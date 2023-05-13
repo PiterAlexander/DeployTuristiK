@@ -57,5 +57,10 @@ export const MENU = [
                 path: ['/sub-menu-2']
             }
         ]
-    }
+    },
+    {
+        name: 'Item 3',
+        iconClasses: 'fas fa-tachometer-alt',
+        path: ['/item3']
+    },
 ];

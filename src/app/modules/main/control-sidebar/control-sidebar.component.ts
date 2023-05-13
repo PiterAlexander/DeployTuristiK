@@ -1,7 +1,5 @@
 import {AppState} from '@/store/state';
 import {
-    SetNavbarVariant,
-    SetSidebarSkin,
     ToggleDarkMode
 } from '@/store/ui/actions';
 import {UiState} from '@/store/ui/state';
@@ -49,13 +47,4 @@ export class ControlSidebarComponent implements OnInit {
         this.store.dispatch(new ToggleDarkMode());
     }
 
-    public onNavbarVariantChange(event: any) {
-        console.log('value', event.target.value);
-        this.store.dispatch(new SetNavbarVariant(event.target.value));
-    }
-
-    public onSidebarSkinChange(event: any) {
-        console.log('value', event.target.value);
-        this.store.dispatch(new SetSidebarSkin(event.target.value));
-    }
 }

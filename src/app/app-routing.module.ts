@@ -39,7 +39,11 @@ const routes: Routes = [
             {
                 path: '',
                 component: DashboardComponent
-            }
+            },
+            {
+                path: 'item3',
+                component: BlankComponent
+            },
         ]
     },
     {

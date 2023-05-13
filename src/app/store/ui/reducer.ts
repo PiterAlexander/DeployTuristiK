@@ -36,29 +36,6 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 sidebarSkin: skin,
                 darkMode: !state.darkMode
             };
-        case Actions.SET_NAVBAR_VARIANT:
-            let navbarVariant: string;
-            if (state.darkMode) {
-                navbarVariant = action.payload || NAVBAR_DARK_VARIANTS[0].value;
-            } else {
-                navbarVariant =
-                    action.payload || NAVBAR_LIGHT_VARIANTS[0].value;
-            }
-            return {
-                ...state,
-                navbarVariant
-            };
-        case Actions.SET_SIDEBAR_SKIN:
-            let sidebarSkin: string;
-            if (state.darkMode) {
-                sidebarSkin = action.payload || SIDEBAR_DARK_SKINS[0].value;
-            } else {
-                sidebarSkin = action.payload || SIDEBAR_LIGHT_SKINS[0].value;
-            }
-            return {
-                ...state,
-                sidebarSkin
-            };
         default:
             return state;
     }
