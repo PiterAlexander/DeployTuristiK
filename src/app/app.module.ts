@@ -1,7 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
-
 import {AppRoutingModule} from '@/app-routing.module';
 import {AppComponent} from './app.component';
 import {MainComponent} from '@modules/main/main.component';
@@ -17,7 +16,6 @@ import {RegisterComponent} from '@modules/register/register.component';
 import {DashboardComponent} from '@pages/dashboard/dashboard.component';
 import {ToastrModule} from 'ngx-toastr';
 import {NotificationsComponent} from '@modules/main/header/notifications/notifications.component';
-
 import {registerLocaleData} from '@angular/common';
 import localeEn from '@angular/common/locales/en';
 import {UserComponent} from '@modules/main/header/user/user.component';
@@ -33,6 +31,12 @@ import {uiReducer} from './store/ui/reducer';
 import {ProfabricComponentsModule} from '@profabric/angular-components';
 import {defineCustomElements} from '@profabric/web-components/loader';
 import {SidebarSearchComponent} from './components/sidebar-search/sidebar-search.component';
+import { PackagesComponent } from './pages/packages/packages.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { EffectsModule } from '@ngrx/effects';
+import { PackageEffects } from './store/package/effects';
+import { CreatePackageFormComponent } from './components/create-package-form/create-package-form.component';
+import { packageReducer } from './store/package/reducer';
 
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
@@ -57,11 +61,14 @@ registerLocaleData(localeEn, 'en-EN');
         SubMenuComponent,
         MenuItemComponent,
         ControlSidebarComponent,
-        SidebarSearchComponent
+        SidebarSearchComponent,
+        PackagesComponent,
+        CreatePackageFormComponent
     ],
     imports: [
         BrowserModule,
-        StoreModule.forRoot({auth: authReducer, ui: uiReducer}),
+        StoreModule.forRoot({auth: authReducer, ui: uiReducer, package: packageReducer}),
+        EffectsModule.forRoot([PackageEffects]),
         HttpClientModule,
         AppRoutingModule,
         ReactiveFormsModule,
@@ -71,7 +78,8 @@ registerLocaleData(localeEn, 'en-EN');
             positionClass: 'toast-top-right',
             preventDuplicates: true
         }),
-        ProfabricComponentsModule
+        ProfabricComponentsModule,
+        NgbModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

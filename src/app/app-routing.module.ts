@@ -12,6 +12,7 @@ import {ForgotPasswordComponent} from '@modules/forgot-password/forgot-password.
 import {RecoverPasswordComponent} from '@modules/recover-password/recover-password.component';
 import {MainMenuComponent} from '@pages/main-menu/main-menu.component';
 import {SubMenuComponent} from '@pages/main-menu/sub-menu/sub-menu.component';
+import { PackagesComponent } from '@pages/packages/packages.component';
 
 const routes: Routes = [
     {
@@ -41,8 +42,8 @@ const routes: Routes = [
                 component: DashboardComponent
             },
             {
-                path: 'item3',
-                component: BlankComponent
+                path: 'packages',
+                component: PackagesComponent
             },
         ]
     },

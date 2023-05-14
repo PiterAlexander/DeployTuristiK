@@ -1,9 +1,9 @@
 <div class="card card-outline card-primary">
     <div class="card-header text-center">
-        <a [routerLink]="['/']" class="h1"><b>Admin</b>LTE</a>
+        <a [routerLink]="['/']" class="h1"><b>TuristiK</b>App</a>
     </div>
     <div class="card-body">
-        <p class="login-box-msg">Sign in to start your session</p>
+        <p class="login-box-msg">Iniciar Sesión</p>
 
         <form [formGroup]="loginForm" (ngSubmit)="loginByAuth()">
             <div class="input-group mb-3">
@@ -36,7 +36,7 @@
                 <div class="col-7">
                     <div class="icheck-primary">
                         <input type="checkbox" id="remember" />
-                        <label for="remember"> Remember Me </label>
+                        <label for="remember"> Recordarme </label>
                     </div>
                 </div>
                 <!-- /.col -->
@@ -47,7 +47,7 @@
                         [loading]="isAuthLoading"
                         [disabled]="isFacebookLoading || isGoogleLoading"
                     >
-                        Sign In
+                        Ingresar
                     </pf-button>
                 </div>
                 <!-- /.col -->
@@ -63,7 +63,7 @@
                 (click)="loginByFacebook()"
             >
                 <i class="fab fa-facebook mr-2"></i>
-                Sign in using Facebook
+                Ingresar con facebook
             </pf-button>
             <pf-button
                 [block]="true"
@@ -73,16 +73,16 @@
                 (click)="loginByGoogle()"
             >
                 <i class="fab fa-google mr-2"></i>
-                Sign in using Google+
+                Ingresar con google
             </pf-button>
         </div>
 
         <p class="mb-1">
-            <a [routerLink]="['/forgot-password']">I forgot my password</a>
+            <a [routerLink]="['/forgot-password']">¿Olvidé mi contraseña?</a>
         </p>
         <p class="mb-0">
             <a [routerLink]="['/register']" class="text-center">
-                Register a new membership
+                Registrarse
             </a>
         </p>
     </div>

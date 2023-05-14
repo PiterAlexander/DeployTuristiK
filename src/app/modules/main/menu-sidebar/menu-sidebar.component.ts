@@ -72,7 +72,7 @@ export const MENU = [
   {
     name: 'Paquetes',
     iconClasses: 'far fa-image',
-    path: ['']
+    path: ['/packages']
   },
   {
     name: 'Pedidos',

@@ -1,0 +1,52 @@
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row m-3">
+            <div class="card card-package">
+                <div class="card-header card-package-header">
+                    <div class="col-sm-9 col-personalized-1">
+                        <h1 class="m-0 text-dark">Paquetes</h1>
+                    </div>
+                    <div class="col-sm-3 col-personalized-2">
+                        <button (click)="openModalCreatePackage()" type="button" class="btn btn-primary">Agregar paquete</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3 row">
+                            <label for="table-complete-search" class="col-xs-3 col-sm-auto col-form-label">Full text search:</label>
+                            <div class="col-xs-3 col-sm-auto">
+                                <input
+                                    id="table-complete-search"
+                                    type="text"
+                                    class="form-control"
+                                    name="searchTerm"
+                                />
+                            </div>
+                        </div>
+                    
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" sortable="name">Country</th>
+                                    <th scope="col" sortable="area">Area</th>
+                                    <th scope="col" sortable="population">Population</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    
+                        <div class="d-flex justify-content-end pt-3">
+                            <ngb-pagination collectionSize="100" page="0" pageSize="20">
+                            </ngb-pagination>
+                        </div>
+                    </form>    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
