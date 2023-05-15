@@ -12,5 +12,5 @@ export interface Package {
     price:number;
     image:string;
     status:boolean;
-    
+
 }

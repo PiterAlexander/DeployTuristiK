@@ -1,1 +1,68 @@
-<p>create-role-form works!</p>
+<div class="modal-header">
+  <div class="container">
+      <h5 class="modal-title padding-extra">Agregar Rol</h5>
+  </div>
+</div>
+<div class="modal-body">
+  <div class="container-fluid">
+      <form class="needs-validation" novalidate id="form" (submit)="saveRoleAndAssociatePermissions()" [formGroup]="formGroup">
+          <div class=" card-body d-flex">
+              <div class="w-100 p-2">
+                  <div class="row">
+                      <div class="form-group col-6">
+                          <label for="package_name" class="form-label">Nombre</label>
+                          <input type="text" id="permission_name" name="name"
+                              class="form-control formularioCampo border-left-dark"
+                              placeholder="Ingrese el nombre del rol" formControlName="name">
+                          <div class="invalid-feedback">
+                              En este campo solo se permiten letras
+                          </div>
+                      </div>
+
+                      <div class="form-group col-5">
+                        <label for="status" class="form-label">Estado</label>
+                        <div class="input-group">
+                            <select class="custom-select border-left-dark form-control formularioCampo"
+                                id="status" name="status" formControlName="status" placeholder="Seleccione un estado">
+                                <option selected disabled value="0">Seleccione un estado</option>
+                                <option value="1">Habilitado</option>
+                                <option value="2">Deshabilitado</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user-cog"></i></span>
+                            </div>
+                            <div class="invalid-feedback">
+                                Por favor seleccione una opción.
+                            </div>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                    <div class="container mb-4">
+                      <h3 class="text-dark mb-3">Permisos</h3>
+                      <div *ngFor="let permiso of permissionList" class="form group col-7 d-flex justify-content-start ">
+                        <div class="custom-control custom-switch col-6 mt-3">
+                          <input type="checkbox" class="custom-control-input"
+                          [id]="permiso.module"
+                          (click)="assignpermissiontolist(permiso)">
+                          <label class="custom-control-label" [for]="permiso.module">{{permiso.module}}</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+          <div class="card-footer d-flex justify-content-end">
+              <div class="row">
+                  <div class="col">
+                    <button (click)="cancel()" type="button" id="cancelButton" class="btn btn-danger">Cancelar</button>
+                  </div>
+                  <div class="col">
+                    <button *ngIf="validForm()" type="submit" id="saveButton" class="btn btn-success">Guardar</button>
+                    <!-- <button *ngIf="!validForm()" type="submit" id="saveButton" class="btn btn-secondary" disabled>Guardar</button> -->
+                  </div>
+              </div>
+          </div>
+      </form>
+  </div>
+</div>

@@ -1,4 +1,6 @@
 import { Package } from "@/models/package";
+import { Permission } from "@/models/permission";
+import { Role } from '@/models/role';
 
 export default <UiState>{
     darkMode: false,
@@ -10,8 +12,19 @@ export default <UiState>{
         data: [],
         error: undefined,
         loading: false
+    },
+    allPermissions: {
+      data: [],
+      error: undefined,
+      loading: false
+    },
+    allRoles:{
+      data: [],
+      error: undefined,
+      loading: false
     }
 };
+
 
 export interface UiState {
     darkMode: boolean;
@@ -24,5 +37,15 @@ export interface UiState {
         data: Array<Package>,
         error: string,
         loading: boolean
-    }
+    };
+    allPermissions :{
+      data: Array<Permission>,
+      error: string,
+      loading: boolean
+    };
+    allRoles:{
+      data: Array<Role>,
+      error: string,
+      loading: boolean
+    };
 }
