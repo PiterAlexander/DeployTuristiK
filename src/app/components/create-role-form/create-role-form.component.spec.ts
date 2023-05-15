@@ -1,20 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SubMenuComponent } from './sub-menu.component';
+import { CreateRoleFormComponent } from './create-role-form.component';
 
-describe('SubMenuComponent', () => {
-  let component: SubMenuComponent;
-  let fixture: ComponentFixture<SubMenuComponent>;
+describe('CreateRoleFormComponent', () => {
+  let component: CreateRoleFormComponent;
+  let fixture: ComponentFixture<CreateRoleFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SubMenuComponent ]
+      declarations: [ CreateRoleFormComponent ]
     })
     .compileComponents();
-  });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(SubMenuComponent);
+    fixture = TestBed.createComponent(CreateRoleFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

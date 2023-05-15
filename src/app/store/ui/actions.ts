@@ -4,13 +4,17 @@ import {Action} from '@ngrx/store';
 export const TOGGLE_SIDEBAR_MENU: string = 'TOGGLE_SIDEBAR_MENU';
 export const TOGGLE_CONTROL_SIDEBAR: string = 'TOGGLE_CONTROL_SIDEBAR';
 export const TOGGLE_DARK_MODE: string = 'TOGGLE_DARK_MODE';
+
 export const OPEN_MODAL_CREATE_PACKAGE: string = '[PACKAGE] OPEN_MODAL_CREATE_PACKAGE';
 export const GET_ALL_PACKAGES_REQUEST: string = '[PACKAGE] GET_ALL_PACKAGES_REQUEST';
 export const GET_ALL_PACKAGES_SUCCESS: string = '[PACKAGE] GET_ALL_PACKAGES_SUCCESS';
 export const GET_ALL_PACKAGES_FAILURE: string = '[PACKAGE] GET_ALL_PACKAGES_FAILURE';
+
 export const CREATE_PACKAGE_REQUEST: string = '[PACKAGE] CREATE_PACKAGE_REQUEST';
 export const CREATE_PACKAGE_SUCCESS: string = '[PACKAGE] CREATE_PACKAGE_SUCCESS';
 export const CREATE_PACKAGE_FAILURE: string = '[PACKAGE] CREATE_PACKAGE_FAILURE';
+
+export const OPEN_MODAL_CREATE_ROLE: string = '[ROLES] OPEN_MODAL_CREATE_ROLE';
 
 export class ToggleSidebarMenu implements Action {
     readonly type: string = TOGGLE_SIDEBAR_MENU;
@@ -46,7 +50,7 @@ export class GetAllPackagesFailure implements Action {
 
 export class CreatePackageRequest implements Action {
     readonly type: string = CREATE_PACKAGE_REQUEST;
-    constructor(public payload: any) {}
+    constructor(public payload: Package) {}
 }
 
 export class CreatePackageSuccess implements Action {
@@ -57,6 +61,10 @@ export class CreatePackageSuccess implements Action {
 export class CreatePackageFailure implements Action {
     readonly type: string = CREATE_PACKAGE_FAILURE;
     constructor(public payload: string) {}
+}
+
+export class OpenModalCreateRole implements Action {
+    readonly type: string = OPEN_MODAL_CREATE_ROLE;
 }
 
 

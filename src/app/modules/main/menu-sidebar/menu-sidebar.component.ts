@@ -44,21 +44,20 @@ export const MENU = [
       {
         name: 'Roles',
         iconClasses: 'far fa-circle',
-        path: ['/sub-menu-1']
+        path: ['/roles']
       },
       {
         name: 'Usuarios',
         iconClasses: 'far fa-circle',
-        path: ['/sub-menu-2']
+        path: ['']
       }
     ]
   },
   {
     name: 'Empleados',
     iconClasses: 'far fas fa-user-alt',
-    path: ['/blank']
+    path: ['']
   },
-
   {
     name: 'Clientes',
     iconClasses: 'far fas fa-user-friends',

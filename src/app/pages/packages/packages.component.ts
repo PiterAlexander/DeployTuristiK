@@ -37,7 +37,7 @@ export class PackagesComponent implements OnInit {
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.packagesList = state.allPackages.data,
-        this.loading = state.allPackages.loading
+      this.loading = state.allPackages.loading
       this.searchByName();
     });
   }

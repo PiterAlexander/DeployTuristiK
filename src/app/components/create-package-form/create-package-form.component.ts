@@ -46,7 +46,7 @@ export class CreatePackageFormComponent implements OnInit {
   }
 
   validForm(): boolean {
-    return this.formGroup.valid && this.formGroup.value.status != 0 && this.formGroup.value.transport
+    return this.formGroup.valid && this.formGroup.value.status != 0 && this.formGroup.value.transport != 0
   }
 
   cancel() {
