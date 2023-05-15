@@ -1,4 +1,4 @@
-import { CreatePackageRequest } from '@/store/package/actions';
+import { CreatePackageRequest } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';

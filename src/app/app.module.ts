@@ -9,7 +9,7 @@ import {HeaderComponent} from '@modules/main/header/header.component';
 import {FooterComponent} from '@modules/main/footer/footer.component';
 import {MenuSidebarComponent} from '@modules/main/menu-sidebar/menu-sidebar.component';
 import {BlankComponent} from '@pages/blank/blank.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ProfileComponent} from '@pages/profile/profile.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RegisterComponent} from '@modules/register/register.component';
@@ -34,9 +34,8 @@ import {SidebarSearchComponent} from './components/sidebar-search/sidebar-search
 import { PackagesComponent } from './pages/packages/packages.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { EffectsModule } from '@ngrx/effects';
-import { PackageEffects } from './store/package/effects';
+import { PackageEffects } from './store/ui/effects';
 import { CreatePackageFormComponent } from './components/create-package-form/create-package-form.component';
-import { packageReducer } from './store/package/reducer';
 
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
@@ -67,7 +66,7 @@ registerLocaleData(localeEn, 'en-EN');
     ],
     imports: [
         BrowserModule,
-        StoreModule.forRoot({auth: authReducer, ui: uiReducer, package: packageReducer}),
+        StoreModule.forRoot({auth: authReducer, ui: uiReducer}),
         EffectsModule.forRoot([PackageEffects]),
         HttpClientModule,
         AppRoutingModule,
@@ -80,6 +79,7 @@ registerLocaleData(localeEn, 'en-EN');
         }),
         ProfabricComponentsModule,
         NgbModule,
+        FormsModule
     ],
     providers: [],
     bootstrap: [AppComponent]
