@@ -1,10 +1,16 @@
+import { Package } from "@/models/package";
+
 export default <UiState>{
     darkMode: false,
     navbarVariant: 'navbar-light',
     sidebarSkin: 'sidebar-dark-primary',
     menuSidebarCollapsed: false,
-    controlSidebarCollapsed: true
-    // screenSize: calculateWindowSize(window.innerWidth)
+    controlSidebarCollapsed: true,
+    allPackages: {
+        data: [],
+        error: undefined,
+        loading: false
+    }
 };
 
 export interface UiState {
@@ -14,4 +20,9 @@ export interface UiState {
     navbarVariant: string;
     sidebarSkin: string;
     screenSize: any;
+    allPackages: {
+        data: Array<Package>,
+        error: string,
+        loading: boolean
+    }
 }

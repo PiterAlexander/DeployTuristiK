@@ -20,20 +20,7 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
-}
-
-.content {
-    padding: 0 0.5rem;
-}
-
-// Sidebar menu animation
-// Needed for open/close menu animation for menus with child nodes
-.nav .nav-item:not(.menu-open) > .ng-trigger-openClose,
-.nav .nav-item > .ng-trigger-openClose.ng-animating {
-    overflow: hidden;
-    display: block;
+    display: none;
 }
 
 // Override original AdminLTE transform
@@ -43,3 +30,7 @@ body {
 .nav-sidebar .menu-open > .nav-link svg.right {
     transform: none;
 }
+
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';

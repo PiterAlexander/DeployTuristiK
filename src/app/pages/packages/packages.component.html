@@ -1,0 +1,71 @@
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row m-3">
+            <div class="card card-package">
+                <div class="card-header card-package-header">
+                    <div class="col-sm-9 col-personalized-1">
+                        <h1 class="m-0 text-dark">Paquetes</h1>
+                    </div>
+                    <div class="col-sm-3 col-personalized-2">
+                        <button (click)="openModalCreatePackage()" type="button" class="btn btn-primary">Agregar
+                            paquete</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div *ngIf="loading" class="d-flex justify-content-center">
+                        <div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
+                            <span class="visually-hidden"></span>
+                        </div>
+                    </div>
+                    <form *ngIf="!loading">
+                        <div class="d-flex justify-content-end mb-3 row">
+                            <label for="table-complete-search" class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
+                            <div class="col-xs-3 col-sm-auto">
+                                <input id="table-complete-search" type="text" class="form-control" name="searchTerm" [(ngModel)]="search" (ngModelChange)="searchByName()"/>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col" sortable="name">Destino</th>
+                                    <th scope="col" sortable="area">Fecha de salida</th>
+                                    <th scope="col" sortable="population">Fecha de regreso</th>
+                                    <th scope="col" sortable="population">Cupos</th>
+                                    <th scope="col" sortable="population">Cupos disponibles</th>
+                                    <th scope="col" sortable="population">Precio</th>
+                                    <th scope="col" sortable="population">Información</th>
+                                    <th scope="col" sortable="population">Estado</th>
+                                    <th scope="col" sortable="population">Editar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let pack of filteredPackagesList">
+                                    <td>{{pack.name}}</td>
+                                    <td>{{pack.destination}}</td>
+                                    <td>{{pack.departureDate | date}}</td>
+                                    <td>{{pack.arrivalDate | date}}</td>
+                                    <td>{{pack.totalQuotas }}</td>
+                                    <td>{{pack.availableQuotas }}</td>
+                                    <td>{{pack.price}}</td>
+                                    <td><a href="">Ver detalles</a></td>
+                                    <td>
+                                        <span *ngIf="pack.status === 1">Habilitado</span>
+                                        <span *ngIf="pack.status !== 1">Deshabilitado</span>
+                                    </td>
+                                    <td><a href="">Edit</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="d-flex justify-content-end pt-3">
+                            <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize">
+                            </ngb-pagination>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

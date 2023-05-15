@@ -1,0 +1,205 @@
+<div class="modal-header">
+    <div class="container-fluid">
+        <h5 class="modal-title padding-extra">Agregar paquete</h5>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="container-fluid">
+        <form class="needs-validation" novalidate id="form" (submit)="savePackage()" [formGroup]="formGroup">
+            <div class=" card-body d-flex">
+                <div class="w-100 p-2">
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="package_name" class="form-label">Nombre</label>
+                            <input type="text" id="package_name" name="name"
+                                class="form-control formularioCampo border-left-dark"
+                                placeholder="Ingrese el nombre del paquete" formControlName="name">
+                            <div class="invalid-feedback">
+                                En este campo solo se permiten letras
+                            </div>
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="package_destiny" class="form-label">Destino</label>
+                            <div class="input-group">
+                                <input type="text" id="package_destiny" name="destination"
+                                    class="form-control formularioCampo border-left-dark"
+                                    placeholder="Ingrese el destino del paquete" formControlName="destination">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-right"><i
+                                            class="fas fa-umbrella-beach"></i></span>
+                                </div>
+                                <div class="invalid-feedback">
+                                    En este campo solo se permiten letras
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-12">
+                            <label for="package_details" class="form-label">Detalles</label>
+                            <textarea class="form-control formularioCampo border-left-dark"
+                                placeholder="Escriba la descripción del paquete acá" style="height: 100px" required
+                                id="package_details" name="details" formControlName="details"></textarea>
+                            <div class="invalid-feedback">
+                                En este campo solo se permiten letras y caracteres numericos
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="package_transportation" class="form-label">Transporte</label>
+                            <div class="input-group">
+                                <select class="custom-select border-left-dark form-control formularioCampo"
+                                    id="package_transportation" name="package_transportation" formControlName="transport" placeholder="Seleccione el tipo de transporte">
+                                    <option selected disabled value="0">Seleccione el tipo de transporte</option>
+                                    <option value="1">Aereo</option>
+                                    <option value="2">Terreste</option>
+                                </select>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-bus"></i></span>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Por favor seleccione una opción.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="package_hotel" class="form-label">Hotel</label>
+                            <div class="input-group">
+                                <input type="text" id="package_hotel" name="package_hotel"
+                                    class="form-control formularioCampo border-left-dark"
+                                    placeholder="Ingrese el nombre del hotel" formControlName="hotel">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-right"><i class="fa fa-hotel"></i></span>
+                                </div>
+                                <div class="invalid-feedback">
+                                    En este campo solo se permiten letras y caracteres numericos
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="package_departure_date" class="form-label">Fecha de salida</label>
+                            <div class="input-group">
+                                <input type="date" id="package_departure_date" name="package_departure_date"
+                                    class="form-control formularioCampo border-left-dark" formControlName="departureDate">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-right"><i
+                                            class="fas fa-calendar-day"></i></span>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Este campo es obligatorio.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="package_return_date" class="form-label">Fecha de regreso</label>
+                            <div class="input-group">
+                                <input type="date" id="package_return_date" name="package_return_date"
+                                    class="form-control formularioCampo border-left-dark" formControlName="arrivalDate">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-right"><i
+                                            class="fas fa-calendar-week"></i></span>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Este campo es obligatorio.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="package_departure_place" class="form-label">Lugar de salida</label>
+                            <div class="input-group">
+                                <input type="text" id="package_departure_place" name="package_departure_place"
+                                    class="form-control formularioCampo border-left-dark"
+                                    placeholder="Ingrese el lugar de encuentro" formControlName="departurePoint">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-right"><i
+                                            class="fas fa-location-arrow"></i></span>
+                                </div>
+                                <div class="invalid-feedback">
+                                    En este campo solo se permiten letras
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="package_departure_place" class="form-label">Url de la imagen</label>
+                            <div class="input-group">
+                                <input type="text" id="package_departure_place" name="package_departure_place"
+                                    class="form-control formularioCampo border-left-dark"
+                                    placeholder="Ingrese la url de la imagen" formControlName="image">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-left"><i
+                                        class="fas fa-file-archive"></i></span>
+                                </div>
+                                <div class="invalid-feedback">
+                                    En este campo solo se permiten letras
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-4">
+                            <label for="package_price" class="form-label">Precio</label>
+                            <div class="input-group">
+                                <input type="number" id="package_price" name="package_price"
+                                    class="form-control formularioCampo border-left-dark"
+                                    placeholder="Precio del paquete" formControlName="price">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-right"><i
+                                            class="fas fa-dollar-sign"></i></span>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Este campo es obligatorio.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="package_quotas" class="form-label">Cupos</label>
+                            <input type="number" id="package_quotas" name="package_quotas"
+                                class="form-control formularioCampo border-left-dark"
+                                placeholder="Ingrese el número de cupos" formControlName="totalQuotas">
+                            <div class="invalid-feedback">
+                                Este campo es obligatorio.
+                            </div>
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="status" class="form-label">Estado</label>
+                            <div class="input-group">
+                                <select class="custom-select border-left-dark form-control formularioCampo"
+                                    id="status" name="status" formControlName="status" placeholder="Seleccione un estado">
+                                    <option selected disabled value="0">Seleccione un estado</option>
+                                    <option value="1">Habilitado</option>
+                                    <option value="2">Deshabilitado</option>
+                                </select>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user-cog"></i></span>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Por favor seleccione una opción.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-end">
+                <div class="row">
+                    <div class="col">
+                        <button (click)="cancel()" type="button" id="cancelButton" class="btn btn-danger">Cancelar</button>
+                    </div>
+                    <div class="col">
+                        <button *ngIf="validForm()" type="submit" id="saveButton" class="btn btn-success">Guardar</button>
+                        <button *ngIf="!validForm()" type="submit" id="saveButton" class="btn btn-secondary" disabled>Guardar</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

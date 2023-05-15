@@ -86,7 +86,6 @@ export class AppService {
     async getProfile() {
         try {
             this.user = await Gatekeeper.getProfile();
-            console.log(this.user);
         } catch (error) {
             this.logout();
             throw error;

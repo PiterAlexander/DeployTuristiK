@@ -43,7 +43,6 @@ export class ControlSidebarComponent implements OnInit {
     }
 
     public handleDarkModeChange(event: any) {
-        console.log('value', event.target.checked);
         this.store.dispatch(new ToggleDarkMode());
     }
 
