@@ -119,7 +119,6 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     }
                 };
 
-
               case Actions.GET_ALL_ROLE_FAILURE:
                   return {
                       ...state,
