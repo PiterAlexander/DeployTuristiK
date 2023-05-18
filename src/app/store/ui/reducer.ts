@@ -129,6 +129,16 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                       }
                   };
 
+              case Actions.OPEN_MODAL_CREATE_ROLE:
+                    return {
+                        ...state,
+                        oneRole: {
+                            data: action.payload,
+                            error: undefined,
+                            loading: false
+                        }
+                  };
+
         default:
             return state;
     }

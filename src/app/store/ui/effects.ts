@@ -20,12 +20,12 @@ import {
   GET_ALL_ROLE_REQUEST,
   GetAllRoleSuccess,
   GetAllRoleFailure,
-  OpenModalEditRole,
   EDIT_ROLE_REQUEST,
   EditRoleRequest,
   EditRoleSuccess,
   EditRoleFailure,
   GetAllRoleRequest,
+  OpenModalCreateRole,
 } from './actions';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { PackagesComponent } from '@pages/packages/packages.component';
@@ -94,9 +94,33 @@ export class PackageEffects {
                     size: 'lg'
                 });
             })
-        ), { dispatch: false });
+        ),
+        {
+          dispatch: false
+
+        });
 
 
+
+    //   openModalCreateRole$ = createEffect(() =>
+    //   this.actions$.pipe(
+    //     ofType(OPEN_MODAL_CREATE_ROLE),
+    //     filter((action: Action) => !!action), // Filtra los dispatches que no están vacíos
+    //     map((action: Action) => {
+    //       Aquí puedes acceder al valor dentro del dispatch y retornarlo
+    //       return action.payload; // Supongamos que el valor se encuentra en la propiedad 'payload' del action
+    //     }),
+    //     tap((value) => {
+    //       Realiza las acciones necesarias con el valor extraído del dispatch
+    //       console.log('Valor dentro del dispatch:', value);
+    //       this.modalRef = this.modalService.open(CreateRoleFormComponent, {
+    //         backdrop: false,
+    //         size: 'lg'
+    //       });
+    //     })
+    //   ),
+    //   { dispatch: false }
+    // );
 
     getPermissions$ = createEffect(() => this.actions$.pipe(
         ofType(GET_ALL_PERMISSIONS_REQUEST),
@@ -155,7 +179,6 @@ export class PackageEffects {
                     return [
                         new EditRoleSuccess(roleResolved),
                         new GetAllRoleRequest(),
-                        new OpenModalEditRole(undefined)
                     ];
                 }),
                 catchError((err) => of(new EditRoleFailure(err)))

@@ -22,6 +22,11 @@ export default <UiState>{
       data: [],
       error: undefined,
       loading: false
+    },
+    oneRole:{
+      data: undefined,
+      error: undefined,
+      loading: false
     }
 };
 
@@ -48,4 +53,9 @@ export interface UiState {
       error: string,
       loading: boolean
     };
+    oneRole:{
+      data: Role,
+      error: string,
+      loading: boolean
+    }
 }
