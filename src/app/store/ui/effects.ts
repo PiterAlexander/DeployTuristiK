@@ -19,7 +19,13 @@ import {
   CreateRoleSuccess,
   GET_ALL_ROLE_REQUEST,
   GetAllRoleSuccess,
-  GetAllRoleFailure
+  GetAllRoleFailure,
+  OpenModalEditRole,
+  EDIT_ROLE_REQUEST,
+  EditRoleRequest,
+  EditRoleSuccess,
+  EditRoleFailure,
+  GetAllRoleRequest,
 } from './actions';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { PackagesComponent } from '@pages/packages/packages.component';
@@ -30,7 +36,8 @@ import { of } from 'rxjs';
 import { CreateRoleFormComponent } from '@components/create-role-form/create-role-form.component';
 import { PermissionService } from '@services/configuration/permission.service';
 import { RoleService } from '@services/configuration/role.service';
-import { CreateRoleRequest } from './actions';
+import { CreateRoleRequest, OPEN_MODAL_EDIT_ROLE } from './actions';
+import { open } from 'fs';
 @Injectable()
 export class PackageEffects {
     modalRef: NgbModalRef;
@@ -89,6 +96,8 @@ export class PackageEffects {
             })
         ), { dispatch: false });
 
+
+
     getPermissions$ = createEffect(() => this.actions$.pipe(
         ofType(GET_ALL_PERMISSIONS_REQUEST),
         switchMap((action) => {
@@ -112,7 +121,8 @@ export class PackageEffects {
                 mergeMap((roleResolved) => {
                     this.modalRef.close();
                     return [
-                        new CreateRoleSuccess(roleResolved)
+                        new CreateRoleSuccess(roleResolved),
+                        new GetAllRoleRequest()
                     ];
                 }),
                 catchError((err) => of(new CreateRoleFailure(err)))
@@ -133,6 +143,24 @@ export class PackageEffects {
           )
 
       })
+    ));
+
+    editRole$ = createEffect(() => this.actions$.pipe(
+        ofType(EDIT_ROLE_REQUEST),
+        map((action: EditRoleRequest) => action.payload),
+        switchMap((role) => {
+            return this.roleService.UpdateRole(role.roleId,role).pipe(
+                mergeMap((roleResolved) => {
+                    this.modalRef.close();
+                    return [
+                        new EditRoleSuccess(roleResolved),
+                        new GetAllRoleRequest(),
+                        new OpenModalEditRole(undefined)
+                    ];
+                }),
+                catchError((err) => of(new EditRoleFailure(err)))
+            )
+        })
     ));
 
 

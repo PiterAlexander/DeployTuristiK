@@ -1,6 +1,6 @@
 import { Permission } from '@/models/permission';
-import {CreateRoleRequest, GetAllPermissionsRequest, OpenModalCreateRole } from '@/store/ui/actions';
-import { Component, OnInit, PipeTransform } from '@angular/core';
+import {CreateRoleRequest, EditRoleRequest, GetAllPermissionsRequest, OpenModalCreateRole } from '@/store/ui/actions';
+import { Component, Inject, OnInit, PipeTransform } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
@@ -9,7 +9,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Role } from '@/models/role';
 import { AssociatedPermission } from '@/models/associated-permission';
-
 
 @Component({
   selector: 'app-create-role-form',
@@ -20,12 +19,24 @@ export class CreateRoleFormComponent implements OnInit{
 
   public ui:Observable<UiState>
   public permissionList : Array<Permission>
+  public ActionTitle : string = "Agregar"
   formGroup: FormGroup;
   selectedPermissions: { permissionId: string }[] = [];
+  public roleData
 
-  constructor(private fb: FormBuilder, private modalService: NgbModal,private store: Store<AppState>){}
+  constructor(
+    private fb: FormBuilder,
+    private modalService: NgbModal,
+    private store: Store<AppState>,
+  ){}
 
   ngOnInit() {
+
+    this.store.dispatch(new GetAllPermissionsRequest())
+    this.ui = this.store.select('ui')
+    this.ui.subscribe((state:UiState)=>{
+      this.permissionList = state.allPermissions.data
+    })
 
     this.formGroup = this.fb.group({
       name: ['',Validators.required],
@@ -33,12 +44,31 @@ export class CreateRoleFormComponent implements OnInit{
       associatedPermission: [this.selectedPermissions,Validators.required]
     })
 
-    this.store.dispatch(new GetAllPermissionsRequest())
-    this.ui = this.store.select('ui')
-    this.ui.subscribe((state:UiState)=>{
-      this.permissionList = state.allPermissions.data
-    })
+    if (this.roleData!=null) {
+
+      this.ActionTitle = "Editar"
+      this.formGroup.setValue({
+        name: this.roleData.name,
+        status: this.roleData.status,
+        associatedPermission: this.selectedPermissions
+      })
+
+      this.permissionList.forEach(item=>{
+        console.log(item)
+        item["temporalStatus"]=false;
+          item.associatedPermission?.forEach(ap=>{
+            if (ap.roleId==this.roleData["roleId"]) {
+              item["temporalStatus"]=true;
+            }
+          })
+      })
+
+      this.selectedPermissions=this.permissionList;
+
+    }
+
   }
+
 
   assignpermissiontolist(permiso:any){
 
@@ -51,36 +81,40 @@ export class CreateRoleFormComponent implements OnInit{
       this.selectedPermissions.push({ permissionId: permiso });
     }
 
-
-    // if (this.selectedPermissions.includes(permiso)) {
-    //   this.selectedPermissions = this.selectedPermissions.filter(i => i !== permiso);
-    // } else {
-    //   this.selectedPermissions.push(permiso);
-    // }
-
+    console.log(this.selectedPermissions)
   }
 
-  saveRoleAndAssociatePermissions(){
+  saveChanges(){
+    console.log("pua",this.roleData)
+    if (this.roleData===null) {
+      const model : Role = {
+        name : this.formGroup.value.name,
+        status : this.formGroup.value.status,
+        associatedPermission: this.selectedPermissions
+      }
 
-    const model : Role = {
-      name : this.formGroup.value.name,
-      status : this.formGroup.value.status,
-      associatedPermission: this.selectedPermissions
+      this.store.dispatch(new CreateRoleRequest({
+        ...model
+      }));
+    }else{
+      const model : Role = {
+        roleId: this.roleData.roleId,
+        name : this.formGroup.value.name,
+        status : this.formGroup.value.status,
+      }
+      this.store.dispatch(new EditRoleRequest({
+        ...model
+      }));
     }
 
-    console.log(model)
-    var id = this.store.dispatch(new CreateRoleRequest({
-      ...model
-    }));
 
-    console.log("JUST COMON ",id)
+    // this.selectedPermissions.forEach(permiso => {
+    //   const model : AssociatedPermission = {
+    //     roleId : this.formGroup.value.name,
+    //     permissionId : permiso.permissionId,
+    //   }
+    // });
 
-    this.selectedPermissions.forEach(permiso => {
-      const model : AssociatedPermission = {
-        roleId : this.formGroup.value.name,
-        permissionId : permiso.permissionId,
-      }
-    });
   }
 
   validForm(): boolean {
@@ -92,4 +126,5 @@ export class CreateRoleFormComponent implements OnInit{
   cancel() {
     this.modalService.dismissAll();
   }
+
 }
