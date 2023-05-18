@@ -85,11 +85,7 @@ export class CreatePackageFailure implements Action {
 
 export class OpenModalCreateRole implements Action {
     readonly type: string = OPEN_MODAL_CREATE_ROLE;
-}
-
-export class OpenModalEditRole implements Action {
-  readonly type: string = OPEN_MODAL_EDIT_ROLE;
-  constructor(public payload: Role) {}
+    constructor(public payload?: Role) {}
 }
 
 export class GetAllPermissionsRequest implements Action {

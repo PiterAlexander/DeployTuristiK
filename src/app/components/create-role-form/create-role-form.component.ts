@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Role } from '@/models/role';
 import { AssociatedPermission } from '@/models/associated-permission';
+import { AssociatedPermissionService } from '../../services/configuration/associated-permission.service';
 
 @Component({
   selector: 'app-create-role-form',
@@ -18,7 +19,7 @@ import { AssociatedPermission } from '@/models/associated-permission';
 export class CreateRoleFormComponent implements OnInit{
 
   public ui:Observable<UiState>
-  public permissionList : Array<Permission>
+  public permissionList : Array<any>
   public ActionTitle : string = "Agregar"
   formGroup: FormGroup;
   selectedPermissions: { permissionId: string }[] = [];
@@ -36,6 +37,7 @@ export class CreateRoleFormComponent implements OnInit{
     this.ui = this.store.select('ui')
     this.ui.subscribe((state:UiState)=>{
       this.permissionList = state.allPermissions.data
+      this.roleData = state.oneRole.data
     })
 
     this.formGroup = this.fb.group({
@@ -53,17 +55,9 @@ export class CreateRoleFormComponent implements OnInit{
         associatedPermission: this.selectedPermissions
       })
 
-      this.permissionList.forEach(item=>{
-        console.log(item)
-        item["temporalStatus"]=false;
-          item.associatedPermission?.forEach(ap=>{
-            if (ap.roleId==this.roleData["roleId"]) {
-              item["temporalStatus"]=true;
-            }
-          })
+      this.roleData.associatedPermission.forEach(rolpermiso=>{
+        this.assignpermissiontolist(rolpermiso)
       })
-
-      this.selectedPermissions=this.permissionList;
 
     }
 
@@ -81,12 +75,24 @@ export class CreateRoleFormComponent implements OnInit{
       this.selectedPermissions.push({ permissionId: permiso });
     }
 
-    console.log(this.selectedPermissions)
   }
 
+  isAssociated(permiso:any):boolean{
+    var associated = false
+    if(this.roleData!=null){
+      permiso.associatedPermission.forEach(ap=> {
+        if (ap.roleId==this.roleData.roleId) {
+          associated = true
+        }
+      });
+    }
+    return associated
+  }
+
+
   saveChanges(){
-    console.log("pua",this.roleData)
-    if (this.roleData===null) {
+
+    if (this.roleData==null) {
       const model : Role = {
         name : this.formGroup.value.name,
         status : this.formGroup.value.status,
@@ -97,23 +103,30 @@ export class CreateRoleFormComponent implements OnInit{
         ...model
       }));
     }else{
+
       const model : Role = {
-        roleId: this.roleData.roleId,
+        roleId : this.roleData.roleId,
         name : this.formGroup.value.name,
         status : this.formGroup.value.status,
+        associatedPermission: this.selectedPermissions
       }
+
       this.store.dispatch(new EditRoleRequest({
-        ...model
+            ...model
       }));
+
+      this.selectedPermissions.forEach(permiso => {
+        const model : AssociatedPermission = {
+          roleId : this.formGroup.value.name,
+          permissionId : permiso.permissionId,
+        }
+      });
+
+
     }
 
 
-    // this.selectedPermissions.forEach(permiso => {
-    //   const model : AssociatedPermission = {
-    //     roleId : this.formGroup.value.name,
-    //     permissionId : permiso.permissionId,
-    //   }
-    // });
+
 
   }
 

@@ -1,5 +1,5 @@
 import { AppState } from '@/store/state';
-import {GetAllRoleRequest,GetAllPermissionsRequest, OpenModalCreateRole, OpenModalEditRole } from '@/store/ui/actions';
+import {GetAllRoleRequest,GetAllPermissionsRequest, OpenModalCreateRole } from '@/store/ui/actions';
 import { Component, OnInit, PipeTransform } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -57,7 +57,7 @@ export class RolesComponent implements OnInit{
   }
 
   openEditRoleModal(role:Role){
-    this.store.dispatch(new OpenModalEditRole(role));
+    this.store.dispatch(new OpenModalCreateRole(role));
   }
 
 
