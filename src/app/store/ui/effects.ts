@@ -26,6 +26,9 @@ import {
   EditRoleFailure,
   GetAllRoleRequest,
   OpenModalCreateRole,
+  EDIT_PACKAGE_REQUEST,
+  EditPackageRequest,
+  EditPackageSuccess,
 } from './actions';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { PackagesComponent } from '@pages/packages/packages.component';
@@ -85,6 +88,25 @@ export class PackageEffects {
         })
     ));
 
+    editPackage$ = createEffect(() => this.actions$.pipe(
+        ofType(EDIT_PACKAGE_REQUEST),
+        map((action: EditPackageRequest) => action.payload),
+        switchMap((pack) => {
+            return this.apiService.updatePackage(pack.packageId,pack).pipe(
+                mergeMap((packResolved) => {
+                    this.modalRef.close();
+                    return [
+                        new EditPackageSuccess(packResolved),
+                        new GetAllPackagesRequest(),
+                    ];
+                }),
+                catchError((err) => of(new EditRoleFailure(err)))
+            )
+        })
+    ));
+
+    
+
     openModalCreateRole$ = createEffect(() =>
         this.actions$.pipe(
             ofType(OPEN_MODAL_CREATE_ROLE),
@@ -97,7 +119,6 @@ export class PackageEffects {
         ),
         {
           dispatch: false
-
         });
 
 

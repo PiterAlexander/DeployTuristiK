@@ -1,5 +1,5 @@
 import { Permission } from '@/models/permission';
-import {CreateRoleRequest, EditRoleRequest, GetAllPermissionsRequest, OpenModalCreateRole } from '@/store/ui/actions';
+import {CreateRoleRequest, EditRoleRequest, GetAllPermissionsRequest } from '@/store/ui/actions';
 import { Component, Inject, OnInit, PipeTransform } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -121,17 +121,10 @@ export class CreateRoleFormComponent implements OnInit{
           permissionId : permiso.permissionId,
         }
       });
-
-
     }
-
-
-
-
   }
 
   validForm(): boolean {
-
     //return this.formGroup.valid && this.formGroup.value.status != 0
     return true
   }

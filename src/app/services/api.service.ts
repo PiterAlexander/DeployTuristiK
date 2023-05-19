@@ -20,7 +20,8 @@ export class ApiService {
         return this.http.post<Package>(`${this.endpoint}api/package/addPackage`, modelo)
     }
 
-    updatePackage(idPackage:number,modelo:Package):Observable<Package>{
+    updatePackage(idPackage:string,modelo:Package):Observable<Package>{
+        console.log(`${this.endpoint}${idPackage}`);
         return this.http.put<Package>(`${this.endpoint}api/package/edit/${idPackage}`, modelo)
     }
 
