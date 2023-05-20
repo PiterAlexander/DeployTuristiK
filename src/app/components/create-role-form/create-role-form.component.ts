@@ -110,25 +110,27 @@ export class CreateRoleFormComponent implements OnInit{
         roleId : this.roleData.roleId,
         name : this.formGroup.value.name,
         status : this.formGroup.value.status,
-        associatedPermission: this.selectedPermissions
       }
+
+      this.UpdatingPermissionRoleAssignment()
 
       this.store.dispatch(new EditRoleRequest({
             ...model
       }));
 
-      this.UpdatingPermissionRoleAssignment()
+
 
     }
   }
 
   UpdatingPermissionRoleAssignment(){
 
+    var associatedPermission = this.roleData.associatedPermission
+
     //DELETE
-    const associatedPermission = this.roleData.associatedPermission
-    for (const ap in associatedPermission) {
-      var exists = this.selectedPermissions.find(item => item.permissionId === associatedPermission[ap].permissionId);
-      if (exists==null) {
+    for (var ap in associatedPermission) {
+      var existsAp = this.selectedPermissions.find(item => item.permissionId === associatedPermission[ap].permissionId);
+      if (existsAp==null) {
         const assocPerModelDelete : AssociatedPermission = {
           associatedPermissionId : associatedPermission[ap].associatedPermissionId,
         }
@@ -139,12 +141,11 @@ export class CreateRoleFormComponent implements OnInit{
     }
 
     //CREATE
-    const selectedPermission = this.selectedPermissions
-    for (const sp in selectedPermission) {
-      var action = ""
-      const exists = associatedPermission.find(item => item.permissionId === selectedPermission[sp].permissionId);
-      if (exists==null) {
-        const assocPerModelCreate : AssociatedPermission = {
+    var selectedPermission = this.selectedPermissions
+    for (var sp in selectedPermission) {
+      var existsSp = associatedPermission.find(item => item.permissionId === selectedPermission[sp].permissionId);
+      if (existsSp==null) {
+        var assocPerModelCreate : AssociatedPermission = {
           roleId : this.roleData.roleId,
           permissionId : selectedPermission[sp].permissionId,
         }
