@@ -17,6 +17,11 @@ export const CREATE_PACKAGE_REQUEST: string = '[PACKAGE] CREATE_PACKAGE_REQUEST'
 export const CREATE_PACKAGE_SUCCESS: string = '[PACKAGE] CREATE_PACKAGE_SUCCESS';
 export const CREATE_PACKAGE_FAILURE: string = '[PACKAGE] CREATE_PACKAGE_FAILURE';
 
+export const EDIT_PACKAGE_REQUEST: string = '[PACKAGE] EDIT_PACKAGE_REQUEST';
+export const EDIT_PACKAGE_SUCCESS: string = '[PACKAGE] EDIT_PACKAGE_SUCCESS';
+export const EDIT_PACKAGE_FAILURE: string = '[PACKAGE] EDIT_PACKAGE_FAILURE';
+
+
 export const OPEN_MODAL_CREATE_ROLE: string = '[ROLES] OPEN_MODAL_CREATE_ROLE';
 
 export const GET_ALL_PERMISSIONS_REQUEST: string = '[PERMISSIONS] GET_ALL_PERMISSIONS_REQUEST';
@@ -56,9 +61,14 @@ export class ToggleDarkMode implements Action {
     constructor(public payload?: string) {}
 }
 
+
+// PACKAGES --------------------------------------------------------
 export class OpenModalCreatePackage implements Action {
     readonly type: string = OPEN_MODAL_CREATE_PACKAGE;
+    constructor(public payload?: Package) {}
 }
+
+// PACKAGES LIST -------------------------------------------------------------
 
 export class GetAllPackagesRequest implements Action {
     readonly type: string = GET_ALL_PACKAGES_REQUEST;
@@ -73,6 +83,10 @@ export class GetAllPackagesFailure implements Action {
     readonly type: string = GET_ALL_PACKAGES_FAILURE;
     constructor(public payload: string) {}
 }
+// END PACKAGES LIST -------------------------------------------------------------
+
+
+// PACKAGES CREATE--------------------------------------------------------
 
 export class CreatePackageRequest implements Action {
     readonly type: string = CREATE_PACKAGE_REQUEST;
@@ -88,6 +102,30 @@ export class CreatePackageFailure implements Action {
     readonly type: string = CREATE_PACKAGE_FAILURE;
     constructor(public payload: string) {}
 }
+
+// END PACKAGES CREATE--------------------------------------------------------
+
+// PACKAGES EDIT--------------------------------------------------------
+
+export class EditPackageRequest implements Action {
+  readonly type: string = EDIT_PACKAGE_REQUEST;
+  constructor(public payload: Package) {}
+}
+
+export class EditPackageSuccess implements Action {
+  readonly type: string = EDIT_PACKAGE_SUCCESS;
+  readonly string = OPEN_MODAL_CREATE_PACKAGE;
+  constructor(public payload: any) {}
+}
+
+export class EditPackageFailure implements Action {
+  readonly type: string = EDIT_PACKAGE_FAILURE;
+  constructor(public payload: string) {}
+}
+
+// END PACKAGES EDIT--------------------------------------------------------
+
+// PACKAGES END--------------------------------------------------------
 
 export class OpenModalCreateRole implements Action {
     readonly type: string = OPEN_MODAL_CREATE_ROLE;
