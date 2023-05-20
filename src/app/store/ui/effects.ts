@@ -25,6 +25,12 @@ import {
   EditRoleSuccess,
   EditRoleFailure,
   GetAllRoleRequest,
+  CREATE_ASSOCIATEDPERMISSION_REQUEST,
+  CreateAssociatedPermissionRequest,
+  CreateAssociatedPermissionSuccess,
+  CreateAssociatedPermissionFailure,
+  DELETE_ASSOCIATEDPERMISSION_REQUEST,
+  DeleteAssociatedPermissionRequest,
   OpenModalCreateRole,
   EDIT_PACKAGE_REQUEST,
   EditPackageRequest,
@@ -39,8 +45,9 @@ import { of } from 'rxjs';
 import { CreateRoleFormComponent } from '@components/create-role-form/create-role-form.component';
 import { PermissionService } from '@services/configuration/permission.service';
 import { RoleService } from '@services/configuration/role.service';
-import { CreateRoleRequest, OPEN_MODAL_EDIT_ROLE } from './actions';
+import { CreateRoleRequest, DeleteAssociatedPermissionSuccess, DeleteAssociatedPermissionFailure } from './actions';
 import { open } from 'fs';
+import { AssociatedPermissionService } from '@services/configuration/associated-permission.service';
 @Injectable()
 export class PackageEffects {
     modalRef: NgbModalRef;
@@ -121,28 +128,6 @@ export class PackageEffects {
           dispatch: false
         });
 
-
-
-    //   openModalCreateRole$ = createEffect(() =>
-    //   this.actions$.pipe(
-    //     ofType(OPEN_MODAL_CREATE_ROLE),
-    //     filter((action: Action) => !!action), // Filtra los dispatches que no están vacíos
-    //     map((action: Action) => {
-    //       Aquí puedes acceder al valor dentro del dispatch y retornarlo
-    //       return action.payload; // Supongamos que el valor se encuentra en la propiedad 'payload' del action
-    //     }),
-    //     tap((value) => {
-    //       Realiza las acciones necesarias con el valor extraído del dispatch
-    //       console.log('Valor dentro del dispatch:', value);
-    //       this.modalRef = this.modalService.open(CreateRoleFormComponent, {
-    //         backdrop: false,
-    //         size: 'lg'
-    //       });
-    //     })
-    //   ),
-    //   { dispatch: false }
-    // );
-
     getPermissions$ = createEffect(() => this.actions$.pipe(
         ofType(GET_ALL_PERMISSIONS_REQUEST),
         switchMap((action) => {
@@ -207,12 +192,47 @@ export class PackageEffects {
         })
     ));
 
+    createAssociatedPermission$ = createEffect(() => this.actions$.pipe(
+      ofType(CREATE_ASSOCIATEDPERMISSION_REQUEST),
+      map((action: CreateAssociatedPermissionRequest) => action.payload),
+      switchMap((asocpermission) => {
+          return this.assocPermissionService.CreateAssociatedPermission(asocpermission).pipe(
+              mergeMap((assocPermissionResolved) => {
+                  this.modalRef.close();
+                  return [
+                      new CreateAssociatedPermissionSuccess(assocPermissionResolved),
+                  ];
+              }),
+              catchError((err) => of(new CreateAssociatedPermissionFailure(err)))
+          )
+      })
+    ));
+
+    DeleteAssociatedPermission$ = createEffect(() => this.actions$.pipe(
+      ofType(DELETE_ASSOCIATEDPERMISSION_REQUEST),
+      map((action: DeleteAssociatedPermissionRequest) => action.payload),
+      switchMap((asocpermission) => {
+          return this.assocPermissionService.DeleteAssociatedPermission(asocpermission.associatedPermissionId).pipe(
+            mergeMap((assocPermissionResolved) => {
+                this.modalRef.close();
+                return [
+                    new DeleteAssociatedPermissionSuccess(assocPermissionResolved),
+                ];
+            }),
+            catchError((err) => of(new DeleteAssociatedPermissionFailure(err)))
+          )
+      })
+    ));
+
+
+
 
     constructor(
         private actions$: Actions,
         private modalService: NgbModal,
         private apiService: ApiService,
         private apiPermission: PermissionService,
-        private roleService: RoleService
+        private roleService: RoleService,
+        private assocPermissionService : AssociatedPermissionService
     ) { }
 }

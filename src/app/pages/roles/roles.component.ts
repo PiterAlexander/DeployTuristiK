@@ -11,6 +11,7 @@ interface State{
   page:number;
   pageSize:number;
 }
+
 @Component({
   selector: 'app-roles',
   templateUrl: './roles.component.html',
