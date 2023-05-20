@@ -14,6 +14,7 @@
                           <input type="text" id="permission_name" name="name"
                               class="form-control formularioCampo border-left-dark"
                               placeholder="Ingrese el nombre del rol" formControlName="name"
+                              onkeydown="return /[a-z, ]/i.test(event.key)"
                               >
                           <div class="invalid-feedback">
                               En este campo solo se permiten letras
@@ -41,12 +42,14 @@
                   <div class="row">
                     <div class="container mb-4">
                       <h3 class="text-dark mb-3">Permisos</h3>
-                      <div *ngFor="let permiso of permissionList" class="form group col-7 d-flex justify-content-start ">
-                        <div class="custom-control custom-switch col-6 mt-3">
+                      <div class="row col-12 d-flex">
+                        <div *ngFor="let permiso of permissionList" class="custom-control custom-switch col-6 mt-3">
                           <input type="checkbox" class="custom-control-input"
                           [id]="permiso.module" [checked]="isAssociated(permiso)"
                           (click)="assignpermissiontolist(permiso)">
-                          <label class="custom-control-label" [for]="permiso.module">{{permiso.module}}</label>
+                          <label class="custom-control-label" [for]="permiso.module">
+                            {{permiso.module}}
+                          </label>
                         </div>
                       </div>
                     </div>

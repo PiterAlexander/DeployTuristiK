@@ -1,7 +1,7 @@
 import { Permission } from '@/models/permission';
-import {CreateRoleRequest, EditRoleRequest, GetAllPermissionsRequest, OpenModalCreateRole } from '@/store/ui/actions';
+import {CreateAssociatedPermissionRequest, CreateRoleRequest, DeleteAssociatedPermissionRequest, EditRoleRequest, GetAllPermissionsRequest, OpenModalCreateRole } from '@/store/ui/actions';
 import { Component, Inject, OnInit, PipeTransform } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { AppState } from '@/store/state';
@@ -9,7 +9,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Role } from '@/models/role';
 import { AssociatedPermission } from '@/models/associated-permission';
-import { AssociatedPermissionService } from '../../services/configuration/associated-permission.service';
+import { state } from '@angular/animations';
+
+
 
 @Component({
   selector: 'app-create-role-form',
@@ -18,11 +20,12 @@ import { AssociatedPermissionService } from '../../services/configuration/associ
 })
 export class CreateRoleFormComponent implements OnInit{
 
-  public ui:Observable<UiState>
-  public permissionList : Array<any>
-  public ActionTitle : string = "Agregar"
   formGroup: FormGroup;
-  selectedPermissions: { permissionId: string }[] = [];
+  public ui:Observable<UiState>
+  public ActionTitle : string = "Agregar"
+  public permissionList : Array<any>
+  public AllRoles : Array<any>
+  public selectedPermissions: { permissionId: any ,module:string}[] = [];
   public roleData
 
   constructor(
@@ -37,42 +40,41 @@ export class CreateRoleFormComponent implements OnInit{
     this.ui = this.store.select('ui')
     this.ui.subscribe((state:UiState)=>{
       this.permissionList = state.allPermissions.data
+      this.AllRoles = state.allRoles.data
       this.roleData = state.oneRole.data
     })
 
     this.formGroup = this.fb.group({
-      name: ['',Validators.required],
+      name: ['',
+        [Validators.required, Validators.minLength(3),Validators.maxLength(20)]
+      ],
       status: [0,Validators.required],
-      associatedPermission: [this.selectedPermissions,Validators.required]
+      associatedPermission: [this.selectedPermissions]
     })
 
     if (this.roleData!=null) {
-
       this.ActionTitle = "Editar"
       this.formGroup.setValue({
         name: this.roleData.name,
         status: this.roleData.status,
-        associatedPermission: this.selectedPermissions
+        associatedPermission: [this.selectedPermissions,Validators.required]
       })
 
       this.roleData.associatedPermission.forEach(rolpermiso=>{
-        this.assignpermissiontolist(rolpermiso)
+        this.assignpermissiontolist(rolpermiso.permission)
       })
-
     }
 
   }
 
-
   assignpermissiontolist(permiso:any){
 
-    permiso = permiso["permissionId"]
-    const existingIndex = this.selectedPermissions.findIndex(item => item.permissionId === permiso);
+    const existingIndex = this.selectedPermissions.findIndex(item => item.permissionId === permiso["permissionId"]);
 
     if (existingIndex !== -1) {
       this.selectedPermissions.splice(existingIndex, 1);
     } else {
-      this.selectedPermissions.push({ permissionId: permiso });
+      this.selectedPermissions.push({ permissionId: permiso["permissionId"], module : permiso["module"]});
     }
 
   }
@@ -115,25 +117,60 @@ export class CreateRoleFormComponent implements OnInit{
             ...model
       }));
 
-      this.selectedPermissions.forEach(permiso => {
-        const model : AssociatedPermission = {
-          roleId : this.formGroup.value.name,
-          permissionId : permiso.permissionId,
-        }
-      });
-
+      this.UpdatingPermissionRoleAssignment()
 
     }
+  }
 
+  UpdatingPermissionRoleAssignment(){
 
+    //DELETE
+    const associatedPermission = this.roleData.associatedPermission
+    for (const ap in associatedPermission) {
+      var exists = this.selectedPermissions.find(item => item.permissionId === associatedPermission[ap].permissionId);
+      if (exists==null) {
+        const assocPerModelDelete : AssociatedPermission = {
+          associatedPermissionId : associatedPermission[ap].associatedPermissionId,
+        }
+        this.store.dispatch(new DeleteAssociatedPermissionRequest({
+          ...assocPerModelDelete
+        }));
+      }
+    }
 
+    //CREATE
+    const selectedPermission = this.selectedPermissions
+    for (const sp in selectedPermission) {
+      var action = ""
+      const exists = associatedPermission.find(item => item.permissionId === selectedPermission[sp].permissionId);
+      if (exists==null) {
+        const assocPerModelCreate : AssociatedPermission = {
+          roleId : this.roleData.roleId,
+          permissionId : selectedPermission[sp].permissionId,
+        }
+        this.store.dispatch(new CreateAssociatedPermissionRequest({
+          ...assocPerModelCreate
+        }));
+      }
+    }
 
   }
 
-  validForm(): boolean {
 
-    //return this.formGroup.valid && this.formGroup.value.status != 0
-    return true
+  validForm(): boolean {
+    if (this.roleData==null) {
+      return this.formGroup.valid
+      && this.formGroup.value.status != 0
+      && !this.AllRoles.find(item => item.name === this.formGroup.value.name)
+      && this.selectedPermissions.length>0
+    }else{
+      return this.formGroup.valid
+      && this.formGroup.value.status != 0
+      && !this.AllRoles.find(
+        item => item.name === this.formGroup.value.name
+        && item.roleId !== this.roleData.roleId)
+      && this.selectedPermissions.length>0
+    }
   }
 
   cancel() {
