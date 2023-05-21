@@ -83,7 +83,7 @@ export class PackageEffects {
         map((action: CreatePackageRequest) => action.payload),
         switchMap((pack) => {
             return this.apiService.addPackage(pack).pipe(
-                
+
                 mergeMap((packageResolved) => {
                     this.modalRef.close();
                     return [
@@ -113,7 +113,7 @@ export class PackageEffects {
         })
     ));
 
-    
+
 
     openModalCreateRole$ = createEffect(() =>
         this.actions$.pipe(
@@ -215,7 +215,6 @@ export class PackageEffects {
       switchMap((asocpermission) => {
           return this.assocPermissionService.DeleteAssociatedPermission(asocpermission.associatedPermissionId).pipe(
             mergeMap((assocPermissionResolved) => {
-                this.modalRef.close();
                 return [
                     new DeleteAssociatedPermissionSuccess(assocPermissionResolved),
                 ];

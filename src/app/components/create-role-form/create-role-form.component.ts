@@ -25,7 +25,7 @@ export class CreateRoleFormComponent implements OnInit{
   public ActionTitle : string = "Agregar"
   public permissionList : Array<any>
   public AllRoles : Array<any>
-  public selectedPermissions: { permissionId: any ,module:string}[] = [];
+  public selectedPermissions: { permissionId: any ,module:string,status?:boolean}[] = [];
   public roleData
 
   constructor(
@@ -80,12 +80,11 @@ export class CreateRoleFormComponent implements OnInit{
     }
 
 
-
-    // console.log("Pemisos ASOCIADOS")
-    // console.log(this.selectedPermissions)
-    // this.selectedPermissions.forEach(element => {
-    //   console.log("MOdulo",element.module)
-    // });
+    console.log("Pemisos ASOCIADOS")
+    console.log(this.selectedPermissions)
+    this.selectedPermissions.forEach(element => {
+      console.log("MOdulo",element.module, "Id",element.permissionId)
+    });
 
   }
 
@@ -122,50 +121,69 @@ export class CreateRoleFormComponent implements OnInit{
         status : this.formGroup.value.status,
       }
 
-      this.UpdatingPermissionRoleAssignment()
 
       this.store.dispatch(new EditRoleRequest({
             ...model
       }));
 
-
+      this.UpdatingPermissionRoleAssignment()
 
     }
   }
 
   UpdatingPermissionRoleAssignment(){
 
-    if(this.roleData!=null){
-      const associatedPermission = this.roleData.associatedPermission
+    var selectedUpdateItems: any[] = [];
 
-      //CREATE
-      const selectedPermission = this.selectedPermissions
-      for (const sp in selectedPermission) {
-        const existsSp = associatedPermission.find(item => item.permissionId === selectedPermission[sp].permissionId);
-        if (existsSp==null) {
-          const assocPerModelCreate : AssociatedPermission = {
-            roleId : this.roleData.roleId,
-            permissionId : selectedPermission[sp].permissionId,
-          }
-          this.store.dispatch(new CreateAssociatedPermissionRequest({
-            ...assocPerModelCreate
-          }));
-        }
-      }
+    if(this.roleData.roleId!=null){
 
-      //DELETE
-      for (const ap in associatedPermission) {
-        const existsAp = this.selectedPermissions.find(item => item.permissionId === associatedPermission[ap].permissionId);
-        if (existsAp==null) {
-          const assocPerModelDelete : AssociatedPermission = {
-            associatedPermissionId : associatedPermission[ap].associatedPermissionId,
-          }
-          this.store.dispatch(new DeleteAssociatedPermissionRequest({
-            ...assocPerModelDelete
-          }));
-        }
+    //DELETE
+    const associatedPermission = this.roleData.associatedPermission
+    associatedPermission.forEach(ap => {
+      const existsAp = this.selectedPermissions.find(item => item.permissionId === ap.permissionId);
+      if (existsAp==null) {
+        selectedUpdateItems.push({
+          associatedPermissionId:ap.associatedPermissionId,
+          status:false
+        });
       }
+    });
     }
+
+    //CREATE
+    const selectedPermission = this.selectedPermissions
+    selectedPermission.forEach(sp=>{
+      const existsSp = this.roleData.associatedPermission.find(item => item.permissionId === sp.permissionId);
+      if (existsSp==null) {
+        selectedUpdateItems.push({
+          status:true,
+          module:sp.module,
+          roleId:this.roleData.roleId,
+          permissionId:sp.permissionId
+        });
+      }
+    })
+
+    selectedUpdateItems.forEach(updateItem =>{
+      if (updateItem.status === false) {
+        console.log(updateItem, "Se Elimina")
+        const assocPerModelDelete : AssociatedPermission = {
+          associatedPermissionId: updateItem.associatedPermissionId
+        }
+        this.store.dispatch(new DeleteAssociatedPermissionRequest({
+          ...assocPerModelDelete
+        }));
+      }else{
+        console.log(updateItem, "Se crea")
+        const assocPerModelCreate : AssociatedPermission = {
+          roleId : updateItem.roleId,
+          permissionId : updateItem.permissionId,
+        }
+        this.store.dispatch(new CreateAssociatedPermissionRequest({
+         ...assocPerModelCreate
+        }));
+      }
+    })
 
   }
 
