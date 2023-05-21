@@ -5,5 +5,4 @@ export interface Permission {
   module:string,
   status:number,
   associatedPermission?:AssociatedPermission[];
-  temporalStatus?:boolean;
 }

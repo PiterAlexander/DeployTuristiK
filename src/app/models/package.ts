@@ -1,11 +1,12 @@
 export interface Package {
-    packageId:string;
+    packageId?:string;
     name:string;
     destination:string;
     details:string;
     transport:string;
     hotel:string;
     arrivalDate:Date;
+    departureDate:Date;
     departurePoint:string;
     totalQuotas:number;
     availableQuotas:number;

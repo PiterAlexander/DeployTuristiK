@@ -3,6 +3,7 @@ import { Employee } from '@/models/employee';
 import { Package } from '@/models/package';
 import { Permission } from '@/models/permission';
 import { Role } from '@/models/role';
+import { AssociatedPermission } from '@/models/associated-permission';
 import {Action} from '@ngrx/store';
 
 export const TOGGLE_SIDEBAR_MENU: string = 'TOGGLE_SIDEBAR_MENU';
@@ -18,7 +19,9 @@ export const CREATE_PACKAGE_REQUEST: string = '[PACKAGE] CREATE_PACKAGE_REQUEST'
 export const CREATE_PACKAGE_SUCCESS: string = '[PACKAGE] CREATE_PACKAGE_SUCCESS';
 export const CREATE_PACKAGE_FAILURE: string = '[PACKAGE] CREATE_PACKAGE_FAILURE';
 
-
+export const EDIT_PACKAGE_REQUEST: string = '[PACKAGE] EDIT_PACKAGE_REQUEST';
+export const EDIT_PACKAGE_SUCCESS: string = '[PACKAGE] EDIT_PACKAGE_SUCCESS';
+export const EDIT_PACKAGE_FAILURE: string = '[PACKAGE] EDIT_PACKAGE_FAILURE';
 
 
 export const OPEN_MODAL_CREATE_ROLE: string = '[ROLES] OPEN_MODAL_CREATE_ROLE';
@@ -57,6 +60,17 @@ export const CREATE_EMPLOYEE_REQUEST: string = '[EMPLOYEES] CREATE_EMPLOYEE_REQU
 export const CREATE_EMPLOYEE_SUCCESS: string = '[EMPLOYEES] CREATE_EMPLOYEE_SUCCESS';
 export const CREATE_EMPLOYEE_FAILURE: string = '[EMPLOYEES] CREATE_EMPLOYEE_FAILURE';
 
+export const EDIT_ROLE_REQUEST: string = '[ROLES] EDIT_ROLE_REQUEST';
+export const EDIT_ROLE_SUCCESS: string = '[ROLES] EDIT_ROLE_SUCCESS';
+export const EDIT_ROLE_FAILURE: string = '[ROLES] EDIT_ROLE_FAILURE';
+
+export const CREATE_ASSOCIATEDPERMISSION_REQUEST: string = '[ASSOCIATEDPERMISSION] CREATE_ASSOCIATEDPERMISSION_REQUEST';
+export const CREATE_ASSOCIATEDPERMISSION_SUCCESS: string = '[ASSOCIATEDPERMISSION] CREATE_ASSOCIATEDPERMISSION_SUCCESS';
+export const CREATE_ASSOCIATEDPERMISSION_FAILURE: string = '[ASSOCIATEDPERMISSION] CREATE_ASSOCIATEDPERMISSION_FAILURE';
+
+export const DELETE_ASSOCIATEDPERMISSION_REQUEST: string = '[ASSOCIATEDPERMISSION] DELETE_ASSOCIATEDPERMISSION_REQUEST';
+export const DELETE_ASSOCIATEDPERMISSION_SUCCESS: string = '[ASSOCIATEDPERMISSION] DELETE_ASSOCIATEDPERMISSION_SUCCESS';
+export const DELETE_ASSOCIATEDPERMISSION_FAILURE: string = '[ASSOCIATEDPERMISSION] DELETE_ASSOCIATEDPERMISSION_FAILURE';
 export class ToggleSidebarMenu implements Action {
     readonly type: string = TOGGLE_SIDEBAR_MENU;
     constructor(public payload?: string) {}
@@ -71,9 +85,14 @@ export class ToggleDarkMode implements Action {
     constructor(public payload?: string) {}
 }
 
+
+// PACKAGES --------------------------------------------------------
 export class OpenModalCreatePackage implements Action {
     readonly type: string = OPEN_MODAL_CREATE_PACKAGE;
+    constructor(public payload?: Package) {}
 }
+
+// PACKAGES LIST -------------------------------------------------------------
 
 export class GetAllPackagesRequest implements Action {
     readonly type: string = GET_ALL_PACKAGES_REQUEST;
@@ -88,6 +107,10 @@ export class GetAllPackagesFailure implements Action {
     readonly type: string = GET_ALL_PACKAGES_FAILURE;
     constructor(public payload: string) {}
 }
+// END PACKAGES LIST -------------------------------------------------------------
+
+
+// PACKAGES CREATE--------------------------------------------------------
 
 export class CreatePackageRequest implements Action {
     readonly type: string = CREATE_PACKAGE_REQUEST;
@@ -96,7 +119,7 @@ export class CreatePackageRequest implements Action {
 
 export class CreatePackageSuccess implements Action {
     readonly type: string = CREATE_PACKAGE_SUCCESS;
-    constructor(public payload: any) {}
+    constructor(public payload: Package) {}
 }
 
 export class CreatePackageFailure implements Action {
@@ -104,8 +127,33 @@ export class CreatePackageFailure implements Action {
     constructor(public payload: string) {}
 }
 
+// END PACKAGES CREATE--------------------------------------------------------
+
+// PACKAGES EDIT--------------------------------------------------------
+
+export class EditPackageRequest implements Action {
+  readonly type: string = EDIT_PACKAGE_REQUEST;
+  constructor(public payload: Package) {}
+}
+
+export class EditPackageSuccess implements Action {
+  readonly type: string = EDIT_PACKAGE_SUCCESS;
+  readonly string = OPEN_MODAL_CREATE_PACKAGE;
+  constructor(public payload: any) {}
+}
+
+export class EditPackageFailure implements Action {
+  readonly type: string = EDIT_PACKAGE_FAILURE;
+  constructor(public payload: string) {}
+}
+
+// END PACKAGES EDIT--------------------------------------------------------
+
+// PACKAGES END--------------------------------------------------------
+
 export class OpenModalCreateRole implements Action {
     readonly type: string = OPEN_MODAL_CREATE_ROLE;
+    constructor(public payload?: Role) {}
 }
 
 export class GetAllPermissionsRequest implements Action {
@@ -178,6 +226,53 @@ export class CreateCostumerSuccess implements Action {
   readonly type: string = CREATE_COSTUMER_SUCCESS;
   constructor(public payload: any) {}
 }
+export class EditRoleRequest implements Action {
+  readonly type: string = EDIT_ROLE_REQUEST;
+  constructor(public payload: Role) {}
+}
+
+export class EditRoleSuccess implements Action {
+  readonly type: string = EDIT_ROLE_SUCCESS;
+  readonly string = OPEN_MODAL_CREATE_ROLE;
+  constructor(public payload: any) {}
+}
+
+export class EditRoleFailure implements Action {
+  readonly type: string = EDIT_ROLE_FAILURE;
+  constructor(public payload: string) {}
+}
+
+export class CreateAssociatedPermissionRequest implements Action {
+  readonly type: string = CREATE_ASSOCIATEDPERMISSION_REQUEST;
+  constructor(public payload: AssociatedPermission) {}
+}
+
+export class CreateAssociatedPermissionSuccess implements Action {
+  readonly type: string = CREATE_ASSOCIATEDPERMISSION_SUCCESS;
+  constructor(public payload: any) {}
+}
+
+export class CreateAssociatedPermissionFailure implements Action {
+  readonly type: string = CREATE_ASSOCIATEDPERMISSION_FAILURE;
+  constructor(public payload: string) {}
+}
+
+export class DeleteAssociatedPermissionRequest implements Action {
+  readonly type: string = DELETE_ASSOCIATEDPERMISSION_REQUEST;
+  constructor(public payload: AssociatedPermission) {}
+}
+
+export class DeleteAssociatedPermissionSuccess implements Action {
+  readonly type: string = DELETE_ASSOCIATEDPERMISSION_SUCCESS;
+  constructor(public payload: any) {}
+}
+
+export class DeleteAssociatedPermissionFailure implements Action {
+  readonly type: string = DELETE_ASSOCIATEDPERMISSION_FAILURE;
+  constructor(public payload: string) {}
+}
+
+
 
 export class CreateCostumerFailure implements Action {
   readonly type: string = CREATE_COSTUMER_FAILURE;
@@ -241,4 +336,13 @@ export type UiAction =
     | GetAllEmployeeFailure
     | CreateEmployeeRequest
     | CreateEmployeeSuccess
-    | CreateEmployeeFailure;
+    | CreateEmployeeFailure
+    | EditRoleRequest
+    | EditRoleSuccess
+    | EditRoleFailure
+    | CreateAssociatedPermissionRequest
+    | CreateAssociatedPermissionSuccess
+    | CreateAssociatedPermissionFailure
+    | DeleteAssociatedPermissionRequest
+    | DeleteAssociatedPermissionSuccess
+    | DeleteAssociatedPermissionFailure;

@@ -48,9 +48,16 @@ export class PackagesComponent implements OnInit {
     );
   }
 
-  openModalCreatePackage() {
+  openModalCreatePackage(pack?:Package) {
     this.store.dispatch(new OpenModalCreatePackage());
   }
+
+
+  openEditPackageModal(pack:Package){
+    console.log(pack)
+    this.store.dispatch(new OpenModalCreatePackage(pack));
+  }
+
 
   searchByName() {
     if (this.search === undefined || this.search.length <= 0) {

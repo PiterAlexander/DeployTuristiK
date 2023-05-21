@@ -14,6 +14,11 @@ export default <UiState>{
         error: undefined,
         loading: false
     },
+    onePackage: {
+      data: undefined,
+      error: undefined,
+      loading: false
+    },
     allPermissions: {
       data: [],
       error: undefined,
@@ -33,6 +38,11 @@ export default <UiState>{
       data: [],
       error: undefined,
       loading: false
+    },
+  oneRole:{
+      data: undefined,
+      error: undefined,
+      loading: false
     }
 };
 
@@ -49,6 +59,11 @@ export interface UiState {
         error: string,
         loading: boolean
     };
+    onePackage: {
+      data: Package,
+      error: string,
+      loading: boolean
+    },
     allPermissions :{
       data: Array<Permission>,
       error: string,
@@ -69,4 +84,9 @@ export interface UiState {
       error: string,
       loading: boolean
     };
+    oneRole:{
+      data: Role,
+      error: string,
+      loading: boolean
+    }
 }

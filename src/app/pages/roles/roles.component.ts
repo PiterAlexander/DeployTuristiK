@@ -11,6 +11,7 @@ interface State{
   page:number;
   pageSize:number;
 }
+
 @Component({
   selector: 'app-roles',
   templateUrl: './roles.component.html',
@@ -51,9 +52,15 @@ export class RolesComponent implements OnInit{
     );
   }
 
-  openCreateRoleModal(){
+  openCreateRoleModal(role?:Role){
+
     this.store.dispatch(new OpenModalCreateRole());
   }
+
+  openEditRoleModal(role:Role){
+    this.store.dispatch(new OpenModalCreateRole(role));
+  }
+
 
   searchByName() {
     if (this.search === undefined || this.search.length <= 0) {
