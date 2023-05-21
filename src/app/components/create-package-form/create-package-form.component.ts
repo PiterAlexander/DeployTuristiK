@@ -77,14 +77,13 @@ export class CreatePackageFormComponent implements OnInit {
         departureDate: this.formGroup.value.departureDate,
         departurePoint: this.formGroup.value.departurePoint,
         totalQuotas: this.formGroup.value.totalQuotas,
-        availableQuotas: this.formGroup.value.availableQuotas,
+        availableQuotas: this.formGroup.value.totalQuotas,
         price: this.formGroup.value.price,
         image: this.formGroup.value.image,
         status: this.formGroup.value.status,
       }
-      this.store.dispatch(new CreatePackageRequest({
-        ...model
-      }));
+      this.store.dispatch(new CreatePackageRequest({...model}));
+      console.log(model)
     } else {
       const model: Package = {
         packageId: this.packageData.packageId,

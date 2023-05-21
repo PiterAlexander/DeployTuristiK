@@ -95,7 +95,7 @@ export class CreatePackageRequest implements Action {
 
 export class CreatePackageSuccess implements Action {
     readonly type: string = CREATE_PACKAGE_SUCCESS;
-    constructor(public payload: any) {}
+    constructor(public payload: Package) {}
 }
 
 export class CreatePackageFailure implements Action {

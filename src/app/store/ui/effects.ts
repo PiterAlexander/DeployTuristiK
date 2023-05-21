@@ -83,6 +83,7 @@ export class PackageEffects {
         map((action: CreatePackageRequest) => action.payload),
         switchMap((pack) => {
             return this.apiService.addPackage(pack).pipe(
+                
                 mergeMap((packageResolved) => {
                     this.modalRef.close();
                     return [
