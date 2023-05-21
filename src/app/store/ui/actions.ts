@@ -1,3 +1,5 @@
+import { Costumer } from '@/models/costumer';
+import { Employee } from '@/models/employee';
 import { Package } from '@/models/package';
 import { Permission } from '@/models/permission';
 import { Role } from '@/models/role';
@@ -33,6 +35,27 @@ export const GET_ALL_ROLE_REQUEST: string = '[PERMISSIONS] GET_ALL_ROLE_REQUEST'
 export const GET_ALL_ROLE_SUCCESS: string = '[PERMISSIONS] GET_ALL_ROLE_SUCCESS';
 export const GET_ALL_ROLE_FAILURE: string = '[PERMISSIONS] GET_ALL_ROLE_FAILURE';
 
+//<----- COSTUMERS ----->
+export const OPEN_MODAL_CREATE_COSTUMER: string = '[COSTUMERS] OPEN_MODAL_CREATE_COSTUMER';
+
+export const GET_ALL_COSTUMER_REQUEST: string = '[COSTUMERS] GET_ALL_COSTUMER__REQUEST';
+export const GET_ALL_COSTUMER_SUCCESS: string = '[COSTUMERS] GET_ALL_COSTUMER__SUCCESS';
+export const GET_ALL_COSTUMER_FAILURE: string = '[COSTUMERS] GET_ALL_COSTUMER__FAILURE';
+
+export const CREATE_COSTUMER_REQUEST: string = '[COSTUMERS] CREATE_COSTUMER_REQUEST';
+export const CREATE_COSTUMER_SUCCESS: string = '[COSTUMERS] CREATE_COSTUMER_SUCCESS';
+export const CREATE_COSTUMER_FAILURE: string = '[COSTUMERS] CREATE_COSTUMER_FAILURE';
+
+//<----- EMPLOYEES ----->
+export const OPEN_MODAL_CREATE_EMPLOYEE: string = '[EMPLOYEES] OPEN_MODAL_CREATE_EMPLOYEE';
+
+export const GET_ALL_EMPLOYEE_REQUEST: string = '[EMPLOYEES] GET_ALL_EMPLOYEE__REQUEST';
+export const GET_ALL_EMPLOYEE_SUCCESS: string = '[EMPLOYEES] GET_ALL_EMPLOYEE__SUCCESS';
+export const GET_ALL_EMPLOYEE_FAILURE: string = '[EMPLOYEES] GET_ALL_EMPLOYEE__FAILURE';
+
+export const CREATE_EMPLOYEE_REQUEST: string = '[EMPLOYEES] CREATE_EMPLOYEE_REQUEST';
+export const CREATE_EMPLOYEE_SUCCESS: string = '[EMPLOYEES] CREATE_EMPLOYEE_SUCCESS';
+export const CREATE_EMPLOYEE_FAILURE: string = '[EMPLOYEES] CREATE_EMPLOYEE_FAILURE';
 
 export class ToggleSidebarMenu implements Action {
     readonly type: string = TOGGLE_SIDEBAR_MENU;
@@ -127,11 +150,72 @@ export class GetAllRoleFailure implements Action {
   constructor(public payload: string) {}
 }
 
+//<------ COSTUMERS ----->
+export class OpenModalCreateCostumer implements Action {
+  readonly type: string = OPEN_MODAL_CREATE_COSTUMER;
+}
 
+export class GetAllCostumerRequest implements Action {
+  readonly type: string = GET_ALL_COSTUMER_REQUEST;
+}
 
+export class GetAllCostumerSuccess implements Action {
+  readonly type: string = GET_ALL_COSTUMER_SUCCESS;
+  constructor(public payload: Array<Costumer>) {}
+}
 
+export class GetAllCostumerFailure implements Action {
+  readonly type: string = GET_ALL_COSTUMER_FAILURE;
+  constructor(public payload: string) {}
+}
+//<----- CREATE ---->
+export class CreateCostumerRequest implements Action {
+  readonly type: string = CREATE_COSTUMER_REQUEST;
+  constructor(public payload: Costumer) {}
+}
 
+export class CreateCostumerSuccess implements Action {
+  readonly type: string = CREATE_COSTUMER_SUCCESS;
+  constructor(public payload: any) {}
+}
 
+export class CreateCostumerFailure implements Action {
+  readonly type: string = CREATE_COSTUMER_FAILURE;
+  constructor(public payload: string) {}
+}
+//<------ EMPLOYEES ----->
+export class OpenModalCreateEmployee implements Action {
+  readonly type: string = OPEN_MODAL_CREATE_EMPLOYEE;
+}
+
+export class GetAllEmployeeRequest implements Action {
+  readonly type: string = GET_ALL_EMPLOYEE_REQUEST;
+}
+
+export class GetAllEmployeeSuccess implements Action {
+  readonly type: string = GET_ALL_EMPLOYEE_SUCCESS;
+  constructor(public payload: Array<Employee>) {}
+}
+
+export class GetAllEmployeeFailure implements Action {
+  readonly type: string = GET_ALL_EMPLOYEE_FAILURE;
+  constructor(public payload: string) {}
+}
+//<----- CREATE ---->
+export class CreateEmployeeRequest implements Action {
+  readonly type: string = CREATE_EMPLOYEE_REQUEST;
+  constructor(public payload: Employee) {}
+}
+
+export class CreateEmployeeSuccess implements Action {
+  readonly type: string = CREATE_EMPLOYEE_SUCCESS;
+  constructor(public payload: any) {}
+}
+
+export class CreateEmployeeFailure implements Action {
+  readonly type: string = CREATE_EMPLOYEE_FAILURE;
+  constructor(public payload: string) {}
+}
 export type UiAction =
     | ToggleSidebarMenu
     | ToggleControlSidebar
@@ -147,4 +231,14 @@ export type UiAction =
     | CreateRoleSuccess
     | CreateRoleFailure
     | GetAllRoleSuccess
-    | GetAllRoleFailure;
+    | GetAllRoleFailure
+    | GetAllCostumerSuccess
+    | GetAllCostumerFailure
+    | CreateCostumerRequest
+    | CreateCostumerSuccess
+    | CreateCostumerFailure
+    | GetAllEmployeeSuccess
+    | GetAllEmployeeFailure
+    | CreateEmployeeRequest
+    | CreateEmployeeSuccess
+    | CreateEmployeeFailure;
