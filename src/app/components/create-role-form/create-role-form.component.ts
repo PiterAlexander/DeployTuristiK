@@ -53,6 +53,11 @@ export class CreateRoleFormComponent implements OnInit{
     })
 
     if (this.roleData!=null) {
+
+      this.roleData.associatedPermission.forEach(rolpermiso=>{
+        this.assignpermissiontolist(rolpermiso.permission)
+      })
+
       this.ActionTitle = "Editar"
       this.formGroup.setValue({
         name: this.roleData.name,
@@ -60,9 +65,6 @@ export class CreateRoleFormComponent implements OnInit{
         associatedPermission: [this.selectedPermissions,Validators.required]
       })
 
-      this.roleData.associatedPermission.forEach(rolpermiso=>{
-        this.assignpermissiontolist(rolpermiso.permission)
-      })
     }
 
   }
@@ -76,6 +78,14 @@ export class CreateRoleFormComponent implements OnInit{
     } else {
       this.selectedPermissions.push({ permissionId: permiso["permissionId"], module : permiso["module"]});
     }
+
+
+
+    // console.log("Pemisos ASOCIADOS")
+    // console.log(this.selectedPermissions)
+    // this.selectedPermissions.forEach(element => {
+    //   console.log("MOdulo",element.module)
+    // });
 
   }
 
@@ -125,33 +135,35 @@ export class CreateRoleFormComponent implements OnInit{
 
   UpdatingPermissionRoleAssignment(){
 
-    var associatedPermission = this.roleData.associatedPermission
+    if(this.roleData!=null){
+      const associatedPermission = this.roleData.associatedPermission
 
-    //DELETE
-    for (var ap in associatedPermission) {
-      var existsAp = this.selectedPermissions.find(item => item.permissionId === associatedPermission[ap].permissionId);
-      if (existsAp==null) {
-        const assocPerModelDelete : AssociatedPermission = {
-          associatedPermissionId : associatedPermission[ap].associatedPermissionId,
+      //CREATE
+      const selectedPermission = this.selectedPermissions
+      for (const sp in selectedPermission) {
+        const existsSp = associatedPermission.find(item => item.permissionId === selectedPermission[sp].permissionId);
+        if (existsSp==null) {
+          const assocPerModelCreate : AssociatedPermission = {
+            roleId : this.roleData.roleId,
+            permissionId : selectedPermission[sp].permissionId,
+          }
+          this.store.dispatch(new CreateAssociatedPermissionRequest({
+            ...assocPerModelCreate
+          }));
         }
-        this.store.dispatch(new DeleteAssociatedPermissionRequest({
-          ...assocPerModelDelete
-        }));
       }
-    }
 
-    //CREATE
-    var selectedPermission = this.selectedPermissions
-    for (var sp in selectedPermission) {
-      var existsSp = associatedPermission.find(item => item.permissionId === selectedPermission[sp].permissionId);
-      if (existsSp==null) {
-        var assocPerModelCreate : AssociatedPermission = {
-          roleId : this.roleData.roleId,
-          permissionId : selectedPermission[sp].permissionId,
+      //DELETE
+      for (const ap in associatedPermission) {
+        const existsAp = this.selectedPermissions.find(item => item.permissionId === associatedPermission[ap].permissionId);
+        if (existsAp==null) {
+          const assocPerModelDelete : AssociatedPermission = {
+            associatedPermissionId : associatedPermission[ap].associatedPermissionId,
+          }
+          this.store.dispatch(new DeleteAssociatedPermissionRequest({
+            ...assocPerModelDelete
+          }));
         }
-        this.store.dispatch(new CreateAssociatedPermissionRequest({
-          ...assocPerModelCreate
-        }));
       }
     }
 
