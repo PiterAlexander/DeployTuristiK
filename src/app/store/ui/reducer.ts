@@ -77,6 +77,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
 
+
         case Actions.GET_ALL_PERMISSIONS_REQUEST:
             return {
                 ...state,
@@ -86,6 +87,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: true
                 }
             };
+
 
         case Actions.GET_ALL_PERMISSIONS_SUCCESS:
             return {
@@ -149,6 +151,118 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
 
+        case Actions.GET_ALL_PERMISSIONS_SUCCESS:
+            return {
+                ...state,
+                allPermissions: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+
+        case Actions.GET_ALL_PERMISSIONS_FAILURE:
+            return {
+                ...state,
+                allPermissions: {
+                    data: [],
+                    error: action.payload,
+                    loading: false
+                }
+            };
+
+        case Actions.GET_ALL_PERMISSIONS_REQUEST:
+            return {
+                ...state,
+                allRoles: {
+                    data: [],
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+
+        case Actions.GET_ALL_ROLE_SUCCESS:
+            return {
+                ...state,
+                allRoles: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+
+        case Actions.GET_ALL_ROLE_FAILURE:
+            return {
+                ...state,
+                allRoles: {
+                    data: [],
+                    error: action.payload,
+                    loading: false
+                }
+            };
+        case Actions.GET_ALL_COSTUMER_REQUEST:
+            return {
+                ...state,
+                allCostumers: {
+                    data: [],
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+        case Actions.GET_ALL_COSTUMER_SUCCESS:
+            return {
+                ...state,
+                allCostumers: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.GET_ALL_COSTUMER_FAILURE:
+            return {
+                ...state,
+                allCostumers: {
+                    data: [],
+                    error: action.payload,
+                    loading: false
+                }
+            };
+
+
+        case Actions.GET_ALL_EMPLOYEE_REQUEST:
+            return {
+                ...state,
+                alEmployees: {
+                    data: [],
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+        case Actions.GET_ALL_EMPLOYEE_SUCCESS:
+            return {
+                ...state,
+                alEmployees: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.GET_ALL_EMPLOYEE_FAILURE:
+            return {
+                ...state,
+                alEmployees: {
+                    data: [],
+                    error: action.payload,
+                    loading: false
+                }
+            };
         default:
             return state;
     }
