@@ -26,6 +26,7 @@ export class CreateRoleFormComponent implements OnInit{
   public permissionList : Array<any>
   public AllRoles : Array<any>
   public selectedPermissions: { permissionId: any ,module:string,status?:boolean}[] = [];
+  public selectedUpdateItems: any[] = [];
   public roleData
 
   constructor(
@@ -133,8 +134,6 @@ export class CreateRoleFormComponent implements OnInit{
 
   UpdatingPermissionRoleAssignment(){
 
-    var selectedUpdateItems: any[] = [];
-
     if(this.roleData.roleId!=null){
 
     //DELETE
@@ -142,7 +141,7 @@ export class CreateRoleFormComponent implements OnInit{
     associatedPermission.forEach(ap => {
       const existsAp = this.selectedPermissions.find(item => item.permissionId === ap.permissionId);
       if (existsAp==null) {
-        selectedUpdateItems.push({
+        this.selectedUpdateItems.push({
           associatedPermissionId:ap.associatedPermissionId,
           status:false
         });
@@ -155,7 +154,7 @@ export class CreateRoleFormComponent implements OnInit{
     selectedPermission.forEach(sp=>{
       const existsSp = this.roleData.associatedPermission.find(item => item.permissionId === sp.permissionId);
       if (existsSp==null) {
-        selectedUpdateItems.push({
+        this.selectedUpdateItems.push({
           status:true,
           module:sp.module,
           roleId:this.roleData.roleId,
@@ -164,7 +163,7 @@ export class CreateRoleFormComponent implements OnInit{
       }
     })
 
-    selectedUpdateItems.forEach(updateItem =>{
+    this.selectedUpdateItems.forEach(updateItem =>{
       if (updateItem.status === false) {
         console.log(updateItem, "Se Elimina")
         const assocPerModelDelete : AssociatedPermission = {
