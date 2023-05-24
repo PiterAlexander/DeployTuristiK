@@ -1,3 +1,4 @@
+import { Order } from '@/models/order';
 import { Costumer } from '@/models/costumer';
 import { Employee } from '@/models/employee';
 import { Package } from '@/models/package';
@@ -19,6 +20,16 @@ export const CREATE_PACKAGE_REQUEST: string = '[PACKAGE] CREATE_PACKAGE_REQUEST'
 export const CREATE_PACKAGE_SUCCESS: string = '[PACKAGE] CREATE_PACKAGE_SUCCESS';
 export const CREATE_PACKAGE_FAILURE: string = '[PACKAGE] CREATE_PACKAGE_FAILURE';
 
+//<--- ORDER ACTIONS --->
+export const GET_ALL_ORDERS_REQUEST: string = '[ORDER] GET_ALL_ORDERS_REQUEST';
+export const GET_ALL_ORDERS_SUCCESS: string = '[ORDER] GET_ALL_ORDERS_SUCCESS';
+export const GET_ALL_ORDERS_FAILURE: string = '[ORDER] GET_ALL_ORDERS_FAILURE';
+
+export const OPEN_MODAL_CREATE_ORDER: string = '[ORDER] OPEN_MODAL_CREATE_ORDER';
+export const CREATE_ORDER_REQUEST: string = '[ORDER] CREATE_ORDER_REQUEST';
+export const CREATE_ORDER_SUCCESS: string = '[ORDER] CREATE_ORDER_SUCCESS';
+export const CREATE_ORDER_FAILURE: string = '[ORDER] CREATE_ORDER_FAILURE';
+//<--------------------->
 export const EDIT_PACKAGE_REQUEST: string = '[PACKAGE] EDIT_PACKAGE_REQUEST';
 export const EDIT_PACKAGE_SUCCESS: string = '[PACKAGE] EDIT_PACKAGE_SUCCESS';
 export const EDIT_PACKAGE_FAILURE: string = '[PACKAGE] EDIT_PACKAGE_FAILURE';
@@ -89,6 +100,7 @@ export class ToggleDarkMode implements Action {
 // PACKAGES --------------------------------------------------------
 export class OpenModalCreatePackage implements Action {
     readonly type: string = OPEN_MODAL_CREATE_PACKAGE;
+    
     constructor(public payload?: Package) {}
 }
 
@@ -100,7 +112,7 @@ export class GetAllPackagesRequest implements Action {
 
 export class GetAllPackagesSuccess implements Action {
     readonly type: string = GET_ALL_PACKAGES_SUCCESS;
-    constructor(public payload: Array<Package>) {}
+                                                                                                                                                                                                                                                                                                                                            constructor(public payload: Array<Package>) {}
 }
 
 export class GetAllPackagesFailure implements Action {
@@ -127,6 +139,35 @@ export class CreatePackageFailure implements Action {
     constructor(public payload: string) {}
 }
 
+//<--- ORDER ACTIONS --->
+export class GetAllOrdersRequest implements Action {
+    readonly type: string = GET_ALL_ORDERS_REQUEST;
+}
+export class GetAllOrdersSuccess implements Action {
+    readonly type: string = GET_ALL_ORDERS_SUCCESS;
+    constructor(public payload: Array<Order>) {}
+}
+export class GetAllOrdersFailure implements Action {
+    readonly type: string = GET_ALL_ORDERS_FAILURE;
+    constructor(public payload: string) {}
+}
+
+export class OpenModalCreateOrder implements Action {
+    readonly type: string = OPEN_MODAL_CREATE_ORDER;
+}
+export class CreateOrderRequest implements Action {
+    readonly type: string = CREATE_ORDER_REQUEST;
+    constructor(public payload: Order) {}
+}
+export class CreateOrderSuccess implements Action {
+    readonly type: string = CREATE_ORDER_SUCCESS;
+    constructor(public payload: any) {}
+}
+export class CreateOrderFailure implements Action {
+    readonly type: string = CREATE_ORDER_FAILURE;
+    constructor(public payload: string) {}
+}
+//<--------------------->
 // END PACKAGES CREATE--------------------------------------------------------
 
 // PACKAGES EDIT--------------------------------------------------------
@@ -320,6 +361,11 @@ export type UiAction =
     | CreatePackageRequest
     | CreatePackageSuccess
     | CreatePackageFailure
+    | GetAllOrdersSuccess
+    | GetAllOrdersFailure
+    | CreateOrderRequest
+    | CreateOrderSuccess
+    | CreateOrderFailure
     | GetAllPermissionsSuccess
     | GetAllPermissionsFailure
     | CreateRoleRequest

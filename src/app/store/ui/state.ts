@@ -1,5 +1,6 @@
 import { Costumer } from "@/models/costumer";
 import { Package } from "@/models/package";
+import { Order } from "@/models/order";
 import { Permission } from "@/models/permission";
 import { Role } from '@/models/role';
 
@@ -14,6 +15,12 @@ export default <UiState>{
         error: undefined,
         loading: false
     },
+    //<--- ORDER STATES --->
+    allOrders: {
+        data: [],
+        error: undefined,
+        loading: false
+        },
     onePackage: {
       data: undefined,
       error: undefined,
@@ -44,6 +51,7 @@ export default <UiState>{
       error: undefined,
       loading: false
     }
+    //<-------------------->
 };
 
 
@@ -56,6 +64,12 @@ export interface UiState {
     screenSize: any;
     allPackages: {
         data: Array<Package>,
+        error: string,
+        loading: boolean
+    },
+    //<--- ORDER STATES --->
+    allOrders: {
+        data: Array<Order>,
         error: string,
         loading: boolean
     };
@@ -89,4 +103,5 @@ export interface UiState {
       error: string,
       loading: boolean
     }
+    //<-------------------->
 }

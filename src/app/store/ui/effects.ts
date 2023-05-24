@@ -1,17 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { catchError, exhaustMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { CREATE_ORDER_REQUEST, CREATE_PACKAGE_REQUEST, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, GET_ALL_ORDERS_REQUEST, GET_ALL_PACKAGES_REQUEST, GET_ALL_PERMISSIONS_REQUEST, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesRequest, GetAllPackagesSuccess, OPEN_MODAL_CREATE_ORDER, OPEN_MODAL_CREATE_PACKAGE, OPEN_MODAL_CREATE_ROLE } from './actions';
 import {
-    CREATE_PACKAGE_REQUEST,
-    CreatePackageFailure,
-    CreatePackageRequest,
-    CreatePackageSuccess,
-    GET_ALL_PACKAGES_REQUEST,
-    GET_ALL_PERMISSIONS_REQUEST,
-    GetAllPackagesRequest,
-    GetAllPackagesSuccess,
-    OPEN_MODAL_CREATE_PACKAGE,
-    OPEN_MODAL_CREATE_ROLE,
     GetAllPermissionsSuccess,
     GetAllPermissionsFailure,
     CREATE_ROLE_REQUEST,
@@ -38,24 +29,6 @@ import {
     CreateEmployeeSuccess,
     GetAllEmployeeRequest,
     CreateEmployeeFailure,
-  CREATE_PACKAGE_REQUEST,
-  CreatePackageFailure,
-  CreatePackageRequest,
-  CreatePackageSuccess,
-  GET_ALL_PACKAGES_REQUEST,
-  GET_ALL_PERMISSIONS_REQUEST,
-  GetAllPackagesRequest,
-  GetAllPackagesSuccess,
-  OPEN_MODAL_CREATE_PACKAGE,
-  OPEN_MODAL_CREATE_ROLE,
-  GetAllPermissionsSuccess,
-  GetAllPermissionsFailure,
-  CREATE_ROLE_REQUEST,
-  CreateRoleFailure,
-  CreateRoleSuccess,
-  GET_ALL_ROLE_REQUEST,
-  GetAllRoleSuccess,
-  GetAllRoleFailure,
   EDIT_ROLE_REQUEST,
   EditRoleRequest,
   EditRoleSuccess,
@@ -79,11 +52,13 @@ import { ApiService } from '@services/api.service';
 import { of } from 'rxjs';
 import { CreatecostumerformComponent } from '@components/createcostumerform/createcostumerform.component';
 import { CreateRoleFormComponent } from '@components/create-role-form/create-role-form.component';
+import { CreateOrderFormComponent } from '@components/create-order-form/create-order-form.component';
+
 import { PermissionService } from '@services/configuration/permission.service';
 import { RoleService } from '@services/configuration/role.service';
 import { CreateRoleRequest } from './actions';
 import { CreateEmployeeFormComponent } from '@components/create-employee-form/create-employee-form.component';
-import { CreateRoleRequest, DeleteAssociatedPermissionSuccess, DeleteAssociatedPermissionFailure } from './actions';
+import { DeleteAssociatedPermissionSuccess, DeleteAssociatedPermissionFailure } from './actions';
 import { open } from 'fs';
 import { AssociatedPermissionService } from '@services/configuration/associated-permission.service';
 @Injectable()
@@ -134,6 +109,52 @@ export class PackageEffects {
         })
     ));
 
+    //<--- ORDER EFFECTS --->
+    openModalCreateOrder$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(OPEN_MODAL_CREATE_ORDER),
+            tap((action) => {
+                this.modalRef = this.modalService.open(CreateOrderFormComponent, {
+                    backdrop: false,
+                    size: 'xl'
+                });
+            })
+        ), { dispatch: false });
+
+        createOrder$ = createEffect(() => this.actions$.pipe(
+            ofType(CREATE_ORDER_REQUEST),
+            map((action: CreateOrderRequest) => action.payload),
+            switchMap((order) => {
+                return this.apiService.addOrder(order).pipe(
+                    mergeMap((orderResolved) => {
+                        this.modalRef.close();
+                        return [
+                            new CreateOrderSuccess(orderResolved),
+                            new GetAllOrdersRequest()
+                        ];
+                    }),
+                    catchError((err) => of(new CreateOrderFailure(err)))
+                )
+            })
+        ));
+    getOrders$ = createEffect(() => this.actions$.pipe(
+        ofType(GET_ALL_ORDERS_REQUEST),
+        switchMap((action) => {
+            return this.apiService.getOrders().pipe(
+                mergeMap((ordersResolved) => {
+                    console.log(ordersResolved)
+                    return [
+                        new GetAllOrdersSuccess(ordersResolved)
+                        
+                    ];
+                }),
+                catchError((err) => of(new CreatePackageFailure(err)))
+            )
+        })
+    ));
+
+    
+    //<--------------------->
     editPackage$ = createEffect(() => this.actions$.pipe(
         ofType(EDIT_PACKAGE_REQUEST),
         map((action: EditPackageRequest) => action.payload),
@@ -251,6 +272,10 @@ export class PackageEffects {
                     ];
                 }),
                 catchError((err) => of(new CreateCostumerFailure(err)))
+            )
+            })
+    ));
+
     editRole$ = createEffect(() => this.actions$.pipe(
         ofType(EDIT_ROLE_REQUEST),
         map((action: EditRoleRequest) => action.payload),
@@ -266,7 +291,7 @@ export class PackageEffects {
                 catchError((err) => of(new EditRoleFailure(err)))
             )
         })
-    ));
+    ))
 
     //<-----  EMPLOYEE ----->
     openModalCreateEmployee = createEffect(() =>

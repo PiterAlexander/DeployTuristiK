@@ -3,6 +3,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Package } from '@/models/package';
+import { Order } from '@/models/order';
 import { Costumer } from '@/models/costumer';
 import { Employee } from '@/models/employee';
 @Injectable({
@@ -30,6 +31,24 @@ export class ApiService {
     deletePackage(idPackage:number):Observable<void>{                                        
         return this.http.delete<void>(`${this.endpoint}api/package/delete/${idPackage}`)
     }
+
+//<--- ORDER URLS --->
+    getOrders():Observable<Order[]>{
+        return this.http.get<Order[]>(`${this.endpoint}api/Order`)
+    }
+
+    addOrder(modelo:Order):Observable<Order>{
+        return this.http.post<Order>(`${this.endpoint}api/Order`, modelo)
+    }
+
+    updateOrder(idOrder:number,modelo:Order):Observable<Order>{
+        return this.http.put<Order>(`${this.endpoint}api/Order/${idOrder}`, modelo)
+    }
+
+    deleteOrder(idOrder:number):Observable<void>{                                        
+        return this.http.delete<void>(`${this.endpoint}api/Order/${idOrder}`)
+    }
+//<------------------>
     //<--- COSTUMERS --->
     getCostumers(): Observable<Costumer[]> {
         return this.http.get<Costumer[]>(`${this.endpoint}api/Costumer`)
