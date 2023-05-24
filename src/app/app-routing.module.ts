@@ -11,6 +11,7 @@ import {ForgotPasswordComponent} from '@modules/forgot-password/forgot-password.
 import {RecoverPasswordComponent} from '@modules/recover-password/recover-password.component';
 import { PackagesComponent } from '@pages/packages/packages.component';
 import { RolesComponent } from '@pages/roles/roles.component';
+import { OrdersComponent } from '@pages/orders/orders.component';
 
 const routes: Routes = [
     {
@@ -35,6 +36,10 @@ const routes: Routes = [
                 path: 'roles',
                 component: RolesComponent
             },
+            {
+                path: 'orders',
+                component: OrdersComponent
+            }
         ]
     },
     {

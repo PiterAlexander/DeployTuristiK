@@ -1,4 +1,5 @@
 import { Package } from "@/models/package";
+import { Order } from "@/models/order";
 
 export default <UiState>{
     darkMode: false,
@@ -10,7 +11,14 @@ export default <UiState>{
         data: [],
         error: undefined,
         loading: false
+    },
+    //<--- ORDER STATES --->
+    allOrders: {
+        data: [],
+        error: undefined,
+        loading: false
     }
+    //<-------------------->
 };
 
 export interface UiState {
@@ -24,5 +32,12 @@ export interface UiState {
         data: Array<Package>,
         error: string,
         loading: boolean
+    },
+    //<--- ORDER STATES --->
+    allOrders: {
+        data: Array<Order>,
+        error: string,
+        loading: boolean
     }
+    //<-------------------->
 }

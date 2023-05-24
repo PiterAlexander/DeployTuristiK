@@ -34,6 +34,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { PackageEffects } from './store/ui/effects';
 import { CreatePackageFormComponent } from './components/create-package-form/create-package-form.component';
 import { RolesComponent } from './pages/roles/roles.component';
+import { OrdersComponent } from './pages/orders/orders.component';
+import { CreateOrderFormComponent } from './components/create-order-form/create-order-form.component';
 
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
@@ -59,6 +61,8 @@ registerLocaleData(localeEn, 'en-EN');
         PackagesComponent,
         CreatePackageFormComponent,
         RolesComponent,
+        OrdersComponent,
+        CreateOrderFormComponent,
     ],
     imports: [
         BrowserModule,

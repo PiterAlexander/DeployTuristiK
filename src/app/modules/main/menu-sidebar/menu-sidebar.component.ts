@@ -76,6 +76,6 @@ export const MENU = [
   {
     name: 'Pedidos',
     iconClasses: 'fas fa-columns',
-    path: ['']
+    path: ['/orders']
   }
 ];
