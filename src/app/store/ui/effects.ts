@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { catchError, exhaustMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
-import { CREATE_ORDER_REQUEST, CREATE_PACKAGE_REQUEST, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, GET_ALL_ORDERS_REQUEST, GET_ALL_PACKAGES_REQUEST, GET_ALL_PERMISSIONS_REQUEST, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesRequest, GetAllPackagesSuccess, OPEN_MODAL_CREATE_ORDER, OPEN_MODAL_CREATE_PACKAGE, OPEN_MODAL_CREATE_ROLE } from './actions';
+import { CREATE_ORDER_REQUEST, CREATE_PACKAGE_REQUEST, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, GET_ALL_ORDERS_REQUEST, GET_ALL_PACKAGES_REQUEST, GET_ALL_PERMISSIONS_REQUEST, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesRequest, GetAllPackagesSuccess, OPEN_MODAL_CREATE_ORDER, OPEN_MODAL_CREATE_PACKAGE, OPEN_MODAL_CREATE_ROLE} from './actions';
 import {
     GetAllPermissionsSuccess,
     GetAllPermissionsFailure,
@@ -61,6 +61,7 @@ import { CreateEmployeeFormComponent } from '@components/create-employee-form/cr
 import { DeleteAssociatedPermissionSuccess, DeleteAssociatedPermissionFailure } from './actions';
 import { open } from 'fs';
 import { AssociatedPermissionService } from '@services/configuration/associated-permission.service';
+
 @Injectable()
 export class PackageEffects {
     modalRef: NgbModalRef;
@@ -145,7 +146,7 @@ export class PackageEffects {
                     console.log(ordersResolved)
                     return [
                         new GetAllOrdersSuccess(ordersResolved)
-                        
+
                     ];
                 }),
                 catchError((err) => of(new CreatePackageFailure(err)))
@@ -153,7 +154,7 @@ export class PackageEffects {
         })
     ));
 
-    
+
     //<--------------------->
     editPackage$ = createEffect(() => this.actions$.pipe(
         ofType(EDIT_PACKAGE_REQUEST),
@@ -173,67 +174,67 @@ export class PackageEffects {
     ));
 
 
-
+    //<--- ROL AND PERMISSIONS EFFECTS --->
     openModalCreateRole$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(OPEN_MODAL_CREATE_ROLE),
-            tap((action) => {
-                this.modalRef = this.modalService.open(CreateRoleFormComponent, {
-                    backdrop: false,
-                    size: 'lg'
-                });
-            })
-        ),
-        {
-          dispatch: false
-        });
+      this.actions$.pipe(
+          ofType(OPEN_MODAL_CREATE_ROLE),
+          tap((action) => {
+              this.modalRef = this.modalService.open(CreateRoleFormComponent, {
+                  backdrop: false,
+                  size: 'lg'
+              });
+          })
+      ),
+      {dispatch: false});
 
     getPermissions$ = createEffect(() => this.actions$.pipe(
-        ofType(GET_ALL_PERMISSIONS_REQUEST),
-        switchMap((action) => {
-            return this.apiPermission.ReadPermissions().pipe(
-                mergeMap((permissionResolved) => {
-                    return [
-                        new GetAllPermissionsSuccess(permissionResolved)
-                    ];
-                }),
-                catchError((err) => of(new GetAllPermissionsFailure(err)))
-            )
-
-        })
+      ofType(GET_ALL_PERMISSIONS_REQUEST),
+      switchMap((action) => {
+          return this.apiPermission.ReadPermissions().pipe(
+              mergeMap((permissionResolved) => {
+                  return [
+                      new GetAllPermissionsSuccess(permissionResolved)
+                  ];
+              }),
+              catchError((err) => of(new GetAllPermissionsFailure(err)))
+          )
+      })
     ));
 
     createRole$ = createEffect(() => this.actions$.pipe(
-        ofType(CREATE_ROLE_REQUEST),
-        map((action: CreateRoleRequest) => action.payload),
-        switchMap((role) => {
-            return this.roleService.CreateRole(role).pipe(
-                mergeMap((roleResolved) => {
-                    this.modalRef.close();
-                    return [
-                        new CreateRoleSuccess(roleResolved),
-                        new GetAllRoleRequest()
-                    ];
-                }),
-                catchError((err) => of(new CreateRoleFailure(err)))
-            )
-        })
+      ofType(CREATE_ROLE_REQUEST),
+      map((action: CreateRoleRequest) => action.payload),
+      switchMap((role) => {
+        return this.roleService.CreateRole(role).pipe(
+            mergeMap((roleResolved) => {
+                this.modalRef.close();
+                return [
+                    new CreateRoleSuccess(roleResolved),
+                    new GetAllRoleRequest()
+                ];
+            }),
+            catchError((err) => of(new CreateRoleFailure(err)))
+        )
+      })
     ));
 
     getRoles$ = createEffect(() => this.actions$.pipe(
-        ofType(GET_ALL_ROLE_REQUEST),
-        switchMap((action) => {
-            return this.roleService.ReadRoles().pipe(
-                mergeMap((roleResolved) => {
-                    return [
-                        new GetAllRoleSuccess(roleResolved)
-                    ];
-                }),
-                catchError((err) => of(new GetAllRoleFailure(err)))
-            )
-
-        })
+      ofType(GET_ALL_ROLE_REQUEST),
+      switchMap((action) => {
+        return this.roleService.ReadRoles().pipe(
+            mergeMap((roleResolved) => {
+              console.log(roleResolved)
+                return [
+                    new GetAllRoleSuccess(roleResolved)
+                ];
+            }),
+            catchError((err) => of(new GetAllRoleFailure(err)))
+        )
+      })
     ));
+    //<--------------------->
+
+
     //<-----  COSTUMERS ----->
     openModalCreateCostumer = createEffect(() =>
         this.actions$.pipe(
@@ -276,23 +277,24 @@ export class PackageEffects {
             })
     ));
 
+    //<-----  EDIT ROLE ----->
     editRole$ = createEffect(() => this.actions$.pipe(
         ofType(EDIT_ROLE_REQUEST),
         map((action: EditRoleRequest) => action.payload),
         switchMap((role) => {
             return this.roleService.UpdateRole(role.roleId,role).pipe(
-                mergeMap((roleResolved) => {
-                    this.modalRef.close();
-                    return [
-                        new EditRoleSuccess(roleResolved),
-                        new GetAllRoleRequest(),
-                    ];
-                }),
-                catchError((err) => of(new EditRoleFailure(err)))
+              mergeMap((roleResolved) => {
+                  this.modalRef.close();
+                  return [
+                      new EditRoleSuccess(roleResolved),
+                      new GetAllRoleRequest(),
+                  ];
+              }),
+              catchError((err) => of(new EditRoleFailure(err)))
             )
         })
     ))
-
+    //<-----  EDIT ROLE  END----->
     //<-----  EMPLOYEE ----->
     openModalCreateEmployee = createEffect(() =>
         this.actions$.pipe(
@@ -334,6 +336,8 @@ export class PackageEffects {
             )
         })
     ));
+
+    //<----- ASSOCIATED PERMISSIONS EFFECTS ----->
     createAssociatedPermission$ = createEffect(() => this.actions$.pipe(
       ofType(CREATE_ASSOCIATEDPERMISSION_REQUEST),
       map((action: CreateAssociatedPermissionRequest) => action.payload),
@@ -364,7 +368,8 @@ export class PackageEffects {
           )
       })
     ));
-          
+    //<----------------------------------->
+
     constructor(
         private actions$: Actions,
         private modalService: NgbModal,

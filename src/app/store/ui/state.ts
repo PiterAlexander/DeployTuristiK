@@ -26,6 +26,7 @@ export default <UiState>{
       error: undefined,
       loading: false
     },
+    //<--- PERMISSIONS AND ROLES STATES --->
     allPermissions: {
       data: [],
       error: undefined,
@@ -36,6 +37,12 @@ export default <UiState>{
       error: undefined,
       loading: false
     },
+    oneRole:{
+      data: undefined,
+      error: undefined,
+      loading: false
+    },
+    //<--- COSTUMERS STATES --->
     allCostumers:{
       data: [],
       error: undefined,
@@ -46,11 +53,6 @@ export default <UiState>{
       error: undefined,
       loading: false
     },
-  oneRole:{
-      data: undefined,
-      error: undefined,
-      loading: false
-    }
     //<-------------------->
 };
 

@@ -34,7 +34,7 @@ export const EDIT_PACKAGE_REQUEST: string = '[PACKAGE] EDIT_PACKAGE_REQUEST';
 export const EDIT_PACKAGE_SUCCESS: string = '[PACKAGE] EDIT_PACKAGE_SUCCESS';
 export const EDIT_PACKAGE_FAILURE: string = '[PACKAGE] EDIT_PACKAGE_FAILURE';
 
-
+//<--- ROLE AND PERMISSIONS ACTIONS --->
 export const OPEN_MODAL_CREATE_ROLE: string = '[ROLES] OPEN_MODAL_CREATE_ROLE';
 
 export const GET_ALL_PERMISSIONS_REQUEST: string = '[PERMISSIONS] GET_ALL_PERMISSIONS_REQUEST';
@@ -48,6 +48,7 @@ export const CREATE_ROLE_FAILURE: string = '[ROLES] CREATE_ROLE_FAILURE';
 export const GET_ALL_ROLE_REQUEST: string = '[PERMISSIONS] GET_ALL_ROLE_REQUEST';
 export const GET_ALL_ROLE_SUCCESS: string = '[PERMISSIONS] GET_ALL_ROLE_SUCCESS';
 export const GET_ALL_ROLE_FAILURE: string = '[PERMISSIONS] GET_ALL_ROLE_FAILURE';
+//<--------------------->
 
 //<----- COSTUMERS ----->
 export const OPEN_MODAL_CREATE_COSTUMER: string = '[COSTUMERS] OPEN_MODAL_CREATE_COSTUMER';
@@ -75,6 +76,7 @@ export const EDIT_ROLE_REQUEST: string = '[ROLES] EDIT_ROLE_REQUEST';
 export const EDIT_ROLE_SUCCESS: string = '[ROLES] EDIT_ROLE_SUCCESS';
 export const EDIT_ROLE_FAILURE: string = '[ROLES] EDIT_ROLE_FAILURE';
 
+//<----- ASSOCIATED PERMISSIONS ACTIONS ----->
 export const CREATE_ASSOCIATEDPERMISSION_REQUEST: string = '[ASSOCIATEDPERMISSION] CREATE_ASSOCIATEDPERMISSION_REQUEST';
 export const CREATE_ASSOCIATEDPERMISSION_SUCCESS: string = '[ASSOCIATEDPERMISSION] CREATE_ASSOCIATEDPERMISSION_SUCCESS';
 export const CREATE_ASSOCIATEDPERMISSION_FAILURE: string = '[ASSOCIATEDPERMISSION] CREATE_ASSOCIATEDPERMISSION_FAILURE';
@@ -82,6 +84,9 @@ export const CREATE_ASSOCIATEDPERMISSION_FAILURE: string = '[ASSOCIATEDPERMISSIO
 export const DELETE_ASSOCIATEDPERMISSION_REQUEST: string = '[ASSOCIATEDPERMISSION] DELETE_ASSOCIATEDPERMISSION_REQUEST';
 export const DELETE_ASSOCIATEDPERMISSION_SUCCESS: string = '[ASSOCIATEDPERMISSION] DELETE_ASSOCIATEDPERMISSION_SUCCESS';
 export const DELETE_ASSOCIATEDPERMISSION_FAILURE: string = '[ASSOCIATEDPERMISSION] DELETE_ASSOCIATEDPERMISSION_FAILURE';
+//<------------------------------------------>
+
+
 export class ToggleSidebarMenu implements Action {
     readonly type: string = TOGGLE_SIDEBAR_MENU;
     constructor(public payload?: string) {}
@@ -100,7 +105,7 @@ export class ToggleDarkMode implements Action {
 // PACKAGES --------------------------------------------------------
 export class OpenModalCreatePackage implements Action {
     readonly type: string = OPEN_MODAL_CREATE_PACKAGE;
-    
+
     constructor(public payload?: Package) {}
 }
 
@@ -192,6 +197,8 @@ export class EditPackageFailure implements Action {
 
 // PACKAGES END--------------------------------------------------------
 
+
+//CREATE-GET ROLES AND GET PERMISSIONS  ----------------------------------------
 export class OpenModalCreateRole implements Action {
     readonly type: string = OPEN_MODAL_CREATE_ROLE;
     constructor(public payload?: Role) {}
@@ -238,6 +245,7 @@ export class GetAllRoleFailure implements Action {
   readonly type: string = GET_ALL_ROLE_FAILURE;
   constructor(public payload: string) {}
 }
+//CREATE-GET ROLES AND GET PERMISSIONS END ----------------------------------
 
 //<------ COSTUMERS ----->
 export class OpenModalCreateCostumer implements Action {
@@ -267,6 +275,8 @@ export class CreateCostumerSuccess implements Action {
   readonly type: string = CREATE_COSTUMER_SUCCESS;
   constructor(public payload: any) {}
 }
+
+//EDIT ROLES AND DELETE-CREATE ASSOCIATEDPERMISSIONS ------------------------------
 export class EditRoleRequest implements Action {
   readonly type: string = EDIT_ROLE_REQUEST;
   constructor(public payload: Role) {}
@@ -312,7 +322,7 @@ export class DeleteAssociatedPermissionFailure implements Action {
   readonly type: string = DELETE_ASSOCIATEDPERMISSION_FAILURE;
   constructor(public payload: string) {}
 }
-
+//EDIT ROLES AND DELETE-CREATE ASSOCIATEDPERMISSIONS END----------------------------
 
 
 export class CreateCostumerFailure implements Action {
@@ -352,6 +362,7 @@ export class CreateEmployeeFailure implements Action {
   readonly type: string = CREATE_EMPLOYEE_FAILURE;
   constructor(public payload: string) {}
 }
+
 export type UiAction =
     | ToggleSidebarMenu
     | ToggleControlSidebar
