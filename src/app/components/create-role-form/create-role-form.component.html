@@ -11,13 +11,14 @@
                   <div class="row">
                       <div class="form-group col-6">
                           <label for="package_name" class="form-label">Nombre</label>
-                          <input type="text" id="permission_name" name="name"
-                              class="form-control formularioCampo border-left-dark"
-                              placeholder="Ingrese el nombre del rol" formControlName="name"
-                              onkeydown="return /[a-z, ]/i.test(event.key)"
-                              >
-                          <div class="invalid-feedback">
-                              En este campo solo se permiten letras
+                          <input type="text" id="name" name="name"
+                          class="form-control formularioCampo border-left-dark"
+                          placeholder="Ingrese el nombre del rol" formControlName="name"
+                          onkeydown="return /[a-z, ]/i.test(event.key)"
+                          >
+                          <div *ngIf="formGroup.get('name').invalid && (formGroup.get('name').dirty || formGroup.get('name').touched)" class="invalid-feedback">
+                            <div *ngIf="formGroup.get('name').errors.required">Este campo es obligatorio.</div>
+                            <div *ngIf="formGroup.get('name').errors.minlength">El nombre debe tener al menos {{ formGroup.get('name').errors.minlength.requiredLength }} caracteres.</div>
                           </div>
                       </div>
 
@@ -42,6 +43,9 @@
                   <div class="row">
                     <div class="container mb-4">
                       <h3 class="text-dark mb-3">Permisos</h3>
+                      <div *ngIf="formGroup.get('associatedPermission').invalid && (formGroup.get('associatedPermission').dirty || formGroup.get('name').touched)" class="invalid-feedback">
+                        <div *ngIf="formGroup.get('associatedPermission').errors.required">El rol debe tener almenos un permiso asociado.</div>
+                      </div>
                       <div class="row col-12 d-flex">
                         <div *ngFor="let permiso of permissionList" class="custom-control custom-switch col-6 mt-3">
                           <input type="checkbox" class="custom-control-input"

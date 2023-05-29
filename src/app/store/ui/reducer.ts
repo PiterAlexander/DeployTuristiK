@@ -36,7 +36,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 sidebarSkin: skin,
                 darkMode: !state.darkMode
             };
-        
+
             case Actions.GET_ALL_PACKAGES_REQUEST:
                 return {
                     ...state,
@@ -46,7 +46,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                         loading: true
                     }
                 };
-    
+
             case Actions.GET_ALL_PACKAGES_SUCCESS:
                 return {
                     ...state,
@@ -56,7 +56,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                         loading: false
                     }
                 };
-    
+
             case Actions.GET_ALL_PACKAGES_FAILURE:
                 return {
                     ...state,
@@ -77,7 +77,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                         loading: true
                     }
                 };
-    
+
             case Actions.GET_ALL_ORDERS_SUCCESS:
                 return {
                     ...state,
@@ -87,7 +87,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                         loading: false
                     }
                 };
-    
+
             case Actions.GET_ALL_ORDERS_FAILURE:
                 return {
                     ...state,
@@ -98,7 +98,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     }
                 };
             //<---------------------->
-            
+
 
         case Actions.GET_ALL_PACKAGES_REQUEST:
             return {
@@ -140,7 +140,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
 
-
+        //<--- PERMISSIONS AND ROLE REDUCERS -------------------------->
         case Actions.GET_ALL_PERMISSIONS_REQUEST:
             return {
                 ...state,
@@ -266,6 +266,9 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 }
             };
+        //<------------------------------------------------------------->
+
+
         case Actions.GET_ALL_COSTUMER_REQUEST:
             return {
                 ...state,
