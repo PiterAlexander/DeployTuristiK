@@ -326,6 +326,46 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 }
             };
+        
+
+        //<--User Reducers----->
+        case Actions.usersActions.GET_USERS_REQUEST:
+            return{
+                ...state,
+                allUsers:{
+                    data: [],
+                    error: undefined,
+                    loading: true
+                }
+            };
+        case Actions.usersActions.GET_USERS_SUCCESS:
+            return{
+                ...state,
+                allUsers:{
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+        case Actions.usersActions.GET_USERS_FAILURE:
+            return{
+                ...state,
+                allUsers:{
+                    data: [],
+                    error: action.payload,
+                    loading: false
+                }
+            };
+
+        case Actions.OPEN_MODAL_USER:
+            return{
+                ...state,
+                currentUser:{
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
         default:
             return state;
     }

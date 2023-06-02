@@ -49,7 +49,7 @@ export const MENU = [
       {
         name: 'Usuarios',
         iconClasses: 'far fa-circle',
-        path: ['']
+        path: ['/usuarios']
       }
     ]
   },
