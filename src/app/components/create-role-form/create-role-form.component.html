@@ -15,8 +15,19 @@
 
                           <input type="text" id="role_name" name="name" maxlength="20"
                           class="form-control formularioCampo border-left-dark"
+
+                          [ngClass]="
+                          {
+                            'invalid': formGroup.get('name').dirty && (formGroup.get('name').errors || validateExistingRoleName()),
+                            'valid': formGroup.get('name').dirty && !formGroup.get('name').errors
+                            && !validateExistingRoleName()
+                          }"
+
                           placeholder="Ingrese el nombre del rol" formControlName="name" required
-                          onkeydown="return /[a-z, ]/i.test(event.key)">
+                          onkeydown="return /[a-z, ]/i.test(event.key)"
+                          >
+
+
                           <div class="input-group-prepend">
                             <span *ngIf="formGroup.get('name').errors || validateExistingRoleName()" class="input-group-text rounded-right">
                               <i class="fas fa-user"></i>
@@ -27,24 +38,25 @@
                           </div>
 
                           <!--MENSAJES DE VALIDACION ROLE NAME-->
-                          <div *ngIf="formGroup.get('name')?.errors?.['required']" class="invalid-feedback">
+                          <div *ngIf="formGroup.get('name')?.errors?.['required'] && formGroup.get('name').dirty" class="invalid-feedback">
                             *Este campo es obligatorio.
                           </div>
-                          <div *ngIf="formGroup.get('name')?.errors?.['minlength']" class="invalid-feedback">
+                          <div *ngIf="formGroup.get('name')?.errors?.['minlength'] && formGroup.get('name').dirty" class="invalid-feedback">
                             *El nombre debe tener mínimo 3 caracteres.
                           </div>
-                          <div *ngIf="validateExistingRoleName()" class="invalid-feedback">
+                          <div *ngIf="validateExistingRoleName() && formGroup.get('name').dirty" class="invalid-feedback">
                             *El rol ya está registrado.
                           </div>
                           <!---------------------------------->
+
                       </div>
                     </div>
 
                     <div class="form-group col-5">
                       <label for="status" class="form-label">Estado</label>
                       <div class="input-group">
-                          <select class="custom-select border-left-dark form-control formularioCampo"
-                              id="status" name="status" formControlName="status" placeholder="Seleccione un estado">
+                          <select class="custom-select border-left-dark form-control formularioCampo" [ngClass]="{'invalid': formGroup.get('status').dirty,'valid': formGroup.get('status').dirty}"
+                              id="status" name="status" formControlName="status" placeholder="Seleccione un estado" >
                               <option selected disabled value="0">Seleccione un estado</option>
                               <option value="1">Habilitado</option>
                               <option value="2">Deshabilitado</option>
@@ -53,7 +65,7 @@
                               <span class="input-group-text"><i class="fas fa-user-cog"></i></span>
                           </div>
                           <!--MENSAJES DE VALIDACION ROLE STATUS-->
-                          <div *ngIf="this.formGroup.value.status===0" class="invalid-feedback">
+                          <div *ngIf="this.formGroup.value.status===0 && formGroup.get('status').dirty" class="invalid-feedback">
                             *Por favor seleccione una opción.
                           </div>
                           <!-------------------------------------->
