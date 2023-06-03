@@ -37,69 +37,6 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 darkMode: !state.darkMode
             };
 
-            case Actions.GET_ALL_PACKAGES_REQUEST:
-                return {
-                    ...state,
-                    allPackages: {
-                        data: [],
-                        error: undefined,
-                        loading: true
-                    }
-                };
-
-            case Actions.GET_ALL_PACKAGES_SUCCESS:
-                return {
-                    ...state,
-                    allPackages: {
-                        data: action.payload,
-                        error: undefined,
-                        loading: false
-                    }
-                };
-
-            case Actions.GET_ALL_PACKAGES_FAILURE:
-                return {
-                    ...state,
-                    allPackages: {
-                        data: [],
-                        error: action.payload,
-                        loading: false
-                    }
-                };
-
-            //<--- ORDER REDUCERS --->
-            case Actions.GET_ALL_ORDERS_REQUEST:
-                return {
-                    ...state,
-                    allOrders: {
-                        data: [],
-                        error: undefined,
-                        loading: true
-                    }
-                };
-
-            case Actions.GET_ALL_ORDERS_SUCCESS:
-                return {
-                    ...state,
-                    allOrders: {
-                        data: action.payload,
-                        error: undefined,
-                        loading: false
-                    }
-                };
-
-            case Actions.GET_ALL_ORDERS_FAILURE:
-                return {
-                    ...state,
-                    allOrders: {
-                        data: [],
-                        error: action.payload,
-                        loading: false
-                    }
-                };
-            //<---------------------->
-
-
         case Actions.GET_ALL_PACKAGES_REQUEST:
             return {
                 ...state,
@@ -140,7 +77,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
 
-        //<--- PERMISSIONS AND ROLE REDUCERS -------------------------->
+
         case Actions.GET_ALL_PERMISSIONS_REQUEST:
             return {
                 ...state,
@@ -266,9 +203,6 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 }
             };
-        //<------------------------------------------------------------->
-
-
         case Actions.GET_ALL_COSTUMER_REQUEST:
             return {
                 ...state,
@@ -326,46 +260,6 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 alEmployees: {
                     data: [],
                     error: action.payload,
-                    loading: false
-                }
-            };
-        
-
-        //<--User Reducers----->
-        case Actions.usersActions.GET_USERS_REQUEST:
-            return{
-                ...state,
-                allUsers:{
-                    data: [],
-                    error: undefined,
-                    loading: true
-                }
-            };
-        case Actions.usersActions.GET_USERS_SUCCESS:
-            return{
-                ...state,
-                allUsers:{
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
-                }
-            };
-        case Actions.usersActions.GET_USERS_FAILURE:
-            return{
-                ...state,
-                allUsers:{
-                    data: [],
-                    error: action.payload,
-                    loading: false
-                }
-            };
-
-        case Actions.OPEN_MODAL_USER:
-            return{
-                ...state,
-                currentUser:{
-                    data: action.payload,
-                    error: undefined,
                     loading: false
                 }
             };
