@@ -231,10 +231,7 @@ export class CreateRoleFormComponent implements OnInit{
 
   validateExistingRoleName():boolean{
     if (this.roleData==null) {
-      if(this.AllRoles.find(item => item.name === this.formGroup.value.name)){
-        console.log("Existe")
-        return true
-      }
+      return this.AllRoles.find(item => item.name === this.formGroup.value.name)
     }else{
       return this.AllRoles.find(
         item => item.name === this.formGroup.value.name
