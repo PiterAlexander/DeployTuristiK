@@ -34,17 +34,11 @@ import { EffectsModule } from '@ngrx/effects';
 import { PackageEffects } from './store/ui/effects';
 import { CreatePackageFormComponent } from './components/create-package-form/create-package-form.component';
 import { RolesComponent } from './pages/roles/roles.component';
-import { OrdersComponent } from './pages/orders/orders.component';
-import { CreateOrderFormComponent } from './components/create-order-form/create-order-form.component';
 import { CreateRoleFormComponent } from '@components/create-role-form/create-role-form.component';
 import { CostumersComponent } from './pages/costumers/costumers.component';
 import { CreatecostumerformComponent } from './components/createcostumerform/createcostumerform.component';
 import { EmployeesComponent } from './pages/employees/employees.component';
 import { CreateEmployeeFormComponent } from './components/create-employee-form/create-employee-form.component';
-import { CreateUserFormComponent } from './components/create-user-form/create-user-form.component';
-import { UsersComponent } from './pages/users/users.component';
-
-
 
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
@@ -70,15 +64,11 @@ registerLocaleData(localeEn, 'en-EN');
         PackagesComponent,
         CreatePackageFormComponent,
         RolesComponent,
-        OrdersComponent,
-        CreateOrderFormComponent,
         CreateRoleFormComponent,
         CostumersComponent,
         CreatecostumerformComponent,
         EmployeesComponent,
-        CreateEmployeeFormComponent,
-        UsersComponent,
-        CreateUserFormComponent        
+        CreateEmployeeFormComponent
     ],
     imports: [
         BrowserModule,
