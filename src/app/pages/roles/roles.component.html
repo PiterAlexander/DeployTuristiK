@@ -8,7 +8,7 @@
                       <h1 class="m-0 text-dark">Roles</h1>
                   </div>
                   <div class="col-sm-3 col-personalized-1">
-                      <button (click)="openCreateRoleModal()" type="button" class="btn btn-primary">AgregarRol</button>
+                      <button (click)="openCreateRoleModal()" type="button" class="btn btn-primary">Agregar Rol</button>
                   </div>
               </div>
 
@@ -22,7 +22,7 @@
                       <div class="d-flex justify-content-end mb-3 row">
                           <label for="table-complete-search" class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
                           <div class="col-xs-3 col-sm-auto">
-                              <input id="table-complete-search" type="text" class="form-control" name="searchTerm" [(ngModel)]="search" (ngModelChange)="searchByName()"/>
+                              <input id="table-complete-search" type="text" class="form-control" name="searchTerm" [(ngModel)]="search" (ngModelChange)="searchByName()" maxlength="100"/>
                           </div>
                       </div>
 
