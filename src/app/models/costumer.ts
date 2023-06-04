@@ -1,4 +1,5 @@
 import { FrequentTraveler } from "./frequentTraveler";
+import { User } from "./user";
 export interface Costumer {
     costumerId?: string
     name:string;
@@ -8,6 +9,7 @@ export interface Costumer {
     phoneNumber:string;
     address:string;
     EPS:string;
+    User:User[];
     userId?:string;
     frequentTravel:FrequentTraveler[];
 }
