@@ -24,6 +24,7 @@ export class CreatePackageFormComponent implements OnInit {
   constructor(private fb: FormBuilder, private modalService: NgbModal, private store: Store<AppState>) { }
 
   ngOnInit(): void {
+    
     this.formGroup = this.fb.group({
       name: [null, Validators.required],
       destination: [null, Validators.required],
