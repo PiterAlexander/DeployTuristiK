@@ -40,7 +40,7 @@
                             <label for="document" class="form-label">Documento</label>
                             <div class="input-group">
                                 <input type="text" id="document" name="document" placeholder="Número de documento"
-                                    class="form-control formularioCampo border-left-dark" formControlName="departureDate">
+                                    class="form-control formularioCampo border-left-dark" formControlName="document">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text rounded-right"><i
                                             class="fas fa-id-card"></i></span>
@@ -71,7 +71,7 @@
                             <div class="input-group">
                                 <input type="text" id="phoneNumber" name="phoneNumber"
                                     class="form-control formularioCampo border-left-dark"
-                                    placeholder="Número de contacto" formControlName="departurePoint">
+                                    placeholder="Número de contacto" formControlName="phoneNumber">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text rounded-right"><i
                                             class="fas fa-phone"></i></span>
@@ -97,9 +97,8 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="row">
-                        <div class="form-group col-12">
+                        <div class="form-group col-6">
                             <label for="address" class="form-label">Dirección</label>
                             <div class="input-group">
                                 <input type="text" id="address" name="address"
@@ -108,6 +107,53 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text rounded-right"><i
                                             class="fas fa-home"></i></span>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Este campo es obligatorio.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="email" class="form-label">Correo</label>
+                            <div class="input-group">
+                                <input type="email" id="email" name="email"
+                                    class="form-control formularioCampo border-left-dark"
+                                    placeholder="Correo Electrónico" formControlName="email">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-right"><i
+                                            class="fas fa-at"></i></span>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Este campo es obligatorio.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <div class="input-group">
+                                <input type="password" id="password" name="password"
+                                    class="form-control formularioCampo border-left-dark"
+                                    placeholder="Digite su contraseña" formControlName="password">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-right"><i
+                                            class="fas fa-eye-slash"></i></span>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Este campo es obligatorio.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="ConfirmPassword" class="form-label">Confirmar contraseña</label>
+                            <div class="input-group">
+                                <input type="password" id="ConfirmPassword" name="ConfirmPassword"
+                                    class="form-control formularioCampo border-left-dark"
+                                    placeholder="Correo Electrónico" formControlName="ConfirmPassword">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-right"><i
+                                            class="	fas fa-eye-slash"></i></span>
                                 </div>
                                 <div class="invalid-feedback">
                                     Este campo es obligatorio.
@@ -124,7 +170,7 @@
                     </div>
                     <div class="col">
                         <button *ngIf="validForm()" type="submit" id="saveButton" class="btn btn-success">Guardar</button>
-                        <button *ngIf="!validForm()" type="submit" id="saveButton" class="btn btn-secondary" disabled>Guardar</button>
+                        <button *ngIf="!validForm()" type="submit" id="saveButton" class="btn btn-secondary" >Guardar</button>
                     </div>
                 </div>
             </div>
