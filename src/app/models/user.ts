@@ -3,6 +3,7 @@ export interface User {
   userName:string,
   email: string,
   password:string,
+
   status:number,
   roleId?:string;
 }
