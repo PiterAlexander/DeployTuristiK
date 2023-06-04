@@ -1,6 +1,6 @@
 <div class="modal-header">
   <div class="container">
-      <h5 class="modal-title padding-extra">{{actionTitle}} Rol</h5>
+      <h5 class="modal-title padding-extra">{{ActionTitle}} Rol</h5>
   </div>
 </div>
 <div class="modal-body">
@@ -10,89 +10,48 @@
               <div class="w-100 p-2">
                   <div class="row">
                       <div class="form-group col-6">
-                          <label for="role_name" class="form-label">Nombre</label>
+                          <label for="package_name" class="form-label">Nombre</label>
+                          <input type="text" id="permission_name" name="name"
+                              class="form-control formularioCampo border-left-dark"
+                              placeholder="Ingrese el nombre del rol" formControlName="name"
+                              onkeydown="return /[a-z, ]/i.test(event.key)"
+                              >
+                          <div class="invalid-feedback">
+                              En este campo solo se permiten letras
+                          </div>
+                      </div>
+
+                      <div class="form-group col-5">
+                        <label for="status" class="form-label">Estado</label>
                         <div class="input-group">
-
-                          <input type="text" id="role_name" name="name" maxlength="20"
-                          class="form-control formularioCampo border-left-dark"
-
-                          [ngClass]="
-                          {
-                            'invalid': formGroup.get('name').dirty && (formGroup.get('name').errors || validateExistingRoleName()),
-                            'valid': formGroup.get('name').dirty && !formGroup.get('name').errors
-                            && !validateExistingRoleName()
-                          }"
-
-                          placeholder="Ingrese el nombre del rol" formControlName="name" required
-                          onkeydown="return /[a-z, ]/i.test(event.key)"
-                          >
-
-
-                          <div class="input-group-prepend">
-                            <span *ngIf="formGroup.get('name').errors || validateExistingRoleName()" class="input-group-text rounded-right">
-                              <i class="fas fa-user"></i>
-                            </span>
-                            <span *ngIf="!formGroup.get('name')?.errors && !validateExistingRoleName()" class="input-group-text rounded-right">
-                              <i class="fas fa-check"></i>
-                            </span>
-                          </div>
-
-                          <!--MENSAJES DE VALIDACION ROLE NAME-->
-                          <div *ngIf="formGroup.get('name')?.errors?.['required'] && formGroup.get('name').dirty" class="invalid-feedback">
-                            *Este campo es obligatorio.
-                          </div>
-                          <div *ngIf="formGroup.get('name')?.errors?.['minlength'] && formGroup.get('name').dirty" class="invalid-feedback">
-                            *El nombre debe tener mínimo 3 caracteres.
-                          </div>
-                          <div *ngIf="validateExistingRoleName() && formGroup.get('name').dirty" class="invalid-feedback">
-                            *El rol ya está registrado.
-                          </div>
-                          <!---------------------------------->
-
+                            <select class="custom-select border-left-dark form-control formularioCampo"
+                                id="status" name="status" formControlName="status" placeholder="Seleccione un estado">
+                                <option selected disabled value="0">Seleccione un estado</option>
+                                <option value="1">Habilitado</option>
+                                <option value="2">Deshabilitado</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user-cog"></i></span>
+                            </div>
+                            <div class="invalid-feedback">
+                                Por favor seleccione una opción.
+                            </div>
+                        </div>
                       </div>
-                    </div>
-
-                    <div class="form-group col-5">
-                      <label for="status" class="form-label">Estado</label>
-                      <div class="input-group">
-                          <select class="custom-select border-left-dark form-control formularioCampo" [ngClass]="{'invalid': formGroup.get('status').dirty,'valid': formGroup.get('status').dirty}"
-                              id="status" name="status" formControlName="status" placeholder="Seleccione un estado" >
-                              <option selected disabled value="0">Seleccione un estado</option>
-                              <option value="1">Habilitado</option>
-                              <option value="2">Deshabilitado</option>
-                          </select>
-                          <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="fas fa-user-cog"></i></span>
-                          </div>
-                          <!--MENSAJES DE VALIDACION ROLE STATUS-->
-                          <div *ngIf="this.formGroup.value.status===0 && formGroup.get('status').dirty" class="invalid-feedback">
-                            *Por favor seleccione una opción.
-                          </div>
-                          <!-------------------------------------->
-                      </div>
-                    </div>
                   </div>
-
                   <div class="row">
                     <div class="container mb-4">
                       <h3 class="text-dark mb-3">Permisos</h3>
                       <div class="row col-12 d-flex">
                         <div *ngFor="let permiso of permissionList" class="custom-control custom-switch col-6 mt-3">
                           <input type="checkbox" class="custom-control-input"
-                          [id]="permiso.module" [checked]="isPermissionAssociated(permiso)"
+                          [id]="permiso.module" [checked]="isAssociated(permiso)"
                           (click)="assignpermissiontolist(permiso)">
                           <label class="custom-control-label" [for]="permiso.module">
                             {{permiso.module}}
                           </label>
                         </div>
                       </div>
-
-                      <!--MENSAJES DE VALIDACION PERMISOS ASOCIADOS-->
-                      <div *ngIf="!validateAssociatedPermissions()" class="invalid-feedback mt-4">
-                        *El rol debe tener almenos un permiso asociado.
-                      </div>
-                      <!--------------------------------------------->
-
                     </div>
                   </div>
               </div>

@@ -11,10 +11,8 @@ import {ForgotPasswordComponent} from '@modules/forgot-password/forgot-password.
 import {RecoverPasswordComponent} from '@modules/recover-password/recover-password.component';
 import { PackagesComponent } from '@pages/packages/packages.component';
 import { RolesComponent } from '@pages/roles/roles.component';
-import { OrdersComponent } from '@pages/orders/orders.component';
 import { CostumersComponent } from '@pages/costumers/costumers.component';
 import { EmployeesComponent } from '@pages/employees/employees.component';
-import { UsersComponent } from '@pages/users/users.component';
 
 const routes: Routes = [
     {
@@ -40,19 +38,12 @@ const routes: Routes = [
                 component: RolesComponent
             },
             {
-                path: 'orders',
-                component: OrdersComponent
-            },
-            {   path: 'costumers',
+                path: 'costumers',
                 component: CostumersComponent
             },
             {
                 path: 'employees',
                 component: EmployeesComponent
-            },
-            {
-                path: 'users',
-                component: UsersComponent
             },
         ]
     },

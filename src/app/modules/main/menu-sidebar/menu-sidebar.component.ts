@@ -49,7 +49,7 @@ export const MENU = [
       {
         name: 'Usuarios',
         iconClasses: 'far fa-circle',
-        path: ['/usuarios']
+        path: ['']
       }
     ]
   },
@@ -76,6 +76,6 @@ export const MENU = [
   {
     name: 'Pedidos',
     iconClasses: 'fas fa-columns',
-    path: ['/orders']
+    path: ['']
   }
 ];
