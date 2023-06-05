@@ -1,7 +1,7 @@
 export interface Order {
-    orderId:String;
-    costumerId:String;
-    packageId:String;
-    totalCost:number;
-    status:boolean;
+    OrderId: string;
+    CostumerId: string;
+    PackageId: string;
+    TotalCost: number;
+    Status: number;
 }

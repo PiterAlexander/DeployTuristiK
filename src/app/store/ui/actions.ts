@@ -30,7 +30,13 @@ export const OPEN_MODAL_CREATE_ORDER: string = '[ORDER] OPEN_MODAL_CREATE_ORDER'
 export const CREATE_ORDER_REQUEST: string = '[ORDER] CREATE_ORDER_REQUEST';
 export const CREATE_ORDER_SUCCESS: string = '[ORDER] CREATE_ORDER_SUCCESS';
 export const CREATE_ORDER_FAILURE: string = '[ORDER] CREATE_ORDER_FAILURE';
+
+export const SET_ORDER_ID = '[ORDER] SET_ORDER_ID';
+
+//<--- ORDERDETAIL ACTIONS --->
+export const OPEN_MODAL_CREATE_ORDERDETAIL: string = '[ORDERDETAIL] OPEN_MODAL_CREATE_ORDERDETAIL';
 //<--------------------->
+
 export const EDIT_PACKAGE_REQUEST: string = '[PACKAGE] EDIT_PACKAGE_REQUEST';
 export const EDIT_PACKAGE_SUCCESS: string = '[PACKAGE] EDIT_PACKAGE_SUCCESS';
 export const EDIT_PACKAGE_FAILURE: string = '[PACKAGE] EDIT_PACKAGE_FAILURE';
@@ -123,9 +129,9 @@ export class ToggleDarkMode implements Action {
 
 // PACKAGES --------------------------------------------------------
 export class OpenModalCreatePackage implements Action {
-    readonly type: string = OPEN_MODAL_CREATE_PACKAGE;
-    
-    constructor(public payload?: Package) {}
+  readonly type: string = OPEN_MODAL_CREATE_PACKAGE;
+
+  constructor(public payload?: Package) { }
 }
 
 // PACKAGES LIST -------------------------------------------------------------
@@ -190,6 +196,10 @@ export class CreateOrderSuccess implements Action {
 export class CreateOrderFailure implements Action {
   readonly type: string = CREATE_ORDER_FAILURE;
   constructor(public payload: string) { }
+}
+
+export class OpenModalCreateOrderDetail implements Action {
+  readonly type: string = OPEN_MODAL_CREATE_ORDERDETAIL;
 }
 //<--------------------->
 // END PACKAGES CREATE--------------------------------------------------------

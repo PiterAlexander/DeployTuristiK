@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { catchError, exhaustMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
-import { CREATE_ORDER_REQUEST, CREATE_PACKAGE_REQUEST, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, GET_ALL_ORDERS_REQUEST, GET_ALL_PACKAGES_REQUEST, GET_ALL_PERMISSIONS_REQUEST, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesRequest, GetAllPackagesSuccess, GetUsersRequest, GetUsersFailure, GetUsersSuccess, OPEN_MODAL_CREATE_ORDER, OPEN_MODAL_CREATE_PACKAGE, OPEN_MODAL_CREATE_ROLE, CreateUserRequest, CreateUserSuccess, CreateUserFailure, UpdateUserRequest, UpdateUserSuccess, UpdateUserFailure } from './actions';
+import { CREATE_ORDER_REQUEST, CREATE_PACKAGE_REQUEST, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, GET_ALL_ORDERS_REQUEST, GET_ALL_PACKAGES_REQUEST, GET_ALL_PERMISSIONS_REQUEST, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesRequest, GetAllPackagesSuccess, GetUsersRequest, GetUsersFailure, GetUsersSuccess, OPEN_MODAL_CREATE_ORDER, OPEN_MODAL_CREATE_PACKAGE, OPEN_MODAL_CREATE_ROLE, CreateUserRequest, CreateUserSuccess, CreateUserFailure, UpdateUserRequest, UpdateUserSuccess, UpdateUserFailure, OPEN_MODAL_CREATE_ORDERDETAIL } from './actions';
 import {
     GetAllPermissionsSuccess,
     GetAllPermissionsFailure,
@@ -55,7 +55,6 @@ import { of } from 'rxjs';
 import { CreatecostumerformComponent } from '@components/createcostumerform/createcostumerform.component';
 import { CreateRoleFormComponent } from '@components/create-role-form/create-role-form.component';
 import { CreateOrderFormComponent } from '@components/create-order-form/create-order-form.component';
-
 import { PermissionService } from '@services/configuration/permission.service';
 import { RoleService } from '@services/configuration/role.service';
 import { CreateRoleRequest } from './actions';
@@ -63,6 +62,9 @@ import { CreateEmployeeFormComponent } from '@components/create-employee-form/cr
 import { DeleteAssociatedPermissionSuccess, DeleteAssociatedPermissionFailure } from './actions';
 import { open } from 'fs';
 import { AssociatedPermissionService } from '@services/configuration/associated-permission.service';
+import { Store } from '@ngrx/store';
+import { Order } from '@/models/order';
+import { CreateOrderDetailFormComponent } from '@components/create-order-detail-form/create-order-detail-form.component';
 import { CreateUserFormComponent } from '@components/create-user-form/create-user-form.component';
 @Injectable()
 export class PackageEffects {
@@ -140,12 +142,23 @@ export class PackageEffects {
             )
         })
     ));
+
+    openModalCreateOrderDetail$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(OPEN_MODAL_CREATE_ORDERDETAIL),
+            tap((action) => {
+                this.modalRef = this.modalService.open(CreateOrderDetailFormComponent, {
+                    backdrop: false,
+                    size: 'xl'
+                });
+            })
+        ), { dispatch: false });
+
     getOrders$ = createEffect(() => this.actions$.pipe(
         ofType(GET_ALL_ORDERS_REQUEST),
         switchMap((action) => {
             return this.apiService.getOrders().pipe(
                 mergeMap((ordersResolved) => {
-                    console.log(ordersResolved)
                     return [
                         new GetAllOrdersSuccess(ordersResolved)
 
@@ -439,6 +452,7 @@ export class PackageEffects {
         private apiService: ApiService,
         private apiPermission: PermissionService,
         private roleService: RoleService,
-        private assocPermissionService: AssociatedPermissionService
+        private assocPermissionService: AssociatedPermissionService,
+        private store: Store
     ) { }
 }
