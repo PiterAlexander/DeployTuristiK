@@ -6,6 +6,7 @@ import { Package } from '@/models/package';
 import { Order } from '@/models/order';
 import { Costumer } from '@/models/costumer';
 import { Employee } from '@/models/employee';
+import { OrderDetail } from '@/models/orderDetail';
 @Injectable({
     providedIn: 'root'
 })
@@ -47,6 +48,10 @@ export class ApiService {
 
     deleteOrder(idOrder:number):Observable<void>{                                        
         return this.http.delete<void>(`${this.endpoint}api/Order/${idOrder}`)
+    }
+
+    addOrderDetail(modelo:OrderDetail):Observable<OrderDetail>{
+        return this.http.post<OrderDetail>(`${this.endpoint}api/OrderDetail`, modelo)
     }
 //<------------------>
     //<--- COSTUMERS --->

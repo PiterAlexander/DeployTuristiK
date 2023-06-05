@@ -36,69 +36,69 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 sidebarSkin: skin,
                 darkMode: !state.darkMode
             };
-        
-            case Actions.GET_ALL_PACKAGES_REQUEST:
-                return {
-                    ...state,
-                    allPackages: {
-                        data: [],
-                        error: undefined,
-                        loading: true
-                    }
-                };
-    
-            case Actions.GET_ALL_PACKAGES_SUCCESS:
-                return {
-                    ...state,
-                    allPackages: {
-                        data: action.payload,
-                        error: undefined,
-                        loading: false
-                    }
-                };
-    
-            case Actions.GET_ALL_PACKAGES_FAILURE:
-                return {
-                    ...state,
-                    allPackages: {
-                        data: [],
-                        error: action.payload,
-                        loading: false
-                    }
-                };
 
-            //<--- ORDER REDUCERS --->
-            case Actions.GET_ALL_ORDERS_REQUEST:
-                return {
-                    ...state,
-                    allOrders: {
-                        data: [],
-                        error: undefined,
-                        loading: true
-                    }
-                };
-    
-            case Actions.GET_ALL_ORDERS_SUCCESS:
-                return {
-                    ...state,
-                    allOrders: {
-                        data: action.payload,
-                        error: undefined,
-                        loading: false
-                    }
-                };
-    
-            case Actions.GET_ALL_ORDERS_FAILURE:
-                return {
-                    ...state,
-                    allOrders: {
-                        data: [],
-                        error: action.payload,
-                        loading: false
-                    }
-                };
-            //<---------------------->
-            
+        case Actions.GET_ALL_PACKAGES_REQUEST:
+            return {
+                ...state,
+                allPackages: {
+                    data: [],
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+        case Actions.GET_ALL_PACKAGES_SUCCESS:
+            return {
+                ...state,
+                allPackages: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.GET_ALL_PACKAGES_FAILURE:
+            return {
+                ...state,
+                allPackages: {
+                    data: [],
+                    error: action.payload,
+                    loading: false
+                }
+            };
+
+        //<--- ORDER REDUCERS --->
+        case Actions.GET_ALL_ORDERS_REQUEST:
+            return {
+                ...state,
+                allOrders: {
+                    data: [],
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+        case Actions.GET_ALL_ORDERS_SUCCESS:
+            return {
+                ...state,
+                allOrders: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.GET_ALL_ORDERS_FAILURE:
+            return {
+                ...state,
+                allOrders: {
+                    data: [],
+                    error: action.payload,
+                    loading: false
+                }
+            };
+        //<---------------------->
+
 
         case Actions.GET_ALL_PACKAGES_REQUEST:
             return {
