@@ -72,7 +72,7 @@
     <div class="card-footer d-flex justify-content-end">
         <div class="row">
             <div class="col">
-                <button type="button" id="cancelButton" class="btn btn-danger" id="cancelButton">Cancelar</button>
+                <button type="button" (click)="cancel()" id="cancelButton" class="btn btn-danger" id="cancelButton">Cancelar</button>
             </div>
             <div class="col">
                 <button *ngIf="validForm()" type="submit" class="btn btn-success" (click)="next()"

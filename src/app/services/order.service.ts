@@ -1,4 +1,4 @@
-import { Injectable, Output, EventEmitter, OnInit } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +9,4 @@ export class OrderService {
 
   constructor(
   ) { }
-
-
 }

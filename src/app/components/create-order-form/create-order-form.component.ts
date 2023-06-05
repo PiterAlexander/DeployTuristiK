@@ -37,9 +37,9 @@ export class CreateOrderFormComponent implements OnInit {
       this.formGroup.value.BeneficiariesAmount > 0
   }
 
-  // cancel() {
-  //   this.modalService.dismissAll();
-  // }
+  cancel() {
+    this.modalService.dismissAll();
+  }
 
   Data() {
     this.OrderData.push({
@@ -50,12 +50,11 @@ export class CreateOrderFormComponent implements OnInit {
     this.orderService.DataTrigger.emit({
       data: this.OrderData
     })
-    console.log(this.OrderData)
   }
 
   next() {
     this.Data()
-    // this.cancel()
+    this.cancel()
     this.store.dispatch(new OpenModalCreateOrderDetail());
   }
 }
