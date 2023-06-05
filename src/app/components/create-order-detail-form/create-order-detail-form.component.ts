@@ -24,7 +24,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.orderService.DataTrigger.subscribe(data => {
-      this.orderData = data
+      this.orderData.push(data)
     })
     this.formGroup = this.fb.group({
       Name: [null, Validators.required],
@@ -43,10 +43,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
   }
 
   back() {
-    console.log("desde detail",this.orderData)
   }
 
   next() {
-
   }
 }
