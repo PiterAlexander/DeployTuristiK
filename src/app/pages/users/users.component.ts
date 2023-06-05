@@ -1,7 +1,7 @@
 import { Role } from '@/models/role';
 import { User } from '@/models/user';
 import { AppState } from '@/store/state';
-import { GetUsersRequest, OpenModalUser } from '@/store/ui/actions';
+import { GetAllRoleRequest, GetUsersRequest, OpenModalUser } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, PipeTransform } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -37,6 +37,7 @@ export class UsersComponent {
 
   ngOnInit() {
     this.store.dispatch(new GetUsersRequest())
+    this.store.dispatch(new GetAllRoleRequest())
 
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
