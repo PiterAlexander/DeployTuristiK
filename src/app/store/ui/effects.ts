@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
-import { catchError, exhaustMap, map, mergeMap, switchMap, tap, } from 'rxjs/operators';
-import { CREATE_ORDER_REQUEST, CREATE_PACKAGE_REQUEST, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, GET_ALL_ORDERS_REQUEST, GET_ALL_PACKAGES_REQUEST, GET_ALL_PERMISSIONS_REQUEST, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesRequest, GetAllPackagesSuccess, OPEN_MODAL_CREATE_ORDER, OPEN_MODAL_CREATE_ORDERDETAIL, OPEN_MODAL_CREATE_PACKAGE, OPEN_MODAL_CREATE_ROLE } from './actions';
+import { catchError, exhaustMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { CREATE_ORDER_REQUEST, CREATE_PACKAGE_REQUEST, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, GET_ALL_ORDERS_REQUEST, GET_ALL_PACKAGES_REQUEST, GET_ALL_PERMISSIONS_REQUEST, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesRequest, GetAllPackagesSuccess, GetUsersRequest, GetUsersFailure, GetUsersSuccess, OPEN_MODAL_CREATE_ORDER, OPEN_MODAL_CREATE_PACKAGE, OPEN_MODAL_CREATE_ROLE, CreateUserRequest, CreateUserSuccess, CreateUserFailure, UpdateUserRequest, UpdateUserSuccess, UpdateUserFailure, OPEN_MODAL_CREATE_ORDERDETAIL } from './actions';
 import {
     GetAllPermissionsSuccess,
     GetAllPermissionsFailure,
@@ -44,6 +44,8 @@ import {
     EDIT_PACKAGE_REQUEST,
     EditPackageRequest,
     EditPackageSuccess,
+    OPEN_MODAL_USER,
+    usersActions
 } from './actions';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { PackagesComponent } from '@pages/packages/packages.component';
@@ -63,6 +65,7 @@ import { AssociatedPermissionService } from '@services/configuration/associated-
 import { Store } from '@ngrx/store';
 import { Order } from '@/models/order';
 import { CreateOrderDetailFormComponent } from '@components/create-order-detail-form/create-order-detail-form.component';
+import { CreateUserFormComponent } from '@components/create-user-form/create-user-form.component';
 @Injectable()
 export class PackageEffects {
     modalRef: NgbModalRef;
@@ -186,7 +189,7 @@ export class PackageEffects {
     ));
 
 
-
+    //<--- ROL AND PERMISSIONS EFFECTS --->
     openModalCreateRole$ = createEffect(() =>
         this.actions$.pipe(
             ofType(OPEN_MODAL_CREATE_ROLE),
@@ -212,7 +215,6 @@ export class PackageEffects {
                 }),
                 catchError((err) => of(new GetAllPermissionsFailure(err)))
             )
-
         })
     ));
 
@@ -244,9 +246,11 @@ export class PackageEffects {
                 }),
                 catchError((err) => of(new GetAllRoleFailure(err)))
             )
-
         })
     ));
+    //<--------------------->
+
+
     //<-----  COSTUMERS ----->
     openModalCreateCostumer = createEffect(() =>
         this.actions$.pipe(
@@ -289,6 +293,7 @@ export class PackageEffects {
         })
     ));
 
+    //<-----  EDIT ROLE ----->
     editRole$ = createEffect(() => this.actions$.pipe(
         ofType(EDIT_ROLE_REQUEST),
         map((action: EditRoleRequest) => action.payload),
@@ -305,7 +310,7 @@ export class PackageEffects {
             )
         })
     ))
-
+    //<-----  EDIT ROLE  END----->
     //<-----  EMPLOYEE ----->
     openModalCreateEmployee = createEffect(() =>
         this.actions$.pipe(
@@ -347,6 +352,8 @@ export class PackageEffects {
             )
         })
     ));
+
+    //<----- ASSOCIATED PERMISSIONS EFFECTS ----->
     createAssociatedPermission$ = createEffect(() => this.actions$.pipe(
         ofType(CREATE_ASSOCIATEDPERMISSION_REQUEST),
         map((action: CreateAssociatedPermissionRequest) => action.payload),
@@ -374,6 +381,67 @@ export class PackageEffects {
                     ];
                 }),
                 catchError((err) => of(new DeleteAssociatedPermissionFailure(err)))
+            )
+        })
+    ));
+
+
+    //<--USER EFFECTS--------------->
+
+    openModalUser$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(OPEN_MODAL_USER),
+            tap(() => {
+                this.modalRef = this.modalService.open(CreateUserFormComponent, {
+                    backdrop: false,
+                    size: 'lg'
+                })
+            })
+        ), { dispatch: false });
+
+    getUsers$ = createEffect(() => this.actions$.pipe(
+        ofType(usersActions.GET_USERS_REQUEST),
+        switchMap((action) => {
+            return this.apiService.getUsers().pipe(
+                mergeMap((usersResolved) => {
+                    return [
+                        new GetUsersSuccess(usersResolved)
+                    ];
+                }),
+                catchError((error) => of(new GetUsersFailure(error)))
+            )
+        })
+    ));
+
+    createUser$ = createEffect(() => this.actions$.pipe(
+        ofType(usersActions.CREATE_USER_REQUEST),
+        map((action: CreateUserRequest) => action.payload),
+        switchMap((user) => {
+            return this.apiService.createUser(user).pipe(
+                mergeMap((userResolved) => {
+                    this.modalRef.close();
+                    return [
+                        new CreateUserSuccess(userResolved),
+                        new GetUsersRequest()
+                    ];
+                }),
+                catchError((error) => of(new CreateUserFailure(error)))
+            )
+        })
+    ));
+
+    updateUser$ = createEffect(() => this.actions$.pipe(
+        ofType(usersActions.UPDATE_USER_REQUEST),
+        map((action: UpdateUserRequest) => action.payload),
+        switchMap((user) => {
+            return this.apiService.updateUser(user.userId, user).pipe(
+                mergeMap((userResolved) => {
+                    this.modalRef.close(); return [
+                        new UpdateUserSuccess(userResolved),
+                        new GetUsersRequest(),
+                    ]
+                }),
+                catchError((error) => of(new UpdateUserFailure(error)))
             )
         })
     ));

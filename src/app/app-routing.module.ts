@@ -14,6 +14,7 @@ import { RolesComponent } from '@pages/roles/roles.component';
 import { OrdersComponent } from '@pages/orders/orders.component';
 import { CostumersComponent } from '@pages/costumers/costumers.component';
 import { EmployeesComponent } from '@pages/employees/employees.component';
+import { UsersComponent } from '@pages/users/users.component';
 
 const routes: Routes = [
     {
@@ -48,6 +49,10 @@ const routes: Routes = [
             {
                 path: 'employees',
                 component: EmployeesComponent
+            },
+            {
+                path: 'users',
+                component: UsersComponent
             },
         ]
     },

@@ -42,6 +42,8 @@ import { CreatecostumerformComponent } from './components/createcostumerform/cre
 import { EmployeesComponent } from './pages/employees/employees.component';
 import { CreateEmployeeFormComponent } from './components/create-employee-form/create-employee-form.component';
 import { CreateOrderDetailFormComponent } from './components/create-order-detail-form/create-order-detail-form.component';
+import { UsersComponent } from '@pages/users/users.component';
+import { CreateUserFormComponent } from '@components/create-user-form/create-user-form.component';
 
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
@@ -74,7 +76,9 @@ registerLocaleData(localeEn, 'en-EN');
         CreatecostumerformComponent,
         EmployeesComponent,
         CreateEmployeeFormComponent,
-        CreateOrderDetailFormComponent
+        CreateOrderDetailFormComponent,
+        UsersComponent,
+        CreateUserFormComponent        
     ],
     imports: [
         BrowserModule,

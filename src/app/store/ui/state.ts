@@ -3,6 +3,7 @@ import { Package } from "@/models/package";
 import { Order } from "@/models/order";
 import { Permission } from "@/models/permission";
 import { Role } from '@/models/role';
+import { User } from "@/models/user";
 
 export default <UiState>{
   darkMode: false,
@@ -50,8 +51,20 @@ export default <UiState>{
     data: undefined,
     error: undefined,
     loading: false
-  }
+  },
   //<-------------------->
+
+  //<--USER STATES->
+  allUsers: {
+    data: [],
+    error: undefined,
+    loading: false
+  },
+  currentUser:{
+    data: undefined,
+    error: undefined,
+    loading: false
+  }
 };
 
 
@@ -104,4 +117,16 @@ export interface UiState {
     loading: boolean
   }
   //<-------------------->
+
+  //<--USER STATES->
+  allUsers: {
+    data: Array<User>,
+    error: string,
+    loading: boolean
+  }
+  currentUser: {
+    data: User,
+    error: string,
+    loading: boolean
+  }
 }
