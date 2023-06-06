@@ -7,9 +7,9 @@
             <div class="row">
                 <div class="col">
                     <div class="form-group">
-                        <label for="create_order_package_id" class="form-label">Paquete</label>
-                        <select class="custom-select border-left-dark" id="packageId" formControlName="packageId"
-                         placeholder="Seleccione el paquete" required>
+                        <label for="PackageId" class="form-label">Paquete</label>
+                        <select class="custom-select border-left-dark" id="PackageId" formControlName="PackageId"
+                            placeholder="Seleccione el paquete" required>
                             <option selected disabled value="0">Seleccione el paquete</option>
                             <option value="1">Piedra del peñól</option>
                             <option value="2">San andrés</option>
@@ -21,10 +21,10 @@
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <label for="create_order_beneficiaries" class="form-label">Beneficiarios</label>
+                        <label for="BeneficiariesAmount" class="form-label">Beneficiarios</label>
                         <div class="input-group">
-                            <input type="number" id="create_order_beneficiaries" formControlName="beneficiaries" class="form-control border-left-dark"
-                                placeholder="Cantidad de beneficiarios" required>
+                            <input type="number" class="form-control border-left-dark" id="BeneficiariesAmount"
+                                formControlName="BeneficiariesAmount" placeholder="Cantidad de beneficiarios" required>
                             <div class="input-group-prepend">
                                 <span class="input-group-text rounded-right"><i class="fas fa-users"></i></span>
                             </div>
@@ -38,7 +38,7 @@
             <div class="form-group mb-0">
                 <div class="row">
                     <div class="col">
-                        <label for="create_order_costumer_id" class="form-label">Persona
+                        <label for="CostumerId" class="form-label">Persona
                             titular</label>
                     </div>
                     <div class="col d-flex justify-content-end align-items-end">
@@ -50,13 +50,13 @@
                     </div>
                 </div>
                 <div class="input-group">
-                    <select id="create_order_costumer_id" formControlName="costumerId" class="custom-select border-left-dark"
-                    placeholder="Por favor ingrese el número del
+                    <select class="custom-select border-left-dark" id="CostumerId" formControlName="CostumerId"
+                        placeholder="Por favor ingrese el número del
                     documento de identidad de la persona titular." required>
                         <option selected disabled value="0">Por favor ingrese el número del
                             documento de identidad de la persona titular.</option>
-                            <option value="1">1023626332 - Camila Zapata</option>
-                            <option value="2">1000442208 - Pedro Nuñez</option>
+                        <option value="1">1023626332 - Camila Zapata</option>
+                        <option value="2">1000442208 - Pedro Nuñez</option>
                     </select>
                     <div class="input-group-prepend">
                         <span class="input-group-text rounded-right"><i class="fas fa-user"></i></span>
@@ -72,11 +72,13 @@
     <div class="card-footer d-flex justify-content-end">
         <div class="row">
             <div class="col">
-                <button (click)="cancel()" type="button" id="cancelButton" class="btn btn-danger">Cancelar</button>
+                <button type="button" (click)="cancel()" id="cancelButton" class="btn btn-danger" id="cancelButton">Cancelar</button>
             </div>
             <div class="col">
-                <button *ngIf="validForm()" type="submit" id="saveButton" class="btn btn-success">Siguiente</button>
-                <button *ngIf="!validForm()" type="submit" id="saveButton" class="btn btn-secondary" disabled>Siguiente</button>
+                <button *ngIf="validForm()" type="submit" class="btn btn-success" (click)="next()"
+                    id="nextButton">Siguiente</button>
+                <button *ngIf="!validForm()" type="submit" class="btn btn-secondary" id="nextButton"
+                    disabled>Siguiente</button>
             </div>
         </div>
     </div>

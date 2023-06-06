@@ -1,76 +1,43 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
-import { catchError, exhaustMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
-import { CREATE_ORDER_REQUEST, CREATE_PACKAGE_REQUEST, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, GET_ALL_ORDERS_REQUEST, GET_ALL_PACKAGES_REQUEST, GET_ALL_PERMISSIONS_REQUEST, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesRequest, GetAllPackagesSuccess, GetUsersRequest, GetUsersFailure, GetUsersSuccess, OPEN_MODAL_CREATE_ORDER, OPEN_MODAL_CREATE_PACKAGE, OPEN_MODAL_CREATE_ROLE, CreateUserRequest, CreateUserSuccess, CreateUserFailure, UpdateUserRequest, UpdateUserSuccess, UpdateUserFailure } from './actions';
-import {
-    GetAllPermissionsSuccess,
-    GetAllPermissionsFailure,
-    CREATE_ROLE_REQUEST,
-    CreateRoleFailure,
-    CreateRoleSuccess,
-    GET_ALL_ROLE_REQUEST,
-    GetAllRoleSuccess,
-    GetAllRoleFailure,
-    GET_ALL_COSTUMER_REQUEST,
-    GetAllCostumerSuccess,
-    GetAllCostumerFailure,
-    OPEN_MODAL_CREATE_COSTUMER,
-    CREATE_COSTUMER_REQUEST,
-    CreateCostumerRequest,
-    CreateCostumerSuccess,
-    GetAllCostumerRequest,
-    CreateCostumerFailure,
-    OPEN_MODAL_CREATE_EMPLOYEE,
-    GET_ALL_EMPLOYEE_REQUEST,
-    GetAllEmployeeSuccess,
-    GetAllEmployeeFailure,
-    CREATE_EMPLOYEE_REQUEST,
-    CreateEmployeeRequest,
-    CreateEmployeeSuccess,
-    GetAllEmployeeRequest,
-    CreateEmployeeFailure,
-    EDIT_ROLE_REQUEST,
-    EditRoleRequest,
-    EditRoleSuccess,
-    EditRoleFailure,
-    GetAllRoleRequest,
-    CREATE_ASSOCIATEDPERMISSION_REQUEST,
-    CreateAssociatedPermissionRequest,
-    CreateAssociatedPermissionSuccess,
-    CreateAssociatedPermissionFailure,
-    DELETE_ASSOCIATEDPERMISSION_REQUEST,
-    DeleteAssociatedPermissionRequest,
-    OpenModalCreateRole,
-    EDIT_PACKAGE_REQUEST,
-    EditPackageRequest,
-    EditPackageSuccess,
-    OPEN_MODAL_USER,
-    usersActions
-} from './actions';
+import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { PackagesComponent } from '@pages/packages/packages.component';
-import { CreatePackageFormComponent } from '@components/create-package-form/create-package-form.component';
 import { ApiService } from '@services/api.service';
 import { of } from 'rxjs';
-import { CreatecostumerformComponent } from '@components/createcostumerform/createcostumerform.component';
-import { CreateRoleFormComponent } from '@components/create-role-form/create-role-form.component';
+import { CreateAssociatedPermissionFailure, CreateAssociatedPermissionRequest, CreateAssociatedPermissionSuccess, CreateCostumerFailure, CreateCostumerRequest, CreateCostumerSuccess, CreateEmployeeFailure, CreateEmployeeRequest, CreateEmployeeSuccess, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, CreateRoleFailure, CreateRoleRequest, CreateRoleSuccess, CreateUserFailure, CreateUserRequest, CreateUserSuccess, DeleteAssociatedPermissionFailure, DeleteAssociatedPermissionRequest, DeleteAssociatedPermissionSuccess, EditPackageFailure, EditPackageRequest, EditPackageSuccess, EditRoleFailure, EditRoleRequest, EditRoleSuccess, GetAllCostumerFailure, GetAllCostumerRequest, GetAllCostumerSuccess, GetAllEmployeeFailure, GetAllEmployeeRequest, GetAllEmployeeSuccess, GetAllOrdersFailure, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesFailure, GetAllPackagesRequest, GetAllPackagesSuccess, GetAllPermissionsFailure, GetAllPermissionsSuccess, GetAllRoleFailure, GetAllRoleRequest, GetAllRoleSuccess, GetUsersFailure, GetUsersRequest, GetUsersSuccess, UpdateUserFailure, UpdateUserRequest, UpdateUserSuccess, costumerActions, employeeActions, orderActions, packageActions, permissionActions, roleActions, userActions } from './actions';
+import { CreatePackageFormComponent } from '@components/create-package-form/create-package-form.component';
 import { CreateOrderFormComponent } from '@components/create-order-form/create-order-form.component';
-
+import { CreateOrderDetailFormComponent } from '@components/create-order-detail-form/create-order-detail-form.component';
+import { CreateRoleFormComponent } from '@components/create-role-form/create-role-form.component';
 import { PermissionService } from '@services/configuration/permission.service';
 import { RoleService } from '@services/configuration/role.service';
-import { CreateRoleRequest } from './actions';
-import { CreateEmployeeFormComponent } from '@components/create-employee-form/create-employee-form.component';
-import { DeleteAssociatedPermissionSuccess, DeleteAssociatedPermissionFailure } from './actions';
-import { open } from 'fs';
 import { AssociatedPermissionService } from '@services/configuration/associated-permission.service';
+import { CreatecostumerformComponent } from '@components/createcostumerform/createcostumerform.component';
+import { CreateEmployeeFormComponent } from '@components/create-employee-form/create-employee-form.component';
+import { CreateUserFormComponent } from '@components/create-user-form/create-user-form.component';
+
 @Injectable()
 export class PackageEffects {
     modalRef: NgbModalRef;
 
+    //<--- PACKAGES --->
+    getPackages$ = createEffect(() => this.actions$.pipe(
+        ofType(packageActions.GET_ALL_PACKAGES_REQUEST),
+        switchMap((action) => {
+            return this.apiService.getPackages().pipe(
+                mergeMap((packagesResolved) => {
+                    return [
+                        new GetAllPackagesSuccess(packagesResolved)
+                    ];
+                }),
+                catchError((err) => of(new GetAllPackagesFailure(err)))
+            )
+        })
+    ));
 
     openModalCreatePackage$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(OPEN_MODAL_CREATE_PACKAGE),
+            ofType(packageActions.OPEN_MODAL_CREATE_PACKAGE),
             tap((action) => {
                 this.modalRef = this.modalService.open(CreatePackageFormComponent, {
                     backdrop: false,
@@ -79,22 +46,8 @@ export class PackageEffects {
             })
         ), { dispatch: false });
 
-    getPackages$ = createEffect(() => this.actions$.pipe(
-        ofType(GET_ALL_PACKAGES_REQUEST),
-        switchMap((action) => {
-            return this.apiService.getPackages().pipe(
-                mergeMap((packagesResolved) => {
-                    return [
-                        new GetAllPackagesSuccess(packagesResolved)
-                    ];
-                }),
-                catchError((err) => of(new CreatePackageFailure(err)))
-            )
-        })
-    ));
-
     createPackage$ = createEffect(() => this.actions$.pipe(
-        ofType(CREATE_PACKAGE_REQUEST),
+        ofType(packageActions.CREATE_PACKAGE_REQUEST),
         map((action: CreatePackageRequest) => action.payload),
         switchMap((pack) => {
             return this.apiService.addPackage(pack).pipe(
@@ -111,10 +64,42 @@ export class PackageEffects {
         })
     ));
 
-    //<--- ORDER EFFECTS --->
+    editPackage$ = createEffect(() => this.actions$.pipe(
+        ofType(packageActions.EDIT_PACKAGE_REQUEST),
+        map((action: EditPackageRequest) => action.payload),
+        switchMap((pack) => {
+            return this.apiService.updatePackage(pack.packageId, pack).pipe(
+                mergeMap((packResolved) => {
+                    this.modalRef.close();
+                    return [
+                        new EditPackageSuccess(packResolved),
+                        new GetAllPackagesRequest(),
+                    ];
+                }),
+                catchError((err) => of(new EditPackageFailure(err)))
+            )
+        })
+    ));
+    //<-------------->
+
+    //<--- ORDERS --->
+    getOrders$ = createEffect(() => this.actions$.pipe(
+        ofType(orderActions.GET_ALL_ORDERS_REQUEST),
+        switchMap((action) => {
+            return this.apiService.getOrders().pipe(
+                mergeMap((ordersResolved) => {
+                    return [
+                        new GetAllOrdersSuccess(ordersResolved)
+                    ];
+                }),
+                catchError((err) => of(new GetAllOrdersFailure(err)))
+            )
+        })
+    ));
+
     openModalCreateOrder$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(OPEN_MODAL_CREATE_ORDER),
+            ofType(orderActions.OPEN_MODAL_CREATE_ORDER),
             tap((action) => {
                 this.modalRef = this.modalService.open(CreateOrderFormComponent, {
                     backdrop: false,
@@ -124,7 +109,7 @@ export class PackageEffects {
         ), { dispatch: false });
 
     createOrder$ = createEffect(() => this.actions$.pipe(
-        ofType(CREATE_ORDER_REQUEST),
+        ofType(orderActions.CREATE_ORDER_REQUEST),
         map((action: CreateOrderRequest) => action.payload),
         switchMap((order) => {
             return this.apiService.addOrder(order).pipe(
@@ -139,46 +124,37 @@ export class PackageEffects {
             )
         })
     ));
-    getOrders$ = createEffect(() => this.actions$.pipe(
-        ofType(GET_ALL_ORDERS_REQUEST),
+
+    openModalCreateOrderDetail$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(orderActions.OPEN_MODAL_CREATE_ORDERDETAIL),
+            tap((action) => {
+                this.modalRef = this.modalService.open(CreateOrderDetailFormComponent, {
+                    backdrop: false,
+                    size: 'xl'
+                });
+            })
+        ), { dispatch: false });
+    //<----------------------------->
+
+    //<--- ROLES AND PERMISSIONS --->
+    getRoles$ = createEffect(() => this.actions$.pipe(
+        ofType(roleActions.GET_ALL_ROLE_REQUEST),
         switchMap((action) => {
-            return this.apiService.getOrders().pipe(
-                mergeMap((ordersResolved) => {
-                    console.log(ordersResolved)
+            return this.roleService.ReadRoles().pipe(
+                mergeMap((roleResolved) => {
                     return [
-                        new GetAllOrdersSuccess(ordersResolved)
-
+                        new GetAllRoleSuccess(roleResolved)
                     ];
                 }),
-                catchError((err) => of(new CreatePackageFailure(err)))
+                catchError((err) => of(new GetAllRoleFailure(err)))
             )
         })
     ));
 
-
-    //<--------------------->
-    editPackage$ = createEffect(() => this.actions$.pipe(
-        ofType(EDIT_PACKAGE_REQUEST),
-        map((action: EditPackageRequest) => action.payload),
-        switchMap((pack) => {
-            return this.apiService.updatePackage(pack.packageId, pack).pipe(
-                mergeMap((packResolved) => {
-                    this.modalRef.close();
-                    return [
-                        new EditPackageSuccess(packResolved),
-                        new GetAllPackagesRequest(),
-                    ];
-                }),
-                catchError((err) => of(new EditRoleFailure(err)))
-            )
-        })
-    ));
-
-
-    //<--- ROL AND PERMISSIONS EFFECTS --->
     openModalCreateRole$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(OPEN_MODAL_CREATE_ROLE),
+            ofType(roleActions.OPEN_MODAL_CREATE_ROLE),
             tap((action) => {
                 this.modalRef = this.modalService.open(CreateRoleFormComponent, {
                     backdrop: false,
@@ -187,105 +163,31 @@ export class PackageEffects {
             })
         ),
         {
-          dispatch: false
+            dispatch: false
         });
 
-    getPermissions$ = createEffect(() => this.actions$.pipe(
-      ofType(GET_ALL_PERMISSIONS_REQUEST),
-      switchMap((action) => {
-          return this.apiPermission.ReadPermissions().pipe(
-              mergeMap((permissionResolved) => {
-                  return [
-                      new GetAllPermissionsSuccess(permissionResolved)
-                  ];
-              }),
-              catchError((err) => of(new GetAllPermissionsFailure(err)))
-          )
-      })
-    ));
-
     createRole$ = createEffect(() => this.actions$.pipe(
-      ofType(CREATE_ROLE_REQUEST),
-      map((action: CreateRoleRequest) => action.payload),
-      switchMap((role) => {
-        return this.roleService.CreateRole(role).pipe(
-            mergeMap((roleResolved) => {
-                this.modalRef.close();
-                return [
-                    new CreateRoleSuccess(roleResolved),
-                    new GetAllRoleRequest()
-                ];
-            }),
-            catchError((err) => of(new CreateRoleFailure(err)))
-        )
-      })
-    ));
-
-    getRoles$ = createEffect(() => this.actions$.pipe(
-      ofType(GET_ALL_ROLE_REQUEST),
-      switchMap((action) => {
-        return this.roleService.ReadRoles().pipe(
-            mergeMap((roleResolved) => {
-              console.log(roleResolved)
-                return [
-                    new GetAllRoleSuccess(roleResolved)
-                ];
-            }),
-            catchError((err) => of(new GetAllRoleFailure(err)))
-        )
-      })
-    ));
-    //<--------------------->
-
-
-    //<-----  COSTUMERS ----->
-    openModalCreateCostumer = createEffect(() =>
-        this.actions$.pipe(
-            ofType(OPEN_MODAL_CREATE_COSTUMER),
-            tap((action) => {
-                this.modalRef = this.modalService.open(CreatecostumerformComponent, {
-                    backdrop: false,
-                    size: 'lg'
-                });
-            })
-        ), { dispatch: false });
-
-    getCostumers$ = createEffect(() => this.actions$.pipe(
-        ofType(GET_ALL_COSTUMER_REQUEST),
-        switchMap((action) => {
-            return this.apiService.getCostumers().pipe(
-                mergeMap((costumerResolved) => {
-                    return [
-                        new GetAllCostumerSuccess(costumerResolved)
-                    ];
-                }),
-                catchError((err) => of(new GetAllCostumerFailure(err)))
-            )
-        })
-    ));
-    createCostumer$ = createEffect(() => this.actions$.pipe(
-        ofType(CREATE_COSTUMER_REQUEST),
-        map((action: CreateCostumerRequest) => action.payload),
-        switchMap((costumer) => {
-            return this.apiService.addCostumer(costumer).pipe(
-                mergeMap((costumerResolved) => {
+        ofType(roleActions.CREATE_ROLE_REQUEST),
+        map((action: CreateRoleRequest) => action.payload),
+        switchMap((role) => {
+            return this.roleService.CreateRole(role).pipe(
+                mergeMap((roleResolved) => {
                     this.modalRef.close();
                     return [
-                        new CreateCostumerSuccess(costumerResolved),
-                        new GetAllCostumerRequest()
+                        new CreateRoleSuccess(roleResolved),
+                        new GetAllRoleRequest()
                     ];
                 }),
-                catchError((err) => of(new CreateCostumerFailure(err)))
+                catchError((err) => of(new CreateRoleFailure(err)))
             )
         })
     ));
 
-    //<-----  EDIT ROLE ----->
     editRole$ = createEffect(() => this.actions$.pipe(
-        ofType(EDIT_ROLE_REQUEST),
+        ofType(roleActions.EDIT_ROLE_REQUEST),
         map((action: EditRoleRequest) => action.payload),
         switchMap((role) => {
-            return this.roleService.UpdateRole(role.roleId,role).pipe(
+            return this.roleService.UpdateRole(role.roleId, role).pipe(
                 mergeMap((roleResolved) => {
                     this.modalRef.close();
                     return [
@@ -297,52 +199,23 @@ export class PackageEffects {
             )
         })
     ))
-    //<-----  EDIT ROLE  END----->
-    //<-----  EMPLOYEE ----->
-    openModalCreateEmployee = createEffect(() =>
-        this.actions$.pipe(
-            ofType(OPEN_MODAL_CREATE_EMPLOYEE),
-            tap((action) => {
-                this.modalRef = this.modalService.open(CreateEmployeeFormComponent, {
-                    backdrop: false,
-                    size: 'lg'
-                });
-            })
-        ), { dispatch: false });
 
-    getEmployees$ = createEffect(() => this.actions$.pipe(
-        ofType(GET_ALL_EMPLOYEE_REQUEST),
+    getPermissions$ = createEffect(() => this.actions$.pipe(
+        ofType(permissionActions.GET_ALL_PERMISSIONS_REQUEST),
         switchMap((action) => {
-            return this.apiService.getEmployees().pipe(
-                mergeMap((employeeResolver) => {
+            return this.apiPermission.ReadPermissions().pipe(
+                mergeMap((permissionResolved) => {
                     return [
-                        new GetAllEmployeeSuccess(employeeResolver)
+                        new GetAllPermissionsSuccess(permissionResolved)
                     ];
                 }),
-                catchError((err) => of(new GetAllEmployeeFailure(err)))
-            )
-        })
-    ));
-    createEmployee$ = createEffect(() => this.actions$.pipe(
-        ofType(CREATE_EMPLOYEE_REQUEST),
-        map((action: CreateEmployeeRequest) => action.payload),
-        switchMap((employee) => {
-            return this.apiService.addEmployee(employee).pipe(
-                mergeMap((employeeResolver) => {
-                    this.modalRef.close();
-                    return [
-                        new CreateEmployeeSuccess(employeeResolver),
-                        new GetAllEmployeeRequest()
-                    ];
-                }),
-                catchError((err) => of(new CreateEmployeeFailure(err)))
+                catchError((err) => of(new GetAllPermissionsFailure(err)))
             )
         })
     ));
 
-    //<----- ASSOCIATED PERMISSIONS EFFECTS ----->
     createAssociatedPermission$ = createEffect(() => this.actions$.pipe(
-        ofType(CREATE_ASSOCIATEDPERMISSION_REQUEST),
+        ofType(permissionActions.CREATE_ASSOCIATEDPERMISSION_REQUEST),
         map((action: CreateAssociatedPermissionRequest) => action.payload),
         switchMap((asocpermission) => {
             return this.assocPermissionService.CreateAssociatedPermission(asocpermission).pipe(
@@ -358,7 +231,7 @@ export class PackageEffects {
     ));
 
     DeleteAssociatedPermission$ = createEffect(() => this.actions$.pipe(
-        ofType(DELETE_ASSOCIATEDPERMISSION_REQUEST),
+        ofType(permissionActions.DELETE_ASSOCIATEDPERMISSION_REQUEST),
         map((action: DeleteAssociatedPermissionRequest) => action.payload),
         switchMap((asocpermission) => {
             return this.assocPermissionService.DeleteAssociatedPermission(asocpermission.associatedPermissionId).pipe(
@@ -371,7 +244,156 @@ export class PackageEffects {
             )
         })
     ));
-          
+    //<------------------->
+
+    //<---- COSTUMERS ---->
+    getCostumers$ = createEffect(() => this.actions$.pipe(
+        ofType(costumerActions.GET_ALL_COSTUMER_REQUEST),
+        switchMap((action) => {
+            return this.apiService.getCostumers().pipe(
+                mergeMap((costumerResolved) => {
+                    return [
+                        new GetAllCostumerSuccess(costumerResolved)
+                    ];
+                }),
+                catchError((err) => of(new GetAllCostumerFailure(err)))
+            )
+        })
+    ));
+
+    openModalCreateCostumer = createEffect(() =>
+        this.actions$.pipe(
+            ofType(costumerActions.OPEN_MODAL_CREATE_COSTUMER),
+            tap((action) => {
+                this.modalRef = this.modalService.open(CreatecostumerformComponent, {
+                    backdrop: false,
+                    size: 'lg'
+                });
+            })
+        ), { dispatch: false });
+
+    createCostumer$ = createEffect(() => this.actions$.pipe(
+        ofType(costumerActions.CREATE_COSTUMER_REQUEST),
+        map((action: CreateCostumerRequest) => action.payload),
+        switchMap((costumer) => {
+            return this.apiService.addCostumer(costumer).pipe(
+                mergeMap((costumerResolved) => {
+                    this.modalRef.close();
+                    return [
+                        new CreateCostumerSuccess(costumerResolved),
+                        new GetAllCostumerRequest()
+                    ];
+                }),
+                catchError((err) => of(new CreateCostumerFailure(err)))
+            )
+        })
+    ));
+    //<------------------>
+
+    //<---- EMPLOYEE ---->
+    getEmployees$ = createEffect(() => this.actions$.pipe(
+        ofType(employeeActions.GET_ALL_EMPLOYEE_REQUEST),
+        switchMap((action) => {
+            return this.apiService.getEmployees().pipe(
+                mergeMap((employeeResolver) => {
+                    return [
+                        new GetAllEmployeeSuccess(employeeResolver)
+                    ];
+                }),
+                catchError((err) => of(new GetAllEmployeeFailure(err)))
+            )
+        })
+    ));
+
+    openModalCreateEmployee = createEffect(() =>
+        this.actions$.pipe(
+            ofType(employeeActions.OPEN_MODAL_CREATE_EMPLOYEE),
+            tap((action) => {
+                this.modalRef = this.modalService.open(CreateEmployeeFormComponent, {
+                    backdrop: false,
+                    size: 'lg'
+                });
+            })
+        ), { dispatch: false });
+
+    createEmployee$ = createEffect(() => this.actions$.pipe(
+        ofType(employeeActions.CREATE_EMPLOYEE_REQUEST),
+        map((action: CreateEmployeeRequest) => action.payload),
+        switchMap((employee) => {
+            return this.apiService.addEmployee(employee).pipe(
+                mergeMap((employeeResolver) => {
+                    this.modalRef.close();
+                    return [
+                        new CreateEmployeeSuccess(employeeResolver),
+                        new GetAllEmployeeRequest()
+                    ];
+                }),
+                catchError((err) => of(new CreateEmployeeFailure(err)))
+            )
+        })
+    ));
+    //<--------------->
+
+    //<---- USERS ---->
+    getUsers$ = createEffect(() => this.actions$.pipe(
+        ofType(userActions.GET_USERS_REQUEST),
+        switchMap((action) => {
+            return this.apiService.getUsers().pipe(
+                mergeMap((usersResolved) => {
+                    return [
+                        new GetUsersSuccess(usersResolved)
+                    ];
+                }),
+                catchError((error) => of(new GetUsersFailure(error)))
+            )
+        })
+    ));
+
+    openModalUser$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(userActions.OPEN_MODAL_USER),
+            tap(() => {
+                this.modalRef = this.modalService.open(CreateUserFormComponent, {
+                    backdrop: false,
+                    size: 'lg'
+                })
+            })
+        ), { dispatch: false });
+
+    createUser$ = createEffect(() => this.actions$.pipe(
+        ofType(userActions.CREATE_USER_REQUEST),
+        map((action: CreateUserRequest) => action.payload),
+        switchMap((user) => {
+            return this.apiService.createUser(user).pipe(
+                mergeMap((userResolved) => {
+                    this.modalRef.close();
+                    return [
+                        new CreateUserSuccess(userResolved),
+                        new GetUsersRequest()
+                    ];
+                }),
+                catchError((error) => of(new CreateUserFailure(error)))
+            )
+        })
+    ));
+
+    updateUser$ = createEffect(() => this.actions$.pipe(
+        ofType(userActions.UPDATE_USER_REQUEST),
+        map((action: UpdateUserRequest) => action.payload),
+        switchMap((user) => {
+            return this.apiService.updateUser(user.userId, user).pipe(
+                mergeMap((userResolved) => {
+                    this.modalRef.close(); return [
+                        new UpdateUserSuccess(userResolved),
+                        new GetUsersRequest(),
+                    ]
+                }),
+                catchError((error) => of(new UpdateUserFailure(error)))
+            )
+        })
+    ));
+    //<--------------->
+
     constructor(
         private actions$: Actions,
         private modalService: NgbModal,

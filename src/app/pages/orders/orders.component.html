@@ -53,9 +53,9 @@
                                             href="">Ver lista</a></td>
                                     <td>{{order.totalCost}}</td>
                                     <td>
-                                        <span *ngIf="order.status === 1">Pendiente</span>
-                                        <span *ngIf="order.status === 2">En curso</span>
-                                        <span *ngIf="order.status === 3">Cancelado</span>
+                                        <span *ngIf="order.status === 0">Pendiente</span>
+                                        <span *ngIf="order.status === 1">En curso</span>
+                                        <span *ngIf="order.status === 2">Cancelado</span>
                                     </td>
                                 </tr>
                             </tbody>

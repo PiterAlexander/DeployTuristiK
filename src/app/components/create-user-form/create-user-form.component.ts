@@ -40,6 +40,7 @@ export class CreateUserFormComponent implements OnInit {
 
 
     this.formGroup = this.fb.group({
+      userId: [null],
       userName: [null,
         [Validators.required,
         Validators.minLength(5),
@@ -63,8 +64,9 @@ export class CreateUserFormComponent implements OnInit {
 
       this.ActionTitle = "Editar"
       this.formGroup.setValue({
-        username: this.userData.username,
-        role: this.userData.role,
+        userId: this.userData.userId,
+        userName: this.userData.userName,
+        role: this.userData.roleId,
         email: this.userData.email,
         password: this.userData.password,
         status: this.userData.status,
@@ -76,20 +78,19 @@ export class CreateUserFormComponent implements OnInit {
 
     if (this.userData == null) {
       const model: User = {
-        userName: this.formGroup.value.username,
+        userName: this.formGroup.value.userName,
         email: this.formGroup.value.email,
         password: this.formGroup.value.password,
         status: this.formGroup.value.status,
         roleId: this.formGroup.value.role
       }
-
       this.store.dispatch(new CreateUserRequest({
         ...model
       }));
     } else {
       const model: User = {
         userId: this.formGroup.value.userId,
-        userName: this.formGroup.value.username,
+        userName: this.formGroup.value.userName,
         email: this.formGroup.value.email,
         password: this.formGroup.value.password,
         status: this.formGroup.value.status,
@@ -111,8 +112,8 @@ export class CreateUserFormComponent implements OnInit {
     } else {
       return this.formGroup.valid
         && this.formGroup.value.status != 0
-        && !this.allUsers.find(u => u.userName === this.formGroup.value.userName && u.userId !== this.formGroup.value.userId)
-        && !this.allUsers.find(u => u.email === this.formGroup.value.email && u.userId !== this.formGroup.value.userId)
+        && !this.allUsers.find(u => u.userName === this.formGroup.value.userName && u.userId != this.formGroup.value.userId)
+        && !this.allUsers.find(u => u.email === this.formGroup.value.email && u.userId != this.formGroup.value.userId)
     }
   }
 

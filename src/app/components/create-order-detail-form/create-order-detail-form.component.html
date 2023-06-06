@@ -1,0 +1,172 @@
+<div class="card-header py-3">
+    <h4 class="m-0 font-weight-bold text-dark"><span>Formulario de Beneficiarios</span></h4>
+</div>
+<form class="needs-validation" novalidate [formGroup]="formGroup">
+    <div class="card-body d-flex justify-content-center">
+        <div class="w-100 p-2">
+            <div class="container-fluid m-0 p-0">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="Name" class="form-label">Nombre</label>
+                            <input type="text" name="Name" id="Name" formControlName="Name"
+                                class="form-control border-left-dark" placeholder="Ingrese el nombre del beneficiario"
+                                required>
+                            <div class="invalid-feedback">
+                                Por favor ingrese unicamente letras. No se aceptan números
+                                o caracteres especiales además de tildes.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="LastName" class="form-label">Apellidos</label>
+                            <input type="text" name="LastName" id="LastName" formControlName="LastName"
+                                class="form-control border-left-dark"
+                                placeholder="Ingrese los apellidos del beneficiario" required>
+                            <div class="invalid-feedback">
+                                Por favor ingrese unicamente letras. No se aceptan números
+                                o caracteres especiales además de tildes.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="Document" class="form-label">Documento</label>
+                            <div class="input-group">
+                                <input type="text" name="Document" id="Document" formControlName="Document"
+                                    class="form-control border-left-dark"
+                                    placeholder="Ingrese el documento del beneficiario" required>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-right"><i class="fas fa-id-card"></i></span>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Por favor ingrese unicamente números, (7-10 digitos). No se aceptan letras
+                                    o caracteres especiales.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-7">
+                        <div class="row">
+                            <div class="col-7">
+                                <div class="form-group">
+                                    <label for="Address" class="form-label">Dirección</label>
+                                    <div class="input-group">
+                                        <input type="text" name="Address" id="Address" formControlName="Address"
+                                            class="form-control border-left-dark"
+                                            placeholder="Ej: País - Ciudad - Barrio - Dirección" required>
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text rounded-right"><i
+                                                    class="fas fa-location-arrow"></i></span>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Por favor rellene este campo, esta información no será compartida con
+                                            terceros.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="form-group">
+                                    <label for="PhoneNumber" class="form-label">Teléfono</label>
+                                    <div class="input-group">
+                                        <input type="text" name="PhoneNumber" id="PhoneNumber"
+                                            formControlName="PhoneNumber" class="form-control border-left-dark"
+                                            placeholder="Teléfono del beneficiario" required>
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text rounded-right"><i
+                                                    class="fas fa-phone-alt"></i></span>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            La longitud debe ser de 10 números, no se permiten letras o caracteres
+                                            especiales.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="form-group">
+                                    <label for="BirthDate" class="form-label">Fecha de
+                                        nacimiento</label>
+                                    <input type="date" name="BirthDate" id="BirthDate" formControlName="BirthDate"
+                                        class="form-control border-left-dark">
+                                    <div class="invalid-feedback">
+                                        Este campo es obligatorio.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="form-group">
+                                    <label for="Eps" class="form-label">Tipo de
+                                        EPS</label>
+                                    <div class="input-group">
+                                        <input type="text" name="Eps" id="Eps" formControlName="Eps"
+                                            class="form-control border-left-dark" placeholder="EPS del beneficiario"
+                                            required>
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text rounded-right"><i
+                                                    class="fas fa-hospital-user"></i></span>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Por favor ingrese unicamente letras, no se aceptan caracteres
+                                            especiales.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped shadow-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Apellidos</th>
+                                <th>Documento</th>
+                                <th>Fecha Nacimiento</th>
+                                <th>Celular</th>
+                                <th>Dirección</th>
+                                <th>EPS</th>
+                                <th>Precio unitario</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Esteban</td>
+                                <td>Muñoz</td>
+                                <td>1023626332</td>
+                                <td>06/05/2005</td>
+                                <td>3232889279</td>
+                                <td>Bello, CALLE 37 #43A-56</td>
+                                <td>sura</td>
+                                <td>450000</td>
+                                <td class="text-center"><a><i class="fas fa-trash text-danger"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+        <div class="row">
+            <div class="col">
+                <button (click)="back()" type="button" id="cancelButton" class="btn btn-danger">Regresar</button>
+            </div>
+            <div class="col">
+                <!-- <button *ngIf="validForm()" (click)="next()" type="submit" class="btn btn-success">Siguiente</button> -->
+                <button type="submit" class="btn btn-secondary" disabled>Siguiente</button>
+            </div>
+        </div>
+    </div>
+</form>
