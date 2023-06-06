@@ -5,6 +5,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { Role } from '@/models/role';
+import Swal from 'sweetalert2';
+import { DeleteRoleRequest } from '../../store/ui/actions';
 
 
 interface State{
@@ -59,6 +61,61 @@ export class RolesComponent implements OnInit{
 
   openEditRoleModal(role:Role){
     this.store.dispatch(new OpenModalCreateRole(role));
+  }
+
+
+  deleteRole(role:Role){
+
+    // var rolesNoPermitidos = [
+    //   '6feb1fce-d42e-480d-e18e-08db643f6005',
+    //   'a5dfd988-38a2-4bad-a23a-08db646e34a3',
+    //   'a02ee692-f471-4580-4ab6-08db66c858e0',
+    //   '19e6a937-c157-4259-4ab7-08db66c858e0'
+    // ]
+
+    // var ok = true
+    // rolesNoPermitidos.forEach(id=>{
+    //   if (role.roleId==id) {
+    //     ok = false
+    //   }
+    // })
+
+    // if(ok){
+    //   this.store.dispatch(new DeleteRoleRequest(role))
+    // }else{
+    //   Swal.fire({
+    //     icon: 'warning',
+    //     title: 'El rol '+role.name+' no puede ser eliminado del sistema',
+    //     showConfirmButton: true,
+    //   }).then(function(){})
+    // }
+
+
+    //OPCION 2
+    var rolesNoPermitidosbyName = [
+      'Administrador',
+      'Empleado',
+      'Beneficiario',
+      'Cliente'
+    ]
+
+    var ok2 = true
+    rolesNoPermitidosbyName.forEach(name=>{
+      if (role.name==name) {
+        ok2 = false
+      }
+    })
+
+    if(ok2){
+      this.store.dispatch(new DeleteRoleRequest(role))
+    }else{
+      Swal.fire({
+        icon: 'warning',
+        title: 'El rol '+role.name+' no puede ser eliminado del sistema',
+        showConfirmButton: true,
+      }).then(function(){})
+    }
+
   }
 
 

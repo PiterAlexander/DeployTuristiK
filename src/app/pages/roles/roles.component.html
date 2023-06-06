@@ -32,6 +32,7 @@
                                   <th scope="col">Nombre</th>
                                   <th scope="col" sortable="name">Estado</th>
                                   <th scope="col" sortable="population">Editar</th>
+                                  <th scope="col" sortable="population">Eliminar</th>
                               </tr>
                           </thead>
                           <tbody>
@@ -42,8 +43,13 @@
                                     <span *ngIf="role.status !== 1">Deshabilitado</span>
                                 </td>
                                 <td>
-                                    <i class="fas fa-edit text-dark" (click)="openEditRoleModal(role)"></i>
+                                    <i class="fas fa-edit text-dark" (click)="openEditRoleModal(role)" style="cursor: pointer">
+
+                                    </i>
                                 </td>
+                                <td>
+                                  <i class="fas fa-trash text-dark" (click)="deleteRole(role)" style="cursor: pointer"></i>
+                              </td>
                             </tr>
                           </tbody>
                       </table>
