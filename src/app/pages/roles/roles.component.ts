@@ -67,10 +67,10 @@ export class RolesComponent implements OnInit{
   deleteRole(role:Role){
 
     // var rolesNoPermitidos = [
-    //   '6feb1fce-d42e-480d-e18e-08db643f6005',
-    //   'a5dfd988-38a2-4bad-a23a-08db646e34a3',
-    //   'a02ee692-f471-4580-4ab6-08db66c858e0',
-    //   '19e6a937-c157-4259-4ab7-08db66c858e0'
+    //   '53a148f0-2206-430c-c935-08db66f03c2d',
+    //   'cb89f0c5-356f-47ab-c936-08db66f03c2d',
+    //   'a27440ba-85ec-4fab-c937-08db66f03c2d',
+    //   'd2357f46-38a1-4249-c938-08db66f03c2d'
     // ]
 
     // var ok = true
@@ -107,7 +107,40 @@ export class RolesComponent implements OnInit{
     })
 
     if(ok2){
-      this.store.dispatch(new DeleteRoleRequest(role))
+      if (role.user.length>0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'El rol '+role.name+' tiene usuarios asociados.No puede ser eliminado del sistema',
+          showConfirmButton: true,
+        }).then(function(){})
+      }else{
+        const swalWithBootstrapButtons = Swal.mixin({
+          customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+          },
+          buttonsStyling: false
+        })
+
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.store.dispatch(new DeleteRoleRequest(role))
+            Swal.fire(
+              'Deleted!',
+              'Your file has been deleted.',
+              'success'
+            )
+          }
+        })
+      }
     }else{
       Swal.fire({
         icon: 'warning',
