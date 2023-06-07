@@ -96,13 +96,14 @@ export enum orderActions {
   GET_ALL_ORDERS_FAILURE = '[ORDER] GET_ALL_ORDERS_FAILURE',
 
   OPEN_MODAL_CREATE_ORDER = '[ORDER] OPEN_MODAL_CREATE_ORDER',
+  CREATE_ORDER_DATA = '[ORDER] CREATE_ORDER_DATA',
   CREATE_ORDER_REQUEST = '[ORDER] CREATE_ORDER_REQUEST',
   CREATE_ORDER_SUCCESS = '[ORDER] CREATE_ORDER_SUCCESS',
   CREATE_ORDER_FAILURE = '[ORDER] CREATE_ORDER_FAILURE',
 
-  //<--- ORDERDETAIL ACTIONS --->
-  OPEN_MODAL_CREATE_ORDERDETAIL = '[ORDERDETAIL] OPEN_MODAL_CREATE_ORDERDETAIL'
-  //<--------------------->
+  OPEN_MODAL_CREATE_ORDERDETAIL = '[ORDERDETAIL] OPEN_MODAL_CREATE_ORDERDETAIL',
+
+  OPEN_MODAL_CREATE_PAYMENT = '[PAYMENT] OPEN_MODAL_CREATE_PAYMENT'
 }
 
 export class GetAllOrdersRequest implements Action {
@@ -120,6 +121,10 @@ export class GetAllOrdersFailure implements Action {
 export class OpenModalCreateOrder implements Action {
   readonly type: string = orderActions.OPEN_MODAL_CREATE_ORDER;
 }
+export class CreateOrderData implements Action {
+  readonly type: string = orderActions.CREATE_ORDER_DATA;
+  constructor(public payload: Array<any>) { }
+}
 export class CreateOrderRequest implements Action {
   readonly type: string = orderActions.CREATE_ORDER_REQUEST;
   constructor(public payload: Order) { }
@@ -135,6 +140,10 @@ export class CreateOrderFailure implements Action {
 
 export class OpenModalCreateOrderDetail implements Action {
   readonly type: string = orderActions.OPEN_MODAL_CREATE_ORDERDETAIL;
+}
+
+export class OpenModalCreatePayment implements Action {
+  readonly type: string = orderActions.OPEN_MODAL_CREATE_PAYMENT;
 }
 //<--------------------->
 

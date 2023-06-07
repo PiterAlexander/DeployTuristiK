@@ -32,6 +32,11 @@ export default <UiState>{
     error: undefined,
     loading: false
   },
+  orderProcess: {
+    data: [],
+    error: undefined,
+    loading: false
+  },
   //<----------------------------->
   //<--- ROLES AND PERMISSIONS --->
   allRoles: {
@@ -102,6 +107,11 @@ export interface UiState {
   //<--- ORDERS --->
   allOrders: {
     data: Array<Order>,
+    error: string,
+    loading: boolean
+  };
+  orderProcess: {
+    data: Array<any>,
     error: string,
     loading: boolean
   };
