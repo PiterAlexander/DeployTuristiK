@@ -4,6 +4,7 @@ import { Role } from '@/models/role';
 import { Permission } from "@/models/permission";
 import { Costumer } from "@/models/costumer";
 import { User } from "@/models/user";
+import { Employee } from "@/models/employee";
 
 export default <UiState>{
   //<--- TOGGLER --->
@@ -131,7 +132,7 @@ export interface UiState {
   //<----------------->
   //<--- EMPLOYEES --->
   allEmployees: {
-    data: Array<Costumer>,
+    data: Array<Employee>,
     error: string,
     loading: boolean
   };
