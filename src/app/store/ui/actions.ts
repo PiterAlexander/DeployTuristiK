@@ -161,6 +161,10 @@ export enum roleActions {
   EDIT_ROLE_REQUEST = '[ROLES] EDIT_ROLE_REQUEST',
   EDIT_ROLE_SUCCESS = '[ROLES] EDIT_ROLE_SUCCESS',
   EDIT_ROLE_FAILURE = '[ROLES] EDIT_ROLE_FAILURE',
+
+  DELETE_ROLE_REQUEST = '[ROLES] DELETE_ROLE_REQUEST',
+  DELETE_ROLE_SUCCESS = '[ROLES] DELETE_ROLE_SUCCESS',
+  DELETE_ROLE_FAILURE = '[ROLES] DELETE_ROLE_FAILURE',
 }
 
 export class GetAllRoleRequest implements Action {
@@ -203,6 +207,19 @@ export class EditRoleSuccess implements Action {
 }
 export class EditRoleFailure implements Action {
   readonly type: string = roleActions.EDIT_ROLE_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class DeleteRoleRequest implements Action {
+  readonly type: string = roleActions.DELETE_ROLE_REQUEST;
+  constructor(public payload: Role) { }
+}
+export class DeleteRoleSuccess implements Action {
+  readonly type: string = roleActions.DELETE_ROLE_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class DeleteRoleFailure implements Action {
+  readonly type: string = roleActions.DELETE_ROLE_FAILURE;
   constructor(public payload: string) { }
 }
 //<--------------------->
@@ -432,6 +449,9 @@ export type UiAction =
   | EditRoleRequest
   | EditRoleSuccess
   | EditRoleFailure
+  | DeleteRoleRequest
+  | DeleteRoleSuccess
+  | DeleteRoleFailure
   //<--------------------->
   //<---PERMISSIONS--->
   | GetAllPermissionsSuccess

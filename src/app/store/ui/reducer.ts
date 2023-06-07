@@ -231,7 +231,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
         case Actions.employeeActions.GET_ALL_EMPLOYEE_REQUEST:
             return {
                 ...state,
-                alEmployees: {
+                allEmployees: {
                     data: [],
                     error: undefined,
                     loading: true
@@ -241,7 +241,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
         case Actions.employeeActions.GET_ALL_EMPLOYEE_SUCCESS:
             return {
                 ...state,
-                alEmployees: {
+                allEmployees: {
                     data: action.payload,
                     error: undefined,
                     loading: false
@@ -251,7 +251,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
         case Actions.employeeActions.GET_ALL_EMPLOYEE_FAILURE:
             return {
                 ...state,
-                alEmployees: {
+                allEmployees: {
                     data: [],
                     error: action.payload,
                     loading: false
