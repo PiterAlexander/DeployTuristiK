@@ -12,25 +12,42 @@
                         <div class="form-group col-6">
                             <label for="name" class="form-label">Nombre</label>
                             <input type="text" id="name" name="name"
-                                class="form-control formularioCampo border-left-dark"
-                                placeholder="Digite su nombre" formControlName="name">
-                            <div class="invalid-feedback">
-                                En este campo solo se permiten letras
+                                class="form-control formularioCampo border-left-dark" placeholder="Digite su nombre"
+                                formControlName="name">
+                            <div *ngIf="formGroup.get('name')?.errors?.['required'] && formGroup.get('name').dirty"
+                                class="invalid-feedback">
+                                *El campo es requerido.
+                            </div>
+                            <div *ngIf="formGroup.get('name')?.errors?.['minlength'] && formGroup.get('name').dirty"
+                                class="invalid-feedback">
+                                *El nombre debe tener mínimo 3 caracteres.
+                            </div>
+                            <div *ngIf="formGroup.get('name')?.errors?.['maxlength'] && formGroup.get('name').dirty"
+                                class="invalid-feedback">
+                                *El nombre no debe exceder los 20 caracteres.
                             </div>
                         </div>
 
                         <div class="form-group col-6">
                             <label for="lastName" class="form-label">Apellido</label>
                             <div class="input-group">
-                                <input type="text" id="lastName" name="lastName" 
+                                <input type="text" id="lastName" name="lastName"
                                     class="form-control formularioCampo border-left-dark"
                                     placeholder="Digite su Apellido" formControlName="lastName">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text rounded-right"><i
-                                            class="fas fa-user-alt"></i></span>
+                                    <span class="input-group-text rounded-right"><i class="fas fa-user-alt"></i></span>
                                 </div>
-                                <div class="invalid-feedback">
-                                    En este campo solo se permiten letras
+                                <div *ngIf="formGroup.get('lastName')?.errors?.['required'] && formGroup.get('lastName').dirty"
+                                    class="invalid-feedback">
+                                    *El campo es requerido.
+                                </div>
+                                <div *ngIf="formGroup.get('lastName')?.errors?.['minlength'] && formGroup.get('lastName').dirty"
+                                    class="invalid-feedback">
+                                    *El apellido debe tener mínimo 3 caracteres.
+                                </div>
+                                <div *ngIf="formGroup.get('lastName')?.errors?.['maxlength'] && formGroup.get('lastName').dirty"
+                                    class="invalid-feedback">
+                                    *El apellido no debe exceder los 20 caracteres.
                                 </div>
                             </div>
                         </div>
@@ -42,11 +59,19 @@
                                 <input type="text" id="document" name="document" placeholder="Número de documento"
                                     class="form-control formularioCampo border-left-dark" formControlName="document">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text rounded-right"><i
-                                            class="fas fa-id-card"></i></span>
+                                    <span class="input-group-text rounded-right"><i class="fas fa-id-card"></i></span>
                                 </div>
-                                <div class="invalid-feedback">
-                                    Este campo es obligatorio.
+                                <div *ngIf="formGroup.get('document').dirty && validateExistingDocument()"
+                                    class="invalid-feedback">
+                                    *El documento ya existe
+                                </div>
+                                <div *ngIf="formGroup.get('document')?.errors?.['required'] && formGroup.get('document').dirty"
+                                    class="invalid-feedback">
+                                    *El campo es requerido.
+                                </div>
+                                <div *ngIf="formGroup.get('document')?.errors?.['minlength'] && formGroup.get('document').dirty"
+                                    class="invalid-feedback">
+                                    *El documento debe tener mínimo 10 caracteres.
                                 </div>
                             </div>
                         </div>
@@ -59,9 +84,6 @@
                                     <span class="input-group-text rounded-right"><i
                                             class="fas fa-calendar-week"></i></span>
                                 </div>
-                                <div class="invalid-feedback">
-                                    Este campo es obligatorio.
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -73,11 +95,19 @@
                                     class="form-control formularioCampo border-left-dark"
                                     placeholder="Número de contacto" formControlName="phoneNumber">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text rounded-right"><i
-                                            class="fas fa-phone"></i></span>
+                                    <span class="input-group-text rounded-right"><i class="fas fa-phone"></i></span>
                                 </div>
-                                <div class="invalid-feedback">
-                                    En este campo solo se permiten letras
+                                <div *ngIf="formGroup.get('phoneNumber')?.errors?.['required'] && formGroup.get('phoneNumber').dirty"
+                                    class="invalid-feedback">
+                                    *El campo es requerido.
+                                </div>
+                                <div *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber').dirty"
+                                    class="invalid-feedback">
+                                    *El número debe tener mínimo 10 caracteres.
+                                </div>
+                                <div *ngIf="formGroup.get('phoneNumber')?.errors?.['maxlength'] && formGroup.get('phoneNumber').dirty"
+                                    class="invalid-feedback">
+                                    *El número no debe exceder los 20 caracteres.
                                 </div>
                             </div>
                         </div>
@@ -88,11 +118,19 @@
                                     class="form-control formularioCampo border-left-dark"
                                     placeholder="EPS a la que se encuentra afiliado" formControlName="eps">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text rounded-left"><i
-                                        class="	fa fa-medkit"></i></span>
+                                    <span class="input-group-text rounded-left"><i class="	fa fa-medkit"></i></span>
                                 </div>
-                                <div class="invalid-feedback">
-                                    En este campo solo se permiten letras
+                                <div *ngIf="formGroup.get('eps')?.errors?.['required'] && formGroup.get('eps').dirty"
+                                    class="invalid-feedback">
+                                    *El campo es requerido.
+                                </div>
+                                <div *ngIf="formGroup.get('eps')?.errors?.['minlength'] && formGroup.get('eps').dirty"
+                                    class="invalid-feedback">
+                                    *La eps debe tener mínimo 4 caracteres.
+                                </div>
+                                <div *ngIf="formGroup.get('eps')?.errors?.['maxlength'] && formGroup.get('eps').dirty"
+                                    class="invalid-feedback">
+                                    *La eps no debe exceder los 20 caracteres.
                                 </div>
                             </div>
                         </div>
@@ -105,14 +143,47 @@
                                     class="form-control formularioCampo border-left-dark"
                                     placeholder="Dirección de vivienda" formControlName="address">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text rounded-right"><i
-                                            class="fas fa-home"></i></span>
+                                    <span class="input-group-text rounded-right"><i class="fas fa-home"></i></span>
                                 </div>
-                                <div class="invalid-feedback">
-                                    Este campo es obligatorio.
+                                <div *ngIf="formGroup.get('address')?.errors?.['required'] && formGroup.get('address').dirty"
+                                    class="invalid-feedback">
+                                    *El campo es requerido.
+                                </div>
+                                <div *ngIf="formGroup.get('address')?.errors?.['minlength'] && formGroup.get('address').dirty"
+                                    class="invalid-feedback">
+                                    *La dirección debe tener mínimo 10 caracteres.
+                                </div>
+                                <div *ngIf="formGroup.get('address')?.errors?.['maxlength'] && formGroup.get('address').dirty"
+                                    class="invalid-feedback">
+                                    *La dirección no debe exceder los 100 caracteres.
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group col-6">
+                            <label for="userName" class="form-label">Nombre de Usuario</label>
+                            <div class="input-group">
+                                <input type="text" id="userName" name="userName"
+                                    class="form-control formularioCampo border-left-dark"
+                                    placeholder="Digite su nombre de usuario" formControlName="userName">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-right"><i class="fas fa-user-alt"></i></span>
+                                </div>
+                                <div *ngIf="formGroup.get('userName')?.errors?.['required'] && formGroup.get('userName').dirty"
+                                    class="invalid-feedback">
+                                    *El campo es requerido.
+                                </div>
+                                <div *ngIf="formGroup.get('userName')?.errors?.['minlength'] && formGroup.get('userName').dirty"
+                                    class="invalid-feedback">
+                                    *El nombre de usuario debe tener mínimo 5 caracteres.
+                                </div>
+                                <div *ngIf="formGroup.get('userName')?.errors?.['maxlength'] && formGroup.get('userName').dirty"
+                                    class="invalid-feedback">
+                                    *El nombre de usuario no debe exceder los 20 caracteres.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group col-6">
                             <label for="email" class="form-label">Correo</label>
                             <div class="input-group">
@@ -120,43 +191,44 @@
                                     class="form-control formularioCampo border-left-dark"
                                     placeholder="Correo Electrónico" formControlName="email">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text rounded-right"><i
-                                            class="fas fa-at"></i></span>
+                                    <span class="input-group-text rounded-right"><i class="fas fa-at"></i></span>
                                 </div>
-                                <div class="invalid-feedback">
-                                    Este campo es obligatorio.
+                                <div *ngIf="formGroup.get('email')?.errors?.['required'] && formGroup.get('email').dirty"
+                                    class="invalid-feedback">
+                                    *El campo es requerido.
+                                </div>
+                                <div *ngIf="formGroup.get('email').dirty && validateExistingEmail()"
+                                    class="invalid-feedback">
+                                    *El correo ya existe
+                                </div>
+                                <div *ngIf="formGroup.get('email')?.errors?.['pattern'] && formGroup.get('email').dirty"
+                                    class="invalid-feedback">
+                                    *Ingrese un correo valido.
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="form-group col-6">
                             <label for="password" class="form-label">Contraseña</label>
                             <div class="input-group">
-                                <input type="password" id="password" name="password"
-                                    class="form-control formularioCampo border-left-dark"
+                                <input [type]="Visible ? 'text' : 'password'" [(ngModel)]="password" id="password"
+                                    name="password" class="form-control formularioCampo border-left-dark"
                                     placeholder="Digite su contraseña" formControlName="password">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text rounded-right"><i
-                                            class="fas fa-eye-slash"></i></span>
+                                    <span (click)="displayPassword()" class="input-group-text rounded-right"><i
+                                            class="fa"
+                                            [ngClass]="{'fa-eye': Visible, 'fa-eye-slash': !Visible}"></i></span>
                                 </div>
-                                <div class="invalid-feedback">
-                                    Este campo es obligatorio.
+                                <div *ngIf="formGroup.get('password')?.errors?.['required'] && formGroup.get('password').dirty"
+                                    class="invalid-feedback">
+                                    *El campo es requerido.
                                 </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="ConfirmPassword" class="form-label">Confirmar contraseña</label>
-                            <div class="input-group">
-                                <input type="password" id="ConfirmPassword" name="ConfirmPassword"
-                                    class="form-control formularioCampo border-left-dark"
-                                    placeholder="Correo Electrónico" formControlName="ConfirmPassword">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text rounded-right"><i
-                                            class="	fas fa-eye-slash"></i></span>
+                                <div *ngIf="formGroup.get('password')?.errors?.['minlength'] && formGroup.get('password').dirty"
+                                    class="invalid-feedback">
+                                    *La contraseña debe tener mínimo 5 caracteres.
                                 </div>
-                                <div class="invalid-feedback">
-                                    Este campo es obligatorio.
+                                <div *ngIf="formGroup.get('password')?.errors?.['maxlength'] && formGroup.get('password').dirty"
+                                    class="invalid-feedback">
+                                    *La contraseña no debe exceder los 30 caracteres.
                                 </div>
                             </div>
                         </div>
@@ -166,11 +238,14 @@
             <div class="card-footer d-flex justify-content-end">
                 <div class="row">
                     <div class="col">
-                        <button (click)="cancel()" type="button" id="cancelButton" class="btn btn-danger">Cancelar</button>
+                        <button (click)="cancel()" type="button" id="cancelButton"
+                            class="btn btn-danger">Cancelar</button>
                     </div>
                     <div class="col">
-                        <button *ngIf="validForm()" type="submit" id="saveButton" class="btn btn-success">Guardar</button>
-                        <button *ngIf="!validForm()" type="submit" id="saveButton" class="btn btn-secondary" >Guardar</button>
+                        <button *ngIf="validForm()" type="submit" id="saveButton"
+                            class="btn btn-success">Guardar</button>
+                        <button *ngIf="!validForm()" type="submit" id="saveButton"
+                            class="btn btn-secondary">Guardar</button>
                     </div>
                 </div>
             </div>

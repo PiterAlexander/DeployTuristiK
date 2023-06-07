@@ -9,7 +9,7 @@ export interface Costumer {
     phoneNumber:string;
     address:string;
     EPS:string;
-    User:User[];
+    User?:User;
     userId?:string;
-    frequentTravel:FrequentTraveler[];
+    frequentTravel?:FrequentTraveler[];
 }

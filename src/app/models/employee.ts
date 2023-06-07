@@ -1,9 +1,10 @@
+import { User } from "./user";
 export interface Employee {
     employeeId?: string
     name:string;
     lastName:string;
     document:string;
-    birthDate:Date;
     phoneNumber:string;
+    user?: User;
     userId?:string;
 }
