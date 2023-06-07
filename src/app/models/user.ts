@@ -1,9 +1,15 @@
-export interface User {
-  userId?:string,
-  userName:string,
-  email: string,
-  password:string,
+import { Costumer } from "./costumer";
+import { Employee } from "./employee";
 
-  status:number,
-  roleId?:string;
+export interface User {
+  userId?: string,
+  userName: string,
+  email: string,
+  password: string,
+
+  status: number,
+  roleId?: string;
+
+  employee?: Employee,
+  costumer?: Costumer,
 }
