@@ -1,12 +1,14 @@
 import { Costumer } from '@/models/costumer';
 import { User } from '@/models/user';
 import { AppState } from '@/store/state';
-import { CreateOrderData, OpenModalCreateOrder, OpenModalCreatePayment } from '@/store/ui/actions';
+import { CreateCostumerRequest, CreateOrderData, OpenModalCreateOrder, OpenModalCreatePayment } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
+import { ApiService } from '@services/api.service';
+import { element } from 'protractor';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -24,14 +26,15 @@ export class CreateOrderDetailFormComponent implements OnInit {
     userName: 'pakitours',
     email: 'pakitours@pakitours.com',
     password: 'pakitours',
-    status: 2,
-    roleId: "c4c32ef4-d90c-4a98-cfff-08db66c79517",
+    status: 1,
+    roleId: 'cb89f0c5-356f-47ab-c936-08db66f03c2d',
   }
 
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private apiService: ApiService,
   ) { }
 
   ngOnInit(): void {
@@ -66,6 +69,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
   }
 
   save() {
+
     if (this.beneficiaries.length < this.orderProcess[0].order.beneficiaries) {
       this.beneficiaries.push({
         name: this.formGroup.value.name,
@@ -79,14 +83,56 @@ export class CreateOrderDetailFormComponent implements OnInit {
       })
       this.formGroup.reset()
     } else {
+      this.saveCostumers()//<----------------------AGREGADO
       this.orderProcess = [{
         order: this.orderProcess[0].order,
         beneficiaries: this.beneficiaries,
         payment: {}
       }]
-      this.store.dispatch(new CreateOrderData(this.orderProcess))
-      this.modalService.dismissAll();
-      this.store.dispatch(new OpenModalCreatePayment)
+      // this.store.dispatch(new CreateOrderData(this.orderProcess))
+      // this.modalService.dismissAll();
+      // this.store.dispatch(new OpenModalCreatePayment)
     }
   }
+
+
+  // saveCostumers(){
+  //   const beneficiaries = this.beneficiaries
+  //   beneficiaries.forEach(elemnt=>{
+  //     console.log("registrado: ",elemnt)
+  //     const costumerModel = elemnt
+  //     this.store.dispatch(new CreateCostumerRequest({
+  //       ...costumerModel
+  //     }));
+  //   })
+  // }
+
+  saveCostumers() {
+    const beneficiaries = this.beneficiaries;
+
+    for (const element of beneficiaries) {
+      const costumerModel : Costumer = element;
+      //console.log("costumer: ", costumerModel)
+      this.apiService.addCostumer(costumerModel).subscribe({
+        next:(data)=>{
+          console.log("creado con exito pleasee",data)
+        },error:(err)=>{
+          console.log("nonis",err)
+        }
+      })
+      
+    }
+
+    // if (!beneficiaries < this.orderProcess[0].order.beneficiaries) {
+    //   beneficiaries.forEach(element=>{
+    //     const costumerModel : Costumer = element;
+    //     this.apiService.addCostumer(costumerModel)
+    //     //this.store.dispatch(new CreateCostumerRequest({ ...costumerModel }));
+    //   })
+    // }
+
+  }
+
+
+
 }
