@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
+import { ApiService } from '@services/api.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -25,7 +26,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
     email: 'pakitours@pakitours.com',
     password: 'pakitours',
     status: 2,
-    roleId: "c4c32ef4-d90c-4a98-cfff-08db66c79517",
+    roleId: "2d176444-1e21-42d8-155f-08db67be323f",
   }
 
   constructor(

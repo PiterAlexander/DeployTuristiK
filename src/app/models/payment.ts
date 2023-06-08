@@ -1,9 +1,9 @@
 export interface Payment {
-    paymentId?: String;
-    orderId?: String;
+    paymentId?: string;
+    orderId?: string;
     amount: number;
     remainingAmount: number;
     date: Date
-    image: String;
+    image: string;
     status: number
 }
