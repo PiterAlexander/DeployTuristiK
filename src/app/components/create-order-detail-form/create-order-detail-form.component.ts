@@ -8,7 +8,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { ApiService } from '@services/api.service';
-import { element } from 'protractor';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -26,8 +25,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
     userName: 'pakitours',
     email: 'pakitours@pakitours.com',
     password: 'pakitours',
-    status: 1,
-    roleId: 'cb89f0c5-356f-47ab-c936-08db66f03c2d',
+    status: 2,
+    roleId: "2d176444-1e21-42d8-155f-08db67be323f",
   }
 
   constructor(
@@ -83,7 +82,6 @@ export class CreateOrderDetailFormComponent implements OnInit {
       })
       this.formGroup.reset()
     } else {
-      this.saveCostumers()//<----------------------AGREGADO
       this.orderProcess = [{
         order: this.orderProcess[0].order,
         beneficiaries: this.beneficiaries,
@@ -94,45 +92,4 @@ export class CreateOrderDetailFormComponent implements OnInit {
       // this.store.dispatch(new OpenModalCreatePayment)
     }
   }
-
-
-  // saveCostumers(){
-  //   const beneficiaries = this.beneficiaries
-  //   beneficiaries.forEach(elemnt=>{
-  //     console.log("registrado: ",elemnt)
-  //     const costumerModel = elemnt
-  //     this.store.dispatch(new CreateCostumerRequest({
-  //       ...costumerModel
-  //     }));
-  //   })
-  // }
-
-  saveCostumers() {
-    const beneficiaries = this.beneficiaries;
-
-    for (const element of beneficiaries) {
-      const costumerModel : Costumer = element;
-      //console.log("costumer: ", costumerModel)
-      this.apiService.addCostumer(costumerModel).subscribe({
-        next:(data)=>{
-          console.log("creado con exito pleasee",data)
-        },error:(err)=>{
-          console.log("nonis",err)
-        }
-      })
-      
-    }
-
-    // if (!beneficiaries < this.orderProcess[0].order.beneficiaries) {
-    //   beneficiaries.forEach(element=>{
-    //     const costumerModel : Costumer = element;
-    //     this.apiService.addCostumer(costumerModel)
-    //     //this.store.dispatch(new CreateCostumerRequest({ ...costumerModel }));
-    //   })
-    // }
-
-  }
-
-
-
 }
