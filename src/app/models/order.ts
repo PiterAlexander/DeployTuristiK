@@ -8,5 +8,5 @@ export interface Order {
     totalCost: number;
     status: number;
     payment: Payment[],
-    orderDetail: OrderDetail[]
+    orderDetail?: OrderDetail[]
 }
