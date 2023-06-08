@@ -1,10 +1,13 @@
 import { AppState } from '@/store/state';
-import { OpenModalCreateOrderDetail } from '@/store/ui/actions';
-import { Component, Input, OnInit } from '@angular/core';
+import { CreateOrderData, GetAllCostumerRequest, GetAllEmployeeRequest, GetAllPackagesRequest, OpenModalCreateOrderDetail } from '@/store/ui/actions';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
-import { OrderService } from '@services/order.service';
+import { Observable } from 'rxjs';
+import { UiState } from '@/store/ui/state';
+import { Package } from '@/models/package';
+import { Costumer } from '@/models/costumer';
 
 @Component({
   selector: 'app-create-order-form',
@@ -13,26 +16,36 @@ import { OrderService } from '@services/order.service';
 })
 export class CreateOrderFormComponent implements OnInit {
 
-  @Input() OrderData: Array<any> = []
-
   formGroup: FormGroup;
+  private ui: Observable<UiState>
+  public orderProcess: Array<any>
+  public allPackages: Array<Package>
+  public allCostumers: Array<Costumer>
 
   constructor(
-    private orderService: OrderService,
-    private fb: FormBuilder, private modalService: NgbModal, private store: Store<AppState>
+    private fb: FormBuilder,
+    private modalService: NgbModal,
+    private store: Store<AppState>
   ) { }
 
   ngOnInit(): void {
+    this.store.dispatch(new GetAllPackagesRequest)
+    this.store.dispatch(new GetAllCostumerRequest)
+    this.ui = this.store.select('ui')
+    this.ui.subscribe((state: UiState) => {
+      this.allPackages = state.allPackages.data
+      this.allCostumers = state.allCostumers.data
+    })
     this.formGroup = this.fb.group({
-      CostumerId: [0, Validators.required],
-      PackageId: [0, Validators.required],
-      BeneficiariesAmount: [0, Validators.required],
+      document: ['', Validators.required],
+      PackageId: ['', Validators.required],
+      BeneficiariesAmount: ['', Validators.required],
     });
   }
 
   validForm(): boolean {
     return this.formGroup.valid &&
-      this.formGroup.value.CostumerId != 0 &&
+      this.formGroup.value.document != '' && this.formGroup.value.document != null &&
       this.formGroup.value.PackageId != 0 &&
       this.formGroup.value.BeneficiariesAmount > 0
   }
@@ -41,19 +54,31 @@ export class CreateOrderFormComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
-  Data() {
-    this.OrderData.push({
-      costumer: this.formGroup.value.CostumerId,
-      package: this.formGroup.value.PackageId,
-      benefiiaries: this.formGroup.value.BeneficiariesAmount
-    })
-    this.orderService.DataTrigger.emit({
-      data: this.OrderData
-    })
-  }
-
   next() {
-    this.Data()
+    var costumerId
+    var price
+    this.allCostumers.forEach(element => {
+      if (this.formGroup.value.document == element.document) {
+        costumerId = element.costumerId
+      }
+    });
+    this.allPackages.forEach(element => {
+      if (this.formGroup.value.PackageId == element.packageId) {
+        price = element.price * this.formGroup.value.BeneficiariesAmount
+      }
+    });
+    this.orderProcess = ([{
+      order: {
+        costumerId: costumerId,
+        packageId: this.formGroup.value.PackageId,
+        totalCost: price,
+        status: 1,
+        beneficiaries: this.formGroup.value.BeneficiariesAmount
+      },
+      beneficiaries: {},
+      payment: {}
+    }])
+    this.store.dispatch(new CreateOrderData(this.orderProcess))
     this.cancel()
     this.store.dispatch(new OpenModalCreateOrderDetail());
   }

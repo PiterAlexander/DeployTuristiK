@@ -15,6 +15,7 @@ import { AssociatedPermissionService } from '@services/configuration/associated-
 import { CreatecostumerformComponent } from '@components/createcostumerform/createcostumerform.component';
 import { CreateEmployeeFormComponent } from '@components/create-employee-form/create-employee-form.component';
 import { CreateUserFormComponent } from '@components/create-user-form/create-user-form.component';
+import { CreatePaymentFormComponent } from '@components/create-payment-form/create-payment-form.component';
 
 @Injectable()
 export class PackageEffects {
@@ -103,7 +104,7 @@ export class PackageEffects {
             tap((action) => {
                 this.modalRef = this.modalService.open(CreateOrderFormComponent, {
                     backdrop: false,
-                    size: 'xl'
+                    size: 'lg'
                 });
             })
         ), { dispatch: false });
@@ -130,6 +131,17 @@ export class PackageEffects {
             ofType(orderActions.OPEN_MODAL_CREATE_ORDERDETAIL),
             tap((action) => {
                 this.modalRef = this.modalService.open(CreateOrderDetailFormComponent, {
+                    backdrop: false,
+                    size: 'xl'
+                });
+            })
+        ), { dispatch: false });
+
+    openModalCreatePayment$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(orderActions.OPEN_MODAL_CREATE_PAYMENT),
+            tap((action) => {
+                this.modalRef = this.modalService.open(CreatePaymentFormComponent, {
                     backdrop: false,
                     size: 'xl'
                 });
