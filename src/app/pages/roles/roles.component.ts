@@ -99,19 +99,20 @@ export class RolesComponent implements OnInit{
       'Cliente'
     ]
 
-    var ok2 = true
+    var ok = true
     rolesNoPermitidosbyName.forEach(name=>{
       if (role.name==name) {
-        ok2 = false
+        ok = false
       }
     })
 
-    if(ok2){
+    if(ok){
       if (role.user.length>0) {
         Swal.fire({
           icon: 'warning',
-          title: 'El rol '+role.name+' tiene usuarios asociados.No puede ser eliminado del sistema',
+          title: 'El rol '+role.name+' tiene usuarios asociados.No puede ser eliminado del sistema.',
           showConfirmButton: true,
+          confirmButtonText: 'Aceptar',
         }).then(function(){})
       }else{
         const swalWithBootstrapButtons = Swal.mixin({
@@ -123,20 +124,19 @@ export class RolesComponent implements OnInit{
         })
 
         Swal.fire({
-          title: 'Are you sure?',
-          text: "You won't be able to revert this!",
+          title: '¿Estás seguro de eliminar a '+role.name+'?',
+          text: "No podrás revertirlo.",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!'
+          confirmButtonText: 'Si, eliminar',
+          cancelButtonText: 'Cancelar'
         }).then((result) => {
           if (result.isConfirmed) {
             this.store.dispatch(new DeleteRoleRequest(role))
             Swal.fire(
-              'Deleted!',
-              'Your file has been deleted.',
-              'success'
+              'Eliminado con éxito.',
             )
           }
         })
@@ -144,7 +144,7 @@ export class RolesComponent implements OnInit{
     }else{
       Swal.fire({
         icon: 'warning',
-        title: 'El rol '+role.name+' no puede ser eliminado del sistema',
+        title: 'El rol '+role.name+' no puede ser eliminado del sistema.',
         showConfirmButton: true,
       }).then(function(){})
     }

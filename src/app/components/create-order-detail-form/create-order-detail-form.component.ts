@@ -1,7 +1,7 @@
 import { Costumer } from '@/models/costumer';
 import { User } from '@/models/user';
 import { AppState } from '@/store/state';
-import { CreateOrderData, OpenModalCreateOrder, OpenModalCreatePayment } from '@/store/ui/actions';
+import { CreateCostumerRequest, CreateOrderData, OpenModalCreateOrder, OpenModalCreatePayment } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -32,7 +32,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private apiService: ApiService,
   ) { }
 
   ngOnInit(): void {
@@ -67,6 +68,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
   }
 
   save() {
+
     if (this.beneficiaries.length < this.orderProcess[0].order.beneficiaries) {
       this.beneficiaries.push({
         name: this.formGroup.value.name,
@@ -85,9 +87,9 @@ export class CreateOrderDetailFormComponent implements OnInit {
         beneficiaries: this.beneficiaries,
         payment: {}
       }]
-      this.store.dispatch(new CreateOrderData(this.orderProcess))
-      this.modalService.dismissAll();
-      this.store.dispatch(new OpenModalCreatePayment)
+      // this.store.dispatch(new CreateOrderData(this.orderProcess))
+      // this.modalService.dismissAll();
+      // this.store.dispatch(new OpenModalCreatePayment)
     }
   }
 }

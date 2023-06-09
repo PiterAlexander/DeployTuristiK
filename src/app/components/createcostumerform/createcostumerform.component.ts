@@ -51,7 +51,7 @@ export class CreatecostumerformComponent implements OnInit {
       email: this.formGroup.value.email,
       password: this.formGroup.value.password,
       status: 1,
-      roleId: "0111d6df-deb0-46ac-6b56-08db663708d3",
+      roleId: "cb89f0c5-356f-47ab-c936-08db66f03c2d",
     }
 
     const costumer: Costumer = {
