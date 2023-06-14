@@ -104,7 +104,6 @@ export class CreateUserFormComponent implements OnInit {
             name: this.formGroup.value.name,
             lastName: this.formGroup.value.lastName,
             document: this.formGroup.value.identification,
-            birthDate: this.formGroup.value.birthDate,
             phoneNumber: this.formGroup.value.phone
           }
         }
@@ -122,7 +121,7 @@ export class CreateUserFormComponent implements OnInit {
             birthDate: this.formGroup.value.birthDate,
             phoneNumber: this.formGroup.value.phone,
             address: this.formGroup.value.address,
-            EPS: this.saveEps()
+            eps: this.saveEps()
           }
         }
       }

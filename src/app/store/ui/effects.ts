@@ -4,7 +4,7 @@ import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ApiService } from '@services/api.service';
 import { of } from 'rxjs';
-import { CreateAssociatedPermissionFailure, CreateAssociatedPermissionRequest, CreateAssociatedPermissionSuccess, CreateCostumerFailure, CreateCostumerRequest, CreateCostumerSuccess, CreateEmployeeFailure, CreateEmployeeRequest, CreateEmployeeSuccess, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, CreateRoleFailure, CreateRoleRequest, CreateRoleSuccess, CreateUserFailure, CreateUserRequest, CreateUserSuccess, DeleteAssociatedPermissionFailure, DeleteAssociatedPermissionRequest, DeleteAssociatedPermissionSuccess, EditPackageFailure, EditPackageRequest, EditPackageSuccess, EditRoleFailure, EditRoleRequest, EditRoleSuccess, GetAllCostumerFailure, GetAllCostumerRequest, GetAllCostumerSuccess, GetAllEmployeeFailure, GetAllEmployeeRequest, GetAllEmployeeSuccess, GetAllOrdersFailure, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesFailure, GetAllPackagesRequest, GetAllPackagesSuccess, GetAllPermissionsFailure, GetAllPermissionsSuccess, GetAllRoleFailure, GetAllRoleRequest, GetAllRoleSuccess, GetUsersFailure, GetUsersRequest, GetUsersSuccess, UpdateUserFailure, UpdateUserRequest, UpdateUserSuccess, costumerActions, employeeActions, orderActions, packageActions, permissionActions, roleActions, userActions } from './actions';
+import { CreateAssociatedPermissionFailure, CreateAssociatedPermissionRequest, CreateAssociatedPermissionSuccess, CreateCostumerFailure, CreateCostumerRequest, CreateCostumerSuccess, CreateEmployeeFailure, CreateEmployeeRequest, CreateEmployeeSuccess, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, CreateRoleFailure, CreateRoleRequest, CreateRoleSuccess, CreateUserFailure, CreateUserRequest, CreateUserSuccess, DeleteAssociatedPermissionFailure, DeleteAssociatedPermissionRequest, DeleteAssociatedPermissionSuccess, DeleteEmployeeFailure, DeleteEmployeeRequest, DeleteEmployeeSuccess, EditCostumerFailure, EditCostumerRequest, EditCostumerSuccess, EditEmployeeFailure, EditEmployeeRequest, EditEmployeeSuccess, EditPackageFailure, EditPackageRequest, EditPackageSuccess, EditRoleFailure, EditRoleRequest, EditRoleSuccess, GetAllCostumerFailure, GetAllCostumerRequest, GetAllCostumerSuccess, GetAllEmployeeFailure, GetAllEmployeeRequest, GetAllEmployeeSuccess, GetAllOrdersFailure, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesFailure, GetAllPackagesRequest, GetAllPackagesSuccess, GetAllPermissionsFailure, GetAllPermissionsSuccess, GetAllRoleFailure, GetAllRoleRequest, GetAllRoleSuccess, GetUsersFailure, GetUsersRequest, GetUsersSuccess, UpdateUserFailure, UpdateUserRequest, UpdateUserSuccess, costumerActions, employeeActions, orderActions, packageActions, permissionActions, roleActions, userActions } from './actions';
 import { CreatePackageFormComponent } from '@components/create-package-form/create-package-form.component';
 import { CreateOrderFormComponent } from '@components/create-order-form/create-order-form.component';
 import { CreateOrderDetailFormComponent } from '@components/create-order-detail-form/create-order-detail-form.component';
@@ -288,6 +288,22 @@ export class PackageEffects {
             )
         })
     ));
+    editCostumer$ = createEffect(() => this.actions$.pipe(
+        ofType(costumerActions.EDIT_COSTUMER_REQUEST),
+        map((action: EditCostumerRequest) => action.payload),
+        switchMap((costumer) => {
+            return this.apiService.updateCostumer(costumer.costumerId, costumer).pipe(
+                mergeMap((costumerResolved) => {
+                    this.modalRef.close();
+                    return [
+                        new EditCostumerSuccess(costumerResolved),
+                        new GetAllCostumerRequest(),
+                    ];
+                }),
+                catchError((err) => of(new EditCostumerFailure(err)))
+            )
+        })
+    ));
     //<------------------>
 
     //<---- EMPLOYEE ---->
@@ -329,6 +345,36 @@ export class PackageEffects {
                     ];
                 }),
                 catchError((err) => of(new CreateEmployeeFailure(err)))
+            )
+        })
+    ));
+    editEmployee$ = createEffect(() => this.actions$.pipe(
+        ofType(employeeActions.EDIT_EMPLOYEE_REQUEST),
+        map((action: EditEmployeeRequest) => action.payload),
+        switchMap((employee) => {
+            return this.apiService.updateEmployee(employee.employeeId, employee).pipe(
+                mergeMap((employeeResolved) => {
+                    this.modalRef.close();
+                    return [
+                        new EditEmployeeSuccess(employeeResolved),
+                        new GetAllEmployeeRequest(),
+                    ];
+                }),
+                catchError((err) => of(new EditEmployeeFailure(err)))
+            )
+        })
+    ));
+    DeleteEmployee$ = createEffect(() => this.actions$.pipe(
+        ofType(employeeActions.DELETE_EMPLOYEE_REQUEST),
+        map((action: DeleteEmployeeRequest) => action.payload),
+        switchMap((employee) => {
+            return this.apiService.deleteEmployee(employee.employeeId).pipe(
+                mergeMap((employeeResolved) => {
+                    return [
+                        new DeleteEmployeeSuccess(employeeResolved),
+                    ];
+                }),
+                catchError((err) => of(new DeleteEmployeeFailure(err)))
             )
         })
     ));

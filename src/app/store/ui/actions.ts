@@ -261,7 +261,12 @@ export enum costumerActions {
   OPEN_MODAL_CREATE_COSTUMER = '[COSTUMERS] OPEN_MODAL_CREATE_COSTUMER',
   CREATE_COSTUMER_REQUEST = '[COSTUMERS] CREATE_COSTUMER_REQUEST',
   CREATE_COSTUMER_SUCCESS = '[COSTUMERS] CREATE_COSTUMER_SUCCESS',
-  CREATE_COSTUMER_FAILURE = '[COSTUMERS] CREATE_COSTUMER_FAILURE'
+  CREATE_COSTUMER_FAILURE = '[COSTUMERS] CREATE_COSTUMER_FAILURE',
+
+  EDIT_COSTUMER_REQUEST = '[COSTUMERS] EDIT_COSTUMER_REQUEST',
+  EDIT_COSTUMER_SUCCESS = '[COSTUMERS] EDIT_COSTUMER_SUCCESS',
+  EDIT_COSTUMER_FAILURE = '[COSTUMERS] EDIT_COSTUMER_FAILURE',
+
 }
 
 export class GetAllCostumerRequest implements Action {
@@ -278,6 +283,7 @@ export class GetAllCostumerFailure implements Action {
 
 export class OpenModalCreateCostumer implements Action {
   readonly type: string = costumerActions.OPEN_MODAL_CREATE_COSTUMER;
+  constructor(public payload?: Costumer) { }
 }
 export class CreateCostumerRequest implements Action {
   readonly type: string = costumerActions.CREATE_COSTUMER_REQUEST;
@@ -291,6 +297,21 @@ export class CreateCostumerFailure implements Action {
   readonly type: string = costumerActions.CREATE_COSTUMER_FAILURE;
   constructor(public payload: string) { }
 }
+
+export class EditCostumerRequest implements Action {
+  readonly type: string = costumerActions.EDIT_COSTUMER_REQUEST;
+  constructor(public payload: Costumer) { }
+}
+export class EditCostumerSuccess implements Action {
+  readonly type: string = costumerActions.EDIT_COSTUMER_SUCCESS;
+  readonly string = costumerActions.OPEN_MODAL_CREATE_COSTUMER;
+  constructor(public payload: any) { }
+}
+export class EditCostumerFailure implements Action {
+  readonly type: string = costumerActions.EDIT_COSTUMER_FAILURE;
+  constructor(public payload: string) { }
+}
+
 //<--------------------->
 
 //<--- EMPLOYEE ACTIONS --->
@@ -303,6 +324,14 @@ export enum employeeActions {
   CREATE_EMPLOYEE_REQUEST = '[EMPLOYEES] CREATE_EMPLOYEE_REQUEST',
   CREATE_EMPLOYEE_SUCCESS = '[EMPLOYEES] CREATE_EMPLOYEE_SUCCESS',
   CREATE_EMPLOYEE_FAILURE = '[EMPLOYEES] CREATE_EMPLOYEE_FAILURE',
+
+  EDIT_EMPLOYEE_REQUEST = '[EMPLOYEES] EDIT_EMPLOYEE_REQUEST',
+  EDIT_EMPLOYEE_SUCCESS = '[EMPLOYEES] EDIT_EMPLOYEE_SUCCESS',
+  EDIT_EMPLOYEE_FAILURE = '[EMPLOYEES] EDIT_EMPLOYEE_FAILURE',
+
+  DELETE_EMPLOYEE_REQUEST = '[EMPLOYEES] DELETE_EMPLOYEE_REQUEST',
+  DELETE_EMPLOYEE_SUCCESS = '[EMPLOYEES] DELETE_EMPLOYEE_SUCCESS',
+  DELETE_EMPLOYEE_FAILURE = '[EMPLOYEES] DELETE_EMPLOYEE_FAILURE',
 }
 
 export class GetAllEmployeeRequest implements Action {
@@ -319,6 +348,7 @@ export class GetAllEmployeeFailure implements Action {
 
 export class OpenModalCreateEmployee implements Action {
   readonly type: string = employeeActions.OPEN_MODAL_CREATE_EMPLOYEE;
+  constructor(public payload?: Employee) { }
 }
 export class CreateEmployeeRequest implements Action {
   readonly type: string = employeeActions.CREATE_EMPLOYEE_REQUEST;
@@ -330,6 +360,33 @@ export class CreateEmployeeSuccess implements Action {
 }
 export class CreateEmployeeFailure implements Action {
   readonly type: string = employeeActions.CREATE_EMPLOYEE_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class EditEmployeeRequest implements Action {
+  readonly type: string = employeeActions.EDIT_EMPLOYEE_REQUEST;
+  constructor(public payload: Employee) { }
+}
+export class EditEmployeeSuccess implements Action {
+  readonly type: string = employeeActions.EDIT_EMPLOYEE_SUCCESS;
+  readonly string = employeeActions.OPEN_MODAL_CREATE_EMPLOYEE;
+  constructor(public payload: any) { }
+}
+export class EditEmployeeFailure implements Action {
+  readonly type: string = employeeActions.EDIT_EMPLOYEE_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class DeleteEmployeeRequest implements Action {
+  readonly type: string = employeeActions.DELETE_EMPLOYEE_REQUEST;
+  constructor(public payload: Employee) { }
+}
+export class DeleteEmployeeSuccess implements Action {
+  readonly type: string = employeeActions.DELETE_EMPLOYEE_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class DeleteEmployeeFailure implements Action {
+  readonly type: string = employeeActions.DELETE_EMPLOYEE_FAILURE;
   constructor(public payload: string) { }
 }
 //<--------------------->
@@ -440,6 +497,9 @@ export type UiAction =
   | CreateCostumerRequest
   | CreateCostumerSuccess
   | CreateCostumerFailure
+  | EditCostumerRequest
+  | EditCostumerFailure
+  | EditCostumerSuccess
   //<--------------------->
   //<---EMPLOYEES--->
   | GetAllEmployeeSuccess
@@ -447,6 +507,12 @@ export type UiAction =
   | CreateEmployeeRequest
   | CreateEmployeeSuccess
   | CreateEmployeeFailure
+  | EditCostumerRequest
+  | EditCostumerSuccess
+  | EditCostumerFailure
+  | DeleteEmployeeRequest
+  | DeleteEmployeeFailure
+  | DeleteEmployeeSuccess
   //<--------------------->
   //<---USERS--->
   | GetUsersSuccess

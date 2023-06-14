@@ -1,4 +1,4 @@
-import { CreateCostumerRequest, GetAllCostumerRequest } from '@/store/ui/actions';
+import { CreateCostumerRequest, EditCostumerRequest, GetAllCostumerRequest } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -22,16 +22,20 @@ export class CreatecostumerformComponent implements OnInit {
   Visible: boolean = false;
   password: string = '';
   public CostumerList: Array<any>
-
+  public costumerData
   constructor(private fb: FormBuilder, private modalService: NgbModal, private store: Store<AppState>) { }
 
   ngOnInit(): void {
     this.store.dispatch(new GetAllCostumerRequest());
     this.ui = this.store.select('ui');
-    this.ui.subscribe((state:UiState)=>{this.CostumerList = state.allCostumers.data})
+    this.ui.subscribe((state: UiState) => {
+      this.CostumerList = state.allCostumers.data
+      this.costumerData = state.oneCostumer.data
+    })
+
     this.formGroup = this.fb.group({
       userName: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]),
-      email: new FormControl('',[Validators.required, Validators.email, Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')]),
+      email: new FormControl('', [Validators.required, Validators.email, Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')]),
       password: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]),
       name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
       lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
@@ -42,34 +46,78 @@ export class CreatecostumerformComponent implements OnInit {
       eps: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]),
       user: ['', Validators.required],
     });
+
+    if (this.costumerData != null) {
+      console.log(this.costumerData.birthDate)
+      this.ActionTitle = "Editar"
+      this.formGroup.setValue({
+
+        name: this.costumerData.name,
+        lastName: this.costumerData.lastName,
+        document: this.costumerData.document,
+        birthDate: this.costumerData.birthDate,
+        phoneNumber: this.costumerData.phoneNumber,
+        address: this.costumerData.address,
+        eps: this.costumerData.eps,
+        userName: this.costumerData.user.userName,
+        email: this.costumerData.user.email,
+        password: this.costumerData.user.password,
+        user: this.costumerData.user
+      }
+      )
+    }
   }
-
-
   saveCostumer() {
-    const user: User = {
-      userName: this.formGroup.value.userName,
-      email: this.formGroup.value.email,
-      password: this.formGroup.value.password,
-      status: 1,
-      roleId: "0111d6df-deb0-46ac-6b56-08db663708d3",
+    if (this.costumerData == null) {
+      const user: User = {
+        userName: this.formGroup.value.userName,
+        email: this.formGroup.value.email,
+        password: this.formGroup.value.password,
+        status: 1,
+        roleId: "7b0f3143-0ba6-408e-9efe-08db6a0a4f82",
+      }
+
+      const costumer: Costumer = {
+        name: this.formGroup.value.name,
+        lastName: this.formGroup.value.lastName,
+        document: this.formGroup.value.document,
+        birthDate: this.formGroup.value.birthDate,
+        phoneNumber: this.formGroup.value.phoneNumber,
+        address: this.formGroup.value.address,
+        eps: this.formGroup.value.eps,
+        User: user
+      }
+
+      this.store.dispatch(new CreateCostumerRequest({
+        ...costumer
+      }));
+    } else {
+      const user: User = {
+        userName: this.formGroup.value.userName,
+        email: this.formGroup.value.email,
+        password: this.formGroup.value.password,
+        status: 1,
+        roleId: "7b0f3143-0ba6-408e-9efe-08db6a0a4f82",
+      }
+
+      const costumer: Costumer = {
+        costumerId: this.costumerData.costumerId,
+        name: this.formGroup.value.name,
+        lastName: this.formGroup.value.lastName,
+        document: this.formGroup.value.document,
+        birthDate: this.formGroup.value.birthDate,
+        phoneNumber: this.formGroup.value.phoneNumber,
+        address: this.formGroup.value.address,
+        eps: this.formGroup.value.eps,
+        User: user,
+        userId: this.costumerData.userId
+
+      }
+      console.log(user, costumer, 'q')
+      this.store.dispatch(new EditCostumerRequest({
+        ...costumer
+      }));
     }
-
-    const costumer: Costumer = {
-      name: this.formGroup.value.name,
-      lastName: this.formGroup.value.lastName,
-      document: this.formGroup.value.document,
-      birthDate: this.formGroup.value.birthDate,
-      phoneNumber: this.formGroup.value.phoneNumber,
-      address: this.formGroup.value.address,
-      EPS: this.formGroup.value.eps,
-      User: user
-    }
-
-
-    this.store.dispatch(new CreateCostumerRequest({
-      ...costumer
-    }));
-    console.log(this.formGroup.value)
   }
 
   displayPassword() {
@@ -77,7 +125,7 @@ export class CreatecostumerformComponent implements OnInit {
   }
 
   validateExistingDocument(): boolean {
-    return this.CostumerList.find(item => item.document == this.formGroup.value.document )
+    return this.CostumerList.find(item => item.document == this.formGroup.value.document)
   }
 
   validateExistingEmail(): boolean {
