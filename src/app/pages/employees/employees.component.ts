@@ -1,5 +1,5 @@
 import { Employee } from '@/models/employee';
-import { GetAllEmployeeRequest, OpenModalCreateEmployee} from '@/store/ui/actions';
+import { DeleteEmployeeRequest, GetAllEmployeeRequest, OpenModalCreateEmployee} from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit, PipeTransform } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -23,7 +23,7 @@ export class EmployeesComponent implements OnInit {
   public loading: boolean;
   public search: string
   public total: number
-
+  public employeeData
   private _state: State = {
     page: 1,
     pageSize: 5
@@ -48,8 +48,12 @@ export class EmployeesComponent implements OnInit {
     );
   }
 
-  openModalCreateEmployee() {
+  openModalCreateEmployee(employee?:Employee) {
     this.store.dispatch(new OpenModalCreateEmployee());
+  }
+
+  openModalEditEmployee(employee:Employee){
+    this.store.dispatch(new OpenModalCreateEmployee(employee));
   }
 
   searchByName() {
