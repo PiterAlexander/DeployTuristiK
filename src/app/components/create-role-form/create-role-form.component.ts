@@ -81,11 +81,11 @@ export class CreateRoleFormComponent implements OnInit{
     }
 
 
-    console.log("Pemisos ASOCIADOS")
-    console.log(this.selectedPermissions)
-    this.selectedPermissions.forEach(element => {
-      console.log("MOdulo",element.module, "Id",element.permissionId)
-    });
+    // console.log("Pemisos ASOCIADOS")
+    // console.log(this.selectedPermissions)
+    // this.selectedPermissions.forEach(element => {
+    //   console.log("MOdulo",element.module, "Id",element.permissionId)
+    // });
 
   }
 
@@ -107,7 +107,7 @@ export class CreateRoleFormComponent implements OnInit{
 
         Swal.fire({
           icon: 'success',
-          title: 'El rol se agreró exitosamente',
+          title: 'El rol se agregó exitosamente',
           showConfirmButton: false,
           timer: 3500
         }).then(function(){

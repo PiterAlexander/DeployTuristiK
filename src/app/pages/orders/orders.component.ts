@@ -33,7 +33,6 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new GetAllOrdersRequest());
-
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.ordersList = state.allOrders.data,
@@ -44,7 +43,7 @@ export class OrdersComponent implements OnInit {
 
   matches(orderResolved: Order, term: string, pipe: PipeTransform) {
     return (
-      orderResolved.CostumerId.toLowerCase().includes(term.toLowerCase())
+      orderResolved.costumerId.toLowerCase().includes(term.toLowerCase())
     );
   }
 
@@ -58,7 +57,7 @@ export class OrdersComponent implements OnInit {
       this.total = this.filteredOrdersList.length;
       this.filteredOrdersList = this.filteredOrdersList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
     } else {
-      this.filteredOrdersList = this.ordersList.filter(orderModel => orderModel.CostumerId.toLocaleLowerCase().includes(this.search.toLocaleLowerCase().trim()));
+      this.filteredOrdersList = this.ordersList.filter(orderModel => orderModel.costumerId.toLocaleLowerCase().includes(this.search.toLocaleLowerCase().trim()));
       this.total = this.filteredOrdersList.length;
       this.filteredOrdersList = this.filteredOrdersList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
     }

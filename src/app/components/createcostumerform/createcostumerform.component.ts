@@ -65,6 +65,13 @@ export class CreatecostumerformComponent implements OnInit {
         user: this.costumerData.user
       }
       )
+  saveCostumer() {
+    const user: User = {
+      userName: this.formGroup.value.userName,
+      email: this.formGroup.value.email,
+      password: this.formGroup.value.password,
+      status: 1,
+      roleId: "cb89f0c5-356f-47ab-c936-08db66f03c2d",
     }
   }
   saveCostumer() {

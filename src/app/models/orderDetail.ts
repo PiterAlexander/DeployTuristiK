@@ -1,6 +1,6 @@
 export interface OrderDetail {
-    OrderDetailId: string;
-    OrderId: string;
-    BeneficiaryId: string;
-    UnitPrice: number;
+    orderDetailId?: string;
+    orderId?: string;
+    beneficiaryId: string;
+    unitPrice: number;
 }

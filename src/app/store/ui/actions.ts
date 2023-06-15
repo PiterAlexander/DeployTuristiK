@@ -96,13 +96,14 @@ export enum orderActions {
   GET_ALL_ORDERS_FAILURE = '[ORDER] GET_ALL_ORDERS_FAILURE',
 
   OPEN_MODAL_CREATE_ORDER = '[ORDER] OPEN_MODAL_CREATE_ORDER',
+  CREATE_ORDER_DATA = '[ORDER] CREATE_ORDER_DATA',
   CREATE_ORDER_REQUEST = '[ORDER] CREATE_ORDER_REQUEST',
   CREATE_ORDER_SUCCESS = '[ORDER] CREATE_ORDER_SUCCESS',
   CREATE_ORDER_FAILURE = '[ORDER] CREATE_ORDER_FAILURE',
 
-  //<--- ORDERDETAIL ACTIONS --->
-  OPEN_MODAL_CREATE_ORDERDETAIL = '[ORDERDETAIL] OPEN_MODAL_CREATE_ORDERDETAIL'
-  //<--------------------->
+  OPEN_MODAL_CREATE_ORDERDETAIL = '[ORDERDETAIL] OPEN_MODAL_CREATE_ORDERDETAIL',
+
+  OPEN_MODAL_CREATE_PAYMENT = '[PAYMENT] OPEN_MODAL_CREATE_PAYMENT'
 }
 
 export class GetAllOrdersRequest implements Action {
@@ -120,6 +121,10 @@ export class GetAllOrdersFailure implements Action {
 export class OpenModalCreateOrder implements Action {
   readonly type: string = orderActions.OPEN_MODAL_CREATE_ORDER;
 }
+export class CreateOrderData implements Action {
+  readonly type: string = orderActions.CREATE_ORDER_DATA;
+  constructor(public payload: Array<any>) { }
+}
 export class CreateOrderRequest implements Action {
   readonly type: string = orderActions.CREATE_ORDER_REQUEST;
   constructor(public payload: Order) { }
@@ -135,6 +140,10 @@ export class CreateOrderFailure implements Action {
 
 export class OpenModalCreateOrderDetail implements Action {
   readonly type: string = orderActions.OPEN_MODAL_CREATE_ORDERDETAIL;
+}
+
+export class OpenModalCreatePayment implements Action {
+  readonly type: string = orderActions.OPEN_MODAL_CREATE_PAYMENT;
 }
 //<--------------------->
 
@@ -152,6 +161,10 @@ export enum roleActions {
   EDIT_ROLE_REQUEST = '[ROLES] EDIT_ROLE_REQUEST',
   EDIT_ROLE_SUCCESS = '[ROLES] EDIT_ROLE_SUCCESS',
   EDIT_ROLE_FAILURE = '[ROLES] EDIT_ROLE_FAILURE',
+
+  DELETE_ROLE_REQUEST = '[ROLES] DELETE_ROLE_REQUEST',
+  DELETE_ROLE_SUCCESS = '[ROLES] DELETE_ROLE_SUCCESS',
+  DELETE_ROLE_FAILURE = '[ROLES] DELETE_ROLE_FAILURE',
 }
 
 export class GetAllRoleRequest implements Action {
@@ -194,6 +207,19 @@ export class EditRoleSuccess implements Action {
 }
 export class EditRoleFailure implements Action {
   readonly type: string = roleActions.EDIT_ROLE_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class DeleteRoleRequest implements Action {
+  readonly type: string = roleActions.DELETE_ROLE_REQUEST;
+  constructor(public payload: Role) { }
+}
+export class DeleteRoleSuccess implements Action {
+  readonly type: string = roleActions.DELETE_ROLE_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class DeleteRoleFailure implements Action {
+  readonly type: string = roleActions.DELETE_ROLE_FAILURE;
   constructor(public payload: string) { }
 }
 //<--------------------->
@@ -480,6 +506,9 @@ export type UiAction =
   | EditRoleRequest
   | EditRoleSuccess
   | EditRoleFailure
+  | DeleteRoleRequest
+  | DeleteRoleSuccess
+  | DeleteRoleFailure
   //<--------------------->
   //<---PERMISSIONS--->
   | GetAllPermissionsSuccess

@@ -111,6 +111,16 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 }
             };
+
+        case Actions.orderActions.CREATE_ORDER_DATA:
+            return {
+                ...state,
+                orderProcess: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            }
         //<----------------------------->
 
         //<--- ROLES AND PERMISSIONS --->

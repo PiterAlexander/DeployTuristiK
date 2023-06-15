@@ -8,10 +8,9 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
-                            <label for="Name" class="form-label">Nombre</label>
-                            <input type="text" name="Name" id="Name" formControlName="Name"
-                                class="form-control border-left-dark" placeholder="Ingrese el nombre del beneficiario"
-                                required>
+                            <label for="name" class="form-label">Nombre</label>
+                            <input type="text" id="name" formControlName="name" class="form-control border-left-dark"
+                                placeholder="Ingrese el nombre del beneficiario" required>
                             <div class="invalid-feedback">
                                 Por favor ingrese unicamente letras. No se aceptan números
                                 o caracteres especiales además de tildes.
@@ -20,8 +19,8 @@
                     </div>
                     <div class="col">
                         <div class="form-group">
-                            <label for="LastName" class="form-label">Apellidos</label>
-                            <input type="text" name="LastName" id="LastName" formControlName="LastName"
+                            <label for="lastName" class="form-label">Apellidos</label>
+                            <input type="text" id="lastName" formControlName="lastName"
                                 class="form-control border-left-dark"
                                 placeholder="Ingrese los apellidos del beneficiario" required>
                             <div class="invalid-feedback">
@@ -32,9 +31,9 @@
                     </div>
                     <div class="col">
                         <div class="form-group">
-                            <label for="Document" class="form-label">Documento</label>
+                            <label for="document" class="form-label">Documento</label>
                             <div class="input-group">
-                                <input type="text" name="Document" id="Document" formControlName="Document"
+                                <input type="text" id="document" formControlName="document"
                                     class="form-control border-left-dark"
                                     placeholder="Ingrese el documento del beneficiario" required>
                                 <div class="input-group-prepend">
@@ -53,9 +52,9 @@
                         <div class="row">
                             <div class="col-7">
                                 <div class="form-group">
-                                    <label for="Address" class="form-label">Dirección</label>
+                                    <label for="address" class="form-label">Dirección</label>
                                     <div class="input-group">
-                                        <input type="text" name="Address" id="Address" formControlName="Address"
+                                        <input type="text" id="address" formControlName="address"
                                             class="form-control border-left-dark"
                                             placeholder="Ej: País - Ciudad - Barrio - Dirección" required>
                                         <div class="input-group-prepend">
@@ -71,10 +70,10 @@
                             </div>
                             <div class="col-5">
                                 <div class="form-group">
-                                    <label for="PhoneNumber" class="form-label">Teléfono</label>
+                                    <label for="phoneNumber" class="form-label">Teléfono</label>
                                     <div class="input-group">
-                                        <input type="text" name="PhoneNumber" id="PhoneNumber"
-                                            formControlName="PhoneNumber" class="form-control border-left-dark"
+                                        <input type="text" id="phoneNumber" formControlName="phoneNumber"
+                                            class="form-control border-left-dark"
                                             placeholder="Teléfono del beneficiario" required>
                                         <div class="input-group-prepend">
                                             <span class="input-group-text rounded-right"><i
@@ -93,9 +92,9 @@
                         <div class="row">
                             <div class="col-5">
                                 <div class="form-group">
-                                    <label for="BirthDate" class="form-label">Fecha de
+                                    <label for="birthdate" class="form-label">Fecha de
                                         nacimiento</label>
-                                    <input type="date" name="BirthDate" id="BirthDate" formControlName="BirthDate"
+                                    <input type="date" id="birthdate" formControlName="birthdate"
                                         class="form-control border-left-dark">
                                     <div class="invalid-feedback">
                                         Este campo es obligatorio.
@@ -107,8 +106,8 @@
                                     <label for="Eps" class="form-label">Tipo de
                                         EPS</label>
                                     <div class="input-group">
-                                        <input type="text" name="Eps" id="Eps" formControlName="Eps"
-                                            class="form-control border-left-dark" placeholder="EPS del beneficiario"
+                                        <input type="text" id="eps" formControlName="eps"
+                                            class="form-control border-left-dark" placeholder="eps del beneficiario"
                                             required>
                                         <div class="input-group-prepend">
                                             <span class="input-group-text rounded-right"><i
@@ -140,14 +139,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Esteban</td>
-                                <td>Muñoz</td>
-                                <td>1023626332</td>
-                                <td>06/05/2005</td>
-                                <td>3232889279</td>
-                                <td>Bello, CALLE 37 #43A-56</td>
-                                <td>sura</td>
+                            <tr *ngFor="let b of beneficiaries">
+                                <td>{{b.name}}</td>
+                                <td>{{b.lastName}}</td>
+                                <td>{{b.document}}</td>
+                                <td>{{b.birthdate}}</td>
+                                <td>{{b.phoneNumber}}</td>
+                                <td>{{b.address}}</td>
+                                <td>{{b.eps}}</td>
                                 <td>450000</td>
                                 <td class="text-center"><a><i class="fas fa-trash text-danger"></i></a>
                                 </td>
@@ -164,8 +163,9 @@
                 <button (click)="back()" type="button" id="cancelButton" class="btn btn-danger">Regresar</button>
             </div>
             <div class="col">
-                <!-- <button *ngIf="validForm()" (click)="next()" type="submit" class="btn btn-success">Siguiente</button> -->
-                <button type="submit" class="btn btn-secondary" disabled>Siguiente</button>
+                <button *ngIf="validForm()" type="submit" (click)="save()"
+                    class="btn btn-success">Guardar</button>
+                <button *ngIf="!validForm()" type="submit" class="btn btn-secondary" disabled>Guardar</button>
             </div>
         </div>
     </div>

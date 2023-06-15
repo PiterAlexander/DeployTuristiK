@@ -5,6 +5,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { Role } from '@/models/role';
+import Swal from 'sweetalert2';
+import { DeleteRoleRequest } from '../../store/ui/actions';
 
 
 interface State{
@@ -59,6 +61,94 @@ export class RolesComponent implements OnInit{
 
   openEditRoleModal(role:Role){
     this.store.dispatch(new OpenModalCreateRole(role));
+  }
+
+
+  deleteRole(role:Role){
+
+    // var rolesNoPermitidos = [
+    //   '53a148f0-2206-430c-c935-08db66f03c2d',
+    //   'cb89f0c5-356f-47ab-c936-08db66f03c2d',
+    //   'a27440ba-85ec-4fab-c937-08db66f03c2d',
+    //   'd2357f46-38a1-4249-c938-08db66f03c2d'
+    // ]
+
+    // var ok = true
+    // rolesNoPermitidos.forEach(id=>{
+    //   if (role.roleId==id) {
+    //     ok = false
+    //   }
+    // })
+
+    // if(ok){
+    //   this.store.dispatch(new DeleteRoleRequest(role))
+    // }else{
+    //   Swal.fire({
+    //     icon: 'warning',
+    //     title: 'El rol '+role.name+' no puede ser eliminado del sistema',
+    //     showConfirmButton: true,
+    //   }).then(function(){})
+    // }
+
+
+    //OPCION 2
+    var rolesNoPermitidosbyName = [
+      'Administrador',
+      'Empleado',
+      'Beneficiario',
+      'Cliente'
+    ]
+
+    var ok = true
+    rolesNoPermitidosbyName.forEach(name=>{
+      if (role.name==name) {
+        ok = false
+      }
+    })
+
+    if(ok){
+      if (role.user.length>0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'El rol '+role.name+' tiene usuarios asociados.No puede ser eliminado del sistema.',
+          showConfirmButton: true,
+          confirmButtonText: 'Aceptar',
+        }).then(function(){})
+      }else{
+        const swalWithBootstrapButtons = Swal.mixin({
+          customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+          },
+          buttonsStyling: false
+        })
+
+        Swal.fire({
+          title: '¿Estás seguro de eliminar a '+role.name+'?',
+          text: "No podrás revertirlo.",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, eliminar',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.store.dispatch(new DeleteRoleRequest(role))
+            Swal.fire(
+              'Eliminado con éxito.',
+            )
+          }
+        })
+      }
+    }else{
+      Swal.fire({
+        icon: 'warning',
+        title: 'El rol '+role.name+' no puede ser eliminado del sistema.',
+        showConfirmButton: true,
+      }).then(function(){})
+    }
+
   }
 
 

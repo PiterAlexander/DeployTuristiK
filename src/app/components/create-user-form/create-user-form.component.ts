@@ -86,6 +86,14 @@ export class CreateUserFormComponent implements OnInit {
         email: this.userData.email,
         password: this.userData.password,
         status: this.userData.status,
+        name: " ",
+        lastName: " ",
+        identification: " ",
+        phone: " ",
+        birthDate: " ",
+        address: " ",
+        eps: " ",
+        otherEps: " "
       })
     }
   }
@@ -169,7 +177,7 @@ export class CreateUserFormComponent implements OnInit {
 
     } else {
       return this.formGroup.valid
-        && this.formGroup.value.status != 0
+        && this.formGroup.value.status != "0"
         && !this.allUsers.find(u => u.userName === this.formGroup.value.userName && u.userId != this.formGroup.value.userId)
         && !this.allUsers.find(u => u.email === this.formGroup.value.email && u.userId != this.formGroup.value.userId)
     }
