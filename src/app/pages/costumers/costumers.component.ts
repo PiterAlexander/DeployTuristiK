@@ -48,8 +48,12 @@ export class CostumersComponent implements OnInit {
     );
   }
 
-  openModalCreateCostumer() {
+  openModalCreateCostumer(costumer?:Costumer) {
     this.store.dispatch(new OpenModalCreateCostumer());
+  }
+
+  openModalEditCostumer(costumer:Costumer){
+    this.store.dispatch(new OpenModalCreateCostumer(costumer));
   }
 
   searchByName() {

@@ -68,12 +68,12 @@ export class ApiService {
         return this.http.post<Costumer>(`${this.endpoint}api/Costumer`, modelo)
     }
 
-    updateCostumer(idCostumer: number, modelo: Costumer): Observable<Costumer> {
-        return this.http.put<Costumer>(`${this.endpoint}api/Costumer${idCostumer}`, modelo)
+    updateCostumer(idCostumer: string, modelo: Costumer): Observable<Costumer> {
+        return this.http.put<Costumer>(`${this.endpoint}api/Costumer/${idCostumer}`, modelo)
     }
 
-    deleteCostumer(idCostumer: number): Observable<void> {
-        return this.http.delete<void>(`${this.endpoint}api/Costumer${idCostumer}`)
+    deleteCostumer(idCostumer: string): Observable<void> {
+        return this.http.delete<void>(`${this.endpoint}api/Costumer/${idCostumer}`)
     }
     //<----------------->
 
@@ -86,11 +86,11 @@ export class ApiService {
         return this.http.post<Employee>(`${this.endpoint}api/Employee`, modelo)
     }
 
-    updateEmployee(idEmployee: number, modelo: Employee): Observable<Employee> {
-        return this.http.put<Employee>(`${this.endpoint}api/Employee${idEmployee}`, modelo)
+    updateEmployee(idEmployee: string, modelo: Employee): Observable<Employee> {
+        return this.http.put<Employee>(`${this.endpoint}api/Employee/${idEmployee}`, modelo)
     }
 
-    deleteEmployee(idEmployee: number): Observable<void> {
+    deleteEmployee(idEmployee: string): Observable<void> {
         return this.http.delete<void>(`${this.endpoint}api/Employee${idEmployee}`)
     }
     //<------------->

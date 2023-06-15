@@ -7,7 +7,7 @@
                         <h1 class="m-0 text-dark">Empleados</h1>
                     </div>
                     <div class="col-sm-3 col-personalized-2">
-                        <button  (click)="openModalCreateEmployee()"  type="button" class="btn btn-primary">Agregar
+                        <button (click)="openModalCreateEmployee()" type="button" class="btn btn-primary">Agregar
                             Empleado</button>
                     </div>
                 </div>
@@ -19,9 +19,11 @@
                     </div>
                     <form *ngIf="!loading">
                         <div class="d-flex justify-content-end mb-3 row">
-                            <label for="table-complete-search" class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
+                            <label for="table-complete-search"
+                                class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
                             <div class="col-xs-3 col-sm-auto">
-                                <input id="table-complete-search" type="text" class="form-control" name="searchTerm" [(ngModel)]="search" (ngModelChange)="searchByName()"/>
+                                <input id="table-complete-search" type="text" class="form-control" name="searchTerm"
+                                    [(ngModel)]="search" (ngModelChange)="searchByName()" />
                             </div>
                         </div>
 
@@ -41,7 +43,12 @@
                                     <td>{{employee.document}}</td>
                                     <td>{{employee.phoneNumber}}</td>
                                     <!-- <td><a href="">Ver detalles</a></td> -->
-                                    <td><a href="">Edit</a></td>
+                                    <td><i class="fas fa-edit text-dark" (click)="openModalEditEmployee(employee)"
+                                            style="cursor: pointer"></i></td>
+                                    <!-- <td>
+                                        <i class="fas fa-trash text-dark" (click)="deleteEmployee(employee)"
+                                            style="cursor: pointer"></i>
+                                    </td> -->
                                 </tr>
                             </tbody>
                         </table>

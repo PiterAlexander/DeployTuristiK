@@ -11,6 +11,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
+import { ApiService } from '@services/api.service';
 import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
 
@@ -39,7 +40,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private apiService: ApiService,
   ) { }
 
   ngOnInit(): void {
@@ -226,9 +228,9 @@ export class CreateOrderDetailFormComponent implements OnInit {
         beneficiaries: this.beneficiaries,
         payment: {}
       }]
-      this.store.dispatch(new CreateOrderData(this.orderProcess))
-      this.modalService.dismissAll();
-      this.store.dispatch(new OpenModalCreatePayment)
+      // this.store.dispatch(new CreateOrderData(this.orderProcess))
+      // this.modalService.dismissAll();
+      // this.store.dispatch(new OpenModalCreatePayment)
     }
   }
 }
