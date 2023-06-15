@@ -61,7 +61,7 @@ export class CreatecostumerformComponent implements OnInit {
       birthDate: this.formGroup.value.birthDate,
       phoneNumber: this.formGroup.value.phoneNumber,
       address: this.formGroup.value.address,
-      EPS: this.formGroup.value.eps,
+      eps: this.formGroup.value.eps,
       User: user
     }
 

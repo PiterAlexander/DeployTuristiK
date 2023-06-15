@@ -1,5 +1,5 @@
 import { Order } from '@/models/order';
-import { GetAllOrdersRequest, OpenModalCreateOrder } from '@/store/ui/actions';
+import { GetAllOrdersRequest, OpenModalCreateOrder, OpenModalCreatePayment, OpenModalOrderDetails, OpenModalPayments } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit, PipeTransform } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -36,7 +36,7 @@ export class OrdersComponent implements OnInit {
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.ordersList = state.allOrders.data,
-      this.loading = state.allOrders.loading
+        this.loading = state.allOrders.loading
       this.searchByName();
     });
   }
@@ -63,6 +63,13 @@ export class OrdersComponent implements OnInit {
     }
   }
 
+  sendToOrderDetails(order: Order) {
+    this.store.dispatch(new OpenModalOrderDetails(order))
+  }
+
+  sendToPayments(order: Order) {
+    this.store.dispatch(new OpenModalPayments(order))
+  }
 
   get page() {
     return this._state.page;

@@ -7,6 +7,8 @@ import { AssociatedPermission } from '@/models/associated-permission';
 import { Costumer } from '@/models/costumer';
 import { Employee } from '@/models/employee';
 import { User } from '@/models/user';
+import { Payment } from '@/models/payment';
+import { OrderDetail } from '@/models/orderDetail';
 
 //<--- TOGGLE ACTIONS --->
 export enum toggleActions {
@@ -96,14 +98,23 @@ export enum orderActions {
   GET_ALL_ORDERS_FAILURE = '[ORDER] GET_ALL_ORDERS_FAILURE',
 
   OPEN_MODAL_CREATE_ORDER = '[ORDER] OPEN_MODAL_CREATE_ORDER',
+
   CREATE_ORDER_DATA = '[ORDER] CREATE_ORDER_DATA',
   CREATE_ORDER_REQUEST = '[ORDER] CREATE_ORDER_REQUEST',
   CREATE_ORDER_SUCCESS = '[ORDER] CREATE_ORDER_SUCCESS',
   CREATE_ORDER_FAILURE = '[ORDER] CREATE_ORDER_FAILURE',
 
+  OPEN_MODAL_ORDERDETAILS = '[ORDERDETAIL] OPEN_MODAL_ORDERDETAILS',
   OPEN_MODAL_CREATE_ORDERDETAIL = '[ORDERDETAIL] OPEN_MODAL_CREATE_ORDERDETAIL',
+  CREATE_ORDERDETAIL_REQUEST = '[ORDERDETAIL] CREATE_ORDERDETAIL_REQUEST',
+  CREATE_ORDERDETAIL_SUCCESS = '[ORDERDETAIL] CREATE_ORDERDETAIL_SUCCESS',
+  CREATE_ORDERDETAIL_FAILURE = '[ORDERDETAIL] CREATE_ORDERDETAIL_FAILURE',
 
-  OPEN_MODAL_CREATE_PAYMENT = '[PAYMENT] OPEN_MODAL_CREATE_PAYMENT'
+  OPEN_MODAL_PAYMENTS = '[PAYMENTS] OPEN_MODAL_PAYMENTS',
+  OPEN_MODAL_CREATE_PAYMENT = '[PAYMENT] OPEN_MODAL_CREATE_PAYMENT',
+  CREATE_PAYMENT_REQUEST = '[PAYMENT] CREATE_PAYMENT_REQUEST',
+  CREATE_PAYMENT_SUCCESS = '[PAYMENT] CREATE_PAYMENT_SUCCESS',
+  CREATE_PAYMENT_FAILURE = '[PAYMENT] CREATE_PAYMENT_FAILURE',
 }
 
 export class GetAllOrdersRequest implements Action {
@@ -138,12 +149,48 @@ export class CreateOrderFailure implements Action {
   constructor(public payload: string) { }
 }
 
+export class OpenModalOrderDetails implements Action {
+  readonly type: string = orderActions.OPEN_MODAL_ORDERDETAILS;
+  constructor(public payload: Order) { }
+}
 export class OpenModalCreateOrderDetail implements Action {
   readonly type: string = orderActions.OPEN_MODAL_CREATE_ORDERDETAIL;
+  constructor(public payload?: Order) { }
+}
+export class CreateOrderDetailRequest implements Action {
+  readonly type: string = orderActions.CREATE_ORDERDETAIL_REQUEST;
+  constructor(public payload: OrderDetail) { }
+}
+export class CreateOrderDetailSuccess implements Action {
+  readonly type: string = orderActions.CREATE_ORDERDETAIL_SUCCESS;
+  readonly string = orderActions.OPEN_MODAL_CREATE_ORDERDETAIL;
+  constructor(public payload: any) { }
+}
+export class CreateOrderDetailFailure implements Action {
+  readonly type: string = orderActions.CREATE_PAYMENT_FAILURE;
+  constructor(public payload: string) { }
 }
 
+export class OpenModalPayments implements Action {
+  readonly type: string = orderActions.OPEN_MODAL_PAYMENTS;
+  constructor(public payload: Order) { }
+}
 export class OpenModalCreatePayment implements Action {
   readonly type: string = orderActions.OPEN_MODAL_CREATE_PAYMENT;
+  constructor(public payload?: Order) { }
+}
+export class CreatePaymentRequest implements Action {
+  readonly type: string = orderActions.CREATE_PAYMENT_REQUEST;
+  constructor(public payload: Payment) { }
+}
+export class CreatePaymentSuccess implements Action {
+  readonly type: string = orderActions.CREATE_PAYMENT_SUCCESS;
+  readonly string = orderActions.OPEN_MODAL_CREATE_PAYMENT;
+  constructor(public payload: any) { }
+}
+export class CreatePaymentFailure implements Action {
+  readonly type: string = orderActions.CREATE_PAYMENT_FAILURE;
+  constructor(public payload: string) { }
 }
 //<--------------------->
 
@@ -439,6 +486,9 @@ export type UiAction =
   | CreateOrderRequest
   | CreateOrderSuccess
   | CreateOrderFailure
+  | CreatePaymentRequest
+  | CreatePaymentSuccess
+  | CreatePaymentFailure
   //<--------------------->
   //<---ROLES--->
   | GetAllRoleSuccess

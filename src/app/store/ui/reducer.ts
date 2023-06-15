@@ -121,6 +121,46 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 }
             }
+        
+            case Actions.orderActions.OPEN_MODAL_ORDERDETAILS:
+                return {
+                    ...state,
+                    oneOrder: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
+                }
+
+        case Actions.orderActions.OPEN_MODAL_PAYMENTS:
+            return {
+                ...state,
+                oneOrder: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            }
+
+        case Actions.orderActions.OPEN_MODAL_CREATE_PAYMENT:
+            return {
+                ...state,
+                oneOrder: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            }
+
+            case Actions.orderActions.OPEN_MODAL_CREATE_ORDERDETAIL:
+                return {
+                    ...state,
+                    oneOrder: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
+                }
         //<----------------------------->
 
         //<--- ROLES AND PERMISSIONS --->
