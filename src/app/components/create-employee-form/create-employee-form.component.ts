@@ -69,7 +69,7 @@ export class CreateEmployeeFormComponent implements OnInit {
         email: this.formGroup.value.email,
         password: this.formGroup.value.password,
         status: 1,
-        roleId: "79c0d088-7b96-4358-0f39-08db6c2a6475",
+        roleId: "8247be8c-3e01-4746-0634-08db6db6206e",
       }
 
       const employee: Employee = {
@@ -89,7 +89,7 @@ export class CreateEmployeeFormComponent implements OnInit {
         email: this.formGroup.value.email,
         password: this.formGroup.value.password,
         status: 1,
-        roleId: "79c0d088-7b96-4358-0f39-08db6c2a6475",
+        roleId: "8247be8c-3e01-4746-0634-08db6db6206e",
       }
 
       const employee: Employee = {

@@ -65,13 +65,6 @@ export class CreatecostumerformComponent implements OnInit {
         user: this.costumerData.user
       }
       )
-  saveCostumer() {
-    const user: User = {
-      userName: this.formGroup.value.userName,
-      email: this.formGroup.value.email,
-      password: this.formGroup.value.password,
-      status: 1,
-      roleId: "cb89f0c5-356f-47ab-c936-08db66f03c2d",
     }
   }
   saveCostumer() {
@@ -81,7 +74,7 @@ export class CreatecostumerformComponent implements OnInit {
         email: this.formGroup.value.email,
         password: this.formGroup.value.password,
         status: 1,
-        roleId: "7b0f3143-0ba6-408e-9efe-08db6a0a4f82",
+        roleId: "903cc9ea-243a-4328-0638-08db6db6206e",
       }
 
       const costumer: Costumer = {
@@ -104,7 +97,7 @@ export class CreatecostumerformComponent implements OnInit {
         email: this.formGroup.value.email,
         password: this.formGroup.value.password,
         status: 1,
-        roleId: "7b0f3143-0ba6-408e-9efe-08db6a0a4f82",
+        roleId: "903cc9ea-243a-4328-0638-08db6db6206e",
       }
 
       const costumer: Costumer = {

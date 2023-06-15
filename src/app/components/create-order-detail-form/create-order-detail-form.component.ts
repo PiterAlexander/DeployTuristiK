@@ -77,7 +77,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         address: this.formGroup.value.address,
         phoneNumber: this.formGroup.value.phoneNumber,
         birthDate: this.formGroup.value.birthdate,
-        EPS: this.formGroup.value.eps,
+        eps: this.formGroup.value.eps,
         User: this.user,
       })
       this.formGroup.reset()
