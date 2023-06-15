@@ -45,6 +45,8 @@ import { CreateOrderDetailFormComponent } from './components/create-order-detail
 import { UsersComponent } from '@pages/users/users.component';
 import { CreateUserFormComponent } from '@components/create-user-form/create-user-form.component';
 import { CreatePaymentFormComponent } from './components/create-payment-form/create-payment-form.component';
+import { ReadOrderOrderDetailComponent } from './components/read-order-order-detail/read-order-order-detail.component';
+import { ReadOrderPaymentComponent } from './components/read-order-payment/read-order-payment.component';
 
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
@@ -80,7 +82,9 @@ registerLocaleData(localeEn, 'en-EN');
         CreateOrderDetailFormComponent,
         UsersComponent,
         CreateUserFormComponent,
-        CreatePaymentFormComponent        
+        CreatePaymentFormComponent,
+        ReadOrderOrderDetailComponent,
+        ReadOrderPaymentComponent        
     ],
     imports: [
         BrowserModule,

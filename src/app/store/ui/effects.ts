@@ -6,6 +6,7 @@ import { ApiService } from '@services/api.service';
 import { of } from 'rxjs';
 import { CreateAssociatedPermissionFailure, CreateAssociatedPermissionRequest, CreateAssociatedPermissionSuccess, CreateCostumerFailure, CreateCostumerRequest, CreateCostumerSuccess, CreateEmployeeFailure, CreateEmployeeRequest, CreateEmployeeSuccess, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, CreateRoleFailure, CreateRoleRequest, CreateRoleSuccess, CreateUserFailure, CreateUserRequest, CreateUserSuccess, DeleteAssociatedPermissionFailure, DeleteAssociatedPermissionRequest, DeleteAssociatedPermissionSuccess, DeleteEmployeeFailure, DeleteEmployeeRequest, DeleteEmployeeSuccess, EditCostumerFailure, EditCostumerRequest, EditCostumerSuccess, EditEmployeeFailure, EditEmployeeRequest, EditEmployeeSuccess, EditPackageFailure, EditPackageRequest, EditPackageSuccess, EditRoleFailure, EditRoleRequest, EditRoleSuccess, GetAllCostumerFailure, GetAllCostumerRequest, GetAllCostumerSuccess, GetAllEmployeeFailure, GetAllEmployeeRequest, GetAllEmployeeSuccess, GetAllOrdersFailure, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesFailure, GetAllPackagesRequest, GetAllPackagesSuccess, GetAllPermissionsFailure, GetAllPermissionsSuccess, GetAllRoleFailure, GetAllRoleRequest, GetAllRoleSuccess, GetUsersFailure, GetUsersRequest, GetUsersSuccess, UpdateUserFailure, UpdateUserRequest, UpdateUserSuccess, costumerActions, employeeActions, orderActions, packageActions, permissionActions, roleActions, userActions } from './actions';
 import {  DeleteRoleFailure, DeleteRoleRequest, DeleteRoleSuccess } from './actions';
+import { CreatePaymentFailure, CreatePaymentRequest, CreatePaymentSuccess, OpenModalPayments} from './actions';
 import { CreatePackageFormComponent } from '@components/create-package-form/create-package-form.component';
 import { CreateOrderFormComponent } from '@components/create-order-form/create-order-form.component';
 import { CreateOrderDetailFormComponent } from '@components/create-order-detail-form/create-order-detail-form.component';
@@ -17,6 +18,8 @@ import { CreatecostumerformComponent } from '@components/createcostumerform/crea
 import { CreateEmployeeFormComponent } from '@components/create-employee-form/create-employee-form.component';
 import { CreateUserFormComponent } from '@components/create-user-form/create-user-form.component';
 import { CreatePaymentFormComponent } from '@components/create-payment-form/create-payment-form.component';
+import { ReadOrderOrderDetailComponent } from '@components/read-order-order-detail/read-order-order-detail.component';
+import { ReadOrderPaymentComponent } from '@components/read-order-payment/read-order-payment.component';
 
 @Injectable()
 export class PackageEffects {
@@ -127,11 +130,33 @@ export class PackageEffects {
         })
     ));
 
+    openModalOrderDetails$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(orderActions.OPEN_MODAL_ORDERDETAILS),
+            tap((action) => {
+                this.modalRef = this.modalService.open(ReadOrderOrderDetailComponent, {
+                    backdrop: false,
+                    size: 'xl'
+                });
+            })
+        ), { dispatch: false });
+
     openModalCreateOrderDetail$ = createEffect(() =>
         this.actions$.pipe(
             ofType(orderActions.OPEN_MODAL_CREATE_ORDERDETAIL),
             tap((action) => {
                 this.modalRef = this.modalService.open(CreateOrderDetailFormComponent, {
+                    backdrop: false,
+                    size: 'xl'
+                });
+            })
+        ), { dispatch: false });
+
+    openModalPayments$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(orderActions.OPEN_MODAL_PAYMENTS),
+            tap((action) => {
+                this.modalRef = this.modalService.open(ReadOrderPaymentComponent, {
                     backdrop: false,
                     size: 'xl'
                 });
@@ -148,6 +173,23 @@ export class PackageEffects {
                 });
             })
         ), { dispatch: false });
+
+    createPayment$ = createEffect(() => this.actions$.pipe(
+        ofType(orderActions.CREATE_PAYMENT_REQUEST),
+        map((action: CreatePaymentRequest) => action.payload),
+        switchMap((payment) => {
+            return this.apiService.addPayment(payment).pipe(
+                mergeMap((paymentResolved) => {
+                    this.modalRef.close();
+                    return [
+                        new CreatePaymentSuccess(paymentResolved),
+                        new GetAllOrdersRequest(),
+                    ];
+                }),
+                catchError((err) => of(new CreatePaymentFailure(err)))
+            )
+        })
+    ));
     //<----------------------------->
 
     //<--- ROLES AND PERMISSIONS --->
@@ -214,19 +256,19 @@ export class PackageEffects {
     ))
 
     deleteRole$ = createEffect(() => this.actions$.pipe(
-      ofType(roleActions.DELETE_ROLE_REQUEST),
-      map((action: DeleteRoleRequest) => action.payload),
-      switchMap((role) => {
-          return this.roleService.DeleteRole(role.roleId).pipe(
-              mergeMap((roleResolved) => {
-                  return [
-                      new DeleteRoleSuccess(roleResolved),
-                      new GetAllRoleRequest(),
-                  ];
-              }),
-              catchError((err) => of(new DeleteRoleFailure(err)))
-          )
-      })
+        ofType(roleActions.DELETE_ROLE_REQUEST),
+        map((action: DeleteRoleRequest) => action.payload),
+        switchMap((role) => {
+            return this.roleService.DeleteRole(role.roleId).pipe(
+                mergeMap((roleResolved) => {
+                    return [
+                        new DeleteRoleSuccess(roleResolved),
+                        new GetAllRoleRequest(),
+                    ];
+                }),
+                catchError((err) => of(new DeleteRoleFailure(err)))
+            )
+        })
     ))
 
     getPermissions$ = createEffect(() => this.actions$.pipe(
