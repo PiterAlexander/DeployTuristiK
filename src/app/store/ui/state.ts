@@ -32,6 +32,11 @@ export default <UiState>{
     error: undefined,
     loading: false
   },
+  oneOrder: {
+    data: undefined,
+    error: undefined,
+    loading: false
+  },
   orderProcess: {
     data: [],
     error: undefined,
@@ -117,6 +122,11 @@ export interface UiState {
   //<--- ORDERS --->
   allOrders: {
     data: Array<Order>,
+    error: string,
+    loading: boolean
+  };
+  oneOrder: {
+    data: Order,
     error: string,
     loading: boolean
   };

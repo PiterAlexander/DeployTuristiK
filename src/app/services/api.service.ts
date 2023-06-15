@@ -8,6 +8,7 @@ import { Costumer } from '@/models/costumer';
 import { Employee } from '@/models/employee';
 import { OrderDetail } from '@/models/orderDetail';
 import { User } from '@/models/user';
+import { Payment } from '@/models/payment';
 @Injectable({
     providedIn: 'root'
 })
@@ -51,6 +52,10 @@ export class ApiService {
 
     deleteOrder(idOrder: number): Observable<void> {
         return this.http.delete<void>(`${this.endpoint}api/Order/${idOrder}`)
+    }
+
+    addPayment(modelo: Payment): Observable<Payment> {
+        return this.http.post<Payment>(`${this.endpoint}api/Payment`, modelo)
     }
     //<----------------->
 

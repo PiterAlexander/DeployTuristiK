@@ -44,13 +44,14 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let order of filteredOrdersList">
-                                    <td>{{order.costumerId}}</td>
-                                    <td>{{order.packageId}}</td>
+                                    <td>{{order.costumer.name + ' ' + order.costumer.lastName + ' - ' +
+                                        order.costumer.document}}</td>
+                                    <td>{{order.package.name}}</td>
                                     <td><a class="text-decoration-none text-primary font-weight-bold font-italic"
-                                            href="">Ver lista</a>
+                                            (click)="sendToOrderDetails(order)">Ver lista</a>
                                     </td>
                                     <td><a class="text-decoration-none text-primary font-weight-bold font-italic"
-                                            href="">Ver lista</a></td>
+                                            (click)="sendToPayments(order)">Ver lista</a></td>
                                     <td>{{order.totalCost}}</td>
                                     <td>
                                         <span *ngIf="order.status === 0">Pendiente</span>
