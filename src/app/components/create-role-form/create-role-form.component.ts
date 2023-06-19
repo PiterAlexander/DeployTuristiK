@@ -52,6 +52,7 @@ export class CreateRoleFormComponent implements OnInit{
 
     if (this.roleData!=null) {
 
+
       this.roleData.associatedPermission.forEach(rolpermiso=>{
         this.assignpermissiontolist(rolpermiso.permission)
       })
@@ -63,9 +64,22 @@ export class CreateRoleFormComponent implements OnInit{
         associatedPermission: [this.selectedPermissions,Validators.required]
       })
 
+      const roleNameControl = this.formGroup.get('name');
+      const roleName = roleNameControl.value;
+
+      if (roleName === 'Administrador' || roleName === 'Empleado' ||
+      roleName === 'Beneficiario' || roleName === 'Cliente')
+      {
+        roleNameControl.disable();
+      }else{
+        roleNameControl.enable();
+      }
+
     }
 
   }
+
+
 
 
   //CREATE UPDATE ROLE AND ASSING PERMISSIONS-----------------------
@@ -217,7 +231,7 @@ export class CreateRoleFormComponent implements OnInit{
     if (this.roleData==null) {
       return this.formGroup.valid
       && this.formGroup.value.status != 0
-      && !this.AllRoles.find(item => item.name === this.formGroup.value.name)
+      && !this.AllRoles.find(item => item.name === this.formGroup.value.name.trim())
       && this.selectedPermissions.length>0
     }else{
       return this.formGroup.valid
@@ -231,7 +245,7 @@ export class CreateRoleFormComponent implements OnInit{
 
   validateExistingRoleName():boolean{
     if (this.roleData==null) {
-      return this.AllRoles.find(item => item.name === this.formGroup.value.name)
+      return this.AllRoles.find(item => item.name === this.formGroup.value.name.trim())
     }else{
       return this.AllRoles.find(
         item => item.name === this.formGroup.value.name
