@@ -8,7 +8,7 @@ export interface Costumer {
     birthDate:Date;
     phoneNumber:string;
     address:string;
-    EPS:string;
+    eps:string;
     User?:User;
     userId?:string;
     frequentTravel?:FrequentTraveler[];

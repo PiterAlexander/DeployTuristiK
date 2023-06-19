@@ -121,6 +121,46 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 }
             }
+        
+            case Actions.orderActions.OPEN_MODAL_ORDERDETAILS:
+                return {
+                    ...state,
+                    oneOrder: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
+                }
+
+        case Actions.orderActions.OPEN_MODAL_PAYMENTS:
+            return {
+                ...state,
+                oneOrder: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            }
+
+        case Actions.orderActions.OPEN_MODAL_CREATE_PAYMENT:
+            return {
+                ...state,
+                oneOrder: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            }
+
+            case Actions.orderActions.OPEN_MODAL_CREATE_ORDERDETAIL:
+                return {
+                    ...state,
+                    oneOrder: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
+                }
         //<----------------------------->
 
         //<--- ROLES AND PERMISSIONS --->
@@ -225,6 +265,16 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 }
             };
+
+        case Actions.costumerActions.OPEN_MODAL_CREATE_COSTUMER:
+            return {
+                ...state,
+                oneCostumer: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
         //<----------------->
 
         //<--- EMPLOYEES --->
@@ -254,6 +304,15 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 allEmployees: {
                     data: [],
                     error: action.payload,
+                    loading: false
+                }
+            };
+        case Actions.employeeActions.OPEN_MODAL_CREATE_EMPLOYEE:
+            return {
+                ...state,
+                oneEmployee: {
+                    data: action.payload,
+                    error: undefined,
                     loading: false
                 }
             };

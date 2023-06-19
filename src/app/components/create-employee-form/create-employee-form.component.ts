@@ -1,4 +1,4 @@
-import { CreateEmployeeRequest, GetAllCostumerRequest, GetAllEmployeeRequest } from '@/store/ui/actions';
+import { CreateEmployeeRequest, EditEmployeeRequest, GetAllCostumerRequest, GetAllEmployeeRequest } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -21,59 +21,104 @@ export class CreateEmployeeFormComponent implements OnInit {
   public ActionTitle: string = "Agregar"
   Visible: boolean = false;
   password: String = '';
-  EmployeeList: Array <any>;
-  User : Array <any>;
-
+  EmployeeList: Array<any>;
+  User: Array<any>;
+  public employeeData
   constructor(private fb: FormBuilder, private modalService: NgbModal, private store: Store<AppState>) { }
 
   ngOnInit(): void {
-    this.store.dispatch(new GetAllEmployeeRequest);
+    this.store.dispatch(new GetAllCostumerRequest());
     this.ui = this.store.select('ui');
-    this.ui.subscribe((state:UiState)=>{this.EmployeeList = state.allEmployees.data,this.User = state.allUsers.data})
+    this.ui.subscribe((state: UiState) => {
+      this.EmployeeList = state.allEmployees.data
+      this.employeeData = state.oneEmployee.data
+    })
     this.formGroup = this.fb.group({
-      email: new FormControl('',[Validators.required, Validators.email, Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')]),
-      password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
+      userName: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]),
+      email: new FormControl('', [Validators.required, Validators.email, Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')]),
+      password: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]),
       name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
-      lastName: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]),
-      userName:new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]),
+      lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
       document: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
       phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
+      user: ['', Validators.required],
     });
+
+    if (this.employeeData != null) {
+      console.log(this.employeeData.user.userName)
+      this.ActionTitle = "Editar"
+      this.formGroup.setValue({
+        userName: this.employeeData.user.userName,
+        email: this.employeeData.user.email,
+        password: this.employeeData.user.password,
+        name: this.employeeData.name,
+        lastName: this.employeeData.lastName,
+        document: this.employeeData.document,
+        phoneNumber: this.employeeData.phoneNumber,
+        user: this.employeeData.user
+      }
+      )
+    }
   }
 
 
   saveEmployee() {
-    const user: User = {
-      userName: this.formGroup.value.userName,
-      email: this.formGroup.value.email,
-      password: this.formGroup.value.password,
-      status: 1,
-      roleId: "0859fc2c-751e-4a28-c01f-08db66e30e8e",
+    if (this.employeeData == null) {
+      const user: User = {
+        userName: this.formGroup.value.userName,
+        email: this.formGroup.value.email,
+        password: this.formGroup.value.password,
+        status: 1,
+        roleId: "8247be8c-3e01-4746-0634-08db6db6206e",
+      }
+
+      const employee: Employee = {
+        name: this.formGroup.value.name,
+        lastName: this.formGroup.value.lastName,
+        document: this.formGroup.value.document,
+        phoneNumber: this.formGroup.value.phoneNumber,
+        user: user,
+      }
+      console.log(employee)
+      this.store.dispatch(new CreateEmployeeRequest({
+        ...employee
+      }));
+    } else {
+      const user: User = {
+        userName: this.formGroup.value.userName,
+        email: this.formGroup.value.email,
+        password: this.formGroup.value.password,
+        status: 1,
+        roleId: "8247be8c-3e01-4746-0634-08db6db6206e",
+      }
+
+      const employee: Employee = {
+        employeeId: this.employeeData.employeeId,
+        name: this.formGroup.value.name,
+        lastName: this.formGroup.value.lastName,
+        document: this.formGroup.value.document,
+        phoneNumber: this.formGroup.value.phoneNumber,
+        user: user,
+        userId: this.employeeData.userId
+      }
+      console.log(employee)
+      this.store.dispatch(new EditEmployeeRequest({
+        ...employee
+      }));
     }
-    
-    const employee: Employee = {
-      name: this.formGroup.value.name,
-      lastName: this.formGroup.value.lastName,
-      document: this.formGroup.value.document,
-      phoneNumber: this.formGroup.value.phoneNumber,
-      user: user,
-    }
-    console.log(employee)
-    this.store.dispatch(new CreateEmployeeRequest({
-      ...employee
-    }));
+
   }
 
   displayPassword() {
     this.Visible = !this.Visible;
   }
 
-  validateExistingDocument(): boolean{
+  validateExistingDocument(): boolean {
     return this.EmployeeList.find((item => item.document == this.formGroup.value.document))
   }
-  validateExistingEmail(): boolean{
-    return this.User.find((item => item.email == this.formGroup.value.email))
-  }
+  // validateExistingEmail(): boolean {
+  //   return this.User.find((item => item.email == this.formGroup.value.email))
+  // }
 
   validForm(): boolean {
     return true

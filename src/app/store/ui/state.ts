@@ -32,6 +32,11 @@ export default <UiState>{
     error: undefined,
     loading: false
   },
+  oneOrder: {
+    data: undefined,
+    error: undefined,
+    loading: false
+  },
   orderProcess: {
     data: [],
     error: undefined,
@@ -61,6 +66,11 @@ export default <UiState>{
     error: undefined,
     loading: false
   },
+  oneCostumer: {
+    data: undefined,
+    error: undefined,
+    loading: false
+  },
   //<----------------->
   //<--- EMPLOYEES --->
   allEmployees: {
@@ -68,6 +78,11 @@ export default <UiState>{
     error: undefined,
     loading: false
   },
+  oneEmployee: {
+    data: undefined,
+    error: undefined,
+    loading: false
+},
   //<------------->
   //<--- USERS --->
   allUsers: {
@@ -110,6 +125,11 @@ export interface UiState {
     error: string,
     loading: boolean
   };
+  oneOrder: {
+    data: Order,
+    error: string,
+    loading: boolean
+  };
   orderProcess: {
     data: Array<any>,
     error: string,
@@ -139,10 +159,20 @@ export interface UiState {
     error: string,
     loading: boolean
   };
+  oneCostumer: {
+    data: Costumer,
+    error: string,
+    loading: boolean
+  };
   //<----------------->
   //<--- EMPLOYEES --->
   allEmployees: {
     data: Array<Employee>,
+    error: string,
+    loading: boolean
+  };
+  oneEmployee: {
+    data: Employee,
     error: string,
     loading: boolean
   };

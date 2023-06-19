@@ -7,6 +7,8 @@ import { AssociatedPermission } from '@/models/associated-permission';
 import { Costumer } from '@/models/costumer';
 import { Employee } from '@/models/employee';
 import { User } from '@/models/user';
+import { Payment } from '@/models/payment';
+import { OrderDetail } from '@/models/orderDetail';
 
 //<--- TOGGLE ACTIONS --->
 export enum toggleActions {
@@ -96,14 +98,23 @@ export enum orderActions {
   GET_ALL_ORDERS_FAILURE = '[ORDER] GET_ALL_ORDERS_FAILURE',
 
   OPEN_MODAL_CREATE_ORDER = '[ORDER] OPEN_MODAL_CREATE_ORDER',
+
   CREATE_ORDER_DATA = '[ORDER] CREATE_ORDER_DATA',
   CREATE_ORDER_REQUEST = '[ORDER] CREATE_ORDER_REQUEST',
   CREATE_ORDER_SUCCESS = '[ORDER] CREATE_ORDER_SUCCESS',
   CREATE_ORDER_FAILURE = '[ORDER] CREATE_ORDER_FAILURE',
 
+  OPEN_MODAL_ORDERDETAILS = '[ORDERDETAIL] OPEN_MODAL_ORDERDETAILS',
   OPEN_MODAL_CREATE_ORDERDETAIL = '[ORDERDETAIL] OPEN_MODAL_CREATE_ORDERDETAIL',
+  CREATE_ORDERDETAIL_REQUEST = '[ORDERDETAIL] CREATE_ORDERDETAIL_REQUEST',
+  CREATE_ORDERDETAIL_SUCCESS = '[ORDERDETAIL] CREATE_ORDERDETAIL_SUCCESS',
+  CREATE_ORDERDETAIL_FAILURE = '[ORDERDETAIL] CREATE_ORDERDETAIL_FAILURE',
 
-  OPEN_MODAL_CREATE_PAYMENT = '[PAYMENT] OPEN_MODAL_CREATE_PAYMENT'
+  OPEN_MODAL_PAYMENTS = '[PAYMENTS] OPEN_MODAL_PAYMENTS',
+  OPEN_MODAL_CREATE_PAYMENT = '[PAYMENT] OPEN_MODAL_CREATE_PAYMENT',
+  CREATE_PAYMENT_REQUEST = '[PAYMENT] CREATE_PAYMENT_REQUEST',
+  CREATE_PAYMENT_SUCCESS = '[PAYMENT] CREATE_PAYMENT_SUCCESS',
+  CREATE_PAYMENT_FAILURE = '[PAYMENT] CREATE_PAYMENT_FAILURE',
 }
 
 export class GetAllOrdersRequest implements Action {
@@ -138,12 +149,48 @@ export class CreateOrderFailure implements Action {
   constructor(public payload: string) { }
 }
 
+export class OpenModalOrderDetails implements Action {
+  readonly type: string = orderActions.OPEN_MODAL_ORDERDETAILS;
+  constructor(public payload: Order) { }
+}
 export class OpenModalCreateOrderDetail implements Action {
   readonly type: string = orderActions.OPEN_MODAL_CREATE_ORDERDETAIL;
+  constructor(public payload?: Order) { }
+}
+export class CreateOrderDetailRequest implements Action {
+  readonly type: string = orderActions.CREATE_ORDERDETAIL_REQUEST;
+  constructor(public payload: OrderDetail) { }
+}
+export class CreateOrderDetailSuccess implements Action {
+  readonly type: string = orderActions.CREATE_ORDERDETAIL_SUCCESS;
+  readonly string = orderActions.OPEN_MODAL_CREATE_ORDERDETAIL;
+  constructor(public payload: any) { }
+}
+export class CreateOrderDetailFailure implements Action {
+  readonly type: string = orderActions.CREATE_PAYMENT_FAILURE;
+  constructor(public payload: string) { }
 }
 
+export class OpenModalPayments implements Action {
+  readonly type: string = orderActions.OPEN_MODAL_PAYMENTS;
+  constructor(public payload: Order) { }
+}
 export class OpenModalCreatePayment implements Action {
   readonly type: string = orderActions.OPEN_MODAL_CREATE_PAYMENT;
+  constructor(public payload?: Order) { }
+}
+export class CreatePaymentRequest implements Action {
+  readonly type: string = orderActions.CREATE_PAYMENT_REQUEST;
+  constructor(public payload: Payment) { }
+}
+export class CreatePaymentSuccess implements Action {
+  readonly type: string = orderActions.CREATE_PAYMENT_SUCCESS;
+  readonly string = orderActions.OPEN_MODAL_CREATE_PAYMENT;
+  constructor(public payload: any) { }
+}
+export class CreatePaymentFailure implements Action {
+  readonly type: string = orderActions.CREATE_PAYMENT_FAILURE;
+  constructor(public payload: string) { }
 }
 //<--------------------->
 
@@ -287,7 +334,12 @@ export enum costumerActions {
   OPEN_MODAL_CREATE_COSTUMER = '[COSTUMERS] OPEN_MODAL_CREATE_COSTUMER',
   CREATE_COSTUMER_REQUEST = '[COSTUMERS] CREATE_COSTUMER_REQUEST',
   CREATE_COSTUMER_SUCCESS = '[COSTUMERS] CREATE_COSTUMER_SUCCESS',
-  CREATE_COSTUMER_FAILURE = '[COSTUMERS] CREATE_COSTUMER_FAILURE'
+  CREATE_COSTUMER_FAILURE = '[COSTUMERS] CREATE_COSTUMER_FAILURE',
+
+  EDIT_COSTUMER_REQUEST = '[COSTUMERS] EDIT_COSTUMER_REQUEST',
+  EDIT_COSTUMER_SUCCESS = '[COSTUMERS] EDIT_COSTUMER_SUCCESS',
+  EDIT_COSTUMER_FAILURE = '[COSTUMERS] EDIT_COSTUMER_FAILURE',
+
 }
 
 export class GetAllCostumerRequest implements Action {
@@ -304,6 +356,7 @@ export class GetAllCostumerFailure implements Action {
 
 export class OpenModalCreateCostumer implements Action {
   readonly type: string = costumerActions.OPEN_MODAL_CREATE_COSTUMER;
+  constructor(public payload?: Costumer) { }
 }
 export class CreateCostumerRequest implements Action {
   readonly type: string = costumerActions.CREATE_COSTUMER_REQUEST;
@@ -317,6 +370,21 @@ export class CreateCostumerFailure implements Action {
   readonly type: string = costumerActions.CREATE_COSTUMER_FAILURE;
   constructor(public payload: string) { }
 }
+
+export class EditCostumerRequest implements Action {
+  readonly type: string = costumerActions.EDIT_COSTUMER_REQUEST;
+  constructor(public payload: Costumer) { }
+}
+export class EditCostumerSuccess implements Action {
+  readonly type: string = costumerActions.EDIT_COSTUMER_SUCCESS;
+  readonly string = costumerActions.OPEN_MODAL_CREATE_COSTUMER;
+  constructor(public payload: any) { }
+}
+export class EditCostumerFailure implements Action {
+  readonly type: string = costumerActions.EDIT_COSTUMER_FAILURE;
+  constructor(public payload: string) { }
+}
+
 //<--------------------->
 
 //<--- EMPLOYEE ACTIONS --->
@@ -329,6 +397,14 @@ export enum employeeActions {
   CREATE_EMPLOYEE_REQUEST = '[EMPLOYEES] CREATE_EMPLOYEE_REQUEST',
   CREATE_EMPLOYEE_SUCCESS = '[EMPLOYEES] CREATE_EMPLOYEE_SUCCESS',
   CREATE_EMPLOYEE_FAILURE = '[EMPLOYEES] CREATE_EMPLOYEE_FAILURE',
+
+  EDIT_EMPLOYEE_REQUEST = '[EMPLOYEES] EDIT_EMPLOYEE_REQUEST',
+  EDIT_EMPLOYEE_SUCCESS = '[EMPLOYEES] EDIT_EMPLOYEE_SUCCESS',
+  EDIT_EMPLOYEE_FAILURE = '[EMPLOYEES] EDIT_EMPLOYEE_FAILURE',
+
+  DELETE_EMPLOYEE_REQUEST = '[EMPLOYEES] DELETE_EMPLOYEE_REQUEST',
+  DELETE_EMPLOYEE_SUCCESS = '[EMPLOYEES] DELETE_EMPLOYEE_SUCCESS',
+  DELETE_EMPLOYEE_FAILURE = '[EMPLOYEES] DELETE_EMPLOYEE_FAILURE',
 }
 
 export class GetAllEmployeeRequest implements Action {
@@ -345,6 +421,7 @@ export class GetAllEmployeeFailure implements Action {
 
 export class OpenModalCreateEmployee implements Action {
   readonly type: string = employeeActions.OPEN_MODAL_CREATE_EMPLOYEE;
+  constructor(public payload?: Employee) { }
 }
 export class CreateEmployeeRequest implements Action {
   readonly type: string = employeeActions.CREATE_EMPLOYEE_REQUEST;
@@ -356,6 +433,33 @@ export class CreateEmployeeSuccess implements Action {
 }
 export class CreateEmployeeFailure implements Action {
   readonly type: string = employeeActions.CREATE_EMPLOYEE_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class EditEmployeeRequest implements Action {
+  readonly type: string = employeeActions.EDIT_EMPLOYEE_REQUEST;
+  constructor(public payload: Employee) { }
+}
+export class EditEmployeeSuccess implements Action {
+  readonly type: string = employeeActions.EDIT_EMPLOYEE_SUCCESS;
+  readonly string = employeeActions.OPEN_MODAL_CREATE_EMPLOYEE;
+  constructor(public payload: any) { }
+}
+export class EditEmployeeFailure implements Action {
+  readonly type: string = employeeActions.EDIT_EMPLOYEE_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class DeleteEmployeeRequest implements Action {
+  readonly type: string = employeeActions.DELETE_EMPLOYEE_REQUEST;
+  constructor(public payload: Employee) { }
+}
+export class DeleteEmployeeSuccess implements Action {
+  readonly type: string = employeeActions.DELETE_EMPLOYEE_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class DeleteEmployeeFailure implements Action {
+  readonly type: string = employeeActions.DELETE_EMPLOYEE_FAILURE;
   constructor(public payload: string) { }
 }
 //<--------------------->
@@ -439,6 +543,9 @@ export type UiAction =
   | CreateOrderRequest
   | CreateOrderSuccess
   | CreateOrderFailure
+  | CreatePaymentRequest
+  | CreatePaymentSuccess
+  | CreatePaymentFailure
   //<--------------------->
   //<---ROLES--->
   | GetAllRoleSuccess
@@ -469,6 +576,9 @@ export type UiAction =
   | CreateCostumerRequest
   | CreateCostumerSuccess
   | CreateCostumerFailure
+  | EditCostumerRequest
+  | EditCostumerFailure
+  | EditCostumerSuccess
   //<--------------------->
   //<---EMPLOYEES--->
   | GetAllEmployeeSuccess
@@ -476,6 +586,12 @@ export type UiAction =
   | CreateEmployeeRequest
   | CreateEmployeeSuccess
   | CreateEmployeeFailure
+  | EditCostumerRequest
+  | EditCostumerSuccess
+  | EditCostumerFailure
+  | DeleteEmployeeRequest
+  | DeleteEmployeeFailure
+  | DeleteEmployeeSuccess
   //<--------------------->
   //<---USERS--->
   | GetUsersSuccess

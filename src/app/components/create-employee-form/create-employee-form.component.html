@@ -1,6 +1,6 @@
 <div class="modal-header">
     <div class="container-fluid">
-        <h5 class="modal-title padding-extra">Agregar Empleado</h5>
+        <h5 class="modal-title padding-extra">{{ActionTitle}} Empleado</h5>
     </div>
 </div>
 <div class="modal-body">
@@ -128,7 +128,7 @@
                             <label for="email" class="form-label">Correo</label>
                             <div class="input-group">
                                 <input type="email" id="email" name="email"
-                                    class="form-control formularioCampo border-left-dark" formControlName="email">
+                                    class="form-control formularioCampo border-left-dark" formControlName="email" placeholder="Ingrese su correo">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text rounded-right"><i class="fas fa-at"></i></span>
                                 </div>
@@ -136,10 +136,10 @@
                                     class="invalid-feedback">
                                     *El campo es requerido.
                                 </div>
-                                <div *ngIf="formGroup.get('email').dirty && validateExistingEmail()"
+                                <!-- <div *ngIf="formGroup.get('email').dirty && validateExistingEmail()"
                                     class="invalid-feedback">
                                     *El correo ya existe
-                                </div>
+                                </div> -->
                                 <div *ngIf="formGroup.get('email')?.errors?.['pattern'] && formGroup.get('email').dirty"
                                     class="invalid-feedback">
                                     *Ingrese un correo valido.
