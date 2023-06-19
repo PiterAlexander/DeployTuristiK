@@ -1,3 +1,4 @@
+<!-- eslint-disable @angular-eslint/template/eqeqeq -->
 <div class="modal-header">
     <div class="container">
         <h5 class="modal-title padding-extra">{{ ActionTitle }} Usuario</h5>
@@ -138,7 +139,7 @@
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="this.userData === null && admin !== null">
+                    <div *ngIf="this.userData == null && admin != null">
                         <div class="row">
                             <div class="form-group col-6">
                                 <label for="name" class="form-label"
