@@ -1,17 +1,15 @@
 import { Costumer } from '@/models/costumer';
-import { Order } from '@/models/order';
 import { OrderDetail } from '@/models/orderDetail';
 import { Package } from '@/models/package';
 import { Role } from '@/models/role';
 import { User } from '@/models/user';
 import { AppState } from '@/store/state';
-import { CreateOrderData, GetAllCostumerRequest, GetAllRoleRequest, OpenModalCreateOrder, OpenModalCreatePayment, OpenModalOrderDetails } from '@/store/ui/actions';
+import { EditCostumerRequest, GetAllRoleRequest, OpenModalCreateOrder, OpenModalCreatePayment, OpenModalOrderDetails } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
-import { ApiService } from '@services/api.service';
 import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
 
@@ -32,7 +30,6 @@ export class CreateOrderDetailFormComponent implements OnInit {
   public oneCostumer: Costumer
   public onePackage: Package
   public oneRole: Role
-  public oneOrder: Order
   public orderDetailCostumers: Array<Costumer> = []
   public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS', 'OTRA']
   public beneficiariesAmount: number
@@ -41,34 +38,17 @@ export class CreateOrderDetailFormComponent implements OnInit {
     private fb: FormBuilder,
     private modalService: NgbModal,
     private store: Store<AppState>,
-    private apiService: ApiService,
   ) { }
 
   ngOnInit(): void {
-    this.store.dispatch(new GetAllCostumerRequest)
     this.store.dispatch(new GetAllRoleRequest)
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
-      this.oneOrder = state.oneOrder.data
+      this.orderProcess = state.orderProcess.data
       this.allCostumers = state.allCostumers.data
       this.allRoles = state.allRoles.data
-      this.oneRole = this.allRoles.find(r => r.name === 'Beneficiario')
-      console.log(this.oneOrder);
-
-      if (this.oneOrder != null) {
-        this.orderDetails = state.oneOrder.data.orderDetail
-        for (const element of this.orderDetails) {
-          const costumer = this.allCostumers.find(c => c.costumerId === element.beneficiaryId)
-          if (costumer != undefined) {
-            this.orderDetailCostumers.push(costumer)
-          }
-        }
-        this.onePackage = this.oneOrder.package
-        this.beneficiariesAmount = 1
-      } else {
-        this.orderProcess = state.orderProcess.data
-        this.beneficiariesAmount = this.orderProcess[0].order.beneficiaries
-        this.onePackage = this.orderProcess[0].order.package
+      if (this.allRoles != undefined) {
+        this.oneRole = this.allRoles.find(r => r.name === 'Beneficiario')
       }
     })
     this.formGroup = this.fb.group({
@@ -80,16 +60,100 @@ export class CreateOrderDetailFormComponent implements OnInit {
       birthdate: ['', Validators.required],
       eps: [0, Validators.required],
     });
+    if (this.orderProcess != undefined) {
+      if (this.orderProcess[0].action === 'CreateOrderDetail') {
+        this.orderDetails = this.orderProcess[0].order.orderDetail
+        for (const element of this.orderDetails) {
+          const costumer = this.allCostumers.find(c => c.costumerId === element.beneficiaryId)
+          if (costumer != undefined) {
+            this.orderDetailCostumers.push(costumer)
+          }
+        }
+        this.onePackage = this.orderProcess[0].order.package
+        if (this.orderProcess[0].beneficiaries != undefined) {
+          if (this.orderProcess[0].beneficiaries.length > 0) {
+            for (const element of this.orderProcess[0].beneficiaries) {
+              if (element != undefined) {
+                const exists = this.beneficiaries.find(b => b.document === element.document)
+                if (exists == undefined) {
+                  this.beneficiaries.push(element)
+                }
+              }
+            }
+            this.beneficiariesAmount = this.orderProcess[0].beneficiaries.length
+          } else {
+            this.beneficiariesAmount = 1
+          }
+        } else {
+          this.beneficiariesAmount = 1
+        }
+      } else if ((this.orderProcess[0].action === 'EditOrderDetail')) {
+        this.beneficiariesAmount = 1
+        const birthDateValue = this.orderProcess[0].costumer.birthDate.split('T')[0]
+        this.formGroup.setValue({
+          name: this.orderProcess[0].costumer.name,
+          lastName: this.orderProcess[0].costumer.lastName,
+          document: this.orderProcess[0].costumer.document,
+          address: this.orderProcess[0].costumer.address,
+          phoneNumber: this.orderProcess[0].costumer.phoneNumber,
+          birthdate: birthDateValue,
+          eps: this.orderProcess[0].costumer.eps,
+        })
+      } else {
+        this.onePackage = this.orderProcess[0].order.package
+        if (this.orderProcess[0].beneficiaries.length > 0) {
+          for (const element of this.orderProcess[0].beneficiaries) {
+            if (element != undefined) {
+              const exists = this.beneficiaries.find(b => b.document === element.document)
+              if (exists == undefined) {
+                this.beneficiaries.push(element)
+              }
+            }
+          }
+          if (this.orderProcess[0].order.beneficiaries > this.orderProcess[0].beneficiaries.length) {
+            this.beneficiariesAmount = this.orderProcess[0].order.beneficiaries
+          } else {
+            this.beneficiariesAmount = this.orderProcess[0].beneficiaries.length
+          }
+        } else {
+          this.beneficiariesAmount = this.orderProcess[0].order.beneficiaries
+        }
+      }
+    }
   }
 
 
   back() {
-    if (this.oneOrder != null) {
+    if (this.orderProcess[0].action === 'CreateOrderDetail') {
+      if (this.beneficiaries.length > 0) {
+        Swal.fire({
+          icon: 'question',
+          title: '¿Estás seguro?',
+          text: 'Perderás toda la información previamente ingresada.',
+          showDenyButton: true,
+          denyButtonText: `Sí, salir`,
+          confirmButtonText: 'Permanecer',
+        }).then((result) => {
+          if (result.isDenied) {
+            this.modalService.dismissAll();
+            this.store.dispatch(new OpenModalOrderDetails(this.orderProcess[0].order))
+          }
+        })
+      } else {
+        this.modalService.dismissAll();
+        this.store.dispatch(new OpenModalOrderDetails(this.orderProcess[0].order))
+      }
+    } else if (this.orderProcess[0].action === 'EditOrderDetail') {
       this.modalService.dismissAll();
-      this.store.dispatch(new OpenModalOrderDetails(this.oneOrder))
+      this.store.dispatch(new OpenModalOrderDetails(this.orderProcess[0].order))
     } else {
+      this.orderProcess = [{
+        order: this.orderProcess[0].order,
+        beneficiaries: this.beneficiaries,
+        payment: {}
+      }]
       this.modalService.dismissAll();
-      this.store.dispatch(new OpenModalCreateOrder)
+      this.store.dispatch(new OpenModalCreateOrder(this.orderProcess))
     }
   }
 
@@ -97,6 +161,9 @@ export class CreateOrderDetailFormComponent implements OnInit {
     const oneCostumer = this.beneficiaries.find(c => c.document === document)
     const index = this.beneficiaries.indexOf(oneCostumer)
     this.beneficiaries.splice(index, 1)
+    if (this.beneficiariesAmount > 1) {
+      this.beneficiariesAmount--
+    }
   }
 
   addAnotherBeneficiarie() {
@@ -108,8 +175,33 @@ export class CreateOrderDetailFormComponent implements OnInit {
         title: '¡Error!',
         text: 'Lo sentimos no quedan cupos disponibles.',
         showConfirmButton: false,
-        timer: 2500,
+        timer: 1500,
         timerProgressBar: true
+      })
+    }
+  }
+
+  reduceBeneficiariesAmount() {
+    if (this.beneficiariesAmount > this.beneficiaries.length) {
+      if (this.beneficiariesAmount == 1) {
+        Swal.fire({
+          icon: 'error',
+          title: '¡Error!',
+          text: 'Debe haber al menos un beneficiario.',
+          showConfirmButton: false,
+          timer: 1500,
+          timerProgressBar: true
+        })
+      } else {
+        this.beneficiariesAmount--
+      }
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: '¡Error!',
+        text: 'Debes eliminar uno de tus beneficiarios antes de completar esta acción.',
+        showConfirmButton: true,
+        confirmButtonText: 'Volver'
       })
     }
   }
@@ -121,7 +213,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
       return this.formGroup.value.name != '' &&
         this.formGroup.value.phoneNumber != '' &&
         this.formGroup.value.birthdate != '' &&
-        this.formGroup.value.eps != 0 && !this.alreadyExists() && !this.costumerInformation() && !this.formGroup.invalid
+        this.formGroup.value.eps != 0 && !this.alreadyExists() && !this.costumerInformation() &&
+        !this.formGroup.invalid && !this.alreadyExistsFromEdit()
     } else {
       return true
     }
@@ -135,10 +228,27 @@ export class CreateOrderDetailFormComponent implements OnInit {
   }
 
   costumerInformation(): boolean {
-    if (this.formGroup.value.document >= 8) {
-      this.oneCostumer = this.allCostumers.find(c => c.document === this.formGroup.value.document)
-      if (this.oneCostumer != undefined) {
-        return true
+    if (this.orderProcess[0].action != 'EditOrderDetail') {
+      if (this.formGroup.value.document >= 8) {
+        this.oneCostumer = this.allCostumers.find(c => c.document === this.formGroup.value.document)
+        if (this.oneCostumer != undefined) {
+          return true
+        }
+      }
+    }
+    return false
+  }
+
+  alreadyExistsFromEdit(): boolean {
+    if (this.orderProcess[0].action === 'EditOrderDetail') {
+      if (this.formGroup.value.document >= 8) {
+        this.oneCostumer = this.allCostumers.find(c => c.document === this.formGroup.value.document)
+        if (this.oneCostumer != undefined) {
+          if (this.oneCostumer.document === this.orderProcess[0].costumer.document) {
+            return false
+          }
+          return true
+        }
       }
     }
     return false
@@ -150,19 +260,21 @@ export class CreateOrderDetailFormComponent implements OnInit {
   }
 
   alreadyExists(): boolean {
-    if (this.oneOrder != null) {
-      const oneCostumer = this.orderDetailCostumers.find(b => b.document === this.formGroup.value.document)
-      const anotherCostumer = this.beneficiaries.find(b => b.document === this.formGroup.value.document)
-      if (anotherCostumer == undefined && oneCostumer == undefined) {
-        return false
+    if (this.orderProcess[0].action != 'EditOrderDetail') {
+      if (this.orderProcess[0].action === 'CreateOrderDetail') {
+        const oneCostumer = this.orderDetailCostumers.find(b => b.document === this.formGroup.value.document)
+        const anotherCostumer = this.beneficiaries.find(b => b.document === this.formGroup.value.document)
+        if (anotherCostumer == undefined && oneCostumer == undefined) {
+          return false
+        }
+      } else {
+        const oneCostumer = this.beneficiaries.find(b => b.document === this.formGroup.value.document)
+        if (oneCostumer == undefined) {
+          return false
+        }
       }
-    } else {
-      const oneCostumer = this.beneficiaries.find(b => b.document === this.formGroup.value.document)
-      if (oneCostumer == undefined) {
-        return false
-      }
+      return true
     }
-    return true
   }
 
   showBeneficiariesTable(): boolean {
@@ -194,43 +306,55 @@ export class CreateOrderDetailFormComponent implements OnInit {
           User: user,
         })
         this.formGroup.reset()
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Todos los campos son obligatorios',
-          text: 'Por favor rellene cada uno de los campos.',
-          showConfirmButton: false,
-          timer: 2500,
-          timerProgressBar: true
-        })
       }
     }
   }
 
   next() {
-    if (this.oneOrder != null) {
+    if (this.orderProcess[0].action === 'CreateOrderDetail') {
       this.orderProcess = [{
+        action: 'CreateOrderDetail',
         order: {
-          orderId: this.oneOrder.orderId,
-          packageId: this.oneOrder.packageId,
-          costumerId: this.oneOrder.costumerId,
-          totalCost: this.oneOrder.package.price * this.beneficiaries.length
+          orderId: this.orderProcess[0].order.orderId,
+          package: this.orderProcess[0].order.package,
+          costumerId: this.orderProcess[0].order.costumerId,
+          totalCost: this.orderProcess[0].order.package.price * this.beneficiaries.length
         },
         beneficiaries: this.beneficiaries,
         payment: {}
       }]
-      this.store.dispatch(new CreateOrderData(this.orderProcess))
       this.modalService.dismissAll();
-      this.store.dispatch(new OpenModalCreatePayment)
+      this.store.dispatch(new OpenModalCreatePayment(this.orderProcess))
+    } else if (this.orderProcess[0].action === 'EditOrderDetail') {
+      const costumer: Costumer = {
+        costumerId: this.orderProcess[0].costumer.costumerId,
+        name: this.formGroup.value.name,
+        lastName: this.formGroup.value.lastName,
+        document: this.formGroup.value.document,
+        birthDate: this.formGroup.value.birthdate,
+        phoneNumber: this.formGroup.value.phoneNumber,
+        address: this.formGroup.value.address,
+        eps: this.formGroup.value.eps,
+        userId: this.orderProcess[0].costumer.userId
+      }
+      this.store.dispatch(new EditCostumerRequest(costumer))
+      this.modalService.dismissAll();
+      Swal.fire({
+        icon: 'success',
+        title: '¡Beneficiario editado exitosamente!',
+        timer: 1500,
+        timerProgressBar: true,
+        showConfirmButton: false
+      })
     } else {
       this.orderProcess = [{
+        action: 'CreateOrder',
         order: this.orderProcess[0].order,
         beneficiaries: this.beneficiaries,
         payment: {}
       }]
-      // this.store.dispatch(new CreateOrderData(this.orderProcess))
-      // this.modalService.dismissAll();
-      // this.store.dispatch(new OpenModalCreatePayment)
+      this.modalService.dismissAll();
+      this.store.dispatch(new OpenModalCreatePayment(this.orderProcess))
     }
   }
 }

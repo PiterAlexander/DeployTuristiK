@@ -46,8 +46,8 @@ export class ApiService {
         return this.http.post<Order>(`${this.endpoint}api/Order`, modelo)
     }
 
-    updateOrder(idOrder: number, modelo: Order): Observable<Order> {
-        return this.http.put<Order>(`${this.endpoint}api/Order/${idOrder}`, modelo)
+    updateOrder(orderId: string, modelo: Order): Observable<Order> {
+        return this.http.put<Order>(`${this.endpoint}api/Order/${orderId}`, modelo)
     }
 
     deleteOrder(idOrder: number): Observable<void> {
@@ -56,6 +56,14 @@ export class ApiService {
 
     addPayment(modelo: Payment): Observable<Payment> {
         return this.http.post<Payment>(`${this.endpoint}api/Payment`, modelo)
+    }
+
+    addOrderDetail(modelo: OrderDetail): Observable<OrderDetail> {
+        return this.http.post<OrderDetail>(`${this.endpoint}api/OrderDetail`, modelo)
+    }
+
+    updateOrderDetail(orderDetailId: string, modelo: OrderDetail): Observable<OrderDetail> {
+        return this.http.put<OrderDetail>(`${this.endpoint}api/OrderDetail/${orderDetailId}`, modelo)
     }
     //<----------------->
 

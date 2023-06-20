@@ -81,12 +81,18 @@
                         <label for="beneficiariesAmount" class="form-label">Beneficiarios</label>
                         <div class="input-group">
                             <input type="number" class="form-control" placeholder="Seleccione un paquete"
-                                *ngIf="!formGroup.get('packageId').dirty" readonly disabled>
+                                *ngIf="!formGroup.get('packageId').dirty && orderProcess == null" readonly disabled>
                             <input type="number" id="beneficiariesAmount" minlength="1" class="form-control"
-                                *ngIf="formGroup.get('packageId').dirty" [ngClass]="
+                                *ngIf="formGroup.get('packageId').dirty || orderProcess != null" [ngClass]="
                           {
-                            'invalid': formGroup.get('beneficiariesAmount').dirty && (formGroup.get('beneficiariesAmount').errors) || (formGroup.get('beneficiariesAmount').dirty && !validateBeneficiaries()) || (formGroup.get('beneficiariesAmount').dirty && !validateBeneficiariesAmount()),
-                            'valid': formGroup.get('beneficiariesAmount').dirty && !formGroup.get('beneficiariesAmount').errors && validateBeneficiaries() && validateBeneficiariesAmount()
+                            'invalid': formGroup.get('beneficiariesAmount').dirty && (formGroup.get('beneficiariesAmount').errors) ||
+                             (orderProcess == null && formGroup.get('beneficiariesAmount').dirty && !validateBeneficiaries()) ||
+                             (orderProcess != null && formGroup.get('packageId').dirty && !validateBeneficiaries()) ||
+                             (orderProcess != null && formGroup.get('beneficiariesAmount').dirty && !validateBeneficiaries()) ||
+                              (formGroup.get('beneficiariesAmount').dirty && !validateBeneficiariesAmount()) ||
+                               (formGroup.get('beneficiariesAmount').dirty && !validateExistingBeneficiariesAmount()),
+                            'valid': formGroup.get('beneficiariesAmount').dirty && !formGroup.get('beneficiariesAmount').errors &&
+                            validateBeneficiaries() && validateBeneficiariesAmount() && validateExistingBeneficiariesAmount()
                           }" placeholder="¿Cuántos viajarán?" formControlName="beneficiariesAmount" required
                                 onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
                             <div class="input-group-prepend">
@@ -100,10 +106,19 @@
                                 class="invalid-feedback">
                                 Debe haber al menos 1 beneficiario.
                             </div>
-                            <div *ngIf="!validateBeneficiaries() && formGroup.get('beneficiariesAmount').dirty"
+                            <div *ngIf="orderProcess == null && !validateBeneficiaries() && formGroup.get('beneficiariesAmount').dirty"
                                 class="invalid-feedback">
                                 Cupos disponibles: {{onePackage.availableQuotas}}.
                             </div>
+                            <div *ngIf="(orderProcess != null && !validateBeneficiaries() && formGroup.get('packageId').dirty) || (orderProcess != null && !validateBeneficiaries() && formGroup.get('beneficiariesAmount').dirty)"
+                                class="invalid-feedback">
+                                Cupos disponibles: {{onePackage.availableQuotas}}.
+                            </div>
+                            <div *ngIf="validateBeneficiaries() && !validateExistingBeneficiariesAmount() && formGroup.get('beneficiariesAmount').dirty"
+                                class="invalid-feedback">
+                                Capacidad minima de beneficiarios: {{beneficiariesAmount}}.
+                            </div>
+
                         </div>
                     </div>
                 </div>

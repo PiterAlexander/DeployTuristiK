@@ -99,16 +99,23 @@ export enum orderActions {
 
   OPEN_MODAL_CREATE_ORDER = '[ORDER] OPEN_MODAL_CREATE_ORDER',
 
-  CREATE_ORDER_DATA = '[ORDER] CREATE_ORDER_DATA',
   CREATE_ORDER_REQUEST = '[ORDER] CREATE_ORDER_REQUEST',
   CREATE_ORDER_SUCCESS = '[ORDER] CREATE_ORDER_SUCCESS',
   CREATE_ORDER_FAILURE = '[ORDER] CREATE_ORDER_FAILURE',
+
+  EDIT_ORDER_REQUEST = '[ORDER] EDIT_ORDER_REQUEST',
+  EDIT_ORDER_SUCCESS = '[ORDER] EDIT_ORDER_SUCCESS',
+  EDIT_ORDER_FAILURE = '[ORDER] EDIT_ORDER_FAILURE',
 
   OPEN_MODAL_ORDERDETAILS = '[ORDERDETAIL] OPEN_MODAL_ORDERDETAILS',
   OPEN_MODAL_CREATE_ORDERDETAIL = '[ORDERDETAIL] OPEN_MODAL_CREATE_ORDERDETAIL',
   CREATE_ORDERDETAIL_REQUEST = '[ORDERDETAIL] CREATE_ORDERDETAIL_REQUEST',
   CREATE_ORDERDETAIL_SUCCESS = '[ORDERDETAIL] CREATE_ORDERDETAIL_SUCCESS',
   CREATE_ORDERDETAIL_FAILURE = '[ORDERDETAIL] CREATE_ORDERDETAIL_FAILURE',
+
+  EDIT_ORDERDETAIL_REQUEST = '[ORDERDETAIL] EDIT_ORDERDETAIL_REQUEST',
+  EDIT_ORDERDETAIL_SUCCESS = '[ORDERDETAIL] EDIT_ORDERDETAIL_SUCCESS',
+  EDIT_ORDERDETAIL_FAILURE = '[ORDERDETAIL] EDIT_ORDERDETAIL_FAILURE',
 
   OPEN_MODAL_PAYMENTS = '[PAYMENTS] OPEN_MODAL_PAYMENTS',
   OPEN_MODAL_CREATE_PAYMENT = '[PAYMENT] OPEN_MODAL_CREATE_PAYMENT',
@@ -131,10 +138,7 @@ export class GetAllOrdersFailure implements Action {
 
 export class OpenModalCreateOrder implements Action {
   readonly type: string = orderActions.OPEN_MODAL_CREATE_ORDER;
-}
-export class CreateOrderData implements Action {
-  readonly type: string = orderActions.CREATE_ORDER_DATA;
-  constructor(public payload: Array<any>) { }
+  constructor(public payload?: Array<any>) { }
 }
 export class CreateOrderRequest implements Action {
   readonly type: string = orderActions.CREATE_ORDER_REQUEST;
@@ -149,13 +153,26 @@ export class CreateOrderFailure implements Action {
   constructor(public payload: string) { }
 }
 
+export class EditOrderRequest implements Action {
+  readonly type: string = orderActions.EDIT_ORDER_REQUEST;
+  constructor(public payload: Order) { }
+}
+export class EditOrderSuccess implements Action {
+  readonly type: string = orderActions.EDIT_ORDER_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class EditOrderFailure implements Action {
+  readonly type: string = orderActions.EDIT_ORDER_FAILURE;
+  constructor(public payload: string) { }
+}
+
 export class OpenModalOrderDetails implements Action {
   readonly type: string = orderActions.OPEN_MODAL_ORDERDETAILS;
   constructor(public payload: Order) { }
 }
 export class OpenModalCreateOrderDetail implements Action {
   readonly type: string = orderActions.OPEN_MODAL_CREATE_ORDERDETAIL;
-  constructor(public payload?: Order) { }
+  constructor(public payload: any) { }
 }
 export class CreateOrderDetailRequest implements Action {
   readonly type: string = orderActions.CREATE_ORDERDETAIL_REQUEST;
@@ -171,13 +188,27 @@ export class CreateOrderDetailFailure implements Action {
   constructor(public payload: string) { }
 }
 
+export class EditOrderDetailRequest implements Action {
+  readonly type: string = orderActions.EDIT_ORDERDETAIL_REQUEST;
+  readonly string = orderActions.OPEN_MODAL_CREATE_ORDERDETAIL;
+  constructor(public payload: OrderDetail) { }
+}
+export class EditOrderDetailSuccess implements Action {
+  readonly type: string = orderActions.EDIT_ORDER_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class EditOrderDetailFailure implements Action {
+  readonly type: string = orderActions.EDIT_ORDER_FAILURE;
+  constructor(public payload: string) { }
+}
+
 export class OpenModalPayments implements Action {
   readonly type: string = orderActions.OPEN_MODAL_PAYMENTS;
   constructor(public payload: Order) { }
 }
 export class OpenModalCreatePayment implements Action {
   readonly type: string = orderActions.OPEN_MODAL_CREATE_PAYMENT;
-  constructor(public payload?: Order) { }
+  constructor(public payload?: any) { }
 }
 export class CreatePaymentRequest implements Action {
   readonly type: string = orderActions.CREATE_PAYMENT_REQUEST;
@@ -543,6 +574,12 @@ export type UiAction =
   | CreateOrderRequest
   | CreateOrderSuccess
   | CreateOrderFailure
+  | EditOrderRequest
+  | EditOrderSuccess
+  | EditOrderFailure
+  | EditOrderDetailRequest
+  | EditOrderDetailSuccess
+  | EditOrderDetailFailure
   | CreatePaymentRequest
   | CreatePaymentSuccess
   | CreatePaymentFailure

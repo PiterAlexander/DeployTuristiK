@@ -1,5 +1,5 @@
 import { AppState } from '@/store/state';
-import { CreateOrderData, GetAllCostumerRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, OpenModalCreateOrderDetail } from '@/store/ui/actions';
+import { GetAllCostumerRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, OpenModalCreateOrderDetail } from '@/store/ui/actions';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -10,6 +10,7 @@ import { Package } from '@/models/package';
 import { Costumer } from '@/models/costumer';
 import { Role } from '@/models/role';
 import { User } from '@/models/user';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-order-form',
@@ -26,6 +27,8 @@ export class CreateOrderFormComponent implements OnInit {
   public allRoles: Array<Role>
   public allUsers: Array<User>
   public onePackage: Package
+  public beneficiariesAmount: number
+
 
   constructor(
     private fb: FormBuilder,
@@ -34,26 +37,64 @@ export class CreateOrderFormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.store.dispatch(new GetAllPackagesRequest)
-    this.store.dispatch(new GetAllCostumerRequest)
-    this.store.dispatch(new GetAllRoleRequest)
-    this.store.dispatch(new GetUsersRequest)
+    if (this.orderProcess == null) {
+      this.store.dispatch(new GetAllPackagesRequest)
+      this.store.dispatch(new GetAllCostumerRequest)
+      this.store.dispatch(new GetAllRoleRequest)
+      this.store.dispatch(new GetUsersRequest)
+    }
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
+      this.orderProcess = state.orderProcess.data
       this.allPackages = state.allPackages.data
       this.allCostumers = state.allCostumers.data
       this.allRoles = state.allRoles.data
       this.allUsers = state.allUsers.data
     })
+
     this.formGroup = this.fb.group({
       document: ['', Validators.required],
       packageId: ['', Validators.required],
       beneficiariesAmount: ['', Validators.required],
     });
+
+    if (this.orderProcess != undefined) {
+      if (this.orderProcess[0].beneficiaries.length > 0) {
+        this.beneficiariesAmount = this.orderProcess[0].beneficiaries.length
+      } else {
+        if (this.orderProcess[0].order.beneficiaries != undefined) {
+          this.beneficiariesAmount = this.orderProcess[0].order.beneficiaries
+        }
+      }
+      this.formGroup.setValue({
+        document: this.orderProcess[0].order.costumer.document,
+        packageId: this.orderProcess[0].order.package.packageId,
+        beneficiariesAmount: this.beneficiariesAmount
+      })
+    }
   }
 
   cancel() {
-    this.modalService.dismissAll();
+    if (this.orderProcess != undefined) {
+      if (this.orderProcess[0].beneficiaries.length > 0) {
+        Swal.fire({
+          icon: 'question',
+          title: '¿Estás seguro?',
+          text: 'Perderás toda la información previamente ingresada.',
+          showDenyButton: true,
+          denyButtonText: `Sí, salir`,
+          confirmButtonText: 'Permanecer',
+        }).then((result) => {
+          if (result.isDenied) {
+            this.modalService.dismissAll();
+          }
+        })
+      } else {
+        this.modalService.dismissAll();
+      }
+    } else {
+      this.modalService.dismissAll();
+    }
   }
 
   //<--- VALIDACIONES --->
@@ -62,7 +103,7 @@ export class CreateOrderFormComponent implements OnInit {
     return this.formGroup.valid &&
       this.formGroup.value.document != '' && this.formGroup.value.PackageId != 0 &&
       this.formGroup.value.beneficiariesAmount > 0 && !this.validateCostumerId() && !this.validateRole() &&
-      this.validateBeneficiaries() && this.validateBeneficiariesAmount()
+      this.validateBeneficiaries() && this.validateBeneficiariesAmount() && this.validateExistingBeneficiariesAmount()
   }
 
   validateCostumerId(): boolean {
@@ -79,9 +120,13 @@ export class CreateOrderFormComponent implements OnInit {
       const oneCostumer = this.allCostumers.find(c => c.document === this.formGroup.value.document)
       if (oneCostumer != undefined) {
         const oneUser = this.allUsers.find(u => u.userId === oneCostumer.userId)
-        const oneRole = this.allRoles.find(r => r.roleId === oneUser.roleId)
-        if (oneRole.name != 'Cliente') {
-          return true
+        if (oneUser != undefined) {
+          const oneRole = this.allRoles.find(r => r.roleId === oneUser.roleId)
+          if (oneRole != undefined) {
+            if (oneRole.name != 'Cliente') {
+              return true
+            }
+          }
         }
       }
     }
@@ -91,14 +136,16 @@ export class CreateOrderFormComponent implements OnInit {
   validateBeneficiaries(): boolean {
     if (this.formGroup.value.packageId != 0) {
       this.onePackage = this.allPackages.find(p => p.packageId == this.formGroup.value.packageId)
-      if (this.formGroup.value.beneficiariesAmount <= this.onePackage.availableQuotas) {
-        return true
+      if (this.onePackage != undefined) {
+        if (this.formGroup.value.beneficiariesAmount <= this.onePackage.availableQuotas) {
+          return true
+        }
       }
     }
     return false
   }
 
-  validateBeneficiariesAmount() {
+  validateBeneficiariesAmount(): boolean {
     if (this.formGroup.value.beneficiariesAmount === null) {
       return true
     } else if (this.formGroup.value.beneficiariesAmount <= 0) {
@@ -107,23 +154,55 @@ export class CreateOrderFormComponent implements OnInit {
     return true
   }
 
+  validateExistingBeneficiariesAmount(): boolean {
+    if (this.orderProcess != null) {
+      if (this.formGroup.value.beneficiariesAmount === null) {
+        return true
+      } else if (this.formGroup.value.beneficiariesAmount <= 0) {
+        return true
+      } else if (this.formGroup.value.beneficiariesAmount < this.beneficiariesAmount) {
+        return false
+      }
+    }
+    return true
+  }
+
   //<------------------->
 
   next() {
-    const oneCostumer = this.allCostumers.find(c => c.document === this.formGroup.value.document)
-    this.orderProcess = ([{
-      order: {
-        costumerId: oneCostumer.costumerId,
-        package: this.onePackage,
-        status: 1,
-        beneficiaries: this.formGroup.value.beneficiariesAmount
-      },
-      beneficiaries: {},
-      payment: {}
-    }])
-    this.store.dispatch(new CreateOrderData(this.orderProcess))
-    this.cancel()
-    this.store.dispatch(new OpenModalCreateOrderDetail());
+    if (!this.formGroup.invalid) {
+      if (this.orderProcess != null) {
+        this.modalService.dismissAll()
+        const oneCostumer = this.allCostumers.find(c => c.document === this.formGroup.value.document)
+        const orderProcess = ([{
+          action: 'CreateOrder',
+          order: {
+            costumer: oneCostumer,
+            package: this.onePackage,
+            status: 1,
+            beneficiaries: this.formGroup.value.beneficiariesAmount
+          },
+          beneficiaries: this.orderProcess[0].beneficiaries,
+          payment: {}
+        }])
+        this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess));
+      } else {
+        const oneCostumer = this.allCostumers.find(c => c.document === this.formGroup.value.document)
+        const orderProcess = ([{
+          action: 'CreateOrder',
+          order: {
+            costumer: oneCostumer,
+            package: this.onePackage,
+            status: 1,
+            beneficiaries: this.formGroup.value.beneficiariesAmount
+          },
+          beneficiaries: {},
+          payment: {}
+        }])
+        this.modalService.dismissAll()
+        this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess));
+      }
+    }
   }
 }
 
