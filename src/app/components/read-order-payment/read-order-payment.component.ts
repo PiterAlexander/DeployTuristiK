@@ -7,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { OpenModalCreatePayment } from '@/store/ui/actions';
 import { Order } from '@/models/order';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-read-order-payment',
@@ -37,7 +38,29 @@ export class ReadOrderPaymentComponent {
   }
 
   addPayment() {
-    this.closeModal()
-    this.store.dispatch(new OpenModalCreatePayment(this.order))
+    let addition = 0
+    this.order.payment.forEach(element => {
+      if (element != undefined) {
+        addition += element.amount
+      }
+    })
+    const remainingAmount = this.order.totalCost - addition
+    if (remainingAmount > 0) {
+      this.closeModal()
+      const orderProcess = [{
+        action: 'CreatePayment',
+        order: this.order
+      }]
+      this.store.dispatch(new OpenModalCreatePayment(orderProcess))
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: '¡Error!',
+        text: 'Ya pagaste la totalidad del pedido :).',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true
+      })
+    }
   }
 }

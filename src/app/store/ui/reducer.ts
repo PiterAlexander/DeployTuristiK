@@ -112,7 +112,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
 
-        case Actions.orderActions.CREATE_ORDER_DATA:
+        case Actions.orderActions.OPEN_MODAL_CREATE_ORDER:
             return {
                 ...state,
                 orderProcess: {
@@ -120,17 +120,17 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     error: undefined,
                     loading: false
                 }
-            }
-        
-            case Actions.orderActions.OPEN_MODAL_ORDERDETAILS:
-                return {
-                    ...state,
-                    oneOrder: {
-                        data: action.payload,
-                        error: undefined,
-                        loading: false
-                    }
+            };
+
+        case Actions.orderActions.OPEN_MODAL_ORDERDETAILS:
+            return {
+                ...state,
+                oneOrder: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
                 }
+            }
 
         case Actions.orderActions.OPEN_MODAL_PAYMENTS:
             return {
@@ -145,22 +145,22 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
         case Actions.orderActions.OPEN_MODAL_CREATE_PAYMENT:
             return {
                 ...state,
-                oneOrder: {
+                orderProcess: {
                     data: action.payload,
                     error: undefined,
                     loading: false
                 }
             }
 
-            case Actions.orderActions.OPEN_MODAL_CREATE_ORDERDETAIL:
-                return {
-                    ...state,
-                    oneOrder: {
-                        data: action.payload,
-                        error: undefined,
-                        loading: false
-                    }
+        case Actions.orderActions.OPEN_MODAL_CREATE_ORDERDETAIL:
+            return {
+                ...state,
+                orderProcess: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
                 }
+            }
         //<----------------------------->
 
         //<--- ROLES AND PERMISSIONS --->

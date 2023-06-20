@@ -4,10 +4,13 @@
             <h4 class="m-0 font-weight-bold text-dark"><span>Formulario de Beneficiarios</span></h4>
         </div>
         <div class="col d-flex justify-content-end">
-            <a (click)="addAnotherBeneficiarie()" class="d-flex align-items-center text-decoration-none text-dark">
-                <h4 class="m-0 font-weight-bold">Añadir otro beneficiario</h4>
-                <i class="ml-2 fas fa-plus-square fa-2x"></i>
-            </a>
+            <div *ngIf="orderProcess[0].action != 'EditOrderDetail'" class="d-flex align-items-cente">
+                <h4 class="m-0 font-weight-bold">Beneficiarios: {{ beneficiariesAmount }} -</h4>
+                <a class="text-decoration-none text-dark" (click)="addAnotherBeneficiarie()"><i
+                        class="ml-2 fas fa-plus-square fa-2x"></i></a>
+                <a class="text-decoration-none text-dark" (click)="reduceBeneficiariesAmount()"><i
+                        class="ml-2 fas fa-minus-square fa-2x"></i></a>
+            </div>
         </div>
     </div>
 </div>
@@ -71,8 +74,8 @@
                                     <input type="text" id="document" formControlName="document" class="form-control"
                                         placeholder="Ingrese el documento del beneficiario" minlength="8" maxlength="15"
                                         required [ngClass]="{
-                                        'invalid': formGroup.get('document').dirty && formGroup.get('document').errors || (alreadyExists() && formGroup.get('document').dirty),
-                                        'valid': formGroup.get('document').dirty && !formGroup.get('document').errors && !alreadyExists() || (costumerInformation() && formGroup.get('document').dirty && !alreadyExists())
+                                        'invalid': formGroup.get('document').dirty && formGroup.get('document').errors || (alreadyExists() && formGroup.get('document').dirty) || (alreadyExistsFromEdit() && formGroup.get('document').dirty),
+                                        'valid': formGroup.get('document').dirty && !formGroup.get('document').errors && !alreadyExists() && !alreadyExistsFromEdit() || (costumerInformation() && formGroup.get('document').dirty && !alreadyExists())
                                     }" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text rounded-right"><i
@@ -89,6 +92,10 @@
                                     <div *ngIf="alreadyExists() && formGroup.get('document').dirty"
                                         class="invalid-feedback">
                                         Ya existe un beneficiario con este documento.
+                                    </div>
+                                    <div *ngIf="alreadyExistsFromEdit() && formGroup.get('document').dirty"
+                                        class="invalid-feedback">
+                                        Este número de documento ya está en uso.
                                     </div>
                                     <div *ngIf="costumerInformation() && !alreadyExists() && formGroup.get('document').dirty"
                                         class="valid-feedback">
@@ -258,19 +265,28 @@
     <div class="card-footer">
         <div class="row">
             <div class="col">
-                <button (click)="back()" type="button" id="cancelButton" class="btn btn-primary">Tus viajeros
-                    frecuentes</button>
+                <!-- <button *ngIf="orderProcess[0].action != 'EditOrderDetail'" (click)="back()" type="button"
+                    id="cancelButton" class="btn btn-primary">Tus viajeros
+                    frecuentes</button> -->
             </div>
             <div class="col">
                 <div class="d-flex justify-content-end">
                     <button (click)="back()" type="button" id="cancelButton"
                         class="btn btn-danger mr-3">Regresar</button>
-                    <button *ngIf="validForm() && beneficiariesForm()" type="submit" (click)="add()"
-                        class="btn btn-success">Agregar</button>
-                    <button *ngIf="validForm() && !beneficiariesForm()" type="submit" (click)="next()"
-                        class="btn btn-success">Siguiente</button>
-                    <button *ngIf="!validForm() && beneficiariesForm()" type="submit" class="btn btn-secondary"
-                        disabled>Agregar</button>
+                    <button *ngIf="orderProcess[0].action != 'EditOrderDetail' && validForm() && beneficiariesForm()"
+                        type="submit" (click)="add()" class="btn btn-success">Agregar</button>
+
+                    <button *ngIf="orderProcess[0].action != 'EditOrderDetail' && validForm() && !beneficiariesForm()"
+                        type="submit" (click)="next()" class="btn btn-success">Siguiente</button>
+
+                    <button *ngIf="orderProcess[0].action != 'EditOrderDetail' && !validForm() && beneficiariesForm()"
+                        type="submit" class="btn btn-secondary" disabled>Agregar</button>
+
+                    <button *ngIf="orderProcess[0].action === 'EditOrderDetail' && validForm() && beneficiariesForm()"
+                        type="submit" (click)="next()" class="btn btn-success">Guardar</button>
+
+                    <button *ngIf="orderProcess[0].action === 'EditOrderDetail' && !validForm() && beneficiariesForm()"
+                        type="submit" (click)="next()" class="btn btn-secondary" disabled>Guardar</button>
                 </div>
             </div>
         </div>
