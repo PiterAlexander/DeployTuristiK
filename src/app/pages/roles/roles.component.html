@@ -48,8 +48,9 @@
                                     </i>
                                 </td>
                                 <td>
-                                  <i class="fas fa-trash text-dark" (click)="deleteRole(role)" style="cursor: pointer"></i>
-                              </td>
+                                  <i *ngIf="role.name !== 'Administrador' && role.name !== 'Beneficiario' &&
+                                  role.name !== 'Cliente' && role.name !== 'Empleado'" class="fas fa-trash text-dark" (click)="deleteRole(role)" style="cursor: pointer"></i>
+                                </td>
                             </tr>
                           </tbody>
                       </table>

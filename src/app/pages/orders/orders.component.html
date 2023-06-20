@@ -47,10 +47,10 @@
                                     <td>{{order.costumer.name + ' ' + order.costumer.lastName + ' - ' +
                                         order.costumer.document}}</td>
                                     <td>{{order.package.name}}</td>
-                                    <td><a class="text-decoration-none text-primary font-weight-bold font-italic"
+                                    <td><a  style="cursor:pointer;"  class="text-decoration-none text-primary font-weight-bold font-italic"
                                             (click)="sendToOrderDetails(order)">Ver lista</a>
                                     </td>
-                                    <td><a class="text-decoration-none text-primary font-weight-bold font-italic"
+                                    <td><a  style="cursor:pointer;"  class="text-decoration-none text-primary font-weight-bold font-italic"
                                             (click)="sendToPayments(order)">Ver lista</a></td>
                                     <td>{{order.totalCost}}</td>
                                     <td>

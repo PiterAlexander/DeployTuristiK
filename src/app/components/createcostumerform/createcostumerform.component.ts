@@ -74,7 +74,7 @@ export class CreatecostumerformComponent implements OnInit {
         email: this.formGroup.value.email,
         password: this.formGroup.value.password,
         status: 1,
-        roleId: "7b0f3143-0ba6-408e-9efe-08db6a0a4f82",
+        roleId: "903cc9ea-243a-4328-0638-08db6db6206e",
       }
 
       const costumer: Costumer = {
@@ -97,7 +97,7 @@ export class CreatecostumerformComponent implements OnInit {
         email: this.formGroup.value.email,
         password: this.formGroup.value.password,
         status: 1,
-        roleId: "7b0f3143-0ba6-408e-9efe-08db6a0a4f82",
+        roleId: "903cc9ea-243a-4328-0638-08db6db6206e",
       }
 
       const costumer: Costumer = {
