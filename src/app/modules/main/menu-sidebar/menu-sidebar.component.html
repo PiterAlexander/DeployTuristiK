@@ -2,14 +2,14 @@
 <a [routerLink]="['/']" class="brand-link">
     <pf-image
         src="assets/img/logo.png"
-        alt="AdminLTE Logo"
+        alt="PakiTours Logo"
         class="brand-image"
         height="33"
         width="33"
         rounded
         style="opacity: 0.8"
     ></pf-image>
-    <span class="brand-text font-weight-light">AdminLTE 3</span>
+    <span class="brand-text font-weight-light">PakiTours</span>
 </a>
 
 <!-- Sidebar -->
@@ -29,7 +29,7 @@
         </div>
         <div class="info">
             <a [routerLink]="['/profile']" class="d-block">
-                {{ user.email }}
+                {{ user.username }}
             </a>
         </div>
     </div>

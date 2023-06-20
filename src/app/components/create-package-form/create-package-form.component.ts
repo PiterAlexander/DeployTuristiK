@@ -28,6 +28,7 @@ export class CreatePackageFormComponent implements OnInit {
     this.selectedDestiny = destination.formatted_address;
   }
   ngOnInit(): void {
+    
     this.formGroup = this.fb.group({
       name: [null, [Validators.required, Validators.minLength(8)]],//
       destination: [null, [Validators.required, Validators.minLength(8)]],//

@@ -10,17 +10,18 @@ import initialState, { UiState } from './state';
 
 export function uiReducer(state: UiState = initialState, action: UiAction) {
     switch (action.type) {
-        case Actions.TOGGLE_SIDEBAR_MENU:
+        //<--- TOGGLE --->
+        case Actions.toggleActions.TOGGLE_SIDEBAR_MENU:
             return {
                 ...state,
                 menuSidebarCollapsed: !state.menuSidebarCollapsed
             };
-        case Actions.TOGGLE_CONTROL_SIDEBAR:
+        case Actions.toggleActions.TOGGLE_CONTROL_SIDEBAR:
             return {
                 ...state,
                 controlSidebarCollapsed: !state.controlSidebarCollapsed
             };
-        case Actions.TOGGLE_DARK_MODE:
+        case Actions.toggleActions.TOGGLE_DARK_MODE:
             let variant: string;
             let skin: string;
             if (state.darkMode) {
@@ -36,8 +37,10 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 sidebarSkin: skin,
                 darkMode: !state.darkMode
             };
+        //<---------------->
 
-        case Actions.GET_ALL_PACKAGES_REQUEST:
+        //<--- PACKAGES --->
+        case Actions.packageActions.GET_ALL_PACKAGES_REQUEST:
             return {
                 ...state,
                 allPackages: {
@@ -47,7 +50,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
 
-        case Actions.GET_ALL_PACKAGES_SUCCESS:
+        case Actions.packageActions.GET_ALL_PACKAGES_SUCCESS:
             return {
                 ...state,
                 allPackages: {
@@ -57,7 +60,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
 
-        case Actions.GET_ALL_PACKAGES_FAILURE:
+        case Actions.packageActions.GET_ALL_PACKAGES_FAILURE:
             return {
                 ...state,
                 allPackages: {
@@ -67,7 +70,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
 
-        case Actions.OPEN_MODAL_CREATE_PACKAGE:
+        case Actions.packageActions.OPEN_MODAL_CREATE_PACKAGE:
             return {
                 ...state,
                 onePackage: {
@@ -95,37 +98,92 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
         case Actions.GET_ALL_PERMISSIONS_REQUEST:
+        //<-------------->
+
+        //<--- ORDERS --->
+        case Actions.orderActions.GET_ALL_ORDERS_REQUEST:
             return {
                 ...state,
-                allPermissions: {
+                allOrders: {
                     data: [],
                     error: undefined,
                     loading: true
                 }
             };
 
-        case Actions.GET_ALL_PERMISSIONS_SUCCESS:
+        case Actions.orderActions.GET_ALL_ORDERS_SUCCESS:
             return {
                 ...state,
-                allPermissions: {
+                allOrders: {
                     data: action.payload,
                     error: undefined,
                     loading: false
                 }
             };
 
-
-        case Actions.GET_ALL_PERMISSIONS_FAILURE:
+        case Actions.orderActions.GET_ALL_ORDERS_FAILURE:
             return {
                 ...state,
-                allPermissions: {
+                allOrders: {
                     data: [],
                     error: action.payload,
                     loading: false
                 }
             };
 
-        case Actions.GET_ALL_PERMISSIONS_REQUEST:
+        case Actions.orderActions.OPEN_MODAL_CREATE_ORDER:
+            return {
+                ...state,
+                orderProcess: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.orderActions.OPEN_MODAL_ORDERDETAILS:
+            return {
+                ...state,
+                oneOrder: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            }
+
+        case Actions.orderActions.OPEN_MODAL_PAYMENTS:
+            return {
+                ...state,
+                oneOrder: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            }
+
+        case Actions.orderActions.OPEN_MODAL_CREATE_PAYMENT:
+            return {
+                ...state,
+                orderProcess: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            }
+
+        case Actions.orderActions.OPEN_MODAL_CREATE_ORDERDETAIL:
+            return {
+                ...state,
+                orderProcess: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            }
+        //<----------------------------->
+
+        //<--- ROLES AND PERMISSIONS --->
+        case Actions.roleActions.GET_ALL_ROLE_REQUEST:
             return {
                 ...state,
                 allRoles: {
@@ -135,8 +193,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
 
-
-        case Actions.GET_ALL_ROLE_SUCCESS:
+        case Actions.roleActions.GET_ALL_ROLE_SUCCESS:
             return {
                 ...state,
                 allRoles: {
@@ -146,7 +203,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
 
-        case Actions.GET_ALL_ROLE_FAILURE:
+        case Actions.roleActions.GET_ALL_ROLE_FAILURE:
             return {
                 ...state,
                 allRoles: {
@@ -156,7 +213,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
 
-        case Actions.OPEN_MODAL_CREATE_ROLE:
+        case Actions.roleActions.OPEN_MODAL_CREATE_ROLE:
             return {
                 ...state,
                 oneRole: {
@@ -165,6 +222,162 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 }
             };
+
+        case Actions.permissionActions.GET_ALL_PERMISSIONS_REQUEST:
+            return {
+                ...state,
+                allPermissions: {
+                    data: [],
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+        case Actions.permissionActions.GET_ALL_PERMISSIONS_SUCCESS:
+            return {
+                ...state,
+                allPermissions: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.permissionActions.GET_ALL_PERMISSIONS_FAILURE:
+            return {
+                ...state,
+                allPermissions: {
+                    data: [],
+                    error: action.payload,
+                    loading: false
+                }
+            };
+        //<----------------->
+
+        //<--- COSTUMERS --->
+        case Actions.costumerActions.GET_ALL_COSTUMER_REQUEST:
+            return {
+                ...state,
+                allCostumers: {
+                    data: [],
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+        case Actions.costumerActions.GET_ALL_COSTUMER_SUCCESS:
+            return {
+                ...state,
+                allCostumers: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.costumerActions.GET_ALL_COSTUMER_FAILURE:
+            return {
+                ...state,
+                allCostumers: {
+                    data: [],
+                    error: action.payload,
+                    loading: false
+                }
+            };
+
+        case Actions.costumerActions.OPEN_MODAL_CREATE_COSTUMER:
+            return {
+                ...state,
+                oneCostumer: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+        //<----------------->
+
+        //<--- EMPLOYEES --->
+        case Actions.employeeActions.GET_ALL_EMPLOYEE_REQUEST:
+            return {
+                ...state,
+                allEmployees: {
+                    data: [],
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+        case Actions.employeeActions.GET_ALL_EMPLOYEE_SUCCESS:
+            return {
+                ...state,
+                allEmployees: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.employeeActions.GET_ALL_EMPLOYEE_FAILURE:
+            return {
+                ...state,
+                allEmployees: {
+                    data: [],
+                    error: action.payload,
+                    loading: false
+                }
+            };
+        case Actions.employeeActions.OPEN_MODAL_CREATE_EMPLOYEE:
+            return {
+                ...state,
+                oneEmployee: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+        //<------------>
+
+        //<--- USER --->
+        case Actions.userActions.GET_USERS_REQUEST:
+            return {
+                ...state,
+                allUsers: {
+                    data: [],
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+        case Actions.userActions.GET_USERS_SUCCESS:
+            return {
+                ...state,
+                allUsers: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.userActions.GET_USERS_FAILURE:
+            return {
+                ...state,
+                allUsers: {
+                    data: [],
+                    error: action.payload,
+                    loading: false
+                }
+            };
+
+        case Actions.userActions.OPEN_MODAL_USER:
+            return {
+                ...state,
+                currentUser: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+        //<------------>
 
         default:
             return state;

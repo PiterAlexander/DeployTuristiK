@@ -1,0 +1,294 @@
+<div class="card-header py-3">
+    <div class="row">
+        <div class="col">
+            <h4 class="m-0 font-weight-bold text-dark"><span>Formulario de Beneficiarios</span></h4>
+        </div>
+        <div class="col d-flex justify-content-end">
+            <div *ngIf="orderProcess[0].action != 'EditOrderDetail'" class="d-flex align-items-cente">
+                <h4 class="m-0 font-weight-bold">Beneficiarios: {{ beneficiariesAmount }} -</h4>
+                <a class="text-decoration-none text-dark" (click)="addAnotherBeneficiarie()"><i
+                        class="ml-2 fas fa-plus-square fa-2x"></i></a>
+                <a class="text-decoration-none text-dark" (click)="reduceBeneficiariesAmount()"><i
+                        class="ml-2 fas fa-minus-square fa-2x"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+<form class="needs-validation" novalidate [formGroup]="formGroup">
+    <div class="card-body d-flex justify-content-center">
+        <div class="w-100 p-2">
+            <div class="container-fluid m-0 p-0">
+                <div *ngIf="beneficiariesForm()" class="mb-3">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="name" class="form-label">Nombres</label>
+                                <div class="input-group">
+                                    <input *ngIf="costumerInformation()" type="text" class="form-control"
+                                        placeholder="Ingrese los nombres del beneficiario" disabled readonly>
+                                    <input *ngIf="!costumerInformation()" type="text" id="name" formControlName="name"
+                                        minlength="3" maxlength="30" class="form-control"
+                                        placeholder="Ingrese los nombres del beneficiario" required [ngClass]="{
+                                    'invalid': formGroup.get('name').dirty && formGroup.get('name').errors, 
+                                    'valid': formGroup.get('name').dirty && !formGroup.get('name').errors
+                            }" onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text rounded-right"><i class="fas fa-user"></i></span>
+                                    </div>
+                                    <div *ngIf="formGroup.get('name').dirty && formGroup.get('name')?.errors?.['required']"
+                                        class="invalid-feedback">
+                                        Este campo es obligatorio.
+                                    </div>
+                                    <div *ngIf="formGroup.get('name')?.errors?.['minlength'] && formGroup.get('name').dirty"
+                                        class="invalid-feedback">
+                                        El nombre debe contener al menos 3 letras.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="lastName" class="form-label">Apellidos</label>
+                                <input *ngIf="costumerInformation()" type="text" class="form-control"
+                                    placeholder="Ingrese los apellidos del beneficiario" disabled readonly>
+                                <input *ngIf="!costumerInformation()" type="text" id="lastName"
+                                    formControlName="lastName" minlength="3" maxlength="30" class="form-control"
+                                    placeholder="Ingrese los apellidos del beneficiario" required [ngClass]="{
+                                    'invalid': formGroup.get('lastName').dirty && formGroup.get('lastName').errors, 
+                                    'valid': formGroup.get('lastName').dirty && !formGroup.get('lastName').errors
+                            }" onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
+                                <div *ngIf="formGroup.get('lastName').dirty && formGroup.get('lastName')?.errors?.['required']"
+                                    class="invalid-feedback">
+                                    Este campo es obligatorio.
+                                </div>
+                                <div *ngIf="formGroup.get('lastName').dirty && formGroup.get('lastName')?.errors?.['minlength']"
+                                    class="invalid-feedback">
+                                    Este campo debe contener al menos 3 letras.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="document" class="form-label">Documento</label>
+                                <div class="input-group">
+                                    <input type="text" id="document" formControlName="document" class="form-control"
+                                        placeholder="Ingrese el documento del beneficiario" minlength="8" maxlength="15"
+                                        required [ngClass]="{
+                                        'invalid': formGroup.get('document').dirty && formGroup.get('document').errors || (alreadyExists() && formGroup.get('document').dirty) || (alreadyExistsFromEdit() && formGroup.get('document').dirty),
+                                        'valid': formGroup.get('document').dirty && !formGroup.get('document').errors && !alreadyExists() && !alreadyExistsFromEdit() || (costumerInformation() && formGroup.get('document').dirty && !alreadyExists())
+                                    }" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text rounded-right"><i
+                                                class="fas fa-id-card"></i></span>
+                                    </div>
+                                    <div *ngIf="formGroup.get('document').dirty && formGroup.get('document')?.errors?.['required']"
+                                        class="invalid-feedback">
+                                        Este campo es obligatorio.
+                                    </div>
+                                    <div *ngIf="formGroup.get('document').dirty && formGroup.get('document')?.errors?.['minlength']"
+                                        class="invalid-feedback">
+                                        El documento debe tener mínimo 8 números.
+                                    </div>
+                                    <div *ngIf="alreadyExists() && formGroup.get('document').dirty"
+                                        class="invalid-feedback">
+                                        Ya existe un beneficiario con este documento.
+                                    </div>
+                                    <div *ngIf="alreadyExistsFromEdit() && formGroup.get('document').dirty"
+                                        class="invalid-feedback">
+                                        Este número de documento ya está en uso.
+                                    </div>
+                                    <div *ngIf="costumerInformation() && !alreadyExists() && formGroup.get('document').dirty"
+                                        class="valid-feedback">
+                                        <a (click)="fillCostumerInformation()"
+                                            class="text-decoration-none text-success">¡Beneficiario encontrado! Haz
+                                            click
+                                            para acelerar el
+                                            proceso.</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-7">
+                            <div class="row">
+                                <div class="col-7">
+                                    <div class="form-group">
+                                        <label for="address" class="form-label">Dirección</label>
+                                        <div class="input-group">
+                                            <input *ngIf="costumerInformation()" type="text" class="form-control"
+                                                placeholder="Ej: País - Ciudad - Barrio - Dirección" disabled readonly>
+                                            <input *ngIf="!costumerInformation()" type="text" id="address"
+                                                formControlName="address" class="form-control"
+                                                placeholder="Ej: País - Ciudad - Barrio - Dirección" minlength="25"
+                                                required [ngClass]="
+                                            {
+                                                'invalid': formGroup.get('address').dirty && formGroup.get('address').errors,
+                                                'valid': formGroup.get('address').dirty && !formGroup.get('address').errors
+                                            }">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text rounded-right"><i
+                                                        class="fas fa-location-arrow"></i></span>
+                                            </div>
+                                            <div *ngIf="formGroup.get('address')?.errors?.['required'] && formGroup.get('address').dirty"
+                                                class="invalid-feedback">
+                                                Este campo es obligatorio.
+                                            </div>
+                                            <div *ngIf="formGroup.get('address')?.errors?.['minlength'] && formGroup.get('address').dirty"
+                                                class="invalid-feedback">
+                                                Por favor ingrese: País, ciudad, barrio y dirección.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-5">
+                                    <div class="form-group">
+                                        <label for="phoneNumber" class="form-label">Teléfono Celular</label>
+                                        <div class="input-group">
+                                            <input *ngIf="costumerInformation()" type="text" class="form-control"
+                                                placeholder="Número del beneficiario" disabled readonly>
+                                            <input *ngIf="!costumerInformation()" type="text" id="phoneNumber"
+                                                formControlName="phoneNumber" class="form-control"
+                                                placeholder="Número del beneficiario" minlength="10" maxlength="10"
+                                                required [ngClass]="
+                                            {
+                                                'invalid': formGroup.get('phoneNumber').dirty && formGroup.get('phoneNumber').errors,
+                                                'valid': formGroup.get('phoneNumber').dirty && !formGroup.get('phoneNumber').errors
+                                            }" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text rounded-right"><i
+                                                        class="fas fa-phone-alt"></i></span>
+                                            </div>
+                                            <div *ngIf="formGroup.get('phoneNumber')?.errors?.['required'] && formGroup.get('phoneNumber').dirty"
+                                                class="invalid-feedback">
+                                                Este campo es obligatorio.
+                                            </div>
+                                            <div *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber').dirty"
+                                                class="invalid-feedback">
+                                                Este campo debe contener 10 números.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="form-group">
+                                        <label for="birthdate" class="form-label">Fecha de
+                                            nacimiento</label>
+                                        <input *ngIf="costumerInformation()" type="date" class="form-control" disabled
+                                            readonly>
+                                        <input *ngIf="!costumerInformation()" type="date" id="birthdate"
+                                            formControlName="birthdate" class="form-control" required [ngClass]="
+                                    {
+                                        'invalid': formGroup.get('birthdate').dirty && formGroup.get('birthdate').errors,
+                                        'valid': formGroup.get('birthdate').dirty && !formGroup.get('birthdate').errors
+                                    }">
+                                        <div *ngIf="formGroup.get('birthdate')?.errors?.['required'] && formGroup.get('birthdate').dirty"
+                                            class="invalid-feedback">
+                                            Este campo es obligatorio.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-7">
+                                    <div class="form-group">
+                                        <label for="eps" class="form-label">Tipo de
+                                            EPS</label>
+                                        <div class="input-group">
+                                            <select *ngIf="costumerInformation()" disabled
+                                                class="custom-select form-control">
+                                                <option disabled selected value="0">EPS del beneficiario
+                                                </option>
+                                            </select>
+                                            <select *ngIf="!costumerInformation()" class="custom-select form-control"
+                                                formControlName="eps" id="eps" required [ngClass]="
+                                        {
+                                            'invalid': formGroup.get('eps').dirty && formGroup.get('eps').errors,
+                                            'valid': formGroup.get('eps').dirty && !formGroup.get('eps').errors
+                                        }">
+                                                <option disabled selected value="0">EPS del beneficiario
+                                                </option>
+                                                <option *ngFor="let eps of allEps" [value]="eps">{{ eps }}</option>
+                                            </select>
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text rounded-right"><i
+                                                        class="fas fa-hospital-user"></i></span>
+                                            </div>
+                                            <div *ngIf="formGroup.get('eps')?.errors?.['required'] && formGroup.get('eps').dirty"
+                                                class="invalid-feedback">
+                                                Este campo es obligatorio.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="showBeneficiariesTable()" class="table-responsive">
+                    <table class="table table-striped shadow-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Apellidos</th>
+                                <th>Documento</th>
+                                <th>Fecha Nacimiento</th>
+                                <th>Celular</th>
+                                <th>Dirección</th>
+                                <th>EPS</th>
+                                <th>Precio unitario</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let b of beneficiaries">
+                                <td>{{b.name}}</td>
+                                <td>{{b.lastName}}</td>
+                                <td>{{b.document}}</td>
+                                <td>{{b.birthDate}}</td>
+                                <td>{{b.phoneNumber}}</td>
+                                <td>{{b.address}}</td>
+                                <td>{{b.eps}}</td>
+                                <td>{{onePackage.price}}</td>
+                                <td class="text-center"><a (click)="deleteBeneficiarie(b.document)"><i
+                                            class="fas fa-trash text-danger"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="row">
+            <div class="col">
+                <!-- <button *ngIf="orderProcess[0].action != 'EditOrderDetail'" (click)="back()" type="button"
+                    id="cancelButton" class="btn btn-primary">Tus viajeros
+                    frecuentes</button> -->
+            </div>
+            <div class="col">
+                <div class="d-flex justify-content-end">
+                    <button (click)="back()" type="button" id="cancelButton"
+                        class="btn btn-danger mr-3">Regresar</button>
+                    <button *ngIf="orderProcess[0].action != 'EditOrderDetail' && validForm() && beneficiariesForm()"
+                        type="submit" (click)="add()" class="btn btn-success">Agregar</button>
+
+                    <button *ngIf="orderProcess[0].action != 'EditOrderDetail' && validForm() && !beneficiariesForm()"
+                        type="submit" (click)="next()" class="btn btn-success">Siguiente</button>
+
+                    <button *ngIf="orderProcess[0].action != 'EditOrderDetail' && !validForm() && beneficiariesForm()"
+                        type="submit" class="btn btn-secondary" disabled>Agregar</button>
+
+                    <button *ngIf="orderProcess[0].action === 'EditOrderDetail' && validForm() && beneficiariesForm()"
+                        type="submit" (click)="next()" class="btn btn-success">Guardar</button>
+
+                    <button *ngIf="orderProcess[0].action === 'EditOrderDetail' && !validForm() && beneficiariesForm()"
+                        type="submit" (click)="next()" class="btn btn-secondary" disabled>Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

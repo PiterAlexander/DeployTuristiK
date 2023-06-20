@@ -4,6 +4,42 @@
   background-color: #28A745!important;
 }
 
+form input:required {
+  content:"*";
+}
+
+.invalid-feedback {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 80%;
+  color: red;
+}
+
+.form-control.invalid{
+  border-color: #dc3545;
+}
+
+.form-control.invalid:focus{
+  box-shadow: 0 0 0 0.20rem rgba(228, 14, 14, 0.25);
+}
+
+.form-control.valid{
+  border-color: #198754;
+}
+
+.form-control.valid:focus {
+  box-shadow: 0 0 0 0.20rem rgba(25,135,84,.25);
+}
+
+
+
+
+
+
+
+
+
 // label.custom-control-label::before{
 //   background: #DC3545!important;
 //   border-color: #DC3545!important;

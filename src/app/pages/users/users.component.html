@@ -1,0 +1,95 @@
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center">
+            <div class="card card-user">
+                <div class="card-header card-user-header d-flex">
+                    <div class="col-sm-9 col-personalized-1">
+                        <h1 class="text-dark">Usuarios</h1>
+                    </div>
+                    <div class="col-sm-3 col-personalized-2">
+                        <button
+                            (click)="openCreateUserModal()"
+                            type="button"
+                            class="btn btn-primary"
+                        >
+                            Agregar Usuario
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div *ngIf="loading" class="d-flex justify-content-center">
+                        <div
+                            class="spinner-border"
+                            style="width: 5rem; height: 5rem"
+                            user="status"
+                        >
+                            <span class="visually-hidden"></span>
+                        </div>
+                    </div>
+                    <form *ngIf="!loading">
+                        <div class="d-flex justify-content-end mb-3 row">
+                            <label
+                                for="table-complete-search"
+                                class="col-xs-3 col-sm-auto col-form-label label-search"
+                                >Búsqueda:</label
+                            >
+                            <div class="col-xs-3 col-sm-auto">
+                                <input
+                                    id="table-complete-search"
+                                    type="text"
+                                    class="form-control"
+                                    name="searchTerm"
+                                    [(ngModel)]="search"
+                                    (ngModelChange)="searchByUserName()"
+                                />
+                            </div>
+                        </div>
+
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nombre de Usuario</th>
+                                    <th scope="col">Correo</th>
+                                    <th scope="col">Rol</th>
+                                    <th scope="col">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let user of filteredUsersList">
+                                    <td>{{ user.userName }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>
+                                        {{ user.role.name }}
+                                    </td>
+                                    <td>
+                                        <span *ngIf="user.status === 1"
+                                            >Habilitado</span
+                                        >
+                                        <span *ngIf="user.status !== 1"
+                                            >Deshabilitado</span
+                                        >
+                                    </td>
+                                    <td>
+                                        <i
+                                            class="btn fas fa-edit text-dark"
+                                            (click)="openUpdateUserModal(user)"
+                                        ></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-end pt-3">
+                            <ngb-pagination
+                                [collectionSize]="total"
+                                [(page)]="page"
+                                [pageSize]="pageSize"
+                            >
+                            </ngb-pagination>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

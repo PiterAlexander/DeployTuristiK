@@ -49,19 +49,19 @@ export const MENU = [
       {
         name: 'Usuarios',
         iconClasses: 'far fa-circle',
-        path: ['']
+        path: ['/users']
       }
     ]
   },
   {
     name: 'Empleados',
     iconClasses: 'far fas fa-user-alt',
-    path: ['']
+    path: ['/employees']
   },
   {
     name: 'Clientes',
     iconClasses: 'far fas fa-user-friends',
-    path: ['']
+    path: ['/costumers']
   },
   {
     name: 'Calendario',
@@ -76,6 +76,6 @@ export const MENU = [
   {
     name: 'Pedidos',
     iconClasses: 'fas fa-columns',
-    path: ['']
+    path: ['/orders']
   }
 ];

@@ -1,0 +1,142 @@
+<div class="card-header py-3">
+    <h4 class="m-0 font-weight-bold text-dark"><span>Agregar Pedido</span></h4>
+</div>
+<form class="needs-validation" novalidate id="form" [formGroup]="formGroup">
+    <div class="card-body d-flex justify-content-center">
+        <div class="w-75 p-2">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-5">
+                        <label for="document" class="form-label">Persona
+                            titular</label>
+                    </div>
+                    <div class="col-7 d-flex justify-content-end align-items-end">
+                        <div class="form-text d-flex justify-content-end">
+                            <span class="font-italic" style="font-size: 15px;">¿El titular no
+                                tiene una cuenta? <a class="text-decoration-none" href="">
+                                    Crear cuenta.</a></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="document" minlength="8" maxlength="15"
+                        formControlName="document" [ngClass]="
+                        {
+                            'invalid': formGroup.get('document').dirty && formGroup.get('document').errors || (validateCostumerId() && formGroup.get('document').dirty) || (validateRole() && formGroup.get('document').dirty),
+                            'valid': formGroup.get('document').dirty && !formGroup.get('document').errors && !validateCostumerId() && !validateRole()
+                        }" placeholder="Ingrese el número del documento de identidad del titular" required
+                        onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
+
+                    <div class="input-group-prepend">
+                        <span class="input-group-text rounded-right">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </div>
+
+                    <div *ngIf="formGroup.get('document')?.errors?.['required'] && formGroup.get('document').dirty"
+                        class="invalid-feedback">
+                        Este campo es obligatorio.
+                    </div>
+                    <div *ngIf="formGroup.get('document')?.errors?.['minlength'] && formGroup.get('document').dirty"
+                        class="invalid-feedback">
+                        El documento debe tener mínimo 8 números.
+                    </div>
+                    <div *ngIf="validateCostumerId() && formGroup.get('document').dirty" class="invalid-feedback">
+                        Este documento no está asociado a ningún cliente.
+                    </div>
+                    <div *ngIf="validateRole() && formGroup.get('document').dirty" class="invalid-feedback">
+                        Solo los clientes pueden ser titulares de un pedido.
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="packageId" class="form-label">Paquete</label>
+                        <div class="input-group">
+                            <select class="custom-select form-control" formControlName="packageId" id="packageId"
+                                required [ngClass]="
+                            {
+                                'invalid': formGroup.get('packageId').dirty && formGroup.get('packageId').errors,
+                                'valid': formGroup.get('packageId').dirty && !formGroup.get('packageId').errors
+                            }">
+                                <option disabled selected value="0">Seleccione el paquete
+                                </option>
+                                <option *ngFor="let package of allPackages" [value]="package.packageId">{{ package.name
+                                    }}</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text rounded-right"><i
+                                        class="fas fa-umbrella-beach"></i></span>
+                            </div>
+                            <div *ngIf="formGroup.get('packageId')?.errors?.['required'] && formGroup.get('packageId').dirty"
+                                class="invalid-feedback">
+                                Este campo es obligatorio.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="beneficiariesAmount" class="form-label">Beneficiarios</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" placeholder="Seleccione un paquete"
+                                *ngIf="!formGroup.get('packageId').dirty && orderProcess == null" readonly disabled>
+                            <input type="number" id="beneficiariesAmount" minlength="1" class="form-control"
+                                *ngIf="formGroup.get('packageId').dirty || orderProcess != null" [ngClass]="
+                          {
+                            'invalid': formGroup.get('beneficiariesAmount').dirty && (formGroup.get('beneficiariesAmount').errors) ||
+                             (orderProcess == null && formGroup.get('beneficiariesAmount').dirty && !validateBeneficiaries()) ||
+                             (orderProcess != null && formGroup.get('packageId').dirty && !validateBeneficiaries()) ||
+                             (orderProcess != null && formGroup.get('beneficiariesAmount').dirty && !validateBeneficiaries()) ||
+                              (formGroup.get('beneficiariesAmount').dirty && !validateBeneficiariesAmount()) ||
+                               (formGroup.get('beneficiariesAmount').dirty && !validateExistingBeneficiariesAmount()),
+                            'valid': formGroup.get('beneficiariesAmount').dirty && !formGroup.get('beneficiariesAmount').errors &&
+                            validateBeneficiaries() && validateBeneficiariesAmount() && validateExistingBeneficiariesAmount()
+                          }" placeholder="¿Cuántos viajarán?" formControlName="beneficiariesAmount" required
+                                onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text rounded-right"><i class="fas fa-users"></i></span>
+                            </div>
+                            <div *ngIf="formGroup.get('beneficiariesAmount')?.errors?.['required'] && formGroup.get('beneficiariesAmount').dirty"
+                                class="invalid-feedback">
+                                Este campo es obligatorio.
+                            </div>
+                            <div *ngIf="!validateBeneficiariesAmount() && formGroup.get('beneficiariesAmount').dirty"
+                                class="invalid-feedback">
+                                Debe haber al menos 1 beneficiario.
+                            </div>
+                            <div *ngIf="orderProcess == null && !validateBeneficiaries() && formGroup.get('beneficiariesAmount').dirty"
+                                class="invalid-feedback">
+                                Cupos disponibles: {{onePackage.availableQuotas}}.
+                            </div>
+                            <div *ngIf="(orderProcess != null && !validateBeneficiaries() && formGroup.get('packageId').dirty) || (orderProcess != null && !validateBeneficiaries() && formGroup.get('beneficiariesAmount').dirty)"
+                                class="invalid-feedback">
+                                Cupos disponibles: {{onePackage.availableQuotas}}.
+                            </div>
+                            <div *ngIf="validateBeneficiaries() && !validateExistingBeneficiariesAmount() && formGroup.get('beneficiariesAmount').dirty"
+                                class="invalid-feedback">
+                                Capacidad minima de beneficiarios: {{beneficiariesAmount}}.
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+        <div class="row">
+            <div class="col">
+                <button type="button" (click)="cancel()" id="cancelButton" class="btn btn-danger"
+                    id="cancelButton">Cancelar</button>
+            </div>
+            <div class="col">
+                <button *ngIf="validForm()" type="submit" class="btn btn-success" (click)="next()"
+                    id="nextButton">Siguiente</button>
+                <button *ngIf="!validForm()" type="submit" class="btn btn-secondary" id="nextButton"
+                    disabled>Siguiente</button>
+            </div>
+        </div>
+    </div>
+</form>

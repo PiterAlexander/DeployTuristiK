@@ -1,0 +1,343 @@
+<!-- eslint-disable @angular-eslint/template/eqeqeq -->
+<div class="modal-header">
+    <div class="container">
+        <h5 class="modal-title padding-extra">{{ ActionTitle }} Usuario</h5>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="container-fluid">
+        <form
+            class="needs-validation"
+            novalidate
+            id="form"
+            (submit)="saveChanges()"
+            [formGroup]="formGroup"
+        >
+            <div class="card-body d-flex">
+                <div class="w-100 p-2">
+                    <div class="row">
+                        <input
+                            type="text"
+                            name="userId"
+                            id="userId"
+                            hidden
+                            class="form-control formularioCampo border-left-dark"
+                            formControlName="userId"
+                        />
+                        <div class="form-group col-6">
+                            <label for="userName" class="form-label"
+                                >Nombre de Usuario</label
+                            >
+                            <input
+                                type="text"
+                                id="username"
+                                name="userName"
+                                class="form-control formularioCampo border-left-dark"
+                                placeholder="Ingrese el Nombre de Usuario"
+                                formControlName="userName"
+                                onkeydown="return /[a-z,0-9]/i.test(event.key)"
+                            />
+                            <div class="invalid-feedback">
+                                En este campo solo se permiten letras
+                            </div>
+                        </div>
+
+                        <div class="form-group col-5">
+                            <label for="role" class="form-label">Rol</label>
+                            <div class="input-group">
+                                <select
+                                    class="custom-select border-left-dark form-control formularioCampo"
+                                    id="role"
+                                    name="role"
+                                    formControlName="role"
+                                    placeholder="Seleccione un rol"
+                                    (change)="addForm()"
+                                >
+                                    <option selected disabled value="0">
+                                        Seleccione un rol
+                                    </option>
+                                    <option
+                                        *ngFor="let role of rolesList"
+                                        [value]="role.roleId"
+                                    >
+                                        {{ role.name }}
+                                    </option>
+                                </select>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"
+                                        ><i class="fas fa-user-cog"></i
+                                    ></span>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Por favor seleccione una opción.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="email" class="form-label">Correo</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                class="form-control formularioCampo border-left-dark"
+                                placeholder="Ingrese el Correo"
+                                formControlName="email"
+                                onkeydown="return /[a-z,0-9,.,@]/i.test(event.key)"
+                            />
+                            <div class="invalid-feedback">
+                                En este campo solo se permiten letras
+                            </div>
+                        </div>
+
+                        <div class="form-group col-5">
+                            <label for="password" class="form-label"
+                                >Contraseña</label
+                            >
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="form-control formularioCampo border-left-dark"
+                                placeholder="Ingrese la contraseña"
+                                formControlName="password"
+                                onkeydown="return /[a-z,0-9,A-Z ]/i.test(event.key)"
+                            />
+                            <div class="invalid-feedback">
+                                En este campo solo se permiten letras
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="this.userData != null">
+                        <div class="form-group col-6">
+                            <label for="status" class="form-label"
+                                >Estado</label
+                            >
+                            <div class="input-group">
+                                <select
+                                    class="custom-select border-left-dark form-control formularioCampo"
+                                    id="status"
+                                    name="status"
+                                    formControlName="status"
+                                    placeholder="Seleccione un estado"
+                                >
+                                    <option selected disabled value="0">
+                                        Seleccione un estado
+                                    </option>
+                                    <option value="1">Activo</option>
+                                    <option value="2">Inactivo</option>
+                                </select>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"
+                                        ><i class="fas fa-user-cog"></i
+                                    ></span>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Por favor seleccione una opción.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="this.userData == null && admin != null">
+                        <div class="row">
+                            <div class="form-group col-6">
+                                <label for="name" class="form-label"
+                                    >Nombre</label
+                                >
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    class="form-control formularioCampo border-left-dark"
+                                    placeholder="Ingrese el Nombre"
+                                    formControlName="name"
+                                    onkeydown="return /[a-z,A-Z, ]/i.test(event.key)"
+                                />
+                                <div class="invalid-feedback">
+                                    En este campo solo se permiten letras
+                                </div>
+                            </div>
+
+                            <div class="form-group col-5">
+                                <label for="lastName" class="form-label"
+                                    >Apellidos</label
+                                >
+                                <input
+                                    type="text"
+                                    id="lastName"
+                                    name="lastName"
+                                    class="form-control formularioCampo border-left-dark"
+                                    placeholder="Ingrese los apellidos"
+                                    formControlName="lastName"
+                                    onkeydown="return /[a-z, ,A-Z ]/i.test(event.key)"
+                                />
+                                <div class="invalid-feedback">
+                                    En este campo solo se permiten letras
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-6">
+                                <label for="identification" class="form-label"
+                                    >Documento</label
+                                >
+                                <input
+                                    type="text"
+                                    id="identification"
+                                    name="identification"
+                                    class="form-control formularioCampo border-left-dark"
+                                    placeholder="Ingrese la identificación"
+                                    formControlName="identification"
+                                    onkeydown="return /[A-Z,0-9]/i.test(event.key)"
+                                />
+                                <div class="invalid-feedback">
+                                    En este campo solo se permiten letras
+                                </div>
+                            </div>
+
+                            <div class="form-group col-5">
+                                <label for="lastName" class="form-label"
+                                    >Teléfono</label
+                                >
+                                <input
+                                    type="number"
+                                    id="phone"
+                                    name="phone"
+                                    class="form-control formularioCampo border-left-dark"
+                                    placeholder="Ingrese los apellidos"
+                                    formControlName="phone"
+                                />
+                                <div class="invalid-feedback">
+                                    En este campo solo se permiten letras
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="admin == 2">
+                            <div class="row">
+                                <div class="form-group col-6">
+                                    <label for="birthDate" class="form-label"
+                                        >Fecha de Nacimiento</label
+                                    >
+                                    <input
+                                        type="date"
+                                        id="birthDate"
+                                        name="birthDate"
+                                        class="form-control formularioCampo border-left-dark"
+                                        placeholder="Ingrese la fecha de nacimiento"
+                                        formControlName="birthDate"
+                                    />
+                                    <div class="invalid-feedback">
+                                        En este campo solo se permiten letras
+                                    </div>
+                                </div>
+                                <div class="form-group col-5">
+                                    <label for="address" class="form-label"
+                                        >Dirección de Residencia</label
+                                    >
+                                    <input
+                                        type="text"
+                                        id="address"
+                                        name="address"
+                                        class="form-control formularioCampo border-left-dark"
+                                        placeholder="Ingrese la dirección de residencia"
+                                        formControlName="address"
+                                        onkeydown="return /[A-Z,0-9,#,-,()]/i.test(event.key)"
+                                    />
+                                    <div class="invalid-feedback">
+                                        En este campo solo se permiten letras
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-6">
+                                    <label for="eps" class="form-label"
+                                        >EPS</label
+                                    >
+                                    <div class="input-group">
+                                        <select
+                                            class="custom-select border-left-dark form-control formularioCampo"
+                                            id="eps"
+                                            name="eps"
+                                            formControlName="eps"
+                                            placeholder="Seleccione una EPS"
+                                            (change)="addForm()"
+                                        >
+                                            <option selected disabled value="0">
+                                                Seleccione un rol
+                                            </option>
+                                            <option
+                                                *ngFor="let eps of allEps"
+                                                [value]="eps"
+                                            >
+                                                {{ eps }}
+                                            </option>
+                                        </select>
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"
+                                                ><i class="fas fa-user-cog"></i
+                                            ></span>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Por favor seleccione una opción.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-5" *ngIf="otraEps">
+                                    <label for="otherEps" class="form-label"
+                                        >¿Cuál?</label
+                                    >
+                                    <input
+                                        type="text"
+                                        id="otherEps"
+                                        name="otherEps"
+                                        class="form-control formularioCampo border-left-dark"
+                                        placeholder="Ingrese la dirección de residencia"
+                                        formControlName="otherEps"
+                                        onkeydown="return /[A-Z,.-]/i.test(event.key)"
+                                    />
+                                    <div class="invalid-feedback">
+                                        En este campo solo se permiten letras
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-end">
+                <div class="row">
+                    <div class="col">
+                        <button
+                            (click)="cancel()"
+                            type="button"
+                            id="cancelButton"
+                            class="btn btn-danger"
+                        >
+                            Cancelar
+                        </button>
+                    </div>
+                    <div class="col">
+                        <button
+                            *ngIf="validForm()"
+                            type="submit"
+                            id="saveButton"
+                            class="btn btn-success"
+                        >
+                            Guardar
+                        </button>
+                        <button
+                            *ngIf="!validForm()"
+                            type="submit"
+                            id="saveButton"
+                            class="btn btn-secondary"
+                            disabled
+                        >
+                            Guardar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

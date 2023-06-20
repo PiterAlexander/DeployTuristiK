@@ -5,6 +5,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { Role } from '@/models/role';
+import Swal from 'sweetalert2';
+import { DeleteRoleRequest } from '../../store/ui/actions';
 
 
 interface State{
@@ -59,6 +61,66 @@ export class RolesComponent implements OnInit{
 
   openEditRoleModal(role:Role){
     this.store.dispatch(new OpenModalCreateRole(role));
+  }
+
+
+  deleteRole(role:Role){
+
+    var rolesNoPermitidosbyName = [
+      'Administrador',
+      'Empleado',
+      'Beneficiario',
+      'Cliente'
+    ]
+
+    var ok = true
+    rolesNoPermitidosbyName.forEach(name=>{
+      if (role.name==name) {
+        ok = false
+      }
+    })
+
+    if(ok){
+      if (role.user.length>0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'El rol '+role.name+' tiene usuarios asociados.No puede ser eliminado del sistema.',
+          showConfirmButton: true,
+          confirmButtonText: 'Aceptar',
+        }).then(function(){})
+      }else{
+
+        Swal.fire({
+          title: '¿Estás seguro de eliminar a '+role.name+'?',
+          text: "No podrás revertirlo.",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'Cancelar',
+          confirmButtonText: 'Si, eliminar',
+          reverseButtons: true,
+          customClass: {
+            confirmButton: 'swal2-confirm-right',
+            cancelButton: 'swal2-cancel-left'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.store.dispatch(new DeleteRoleRequest(role))
+            Swal.fire(
+              'Eliminado con éxito.',
+            )
+          }
+        })
+      }
+    }else{
+      Swal.fire({
+        icon: 'warning',
+        title: 'El rol '+role.name+' no puede ser eliminado del sistema.',
+        showConfirmButton: true,
+      }).then(function(){})
+    }
+
   }
 
 
