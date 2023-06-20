@@ -279,7 +279,7 @@ export class CreatePaymentFormComponent implements OnInit {
             totalQuotas: this.oneOrder.package.totalQuotas,
             availableQuotas: this.oneOrder.package.availableQuotas - this.orderDetail.length,
             price: this.oneOrder.package.price,
-            image: this.oneOrder.package.image,
+            type: this.oneOrder.package.type,
             status: this.oneOrder.package.status
           }
 
@@ -351,7 +351,7 @@ export class CreatePaymentFormComponent implements OnInit {
             totalQuotas: this.orderProcess[0].order.package.totalQuotas,
             availableQuotas: this.orderProcess[0].order.package.availableQuotas - this.orderDetail.length,
             price: this.orderProcess[0].order.package.price,
-            image: this.orderProcess[0].order.package.image,
+            type: this.orderProcess[0].order.package.type,
             status: this.orderProcess[0].order.package.status
           }
 

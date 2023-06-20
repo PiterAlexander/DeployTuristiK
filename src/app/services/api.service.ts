@@ -20,11 +20,11 @@ export class ApiService {
 
     //<--- PACAKGE --->
     getPackages(): Observable<Package[]> {
-        return this.http.get<Package[]>(`${this.endpoint}api/package/list/`)
+        return this.http.get<Package[]>(`${this.endpoint}api/package/`)
     }
 
     addPackage(modelo: Package): Observable<Package> {
-        return this.http.post<Package>(`${this.endpoint}api/package/addPackage/`, modelo)
+        return this.http.post<Package>(`${this.endpoint}api/package/`, modelo)
     }
 
     updatePackage(idPackage: string, modelo: Package): Observable<Package> {
@@ -36,10 +36,6 @@ export class ApiService {
         return this.http.put<Package>(`${this.endpoint}api/package/${idPackage}`, modelo)
     }
 
-    
-    deletePackage(idPackage: number): Observable<void> {
-        return this.http.delete<void>(`${this.endpoint}api/package/delete/${idPackage}`)
-    }
     //<-------------->
 
     //<--- ORDERS --->
