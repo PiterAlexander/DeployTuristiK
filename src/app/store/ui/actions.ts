@@ -9,13 +9,20 @@ export const TOGGLE_CONTROL_SIDEBAR: string = 'TOGGLE_CONTROL_SIDEBAR';
 export const TOGGLE_DARK_MODE: string = 'TOGGLE_DARK_MODE';
 
 export const OPEN_MODAL_CREATE_PACKAGE: string = '[PACKAGE] OPEN_MODAL_CREATE_PACKAGE';
+export const OPEN_MODAL_DETAILS_PACKAGE: string = '[PACKAGE] OPEN_MODAL_DETAILS_PACKAGE'
 export const GET_ALL_PACKAGES_REQUEST: string = '[PACKAGE] GET_ALL_PACKAGES_REQUEST';
 export const GET_ALL_PACKAGES_SUCCESS: string = '[PACKAGE] GET_ALL_PACKAGES_SUCCESS';
 export const GET_ALL_PACKAGES_FAILURE: string = '[PACKAGE] GET_ALL_PACKAGES_FAILURE';
 
+export const GET_ONE_PACKAGES_REQUEST: string = '[PACKAGE] GET_ONE_PACKAGE_REQUEST'
+
 export const CREATE_PACKAGE_REQUEST: string = '[PACKAGE] CREATE_PACKAGE_REQUEST';
 export const CREATE_PACKAGE_SUCCESS: string = '[PACKAGE] CREATE_PACKAGE_SUCCESS';
 export const CREATE_PACKAGE_FAILURE: string = '[PACKAGE] CREATE_PACKAGE_FAILURE';
+
+export const CHANGE_STATUS_PACKAGE_REQUEST: string = '[PACKAGE] CHANGE_STATUS_PACKAGE_REQUEST';
+export const CHANGE_STATUS_PACKAGE_SUCCESS: string = '[PACKAGE] CHANGE_STATUS_PACKAGE_SUCCESS';
+export const CHANGE_STATUS_PACKAGE_FAILURE: string = '[PACKAGE] CHANGE_STATUS_PACKAGE_FAILURE';
 
 export const EDIT_PACKAGE_REQUEST: string = '[PACKAGE] EDIT_PACKAGE_REQUEST';
 export const EDIT_PACKAGE_SUCCESS: string = '[PACKAGE] EDIT_PACKAGE_SUCCESS';
@@ -68,6 +75,11 @@ export class OpenModalCreatePackage implements Action {
     constructor(public payload?: Package) {}
 }
 
+export class OpenModalDetailsPackage implements Action {
+  readonly type: string = OPEN_MODAL_DETAILS_PACKAGE;
+  constructor(public payload?: Package) {}
+}
+
 // PACKAGES LIST -------------------------------------------------------------
 
 export class GetAllPackagesRequest implements Action {
@@ -85,6 +97,9 @@ export class GetAllPackagesFailure implements Action {
 }
 // END PACKAGES LIST -------------------------------------------------------------
 
+export class GetOnePackageRequest implements Action {
+  readonly type: string = GET_ONE_PACKAGES_REQUEST;
+}
 
 // PACKAGES CREATE--------------------------------------------------------
 
@@ -125,6 +140,25 @@ export class EditPackageFailure implements Action {
 
 // END PACKAGES EDIT--------------------------------------------------------
 
+
+// PACKAGES DISABLE ACTIONS ------------------------------------------------
+export class EditStatusPackageRequest implements Action {
+  readonly type: string = EDIT_PACKAGE_REQUEST;
+  constructor(public payload: Package) {}
+}
+
+export class EditStatusPackageSuccess implements Action {
+  readonly type: string = EDIT_PACKAGE_SUCCESS;
+  readonly string = OPEN_MODAL_CREATE_PACKAGE;
+  constructor(public payload: any) {}
+}
+
+export class EditStatusPackageFailure implements Action {
+  readonly type: string = EDIT_PACKAGE_FAILURE;
+  constructor(public payload: string) {}
+}
+
+// PACKAGES DISABLE ACTIONS END -----------------------------------------
 // PACKAGES END--------------------------------------------------------
 
 export class OpenModalCreateRole implements Action {

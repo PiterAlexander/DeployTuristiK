@@ -1,5 +1,5 @@
 import { Package } from '@/models/package';
-import { GetAllPackagesRequest, OpenModalCreatePackage } from '@/store/ui/actions';
+import { EditStatusPackageRequest, GetAllPackagesRequest, OpenModalCreatePackage, OpenModalDetailsPackage } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit, PipeTransform } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -58,7 +58,11 @@ export class PackagesComponent implements OnInit {
     this.store.dispatch(new OpenModalCreatePackage(pack));
   }
 
-
+  modalShowDetailsPackage(pack:Package){
+    console.log(pack)
+    this.store.dispatch(new OpenModalDetailsPackage(pack));
+  }
+  
   searchByName() {
     if (this.search === undefined || this.search.length <= 0) {
       this.filteredPackagesList = this.packagesList;
@@ -70,7 +74,9 @@ export class PackagesComponent implements OnInit {
       this.filteredPackagesList = this.filteredPackagesList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
     }
   }
-
+  disablePackage(pack){
+    this.store.dispatch(new EditStatusPackageRequest(pack))
+  }
 
   get page() {
     return this._state.page;

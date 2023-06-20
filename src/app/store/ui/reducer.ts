@@ -76,7 +76,24 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 }
             };
-
+        case Actions.OPEN_MODAL_DETAILS_PACKAGE:
+            return {
+                ...state,
+                onePackage: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+        case Actions.CHANGE_STATUS_PACKAGE_REQUEST:
+            return{
+                ...state,
+                onePackage: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
         case Actions.GET_ALL_PERMISSIONS_REQUEST:
             return {
                 ...state,

@@ -1,0 +1,98 @@
+<div class="modal-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-11">
+                <h3 class="modal-title padding-extra mt-2">{{packageData.name}} - {{packageData.destination}}</h3>
+            </div>
+            <div class="col-1">
+                <div class="col-1 pl-0">
+                    <div class="hover-text btn btn-secondary">
+                        <p class="p-0 m-0" *ngIf="packageData.type == true">Privado</p>
+                        <p class="p-0 m-0" *ngIf="packageData.type == false">Publico</p><i
+                            *ngIf="packageData.type == true" class="fas fa-lock"></i>
+                        <i *ngIf="packageData.type == false" class="fas fa-lock-open"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-body ">
+    <div class="container-fluid">
+        <div class="col-12 card-body d-flex">
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-6">
+                        <div class="row" style="justify-content: center;">
+                            <div class="col-12 img-details">
+                                <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0d/b9/ed/93/piedra-del-penol.jpg?w=700&h=500&s=1"
+                                    class="rounded-start" alt="...">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-6 p-2">
+                        <div class="row">
+                            <div class="col-11 p-0">
+                                <fieldset>
+                                    <legend>
+                                        <p class="h5 pt-2 ml-0">Descripción:</p>
+                                    </legend>
+                                    <p class="card-text m-0 mb-2 text-justify">{{packageData.details}}</p>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-9 p-0">
+                                <div class="col-12 p-0">
+                                    <p class="h3"><b>{{packageData.price | currency:'COP '}}</b></p>
+                                </div>
+                            </div>
+                            <div class="col-1 pl-0">
+                                <div class="hover-text btn btn-secondary"><i *ngIf="packageData.transport== 1"
+                                        class="fa fa-plane"></i> <i *ngIf="packageData.transport== 2"
+                                        class="fa fa-bus"></i>
+                                    <span class="tooltip-text bottom" *ngIf="packageData.transport== 1">Aereo</span>
+                                    <span class="tooltip-text bottom" *ngIf="packageData.transport== 2">Terrestre</span>
+                                </div>
+                            </div>
+
+                            <div class="col-1 pl-0">
+                                <div class="hover-text btn btn-secondary"><i class="fas fa-hotel"></i>
+                                    <span class="tooltip-text bottom">{{packageData.hotel}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2 p-0">
+                            <div class="col-4 p-0">
+                                <p><b>Fecha de salida:</b><br>{{packageData.departureDate | date}}</p>
+                            </div>
+                            <div class="col-4 p-0">
+                                <p><b>Fecha de llegada:</b><br>{{packageData.arrivalDate | date}}</p>
+                            </div>
+                        </div>
+                        <div class="row mt-1 p-0">
+                            <div class="col-9 p-0">
+                                <p><b>Lugar de salida:</b><br>{{packageData.departurePoint}}</p>
+                            </div>
+                            <div class="col-3 p-0">
+                                <p><b>Cupos:</b><br>{{packageData.totalQuotas}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer m-0 p-0">
+    <div class="row">
+        <button (click)="cancel()" class="btn btn-danger m-2">
+            Cerrar
+        </button>
+        <button class="btn btn-success m-2">
+            Editar
+        </button>
+    </div>
+</div>

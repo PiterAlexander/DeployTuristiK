@@ -22,10 +22,12 @@ export class ApiService {
 
     updatePackage(idPackage:string,modelo:Package):Observable<Package>{
         console.log(`${this.endpoint}${idPackage}`);
-        return this.http.put<Package>(`${this.endpoint}api/package/edit/${idPackage}`, modelo)
+        return this.http.put<Package>(`${this.endpoint}api/package/${idPackage}`, modelo)
+    }
+    disablePackage(idPackage:string,modelo:Package):Observable<Package>{
+        console.log(`${this.endpoint}${idPackage}`);
+        return this.http.put<Package>(`${this.endpoint}api/package/${idPackage}`, modelo)
     }
 
-    deletePackage(idPackage:number):Observable<void>{                                        
-        return this.http.delete<void>(`${this.endpoint}api/package/delete/${idPackage}`)
-    }
+    
 }

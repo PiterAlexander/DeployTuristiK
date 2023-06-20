@@ -35,6 +35,7 @@ import { PackageEffects } from './store/ui/effects';
 import { CreatePackageFormComponent } from './components/create-package-form/create-package-form.component';
 import { RolesComponent } from './pages/roles/roles.component';
 import { CreateRoleFormComponent } from '@components/create-role-form/create-role-form.component';
+import { DetailsPackageComponent } from './components/details-package/details-package.component';
 
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
@@ -60,7 +61,9 @@ registerLocaleData(localeEn, 'en-EN');
         PackagesComponent,
         CreatePackageFormComponent,
         RolesComponent,
-        CreateRoleFormComponent
+        CreateRoleFormComponent,
+        DetailsPackageComponent,
+        
     ],
     imports: [
         BrowserModule,

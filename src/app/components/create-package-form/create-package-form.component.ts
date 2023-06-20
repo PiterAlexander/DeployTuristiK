@@ -1,12 +1,13 @@
 import { CreatePackageRequest, EditPackageRequest } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { Package } from '@/models/package';
 import { UiState } from '@/store/ui/state';
 import { Observable } from 'rxjs';
+import { ApiService } from '@services/api.service';
 
 @Component({
   selector: 'app-create-package-form',
@@ -20,27 +21,31 @@ export class CreatePackageFormComponent implements OnInit {
   public ActionTitle: string = "Agregar"
   formGroup: FormGroup;
   public packageData
-
-  constructor(private fb: FormBuilder, private modalService: NgbModal, private store: Store<AppState>) { }
-
+  public allPackages: Array<any>
+  selectedDestiny: any;
+  constructor(private fb: FormBuilder, private modalService: NgbModal, private store: Store<AppState>, private service: ApiService) { }
+  public handleDestinationChange(destination: any) {
+    this.selectedDestiny = destination.formatted_address;
+  }
   ngOnInit(): void {
     this.formGroup = this.fb.group({
-      name: [null, Validators.required],
-      destination: [null, Validators.required],
-      details: [null, Validators.required],
-      transport: [0, Validators.required],
-      hotel: [null, Validators.required],
-      departureDate: [null, Validators.required],
-      arrivalDate: [null, Validators.required],
-      departurePoint: [null, Validators.required],
-      totalQuotas: [null, Validators.required],
-      availableQuotas: [null],
-      price: [null, Validators.required],
-      image: [null, Validators.required],
-      status: [0, Validators.required]
+      name: [null, [Validators.required, Validators.minLength(8)]],//
+      destination: [null, [Validators.required, Validators.minLength(8)]],//
+      details: [null, [Validators.required, Validators.minLength(25)]],//
+      transport: [0, [Validators.required]],//
+      hotel: [null, Validators.required],//
+      departureDate: new FormControl('', [Validators.required, this.fechaValida.bind(this)]),//
+      arrivalDate: new FormControl('', [Validators.required, this.fechaValida.bind(this), this.validarFechaRegreso.bind(this)]),//
+      departurePoint: [null, Validators.required],//
+      totalQuotas: [null, [Validators.required, Validators.min(15)]],
+      availableQuotas: [0],
+      price: [null, [Validators.required, Validators.min(100000)]],
+      type: [0, Validators.required],
+      status: [1, Validators.required]
     })
     this.ui = this.store.select('ui')
-    this.ui.subscribe((state:UiState)=>{
+    this.ui.subscribe((state: UiState) => {
+      this.allPackages = state.allPackages.data
       this.packageData = state.onePackage.data
     })
 
@@ -56,9 +61,9 @@ export class CreatePackageFormComponent implements OnInit {
         departureDate: this.packageData.departureDate,
         departurePoint: this.packageData.departurePoint,
         totalQuotas: this.packageData.totalQuotas,
-        availableQuotas: this.packageData.availableQuotas,
+        availableQuotas: this.packageData.totalQuotas,
         price: this.packageData.price,
-        image: this.packageData.image,
+        type: this.packageData.type,
         status: this.packageData.status,
       })
     }
@@ -66,53 +71,108 @@ export class CreatePackageFormComponent implements OnInit {
 
 
   savePackage() {
-    if (this.packageData == null) {
-      const model: Package = {
-        name: this.formGroup.value.name,
-        destination: this.formGroup.value.destination,
-        details: this.formGroup.value.details,
-        transport: this.formGroup.value.transport,
-        hotel: this.formGroup.value.hotel,
-        arrivalDate: this.formGroup.value.arrivalDate,
-        departureDate: this.formGroup.value.departureDate,
-        departurePoint: this.formGroup.value.departurePoint,
-        totalQuotas: this.formGroup.value.totalQuotas,
-        availableQuotas: this.formGroup.value.totalQuotas,
-        price: this.formGroup.value.price,
-        image: this.formGroup.value.image,
-        status: this.formGroup.value.status,
-      }
-      this.store.dispatch(new CreatePackageRequest({...model}));
-      console.log(model)
+    if (this.formGroup.invalid) {
+      return;
     } else {
-      const model: Package = {
-        packageId: this.packageData.packageId,
-        name: this.formGroup.value.name,
-        destination: this.formGroup.value.destination,
-        details: this.formGroup.value.details,
-        transport: this.formGroup.value.transport,
-        hotel: this.formGroup.value.hotel,
-        arrivalDate: this.formGroup.value.arrivalDate,
-        departureDate: this.formGroup.value.departureDate,
-        departurePoint: this.formGroup.value.departurePoint,
-        totalQuotas: this.formGroup.value.totalQuotas,
-        availableQuotas: this.formGroup.value.availableQuotas,
-        price: this.formGroup.value.price,
-        image: this.formGroup.value.image,
-        status: this.formGroup.value.status,
+      if (this.packageData == null) {
+        const model: Package = {
+          name: this.formGroup.value.name,
+          destination: this.formGroup.value.destination,
+          details: this.formGroup.value.details,
+          transport: this.formGroup.value.transport,
+          hotel: this.formGroup.value.hotel,
+          arrivalDate: this.formGroup.value.arrivalDate,
+          departureDate: this.formGroup.value.departureDate,
+          departurePoint: this.formGroup.value.departurePoint,
+          totalQuotas: this.formGroup.value.totalQuotas,
+          availableQuotas: this.formGroup.value.totalQuotas,
+          price: this.formGroup.value.price,
+          type: this.formGroup.value.type,
+          status: this.formGroup.value.status,
+        }
+        this.store.dispatch(new CreatePackageRequest({ ...model }));
+        console.log(model)
+      } else {
+        const model: Package = {
+          packageId: this.packageData.packageId,
+          name: this.formGroup.value.name,
+          destination: this.formGroup.value.destination,
+          details: this.formGroup.value.details,
+          transport: this.formGroup.value.transport,
+          hotel: this.formGroup.value.hotel,
+          arrivalDate: this.formGroup.value.arrivalDate,
+          departureDate: this.formGroup.value.departureDate,
+          departurePoint: this.formGroup.value.departurePoint,
+          totalQuotas: this.formGroup.value.totalQuotas,
+          availableQuotas: this.formGroup.value.totalQuotas,
+          price: this.formGroup.value.price,
+          type: this.formGroup.value.type,
+          status: this.formGroup.value.status,
+        }
+        this.store.dispatch(new EditPackageRequest({
+          ...model
+        }));
       }
-      this.store.dispatch(new EditPackageRequest({
-        ...model
-      }));
+    }
+  }
+  validForm(): boolean {
+    if (this.packageData == null) {
+      return this.formGroup.valid
+        && this.formGroup.value.status != 0
+        && !this.allPackages.find(item => item.name === this.formGroup.value.name)
+    } else {
+      return this.formGroup.valid
+        && this.formGroup.value.status != 0
+        && !this.allPackages.find(
+          item => item.name === this.formGroup.value.name
+            && item.roleId !== this.packageData.roleId)
+    }
+  }
+
+
+  validateExistingPackageName(): boolean {
+    if (this.packageData == null) {
+      return this.allPackages.find(item => item.name === this.formGroup.value.name)
+    } else {
+      return this.allPackages.find(
+        item => item.name === this.formGroup.value.name
+          && item.packageId !== this.packageData.packageId)
+    }
+  }
+
+  validarFechaRegreso(control: FormControl): { [s: string]: boolean } {
+    let fechaSalida = null;
+    let fechaRegreso = null;
+
+    fechaRegreso = control.value;
+    if (this.formGroup) {
+      fechaSalida = this.departureDate;
+      fechaRegreso = control.value
     }
 
+    if (fechaRegreso && fechaSalida && fechaRegreso <= fechaSalida) {
+      return { 'fechaInvalida': true };
+    }
+    return null;
   }
 
-  validForm(): boolean {
-    return this.formGroup.valid && this.formGroup.value.status != 0 && this.formGroup.value.transport != 0
+  fechaValida(control: FormControl): { [s: string]: boolean } {
+    const fechaIngresada = new Date(control.value);
+    const fechaHoy = new Date();
+
+    if (fechaIngresada <= fechaHoy) {
+      return { 'fechaInvalida': true };
+    }
+
+    return null;
   }
+
 
   cancel() {
     this.modalService.dismissAll();
+  }
+
+  get departureDate() {
+    return this.formGroup.value.departureDate;
   }
 }
