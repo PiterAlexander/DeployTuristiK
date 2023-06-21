@@ -46,10 +46,11 @@
             role="menu"
             data-accordion="false"
         >
-            <app-menu-item
-                *ngFor="let item of menu"
-                [menuItem]="item"
-            ></app-menu-item>
+            <ng-container *ngFor="let item of menu">
+              <ng-template [ngIf]="item.allowed">
+                <app-menu-item [menuItem]="item"></app-menu-item>
+              </ng-template>
+            </ng-container>
         </ul>
     </nav>
 </div>
