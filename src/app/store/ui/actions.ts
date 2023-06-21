@@ -9,6 +9,7 @@ import { Employee } from '@/models/employee';
 import { User } from '@/models/user';
 import { Payment } from '@/models/payment';
 import { OrderDetail } from '@/models/orderDetail';
+import { Token } from '@/models/token';
 
 //<--- TOGGLE ACTIONS --->
 export enum toggleActions {
@@ -524,6 +525,46 @@ export class UpdateUserFailure implements Action {
 }
 //<--------------------->
 
+//<--- LOGIN ACTIONS --->
+export enum loginActions {
+  LOGIN_REQUEST = '[lOGIN] LOGIN_REQUEST',
+  LOGIN_SUCCESS = '[lOGIN] LOGIN_SUCCESS',
+  LOGIN_FAILURE = '[lOGIN] LOGIN_FAILURE',
+
+  GET_USER_INFO_REQUEST = '[LOGIN] GET_USER_INFO_REQUEST',
+  GET_USER_INFO_SUCCESS = '[LOGIN] GET_USER_INFO_SUCCESS',
+  GET_USER_INFO_FAILURE = '[LOGIN] GET_USER_INFO_FAILURE'
+}
+
+export class LoginRequest implements Action {
+  readonly type: string = loginActions.LOGIN_REQUEST;
+  constructor(public payload: any) { }
+}
+export class LoginSuccess implements Action {
+  readonly type: string = loginActions.LOGIN_SUCCESS;
+  constructor(public payload: Token) {
+    //console.log("desde const", payload)
+  }
+}
+export class LoginFailure implements Action {
+  readonly type: string = loginActions.LOGIN_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class GetUserInfoRequest implements Action {
+  readonly type: string = loginActions.GET_USER_INFO_REQUEST;
+  constructor(public payload: any) {}
+}
+export class GetUserInfoSuccess implements Action {
+  readonly type: string = loginActions.GET_USER_INFO_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class GetUserInfoFailure implements Action {
+  readonly type: string = loginActions.GET_USER_INFO_FAILURE;
+  constructor(public payload: string) { }
+
+}
+
 export type UiAction =
   //<---TOGGLE--->
   | ToggleSidebarMenu
@@ -601,5 +642,13 @@ export type UiAction =
   | CreateUserFailure
   | UpdateUserRequest
   | UpdateUserSuccess
-  | UpdateUserFailure;
+  | UpdateUserFailure
   //<--------------------->
+  //<---LOGIN--->
+  | LoginRequest
+  | LoginSuccess
+  | LoginFailure
+  | GetUserInfoRequest
+  | GetUserInfoSuccess
+  | GetUserInfoFailure;
+  //<-------------------->

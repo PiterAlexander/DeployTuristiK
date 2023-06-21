@@ -121,7 +121,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 }
             }
-        
+
             case Actions.orderActions.OPEN_MODAL_ORDERDETAILS:
                 return {
                     ...state,
@@ -359,7 +359,73 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
         //<------------>
+         //<--- LOGIN --->
+         case Actions.loginActions.LOGIN_REQUEST:
+          return {
+              ...state,
+              token: {
+                  data: undefined,
+                  error: undefined,
+                  loading: true
+              }
+          };
 
+        case Actions.loginActions.LOGIN_SUCCESS:
+            //console.log("desde redu: ", action.payload)
+            return {
+                ...state,
+                token: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                },
+            };
+
+        case Actions.loginActions.LOGIN_FAILURE:
+            return {
+                ...state,
+                token: {
+                    data: undefined,
+                    error: action.payload,
+                    loading: false
+                }
+            };
+
+
+        case Actions.loginActions.GET_USER_INFO_REQUEST:
+
+            console.log("iam in red", action.payload);
+            return {
+                ...state,
+                userLoged: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: true
+                }
+            }
+
+        case Actions.loginActions.GET_USER_INFO_SUCCESS:
+            console.log("iam in blue", action.payload);
+            return {
+                ...state,
+                userLoged: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            }
+
+        case Actions.loginActions.GET_USER_INFO_FAILURE:
+            console.log("Im not")
+            return {
+                ...state,
+                userLoged: {
+                    data: undefined,
+                    error: action.payload,
+                    loading: false
+                }
+            }
+        //<------------>
         default:
             return state;
     }

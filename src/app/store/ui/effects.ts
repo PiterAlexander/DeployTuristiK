@@ -4,7 +4,7 @@ import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ApiService } from '@services/api.service';
 import { of } from 'rxjs';
-import { CreateAssociatedPermissionFailure, CreateAssociatedPermissionRequest, CreateAssociatedPermissionSuccess, CreateCostumerFailure, CreateCostumerRequest, CreateCostumerSuccess, CreateEmployeeFailure, CreateEmployeeRequest, CreateEmployeeSuccess, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, CreateRoleFailure, CreateRoleRequest, CreateRoleSuccess, CreateUserFailure, CreateUserRequest, CreateUserSuccess, DeleteAssociatedPermissionFailure, DeleteAssociatedPermissionRequest, DeleteAssociatedPermissionSuccess, DeleteEmployeeFailure, DeleteEmployeeRequest, DeleteEmployeeSuccess, EditCostumerFailure, EditCostumerRequest, EditCostumerSuccess, EditEmployeeFailure, EditEmployeeRequest, EditEmployeeSuccess, EditPackageFailure, EditPackageRequest, EditPackageSuccess, EditRoleFailure, EditRoleRequest, EditRoleSuccess, GetAllCostumerFailure, GetAllCostumerRequest, GetAllCostumerSuccess, GetAllEmployeeFailure, GetAllEmployeeRequest, GetAllEmployeeSuccess, GetAllOrdersFailure, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesFailure, GetAllPackagesRequest, GetAllPackagesSuccess, GetAllPermissionsFailure, GetAllPermissionsSuccess, GetAllRoleFailure, GetAllRoleRequest, GetAllRoleSuccess, GetUsersFailure, GetUsersRequest, GetUsersSuccess, UpdateUserFailure, UpdateUserRequest, UpdateUserSuccess, costumerActions, employeeActions, orderActions, packageActions, permissionActions, roleActions, userActions } from './actions';
+import { CreateAssociatedPermissionFailure, CreateAssociatedPermissionRequest, CreateAssociatedPermissionSuccess, CreateCostumerFailure, CreateCostumerRequest, CreateCostumerSuccess, CreateEmployeeFailure, CreateEmployeeRequest, CreateEmployeeSuccess, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, CreateRoleFailure, CreateRoleRequest, CreateRoleSuccess, CreateUserFailure, CreateUserRequest, CreateUserSuccess, DeleteAssociatedPermissionFailure, DeleteAssociatedPermissionRequest, DeleteAssociatedPermissionSuccess, DeleteEmployeeFailure, DeleteEmployeeRequest, DeleteEmployeeSuccess, EditCostumerFailure, EditCostumerRequest, EditCostumerSuccess, EditEmployeeFailure, EditEmployeeRequest, EditEmployeeSuccess, EditPackageFailure, EditPackageRequest, EditPackageSuccess, EditRoleFailure, EditRoleRequest, EditRoleSuccess, GetAllCostumerFailure, GetAllCostumerRequest, GetAllCostumerSuccess, GetAllEmployeeFailure, GetAllEmployeeRequest, GetAllEmployeeSuccess, GetAllOrdersFailure, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesFailure, GetAllPackagesRequest, GetAllPackagesSuccess, GetAllPermissionsFailure, GetAllPermissionsSuccess, GetAllRoleFailure, GetAllRoleRequest, GetAllRoleSuccess, GetUserInfoFailure, GetUserInfoSuccess, GetUsersFailure, GetUsersRequest, GetUsersSuccess, LoginFailure, LoginRequest, LoginSuccess, UpdateUserFailure, UpdateUserRequest, UpdateUserSuccess, costumerActions, employeeActions, loginActions, orderActions, packageActions, permissionActions, roleActions, userActions } from './actions';
 import {  DeleteRoleFailure, DeleteRoleRequest, DeleteRoleSuccess } from './actions';
 import { CreatePaymentFailure, CreatePaymentRequest, CreatePaymentSuccess, OpenModalPayments} from './actions';
 import { CreatePackageFormComponent } from '@components/create-package-form/create-package-form.component';
@@ -20,6 +20,7 @@ import { CreateUserFormComponent } from '@components/create-user-form/create-use
 import { CreatePaymentFormComponent } from '@components/create-payment-form/create-payment-form.component';
 import { ReadOrderOrderDetailComponent } from '@components/read-order-order-detail/read-order-order-detail.component';
 import { ReadOrderPaymentComponent } from '@components/read-order-payment/read-order-payment.component';
+import { AuthService } from '@services/auth/auth.service';
 
 @Injectable()
 export class PackageEffects {
@@ -510,13 +511,46 @@ export class PackageEffects {
         })
     ));
     //<--------------->
+    //<--- LOGIN --->
+    login$ = createEffect(() => this.actions$.pipe(
+        ofType(loginActions.LOGIN_REQUEST),
+        map((action: LoginRequest) => action.payload),
+        switchMap((data) => {
+            //console.log(data)
+            return this.apiService.signIn(data.email, data.password).pipe(
+                mergeMap((token) => {
+                    //console.log(typeof (token))
+                    return [new LoginSuccess(token)]
 
+                }),
+                catchError((error) => of(new LoginFailure(error))))
+        })
+    ))
+
+    getUserInfo$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(loginActions.GET_USER_INFO_REQUEST),
+            map((action: LoginRequest) => action.payload),
+            switchMap((response) => {
+                return this.authService.getUserInfo(response).pipe(
+                    mergeMap((data) => {
+                        console.log(typeof (data))
+                        return [new GetUserInfoSuccess(data)]
+
+                    }),
+                    catchError((error) => of(new GetUserInfoFailure(error))))
+            })
+
+        )
+    )
+    //<----------------------------->
     constructor(
         private actions$: Actions,
         private modalService: NgbModal,
         private apiService: ApiService,
         private apiPermission: PermissionService,
         private roleService: RoleService,
-        private assocPermissionService: AssociatedPermissionService
+        private assocPermissionService: AssociatedPermissionService,
+        private authService: AuthService,
     ) { }
 }
