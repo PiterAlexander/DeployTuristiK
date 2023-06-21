@@ -1,84 +1,78 @@
-<div class="card card-outline card-primary">
-  <div class="card-header text-center">
-      <a [routerLink]="['/']" class="h1"><b>TuristiK</b>App</a>
-  </div>
-  <div class="card-body">
-      <p class="login-box-msg">Iniciar Sesión</p>
 
-      <form
-          class="needs-validation"
-          novalidate
-          id="form"
-          (submit)="saveChanges()"
-          [formGroup]="formGroup"
-      >
-          <div class="input-group mb-3">
-              <input
-                  formControlName="email"
-                  type="email"
-                  class="form-control"
-                  placeholder="Email"
-              />
-              <div class="input-group-append">
-                  <div class="input-group-text">
-                      <span class="fas fa-envelope"></span>
-                  </div>
+
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <div class=" card o-hidden border-0 shadow-lg my-5 w-50">
+    <div class="d-flex justify-content-center align-items-center mt-3">
+      <button class="control-prev btn btn-outline-primary border-0" type="button" data-target="#carouselExampleControls"
+        data-slide-to="0">
+        Inicio de sesión
+      </button>
+      <button class="control-next btn btn-outline-primary border-0" type="button" data-target="#carouselExampleControls"
+        data-slide-to="1">
+        Registro
+      </button>
+    </div>
+    <div class="card-body p-0">
+      <!-- Nested Row within Card Body -->
+      <div class="row">
+        <div class="col">
+          <div class="p-4">
+            <div class="d-flex justify-content-center align-items-center mb-3">
+              <div class="row">
+                <div class="">
+                  <a href="index.html" class="btn btn-google rounded-circle ">
+                    <i class="fab fa-google fa-fw"></i>
+                  </a>
+                </div>
+                <div class="col">
+                  <a href="index.html" class="btn btn-facebook rounded-circle ">
+                    <i class="fab fa-facebook-f fa-fw"></i>
+                  </a>
+                </div>
               </div>
-          </div>
-          <div class="input-group mb-3">
-              <input
-                  formControlName="password"
-                  type="password"
-                  class="form-control"
-                  placeholder="Password"
-              />
-              <div class="input-group-append">
+            </div>
+            <form class="needs-validation" novalidate id="form" (submit)="saveChanges()" [formGroup]="formGroup">
+              <div class="input-group mb-3">
+                <input formControlName="email" type="email" class="form-control" placeholder="Email" />
+                <div class="input-group-append">
                   <div class="input-group-text">
-                      <span class="fas fa-lock"></span>
+                    <span class="fas fa-envelope"></span>
                   </div>
+                </div>
               </div>
-          </div>
-          <div class="row">
-              <div class="col-7">
+              <div class="input-group mb-3">
+                <input formControlName="password" type="password" id="passwordLogin" class="form-control" placeholder="Password" />
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-lock"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-9">
                   <div class="icheck-primary">
-                      <input type="checkbox" id="remember" />
-                      <label for="remember"> Recordarme </label>
+                    <input type="checkbox" id="remember" />
+                    <label for="remember"> Recordarme </label>
                   </div>
-              </div>
-              <!-- /.col -->
-              <div class="col-5">
-                  <pf-button
-                      *ngIf="validForm()"
-                      type="submit"
-                      id="saveButton"
-                      class="btn btn-success"
-                      [block]="true"
-                      [loading]="isAuthLoading"
-                  >
+                  <div class="col-2">
+                    <pf-button *ngIf="validForm()" type="submit" id="saveButton" class="btn btn-success" [block]="true"
+                      [loading]="isAuthLoading">
                       Guardar
-                  </pf-button>
-                  <button
-                      *ngIf="!validForm()"
-                      type="submit"
-                      id="saveButton"
-                      class="btn btn-secondary"
-                      disabled
-                  >
+                    </pf-button>
+                    <button *ngIf="!validForm()" type="submit" id="saveButton" class="btn btn-secondary" disabled>
                       Guardar
-                  </button>
+                    </button>
+                  </div>
+                </div>
+                <!-- /.col -->
               </div>
-              <!-- /.col -->
+            </form>
+            <p class="mb-1">
+              <a [routerLink]="['/forgot-password']">¿Olvidé mi contraseña?</a>
+            </p>
           </div>
-      </form>
-
-      <p class="mb-1">
-          <a [routerLink]="['/forgot-password']">¿Olvidé mi contraseña?</a>
-      </p>
-      <p class="mb-0">
-          <a [routerLink]="['/register']" class="text-center">
-              Registrarse
-          </a>
-      </p>
+        </div>
+      </div>
+    </div>
   </div>
-  <!-- /.login-card-body -->
 </div>
