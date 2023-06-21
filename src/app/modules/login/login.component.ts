@@ -44,7 +44,6 @@ export class LoginComponent implements OnInit {
     this.ui.subscribe((state: UiState) => {
       this.token = state.token.data
       this.userLogin = state.userLoged.data
-      console.log("antes de saber", this.userLogin)
       this.getToken()
     })
 
@@ -71,7 +70,6 @@ export class LoginComponent implements OnInit {
       email: this.formGroup.value.email,
       password: this.formGroup.value.password
     }
-    console.log("sirvo")
 
     await this.store.dispatch(new LoginRequest({ email: Model.email, password: Model.password }))
     this.isAuthLoading = false
@@ -96,33 +94,18 @@ export class LoginComponent implements OnInit {
         this.authService.setToken(this.token.result)
 
         var log = JSON.parse(localStorage.getItem('TokenPayload'))
-        console.log("Usuario", log["role"])
         if (log["role"] == "Administrador") {
           this.router.navigate(['/']);
-          console.log("Es Administrador")
         } else if (log["role"] == "Cliente") {
-          this.router.navigate(['/costumers']);
-          console.log("Es cliente")
+          this.router.navigate(['/Clientes']);
         }
 
         this.toastr.success(this.token.message);
       } else {
         this.toastr.error(this.token.message);
-        // console.log(this.token.message)
       }
 
     }
   }
 
-  // public navigate() {
-  //   var log = JSON.parse(localStorage.getItem('TokenPayload'))
-  //   console.log("Usuario", log["role"])
-  //   if (log["role"] == "Administrador") {
-  //     this.router.navigate(['/']);
-  //     console.log("Es Administrador")
-  //   } else if (log["role"] == "Cliente") {
-  //     this.router.navigate(['/costumers']);
-  //     console.log("Es cliente")
-  //   }
-  // }
 }

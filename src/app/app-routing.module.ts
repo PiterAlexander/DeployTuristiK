@@ -18,43 +18,52 @@ import { UsersComponent } from '@pages/users/users.component';
 
 const routes: Routes = [
     {
-        path: '',
-        component: MainComponent,
-        canActivate: [AuthGuard],
-        canActivateChild: [AuthGuard],
-        children: [
-            {
-                path: '',
-                component: DashboardComponent
-            },
-            {
-                path: 'profile',
-                component: ProfileComponent
-            },
-            {
-                path: 'packages',
-                component: PackagesComponent
-            },
-            {
-                path: 'roles',
-                component: RolesComponent
-            },
-            {
-                path: 'orders',
-                component: OrdersComponent
-            },
-            {   path: 'costumers',
-                component: CostumersComponent
-            },
-            {
-                path: 'employees',
-                component: EmployeesComponent
-            },
-            {
-                path: 'users',
-                component: UsersComponent
-            },
-        ]
+      path: '',
+      component: MainComponent,
+      //canActivate: [NonAuthGuard],
+      canActivate: [AuthGuard],
+      canActivateChild: [AuthGuard],
+      children: [
+          {
+              path: '',
+              // canActivate: [NonAuthGuard],
+              component: DashboardComponent
+          },
+          {
+              path: 'profile',
+              // canActivate: [NonAuthGuard],
+              component: ProfileComponent
+          },
+          {
+              path: 'Paquetes',
+              // canActivate: [AuthGuard],
+              component: PackagesComponent
+          },
+          {
+              path: 'Roles',
+              // canActivate: [AuthGuard],
+              component: RolesComponent
+          },
+          {
+              path: 'Pedidos',
+              // canActivate: [AuthGuard],
+              component: OrdersComponent
+          },
+          {   path: 'Clientes',
+              // canActivate: [AuthGuard],
+              component: CostumersComponent
+          },
+          {
+              path: 'Empleados',
+              // canActivate: [AuthGuard],
+              component: EmployeesComponent
+          },
+          {
+              path: 'Usuarios',
+              // canActivate: [AuthGuard],
+              component: UsersComponent
+          },
+      ]
     },
     {
         path: 'login',
