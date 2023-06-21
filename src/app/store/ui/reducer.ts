@@ -139,246 +139,313 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     error: undefined,
                     loading: false
                 }
-            };
-
-        case Actions.orderActions.OPEN_MODAL_ORDERDETAILS:
-            return {
-                ...state,
-                oneOrder: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
-                }
             }
 
-        case Actions.orderActions.OPEN_MODAL_PAYMENTS:
-            return {
-                ...state,
-                oneOrder: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
+            case Actions.orderActions.OPEN_MODAL_ORDERDETAILS:
+                return {
+                    ...state,
+                    oneOrder: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
                 }
-            }
 
-        case Actions.orderActions.OPEN_MODAL_CREATE_PAYMENT:
-            return {
-                ...state,
-                orderProcess: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
-                }
-            }
 
-        case Actions.orderActions.OPEN_MODAL_CREATE_ORDERDETAIL:
-            return {
-                ...state,
-                orderProcess: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
+            case Actions.orderActions.OPEN_MODAL_PAYMENTS:
+                return {
+                    ...state,
+                    oneOrder: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
                 }
-            }
-        //<----------------------------->
 
-        //<--- ROLES AND PERMISSIONS --->
-        case Actions.roleActions.GET_ALL_ROLE_REQUEST:
-            return {
-                ...state,
-                allRoles: {
-                    data: [],
-                    error: undefined,
-                    loading: true
+            case Actions.orderActions.OPEN_MODAL_CREATE_PAYMENT:
+                return {
+                    ...state,
+                    orderProcess: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
                 }
-            };
 
-        case Actions.roleActions.GET_ALL_ROLE_SUCCESS:
-            return {
-                ...state,
-                allRoles: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
+            case Actions.orderActions.OPEN_MODAL_CREATE_ORDERDETAIL:
+                return {
+                    ...state,
+                    orderProcess: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
                 }
-            };
+            //<----------------------------->
 
-        case Actions.roleActions.GET_ALL_ROLE_FAILURE:
-            return {
-                ...state,
-                allRoles: {
-                    data: [],
-                    error: action.payload,
-                    loading: false
-                }
-            };
+            //<--- ROLES AND PERMISSIONS --->
+            case Actions.roleActions.GET_ALL_ROLE_REQUEST:
+                return {
+                    ...state,
+                    allRoles: {
+                        data: [],
+                        error: undefined,
+                        loading: true
+                    }
+                };
 
-        case Actions.roleActions.OPEN_MODAL_CREATE_ROLE:
-            return {
-                ...state,
-                oneRole: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
-                }
-            };
+            case Actions.roleActions.GET_ALL_ROLE_SUCCESS:
+                return {
+                    ...state,
+                    allRoles: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
+                };
 
-        case Actions.permissionActions.GET_ALL_PERMISSIONS_REQUEST:
-            return {
-                ...state,
-                allPermissions: {
-                    data: [],
-                    error: undefined,
-                    loading: true
-                }
-            };
+            case Actions.roleActions.GET_ALL_ROLE_FAILURE:
+                return {
+                    ...state,
+                    allRoles: {
+                        data: [],
+                        error: action.payload,
+                        loading: false
+                    }
+                };
 
-        case Actions.permissionActions.GET_ALL_PERMISSIONS_SUCCESS:
-            return {
-                ...state,
-                allPermissions: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
-                }
-            };
+            case Actions.roleActions.OPEN_MODAL_CREATE_ROLE:
+                return {
+                    ...state,
+                    oneRole: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
+                };
 
-        case Actions.permissionActions.GET_ALL_PERMISSIONS_FAILURE:
-            return {
-                ...state,
-                allPermissions: {
-                    data: [],
-                    error: action.payload,
-                    loading: false
-                }
-            };
-        //<----------------->
+            case Actions.permissionActions.GET_ALL_PERMISSIONS_REQUEST:
+                return {
+                    ...state,
+                    allPermissions: {
+                        data: [],
+                        error: undefined,
+                        loading: true
+                    }
+                };
 
-        //<--- COSTUMERS --->
-        case Actions.costumerActions.GET_ALL_COSTUMER_REQUEST:
-            return {
-                ...state,
-                allCostumers: {
-                    data: [],
-                    error: undefined,
-                    loading: true
-                }
-            };
+            case Actions.permissionActions.GET_ALL_PERMISSIONS_SUCCESS:
+                return {
+                    ...state,
+                    allPermissions: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
+                };
 
-        case Actions.costumerActions.GET_ALL_COSTUMER_SUCCESS:
-            return {
-                ...state,
-                allCostumers: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
-                }
-            };
+            case Actions.permissionActions.GET_ALL_PERMISSIONS_FAILURE:
+                return {
+                    ...state,
+                    allPermissions: {
+                        data: [],
+                        error: action.payload,
+                        loading: false
+                    }
+                };
+            //<----------------->
 
-        case Actions.costumerActions.GET_ALL_COSTUMER_FAILURE:
-            return {
-                ...state,
-                allCostumers: {
-                    data: [],
-                    error: action.payload,
-                    loading: false
-                }
-            };
+            //<--- COSTUMERS --->
+            case Actions.costumerActions.GET_ALL_COSTUMER_REQUEST:
+                return {
+                    ...state,
+                    allCostumers: {
+                        data: [],
+                        error: undefined,
+                        loading: true
+                    }
+                };
 
-        case Actions.costumerActions.OPEN_MODAL_CREATE_COSTUMER:
-            return {
-                ...state,
-                oneCostumer: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
-                }
-            };
-        //<----------------->
+            case Actions.costumerActions.GET_ALL_COSTUMER_SUCCESS:
+                return {
+                    ...state,
+                    allCostumers: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
+                };
 
-        //<--- EMPLOYEES --->
-        case Actions.employeeActions.GET_ALL_EMPLOYEE_REQUEST:
-            return {
-                ...state,
-                allEmployees: {
-                    data: [],
-                    error: undefined,
-                    loading: true
-                }
-            };
+            case Actions.costumerActions.GET_ALL_COSTUMER_FAILURE:
+                return {
+                    ...state,
+                    allCostumers: {
+                        data: [],
+                        error: action.payload,
+                        loading: false
+                    }
+                };
 
-        case Actions.employeeActions.GET_ALL_EMPLOYEE_SUCCESS:
-            return {
-                ...state,
-                allEmployees: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
-                }
-            };
+            case Actions.costumerActions.OPEN_MODAL_CREATE_COSTUMER:
+                return {
+                    ...state,
+                    oneCostumer: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
+                };
+            //<----------------->
 
-        case Actions.employeeActions.GET_ALL_EMPLOYEE_FAILURE:
-            return {
-                ...state,
-                allEmployees: {
-                    data: [],
-                    error: action.payload,
-                    loading: false
-                }
-            };
-        case Actions.employeeActions.OPEN_MODAL_CREATE_EMPLOYEE:
-            return {
-                ...state,
-                oneEmployee: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
-                }
-            };
-        //<------------>
+            //<--- EMPLOYEES --->
+            case Actions.employeeActions.GET_ALL_EMPLOYEE_REQUEST:
+                return {
+                    ...state,
+                    allEmployees: {
+                        data: [],
+                        error: undefined,
+                        loading: true
+                    }
+                };
 
-        //<--- USER --->
-        case Actions.userActions.GET_USERS_REQUEST:
-            return {
-                ...state,
-                allUsers: {
-                    data: [],
-                    error: undefined,
-                    loading: true
-                }
-            };
+            case Actions.employeeActions.GET_ALL_EMPLOYEE_SUCCESS:
+                return {
+                    ...state,
+                    allEmployees: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
+                };
 
-        case Actions.userActions.GET_USERS_SUCCESS:
-            return {
-                ...state,
-                allUsers: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
-                }
-            };
+            case Actions.employeeActions.GET_ALL_EMPLOYEE_FAILURE:
+                return {
+                    ...state,
+                    allEmployees: {
+                        data: [],
+                        error: action.payload,
+                        loading: false
+                    }
+                };
+            case Actions.employeeActions.OPEN_MODAL_CREATE_EMPLOYEE:
+                return {
+                    ...state,
+                    oneEmployee: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
+                };
+            //<------------>
 
-        case Actions.userActions.GET_USERS_FAILURE:
-            return {
-                ...state,
-                allUsers: {
-                    data: [],
-                    error: action.payload,
-                    loading: false
-                }
-            };
+            //<--- USER --->
+            case Actions.userActions.GET_USERS_REQUEST:
+                return {
+                    ...state,
+                    allUsers: {
+                        data: [],
+                        error: undefined,
+                        loading: true
+                    }
+                };
 
-        case Actions.userActions.OPEN_MODAL_USER:
-            return {
-                ...state,
-                currentUser: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
-                }
-            };
-        //<------------>
+            case Actions.userActions.GET_USERS_SUCCESS:
+                return {
+                    ...state,
+                    allUsers: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
+                };
 
+            case Actions.userActions.GET_USERS_FAILURE:
+                return {
+                    ...state,
+                    allUsers: {
+                        data: [],
+                        error: action.payload,
+                        loading: false
+                    }
+                };
+
+            case Actions.userActions.OPEN_MODAL_USER:
+                return {
+                    ...state,
+                    currentUser: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
+                };
+            //<------------>
+            //<--- LOGIN --->
+            case Actions.loginActions.LOGIN_REQUEST:
+              return {
+                  ...state,
+                  token: {
+                      data: undefined,
+                      error: undefined,
+                      loading: true
+                  }
+              };
+
+            case Actions.loginActions.LOGIN_SUCCESS:
+                //console.log("desde redu: ", action.payload)
+                return {
+                    ...state,
+                    token: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    },
+                };
+
+            case Actions.loginActions.LOGIN_FAILURE:
+                return {
+                    ...state,
+                    token: {
+                        data: undefined,
+                        error: action.payload,
+                        loading: false
+                    }
+                };
+
+
+            case Actions.loginActions.GET_USER_INFO_REQUEST:
+
+                console.log("iam in red", action.payload);
+                return {
+                    ...state,
+                    userLoged: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: true
+                    }
+                }
+
+            case Actions.loginActions.GET_USER_INFO_SUCCESS:
+                console.log("iam in blue", action.payload);
+                return {
+                    ...state,
+                    userLoged: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
+                }
+
+            case Actions.loginActions.GET_USER_INFO_FAILURE:
+                console.log("Im not")
+                return {
+                    ...state,
+                    userLoged: {
+                        data: undefined,
+                        error: action.payload,
+                        loading: false
+                    }
+                }
+            //<------------>
         default:
             return state;
     }

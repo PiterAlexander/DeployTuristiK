@@ -9,6 +9,7 @@ import { Employee } from '@/models/employee';
 import { OrderDetail } from '@/models/orderDetail';
 import { User } from '@/models/user';
 import { Payment } from '@/models/payment';
+import { Token } from '@/models/token';
 @Injectable({
     providedIn: 'root'
 })
@@ -121,4 +122,8 @@ export class ApiService {
         return this.http.put<User>(`${this.endpoint}api/User/${userId}`, model)
     }
     //<-------------->
+    //<--- LOGIN --->
+    signIn(email: string, password: string) {
+      return this.http.post<Token>(`${this.endpoint}api/Login`, { email, password })
+  }
 }
