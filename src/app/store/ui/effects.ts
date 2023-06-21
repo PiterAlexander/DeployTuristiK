@@ -1,5 +1,31 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
+import { exhaustMap } from 'rxjs/operators';
+import {
+    CREATE_PACKAGE_REQUEST,
+    GET_ALL_PACKAGES_REQUEST,
+    GET_ALL_PERMISSIONS_REQUEST,
+    OPEN_MODAL_CREATE_PACKAGE,
+    OPEN_MODAL_CREATE_ROLE,
+    CREATE_ROLE_REQUEST,
+    GET_ALL_ROLE_REQUEST,
+    EDIT_ROLE_REQUEST,
+    CREATE_ASSOCIATEDPERMISSION_REQUEST,
+    DELETE_ASSOCIATEDPERMISSION_REQUEST,
+    OpenModalCreateRole,
+    EDIT_PACKAGE_REQUEST,
+    OPEN_MODAL_DETAILS_PACKAGE,
+    GET_ONE_PACKAGES_REQUEST,
+    EditStatusPackageRequest,
+    EditStatusPackageSuccess,
+    EditStatusPackageFailure,
+    loginActions,
+    LoginRequest,
+    LoginSuccess,
+    LoginFailure,
+    GetUserInfoSuccess,
+    GetUserInfoFailure,
+} from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ApiService } from '@services/api.service';
@@ -12,12 +38,14 @@ import { CreateRoleFormComponent } from '@components/create-role-form/create-rol
 import { PermissionService } from '@services/configuration/permission.service';
 import { RoleService } from '@services/configuration/role.service';
 import { AssociatedPermissionService } from '@services/configuration/associated-permission.service';
+import { DetailsPackageComponent } from '@components/details-package/details-package.component';
 import { CreatecostumerformComponent } from '@components/createcostumerform/createcostumerform.component';
 import { CreateEmployeeFormComponent } from '@components/create-employee-form/create-employee-form.component';
 import { CreateUserFormComponent } from '@components/create-user-form/create-user-form.component';
 import { CreatePaymentFormComponent } from '@components/create-payment-form/create-payment-form.component';
 import { ReadOrderOrderDetailComponent } from '@components/read-order-order-detail/read-order-order-detail.component';
 import { ReadOrderPaymentComponent } from '@components/read-order-payment/read-order-payment.component';
+import { AuthService } from '@services/auth/auth.service';
 
 @Injectable()
 export class PackageEffects {
@@ -48,6 +76,18 @@ export class PackageEffects {
                 });
             })
         ), { dispatch: false });
+
+    openModalDetailsPackage$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(OPEN_MODAL_DETAILS_PACKAGE),
+            tap((action) => {
+                this.modalRef = this.modalService.open(DetailsPackageComponent, {
+                    backdrop: false,
+                    size: 'xl'
+                });
+            })
+        ), { dispatch: false });
+
 
     createPackage$ = createEffect(() => this.actions$.pipe(
         ofType(packageActions.CREATE_PACKAGE_REQUEST),
@@ -127,6 +167,7 @@ export class PackageEffects {
             )
         })
     ));
+
 
     editOrder$ = createEffect(() => this.actions$.pipe(
         ofType(orderActions.EDIT_ORDER_REQUEST),
@@ -251,6 +292,21 @@ export class PackageEffects {
             dispatch: false
         });
 
+    getPermissions$ = createEffect(() => this.actions$.pipe(
+        ofType(GET_ALL_PERMISSIONS_REQUEST),
+        switchMap((action) => {
+            return this.apiPermission.ReadPermissions().pipe(
+                mergeMap((permissionResolved) => {
+                    return [
+                        new GetAllPermissionsSuccess(permissionResolved)
+                    ];
+                }),
+                catchError((err) => of(new GetAllPermissionsFailure(err)))
+            )
+
+        })
+    ));
+
     createRole$ = createEffect(() => this.actions$.pipe(
         ofType(roleActions.CREATE_ROLE_REQUEST),
         map((action: CreateRoleRequest) => action.payload),
@@ -267,6 +323,7 @@ export class PackageEffects {
             )
         })
     ));
+
 
     editRole$ = createEffect(() => this.actions$.pipe(
         ofType(roleActions.EDIT_ROLE_REQUEST),
@@ -301,21 +358,8 @@ export class PackageEffects {
         })
     ))
 
-    getPermissions$ = createEffect(() => this.actions$.pipe(
-        ofType(permissionActions.GET_ALL_PERMISSIONS_REQUEST),
-        switchMap((action) => {
-            return this.apiPermission.ReadPermissions().pipe(
-                mergeMap((permissionResolved) => {
-                    return [
-                        new GetAllPermissionsSuccess(permissionResolved)
-                    ];
-                }),
-                catchError((err) => of(new GetAllPermissionsFailure(err)))
-            )
-        })
-    ));
-
     createAssociatedPermission$ = createEffect(() => this.actions$.pipe(
+        ofType(CREATE_ASSOCIATEDPERMISSION_REQUEST),
         ofType(permissionActions.CREATE_ASSOCIATEDPERMISSION_REQUEST),
         map((action: CreateAssociatedPermissionRequest) => action.payload),
         switchMap((asocpermission) => {
@@ -332,11 +376,13 @@ export class PackageEffects {
     ));
 
     DeleteAssociatedPermission$ = createEffect(() => this.actions$.pipe(
+        ofType(DELETE_ASSOCIATEDPERMISSION_REQUEST),
         ofType(permissionActions.DELETE_ASSOCIATEDPERMISSION_REQUEST),
         map((action: DeleteAssociatedPermissionRequest) => action.payload),
         switchMap((asocpermission) => {
             return this.assocPermissionService.DeleteAssociatedPermission(asocpermission.associatedPermissionId).pipe(
                 mergeMap((assocPermissionResolved) => {
+                    this.modalRef.close();
                     return [
                         new DeleteAssociatedPermissionSuccess(assocPermissionResolved),
                     ];
@@ -540,13 +586,46 @@ export class PackageEffects {
         })
     ));
     //<--------------->
+    //<--- LOGIN --->
+    login$ = createEffect(() => this.actions$.pipe(
+        ofType(loginActions.LOGIN_REQUEST),
+        map((action: LoginRequest) => action.payload),
+        switchMap((data) => {
+            //console.log(data)
+            return this.apiService.signIn(data.email, data.password).pipe(
+                mergeMap((token) => {
+                    //console.log(typeof (token))
+                    return [new LoginSuccess(token)]
 
+                }),
+                catchError((error) => of(new LoginFailure(error))))
+        })
+    ))
+
+    getUserInfo$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(loginActions.GET_USER_INFO_REQUEST),
+            map((action: LoginRequest) => action.payload),
+            switchMap((response) => {
+                return this.authService.getUserInfo(response).pipe(
+                    mergeMap((data) => {
+                        console.log(typeof (data))
+                        return [new GetUserInfoSuccess(data)]
+
+                    }),
+                    catchError((error) => of(new GetUserInfoFailure(error))))
+            })
+
+        )
+    )
+    //<----------------------------->
     constructor(
         private actions$: Actions,
         private modalService: NgbModal,
         private apiService: ApiService,
         private apiPermission: PermissionService,
         private roleService: RoleService,
-        private assocPermissionService: AssociatedPermissionService
+        private assocPermissionService: AssociatedPermissionService,
+        private authService: AuthService,
     ) { }
 }

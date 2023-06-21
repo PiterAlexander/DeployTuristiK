@@ -37,6 +37,7 @@ import { RolesComponent } from './pages/roles/roles.component';
 import { OrdersComponent } from './pages/orders/orders.component';
 import { CreateOrderFormComponent } from './components/create-order-form/create-order-form.component';
 import { CreateRoleFormComponent } from '@components/create-role-form/create-role-form.component';
+import { DetailsPackageComponent } from './components/details-package/details-package.component';
 import { CostumersComponent } from './pages/costumers/costumers.component';
 import { CreatecostumerformComponent } from './components/createcostumerform/createcostumerform.component';
 import { EmployeesComponent } from './pages/employees/employees.component';
@@ -72,6 +73,8 @@ registerLocaleData(localeEn, 'en-EN');
         PackagesComponent,
         CreatePackageFormComponent,
         RolesComponent,
+        CreateRoleFormComponent,
+        DetailsPackageComponent,
         OrdersComponent,
         CreateOrderFormComponent,
         CreateRoleFormComponent,

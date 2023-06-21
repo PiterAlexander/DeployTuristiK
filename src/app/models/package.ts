@@ -11,7 +11,7 @@ export interface Package {
     totalQuotas:number;
     availableQuotas:number;
     price:number;
-    image:string;
+    type:boolean;
     status:boolean;
 
 }

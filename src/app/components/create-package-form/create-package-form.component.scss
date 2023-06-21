@@ -2,10 +2,44 @@
     border-top: 0px !important;
 }
 
-.padding-extra{
+.padding-extra {
     padding-left: 28px !important;
 }
 
 * {
     font-weight: 600 !important;
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+    color: #fff;
+    border-color: #28A745 !important;
+    background-color: #28A745 !important;
+}
+
+form input:required {
+    content: "*";
+}
+
+.invalid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+    color: red;
+}
+
+.form-control.invalid {
+    border-color: #dc3545;
+}
+
+.form-control.invalid:focus {
+    box-shadow: 0 0 0 0.20rem rgba(228, 14, 14, 0.25);
+}
+
+.form-control.valid {
+    border-color: #198754;
+}
+
+.form-control.valid:focus {
+    box-shadow: 0 0 0 0.20rem rgba(25, 135, 84, .25);
 }

@@ -5,6 +5,7 @@ import { Permission } from "@/models/permission";
 import { Costumer } from "@/models/costumer";
 import { User } from "@/models/user";
 import { Employee } from "@/models/employee";
+import { Token, UserLog } from "@/models/token";
 
 export default <UiState>{
   //<--- TOGGLER --->
@@ -94,7 +95,19 @@ export default <UiState>{
     data: undefined,
     error: undefined,
     loading: false
+  },
+  //<--- LOGIN --->
+  token: {
+    data: undefined,
+    error: undefined,
+    loading: false
+  },
+  userLoged: {
+    data: undefined,
+    error: undefined,
+    loading: false
   }
+  //<-------------->
 };
 
 
@@ -189,4 +202,16 @@ export interface UiState {
     loading: boolean
   }
   //<------------->
+  //<--- LOGIN --->
+  token: {
+    data: Token,
+    error: string,
+    loading: boolean
+  }
+  userLoged: {
+    data: UserLog,
+    error: string,
+    loading: boolean
+  }
+  //<-------------->
 }

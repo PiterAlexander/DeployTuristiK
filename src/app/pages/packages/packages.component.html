@@ -19,9 +19,11 @@
                     </div>
                     <form *ngIf="!loading">
                         <div class="d-flex justify-content-end mb-3 row">
-                            <label for="table-complete-search" class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
+                            <label for="table-complete-search"
+                                class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
                             <div class="col-xs-3 col-sm-auto">
-                                <input id="table-complete-search" type="text" class="form-control" name="searchTerm" [(ngModel)]="search" (ngModelChange)="searchByName()"/>
+                                <input id="table-complete-search" type="text" class="form-control" name="searchTerm"
+                                    [(ngModel)]="search" (ngModelChange)="searchByName()" />
                             </div>
                         </div>
 
@@ -29,15 +31,14 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Nombre</th>
-                                    <th scope="col" sortable="name">Destino</th>
-                                    <th scope="col" sortable="area">Fecha de salida</th>
-                                    <th scope="col" sortable="population">Fecha de regreso</th>
-                                    <th scope="col" sortable="population">Cupos</th>
-                                    <th scope="col" sortable="population">Cupos disponibles</th>
-                                    <th scope="col" sortable="population">Precio</th>
-                                    <th scope="col" sortable="population">Información</th>
-                                    <th scope="col" sortable="population">Estado</th>
-                                    <th scope="col" sortable="population">Editar</th>
+                                    <th scope="col">Destino</th>
+                                    <th scope="col">Fecha de salida</th>
+                                    <th scope="col">Fecha de regreso</th>
+                                    <th scope="col">Cupos disponibles</th>
+                                    <th scope="col">Precio</th>
+                                    <th scope="col">Información</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Editar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -46,26 +47,42 @@
                                     <td>{{pack.destination}}</td>
                                     <td>{{pack.departureDate | date}}</td>
                                     <td>{{pack.arrivalDate | date}}</td>
-                                    <td>{{pack.totalQuotas }}</td>
                                     <td>{{pack.availableQuotas }}</td>
-                                    <td>{{pack.price}}</td>
-                                    <td><a href="">Ver detalles</a></td>
-                                    <td>
-                                        <span *ngIf="pack.status === 1">
-                                            <i class="fa fa-toggle-on" aria-hidden="true"></i></span>
-                                        <span *ngIf="pack.status !== 1"><i class="fa fa-toggle-off" aria-hidden="true"></i></span>
+                                    <td>{{pack.price | currency:'COP '}}</td>
+
+
+                                    <td class="infoData">
+                                        <button (click)="modalShowDetailsPackage(pack)"
+                                            class="hover-text btn btn-outline-secondary"><i style="cursor: pointer; display: grid;"
+                                            style="font-size: 100%" class="fas fa-eye"></i>
+                                            <span class="tooltip-text bottom">Ver detalles</span>
+                                        </button>
                                     </td>
                                     <td>
-                                    <i class="fas fa-edit text-dark" (click)="openEditPackageModal(pack)"></i>
+                                        <button  *ngIf="pack.status === false" type="button"  style="width: 100%" class="hover-text btn btn-outline-danger" (click)="disablePackage(pack)">
                                         
+                                            <span><i class="fa fa-toggle-off" style="font-size: 100%"
+                                                    aria-hidden="true"></i></span>
+                                        </button>
+                                        <button type="button" *ngIf="pack.status === true" style="width: 100%" class="hover-text btn btn-outline-success" (click)="disablePackage(pack)">
+                                                <span >
+                                                    <i class="fa fa-toggle-on"  style="width: 70%" aria-hidden="true"></i></span>
+                                        </button>
+                                    </td>
+                                    <td class="infoData">
+                                        <button  (click)="openEditPackageModal(pack)"
+                                            class="hover-text btn btn-outline-primary"><i style="cursor: pointer; display: grid;"
+                                                class="fas fa-edit" style="font-size: 100%"></i>
+                                            <span class="tooltip-text bottom">Editar paquete</span>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
 
                         <div class="d-flex justify-content-end pt-3">
-                            <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize">
-                            </ngb-pagination>
+                            <ngb-pagination [collectionSize]="total" [(page)]="page"
+                                [pageSize]="pageSize"></ngb-pagination>
                         </div>
                     </form>
                 </div>
