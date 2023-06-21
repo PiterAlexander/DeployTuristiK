@@ -18,6 +18,52 @@ export enum toggleActions {
   TOGGLE_DARK_MODE = 'TOGGLE_DARK_MODE'
 }
 
+export const OPEN_MODAL_CREATE_PACKAGE: string = '[PACKAGE] OPEN_MODAL_CREATE_PACKAGE';
+export const OPEN_MODAL_DETAILS_PACKAGE: string = '[PACKAGE] OPEN_MODAL_DETAILS_PACKAGE'
+export const GET_ALL_PACKAGES_REQUEST: string = '[PACKAGE] GET_ALL_PACKAGES_REQUEST';
+export const GET_ALL_PACKAGES_SUCCESS: string = '[PACKAGE] GET_ALL_PACKAGES_SUCCESS';
+export const GET_ALL_PACKAGES_FAILURE: string = '[PACKAGE] GET_ALL_PACKAGES_FAILURE';
+
+export const GET_ONE_PACKAGES_REQUEST: string = '[PACKAGE] GET_ONE_PACKAGE_REQUEST'
+
+export const CREATE_PACKAGE_REQUEST: string = '[PACKAGE] CREATE_PACKAGE_REQUEST';
+export const CREATE_PACKAGE_SUCCESS: string = '[PACKAGE] CREATE_PACKAGE_SUCCESS';
+export const CREATE_PACKAGE_FAILURE: string = '[PACKAGE] CREATE_PACKAGE_FAILURE';
+
+export const CHANGE_STATUS_PACKAGE_REQUEST: string = '[PACKAGE] CHANGE_STATUS_PACKAGE_REQUEST';
+export const CHANGE_STATUS_PACKAGE_SUCCESS: string = '[PACKAGE] CHANGE_STATUS_PACKAGE_SUCCESS';
+export const CHANGE_STATUS_PACKAGE_FAILURE: string = '[PACKAGE] CHANGE_STATUS_PACKAGE_FAILURE';
+
+export const EDIT_PACKAGE_REQUEST: string = '[PACKAGE] EDIT_PACKAGE_REQUEST';
+export const EDIT_PACKAGE_SUCCESS: string = '[PACKAGE] EDIT_PACKAGE_SUCCESS';
+export const EDIT_PACKAGE_FAILURE: string = '[PACKAGE] EDIT_PACKAGE_FAILURE';
+
+
+export const OPEN_MODAL_CREATE_ROLE: string = '[ROLES] OPEN_MODAL_CREATE_ROLE';
+
+export const GET_ALL_PERMISSIONS_REQUEST: string = '[PERMISSIONS] GET_ALL_PERMISSIONS_REQUEST';
+export const GET_ALL_PERMISSIONS_SUCCESS: string = '[PERMISSIONS] GET_ALL_PERMISSIONS_SUCCESS';
+export const GET_ALL_PERMISSIONS_FAILURE: string = '[PERMISSIONS] GET_ALL_PERMISSIONS_FAILURE';
+
+export const CREATE_ROLE_REQUEST: string = '[ROLES] CREATE_ROLE_REQUEST';
+export const CREATE_ROLE_SUCCESS: string = '[ROLES] CREATE_ROLE_SUCCESS';
+export const CREATE_ROLE_FAILURE: string = '[ROLES] CREATE_ROLE_FAILURE';
+
+export const GET_ALL_ROLE_REQUEST: string = '[PERMISSIONS] GET_ALL_ROLE_REQUEST';
+export const GET_ALL_ROLE_SUCCESS: string = '[PERMISSIONS] GET_ALL_ROLE_SUCCESS';
+export const GET_ALL_ROLE_FAILURE: string = '[PERMISSIONS] GET_ALL_ROLE_FAILURE';
+
+export const EDIT_ROLE_REQUEST: string = '[ROLES] EDIT_ROLE_REQUEST';
+export const EDIT_ROLE_SUCCESS: string = '[ROLES] EDIT_ROLE_SUCCESS';
+export const EDIT_ROLE_FAILURE: string = '[ROLES] EDIT_ROLE_FAILURE';
+
+export const CREATE_ASSOCIATEDPERMISSION_REQUEST: string = '[ASSOCIATEDPERMISSION] CREATE_ASSOCIATEDPERMISSION_REQUEST';
+export const CREATE_ASSOCIATEDPERMISSION_SUCCESS: string = '[ASSOCIATEDPERMISSION] CREATE_ASSOCIATEDPERMISSION_SUCCESS';
+export const CREATE_ASSOCIATEDPERMISSION_FAILURE: string = '[ASSOCIATEDPERMISSION] CREATE_ASSOCIATEDPERMISSION_FAILURE';
+
+export const DELETE_ASSOCIATEDPERMISSION_REQUEST: string = '[ASSOCIATEDPERMISSION] DELETE_ASSOCIATEDPERMISSION_REQUEST';
+export const DELETE_ASSOCIATEDPERMISSION_SUCCESS: string = '[ASSOCIATEDPERMISSION] DELETE_ASSOCIATEDPERMISSION_SUCCESS';
+export const DELETE_ASSOCIATEDPERMISSION_FAILURE: string = '[ASSOCIATEDPERMISSION] DELETE_ASSOCIATEDPERMISSION_FAILURE';
 export class ToggleSidebarMenu implements Action {
   readonly type: string = toggleActions.TOGGLE_SIDEBAR_MENU;
   constructor(public payload?: string) { }
@@ -48,6 +94,13 @@ export enum packageActions {
   EDIT_PACKAGE_FAILURE = '[PACKAGE] EDIT_PACKAGE_FAILURE'
 }
 
+export class OpenModalDetailsPackage implements Action {
+  readonly type: string = OPEN_MODAL_DETAILS_PACKAGE;
+  constructor(public payload?: Package) {}
+}
+
+// PACKAGES LIST -------------------------------------------------------------
+
 export class GetAllPackagesRequest implements Action {
   readonly type: string = packageActions.GET_ALL_PACKAGES_REQUEST;
 }
@@ -59,6 +112,13 @@ export class GetAllPackagesFailure implements Action {
   readonly type: string = packageActions.GET_ALL_PACKAGES_FAILURE;
   constructor(public payload: string) { }
 }
+// END PACKAGES LIST -------------------------------------------------------------
+
+export class GetOnePackageRequest implements Action {
+  readonly type: string = GET_ONE_PACKAGES_REQUEST;
+}
+
+// PACKAGES CREATE--------------------------------------------------------
 
 export class OpenModalCreatePackage implements Action {
   readonly type: string = packageActions.OPEN_MODAL_CREATE_PACKAGE;
@@ -100,10 +160,13 @@ export enum orderActions {
 
   OPEN_MODAL_CREATE_ORDER = '[ORDER] OPEN_MODAL_CREATE_ORDER',
 
-  CREATE_ORDER_DATA = '[ORDER] CREATE_ORDER_DATA',
   CREATE_ORDER_REQUEST = '[ORDER] CREATE_ORDER_REQUEST',
   CREATE_ORDER_SUCCESS = '[ORDER] CREATE_ORDER_SUCCESS',
   CREATE_ORDER_FAILURE = '[ORDER] CREATE_ORDER_FAILURE',
+
+  EDIT_ORDER_REQUEST = '[ORDER] EDIT_ORDER_REQUEST',
+  EDIT_ORDER_SUCCESS = '[ORDER] EDIT_ORDER_SUCCESS',
+  EDIT_ORDER_FAILURE = '[ORDER] EDIT_ORDER_FAILURE',
 
   OPEN_MODAL_ORDERDETAILS = '[ORDERDETAIL] OPEN_MODAL_ORDERDETAILS',
   OPEN_MODAL_CREATE_ORDERDETAIL = '[ORDERDETAIL] OPEN_MODAL_CREATE_ORDERDETAIL',
@@ -111,12 +174,40 @@ export enum orderActions {
   CREATE_ORDERDETAIL_SUCCESS = '[ORDERDETAIL] CREATE_ORDERDETAIL_SUCCESS',
   CREATE_ORDERDETAIL_FAILURE = '[ORDERDETAIL] CREATE_ORDERDETAIL_FAILURE',
 
+  EDIT_ORDERDETAIL_REQUEST = '[ORDERDETAIL] EDIT_ORDERDETAIL_REQUEST',
+  EDIT_ORDERDETAIL_SUCCESS = '[ORDERDETAIL] EDIT_ORDERDETAIL_SUCCESS',
+  EDIT_ORDERDETAIL_FAILURE = '[ORDERDETAIL] EDIT_ORDERDETAIL_FAILURE',
+
   OPEN_MODAL_PAYMENTS = '[PAYMENTS] OPEN_MODAL_PAYMENTS',
   OPEN_MODAL_CREATE_PAYMENT = '[PAYMENT] OPEN_MODAL_CREATE_PAYMENT',
   CREATE_PAYMENT_REQUEST = '[PAYMENT] CREATE_PAYMENT_REQUEST',
   CREATE_PAYMENT_SUCCESS = '[PAYMENT] CREATE_PAYMENT_SUCCESS',
   CREATE_PAYMENT_FAILURE = '[PAYMENT] CREATE_PAYMENT_FAILURE',
 }
+
+// END PACKAGES EDIT--------------------------------------------------------
+
+
+// PACKAGES DISABLE ACTIONS ------------------------------------------------
+export class EditStatusPackageRequest implements Action {
+  readonly type: string = EDIT_PACKAGE_REQUEST;
+  constructor(public payload: Package) {}
+}
+
+export class EditStatusPackageSuccess implements Action {
+  readonly type: string = EDIT_PACKAGE_SUCCESS;
+  readonly string = OPEN_MODAL_CREATE_PACKAGE;
+  constructor(public payload: any) {}
+}
+
+export class EditStatusPackageFailure implements Action {
+  readonly type: string = EDIT_PACKAGE_FAILURE;
+  constructor(public payload: string) {}
+}
+
+// PACKAGES DISABLE ACTIONS END -----------------------------------------
+// PACKAGES END--------------------------------------------------------
+
 
 export class GetAllOrdersRequest implements Action {
   readonly type: string = orderActions.GET_ALL_ORDERS_REQUEST;
@@ -132,10 +223,7 @@ export class GetAllOrdersFailure implements Action {
 
 export class OpenModalCreateOrder implements Action {
   readonly type: string = orderActions.OPEN_MODAL_CREATE_ORDER;
-}
-export class CreateOrderData implements Action {
-  readonly type: string = orderActions.CREATE_ORDER_DATA;
-  constructor(public payload: Array<any>) { }
+  constructor(public payload?: Array<any>) { }
 }
 export class CreateOrderRequest implements Action {
   readonly type: string = orderActions.CREATE_ORDER_REQUEST;
@@ -150,13 +238,26 @@ export class CreateOrderFailure implements Action {
   constructor(public payload: string) { }
 }
 
+export class EditOrderRequest implements Action {
+  readonly type: string = orderActions.EDIT_ORDER_REQUEST;
+  constructor(public payload: Order) { }
+}
+export class EditOrderSuccess implements Action {
+  readonly type: string = orderActions.EDIT_ORDER_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class EditOrderFailure implements Action {
+  readonly type: string = orderActions.EDIT_ORDER_FAILURE;
+  constructor(public payload: string) { }
+}
+
 export class OpenModalOrderDetails implements Action {
   readonly type: string = orderActions.OPEN_MODAL_ORDERDETAILS;
   constructor(public payload: Order) { }
 }
 export class OpenModalCreateOrderDetail implements Action {
   readonly type: string = orderActions.OPEN_MODAL_CREATE_ORDERDETAIL;
-  constructor(public payload?: Order) { }
+  constructor(public payload: any) { }
 }
 export class CreateOrderDetailRequest implements Action {
   readonly type: string = orderActions.CREATE_ORDERDETAIL_REQUEST;
@@ -172,13 +273,27 @@ export class CreateOrderDetailFailure implements Action {
   constructor(public payload: string) { }
 }
 
+export class EditOrderDetailRequest implements Action {
+  readonly type: string = orderActions.EDIT_ORDERDETAIL_REQUEST;
+  readonly string = orderActions.OPEN_MODAL_CREATE_ORDERDETAIL;
+  constructor(public payload: OrderDetail) { }
+}
+export class EditOrderDetailSuccess implements Action {
+  readonly type: string = orderActions.EDIT_ORDER_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class EditOrderDetailFailure implements Action {
+  readonly type: string = orderActions.EDIT_ORDER_FAILURE;
+  constructor(public payload: string) { }
+}
+
 export class OpenModalPayments implements Action {
   readonly type: string = orderActions.OPEN_MODAL_PAYMENTS;
   constructor(public payload: Order) { }
 }
 export class OpenModalCreatePayment implements Action {
   readonly type: string = orderActions.OPEN_MODAL_CREATE_PAYMENT;
-  constructor(public payload?: Order) { }
+  constructor(public payload?: any) { }
 }
 export class CreatePaymentRequest implements Action {
   readonly type: string = orderActions.CREATE_PAYMENT_REQUEST;
@@ -584,6 +699,12 @@ export type UiAction =
   | CreateOrderRequest
   | CreateOrderSuccess
   | CreateOrderFailure
+  | EditOrderRequest
+  | EditOrderSuccess
+  | EditOrderFailure
+  | EditOrderDetailRequest
+  | EditOrderDetailSuccess
+  | EditOrderDetailFailure
   | CreatePaymentRequest
   | CreatePaymentSuccess
   | CreatePaymentFailure

@@ -2,12 +2,13 @@ import { Costumer } from '@/models/costumer';
 import { Order } from '@/models/order';
 import { OrderDetail } from '@/models/orderDetail';
 import { AppState } from '@/store/state';
-import { GetAllCostumerRequest, OpenModalCreateOrderDetail, OpenModalCreatePayment } from '@/store/ui/actions';
+import { GetAllCostumerRequest, OpenModalCreateOrderDetail } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-read-order-order-detail',
@@ -52,7 +53,34 @@ export class ReadOrderOrderDetailComponent implements OnInit {
   }
 
   addOrderDetail() {
-    this.closeModal()
-    this.store.dispatch(new OpenModalCreateOrderDetail(this.order))
+    if (this.order.package.availableQuotas >= 1) {
+      this.closeModal()
+      const orderProcess = [{
+        action: 'CreateOrderDetail',
+        order: this.order
+      }]
+      this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess))
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: '¡Error!',
+        text: 'Lo sentimos no quedan cupos disponibles.',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true
+      })
+    }
+  }
+
+  editOrdelDetail(costumer: Costumer) {
+    const orderDetail = this.orderDetails.find(od => od.beneficiaryId === costumer.costumerId)
+    const orderProcess = [{
+      action: 'EditOrderDetail',
+      costumer: costumer,
+      orderDetail: orderDetail,
+      order: this.order
+    }]
+    this.modalService.dismissAll();
+    this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess))
   }
 }
