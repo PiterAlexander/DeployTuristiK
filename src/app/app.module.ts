@@ -39,7 +39,7 @@ import { CreateOrderFormComponent } from './components/create-order-form/create-
 import { CreateRoleFormComponent } from '@components/create-role-form/create-role-form.component';
 import { DetailsPackageComponent } from './components/details-package/details-package.component';
 import { CostumersComponent } from './pages/costumers/costumers.component';
-import { CreatecostumerformComponent } from './components/createcostumerform/createcostumerform.component';
+import { CreatecostumerformComponent } from './components/create-costumer-form/createcostumerform.component';
 import { EmployeesComponent } from './pages/employees/employees.component';
 import { CreateEmployeeFormComponent } from './components/create-employee-form/create-employee-form.component';
 import { CreateOrderDetailFormComponent } from './components/create-order-detail-form/create-order-detail-form.component';
@@ -48,6 +48,8 @@ import { CreateUserFormComponent } from '@components/create-user-form/create-use
 import { CreatePaymentFormComponent } from './components/create-payment-form/create-payment-form.component';
 import { ReadOrderOrderDetailComponent } from './components/read-order-order-detail/read-order-order-detail.component';
 import { ReadOrderPaymentComponent } from './components/read-order-payment/read-order-payment.component';
+import { CreateFrequentTravelerFormComponent } from './components/create-frequent-traveler-form/create-frequent-traveler-form.component';
+import { ListFrequentTravelerComponent } from './components/list-frequent-traveler/list-frequent-traveler.component';
 
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
@@ -85,9 +87,7 @@ registerLocaleData(localeEn, 'en-EN');
         CreateOrderDetailFormComponent,
         UsersComponent,
         CreateUserFormComponent,
-        CreatePaymentFormComponent,
-        ReadOrderOrderDetailComponent,
-        ReadOrderPaymentComponent        
+        CreatePaymentFormComponent        
     ],
     imports: [
         BrowserModule,

@@ -48,51 +48,29 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th scope="col-2">Nombre</th>
-                                    <th scope="col-2">Apellido</th>
-                                    <th scope="col-2">Documento</th>
-                                    <th scope="col-2">EPS</th>
-
-                                    <!-- <th scope="col-2">Detalles</th> -->
-                                    <th scope="col-2">Editar</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col" sortable="population">Documento</th>
+                                    <th scope="col" sortable="population">Fecha de nacimiento</th>
+                                    <th scope="col" sortable="population">Número</th>
+                                    <th scope="col" sortable="population">Dirección</th>
+                                    <th scope="col" sortable="population">EPS</th>
+                                    <th scope="col" sortable="population">Ver detalles</th>
+                                    <th scope="col" sortable="population">Editar</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr
-                                    *ngFor="
-                                        let costumer of filteredCostumersList
-                                    "
-                                >
-                                    <td>{{ costumer.name }}</td>
-                                    <td>{{ costumer.lastName }}</td>
-                                    <td>{{ costumer.document }}</td>
-                                    <td>{{ costumer.eps }}</td>
-                                    <!-- <td class="infoData">
-                                        <button
-                                            class="hover-text btn btn-outline-secondary"
-                                        >
-                                            <i
-                                                style="
-                                                    cursor: pointer;
-                                                    display: grid;
-                                                "
-                                                style="font-size: 100%"
-                                                class="fas fa-eye"
-                                            ></i>
-                                            <span class="tooltip-text bottom"
-                                                >Ver detalles</span
-                                            >
-                                        </button>
-                                    </td> -->
-                                    <td>
-                                        <i
-                                            class="fas fa-edit text-dark"
-                                            (click)="
-                                                openModalEditCostumer(costumer)
-                                            "
-                                            style="cursor: pointer"
-                                        ></i>
-                                    </td>
+                                <tr *ngFor="let costumer of filteredCostumersList">
+                                    <td>{{costumer.name}}&nbsp;{{costumer.lastName}}</td>
+                                    <td>{{costumer.document}}</td>
+                                    <td>{{costumer.birthDate | date}}</td>
+                                    <td>{{costumer.phoneNumber}}</td>
+                                    <td>{{costumer.address}}</td>
+                                    <td>{{costumer.eps}}</td>
+                                    <td><strong><i (click)="openModalListTraveler(costumer)" style="cursor: pointer">
+                                                <p>Ver detalles</p>
+                                            </i></strong></td>
+                                    <td><i class="fas fa-edit text-dark" (click)="openModalEditCostumer(costumer)"
+                                            style="cursor: pointer"></i></td>
                                 </tr>
                             </tbody>
                         </table>

@@ -7,6 +7,7 @@ import { AssociatedPermission } from '@/models/associated-permission';
 import { Costumer } from '@/models/costumer';
 import { Employee } from '@/models/employee';
 import { User } from '@/models/user';
+import { FrequentTraveler } from '@/models/frequentTraveler';
 import { Payment } from '@/models/payment';
 import { OrderDetail } from '@/models/orderDetail';
 import { Token } from '@/models/token';
@@ -639,6 +640,88 @@ export class UpdateUserFailure implements Action {
   constructor(public payload: string) { }
 }
 //<--------------------->
+//<--- FREQUENTTRAVELER ACTIONS --->
+export enum FrequentTravelerActions {
+  GET_ALL_FREQUENTTRAVELER_REQUEST = '[FREQUENTTRAVELERS] GET_ALL_FREQUENTTRAVELER__REQUEST',
+  GET_ALL_FREQUENTTRAVELER_SUCCESS = '[FREQUENTTRAVELERS] GET_ALL_FREQUENTTRAVELER__SUCCESS',
+  GET_ALL_FREQUENTTRAVELER_FAILURE = '[FREQUENTTRAVELERS] GET_ALL_FREQUENTTRAVELER__FAILURE',
+  
+  OPEN_MODAL_CREATE_FREQUENTTRAVELER = '[FREQUENTTRAVELERS] OPEN_MODAL_CREATE_FREQUENTTRAVELER',
+  OPEN_MODAL_LIST_FREQUENTTRAVELER = '[FREQUENTTRAVELERS] OPEN_MODAL_LIST_FREQUENTTRAVELER',
+
+
+  CREATE_FREQUENTTRAVELER_REQUEST = '[FREQUENTTRAVELERS] CREATE_FREQUENTTRAVELER_REQUEST',
+  CREATE_FREQUENTTRAVELER_SUCCESS = '[FREQUENTTRAVELERS] CREATE_FREQUENTTRAVELER_SUCCESS',
+  CREATE_FREQUENTTRAVELER_FAILURE = '[FREQUENTTRAVELERS] CREATE_FREQUENTTRAVELER_FAILURE',
+
+  EDIT_FREQUENTTRAVELER_REQUEST = '[FREQUENTTRAVELERS] EDIT_FREQUENTTRAVELER_REQUEST',
+  EDIT_FREQUENTTRAVELER_SUCCESS = '[FREQUENTTRAVELERS] EDIT_FREQUENTTRAVELER_SUCCESS',
+  EDIT_FREQUENTTRAVELER_FAILURE = '[FREQUENTTRAVELERS] EDIT_FREQUENTTRAVELER_FAILURE',
+
+  DELETE_FREQUENTTRAVELER_REQUEST = '[FREQUENTTRAVELERS] DELETE_FREQUENTTRAVELER_REQUEST',
+  DELETE_FREQUENTTRAVELER_SUCCESS = '[FREQUENTTRAVELERS] DELETE_FREQUENTTRAVELER_SUCCESS',
+  DELETE_FREQUENTTRAVELER_FAILURE = '[FREQUENTTRAVELERS] DELETE_FREQUENTTRAVELER_FAILURE',
+}
+
+export class GetAllFrequentTravelerRequest implements Action {
+  readonly type: string = FrequentTravelerActions.GET_ALL_FREQUENTTRAVELER_REQUEST;
+}
+export class GetAllFrequentTravelerSuccess implements Action {
+  readonly type: string = FrequentTravelerActions.GET_ALL_FREQUENTTRAVELER_SUCCESS;
+  constructor(public payload: Array<FrequentTraveler>) { }
+}
+export class GetAllFrequentTravelerFailure implements Action {
+  readonly type: string = FrequentTravelerActions.GET_ALL_FREQUENTTRAVELER_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class OpenModalCreateFrequentTraveler implements Action {
+  readonly type: string = FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER;
+  constructor(public payload: Costumer) { }
+}
+export class OpenModalListFrequentTraveler implements Action {
+  readonly type: string = FrequentTravelerActions.OPEN_MODAL_LIST_FREQUENTTRAVELER;
+  constructor(public payload: Costumer) { }
+}
+export class CreateFrequentTravelerRequest implements Action {
+  readonly type: string = FrequentTravelerActions.CREATE_FREQUENTTRAVELER_REQUEST;
+  constructor(public payload: FrequentTraveler) { }
+}
+export class CreateFrequentTravelerSuccess implements Action {
+  readonly type: string = FrequentTravelerActions.CREATE_FREQUENTTRAVELER_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class CreateFrequentTravelerFailure implements Action {
+  readonly type: string = FrequentTravelerActions.CREATE_FREQUENTTRAVELER_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class EditFrequentTravelerRequest implements Action {
+  readonly type: string = FrequentTravelerActions.EDIT_FREQUENTTRAVELER_REQUEST;
+  constructor(public payload: FrequentTraveler) { }
+}
+export class EditFrequentTravelerSuccess implements Action {
+  readonly type: string = FrequentTravelerActions.EDIT_FREQUENTTRAVELER_SUCCESS;
+  readonly string = FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER;
+  constructor(public payload: any) { }
+}
+export class EditFrequentTravelerFailure implements Action {
+  readonly type: string = FrequentTravelerActions.EDIT_FREQUENTTRAVELER_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class DeleteFrequentTravelerRequest implements Action {
+  readonly type: string = FrequentTravelerActions.DELETE_FREQUENTTRAVELER_REQUEST;
+  constructor(public payload: FrequentTraveler) { }
+}
+export class DeleteFrequentTravelerSuccess implements Action {
+  readonly type: string = FrequentTravelerActions.DELETE_FREQUENTTRAVELER_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class DeleteFrequentTravelerFailure implements Action {
+  readonly type: string = FrequentTravelerActions.DELETE_FREQUENTTRAVELER_FAILURE;
+  constructor(public payload: string) { }
+}
 
 //<--- LOGIN ACTIONS --->
 export enum loginActions {
@@ -741,6 +824,19 @@ export type UiAction =
   | EditCostumerRequest
   | EditCostumerFailure
   | EditCostumerSuccess
+  //<--------------------->
+  //<---FREQUENT TRAVELER--->
+  | GetAllCostumerFailure
+  | GetAllCostumerSuccess
+  | CreateFrequentTravelerRequest
+  | CreateFrequentTravelerSuccess
+  | CreateFrequentTravelerFailure
+  | EditFrequentTravelerRequest
+  | EditFrequentTravelerSuccess
+  | EditFrequentTravelerFailure
+  | DeleteFrequentTravelerRequest
+  | DeleteFrequentTravelerFailure
+  | DeleteFrequentTravelerSuccess
   //<--------------------->
   //<---EMPLOYEES--->
   | GetAllEmployeeSuccess

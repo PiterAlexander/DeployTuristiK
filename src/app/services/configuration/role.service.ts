@@ -22,7 +22,6 @@ export class RoleService {
   }
 
   UpdateRole(RoleId:string,modelo:Role):Observable<Role>{
-    console.log(`${this.apiUrl}{${RoleId}}`);
     return this.http.put<Role>(`${this.apiUrl}${RoleId}`,modelo);
   }
 
