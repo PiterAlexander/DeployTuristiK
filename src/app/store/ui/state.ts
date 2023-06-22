@@ -5,6 +5,7 @@ import { Permission } from "@/models/permission";
 import { Costumer } from "@/models/costumer";
 import { User } from "@/models/user";
 import { Employee } from "@/models/employee";
+import { FrequentTraveler } from "@/models/frequentTraveler";
 
 export default <UiState>{
   //<--- TOGGLER --->
@@ -89,7 +90,20 @@ export default <UiState>{
     data: undefined,
     error: undefined,
     loading: false
-  }
+  },
+  //<------------->
+  //<--- FREQUENT TRAVELER --->
+  allFrequentTraveler: {
+    data: [],
+    error: undefined,
+    loading: false
+  },
+  oneFrequentTraveler: {
+    data: undefined,
+    error: undefined,
+    loading: false
+  },
+  //<----------------->
 };
 
 
@@ -178,5 +192,17 @@ export interface UiState {
     error: string,
     loading: boolean
   }
+  //<------------->
+  //<--- FREQUENT TRAVELER --->
+  allFrequentTraveler: {
+    data: Array<FrequentTraveler>,
+    error: string,
+    loading: boolean
+  };
+  oneFrequentTraveler: {
+    data: FrequentTraveler,
+    error: string,
+    loading: boolean
+  };
   //<------------->
 }

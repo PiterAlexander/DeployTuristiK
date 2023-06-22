@@ -319,7 +319,27 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
         //<------------>
-
+        //<--- FREQUENT TRAVELER --->
+        
+        case Actions.FrequentTravelerActions.OPEN_MODAL_LIST_FREQUENTTRAVELER:
+            return {
+                ...state,
+                oneCostumer: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+        case Actions.FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER:
+            return {
+                ...state,
+                oneCostumer: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+        //<----------------->
         default:
             return state;
     }

@@ -7,7 +7,7 @@
                         <h1 class="m-0 text-dark">Clientes</h1>
                     </div>
                     <div class="col-sm-3 col-personalized-2">
-                        <button  (click)="openModalCreateCostumer()"  type="button" class="btn btn-primary">Agregar
+                        <button (click)="openModalCreateCostumer()" type="button" class="btn btn-primary">Agregar
                             cliente</button>
                     </div>
                 </div>
@@ -19,9 +19,11 @@
                     </div>
                     <form *ngIf="!loading">
                         <div class="d-flex justify-content-end mb-3 row">
-                            <label for="table-complete-search" class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
+                            <label for="table-complete-search"
+                                class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
                             <div class="col-xs-3 col-sm-auto">
-                                <input id="table-complete-search" type="text" class="form-control" name="searchTerm" [(ngModel)]="search" (ngModelChange)="searchByName()"/>
+                                <input id="table-complete-search" type="text" class="form-control" name="searchTerm"
+                                    [(ngModel)]="search" (ngModelChange)="searchByName()" />
                             </div>
                         </div>
 
@@ -29,25 +31,28 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Nombre</th>
-                                    <th scope="col" sortable="name">Apellido</th>
                                     <th scope="col" sortable="population">Documento</th>
                                     <th scope="col" sortable="population">Fecha de nacimiento</th>
                                     <th scope="col" sortable="population">Número</th>
                                     <th scope="col" sortable="population">Dirección</th>
                                     <th scope="col" sortable="population">EPS</th>
+                                    <th scope="col" sortable="population">Ver detalles</th>
+                                    <th scope="col" sortable="population">Editar</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let costumer of filteredCostumersList">
-                                    <td>{{costumer.name}}</td>
-                                    <td>{{costumer.lastName}}</td>
+                                    <td>{{costumer.name}}&nbsp;{{costumer.lastName}}</td>
                                     <td>{{costumer.document}}</td>
                                     <td>{{costumer.birthDate | date}}</td>
                                     <td>{{costumer.phoneNumber}}</td>
                                     <td>{{costumer.address}}</td>
                                     <td>{{costumer.eps}}</td>
-                                    <td><Strong><a style="color: black;" href="">Ver detalles</a></Strong></td>
-                                    <td><i  class="fas fa-edit text-dark" (click)="openModalEditCostumer(costumer)" style="cursor: pointer"></i></td>
+                                    <td><strong><i (click)="openModalListTraveler(costumer)" style="cursor: pointer">
+                                                <p>Ver detalles</p>
+                                            </i></strong></td>
+                                    <td><i class="fas fa-edit text-dark" (click)="openModalEditCostumer(costumer)"
+                                            style="cursor: pointer"></i></td>
                                 </tr>
                             </tbody>
                         </table>

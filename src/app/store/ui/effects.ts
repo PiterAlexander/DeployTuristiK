@@ -4,8 +4,8 @@ import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ApiService } from '@services/api.service';
 import { of } from 'rxjs';
-import { CreateAssociatedPermissionFailure, CreateAssociatedPermissionRequest, CreateAssociatedPermissionSuccess, CreateCostumerFailure, CreateCostumerRequest, CreateCostumerSuccess, CreateEmployeeFailure, CreateEmployeeRequest, CreateEmployeeSuccess, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, CreateRoleFailure, CreateRoleRequest, CreateRoleSuccess, CreateUserFailure, CreateUserRequest, CreateUserSuccess, DeleteAssociatedPermissionFailure, DeleteAssociatedPermissionRequest, DeleteAssociatedPermissionSuccess, DeleteEmployeeFailure, DeleteEmployeeRequest, DeleteEmployeeSuccess, EditCostumerFailure, EditCostumerRequest, EditCostumerSuccess, EditEmployeeFailure, EditEmployeeRequest, EditEmployeeSuccess, EditPackageFailure, EditPackageRequest, EditPackageSuccess, EditRoleFailure, EditRoleRequest, EditRoleSuccess, GetAllCostumerFailure, GetAllCostumerRequest, GetAllCostumerSuccess, GetAllEmployeeFailure, GetAllEmployeeRequest, GetAllEmployeeSuccess, GetAllOrdersFailure, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesFailure, GetAllPackagesRequest, GetAllPackagesSuccess, GetAllPermissionsFailure, GetAllPermissionsSuccess, GetAllRoleFailure, GetAllRoleRequest, GetAllRoleSuccess, GetUsersFailure, GetUsersRequest, GetUsersSuccess, UpdateUserFailure, UpdateUserRequest, UpdateUserSuccess, costumerActions, employeeActions, orderActions, packageActions, permissionActions, roleActions, userActions } from './actions';
-import { CreateAssociatedPermissionFailure, CreateAssociatedPermissionRequest, CreateAssociatedPermissionSuccess, CreateCostumerFailure, CreateCostumerRequest, CreateCostumerSuccess, CreateEmployeeFailure, CreateEmployeeRequest, CreateEmployeeSuccess, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, CreateRoleFailure, CreateRoleRequest, CreateRoleSuccess, CreateUserFailure, CreateUserRequest, CreateUserSuccess, DeleteAssociatedPermissionFailure, DeleteAssociatedPermissionRequest, DeleteAssociatedPermissionSuccess, DeleteRoleFailure, DeleteRoleRequest, DeleteRoleSuccess, EditPackageFailure, EditPackageRequest, EditPackageSuccess, EditRoleFailure, EditRoleRequest, EditRoleSuccess, GetAllCostumerFailure, GetAllCostumerRequest, GetAllCostumerSuccess, GetAllEmployeeFailure, GetAllEmployeeRequest, GetAllEmployeeSuccess, GetAllOrdersFailure, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesFailure, GetAllPackagesRequest, GetAllPackagesSuccess, GetAllPermissionsFailure, GetAllPermissionsSuccess, GetAllRoleFailure, GetAllRoleRequest, GetAllRoleSuccess, GetUsersFailure, GetUsersRequest, GetUsersSuccess, UpdateUserFailure, UpdateUserRequest, UpdateUserSuccess, costumerActions, employeeActions, orderActions, packageActions, permissionActions, roleActions, userActions } from './actions';
+import { CreateAssociatedPermissionFailure, CreateAssociatedPermissionRequest, CreateAssociatedPermissionSuccess, CreateCostumerFailure, CreateCostumerRequest, CreateCostumerSuccess, CreateEmployeeFailure, CreateEmployeeRequest, CreateEmployeeSuccess, CreateFrequentTravelerFailure, CreateFrequentTravelerRequest, CreateFrequentTravelerSuccess, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, CreateRoleFailure, CreateRoleRequest, CreateRoleSuccess, CreateUserFailure, CreateUserRequest, CreateUserSuccess, DeleteAssociatedPermissionFailure, DeleteAssociatedPermissionRequest, DeleteAssociatedPermissionSuccess, DeleteEmployeeFailure, DeleteEmployeeRequest, DeleteEmployeeSuccess, EditCostumerFailure, EditCostumerRequest, EditCostumerSuccess, EditEmployeeFailure, EditEmployeeRequest, EditEmployeeSuccess, EditPackageFailure, EditPackageRequest, EditPackageSuccess, EditRoleFailure, EditRoleRequest, EditRoleSuccess, FrequentTravelerActions, GetAllCostumerFailure, GetAllCostumerRequest, GetAllCostumerSuccess, GetAllEmployeeFailure, GetAllEmployeeRequest, GetAllEmployeeSuccess, GetAllFrequentTravelerRequest, GetAllOrdersFailure, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesFailure, GetAllPackagesRequest, GetAllPackagesSuccess, GetAllPermissionsFailure, GetAllPermissionsSuccess, GetAllRoleFailure, GetAllRoleRequest, GetAllRoleSuccess, GetUsersFailure, GetUsersRequest, GetUsersSuccess, UpdateUserFailure, UpdateUserRequest, UpdateUserSuccess, costumerActions, employeeActions, orderActions, packageActions, permissionActions, roleActions, userActions } from './actions';
+import { DeleteRoleFailure, DeleteRoleRequest, DeleteRoleSuccess} from './actions';
 import { CreatePackageFormComponent } from '@components/create-package-form/create-package-form.component';
 import { CreateOrderFormComponent } from '@components/create-order-form/create-order-form.component';
 import { CreateOrderDetailFormComponent } from '@components/create-order-detail-form/create-order-detail-form.component';
@@ -13,10 +13,12 @@ import { CreateRoleFormComponent } from '@components/create-role-form/create-rol
 import { PermissionService } from '@services/configuration/permission.service';
 import { RoleService } from '@services/configuration/role.service';
 import { AssociatedPermissionService } from '@services/configuration/associated-permission.service';
-import { CreatecostumerformComponent } from '@components/createcostumerform/createcostumerform.component';
+import { CreatecostumerformComponent } from '@components/create-costumer-form/createcostumerform.component';
 import { CreateEmployeeFormComponent } from '@components/create-employee-form/create-employee-form.component';
 import { CreateUserFormComponent } from '@components/create-user-form/create-user-form.component';
 import { CreatePaymentFormComponent } from '@components/create-payment-form/create-payment-form.component';
+import { ListFrequentTravelerComponent } from '@components/list-frequent-traveler/list-frequent-traveler.component';
+import { CreateFrequentTravelerFormComponent } from '@components/create-frequent-traveler-form/create-frequent-traveler-form.component';
 
 @Injectable()
 export class PackageEffects {
@@ -334,6 +336,46 @@ export class PackageEffects {
         })
     ));
     //<------------------>
+    //<---FREQUENT TRAVELER---->
+    listModalTraveler$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(FrequentTravelerActions.OPEN_MODAL_LIST_FREQUENTTRAVELER),
+        tap(() => {
+            this.modalRef = this.modalService.open(ListFrequentTravelerComponent, {
+                backdrop: false,
+                size: 'lg'
+            })
+        })
+    ), { dispatch: false });
+
+    createModalTraveler$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER),
+        tap(() => {
+            this.modalRef = this.modalService.open(CreateFrequentTravelerFormComponent, {
+                backdrop: false,
+                size: 'lg'
+            })
+        })
+    ), { dispatch: false });
+    
+    createFrequentTraveler$ = createEffect(() => this.actions$.pipe(
+        ofType(FrequentTravelerActions.CREATE_FREQUENTTRAVELER_REQUEST),
+        map((action: CreateFrequentTravelerRequest) => action.payload),
+        switchMap((frequentTraveler) => {
+            return this.apiService.addFrequentTraveler(frequentTraveler).pipe(
+                mergeMap((frequentTravelerResolver) => {
+                    this.modalRef.close();
+                    return [
+                        new CreateFrequentTravelerSuccess(frequentTravelerResolver),
+                        new GetAllFrequentTravelerRequest()
+                    ];
+                }),
+                catchError((err) => of(new CreateFrequentTravelerFailure(err)))
+            )
+        })
+    ));
+    //<--------------->
 
     //<---- EMPLOYEE ---->
     getEmployees$ = createEffect(() => this.actions$.pipe(
@@ -468,7 +510,7 @@ export class PackageEffects {
         })
     ));
     //<--------------->
-
+    
     constructor(
         private actions$: Actions,
         private modalService: NgbModal,

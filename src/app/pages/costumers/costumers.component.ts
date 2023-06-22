@@ -1,5 +1,5 @@
 import { Costumer } from '@/models/costumer';
-import { GetAllCostumerRequest, OpenModalCreateCostumer} from '@/store/ui/actions';
+import { GetAllCostumerRequest, OpenModalCreateCostumer, OpenModalListFrequentTraveler} from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit, PipeTransform } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -54,6 +54,10 @@ export class CostumersComponent implements OnInit {
 
   openModalEditCostumer(costumer:Costumer){
     this.store.dispatch(new OpenModalCreateCostumer(costumer));
+  }
+  
+  openModalListTraveler(costumer:Costumer){
+    this.store.dispatch(new OpenModalListFrequentTraveler(costumer));
   }
 
   searchByName() {

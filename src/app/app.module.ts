@@ -38,13 +38,15 @@ import { OrdersComponent } from './pages/orders/orders.component';
 import { CreateOrderFormComponent } from './components/create-order-form/create-order-form.component';
 import { CreateRoleFormComponent } from '@components/create-role-form/create-role-form.component';
 import { CostumersComponent } from './pages/costumers/costumers.component';
-import { CreatecostumerformComponent } from './components/createcostumerform/createcostumerform.component';
+import { CreatecostumerformComponent } from './components/create-costumer-form/createcostumerform.component';
 import { EmployeesComponent } from './pages/employees/employees.component';
 import { CreateEmployeeFormComponent } from './components/create-employee-form/create-employee-form.component';
 import { CreateOrderDetailFormComponent } from './components/create-order-detail-form/create-order-detail-form.component';
 import { UsersComponent } from '@pages/users/users.component';
 import { CreateUserFormComponent } from '@components/create-user-form/create-user-form.component';
 import { CreatePaymentFormComponent } from './components/create-payment-form/create-payment-form.component';
+import { CreateFrequentTravelerFormComponent } from './components/create-frequent-traveler-form/create-frequent-traveler-form.component';
+import { ListFrequentTravelerComponent } from './components/list-frequent-traveler/list-frequent-traveler.component';
 
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
@@ -80,7 +82,9 @@ registerLocaleData(localeEn, 'en-EN');
         CreateOrderDetailFormComponent,
         UsersComponent,
         CreateUserFormComponent,
-        CreatePaymentFormComponent        
+        CreatePaymentFormComponent,
+        CreateFrequentTravelerFormComponent,
+        ListFrequentTravelerComponent        
     ],
     imports: [
         BrowserModule,
