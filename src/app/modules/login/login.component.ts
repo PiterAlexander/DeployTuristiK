@@ -1,69 +1,114 @@
-import {
-    Component,
-    OnInit,
-    OnDestroy,
-    Renderer2,
-    HostBinding
-} from '@angular/core';
-import {UntypedFormGroup, UntypedFormControl, Validators} from '@angular/forms';
+import {Token, UserLog} from '@/models/token';
+import {AppState} from '@/store/state';
+import {GetUserInfoRequest, LoginRequest} from '@/store/ui/actions';
+import {UiState} from '@/store/ui/state';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs';
+// import * as jwt from 'jsonwebtoken'
+import jwt_decode from 'jwt-decode';
+import {AuthService} from '@services/auth/auth.service';
+import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
-import {AppService} from '@services/app.service';
+import {User} from '@/models/user';
+import { ofType } from '@ngrx/effects';
 
 @Component({
-    selector: 'app-login',
+    selector: 'app-login2',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit, OnDestroy {
-    @HostBinding('class') class = 'login-box';
-    public loginForm: UntypedFormGroup;
+export class LoginComponent implements OnInit {
+    public formGroup: FormGroup;
+    public ui: Observable<UiState>;
+    public token: Token;
     public isAuthLoading = false;
-    public isGoogleLoading = false;
-    public isFacebookLoading = false;
+    static payload: Observable<UserLog>;
+    public userLogin: any;
 
     constructor(
-        private renderer: Renderer2,
-        private toastr: ToastrService,
-        private appService: AppService
+        private fb: FormBuilder,
+        private store: Store<AppState>,
+        private authService: AuthService,
+        private router: Router,
+        private toastr: ToastrService
     ) {}
 
     ngOnInit() {
-        this.renderer.addClass(
-            document.querySelector('app-root'),
-            'login-page'
-        );
-        this.loginForm = new UntypedFormGroup({
-            email: new UntypedFormControl(null, Validators.required),
-            password: new UntypedFormControl(null, Validators.required)
+        this.ui = this.store.select('ui');
+        this.ui.subscribe((state: UiState) => {
+            this.token = state.token.data;
+            this.userLogin = state.userLoged.data;
+            this.getToken();
+        });
+
+        this.formGroup = this.fb.group({
+            email: [
+                null,
+                [
+                    Validators.required,
+                    Validators.email,
+                    Validators.pattern(
+                        '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'
+                    )
+                ]
+            ],
+            password: [null, [Validators.required, Validators.minLength(8)]]
         });
     }
 
-    async loginByAuth() {
-        if (this.loginForm.valid) {
-            this.isAuthLoading = true;
-            await this.appService.loginByAuth(this.loginForm.value);
-            this.isAuthLoading = false;
-        } else {
-            this.toastr.error('Form is not valid!');
-        }
-    }
+    async saveChanges() {
+        this.isAuthLoading = true;
+        const Model = {
+            email: this.formGroup.value.email,
+            password: this.formGroup.value.password
+        };
 
-    async loginByGoogle() {
-        this.isGoogleLoading = true;
-        await this.appService.loginByGoogle();
-        this.isGoogleLoading = false;
-    }
-
-    async loginByFacebook() {
-        this.isFacebookLoading = true;
-        await this.appService.loginByFacebook();
-        this.isFacebookLoading = false;
-    }
-
-    ngOnDestroy() {
-        this.renderer.removeClass(
-            document.querySelector('app-root'),
-            'login-page'
+        await this.store.dispatch(
+            new LoginRequest({email: Model.email, password: Model.password})
         );
+        this.isAuthLoading = false;
+    }
+
+    validForm(): boolean {
+        return this.formGroup.valid;
+    }
+
+    // ShowPasswordLogin() {
+    //     var cambio = document.getElementById('passwordLogin');
+    //     if (cambio. == 'password') {
+    //         cambio.type = 'text';
+    //         $('.icon3').removeClass('fa fa-eye-slash').addClass('fa fa-eye');
+    //     } else {
+    //         cambio.type = 'password';
+    //         $('.icon3').removeClass('fa fa-eye').addClass('fa fa-eye-slash');
+    //     }
+    // }
+
+    async getToken() {
+        console.log(this.token);
+        if (this.token == null) {
+            //console.log("El toke aun no esta actualizado")
+        } else {
+            if (this.token.success == true) {
+                window.location.reload();
+                globalThis.payload = await this.authService.getUserInfo(
+                    this.token.result
+                );
+                this.authService.setToken(this.token.result);
+
+                var log = JSON.parse(localStorage.getItem('TokenPayload'));
+                if (log['role'] == 'Administrador') {
+                    this.router.navigate(['/']);
+                } else if (log['role'] == 'Cliente') {
+                    this.router.navigate(['/Clientes']);
+                }
+
+                this.toastr.success(this.token.message);
+            } else {
+                this.toastr.error(this.token.message);
+            }
+        }
     }
 }

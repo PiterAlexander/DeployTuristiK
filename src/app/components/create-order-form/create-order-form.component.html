@@ -19,53 +19,106 @@
                     </div>
                 </div>
                 <div class="input-group">
-                    <input type="text" class="form-control border-left-dark" id="document"
-                        formControlName="document" placeholder="Documento de identidad del cliente titular" required>
+                    <input type="text" class="form-control" id="document" minlength="8" maxlength="15"
+                        formControlName="document" [ngClass]="
+                        {
+                            'invalid': formGroup.get('document').dirty && formGroup.get('document').errors || (validateCostumerId() && formGroup.get('document').dirty) || (validateRole() && formGroup.get('document').dirty),
+                            'valid': formGroup.get('document').dirty && !formGroup.get('document').errors && !validateCostumerId() && !validateRole()
+                        }" placeholder="Ingrese el número del documento de identidad del titular" required
+                        onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
+
                     <div class="input-group-prepend">
-                        <span class="input-group-text rounded-right"><i class="fas fa-user"></i></span>
+                        <span class="input-group-text rounded-right">
+                            <i class="fas fa-user"></i>
+                        </span>
                     </div>
-                    <div class="invalid-feedback">
-                        Por favor seleccione los datos de la persona titular o cree una cuenta
-                        para el mismo.
+
+                    <div *ngIf="formGroup.get('document')?.errors?.['required'] && formGroup.get('document').dirty"
+                        class="invalid-feedback">
+                        Este campo es obligatorio.
+                    </div>
+                    <div *ngIf="formGroup.get('document')?.errors?.['minlength'] && formGroup.get('document').dirty"
+                        class="invalid-feedback">
+                        El documento debe tener mínimo 8 números.
+                    </div>
+                    <div *ngIf="validateCostumerId() && formGroup.get('document').dirty" class="invalid-feedback">
+                        Este documento no está asociado a ningún cliente.
+                    </div>
+                    <div *ngIf="validateRole() && formGroup.get('document').dirty" class="invalid-feedback">
+                        Solo los clientes pueden ser titulares de un pedido.
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <div class="form-group">
-                        <label for="PackageId" class="form-label">Paquete</label>
+                        <label for="packageId" class="form-label">Paquete</label>
                         <div class="input-group">
-                            <select class="custom-select border-left-dark" id="PackageId" formControlName="PackageId"
-                                required>
-                                <option selected disabled value="0">Seleccione el paquete</option>
-                                <option *ngFor="let package of allPackages" [value]="package.packageId">{{package.name}}
+                            <select class="custom-select form-control" formControlName="packageId" id="packageId"
+                                required [ngClass]="
+                            {
+                                'invalid': formGroup.get('packageId').dirty && formGroup.get('packageId').errors,
+                                'valid': formGroup.get('packageId').dirty && !formGroup.get('packageId').errors
+                            }">
+                                <option disabled selected value="0">Seleccione el paquete
                                 </option>
+                                <option *ngFor="let package of allPackages" [value]="package.packageId">{{ package.name
+                                    }}</option>
                             </select>
                             <div class="input-group-prepend">
                                 <span class="input-group-text rounded-right"><i
                                         class="fas fa-umbrella-beach"></i></span>
                             </div>
-                            <div class="invalid-feedback">
-                                Por favor ingrese unicamente números.
+                            <div *ngIf="formGroup.get('packageId')?.errors?.['required'] && formGroup.get('packageId').dirty"
+                                class="invalid-feedback">
+                                Este campo es obligatorio.
                             </div>
-                        </div>
-                        <div class="invalid-feedback">
-                            Por favor seleccione un paquete.
                         </div>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <label for="BeneficiariesAmount" class="form-label">Beneficiarios</label>
+                        <label for="beneficiariesAmount" class="form-label">Beneficiarios</label>
                         <div class="input-group">
-                            <input type="number" class="form-control border-left-dark" id="BeneficiariesAmount"
-                                formControlName="BeneficiariesAmount" placeholder="¿Cuántos viajarán?" required>
+                            <input type="number" class="form-control" placeholder="Seleccione un paquete"
+                                *ngIf="!formGroup.get('packageId').dirty && orderProcess == null" readonly disabled>
+                            <input type="number" id="beneficiariesAmount" minlength="1" class="form-control"
+                                *ngIf="formGroup.get('packageId').dirty || orderProcess != null" [ngClass]="
+                          {
+                            'invalid': formGroup.get('beneficiariesAmount').dirty && (formGroup.get('beneficiariesAmount').errors) ||
+                             (orderProcess == null && formGroup.get('beneficiariesAmount').dirty && !validateBeneficiaries()) ||
+                             (orderProcess != null && formGroup.get('packageId').dirty && !validateBeneficiaries()) ||
+                             (orderProcess != null && formGroup.get('beneficiariesAmount').dirty && !validateBeneficiaries()) ||
+                              (formGroup.get('beneficiariesAmount').dirty && !validateBeneficiariesAmount()) ||
+                               (formGroup.get('beneficiariesAmount').dirty && !validateExistingBeneficiariesAmount()),
+                            'valid': formGroup.get('beneficiariesAmount').dirty && !formGroup.get('beneficiariesAmount').errors &&
+                            validateBeneficiaries() && validateBeneficiariesAmount() && validateExistingBeneficiariesAmount()
+                          }" placeholder="¿Cuántos viajarán?" formControlName="beneficiariesAmount" required
+                                onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
                             <div class="input-group-prepend">
                                 <span class="input-group-text rounded-right"><i class="fas fa-users"></i></span>
                             </div>
-                            <div class="invalid-feedback">
-                                Por favor ingrese unicamente números.
+                            <div *ngIf="formGroup.get('beneficiariesAmount')?.errors?.['required'] && formGroup.get('beneficiariesAmount').dirty"
+                                class="invalid-feedback">
+                                Este campo es obligatorio.
                             </div>
+                            <div *ngIf="!validateBeneficiariesAmount() && formGroup.get('beneficiariesAmount').dirty"
+                                class="invalid-feedback">
+                                Debe haber al menos 1 beneficiario.
+                            </div>
+                            <div *ngIf="orderProcess == null && !validateBeneficiaries() && formGroup.get('beneficiariesAmount').dirty"
+                                class="invalid-feedback">
+                                Cupos disponibles: {{onePackage.availableQuotas}}.
+                            </div>
+                            <div *ngIf="(orderProcess != null && !validateBeneficiaries() && formGroup.get('packageId').dirty) || (orderProcess != null && !validateBeneficiaries() && formGroup.get('beneficiariesAmount').dirty)"
+                                class="invalid-feedback">
+                                Cupos disponibles: {{onePackage.availableQuotas}}.
+                            </div>
+                            <div *ngIf="validateBeneficiaries() && !validateExistingBeneficiariesAmount() && formGroup.get('beneficiariesAmount').dirty"
+                                class="invalid-feedback">
+                                Capacidad minima de beneficiarios: {{beneficiariesAmount}}.
+                            </div>
+
                         </div>
                     </div>
                 </div>

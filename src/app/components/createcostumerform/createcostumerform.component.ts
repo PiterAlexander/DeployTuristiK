@@ -1,4 +1,4 @@
-import { CreateCostumerRequest, EditCostumerRequest, GetAllCostumerRequest } from '@/store/ui/actions';
+import { CreateCostumerRequest, EditCostumerRequest, GetAllCostumerRequest, GetAllRoleRequest } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -8,6 +8,7 @@ import { Costumer } from '@/models/costumer';
 import { UiState } from '@/store/ui/state';
 import { Observable } from 'rxjs';
 import { User } from '@/models/user';
+import { Role } from '@/models/role';
 
 @Component({
   selector: 'app-createcostumerform',
@@ -23,14 +24,17 @@ export class CreatecostumerformComponent implements OnInit {
   password: string = '';
   public CostumerList: Array<any>
   public costumerData
+  Roles: Array<Role>;
   constructor(private fb: FormBuilder, private modalService: NgbModal, private store: Store<AppState>) { }
 
   ngOnInit(): void {
     this.store.dispatch(new GetAllCostumerRequest());
+    this.store.dispatch(new GetAllRoleRequest());
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.CostumerList = state.allCostumers.data
       this.costumerData = state.oneCostumer.data
+      this.Roles = state.allRoles.data;
     })
 
     this.formGroup = this.fb.group({
@@ -65,23 +69,17 @@ export class CreatecostumerformComponent implements OnInit {
         user: this.costumerData.user
       }
       )
-  saveCostumer() {
-    const user: User = {
-      userName: this.formGroup.value.userName,
-      email: this.formGroup.value.email,
-      password: this.formGroup.value.password,
-      status: 1,
-      roleId: "cb89f0c5-356f-47ab-c936-08db66f03c2d",
     }
   }
   saveCostumer() {
+    var idRole: Role = this.Roles.find((r) => r.name == 'Cliente');
     if (this.costumerData == null) {
       const user: User = {
         userName: this.formGroup.value.userName,
         email: this.formGroup.value.email,
         password: this.formGroup.value.password,
         status: 1,
-        roleId: "7b0f3143-0ba6-408e-9efe-08db6a0a4f82",
+        roleId: idRole.roleId,
       }
 
       const costumer: Costumer = {
@@ -104,7 +102,7 @@ export class CreatecostumerformComponent implements OnInit {
         email: this.formGroup.value.email,
         password: this.formGroup.value.password,
         status: 1,
-        roleId: "7b0f3143-0ba6-408e-9efe-08db6a0a4f82",
+        roleId: idRole.roleId,
       }
 
       const costumer: Costumer = {

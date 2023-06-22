@@ -1,67 +1,69 @@
 
 <div class="content-header">
   <div class="container-fluid">
-      <div class="row m-4 d-flex justify-content-center ">
-          <div class="card card-package" style="width: 700px;">
-              <div class="card-header card-package-header d-flex">
-                  <div class="col-sm-10 col-personalized-1">
-                      <h1 class="m-0 text-dark">Roles</h1>
-                  </div>
-                  <div class="col-sm-3 col-personalized-1">
-                      <button (click)="openCreateRoleModal()" type="button" class="btn btn-primary">Agregar Rol</button>
-                  </div>
+      <div class="row m-3">
+          <div class="card card-package w-100">
+            <div class="card-header card-package-header d-flex justify-content-between">
+              <div class="col-sm-10 col-personalized-2">
+                  <h1 class="m-0 text-dark">Roles</h1>
               </div>
+              <div class="col-sm-2 p-0 d-flex justify-content-end">
+                  <button (click)="openCreateRoleModal()" type="button" class="btn btn-primary">Agregar
+                      Role</button>
+              </div>
+            </div>
+            <div class="card-body">
+                <div *ngIf="loading" class="d-flex justify-content-center">
+                    <div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
+                        <span class="visually-hidden"></span>
+                    </div>
+                </div>
+                <form *ngIf="!loading">
+                    <div class="d-flex justify-content-end mb-3 row">
+                        <label for="table-complete-search" class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
+                        <div class="col-xs-3 col-sm-auto">
+                            <input id="table-complete-search" type="text" class="form-control" name="searchTerm" [(ngModel)]="search" (ngModelChange)="searchByName()" maxlength="100"/>
+                        </div>
+                    </div>
 
-              <div class="card-body">
-                  <div *ngIf="loading" class="d-flex justify-content-center">
-                      <div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
-                          <span class="visually-hidden"></span>
-                      </div>
-                  </div>
-                  <form *ngIf="!loading">
-                      <div class="d-flex justify-content-end mb-3 row">
-                          <label for="table-complete-search" class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
-                          <div class="col-xs-3 col-sm-auto">
-                              <input id="table-complete-search" type="text" class="form-control" name="searchTerm" [(ngModel)]="search" (ngModelChange)="searchByName()" maxlength="100"/>
-                          </div>
-                      </div>
-
-                      <table class="table table-striped">
-                          <thead>
-                              <tr>
-                                  <th scope="col">Nombre</th>
-                                  <th scope="col" sortable="name">Estado</th>
-                                  <th scope="col" sortable="population">Editar</th>
-                                  <th scope="col" sortable="population">Eliminar</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                            <tr *ngFor="let role of filteredRolesList">
-                                <td>{{role.name}}</td>
-                                <td>
-                                    <span *ngIf="role.status === 1">Habilitado</span>
-                                    <span *ngIf="role.status !== 1">Deshabilitado</span>
-                                </td>
-                                <td>
-                                    <i class="fas fa-edit text-dark" (click)="openEditRoleModal(role)" style="cursor: pointer">
-
-                                    </i>
-                                </td>
-                                <td>
-                                  <i class="fas fa-trash text-dark" (click)="deleteRole(role)" style="cursor: pointer"></i>
-                              </td>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col" sortable="name">Estado</th>
+                                <th scope="col" sortable="population">Editar</th>
+                                <th scope="col" sortable="population">Eliminar</th>
                             </tr>
-                          </tbody>
-                      </table>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let role of filteredRolesList">
+                              <td>{{role.name}}</td>
+                              <td>
+                                  <span *ngIf="role.status === 1">Habilitado</span>
+                                  <span *ngIf="role.status !== 1">Deshabilitado</span>
+                              </td>
+                              <td>
+                                  <i class="fas fa-edit text-dark" (click)="openEditRoleModal(role)" style="cursor: pointer">
 
-                      <div class="d-flex justify-content-end pt-3">
-                          <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize">
-                          </ngb-pagination>
-                      </div>
-                  </form>
+                                  </i>
+                              </td>
+                              <td>
+                                <i *ngIf="role.name !== 'Administrador' && role.name !== 'Beneficiario' &&
+                                role.name !== 'Cliente' && role.name !== 'Empleado'" class="fas fa-trash text-dark" (click)="deleteRole(role)" style="cursor: pointer"></i>
+                              </td>
+                          </tr>
+                        </tbody>
+                    </table>
 
-              </div>
+                    <div class="d-flex justify-content-end pt-3">
+                        <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize">
+                        </ngb-pagination>
+                    </div>
+                </form>
+
+            </div>
           </div>
       </div>
   </div>
 </div>
+

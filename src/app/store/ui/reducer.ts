@@ -79,6 +79,25 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 }
             };
+        case Actions.OPEN_MODAL_DETAILS_PACKAGE:
+            return {
+                ...state,
+                onePackage: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+        case Actions.CHANGE_STATUS_PACKAGE_REQUEST:
+            return {
+                ...state,
+                onePackage: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+        case Actions.GET_ALL_PERMISSIONS_REQUEST:
         //<-------------->
 
         //<--- ORDERS --->
@@ -112,7 +131,48 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
 
-        case Actions.orderActions.CREATE_ORDER_DATA:
+        case Actions.orderActions.OPEN_MODAL_CREATE_ORDER:
+            return {
+                ...state,
+                orderProcess: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            }
+
+        case Actions.orderActions.OPEN_MODAL_ORDERDETAILS:
+            return {
+                ...state,
+                oneOrder: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            }
+
+
+        case Actions.orderActions.OPEN_MODAL_PAYMENTS:
+            return {
+                ...state,
+                oneOrder: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            }
+
+        case Actions.orderActions.OPEN_MODAL_CREATE_PAYMENT:
+            return {
+                ...state,
+                orderProcess: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            }
+
+        case Actions.orderActions.OPEN_MODAL_CREATE_ORDERDETAIL:
             return {
                 ...state,
                 orderProcess: {
@@ -267,6 +327,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 }
             };
+
         case Actions.employeeActions.OPEN_MODAL_CREATE_EMPLOYEE:
             return {
                 ...state,
@@ -278,7 +339,39 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
             };
         //<------------>
 
+        //<--- FREQUENT TRAVELER --->
+
+        case Actions.FrequentTravelerActions.OPEN_MODAL_LIST_FREQUENTTRAVELER:
+            return {
+                ...state,
+                oneCostumer: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+        case Actions.FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER:
+            return {
+                ...state,
+                oneCostumer: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+        //<----------------->
+
         //<--- USER --->
+
+        case Actions.userActions.OPEN_MODAL_USER:
+            return {
+                ...state,
+                currentUser: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
         case Actions.userActions.GET_USERS_REQUEST:
             return {
                 ...state,
@@ -318,28 +411,77 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 }
             };
+
         //<------------>
-        //<--- FREQUENT TRAVELER --->
-        
-        case Actions.FrequentTravelerActions.OPEN_MODAL_LIST_FREQUENTTRAVELER:
+
+        //<--- LOGIN --->
+
+        case Actions.loginActions.LOGIN_REQUEST:
             return {
                 ...state,
-                oneCostumer: {
+                token: {
+                    data: undefined,
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+        case Actions.loginActions.LOGIN_SUCCESS:
+            //console.log("desde redu: ", action.payload)
+            return {
+                ...state,
+                token: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                },
+            };
+
+        case Actions.loginActions.LOGIN_FAILURE:
+            return {
+                ...state,
+                token: {
+                    data: undefined,
+                    error: action.payload,
+                    loading: false
+                }
+            };
+
+
+        case Actions.loginActions.GET_USER_INFO_REQUEST:
+
+            console.log("iam in red", action.payload);
+            return {
+                ...state,
+                userLoged: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: true
+                }
+            }
+
+        case Actions.loginActions.GET_USER_INFO_SUCCESS:
+            console.log("iam in blue", action.payload);
+            return {
+                ...state,
+                userLoged: {
                     data: action.payload,
                     error: undefined,
                     loading: false
                 }
-            };
-        case Actions.FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER:
+            }
+
+        case Actions.loginActions.GET_USER_INFO_FAILURE:
+            console.log("Im not")
             return {
                 ...state,
-                oneCostumer: {
-                    data: action.payload,
-                    error: undefined,
+                userLoged: {
+                    data: undefined,
+                    error: action.payload,
                     loading: false
                 }
-            };
-        //<----------------->
+            }
+        //<------------>
         default:
             return state;
     }

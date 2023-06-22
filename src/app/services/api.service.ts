@@ -9,6 +9,8 @@ import { Employee } from '@/models/employee';
 import { OrderDetail } from '@/models/orderDetail';
 import { User } from '@/models/user';
 import { FrequentTraveler } from '@/models/frequentTraveler';
+import { Payment } from '@/models/payment';
+import { Token } from '@/models/token';
 @Injectable({
     providedIn: 'root'
 })
@@ -20,21 +22,22 @@ export class ApiService {
 
     //<--- PACAKGE --->
     getPackages(): Observable<Package[]> {
-        return this.http.get<Package[]>(`${this.endpoint}api/package/list/`)
+        return this.http.get<Package[]>(`${this.endpoint}api/package/`)
     }
 
     addPackage(modelo: Package): Observable<Package> {
-        return this.http.post<Package>(`${this.endpoint}api/package/addPackage/`, modelo)
+        return this.http.post<Package>(`${this.endpoint}api/package/`, modelo)
     }
 
     updatePackage(idPackage: string, modelo: Package): Observable<Package> {
         console.log(`${this.endpoint}${idPackage}`);
-        return this.http.put<Package>(`${this.endpoint}api/package/edit/${idPackage}`, modelo)
+        return this.http.put<Package>(`${this.endpoint}api/package/${idPackage}`, modelo)
+    }
+    disablePackage(idPackage:string,modelo:Package):Observable<Package>{
+        console.log(`${this.endpoint}${idPackage}`);
+        return this.http.put<Package>(`${this.endpoint}api/package/${idPackage}`, modelo)
     }
 
-    deletePackage(idPackage: number): Observable<void> {
-        return this.http.delete<void>(`${this.endpoint}api/package/delete/${idPackage}`)
-    }
     //<-------------->
 
     //<--- ORDERS --->
@@ -46,12 +49,24 @@ export class ApiService {
         return this.http.post<Order>(`${this.endpoint}api/Order`, modelo)
     }
 
-    updateOrder(idOrder: number, modelo: Order): Observable<Order> {
-        return this.http.put<Order>(`${this.endpoint}api/Order/${idOrder}`, modelo)
+    updateOrder(orderId: string, modelo: Order): Observable<Order> {
+        return this.http.put<Order>(`${this.endpoint}api/Order/${orderId}`, modelo)
     }
 
     deleteOrder(idOrder: number): Observable<void> {
         return this.http.delete<void>(`${this.endpoint}api/Order/${idOrder}`)
+    }
+
+    addPayment(modelo: Payment): Observable<Payment> {
+        return this.http.post<Payment>(`${this.endpoint}api/Payment`, modelo)
+    }
+
+    addOrderDetail(modelo: OrderDetail): Observable<OrderDetail> {
+        return this.http.post<OrderDetail>(`${this.endpoint}api/OrderDetail`, modelo)
+    }
+
+    updateOrderDetail(orderDetailId: string, modelo: OrderDetail): Observable<OrderDetail> {
+        return this.http.put<OrderDetail>(`${this.endpoint}api/OrderDetail/${orderDetailId}`, modelo)
     }
     //<----------------->
 
@@ -125,4 +140,8 @@ export class ApiService {
         return this.http.delete<void>(`${this.endpoint}api/FrequentTraveler/${idFrequentTraveler}`)
     }
     //<------------->
+    //<--- LOGIN --->
+    signIn(email: string, password: string) {
+      return this.http.post<Token>(`${this.endpoint}api/Login`, { email, password })
+  }
 }

@@ -37,6 +37,7 @@ import { RolesComponent } from './pages/roles/roles.component';
 import { OrdersComponent } from './pages/orders/orders.component';
 import { CreateOrderFormComponent } from './components/create-order-form/create-order-form.component';
 import { CreateRoleFormComponent } from '@components/create-role-form/create-role-form.component';
+import { DetailsPackageComponent } from './components/details-package/details-package.component';
 import { CostumersComponent } from './pages/costumers/costumers.component';
 import { CreatecostumerformComponent } from './components/create-costumer-form/createcostumerform.component';
 import { EmployeesComponent } from './pages/employees/employees.component';
@@ -45,6 +46,8 @@ import { CreateOrderDetailFormComponent } from './components/create-order-detail
 import { UsersComponent } from '@pages/users/users.component';
 import { CreateUserFormComponent } from '@components/create-user-form/create-user-form.component';
 import { CreatePaymentFormComponent } from './components/create-payment-form/create-payment-form.component';
+import { ReadOrderOrderDetailComponent } from './components/read-order-order-detail/read-order-order-detail.component';
+import { ReadOrderPaymentComponent } from './components/read-order-payment/read-order-payment.component';
 import { CreateFrequentTravelerFormComponent } from './components/create-frequent-traveler-form/create-frequent-traveler-form.component';
 import { ListFrequentTravelerComponent } from './components/list-frequent-traveler/list-frequent-traveler.component';
 
@@ -72,6 +75,8 @@ registerLocaleData(localeEn, 'en-EN');
         PackagesComponent,
         CreatePackageFormComponent,
         RolesComponent,
+        CreateRoleFormComponent,
+        DetailsPackageComponent,
         OrdersComponent,
         CreateOrderFormComponent,
         CreateRoleFormComponent,
@@ -82,9 +87,7 @@ registerLocaleData(localeEn, 'en-EN');
         CreateOrderDetailFormComponent,
         UsersComponent,
         CreateUserFormComponent,
-        CreatePaymentFormComponent,
-        CreateFrequentTravelerFormComponent,
-        ListFrequentTravelerComponent        
+        CreatePaymentFormComponent        
     ],
     imports: [
         BrowserModule,

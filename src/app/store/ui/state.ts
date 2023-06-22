@@ -6,6 +6,7 @@ import { Costumer } from "@/models/costumer";
 import { User } from "@/models/user";
 import { Employee } from "@/models/employee";
 import { FrequentTraveler } from "@/models/frequentTraveler";
+import { Token, UserLog } from "@/models/token";
 
 export default <UiState>{
   //<--- TOGGLER --->
@@ -30,6 +31,11 @@ export default <UiState>{
   //<--- ORDERS --->
   allOrders: {
     data: [],
+    error: undefined,
+    loading: false
+  },
+  oneOrder: {
+    data: undefined,
     error: undefined,
     loading: false
   },
@@ -92,18 +98,20 @@ export default <UiState>{
     loading: false
   },
   //<------------->
-  //<--- FREQUENT TRAVELER --->
-  allFrequentTraveler: {
-    data: [],
-    error: undefined,
-    loading: false
-  },
-  oneFrequentTraveler: {
+
+  //<--- LOGIN --->
+  token: {
     data: undefined,
     error: undefined,
     loading: false
   },
   //<----------------->
+  userLoged: {
+    data: undefined,
+    error: undefined,
+    loading: false
+  }
+  //<-------------->
 };
 
 
@@ -131,6 +139,11 @@ export interface UiState {
   //<--- ORDERS --->
   allOrders: {
     data: Array<Order>,
+    error: string,
+    loading: boolean
+  };
+  oneOrder: {
+    data: Order,
     error: string,
     loading: boolean
   };
@@ -193,16 +206,17 @@ export interface UiState {
     loading: boolean
   }
   //<------------->
-  //<--- FREQUENT TRAVELER --->
-  allFrequentTraveler: {
-    data: Array<FrequentTraveler>,
+  
+  //<--- LOGIN --->
+  token: {
+    data: Token,
     error: string,
     loading: boolean
-  };
-  oneFrequentTraveler: {
-    data: FrequentTraveler,
+  }
+  userLoged: {
+    data: UserLog,
     error: string,
     loading: boolean
-  };
-  //<------------->
+  }
+  //<-------------->
 }
