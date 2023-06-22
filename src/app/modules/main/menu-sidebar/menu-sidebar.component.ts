@@ -40,7 +40,7 @@ export class MenuSidebarComponent implements OnInit {
 
   AllowMenuItems(){
     var user = JSON.parse(localStorage.getItem('TokenPayload'))
-    var role = this.roleList.find(r => r.roleId === user["roleId"])
+    var role = this.roleList.find(r => r.name === user.role)
     if (role && role.associatedPermission) {
 
       this.menu.forEach(item=>{
