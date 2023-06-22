@@ -11,5 +11,5 @@ export interface Costumer {
     eps:string;
     User?:User;
     userId?:string;
-    frequentTravel?:FrequentTraveler[];
+    frequentTraveler?:FrequentTraveler[];
 }

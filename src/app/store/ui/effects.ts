@@ -25,6 +25,11 @@ import {
     LoginFailure,
     GetUserInfoSuccess,
     GetUserInfoFailure,
+    CreateFrequentTravelerFailure,
+    CreateFrequentTravelerRequest,
+    CreateFrequentTravelerSuccess,
+    FrequentTravelerActions,
+    GetAllFrequentTravelerRequest,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -46,6 +51,8 @@ import { CreatePaymentFormComponent } from '@components/create-payment-form/crea
 import { ReadOrderOrderDetailComponent } from '@components/read-order-order-detail/read-order-order-detail.component';
 import { ReadOrderPaymentComponent } from '@components/read-order-payment/read-order-payment.component';
 import { AuthService } from '@services/auth/auth.service';
+import { ListFrequentTravelerComponent } from '@components/list-frequent-traveler/list-frequent-traveler.component';
+import { CreateFrequentTravelerFormComponent } from '@components/create-frequent-traveler-form/create-frequent-traveler-form.component';
 
 @Injectable()
 export class PackageEffects {
@@ -452,6 +459,46 @@ export class PackageEffects {
         })
     ));
     //<------------------>
+    //<---FREQUENT TRAVELER---->
+    listModalTraveler$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(FrequentTravelerActions.OPEN_MODAL_LIST_FREQUENTTRAVELER),
+        tap(() => {
+            this.modalRef = this.modalService.open(ListFrequentTravelerComponent, {
+                backdrop: false,
+                size: 'lg'
+            })
+        })
+    ), { dispatch: false });
+
+    createModalTraveler$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER),
+        tap(() => {
+            this.modalRef = this.modalService.open(CreateFrequentTravelerFormComponent, {
+                backdrop: false,
+                size: 'lg'
+            })
+        })
+    ), { dispatch: false });
+    
+    createFrequentTraveler$ = createEffect(() => this.actions$.pipe(
+        ofType(FrequentTravelerActions.CREATE_FREQUENTTRAVELER_REQUEST),
+        map((action: CreateFrequentTravelerRequest) => action.payload),
+        switchMap((frequentTraveler) => {
+            return this.apiService.addFrequentTraveler(frequentTraveler).pipe(
+                mergeMap((frequentTravelerResolver) => {
+                    this.modalRef.close();
+                    return [
+                        new CreateFrequentTravelerSuccess(frequentTravelerResolver),
+                        new GetAllFrequentTravelerRequest()
+                    ];
+                }),
+                catchError((err) => of(new CreateFrequentTravelerFailure(err)))
+            )
+        })
+    ));
+    //<--------------->
 
     //<---- EMPLOYEE ---->
     getEmployees$ = createEffect(() => this.actions$.pipe(

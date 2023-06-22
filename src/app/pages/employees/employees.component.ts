@@ -56,6 +56,10 @@ export class EmployeesComponent implements OnInit {
     this.store.dispatch(new OpenModalCreateEmployee(employee));
   }
 
+  deleteEmployee(employee:Employee){
+    this.store.dispatch(new DeleteEmployeeRequest(employee));
+  }
+
   searchByName() {
     if (this.search === undefined || this.search.length <= 0) {
       this.filteredEmployeesList = this.employeesList;

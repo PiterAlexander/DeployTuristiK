@@ -31,24 +31,22 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Nombre</th>
-                                    <th scope="col" sortable="name">Apellido</th>
                                     <th scope="col" sortable="population">Documento</th>
                                     <th scope="col" sortable="population">Número</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let employee of filteredEmployeesList">
-                                    <td>{{employee.name}}</td>
-                                    <td>{{employee.lastName}}</td>
+                                    <td>{{employee.name}}&nbsp;{{employee.lastName}}</td>
                                     <td>{{employee.document}}</td>
                                     <td>{{employee.phoneNumber}}</td>
                                     <!-- <td><a href="">Ver detalles</a></td> -->
                                     <td><i class="fas fa-edit text-dark" (click)="openModalEditEmployee(employee)"
                                             style="cursor: pointer"></i></td>
-                                    <!-- <td>
+                                    <td>
                                         <i class="fas fa-trash text-dark" (click)="deleteEmployee(employee)"
                                             style="cursor: pointer"></i>
-                                    </td> -->
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

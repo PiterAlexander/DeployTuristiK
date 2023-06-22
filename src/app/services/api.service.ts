@@ -8,6 +8,7 @@ import { Costumer } from '@/models/costumer';
 import { Employee } from '@/models/employee';
 import { OrderDetail } from '@/models/orderDetail';
 import { User } from '@/models/user';
+import { FrequentTraveler } from '@/models/frequentTraveler';
 import { Payment } from '@/models/payment';
 import { Token } from '@/models/token';
 @Injectable({
@@ -101,7 +102,7 @@ export class ApiService {
     }
 
     deleteEmployee(idEmployee: string): Observable<void> {
-        return this.http.delete<void>(`${this.endpoint}api/Employee${idEmployee}`)
+        return this.http.delete<void>(`${this.endpoint}api/Employee/${idEmployee}`)
     }
     //<------------->
 
@@ -122,6 +123,23 @@ export class ApiService {
         return this.http.put<User>(`${this.endpoint}api/User/${userId}`, model)
     }
     //<-------------->
+    //<--- FREQUENT TRAVELER --->
+    getFrequentTravelers(): Observable<FrequentTraveler[]> {
+        return this.http.get<FrequentTraveler[]>(`${this.endpoint}api/FrequentTraveler`)
+    }
+
+    addFrequentTraveler(modelo: FrequentTraveler): Observable<FrequentTraveler> {
+        return this.http.post<FrequentTraveler>(`${this.endpoint}api/FrequentTraveler`, modelo)
+    }
+
+    updateFrequentTraveler(idFrequentTraveler: string, modelo: FrequentTraveler): Observable<FrequentTraveler> {
+        return this.http.put<FrequentTraveler>(`${this.endpoint}api/FrequentTraveler/${idFrequentTraveler}`, modelo)
+    }
+
+    deleteFrequentTraveler(idFrequentTraveler: string): Observable<void> {
+        return this.http.delete<void>(`${this.endpoint}api/FrequentTraveler/${idFrequentTraveler}`)
+    }
+    //<------------->
     //<--- LOGIN --->
     signIn(email: string, password: string) {
       return this.http.post<Token>(`${this.endpoint}api/Login`, { email, password })
