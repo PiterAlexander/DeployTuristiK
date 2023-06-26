@@ -39,6 +39,7 @@
     "@ngrx/store": "^14.3.0",
     "@popperjs/core": "^2.11.6",
     "@profabric/angular-components": "0.1.2",
+    "angular-jwt": "^0.1.11",
     "bootstrap": "4.6.1",
     "core-js": "3.25.0",
     "gatekeeper-client-sdk": "0.4.2",
