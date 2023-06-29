@@ -251,7 +251,7 @@ export class CreateRoleFormComponent implements OnInit{
       return this.formGroup.valid
       && this.formGroup.value.status != 0
       && !this.AllRoles.find(
-        item => item.name === this.formGroup.value.name
+        item => item.name === this.formGroup.value.name.trim()
         && item.roleId !== this.roleData.roleId)
       && this.selectedPermissions.length>0
     }
@@ -262,7 +262,7 @@ export class CreateRoleFormComponent implements OnInit{
       return this.AllRoles.find(item => item.name === this.formGroup.value.name.trim())
     }else{
       return this.AllRoles.find(
-        item => item.name === this.formGroup.value.name
+        item => item.name === this.formGroup.value.name.trim()
         && item.roleId !== this.roleData.roleId)
     }
   }
