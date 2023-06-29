@@ -1,39 +1,25 @@
-
-
 <div class="d-flex justify-content-center align-items-center vh-100">
-  <div class=" card o-hidden border-0 shadow-lg my-5 w-50">
+  <div class="card o-hidden border-0 shadow-lg my-5 w-25">
     <div class="d-flex justify-content-center align-items-center mt-3">
-      <button class="control-prev btn btn-outline-primary border-0" type="button" data-target="#carouselExampleControls"
+      <h3 class="font-weight-bold text-primary">Inicio de sesión</h3>
+      <!-- <button class="control-prev btn btn-outline-primary border-0" type="button" data-target="#carouselExampleControls"
         data-slide-to="0">
         Inicio de sesión
-      </button>
-      <button class="control-next btn btn-outline-primary border-0" type="button" data-target="#carouselExampleControls"
+      </button> -->
+      <!-- <button class="control-next btn btn-outline-primary border-0" type="button" data-target="#carouselExampleControls"
         data-slide-to="1">
         Registro
-      </button>
+      </button> -->
     </div>
+    <hr class="text-primary">
     <div class="card-body p-0">
       <!-- Nested Row within Card Body -->
       <div class="row">
         <div class="col">
           <div class="p-4">
-            <div class="d-flex justify-content-center align-items-center mb-3">
-              <div class="row">
-                <div class="">
-                  <a href="index.html" class="btn btn-google rounded-circle ">
-                    <i class="fab fa-google fa-fw"></i>
-                  </a>
-                </div>
-                <div class="col">
-                  <a href="index.html" class="btn btn-facebook rounded-circle ">
-                    <i class="fab fa-facebook-f fa-fw"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <form class="needs-validation" novalidate id="form" (submit)="saveChanges()" [formGroup]="formGroup">
+            <form class="needs-validation mb-3" novalidate id="form" (submit)="saveChanges()" [formGroup]="formGroup">
               <div class="input-group mb-3">
-                <input formControlName="email" type="email" class="form-control" placeholder="Email" />
+                <input formControlName="email" type="email" class="form-control" placeholder="Correo electrónico" />
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-envelope"></span>
@@ -41,7 +27,7 @@
                 </div>
               </div>
               <div class="input-group mb-3">
-                <input formControlName="password" type="password" id="passwordLogin" class="form-control" placeholder="Password" />
+                <input formControlName="password" type="password" class="form-control" placeholder="Contraseña" />
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-lock"></span>
@@ -49,16 +35,17 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-9">
+                <div class="col">
                   <div class="icheck-primary">
                     <input type="checkbox" id="remember" />
                     <label for="remember"> Recordarme </label>
                   </div>
-                  <div class="col-2">
-                    <pf-button *ngIf="validForm()" type="submit" id="saveButton" class="btn btn-success" [block]="true"
-                      [loading]="isAuthLoading">
+                </div>
+                <div class="col">
+                  <div class="d-flex justify-content-end">
+                    <button *ngIf="validForm()" type="submit" id="saveButton" class="btn btn-success">
                       Guardar
-                    </pf-button>
+                    </button>
                     <button *ngIf="!validForm()" type="submit" id="saveButton" class="btn btn-secondary" disabled>
                       Guardar
                     </button>
@@ -67,8 +54,8 @@
                 <!-- /.col -->
               </div>
             </form>
-            <p class="mb-1">
-              <a [routerLink]="['/forgot-password']">¿Olvidé mi contraseña?</a>
+            <p class="text-center m-0">
+              <a class="font-weight-bold text-primary" [routerLink]="['/forgot-password']">¿Olvidé mi contraseña?</a>
             </p>
           </div>
         </div>
