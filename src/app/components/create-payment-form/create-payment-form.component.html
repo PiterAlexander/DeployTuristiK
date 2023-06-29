@@ -61,8 +61,8 @@
                                 <span class="input-group-text rounded-left"><i class="fas fa-file-archive"></i></span>
                             </div>
                             <div class="custom-file">
-                                <input type="file" formControlName="img" id="img" class="custom-file-input" required
-                                    [ngClass]="
+                                <input type="file" (change)="onFileSelected($event)" formControlName="img" id="img"
+                                    class="custom-file-input" required [ngClass]="
                                 {
                                     'invalid': formGroup.get('img').dirty && formGroup.get('img').errors,
                                     'valid': formGroup.get('img').dirty && !formGroup.get('img').errors
