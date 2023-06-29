@@ -7,7 +7,8 @@ import {Store} from '@ngrx/store';
 import {AppService} from '@services/app.service';
 import {Observable} from 'rxjs';
 
-const BASE_CLASSES = 'main-header navbar navbar-expand';
+var BASE_CLASSES = 'main-header navbar navbar-expand';
+
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
@@ -17,6 +18,7 @@ export class HeaderComponent implements OnInit {
     @HostBinding('class') classes: string = BASE_CLASSES;
     public ui: Observable<UiState>;
     public searchForm: UntypedFormGroup;
+    public role;
 
     constructor(
         private appService: AppService,
@@ -26,6 +28,13 @@ export class HeaderComponent implements OnInit {
     ngOnInit() {
         this.ui = this.store.select('ui');
         this.ui.subscribe((state: UiState) => {
+            var user = JSON.parse(localStorage.getItem('TokenPayload'))
+            this.role = user['role']
+
+            if (this.role === 'Cliente') {
+              BASE_CLASSES = 'navbar navbar-expand-lg bg-body-tertiary'
+            }
+
             this.classes = `${BASE_CLASSES} ${state.navbarVariant}`;
         });
         this.searchForm = new UntypedFormGroup({

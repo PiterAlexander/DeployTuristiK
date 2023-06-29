@@ -44,7 +44,7 @@ import { PermissionService } from '@services/configuration/permission.service';
 import { RoleService } from '@services/configuration/role.service';
 import { AssociatedPermissionService } from '@services/configuration/associated-permission.service';
 import { DetailsPackageComponent } from '@components/details-package/details-package.component';
-import { CreatecostumerformComponent } from '@components/createcostumerform/createcostumerform.component';
+import { CreatecostumerformComponent } from '@components/create-costumer-form/createcostumerform.component';
 import { CreateEmployeeFormComponent } from '@components/create-employee-form/create-employee-form.component';
 import { CreateUserFormComponent } from '@components/create-user-form/create-user-form.component';
 import { CreatePaymentFormComponent } from '@components/create-payment-form/create-payment-form.component';
@@ -481,7 +481,7 @@ export class PackageEffects {
             })
         })
     ), { dispatch: false });
-    
+
     createFrequentTraveler$ = createEffect(() => this.actions$.pipe(
         ofType(FrequentTravelerActions.CREATE_FREQUENTTRAVELER_REQUEST),
         map((action: CreateFrequentTravelerRequest) => action.payload),
@@ -638,10 +638,8 @@ export class PackageEffects {
         ofType(loginActions.LOGIN_REQUEST),
         map((action: LoginRequest) => action.payload),
         switchMap((data) => {
-            //console.log(data)
             return this.apiService.signIn(data.email, data.password).pipe(
                 mergeMap((token) => {
-                    //console.log(typeof (token))
                     return [new LoginSuccess(token)]
 
                 }),
@@ -656,7 +654,7 @@ export class PackageEffects {
             switchMap((response) => {
                 return this.authService.getUserInfo(response).pipe(
                     mergeMap((data) => {
-                        console.log(typeof (data))
+                        //console.log(typeof (data))
                         return [new GetUserInfoSuccess(data)]
 
                     }),

@@ -18,6 +18,7 @@ import { Role } from '@/models/role';
 import { UserLog } from '@/models/token';
 import { GetAllRoleRequest, GetUserInfoRequest } from '@/store/ui/actions';
 import { LoginComponent } from '@modules/login/login.component';
+import { RoleService } from '@services/configuration/role.service';
 
 @Injectable({
     providedIn: 'root'
@@ -26,12 +27,13 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
     public ui: Observable<UiState>
     userLogin: UserLog;
-    rolesList: Array<Role>;
+    rolesList;
     current_role : Role;
     allUsers: Array<User>;
 
     constructor(
         private router: Router,
+        private roleService: RoleService,
         private appService: AppService,
         private authService: AuthService,
         private store: Store<AppState>
@@ -59,66 +61,60 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         return this.canActivate(next, state);
     }
 
+
     async getProfile(route?: ActivatedRouteSnapshot) {
-      // console.log(route.routeConfig.path)
 
+      if (this.userLogin) {
 
-      // if (route.routeConfig.path!="") {
-      //   const allowedModules = role.associatedPermission.map(ap => ap.permission.module);
-      //   const currentModule = route.routeConfig.path
-      //   if (allowedModules.includes(currentModule) || currentModule=="Login") {
-      //     // console.log(currentModule,"---",allowedModules)
-      //     // console.log("Tiene acceso")
-      //     return true
-      //   }else{
-      //     // console.log(currentModule,"---",allowedModules)
-      //     // console.log("No Tiene acceso")
-      //     return false
-      //   }
-      // }else{
-      //   return true
-      // }
-        if (this.userLogin) {
-          var user = JSON.parse(localStorage.getItem('TokenPayload'))
-          var role = this.rolesList.find(r => r.roleId === user["roleId"])
-
-          if (role && route.routeConfig.path!="") {
-            const allowedModules = role.associatedPermission.map(ap => ap.permission.module);
-            const currentModule = route.routeConfig.path
-            if (allowedModules.includes(currentModule) || currentModule=="Login") {
-              return true
-            }else{
-              return false
+        const data = await new Promise((resolve, reject) => {
+          this.roleService.ReadRoles().subscribe({
+            next: (data) => {
+              resolve(data);
+            },
+            error: (err) => {
+              reject(err);
             }
-          }else{
-            return true
-          }
+          });
+        });
 
-          //const allowedModules = role.associatedPermission.map(ap => ap.permission.module);
-          console.log(role);
+        this.rolesList = data
+
+        var user = JSON.parse(localStorage.getItem('TokenPayload'))
+        var role = this.rolesList.find(r => r.name === user.role)
+
+        if (role && route.routeConfig.path!="") {
+          const allowedModules = role.associatedPermission.map(ap => ap.permission.module);
+          const currentModule = route.routeConfig.path
+          if (allowedModules.includes(currentModule) || currentModule=="Login") {
+            return true
+          }else{
+            console.log("El rol",user['role'])
+            if (user['role']==='Cliente') {
+              this.router.navigate(["/Paquetes"])
+            }else{
+              this.router.navigate(["/"])
+            }
+          }
+        }else{
           return true
         }
 
+      }
 
-        try {
 
-            await this.appService.getProfile();
-            this.store.dispatch(new GetAllRoleRequest())
-            this.ui = this.store.select('ui')
-            this.ui.subscribe((state: UiState) => {
-                this.userLogin = state.userLoged.data
-                this.rolesList = state.allRoles.data
-            })
-            return true;
+      try {
 
-        } catch (error) {
-            return false;
-        }
-    }
+          await this.appService.getProfile();
+          this.store.dispatch(new GetAllRoleRequest())
+          this.ui = this.store.select('ui')
+          this.ui.subscribe((state: UiState) => {
+              this.userLogin = state.userLoged.data
+              //this.rolesList = state.allRoles.data
+          })
+          return true;
 
-    getRole(){
-      var user = JSON.parse(localStorage.getItem('TokenPayload'))
-      this.current_role = this.rolesList.find(r => r.roleId === user["roleId"])
-
-    }
+      } catch (error) {
+          return false;
+      }
+  }
 }

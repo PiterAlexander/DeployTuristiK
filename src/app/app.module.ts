@@ -39,7 +39,7 @@ import { CreateOrderFormComponent } from './components/create-order-form/create-
 import { CreateRoleFormComponent } from '@components/create-role-form/create-role-form.component';
 import { DetailsPackageComponent } from './components/details-package/details-package.component';
 import { CostumersComponent } from './pages/costumers/costumers.component';
-// import { CreatecostumerformComponent } from './components/create-costumer-form/createcostumerform.component';
+import { CreatecostumerformComponent } from './components/create-costumer-form/createcostumerform.component';
 import { EmployeesComponent } from './pages/employees/employees.component';
 import { CreateEmployeeFormComponent } from './components/create-employee-form/create-employee-form.component';
 import { CreateOrderDetailFormComponent } from './components/create-order-detail-form/create-order-detail-form.component';
@@ -81,7 +81,7 @@ registerLocaleData(localeEn, 'en-EN');
         CreateOrderFormComponent,
         CreateRoleFormComponent,
         CostumersComponent,
-        // CreatecostumerformComponent,
+        CreatecostumerformComponent,
         EmployeesComponent,
         CreateEmployeeFormComponent,
         CreateOrderDetailFormComponent,
@@ -91,7 +91,7 @@ registerLocaleData(localeEn, 'en-EN');
         ReadOrderOrderDetailComponent,
         ReadOrderPaymentComponent,
         CreateFrequentTravelerFormComponent,
-        ListFrequentTravelerComponent   
+        ListFrequentTravelerComponent
     ],
     imports: [
         BrowserModule,
