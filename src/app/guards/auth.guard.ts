@@ -62,54 +62,9 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
     async getProfile(route?: ActivatedRouteSnapshot) {
 
-      // if (this.userLogin) {
-
-      //   var user = JSON.parse(localStorage.getItem('TokenPayload'));
-      //   var role = this.rolesList.find(r => r.name === user["role"]);
-      //   console.log(role.name)
-      //   if (role && route.routeConfig.path !== "") {
-      //     const allowedModules = role.associatedPermission.map(ap => ap.permission.module);
-      //     const currentModule = route.routeConfig.path;
-      //     if (allowedModules.includes(currentModule) || currentModule == "Login") {
-      //       return true;
-      //     }else{
-      //       if (user['role'] == "Administrador") {
-      //         this.router.navigate(['/Dashboard']);
-      //         return false
-      //       }else{
-      //         this.router.navigate(['/Paquetes']);
-      //        return false
-      //       }
-      //     }
-      //   }
-
-      //   return true
-      // }
-
       if (this.userLogin) {
         const user = JSON.parse(localStorage.getItem('TokenPayload'));
-        // const data = await new Promise((resolve, reject) => {
-        //   this.roleService.ReadRoles().subscribe({
-        //     next: (data) => {
-        //       resolve(data);
-        //     },
-        //     error: (err) => {
-        //       reject(err);
-        //     }
-        //   });
-        // });
 
-        // this.rolesList = data;
-        // // for (const role of this.rolesList) {
-        // //   console.log(role.name);
-        // // }
-
-        // const user = JSON.parse(localStorage.getItem('TokenPayload'));
-
-        // if (this.rolesList!==undefined) {
-        //   const role = this.rolesList.find(r => r.name === user["role"]) || undefined;
-        //   console.log("ok")
-        // }
         const vardas = this.roleService.ReadRoles().pipe(
           map((data) => {
             return data;
@@ -139,10 +94,6 @@ export class AuthGuard implements CanActivate, CanActivateChild {
           // Maneja el error aquí
           console.error(error);
         });
-
-
-
-
         return true
     }
 

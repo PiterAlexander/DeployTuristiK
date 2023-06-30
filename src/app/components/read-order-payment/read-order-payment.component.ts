@@ -39,11 +39,7 @@ export class ReadOrderPaymentComponent {
 
   editPayment(payment: Payment) {
     this.closeModal()
-    const orderProcess = [{
-      order: this.order,
-      payment: payment
-    }]
-    this.store.dispatch(new OpenModalEditPayment(orderProcess))
+    this.store.dispatch(new OpenModalEditPayment(payment))
   }
 
   addPayment() {

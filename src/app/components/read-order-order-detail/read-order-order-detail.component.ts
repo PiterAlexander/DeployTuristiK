@@ -57,7 +57,8 @@ export class ReadOrderOrderDetailComponent implements OnInit {
       this.closeModal()
       const orderProcess = [{
         action: 'CreateOrderDetail',
-        order: this.order
+        order: this.order,
+        beneficiaries: {}
       }]
       this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess))
     } else {

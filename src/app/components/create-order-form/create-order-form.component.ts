@@ -179,26 +179,22 @@ export class CreateOrderFormComponent implements OnInit {
           order: {
             costumer: oneCostumer,
             package: this.onePackage,
-            status: 1,
             beneficiaries: this.formGroup.value.beneficiariesAmount
           },
           beneficiaries: this.orderProcess[0].beneficiaries,
-          payment: {}
         }])
         this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess));
       } else {
         const oneCostumer = this.allCostumers.find(c => c.document === this.formGroup.value.document)
-        const orderProcess = ([{
+        const orderProcess = [{
           action: 'CreateOrder',
           order: {
             costumer: oneCostumer,
             package: this.onePackage,
-            status: 1,
             beneficiaries: this.formGroup.value.beneficiariesAmount
           },
           beneficiaries: {},
-          payment: {}
-        }])
+        }]
         this.modalService.dismissAll()
         this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess));
       }

@@ -7,6 +7,7 @@ import { User } from "@/models/user";
 import { Employee } from "@/models/employee";
 import { FrequentTraveler } from "@/models/frequentTraveler";
 import { Token, UserLog } from "@/models/token";
+import { Payment } from "@/models/payment";
 
 export default <UiState>{
   //<--- TOGGLER --->
@@ -34,13 +35,18 @@ export default <UiState>{
     error: undefined,
     loading: false
   },
+  orderProcess: {
+    data: [],
+    error: undefined,
+    loading: false
+  },
   oneOrder: {
     data: undefined,
     error: undefined,
     loading: false
   },
-  orderProcess: {
-    data: [],
+  onePayment: {
+    data: undefined,
     error: undefined,
     loading: false
   },
@@ -84,7 +90,7 @@ export default <UiState>{
     data: undefined,
     error: undefined,
     loading: false
-},
+  },
   //<------------->
   //<--- USERS --->
   allUsers: {
@@ -142,13 +148,18 @@ export interface UiState {
     error: string,
     loading: boolean
   };
+  orderProcess: {
+    data: Array<any>,
+    error: string,
+    loading: boolean
+  };
   oneOrder: {
     data: Order,
     error: string,
     loading: boolean
   };
-  orderProcess: {
-    data: Array<any>,
+  onePayment: {
+    data: Payment,
     error: string,
     loading: boolean
   };
@@ -206,7 +217,7 @@ export interface UiState {
     loading: boolean
   }
   //<------------->
-  
+
   //<--- LOGIN --->
   token: {
     data: Token,

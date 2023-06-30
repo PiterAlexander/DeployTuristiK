@@ -161,6 +161,16 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             }
 
+        case Actions.orderActions.OPEN_MODAL_CREATE_ORDERDETAIL:
+            return {
+                ...state,
+                orderProcess: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            }
+
         case Actions.orderActions.OPEN_MODAL_PAYMENTS:
             return {
                 ...state,
@@ -181,10 +191,10 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             }
 
-        case Actions.orderActions.OPEN_MODAL_CREATE_ORDERDETAIL:
+        case Actions.orderActions.OPEN_MODAL_EDIT_PAYMENT:
             return {
                 ...state,
-                orderProcess: {
+                onePayment: {
                     data: action.payload,
                     error: undefined,
                     loading: false

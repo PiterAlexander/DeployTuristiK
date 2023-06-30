@@ -179,7 +179,8 @@
     <div class="container px-4 px-lg-5 mt-5">
         <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-3 row-cols-xl-3 justify-content-center">
             <div class="col mb-5" *ngFor="let pack of filteredPackagesList">
-                <div class="card h-100 hoverCard" (click)="modalShowDetailsPackage(pack)" style="cursor: pointer;">
+                <!-- (click)="modalShowDetailsPackage(pack)" -->
+                <div class="card h-100 hoverCard"  style="cursor: pointer;">
                     <div class="card-header p-0">
                         <div class="d-flex">
                             <img class="card-img-top"
@@ -222,9 +223,8 @@
                         </div>
                     </div>
                     <!-- Product actions-->
-                    <div class="card-footer
-                     pt-0 mb-3 border-top-0 bg-transparent">
-                        <p class="m-0">Incluye impuestos, tasas y cargos</p>
+                    <div class="d-flex justify-content-end card-footer pt-0 mb-1 border-top-0 bg-transparent">
+                     <button type="button" (click)="reserve(pack)" class="btn btn-primary col-6">Reservar</button>
                     </div>
                 </div>
             </div>

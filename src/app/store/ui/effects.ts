@@ -290,7 +290,7 @@ export class PackageEffects {
             tap((action) => {
                 this.modalRef = this.modalService.open(EditPaymentFormComponent, {
                     backdrop: false,
-                    size: 'xl'
+                    size: 'l'
                 });
             })
         ), { dispatch: false });
