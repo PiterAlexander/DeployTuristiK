@@ -13,6 +13,6 @@ export interface UserLog {
   email: string;
   iss: string;
   aud: string;
-  role: string;
-  roleId: string;
+  role?: string;
+  roleId?: string;
 }
