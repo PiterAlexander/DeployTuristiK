@@ -47,9 +47,13 @@
                                     <td>{{costumer.phoneNumber}}</td>
                                     <td>{{costumer.address}}</td>
                                     <td>{{costumer.eps}}</td>
-                                    <td>
-                                        <a (click)="editOrdelDetail(costumer)" class="text-decoration-none text-dark"><i
-                                                class="fas fa-edit"></i></a>
+                                    <td class="infoData">
+                                        <button (click)="editOrdelDetail(costumer)"
+                                            class="hover-text btn btn-outline-primary"><i
+                                                style="cursor: pointer; display: grid;" class="fas fa-edit"
+                                                style="font-size: 100%"></i>
+                                            <span class="tooltip-text bottom">Editar</span>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>

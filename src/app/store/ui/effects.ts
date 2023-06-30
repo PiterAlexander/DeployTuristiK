@@ -30,6 +30,9 @@ import {
     CreateFrequentTravelerSuccess,
     FrequentTravelerActions,
     GetAllFrequentTravelerRequest,
+    EditPaymentRequest,
+    EditPaymentSuccess,
+    EditPaymentFailure,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -44,7 +47,6 @@ import { PermissionService } from '@services/configuration/permission.service';
 import { RoleService } from '@services/configuration/role.service';
 import { AssociatedPermissionService } from '@services/configuration/associated-permission.service';
 import { DetailsPackageComponent } from '@components/details-package/details-package.component';
-import { CreatecostumerformComponent } from '@components/createcostumerform/createcostumerform.component';
 import { CreateEmployeeFormComponent } from '@components/create-employee-form/create-employee-form.component';
 import { CreateUserFormComponent } from '@components/create-user-form/create-user-form.component';
 import { CreatePaymentFormComponent } from '@components/create-payment-form/create-payment-form.component';
@@ -53,6 +55,9 @@ import { ReadOrderPaymentComponent } from '@components/read-order-payment/read-o
 import { AuthService } from '@services/auth/auth.service';
 import { ListFrequentTravelerComponent } from '@components/list-frequent-traveler/list-frequent-traveler.component';
 import { CreateFrequentTravelerFormComponent } from '@components/create-frequent-traveler-form/create-frequent-traveler-form.component';
+import { EditPaymentFormComponent } from '@components/edit-payment-form/edit-payment-form.component';
+import { CreatecostumerformComponent } from '@components/create-costumer-form/createcostumerform.component';
+import { ListFrequentTravelersToOrdersComponent } from '@components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
 
 @Injectable()
 export class PackageEffects {
@@ -175,7 +180,6 @@ export class PackageEffects {
         })
     ));
 
-
     editOrder$ = createEffect(() => this.actions$.pipe(
         ofType(orderActions.EDIT_ORDER_REQUEST),
         map((action: EditOrderRequest) => action.payload),
@@ -191,6 +195,17 @@ export class PackageEffects {
             )
         })
     ));
+
+    openModalListFrequentTravelersToOrders$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(orderActions.OPEN_MODAL_LIST_FREQUENTTRAVELERS_TO_ORDERS),
+            tap((action) => {
+                this.modalRef = this.modalService.open(ListFrequentTravelersToOrdersComponent, {
+                    backdrop: false,
+                    size: 'xl'
+                });
+            })
+        ), { dispatch: false });
 
     openModalOrderDetails$ = createEffect(() =>
         this.actions$.pipe(
@@ -265,6 +280,33 @@ export class PackageEffects {
                     ];
                 }),
                 catchError((err) => of(new CreatePaymentFailure(err)))
+            )
+        })
+    ));
+
+    openModalEditPayment$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(orderActions.OPEN_MODAL_EDIT_PAYMENT),
+            tap((action) => {
+                this.modalRef = this.modalService.open(EditPaymentFormComponent, {
+                    backdrop: false,
+                    size: 'xl'
+                });
+            })
+        ), { dispatch: false });
+
+    editPayment$ = createEffect(() => this.actions$.pipe(
+        ofType(orderActions.EDIT_PAYMENT_REQUEST),
+        map((action: EditPaymentRequest) => action.payload),
+        switchMap((payment) => {
+            return this.apiService.updatePayment(payment.paymentId, payment).pipe(
+                mergeMap((paymentResolved) => {
+                    return [
+                        new EditPaymentSuccess(paymentResolved),
+                        new GetAllOrdersRequest()
+                    ];
+                }),
+                catchError((err) => of(new EditPaymentFailure(err)))
             )
         })
     ));
@@ -461,27 +503,27 @@ export class PackageEffects {
     //<------------------>
     //<---FREQUENT TRAVELER---->
     listModalTraveler$ = createEffect(() =>
-    this.actions$.pipe(
-        ofType(FrequentTravelerActions.OPEN_MODAL_LIST_FREQUENTTRAVELER),
-        tap(() => {
-            this.modalRef = this.modalService.open(ListFrequentTravelerComponent, {
-                backdrop: false,
-                size: 'lg'
+        this.actions$.pipe(
+            ofType(FrequentTravelerActions.OPEN_MODAL_LIST_FREQUENTTRAVELER),
+            tap(() => {
+                this.modalRef = this.modalService.open(ListFrequentTravelerComponent, {
+                    backdrop: false,
+                    size: 'lg'
+                })
             })
-        })
-    ), { dispatch: false });
+        ), { dispatch: false });
 
     createModalTraveler$ = createEffect(() =>
-    this.actions$.pipe(
-        ofType(FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER),
-        tap(() => {
-            this.modalRef = this.modalService.open(CreateFrequentTravelerFormComponent, {
-                backdrop: false,
-                size: 'lg'
+        this.actions$.pipe(
+            ofType(FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER),
+            tap(() => {
+                this.modalRef = this.modalService.open(CreateFrequentTravelerFormComponent, {
+                    backdrop: false,
+                    size: 'lg'
+                })
             })
-        })
-    ), { dispatch: false });
-    
+        ), { dispatch: false });
+
     createFrequentTraveler$ = createEffect(() => this.actions$.pipe(
         ofType(FrequentTravelerActions.CREATE_FREQUENTTRAVELER_REQUEST),
         map((action: CreateFrequentTravelerRequest) => action.payload),
@@ -633,15 +675,14 @@ export class PackageEffects {
         })
     ));
     //<--------------->
+
     //<--- LOGIN --->
     login$ = createEffect(() => this.actions$.pipe(
         ofType(loginActions.LOGIN_REQUEST),
         map((action: LoginRequest) => action.payload),
         switchMap((data) => {
-            //console.log(data)
             return this.apiService.signIn(data.email, data.password).pipe(
                 mergeMap((token) => {
-                    //console.log(typeof (token))
                     return [new LoginSuccess(token)]
 
                 }),
@@ -656,7 +697,7 @@ export class PackageEffects {
             switchMap((response) => {
                 return this.authService.getUserInfo(response).pipe(
                     mergeMap((data) => {
-                        console.log(typeof (data))
+                        //console.log(typeof (data))
                         return [new GetUserInfoSuccess(data)]
 
                     }),
@@ -675,4 +716,5 @@ export class PackageEffects {
         private assocPermissionService: AssociatedPermissionService,
         private authService: AuthService,
     ) { }
+
 }

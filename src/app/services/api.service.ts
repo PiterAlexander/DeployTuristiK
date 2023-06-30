@@ -33,7 +33,7 @@ export class ApiService {
         console.log(`${this.endpoint}${idPackage}`);
         return this.http.put<Package>(`${this.endpoint}api/package/${idPackage}`, modelo)
     }
-    disablePackage(idPackage:string,modelo:Package):Observable<Package>{
+    disablePackage(idPackage: string, modelo: Package): Observable<Package> {
         console.log(`${this.endpoint}${idPackage}`);
         return this.http.put<Package>(`${this.endpoint}api/package/${idPackage}`, modelo)
     }
@@ -67,6 +67,10 @@ export class ApiService {
 
     updateOrderDetail(orderDetailId: string, modelo: OrderDetail): Observable<OrderDetail> {
         return this.http.put<OrderDetail>(`${this.endpoint}api/OrderDetail/${orderDetailId}`, modelo)
+    }
+
+    updatePayment(paymentId: string, modelo: Payment): Observable<Payment> {
+        return this.http.put<Payment>(`${this.endpoint}api/Payment/${paymentId}`, modelo)
     }
     //<----------------->
 
@@ -142,6 +146,6 @@ export class ApiService {
     //<------------->
     //<--- LOGIN --->
     signIn(email: string, password: string) {
-      return this.http.post<Token>(`${this.endpoint}api/Login`, { email, password })
-  }
+        return this.http.post<Token>(`${this.endpoint}api/Login`, { email, password })
+    }
 }

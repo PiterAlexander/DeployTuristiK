@@ -1,0 +1,38 @@
+<div class="card w-100 m-0">
+    <div class="card-header text-left">
+        <h1 class="m-0">Tus viajeros frecuentes</h1>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre completo</th>
+                    <th>Documento</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let traveler of frequentTravelers">
+                    <td>{{traveler.name}} {{traveler.lastName}}</td>
+                    <td>{{traveler.document}}</td>
+                    <td colspan="2">
+                        <button *ngIf="!isBeneficiarie(traveler)" type="button" style="width: 100%"
+                            class="hover-text btn btn-success" (click)="addTraveler(traveler)">
+                            <i class="fa fa-toggle-off" style="font-size: 100%" aria-hidden="true"></i>
+                            <span class="tooltip-text bottom">Añadir</span>
+                        </button>
+                        <button *ngIf="isBeneficiarie(traveler)" type="button" style="width: 100%"
+                            class="hover-text btn btn-danger" (click)="discardTraveler(traveler)">
+                            <i class="fa fa-toggle-on" style="width: 70%" aria-hidden="true"></i>
+                            <span class="tooltip-text bottom">Descartar</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+        <button type="button" (click)="back()" id="cancelButton" class="btn btn-danger mr-3"
+            id="cancelButton">Regresar</button>
+        <button type="submit" class="btn btn-success" id="nextButton">Siguiente</button>
+    </div>
+</div>

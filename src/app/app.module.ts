@@ -1,33 +1,33 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {HttpClientModule} from '@angular/common/http';
-import {AppRoutingModule} from '@/app-routing.module';
-import {AppComponent} from './app.component';
-import {MainComponent} from '@modules/main/main.component';
-import {LoginComponent} from '@modules/login/login.component';
-import {HeaderComponent} from '@modules/main/header/header.component';
-import {FooterComponent} from '@modules/main/footer/footer.component';
-import {MenuSidebarComponent} from '@modules/main/menu-sidebar/menu-sidebar.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {ProfileComponent} from '@pages/profile/profile.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {RegisterComponent} from '@modules/register/register.component';
-import {DashboardComponent} from '@pages/dashboard/dashboard.component';
-import {ToastrModule} from 'ngx-toastr';
-import {NotificationsComponent} from '@modules/main/header/notifications/notifications.component';
-import {registerLocaleData} from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { AppRoutingModule } from '@/app-routing.module';
+import { AppComponent } from './app.component';
+import { MainComponent } from '@modules/main/main.component';
+import { LoginComponent } from '@modules/login/login.component';
+import { HeaderComponent } from '@modules/main/header/header.component';
+import { FooterComponent } from '@modules/main/footer/footer.component';
+import { MenuSidebarComponent } from '@modules/main/menu-sidebar/menu-sidebar.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ProfileComponent } from '@pages/profile/profile.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RegisterComponent } from '@modules/register/register.component';
+import { DashboardComponent } from '@pages/dashboard/dashboard.component';
+import { ToastrModule } from 'ngx-toastr';
+import { NotificationsComponent } from '@modules/main/header/notifications/notifications.component';
+import { registerLocaleData } from '@angular/common';
 import localeEn from '@angular/common/locales/en';
-import {UserComponent} from '@modules/main/header/user/user.component';
-import {ForgotPasswordComponent} from '@modules/forgot-password/forgot-password.component';
-import {RecoverPasswordComponent} from '@modules/recover-password/recover-password.component';
-import {MenuItemComponent} from './components/menu-item/menu-item.component';
-import {ControlSidebarComponent} from './modules/main/control-sidebar/control-sidebar.component';
-import {StoreModule} from '@ngrx/store';
-import {authReducer} from './store/auth/reducer';
-import {uiReducer} from './store/ui/reducer';
-import {ProfabricComponentsModule} from '@profabric/angular-components';
-import {defineCustomElements} from '@profabric/web-components/loader';
-import {SidebarSearchComponent} from './components/sidebar-search/sidebar-search.component';
+import { UserComponent } from '@modules/main/header/user/user.component';
+import { ForgotPasswordComponent } from '@modules/forgot-password/forgot-password.component';
+import { RecoverPasswordComponent } from '@modules/recover-password/recover-password.component';
+import { MenuItemComponent } from './components/menu-item/menu-item.component';
+import { ControlSidebarComponent } from './modules/main/control-sidebar/control-sidebar.component';
+import { StoreModule } from '@ngrx/store';
+import { authReducer } from './store/auth/reducer';
+import { uiReducer } from './store/ui/reducer';
+import { ProfabricComponentsModule } from '@profabric/angular-components';
+import { defineCustomElements } from '@profabric/web-components/loader';
+import { SidebarSearchComponent } from './components/sidebar-search/sidebar-search.component';
 import { PackagesComponent } from './pages/packages/packages.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { EffectsModule } from '@ngrx/effects';
@@ -39,7 +39,7 @@ import { CreateOrderFormComponent } from './components/create-order-form/create-
 import { CreateRoleFormComponent } from '@components/create-role-form/create-role-form.component';
 import { DetailsPackageComponent } from './components/details-package/details-package.component';
 import { CostumersComponent } from './pages/costumers/costumers.component';
-// import { CreatecostumerformComponent } from './components/create-costumer-form/createcostumerform.component';
+import { CreatecostumerformComponent } from './components/create-costumer-form/createcostumerform.component';
 import { EmployeesComponent } from './pages/employees/employees.component';
 import { CreateEmployeeFormComponent } from './components/create-employee-form/create-employee-form.component';
 import { CreateOrderDetailFormComponent } from './components/create-order-detail-form/create-order-detail-form.component';
@@ -50,6 +50,8 @@ import { ReadOrderOrderDetailComponent } from './components/read-order-order-det
 import { ReadOrderPaymentComponent } from './components/read-order-payment/read-order-payment.component';
 import { CreateFrequentTravelerFormComponent } from './components/create-frequent-traveler-form/create-frequent-traveler-form.component';
 import { ListFrequentTravelerComponent } from './components/list-frequent-traveler/list-frequent-traveler.component';
+import { EditPaymentFormComponent } from './components/edit-payment-form/edit-payment-form.component';
+import { ListFrequentTravelersToOrdersComponent } from './components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
 
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
@@ -81,7 +83,7 @@ registerLocaleData(localeEn, 'en-EN');
         CreateOrderFormComponent,
         CreateRoleFormComponent,
         CostumersComponent,
-        // CreatecostumerformComponent,
+        CreatecostumerformComponent,
         EmployeesComponent,
         CreateEmployeeFormComponent,
         CreateOrderDetailFormComponent,
@@ -91,11 +93,13 @@ registerLocaleData(localeEn, 'en-EN');
         ReadOrderOrderDetailComponent,
         ReadOrderPaymentComponent,
         CreateFrequentTravelerFormComponent,
-        ListFrequentTravelerComponent   
+        ListFrequentTravelerComponent,
+        EditPaymentFormComponent,
+        ListFrequentTravelersToOrdersComponent
     ],
     imports: [
         BrowserModule,
-        StoreModule.forRoot({auth: authReducer, ui: uiReducer}),
+        StoreModule.forRoot({ auth: authReducer, ui: uiReducer }),
         EffectsModule.forRoot([PackageEffects]),
         HttpClientModule,
         AppRoutingModule,
@@ -113,4 +117,4 @@ registerLocaleData(localeEn, 'en-EN');
     providers: [],
     bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

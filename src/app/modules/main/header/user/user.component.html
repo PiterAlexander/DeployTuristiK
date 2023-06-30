@@ -26,15 +26,15 @@
 
             <p>
                 <span>{{ user.email }}</span>
-                <small>
+                <!-- <small>
                     <span class="mr-2">Member since</span>
                     <span>{{ formatDate(user.createdAt) }}</span>
-                </small>
+                </small> -->
             </p>
         </li>
         <!-- Menu Footer-->
         <li class="user-footer">
-            <a [routerLink]="['/profile']" class="btn btn-default btn-flat">
+            <a [routerLink]="['/profile']" class="btn btn-default btn-flat" >
                 Perfil
             </a>
             <a (click)="logout()" class="btn btn-default btn-flat float-right">

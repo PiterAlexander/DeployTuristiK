@@ -18,7 +18,7 @@ interface State {
 @Component({
   selector: 'app-list-frequent-traveler',
   templateUrl: './list-frequent-traveler.component.html',
-  styleUrls: ['./list-frequent-traveler.component.scss']
+  // styleUrls: ['./list-frequent-traveler.component.scss']
 })
 export class ListFrequentTravelerComponent {
   public filteredFrequentTravelerList: Array<Costumer>;
@@ -45,16 +45,16 @@ export class ListFrequentTravelerComponent {
       this.allCostumer = state.allCostumers.data
       this.costumerData = state.oneCostumer.data
       this.frequentTravelers = state.oneCostumer.data.frequentTraveler
-      this.compareCostumerId() 
+      this.compareCostumerId()
       console.log(this.frequentTravelers)
     })
   }
 
   compareCostumerId(){
     for(const element of this.frequentTravelers){
-    const costumer = this.allCostumer.find(c => c.costumerId === element.travelerId) 
+    const costumer = this.allCostumer.find(c => c.costumerId === element.travelerId)
     if (costumer != undefined) {
-      this.frequentTravelerCostumers.push(costumer)  
+      this.frequentTravelerCostumers.push(costumer)
     }
     };
   }
@@ -95,7 +95,7 @@ export class ListFrequentTravelerComponent {
     Object.assign(this._state, patch);
     this.searchByName();
   }
-  
+
   cancel() {
     this.modalService.dismissAll();
   }

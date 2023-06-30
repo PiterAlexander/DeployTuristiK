@@ -1,4 +1,5 @@
-<div class="content-header">
+<ng-container *ngIf="role!=='Cliente'">
+  <div class="content-header">
     <div class="container-fluid">
         <div class="row m-3">
             <div class="card card-package">
@@ -60,7 +61,7 @@
                                     </td>
                                     <td>
                                         <button  *ngIf="pack.status === false" type="button"  style="width: 100%" class="hover-text btn btn-outline-danger" (click)="disablePackage(pack)">
-                                        
+
                                             <span><i class="fa fa-toggle-off" style="font-size: 100%"
                                                     aria-hidden="true"></i></span>
                                         </button>
@@ -90,3 +91,144 @@
         </div>
     </div>
 </div>
+</ng-container>
+
+
+
+<ng-container *ngIf="role==='Cliente'">
+  <div class="container">
+
+
+    <div class="text-initial">
+        <p class="title">Explora nuestros <span class="span-title">paquetes</span></p>
+    </div>
+
+</div>
+
+<div class="container">
+
+    <div class="buttons-content">
+        <div class="row">
+            <div class="col-3 btn-edit-style"><button type="button" style="text-align: start; display: flex;"
+                    class="btn btn-outline-dark w-100 h-100 "><span class="textButton"
+                        style="width: 95%;">Lugares</span><i style="width: 5%;"
+                        class="textButton icon-style far fa-map"></i></button></div>
+            <div class="col-3 btn-edit-style"><button type="button" style="text-align: start; display: flex;"
+                    class="btn btn-outline-dark w-100 h-100 "><span class="textButton"
+                        style="width: 95%;">Fechas</span><i style="width: 5%;"
+                        class="textButton icon-style far fa-calendar-alt"></i></button></div>
+            <div class="col-3 btn-edit-style"><button type="button" style="text-align: start; display: flex;"
+                    class="btn btn-outline-dark w-100 h-100 "><span class="textButton" style="width: 95%;">Cosas que
+                        hacer</span><i style="width: 5%;" class="textButton icon-style fas fa-route"></i></button></div>
+            <div class="col-3 btn-edit-style"><button type="button" style="text-align: start; display: flex;"
+                    class="btn btn-outline-dark w-100 h-100 "><span class="textButton"
+                        style="width: 95%;">Vuelos</span><i style="width: 5%;"
+                        class="textButton icon-style fa fa-plane"></i></button></div>
+        </div>
+    </div>
+    <!--
+    <div class="container-fluid">
+        <div class="row p-4">
+            <div class="col-3 w-100 h-100">
+                <div class="img-volante p-0 m-0 h-100 w-100"  style="height: 300px;">
+                    <img class="w-100 h-100 " src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/italian-tour-packages-flyer-template-design-e038c5b1a6a0f5acaf69bb87a66705c0_screen.jpg?ts=1636996851" alt="">
+                </div>
+            </div>
+            <div class="col-3 w-100 h-100">
+                <div class="img-volante p-0 m-0"  style="height: 300px;">
+                    <img class="w-100 h-100 " src="https://marketplace.canva.com/EAFGLLP0Yx8/1/0/1236w/canva-volante-agencia-de-viajes-promocion-paquetes-organico-blanco-y-verde-JpUSxwW_WFU.jpg" alt="">
+                </div>
+            </div>
+            <div class="col-6 w-100 h-100">
+                <div class=" img-volante p-0 m-0"  style="height: 300px;">
+                    <img class="w-100 h-100" src="https://4.bp.blogspot.com/-RzHl_hmuel8/VVN9c-e3j_I/AAAAAAAABE4/LYlbOABXwGM/s1600/Volantes%2Bmuestra%2B%2B1.jpg" alt="">
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+
+    <!-- Container element -->
+
+    <div>
+    <div class="parallax m-4 border border-radius-1" >
+
+    <div class="container-fluid">
+        <div class="row p-4">
+            <div class="col-3 w-100 h-100">
+                <div class="img-volante p-0 m-0 h-100 w-100"  style="height: 300px;">
+                    <img class="w-100 h-100 " src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/italian-tour-packages-flyer-template-design-e038c5b1a6a0f5acaf69bb87a66705c0_screen.jpg?ts=1636996851" alt="">
+                </div>
+            </div>
+            <div class="col-3 w-100 h-100">
+                <div class="img-volante p-0 m-0"  style="height: 300px;">
+                    <img class="w-100 h-100 " src="https://marketplace.canva.com/EAFGLLP0Yx8/1/0/1236w/canva-volante-agencia-de-viajes-promocion-paquetes-organico-blanco-y-verde-JpUSxwW_WFU.jpg" alt="">
+                </div>
+            </div>
+            <div class="col-6 w-100 h-100">
+                <div class=" img-volante p-0 m-0"  style="height: 300px;">
+                    <img class="w-100 h-100" src="https://4.bp.blogspot.com/-RzHl_hmuel8/VVN9c-e3j_I/AAAAAAAABE4/LYlbOABXwGM/s1600/Volantes%2Bmuestra%2B%2B1.jpg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+</div>
+
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-3 row-cols-xl-3 justify-content-center">
+            <div class="col mb-5" *ngFor="let pack of filteredPackagesList">
+                <div class="card h-100 hoverCard" (click)="modalShowDetailsPackage(pack)" style="cursor: pointer;">
+                    <div class="card-header p-0">
+                        <div class="d-flex">
+                            <img class="card-img-top"
+                                src="https://st2.depositphotos.com/3725083/5485/i/600/depositphotos_54856347-stock-photo-travel-the-world-monument-concept.jpg"
+                                alt="..." />
+                            <span
+                                class="position-absolute style-edit translate-middle bg-primary border border-light rounded-circle">
+                                <span class="visually-hidden">{{calculateDays(pack.departureDate, pack.arrivalDate)}}
+                                    dias / {{calculateDays(pack.departureDate, pack.arrivalDate)-1}} noches</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body pl-4 pr-4 pb-1">
+                        <div class="text-left small mb-1">
+                            <h5 class="fw-bolder">{{pack.name}}</h5>
+                            <p class="text-card">Desde {{pack.departureDate | date}} hasta {{pack.arrivalDate | date}}
+                            </p>
+
+
+                            <i *ngIf="pack.transport=== 1" class="p-1 fa fa-plane"></i> <i *ngIf="pack.transport=== 2"
+                                class="p-1 fa fa-bus"></i>
+                            <span class="m-1" *ngIf="pack.transport=== 1">Aereo</span>
+                            <span class="m-1" *ngIf="pack.transport=== 2">Terrestre</span>
+
+                            <i class="p-1 fas fa-hotel"></i>
+                            <span class="m-1">{{pack.hotel}}</span>
+
+                        </div>
+                        <div class="text-left small">
+
+                            <i class="p-1 	fas fa-plane-departure"></i>
+                            <span class="m-1">Partiendo desde {{pack.departurePoint}}</span>
+
+                        </div>
+                        <hr class="solid">
+
+                        <div class="text-left small">
+                            <span class="m-1">Precio por persona</span>
+                            <p class="price-text p-1 m-0">{{pack.price | currency:'COP '}}</p>
+                        </div>
+                    </div>
+                    <!-- Product actions-->
+                    <div class="card-footer
+                     pt-0 mb-3 border-top-0 bg-transparent">
+                        <p class="m-0">Incluye impuestos, tasas y cargos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</ng-container>

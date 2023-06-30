@@ -6,10 +6,14 @@
         <div class="col d-flex justify-content-end">
             <div *ngIf="orderProcess[0].action != 'EditOrderDetail'" class="d-flex align-items-cente">
                 <h4 class="m-0 font-weight-bold">Beneficiarios: {{ beneficiariesAmount }} -</h4>
-                <a class="text-decoration-none text-dark" (click)="addAnotherBeneficiarie()"><i
-                        class="ml-2 fas fa-plus-square fa-2x"></i></a>
-                <a class="text-decoration-none text-dark" (click)="reduceBeneficiariesAmount()"><i
-                        class="ml-2 fas fa-minus-square fa-2x"></i></a>
+                <a class="hover-text-2 text-decoration-none text-dark" (click)="addAnotherBeneficiarie()"><i
+                        class="ml-2 fas fa-plus-square fa-2x"></i>
+                    <span class="tooltip-text bottom">Añadir beneficiario</span>
+                </a>
+                <a *ngIf="beneficiariesAmount > 1" class="hover-text-2 text-decoration-none text-dark"
+                    (click)="reduceBeneficiariesAmount()"><i class="ml-2 fas fa-minus-square fa-2x"></i>
+                    <span class="tooltip-text bottom">Reducir beneficiario</span>
+                </a>
             </div>
         </div>
     </div>
@@ -243,17 +247,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let b of beneficiaries">
-                                <td>{{b.name}}</td>
-                                <td>{{b.lastName}}</td>
-                                <td>{{b.document}}</td>
-                                <td>{{b.birthDate}}</td>
-                                <td>{{b.phoneNumber}}</td>
-                                <td>{{b.address}}</td>
-                                <td>{{b.eps}}</td>
+                            <tr *ngFor="let beneficiarie of beneficiaries">
+                                <td>{{beneficiarie.name}}</td>
+                                <td>{{beneficiarie.lastName}}</td>
+                                <td>{{beneficiarie.document}}</td>
+                                <td>{{beneficiarie.birthDate}}</td>
+                                <td>{{beneficiarie.phoneNumber}}</td>
+                                <td>{{beneficiarie.address}}</td>
+                                <td>{{beneficiarie.eps}}</td>
                                 <td>{{onePackage.price}}</td>
-                                <td class="text-center"><a (click)="deleteBeneficiarie(b.document)"><i
-                                            class="fas fa-trash text-danger"></i></a>
+                                <td class="infoData">
+                                    <button (click)="deleteBeneficiarie(beneficiarie.document)"
+                                        class="hover-text btn btn-outline-danger"><i
+                                            style="cursor: pointer; display: grid;" class="fas fa-trash"
+                                            style="font-size: 100%"></i>
+                                        <span class="tooltip-text bottom">Eliminar</span>
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
@@ -265,9 +274,11 @@
     <div class="card-footer">
         <div class="row">
             <div class="col">
-                <!-- <button *ngIf="orderProcess[0].action != 'EditOrderDetail'" (click)="back()" type="button"
-                    id="cancelButton" class="btn btn-primary">Tus viajeros
-                    frecuentes</button> -->
+                <!-- <button *ngIf="orderProcess[0].action != 'EditOrderDetail'" (click)="frequentTravelers()" type="button"
+                    class="hover-text btn btn-primary" style="width: 70px; height: 100%;"><i
+                        style="cursor: pointer; display: grid;" class="fas fa-user-friends" style="font-size: 100%"></i>
+                    <span class="tooltip-text bottom">Tus viajeros frecuentes</span>
+                </button> -->
             </div>
             <div class="col">
                 <div class="d-flex justify-content-end">

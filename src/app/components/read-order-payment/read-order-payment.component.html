@@ -40,7 +40,14 @@
                                     <td>{{payment.amount}}</td>
                                     <td>{{payment.remainingAmount}}</td>
                                     <td>{{payment.date}}</td>
-                                    <td>{{payment.image}}</td>
+                                    <td>
+                                        <button (click)="editPayment(payment)"
+                                            class="hover-text btn btn-outline-secondary"><i
+                                                style="cursor: pointer; display: grid;" style="font-size: 100%"
+                                                class="fas fa-eye"></i>
+                                            <span class="tooltip-text bottom">Inspeccionar</span>
+                                        </button>
+                                    </td>
                                     <td>
                                         <span *ngIf="payment.status === 0">Pendiente</span>
                                         <span *ngIf="payment.status === 1">Aceptado</span>
