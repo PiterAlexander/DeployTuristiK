@@ -20,17 +20,22 @@ export class EditPaymentFormComponent implements OnInit {
   public payment: Payment
   public allOrders: Array<Order>
   public order: Order
+  public user: any
+  public role: any
 
   constructor(
     private modalService: NgbModal,
     private store: Store<AppState>,
   ) { }
+
   ngOnInit(): void {
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
       this.payment = state.onePayment.data
       this.allOrders = state.allOrders.data
       this.order = this.allOrders.find(o => o.orderId === this.payment.orderId)
+      this.user = JSON.parse(localStorage.getItem('TokenPayload'))
+      this.role = this.user['role']
     })
   }
 

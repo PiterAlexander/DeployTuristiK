@@ -1,10 +1,11 @@
 import { Package } from '@/models/package';
-import { EditStatusPackageRequest, GetAllPackagesRequest, OpenModalCreatePackage, OpenModalDetailsPackage } from '@/store/ui/actions';
+import { EditStatusPackageRequest, GetAllCostumerRequest, GetAllPackagesRequest, OpenModalCreateOrderDetail, OpenModalCreatePackage, OpenModalDetailsPackage } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit, PipeTransform } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
+import { Costumer } from '@/models/costumer';
 
 interface State {
   page: number;
@@ -30,19 +31,22 @@ export class PackagesComponent implements OnInit {
   };
 
   public role;
+  public user;
+  public allCostumers: Array<Costumer>
 
   constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
     this.store.dispatch(new GetAllPackagesRequest());
-
+    this.store.dispatch(new GetAllCostumerRequest())
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
+      this.allCostumers = state.allCostumers.data
       this.packagesList = state.allPackages.data,
-      this.loading = state.allPackages.loading
+        this.loading = state.allPackages.loading
       this.searchByName();
-      var user = JSON.parse(localStorage.getItem('TokenPayload'))
-      this.role = user['role']
+      this.user = JSON.parse(localStorage.getItem('TokenPayload'))
+      this.role = this.user['role']
     });
   }
 
@@ -52,17 +56,17 @@ export class PackagesComponent implements OnInit {
     );
   }
 
-  openModalCreatePackage(pack?:Package) {
+  openModalCreatePackage(pack?: Package) {
     this.store.dispatch(new OpenModalCreatePackage());
   }
 
 
-  openEditPackageModal(pack:Package){
+  openEditPackageModal(pack: Package) {
     console.log(pack)
     this.store.dispatch(new OpenModalCreatePackage(pack));
   }
 
-  modalShowDetailsPackage(pack:Package){
+  modalShowDetailsPackage(pack: Package) {
     console.log(pack)
     this.store.dispatch(new OpenModalDetailsPackage(pack));
   }
@@ -78,7 +82,7 @@ export class PackagesComponent implements OnInit {
       this.filteredPackagesList = this.filteredPackagesList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
     }
   }
-  disablePackage(pack){
+  disablePackage(pack) {
     this.store.dispatch(new EditStatusPackageRequest(pack))
   }
 
@@ -106,7 +110,7 @@ export class PackagesComponent implements OnInit {
 
     if (!(departureDate instanceof Date) || !(returnDate instanceof Date)) {
       departureDate = new Date(departureDate);
-      returnDate =new Date(returnDate);
+      returnDate = new Date(returnDate);
     }
     const fechaSalida = departureDate;
     // Fecha de regreso
@@ -122,4 +126,16 @@ export class PackagesComponent implements OnInit {
     return diferenciaDias
   }
 
+  reserve(onePackage: Package) {
+    const costumer: Costumer = this.allCostumers.find(c => c.userId === this.user['id'])
+    const orderProcess = [{
+      action: "CreateOrderFromCustomer",
+      order: {
+        costumer: costumer,
+        package: onePackage
+      },
+      beneficiaries: {}
+    }]
+    this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess))
+  }
 }

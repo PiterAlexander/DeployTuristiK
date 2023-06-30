@@ -76,7 +76,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
         this.rolesList = data;
         var user = JSON.parse(localStorage.getItem('TokenPayload'));
-        var role = this.rolesList.find(r => r.roleId === user["roleId"]);
+        var role = this.rolesList.find(r => r.name === user["role"]);
 
         if (role && route.routeConfig.path !== "") {
           const allowedModules = role.associatedPermission.map(ap => ap.permission.module);

@@ -26,10 +26,10 @@
                     <button (click)="back()" type="button" id="cancelButton"
                         class="btn btn-outline-primary">Regresar</button>
                 </div>
-                <div class="col">
+                <div *ngIf="role !== 'Cliente'" class="col">
                     <button (click)="decline()" type="button" id="saveButton" class="btn btn-danger">Rechazar</button>
                 </div>
-                <div class="col">
+                <div *ngIf="role !== 'Cliente'" class="col">
                     <button (click)="approve()" type="button" id="saveButton" class="btn btn-success">Aprobar</button>
                 </div>
             </div>

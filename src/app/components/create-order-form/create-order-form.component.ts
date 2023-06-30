@@ -186,7 +186,7 @@ export class CreateOrderFormComponent implements OnInit {
         this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess));
       } else {
         const oneCostumer = this.allCostumers.find(c => c.document === this.formGroup.value.document)
-        const orderProcess = ([{
+        const orderProcess = [{
           action: 'CreateOrder',
           order: {
             costumer: oneCostumer,
@@ -194,7 +194,7 @@ export class CreateOrderFormComponent implements OnInit {
             beneficiaries: this.formGroup.value.beneficiariesAmount
           },
           beneficiaries: {},
-        }])
+        }]
         this.modalService.dismissAll()
         this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess));
       }
