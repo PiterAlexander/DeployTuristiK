@@ -87,7 +87,6 @@ export class LoginComponent implements OnInit {
     // }
 
     async getToken() {
-        console.log(this.token);
         if (this.token == null) {
             //console.log("El toke aun no esta actualizado")
         } else {
@@ -96,19 +95,22 @@ export class LoginComponent implements OnInit {
                 globalThis.payload = await this.authService.getUserInfo(
                     this.token.result
                 );
-                this.authService.setToken(this.token.result);
 
+                this.authService.setToken(this.token.result);
                 var log = JSON.parse(localStorage.getItem('TokenPayload'));
+                console.log(log)
                 if (log['role'] == 'Administrador') {
-                    this.router.navigate(['/']);
-                } else if (log['role'] == 'Cliente') {
-                    this.router.navigate(['/Clientes']);
+                  this.router.navigate(['/Dashboard']);
+                }
+                if (log['role'] == 'Cliente') {
+                    this.router.navigate(['/Paquetes']);
                 }
 
                 this.toastr.success(this.token.message);
             } else {
                 this.toastr.error(this.token.message);
             }
+
         }
     }
 }

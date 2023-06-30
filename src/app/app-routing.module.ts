@@ -20,48 +20,47 @@ const routes: Routes = [
     {
         path: '',
         component: MainComponent,
-        //canActivate: [NonAuthGuard],
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         children: [
             {
-                path: '',
-                // canActivate: [NonAuthGuard],
+                path: 'Dashboard',
+                canActivate: [AuthGuard],
                 component: DashboardComponent
             },
             {
                 path: 'profile',
-                // canActivate: [NonAuthGuard],
+                canActivate: [AuthGuard],
                 component: ProfileComponent
             },
             {
                 path: 'Paquetes',
-                // canActivate: [AuthGuard],
+                canActivate: [AuthGuard],
                 component: PackagesComponent
             },
             {
                 path: 'Roles',
-                // canActivate: [AuthGuard],
+                canActivate: [AuthGuard],
                 component: RolesComponent
             },
             {
                 path: 'Pedidos',
-                // canActivate: [AuthGuard],
+                canActivate: [AuthGuard],
                 component: OrdersComponent
             },
             {
                 path: 'Clientes',
-                // canActivate: [AuthGuard],
+                canActivate: [AuthGuard],
                 component: CostumersComponent
             },
             {
                 path: 'Empleados',
-                // canActivate: [AuthGuard],
+                canActivate: [AuthGuard],
                 component: EmployeesComponent
             },
             {
                 path: 'Usuarios',
-                // canActivate: [AuthGuard],
+                canActivate: [AuthGuard],
                 component: UsersComponent
             },
         ]
@@ -86,7 +85,7 @@ const routes: Routes = [
         component: RecoverPasswordComponent,
         canActivate: [NonAuthGuard]
     },
-    { path: '**', redirectTo: '' }
+    { path: '**', redirectTo: 'Paquetes' },
 ];
 
 @NgModule({
