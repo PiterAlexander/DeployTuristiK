@@ -317,9 +317,10 @@ export class CreatePaymentFormComponent implements OnInit {
           }
 
           this.store.dispatch(new CreatePaymentRequest({ ...payment }))
+          this.modalService.dismissAll();
           Swal.fire({
             icon: 'success',
-            title: '¡Beneficiario/s agregado/s exitosamente!',
+            title: '¡Beneficiario(s) agregado(s) exitosamente!',
             timer: 1500,
             timerProgressBar: true,
             showConfirmButton: false
