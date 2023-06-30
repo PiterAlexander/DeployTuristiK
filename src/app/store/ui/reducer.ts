@@ -79,6 +79,35 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 }
             };
+
+            case Actions.packageActions.CHANGE_STATUS_PACKAGE_REQUEST:
+            return {
+                ...state,
+                onePackage: {
+                    data: undefined,
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+        case Actions.packageActions.CHANGE_STATUS_PACKAGE_SUCCESS:
+            return {
+                ...state,
+                onePackage: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+        case Actions.packageActions.CHANGE_STATUS_PACKAGE_FAILURE:
+            return {
+                ...state,
+                onePackage: {
+                    data: undefined,
+                    error: action.payload,
+                    loading: false
+                }
+            };
         case Actions.OPEN_MODAL_DETAILS_PACKAGE:
             return {
                 ...state,

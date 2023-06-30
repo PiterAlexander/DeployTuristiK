@@ -33,9 +33,9 @@ export class ApiService {
         console.log(`${this.endpoint}${idPackage}`);
         return this.http.put<Package>(`${this.endpoint}api/package/${idPackage}`, modelo)
     }
-    disablePackage(idPackage: string, modelo: Package): Observable<Package> {
-        console.log(`${this.endpoint}${idPackage}`);
-        return this.http.put<Package>(`${this.endpoint}api/package/${idPackage}`, modelo)
+    disablePackage(pack:Package):Observable<Package>{
+        console.log(`${this.endpoint}api/package/${pack.packageId}/changeStatus`);
+        return this.http.post<Package>(`${this.endpoint}api/package/${pack.packageId}/changeStatus`, null)
     }
 
     //<-------------->

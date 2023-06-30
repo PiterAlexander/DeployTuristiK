@@ -16,9 +16,6 @@ import {
     EDIT_PACKAGE_REQUEST,
     OPEN_MODAL_DETAILS_PACKAGE,
     GET_ONE_PACKAGES_REQUEST,
-    EditStatusPackageRequest,
-    EditStatusPackageSuccess,
-    EditStatusPackageFailure,
     loginActions,
     LoginRequest,
     LoginSuccess,
@@ -33,6 +30,9 @@ import {
     EditPaymentRequest,
     EditPaymentSuccess,
     EditPaymentFailure,
+    ChangeStatusPackageRequest,
+    ChangeStatusPackageSuccess,
+    ChangeStatusPackageFailure,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -132,6 +132,23 @@ export class PackageEffects {
                     ];
                 }),
                 catchError((err) => of(new EditPackageFailure(err)))
+            )
+        })
+    ));
+
+    disablePackage$ = createEffect(() => this.actions$.pipe(
+        ofType(packageActions.CHANGE_STATUS_PACKAGE_REQUEST),
+        map((action: ChangeStatusPackageRequest) => action.payload),
+        switchMap((pack) => {
+            return this.apiService.disablePackage(pack).pipe(
+                mergeMap((packResolved) => {
+                    this.modalRef.close();
+                    return [
+                        new ChangeStatusPackageSuccess(packResolved),
+                        new GetAllPackagesRequest(),
+                    ];
+                }),
+                catchError((err) => of(new ChangeStatusPackageFailure(err)))
             )
         })
     ));

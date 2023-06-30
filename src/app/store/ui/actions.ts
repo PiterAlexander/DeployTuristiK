@@ -92,7 +92,12 @@ export enum packageActions {
 
   EDIT_PACKAGE_REQUEST = '[PACKAGE] EDIT_PACKAGE_REQUEST',
   EDIT_PACKAGE_SUCCESS = '[PACKAGE] EDIT_PACKAGE_SUCCESS',
-  EDIT_PACKAGE_FAILURE = '[PACKAGE] EDIT_PACKAGE_FAILURE'
+  EDIT_PACKAGE_FAILURE = '[PACKAGE] EDIT_PACKAGE_FAILURE',
+
+  
+  CHANGE_STATUS_PACKAGE_REQUEST = '[PACKAGE] CHANGE_STATUS_PACKAGE_REQUEST',
+  CHANGE_STATUS_PACKAGE_SUCCESS = '[PACKAGE] CHANGE_STATUS_PACKAGE_SUCCESS',
+  CHANGE_STATUS_PACKAGE_FAILURE = '[PACKAGE] CHANGE_STATUS_PACKAGE_FAILURE',
 }
 
 export class OpenModalDetailsPackage implements Action {
@@ -156,20 +161,23 @@ export class EditPackageFailure implements Action {
 
 
 // PACKAGES DISABLE ACTIONS ------------------------------------------------
-export class EditStatusPackageRequest implements Action {
-  readonly type: string = EDIT_PACKAGE_REQUEST;
-  constructor(public payload: Package) { }
+
+export class ChangeStatusPackageRequest implements Action {
+  readonly type = packageActions.CHANGE_STATUS_PACKAGE_REQUEST;
+
+  constructor(public payload: Package) {} // Aquí pasamos el id del paquete como carga útil
 }
 
-export class EditStatusPackageSuccess implements Action {
-  readonly type: string = EDIT_PACKAGE_SUCCESS;
-  readonly string = OPEN_MODAL_CREATE_PACKAGE;
-  constructor(public payload: any) { }
+export class ChangeStatusPackageSuccess implements Action {
+  readonly type = packageActions.CHANGE_STATUS_PACKAGE_SUCCESS;
+
+  constructor(public payload: any) {} // Aquí pasamos el paquete deshabilitado como carga útil
 }
 
-export class EditStatusPackageFailure implements Action {
-  readonly type: string = EDIT_PACKAGE_FAILURE;
-  constructor(public payload: string) { }
+export class ChangeStatusPackageFailure implements Action {
+  readonly type = packageActions.CHANGE_STATUS_PACKAGE_FAILURE;
+
+  constructor(public payload: string) {} // Aquí pasamos cualquier error como carga útil
 }
 
 // PACKAGES DISABLE ACTIONS END -----------------------------------------
@@ -215,6 +223,7 @@ export enum orderActions {
   EDIT_PAYMENT_SUCCESS = '[PAYMENT] EDIT_PAYMENT_SUCCESS',
   EDIT_PAYMENT_FAILURE = '[PAYMENT] EDIT_PAYMENT_FAILURE',
 }
+
 
 export class GetAllOrdersRequest implements Action {
   readonly type: string = orderActions.GET_ALL_ORDERS_REQUEST;
