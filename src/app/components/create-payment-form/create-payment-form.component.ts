@@ -4,7 +4,7 @@ import { OrderDetail } from '@/models/orderDetail';
 import { Package } from '@/models/package';
 import { Payment } from '@/models/payment';
 import { AppState } from '@/store/state';
-import { CreateOrderRequest, CreatePaymentRequest, EditOrderRequest, EditPackageRequest, GetAllOrdersRequest, OpenModalCreateOrderDetail, OpenModalPayments } from '@/store/ui/actions';
+import { CreateOrderRequest, CreatePaymentRequest, EditOrderRequest, EditPackageRequest, OpenModalCreateOrderDetail, OpenModalPayments } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -12,6 +12,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { ApiService } from '@services/api.service';
 import { Observable } from 'rxjs';
+import { saveAs } from 'file-saver';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -32,6 +33,7 @@ export class CreatePaymentFormComponent implements OnInit {
   public remainingAmount: number
   public beneficiariesAmount: number
   public oneOrder: Order
+  public file: any
 
   constructor(
     public apiService: ApiService,
@@ -154,9 +156,20 @@ export class CreatePaymentFormComponent implements OnInit {
 
   //<------------------->
 
+  onFileSelected(event: any) {
+    if (event.target.files && event.target.files.length > 0) {
+      this.file = event.target.files[0];
+    }
+  }
+
   async save() {
     if (!this.formGroup.invalid) {
       if (this.orderProcess[0].action === 'CreatePayment') {
+        // const urlName = this.file.name.replace(/\s/g, '-')
+        // const imgURL = '../src/assets/img/' + urlName
+        // saveAs(imgURL, this.file);
+        // console.log('Imagen: ', urlName);
+        // console.log('url: ', imgURL);
         let status: number
         if (this.formGroup.value.amount === this.remainingAmount) {
           status = 2
@@ -178,7 +191,7 @@ export class CreatePaymentFormComponent implements OnInit {
           amount: this.formGroup.value.amount,
           remainingAmount: this.remainingAmount - this.formGroup.value.amount,
           date: new Date(),
-          image: "url",
+          image: 'url',
           status: 1
         }
 

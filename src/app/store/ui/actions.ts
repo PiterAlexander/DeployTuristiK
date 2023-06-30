@@ -97,7 +97,7 @@ export enum packageActions {
 
 export class OpenModalDetailsPackage implements Action {
   readonly type: string = OPEN_MODAL_DETAILS_PACKAGE;
-  constructor(public payload?: Package) {}
+  constructor(public payload?: Package) { }
 }
 
 // PACKAGES LIST -------------------------------------------------------------
@@ -151,6 +151,28 @@ export class EditPackageFailure implements Action {
   readonly type: string = packageActions.EDIT_PACKAGE_FAILURE;
   constructor(public payload: string) { }
 }
+
+// END PACKAGES EDIT--------------------------------------------------------
+
+
+// PACKAGES DISABLE ACTIONS ------------------------------------------------
+export class EditStatusPackageRequest implements Action {
+  readonly type: string = EDIT_PACKAGE_REQUEST;
+  constructor(public payload: Package) { }
+}
+
+export class EditStatusPackageSuccess implements Action {
+  readonly type: string = EDIT_PACKAGE_SUCCESS;
+  readonly string = OPEN_MODAL_CREATE_PACKAGE;
+  constructor(public payload: any) { }
+}
+
+export class EditStatusPackageFailure implements Action {
+  readonly type: string = EDIT_PACKAGE_FAILURE;
+  constructor(public payload: string) { }
+}
+
+// PACKAGES DISABLE ACTIONS END -----------------------------------------
 //<--------------------->
 
 //<--- ORDER ACTIONS --->
@@ -160,16 +182,18 @@ export enum orderActions {
   GET_ALL_ORDERS_FAILURE = '[ORDER] GET_ALL_ORDERS_FAILURE',
 
   OPEN_MODAL_CREATE_ORDER = '[ORDER] OPEN_MODAL_CREATE_ORDER',
-
   CREATE_ORDER_REQUEST = '[ORDER] CREATE_ORDER_REQUEST',
   CREATE_ORDER_SUCCESS = '[ORDER] CREATE_ORDER_SUCCESS',
   CREATE_ORDER_FAILURE = '[ORDER] CREATE_ORDER_FAILURE',
+
+  OPEN_MODAL_LIST_FREQUENTTRAVELERS_TO_ORDERS = '[ORDER] OPEN_MODAL_LIST_FREQUENTTRAVELERS_TO_ORDERS',
 
   EDIT_ORDER_REQUEST = '[ORDER] EDIT_ORDER_REQUEST',
   EDIT_ORDER_SUCCESS = '[ORDER] EDIT_ORDER_SUCCESS',
   EDIT_ORDER_FAILURE = '[ORDER] EDIT_ORDER_FAILURE',
 
   OPEN_MODAL_ORDERDETAILS = '[ORDERDETAIL] OPEN_MODAL_ORDERDETAILS',
+
   OPEN_MODAL_CREATE_ORDERDETAIL = '[ORDERDETAIL] OPEN_MODAL_CREATE_ORDERDETAIL',
   CREATE_ORDERDETAIL_REQUEST = '[ORDERDETAIL] CREATE_ORDERDETAIL_REQUEST',
   CREATE_ORDERDETAIL_SUCCESS = '[ORDERDETAIL] CREATE_ORDERDETAIL_SUCCESS',
@@ -180,35 +204,17 @@ export enum orderActions {
   EDIT_ORDERDETAIL_FAILURE = '[ORDERDETAIL] EDIT_ORDERDETAIL_FAILURE',
 
   OPEN_MODAL_PAYMENTS = '[PAYMENTS] OPEN_MODAL_PAYMENTS',
+
   OPEN_MODAL_CREATE_PAYMENT = '[PAYMENT] OPEN_MODAL_CREATE_PAYMENT',
   CREATE_PAYMENT_REQUEST = '[PAYMENT] CREATE_PAYMENT_REQUEST',
   CREATE_PAYMENT_SUCCESS = '[PAYMENT] CREATE_PAYMENT_SUCCESS',
   CREATE_PAYMENT_FAILURE = '[PAYMENT] CREATE_PAYMENT_FAILURE',
+
+  OPEN_MODAL_EDIT_PAYMENT = '[PAYMENT] OPEN_MODAL_EDIT_PAYMENT',
+  EDIT_PAYMENT_REQUEST = '[PAYMENT] EDIT_PAYMENT_REQUEST',
+  EDIT_PAYMENT_SUCCESS = '[PAYMENT] EDIT_PAYMENT_SUCCESS',
+  EDIT_PAYMENT_FAILURE = '[PAYMENT] EDIT_PAYMENT_FAILURE',
 }
-
-// END PACKAGES EDIT--------------------------------------------------------
-
-
-// PACKAGES DISABLE ACTIONS ------------------------------------------------
-export class EditStatusPackageRequest implements Action {
-  readonly type: string = EDIT_PACKAGE_REQUEST;
-  constructor(public payload: Package) {}
-}
-
-export class EditStatusPackageSuccess implements Action {
-  readonly type: string = EDIT_PACKAGE_SUCCESS;
-  readonly string = OPEN_MODAL_CREATE_PACKAGE;
-  constructor(public payload: any) {}
-}
-
-export class EditStatusPackageFailure implements Action {
-  readonly type: string = EDIT_PACKAGE_FAILURE;
-  constructor(public payload: string) {}
-}
-
-// PACKAGES DISABLE ACTIONS END -----------------------------------------
-// PACKAGES END--------------------------------------------------------
-
 
 export class GetAllOrdersRequest implements Action {
   readonly type: string = orderActions.GET_ALL_ORDERS_REQUEST;
@@ -239,6 +245,11 @@ export class CreateOrderFailure implements Action {
   constructor(public payload: string) { }
 }
 
+export class OpenModalListFrequentTravelersToOrders implements Action {
+  readonly type: string = orderActions.OPEN_MODAL_LIST_FREQUENTTRAVELERS_TO_ORDERS;
+  constructor(public payload: Array<any>) { }
+}
+
 export class EditOrderRequest implements Action {
   readonly type: string = orderActions.EDIT_ORDER_REQUEST;
   constructor(public payload: Order) { }
@@ -256,6 +267,7 @@ export class OpenModalOrderDetails implements Action {
   readonly type: string = orderActions.OPEN_MODAL_ORDERDETAILS;
   constructor(public payload: Order) { }
 }
+
 export class OpenModalCreateOrderDetail implements Action {
   readonly type: string = orderActions.OPEN_MODAL_CREATE_ORDERDETAIL;
   constructor(public payload: any) { }
@@ -270,7 +282,7 @@ export class CreateOrderDetailSuccess implements Action {
   constructor(public payload: any) { }
 }
 export class CreateOrderDetailFailure implements Action {
-  readonly type: string = orderActions.CREATE_PAYMENT_FAILURE;
+  readonly type: string = orderActions.CREATE_ORDERDETAIL_FAILURE;
   constructor(public payload: string) { }
 }
 
@@ -280,11 +292,11 @@ export class EditOrderDetailRequest implements Action {
   constructor(public payload: OrderDetail) { }
 }
 export class EditOrderDetailSuccess implements Action {
-  readonly type: string = orderActions.EDIT_ORDER_SUCCESS;
+  readonly type: string = orderActions.EDIT_ORDERDETAIL_SUCCESS;
   constructor(public payload: any) { }
 }
 export class EditOrderDetailFailure implements Action {
-  readonly type: string = orderActions.EDIT_ORDER_FAILURE;
+  readonly type: string = orderActions.EDIT_ORDERDETAIL_FAILURE;
   constructor(public payload: string) { }
 }
 
@@ -292,6 +304,7 @@ export class OpenModalPayments implements Action {
   readonly type: string = orderActions.OPEN_MODAL_PAYMENTS;
   constructor(public payload: Order) { }
 }
+
 export class OpenModalCreatePayment implements Action {
   readonly type: string = orderActions.OPEN_MODAL_CREATE_PAYMENT;
   constructor(public payload?: any) { }
@@ -307,6 +320,24 @@ export class CreatePaymentSuccess implements Action {
 }
 export class CreatePaymentFailure implements Action {
   readonly type: string = orderActions.CREATE_PAYMENT_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class OpenModalEditPayment implements Action {
+  readonly type: string = orderActions.OPEN_MODAL_EDIT_PAYMENT;
+  constructor(public payload: any) { }
+}
+export class EditPaymentRequest implements Action {
+  readonly type: string = orderActions.EDIT_PAYMENT_REQUEST;
+  readonly string = orderActions.OPEN_MODAL_EDIT_PAYMENT;
+  constructor(public payload: Payment) { }
+}
+export class EditPaymentSuccess implements Action {
+  readonly type: string = orderActions.EDIT_PAYMENT_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class EditPaymentFailure implements Action {
+  readonly type: string = orderActions.EDIT_PAYMENT_FAILURE;
   constructor(public payload: string) { }
 }
 //<--------------------->
@@ -645,7 +676,7 @@ export enum FrequentTravelerActions {
   GET_ALL_FREQUENTTRAVELER_REQUEST = '[FREQUENTTRAVELERS] GET_ALL_FREQUENTTRAVELER__REQUEST',
   GET_ALL_FREQUENTTRAVELER_SUCCESS = '[FREQUENTTRAVELERS] GET_ALL_FREQUENTTRAVELER__SUCCESS',
   GET_ALL_FREQUENTTRAVELER_FAILURE = '[FREQUENTTRAVELERS] GET_ALL_FREQUENTTRAVELER__FAILURE',
-  
+
   OPEN_MODAL_CREATE_FREQUENTTRAVELER = '[FREQUENTTRAVELERS] OPEN_MODAL_CREATE_FREQUENTTRAVELER',
   OPEN_MODAL_LIST_FREQUENTTRAVELER = '[FREQUENTTRAVELERS] OPEN_MODAL_LIST_FREQUENTTRAVELER',
 
@@ -751,7 +782,7 @@ export class LoginFailure implements Action {
 
 export class GetUserInfoRequest implements Action {
   readonly type: string = loginActions.GET_USER_INFO_REQUEST;
-  constructor(public payload: any) {}
+  constructor(public payload: any) { }
 }
 export class GetUserInfoSuccess implements Action {
   readonly type: string = loginActions.GET_USER_INFO_SUCCESS;

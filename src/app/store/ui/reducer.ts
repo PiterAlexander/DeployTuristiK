@@ -141,6 +141,16 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             }
 
+        case Actions.orderActions.OPEN_MODAL_LIST_FREQUENTTRAVELERS_TO_ORDERS:
+            return {
+                ...state,
+                orderProcess: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            }
+
         case Actions.orderActions.OPEN_MODAL_ORDERDETAILS:
             return {
                 ...state,
@@ -150,7 +160,6 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 }
             }
-
 
         case Actions.orderActions.OPEN_MODAL_PAYMENTS:
             return {
@@ -427,7 +436,6 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
             };
 
         case Actions.loginActions.LOGIN_SUCCESS:
-            //console.log("desde redu: ", action.payload)
             return {
                 ...state,
                 token: {
@@ -450,7 +458,6 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
 
         case Actions.loginActions.GET_USER_INFO_REQUEST:
 
-            console.log("iam in red", action.payload);
             return {
                 ...state,
                 userLoged: {
@@ -461,7 +468,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
             }
 
         case Actions.loginActions.GET_USER_INFO_SUCCESS:
-            console.log("iam in blue", action.payload);
+
             return {
                 ...state,
                 userLoged: {
@@ -472,7 +479,6 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
             }
 
         case Actions.loginActions.GET_USER_INFO_FAILURE:
-            console.log("Im not")
             return {
                 ...state,
                 userLoged: {

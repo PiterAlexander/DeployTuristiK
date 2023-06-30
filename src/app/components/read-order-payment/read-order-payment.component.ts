@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
-import { OpenModalCreatePayment } from '@/store/ui/actions';
+import { OpenModalCreatePayment, OpenModalEditPayment } from '@/store/ui/actions';
 import { Order } from '@/models/order';
 import Swal from 'sweetalert2';
 
@@ -35,6 +35,15 @@ export class ReadOrderPaymentComponent {
 
   closeModal() {
     this.modalService.dismissAll()
+  }
+
+  editPayment(payment: Payment) {
+    this.closeModal()
+    const orderProcess = [{
+      order: this.order,
+      payment: payment
+    }]
+    this.store.dispatch(new OpenModalEditPayment(orderProcess))
   }
 
   addPayment() {

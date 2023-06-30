@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-create-frequent-traveler-form',
   templateUrl: './create-frequent-traveler-form.component.html',
-  styleUrls: ['./create-frequent-traveler-form.component.scss']
+  // styleUrls: ['./create-frequent-traveler-form.component.scss']
 })
 
 export class CreateFrequentTravelerFormComponent {
@@ -92,12 +92,12 @@ export class CreateFrequentTravelerFormComponent {
         eps: this.saveEps(),
         User: user,
       }
-      let costumerId 
+      let costumerId
         this.apiService.addCostumer(costumer).subscribe({
           next: (data) => {
             costumerId = data.costumerId
             console.log(data.costumerId)
-            
+
           },
           error: (err) => {
           }

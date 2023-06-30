@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { AppService } from '@services/app.service';
 import { Observable } from 'rxjs';
 
-const BASE_CLASSES = 'main-sidebar elevation-4';
+var BASE_CLASSES = 'main-sidebar elevation-4 sidebar-light';
 @Component({
   selector: 'app-menu-sidebar',
   templateUrl: './menu-sidebar.component.html',
@@ -19,6 +19,7 @@ export class MenuSidebarComponent implements OnInit {
   public user;
   public roleList:Array<Role>
   public menu = MENU;
+  public role;
 
   constructor(
     public appService: AppService,
@@ -31,11 +32,16 @@ export class MenuSidebarComponent implements OnInit {
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.roleList = state.allRoles.data;
-      this.classes = `${BASE_CLASSES} ${state.sidebarSkin}`;
       this.AllowMenuItems()
+      var user = JSON.parse(localStorage.getItem('TokenPayload'))
+      this.role = user['role']
+
+      if (this.role === 'Cliente') {
+        this.classes = '';
+      }
+      this.classes = `${this.classes} ${state.sidebarSkin}`;
     });
     this.user = this.appService.user;
-
   }
 
   AllowMenuItems(){
@@ -71,7 +77,7 @@ export const MENU = [
   {
     name: 'Dashboard',
     iconClasses: 'fas fa-tachometer-alt',
-    path: ['/'],
+    path: ['/Dashboard'],
     allowed: false
   },
   {

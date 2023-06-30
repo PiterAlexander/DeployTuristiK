@@ -8,7 +8,7 @@ import packageInfo from './../../../../../package.json';
     styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent {
-    @HostBinding('class') classes: string = 'main-footer';
+    @HostBinding('class') classes: string = 'main-footer ';
     public appVersion = packageInfo.version;
     public currentYear: string = DateTime.now().toFormat('y');
 }

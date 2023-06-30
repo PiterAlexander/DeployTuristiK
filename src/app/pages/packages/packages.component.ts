@@ -29,6 +29,8 @@ export class PackagesComponent implements OnInit {
     pageSize: 5
   };
 
+  public role;
+
   constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
@@ -39,6 +41,8 @@ export class PackagesComponent implements OnInit {
       this.packagesList = state.allPackages.data,
       this.loading = state.allPackages.loading
       this.searchByName();
+      var user = JSON.parse(localStorage.getItem('TokenPayload'))
+      this.role = user['role']
     });
   }
 
@@ -62,7 +66,7 @@ export class PackagesComponent implements OnInit {
     console.log(pack)
     this.store.dispatch(new OpenModalDetailsPackage(pack));
   }
-  
+
   searchByName() {
     if (this.search === undefined || this.search.length <= 0) {
       this.filteredPackagesList = this.packagesList;
@@ -96,4 +100,26 @@ export class PackagesComponent implements OnInit {
     Object.assign(this._state, patch);
     this.searchByName();
   }
+
+  //PARA LA VISTA DEL CLIENTE-----------------------------------------------
+  calculateDays(departureDate: Date, returnDate: Date): number {
+
+    if (!(departureDate instanceof Date) || !(returnDate instanceof Date)) {
+      departureDate = new Date(departureDate);
+      returnDate =new Date(returnDate);
+    }
+    const fechaSalida = departureDate;
+    // Fecha de regreso
+    const fechaRegreso = returnDate;
+
+    // Diferencia en milisegundos
+    const diferenciaMilisegundos = fechaRegreso.getTime() - fechaSalida.getTime();
+
+    // Convertir la diferencia de milisegundos a días
+    const unDiaEnMilisegundos = 1000 * 60 * 60 * 24;
+    const diferenciaDias = Math.floor(diferenciaMilisegundos / unDiaEnMilisegundos);
+
+    return diferenciaDias
+  }
+
 }

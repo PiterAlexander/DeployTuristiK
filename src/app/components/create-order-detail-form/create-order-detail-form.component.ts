@@ -4,7 +4,7 @@ import { Package } from '@/models/package';
 import { Role } from '@/models/role';
 import { User } from '@/models/user';
 import { AppState } from '@/store/state';
-import { EditCostumerRequest, GetAllRoleRequest, OpenModalCreateOrder, OpenModalCreatePayment, OpenModalOrderDetails } from '@/store/ui/actions';
+import { EditCostumerRequest, GetAllRoleRequest, OpenModalCreateOrder, OpenModalCreatePayment, OpenModalListFrequentTravelersToOrders, OpenModalOrderDetails } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -155,6 +155,16 @@ export class CreateOrderDetailFormComponent implements OnInit {
       this.modalService.dismissAll();
       this.store.dispatch(new OpenModalCreateOrder(this.orderProcess))
     }
+  }
+
+  frequentTravelers() {
+    this.orderProcess = [{
+      order: this.orderProcess[0].order,
+      beneficiaries: this.beneficiaries,
+      payment: {}
+    }]
+    this.modalService.dismissAll();
+    this.store.dispatch(new OpenModalListFrequentTravelersToOrders(this.orderProcess))
   }
 
   deleteBeneficiarie(document: string) {
