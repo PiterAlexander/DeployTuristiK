@@ -60,9 +60,14 @@
 
 
 <ng-container *ngIf="role==='Cliente'">
-    <ul class="nav justify-content-end" *ngIf="role==='Cliente'">
+
+
+    <ul class="nav justify-content-end">
+
       <li class="nav-item" *ngFor="let item of menu">
-        <a [routerLink]="['/']" class="nav-link" *ngIf="item.allowed">{{item.name}}</a>
+        <ng-template [ngIf]="item.allowed">
+          <app-menu-item [menuItem]="item"></app-menu-item>
+        </ng-template>
       </li>
     </ul>
 </ng-container>

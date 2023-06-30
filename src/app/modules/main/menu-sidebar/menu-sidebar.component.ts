@@ -32,18 +32,16 @@ export class MenuSidebarComponent implements OnInit {
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.roleList = state.allRoles.data;
-      //this.classes = `${BASE_CLASSES} ${state.sidebarSkin}`;
       this.AllowMenuItems()
       var user = JSON.parse(localStorage.getItem('TokenPayload'))
       this.role = user['role']
 
       if (this.role === 'Cliente') {
-        BASE_CLASSES = ''
+        this.classes = '';
       }
-      this.classes = `${BASE_CLASSES} ${state.sidebarSkin}`;
+      this.classes = `${this.classes} ${state.sidebarSkin}`;
     });
     this.user = this.appService.user;
-
   }
 
   AllowMenuItems(){
@@ -79,7 +77,7 @@ export const MENU = [
   {
     name: 'Dashboard',
     iconClasses: 'fas fa-tachometer-alt',
-    path: ['/'],
+    path: ['/Dashboard'],
     allowed: false
   },
   {

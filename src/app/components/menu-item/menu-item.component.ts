@@ -2,6 +2,11 @@ import {Component, HostBinding, Input, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
 import {filter} from 'rxjs/operators';
 import {openCloseAnimation, rotateAnimation} from './menu-item.animations';
+import { Store } from '@ngrx/store';
+import { UiState } from '@/store/ui/state';
+import { AppService } from '@services/app.service';
+import { Observable } from 'rxjs';
+import { AppState } from '@/store/state';
 
 @Component({
     selector: 'app-menu-item',
@@ -12,14 +17,25 @@ import {openCloseAnimation, rotateAnimation} from './menu-item.animations';
 export class MenuItemComponent implements OnInit {
     @Input() menuItem: any = null;
     public isExpandable: boolean = false;
+    public ui: Observable<UiState>;
     @HostBinding('class.nav-item') isNavItem: boolean = true;
     @HostBinding('class.menu-open') isMenuExtended: boolean = false;
     public isMainActive: boolean = false;
     public isOneOfChildrenActive: boolean = false;
+    public role
 
-    constructor(private router: Router) {}
+    constructor(
+      private router: Router,
+      public appService: AppService,
+      private store: Store<AppState>
+    ) {}
 
     ngOnInit(): void {
+      this.ui = this.store.select('ui');
+      this.ui.subscribe((state: UiState) => {
+        var user = JSON.parse(localStorage.getItem('TokenPayload'))
+        this.role = user['role']
+      });
         if (
             this.menuItem &&
             this.menuItem.children &&

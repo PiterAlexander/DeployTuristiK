@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
             this.role = user['role']
 
             if (this.role === 'Cliente') {
-              BASE_CLASSES = 'navbar navbar-expand-lg bg-body-tertiary'
+              BASE_CLASSES = 'navbar navbar-expand-lg bg-body-tertiary fixed-top mb-5'
             }
 
             this.classes = `${BASE_CLASSES} ${state.navbarVariant}`;

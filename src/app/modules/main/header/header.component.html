@@ -6,7 +6,7 @@
       ></a>
   </li>
   <li class="nav-item d-none d-sm-inline-block">
-      <a [routerLink]="['/']" class="nav-link" *ngIf="role!=='Cliente'">Home</a>
+      <a [routerLink]="['/Dashboard']" class="nav-link" *ngIf="role!=='Cliente'">Home</a>
       <a [routerLink]="['/Paquetes']" class="nav-link" *ngIf="role==='Cliente'">TuristiK</a>
   </li>
 </ul>
