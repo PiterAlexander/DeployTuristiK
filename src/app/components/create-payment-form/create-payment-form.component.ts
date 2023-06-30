@@ -12,7 +12,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { ApiService } from '@services/api.service';
 import { Observable } from 'rxjs';
-import { saveAs } from 'file-saver';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -92,8 +91,7 @@ export class CreatePaymentFormComponent implements OnInit {
       this.orderProcess = [{
         action: 'CreateOrderDetail',
         order: order,
-        beneficiaries: this.orderProcess[0].beneficiaries,
-        payment: {}
+        beneficiaries: this.orderProcess[0].beneficiaries
       }]
       this.modalService.dismissAll();
       this.store.dispatch(new OpenModalCreateOrderDetail(this.orderProcess))

@@ -1,69 +1,62 @@
-<div class="content-header">
-    <div class="container-fluid">
-        <div class="row m-2">
-            <div class="card card-package w-100">
-                <div class="card-header text-left">
-                    <div class="row">
-                        <div class="col text-dark">
-                            <h1 class="m-0">Beneficiarios</h1>
-                        </div>
-                        <div class="col">
-                            <div class="text-dark d-flex align-items-center justify-content-end">
-                                <button (click)="addOrderDetail()" type="button" class="btn btn-primary">Agregar
-                                    beneficiario</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <form>
-                        <div class="d-flex justify-content-end mb-3 row">
-                            <label for="table-complete-search"
-                                class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
-                            <div class="col-xs-3 col-sm-auto">
-                                <input id="table-complete-search" type="text" class="form-control" name="searchTerm" />
-                            </div>
-                        </div>
-
-                        <table (load)="compareCostumerId()" class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Nombres</th>
-                                    <th>Apellidos</th>
-                                    <th>Documento</th>
-                                    <th>Fecha de nacimiento</th>
-                                    <th>Número</th>
-                                    <th>Dirección</th>
-                                    <th>EPS</th>
-                                    <th>Editar</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let costumer of orderDetailCostumers">
-                                    <td>{{costumer.name}}</td>
-                                    <td>{{costumer.lastName}}</td>
-                                    <td>{{costumer.document}}</td>
-                                    <td>{{costumer.birthDate | date}}</td>
-                                    <td>{{costumer.phoneNumber}}</td>
-                                    <td>{{costumer.address}}</td>
-                                    <td>{{costumer.eps}}</td>
-                                    <td class="infoData">
-                                        <button (click)="editOrdelDetail(costumer)"
-                                            class="hover-text btn btn-outline-primary"><i
-                                                style="cursor: pointer; display: grid;" class="fas fa-edit"
-                                                style="font-size: 100%"></i>
-                                            <span class="tooltip-text bottom">Editar</span>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
-                </div>
-                <div class="card-footer d-flex justify-content-end">
-                    <button type="button" (click)="closeModal()" class="btn btn-danger">Regresar</button>
+<div class="card card-package w-100 m-0">
+    <div class="card-header text-left">
+        <div class="row">
+            <div class="col text-dark">
+                <h1 class="m-0">Beneficiarios</h1>
+            </div>
+            <div class="col">
+                <div class="text-dark d-flex align-items-center justify-content-end">
+                    <button (click)="addOrderDetail()" type="button" class="btn btn-primary">Agregar
+                        beneficiario</button>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="card-body">
+        <form>
+            <div class="d-flex justify-content-end mb-3 row">
+                <label for="table-complete-search"
+                    class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
+                <div class="col-xs-3 col-sm-auto">
+                    <input id="table-complete-search" type="text" class="form-control" name="searchTerm" />
+                </div>
+            </div>
+
+            <table (load)="compareCostumerId()" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Documento</th>
+                        <th>Fecha de nacimiento</th>
+                        <th>Número</th>
+                        <th>Dirección</th>
+                        <th>EPS</th>
+                        <th>Editar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let costumer of orderDetailCostumers">
+                        <td>{{costumer.name}}</td>
+                        <td>{{costumer.lastName}}</td>
+                        <td>{{costumer.document}}</td>
+                        <td>{{costumer.birthDate | date}}</td>
+                        <td>{{costumer.phoneNumber}}</td>
+                        <td>{{costumer.address}}</td>
+                        <td>{{costumer.eps}}</td>
+                        <td class="infoData">
+                            <button (click)="editOrdelDetail(costumer)" class="hover-text btn btn-outline-primary"><i
+                                    style="cursor: pointer; display: grid;" class="fas fa-edit"
+                                    style="font-size: 100%"></i>
+                                <span class="tooltip-text bottom">Editar</span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+        <button type="button" (click)="closeModal()" class="btn btn-danger">Regresar</button>
     </div>
 </div>

@@ -1,67 +1,60 @@
-<div class="content-header">
-    <div class="container-fluid">
-        <div class="row m-2">
-            <div class="card card-package w-100">
-                <div class="card-header text-left">
-                    <div class="row">
-                        <div class="col text-dark">
-                            <h1 class="m-0">Abonos</h1>
-                        </div>
-                        <div class="col">
-                            <div class="text-dark d-flex align-items-center justify-content-end">
-                                <button (click)="addPayment()" type="button" class="btn btn-primary">Agregar
-                                    abono</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <form>
-                        <div class="d-flex justify-content-end mb-3 row">
-                            <label for="table-complete-search"
-                                class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
-                            <div class="col-xs-3 col-sm-auto">
-                                <input id="table-complete-search" type="text" class="form-control" name="searchTerm" />
-                            </div>
-                        </div>
-
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Monto</th>
-                                    <th>Restante</th>
-                                    <th>Fecha</th>
-                                    <th>Imagen</th>
-                                    <th>Estado</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let payment of payments">
-                                    <td>{{payment.amount}}</td>
-                                    <td>{{payment.remainingAmount}}</td>
-                                    <td>{{payment.date}}</td>
-                                    <td>
-                                        <button (click)="editPayment(payment)"
-                                            class="hover-text btn btn-outline-secondary"><i
-                                                style="cursor: pointer; display: grid;" style="font-size: 100%"
-                                                class="fas fa-eye"></i>
-                                            <span class="tooltip-text bottom">Inspeccionar</span>
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <span *ngIf="payment.status === 0">Pendiente</span>
-                                        <span *ngIf="payment.status === 1">Aceptado</span>
-                                        <span *ngIf="payment.status === 2">Rechazado</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
-                </div>
-                <div class="card-footer d-flex justify-content-end">
-                    <button type="button" (click)="closeModal()" class="btn btn-danger">Regresar</button>
+<div class="card card-package w-100 m-0">
+    <div class="card-header text-left">
+        <div class="row">
+            <div class="col text-dark">
+                <h1 class="m-0">Abonos</h1>
+            </div>
+            <div class="col">
+                <div class="text-dark d-flex align-items-center justify-content-end">
+                    <button (click)="addPayment()" type="button" class="btn btn-primary">Agregar
+                        abono</button>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="card-body">
+        <form>
+            <div class="d-flex justify-content-end mb-3 row">
+                <label for="table-complete-search"
+                    class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
+                <div class="col-xs-3 col-sm-auto">
+                    <input id="table-complete-search" type="text" class="form-control" name="searchTerm" />
+                </div>
+            </div>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Monto</th>
+                        <th>Restante</th>
+                        <th>Fecha</th>
+                        <th>Comprobante</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let payment of payments">
+                        <td>{{payment.amount}}</td>
+                        <td>{{payment.remainingAmount}}</td>
+                        <td>{{payment.date}}</td>
+                        <td>
+                            <button (click)="editPayment(payment)" class="hover-text btn btn-outline-secondary"><i
+                                    style="cursor: pointer; display: grid;" style="font-size: 100%"
+                                    class="fas fa-eye"></i>
+                                <span class="tooltip-text bottom">Inspeccionar</span>
+                            </button>
+                        </td>
+                        <td>
+                            <span *ngIf="payment.status === 0">Pendiente</span>
+                            <span *ngIf="payment.status === 1">Aceptado</span>
+                            <span *ngIf="payment.status === 2">Rechazado</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+        <button type="button" (click)="closeModal()" class="btn btn-danger">Regresar</button>
     </div>
 </div>

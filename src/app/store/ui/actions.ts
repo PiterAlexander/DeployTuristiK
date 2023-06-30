@@ -325,7 +325,7 @@ export class CreatePaymentFailure implements Action {
 
 export class OpenModalEditPayment implements Action {
   readonly type: string = orderActions.OPEN_MODAL_EDIT_PAYMENT;
-  constructor(public payload: any) { }
+  constructor(public payload: Payment) { }
 }
 export class EditPaymentRequest implements Action {
   readonly type: string = orderActions.EDIT_PAYMENT_REQUEST;

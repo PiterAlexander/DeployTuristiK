@@ -1,0 +1,38 @@
+<div class="card card-package w-100 m-0">
+    <div class="card-header py-3">
+        <div class="row">
+            <div class="col">
+                <h3 class="m-0 font-weight-bold text-dark"><span>Editar abono</span></h3>
+            </div>
+            <div class="col">
+                <div class="d-flex justify-content-end">
+                    <div>
+                        <h3 class="m-0 font-weight-bold text-dark">${{payment.amount}} COP</h3>
+                        <p class="m-0 d-flex justify-content-end text-muted">Monto</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form>
+        <div class=" card-body d-flex justify-content-center">
+            <div class="w-75 p-2 text-center">
+                <i class="far fa-image fa-10x"></i>
+            </div>
+        </div>
+        <div class="card-footer d-flex justify-content-end">
+            <div class="row">
+                <div class="col">
+                    <button (click)="back()" type="button" id="cancelButton"
+                        class="btn btn-outline-primary">Regresar</button>
+                </div>
+                <div class="col">
+                    <button (click)="decline()" type="button" id="saveButton" class="btn btn-danger">Rechazar</button>
+                </div>
+                <div class="col">
+                    <button (click)="approve()" type="button" id="saveButton" class="btn btn-success">Aprobar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
