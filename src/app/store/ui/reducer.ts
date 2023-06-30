@@ -446,7 +446,6 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
             };
 
         case Actions.loginActions.LOGIN_SUCCESS:
-            //console.log("desde redu: ", action.payload)
             return {
                 ...state,
                 token: {
@@ -469,7 +468,6 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
 
         case Actions.loginActions.GET_USER_INFO_REQUEST:
 
-            console.log("iam in red", action.payload);
             return {
                 ...state,
                 userLoged: {
@@ -480,7 +478,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
             }
 
         case Actions.loginActions.GET_USER_INFO_SUCCESS:
-            console.log("iam in blue", action.payload);
+
             return {
                 ...state,
                 userLoged: {
@@ -491,7 +489,6 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
             }
 
         case Actions.loginActions.GET_USER_INFO_FAILURE:
-            console.log("Im not")
             return {
                 ...state,
                 userLoged: {

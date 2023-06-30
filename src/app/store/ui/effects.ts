@@ -681,10 +681,8 @@ export class PackageEffects {
         ofType(loginActions.LOGIN_REQUEST),
         map((action: LoginRequest) => action.payload),
         switchMap((data) => {
-            //console.log(data)
             return this.apiService.signIn(data.email, data.password).pipe(
                 mergeMap((token) => {
-                    //console.log(typeof (token))
                     return [new LoginSuccess(token)]
 
                 }),
@@ -699,7 +697,7 @@ export class PackageEffects {
             switchMap((response) => {
                 return this.authService.getUserInfo(response).pipe(
                     mergeMap((data) => {
-                        console.log(typeof (data))
+                        //console.log(typeof (data))
                         return [new GetUserInfoSuccess(data)]
 
                     }),
@@ -718,4 +716,5 @@ export class PackageEffects {
         private assocPermissionService: AssociatedPermissionService,
         private authService: AuthService,
     ) { }
+
 }

@@ -1,4 +1,4 @@
-import { CreatePackageRequest, EditPackageRequest } from '@/store/ui/actions';
+import { CreatePackageRequest, EditPackageRequest, OpenModalDetailsPackage } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -23,12 +23,16 @@ export class CreatePackageFormComponent implements OnInit {
   public packageData
   public allPackages: Array<any>
   selectedDestiny: any;
+
+
+
   constructor(private fb: FormBuilder, private modalService: NgbModal, private store: Store<AppState>, private service: ApiService) { }
   public handleDestinationChange(destination: any) {
     this.selectedDestiny = destination.formatted_address;
   }
+
   ngOnInit(): void {
-    
+
     this.formGroup = this.fb.group({
       name: [null, [Validators.required, Validators.minLength(8)]],//
       destination: [null, [Validators.required, Validators.minLength(8)]],//
@@ -176,4 +180,5 @@ export class CreatePackageFormComponent implements OnInit {
   get departureDate() {
     return this.formGroup.value.departureDate;
   }
+
 }

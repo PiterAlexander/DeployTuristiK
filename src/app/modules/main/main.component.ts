@@ -13,11 +13,16 @@ import {Observable} from 'rxjs';
 export class MainComponent implements OnInit {
     @HostBinding('class') class = 'wrapper';
     public ui: Observable<UiState>;
+    public role;
 
     constructor(private renderer: Renderer2, private store: Store<AppState>) {}
 
     ngOnInit() {
         this.ui = this.store.select('ui');
+        this.ui.subscribe((state: UiState) => {
+          var user = JSON.parse(localStorage.getItem('TokenPayload'))
+          this.role = user['role']
+        });
         this.renderer.removeClass(
             document.querySelector('app-root'),
             'login-page'
