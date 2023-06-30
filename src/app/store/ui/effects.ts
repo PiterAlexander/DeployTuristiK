@@ -44,7 +44,7 @@ import { PermissionService } from '@services/configuration/permission.service';
 import { RoleService } from '@services/configuration/role.service';
 import { AssociatedPermissionService } from '@services/configuration/associated-permission.service';
 import { DetailsPackageComponent } from '@components/details-package/details-package.component';
-import { CreatecostumerformComponent } from '@components/createcostumerform/createcostumerform.component';
+import { CreatecostumerformComponent } from '@components/create-costumer-form/createcostumerform.component';
 import { CreateEmployeeFormComponent } from '@components/create-employee-form/create-employee-form.component';
 import { CreateUserFormComponent } from '@components/create-user-form/create-user-form.component';
 import { CreatePaymentFormComponent } from '@components/create-payment-form/create-payment-form.component';
@@ -566,6 +566,7 @@ export class PackageEffects {
                 mergeMap((employeeResolved) => {
                     return [
                         new DeleteEmployeeSuccess(employeeResolved),
+                        new GetAllEmployeeRequest(),
                     ];
                 }),
                 catchError((err) => of(new DeleteEmployeeFailure(err)))

@@ -1,0 +1,189 @@
+<div class="modal-header">
+    <div class="container-fluid">
+        <h5 class="modal-title padding-extra">{{ActionTitle}} Viajero Frecuente</h5>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="container-fluid">
+        <form class="needs-validation" novalidate id="form" (submit)="saveCostumer()" [formGroup]="formGroup">
+            <div class=" card-body d-flex">
+                <div class="w-100 p-2">
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="name" class="form-label">Nombre</label>
+                            <input type="text" id="name" name="name"
+                                class="form-control formularioCampo border-left-dark" placeholder="Digite su nombre"
+                                formControlName="name">
+                            <div *ngIf="formGroup.get('name')?.errors?.['required'] && formGroup.get('name').dirty"
+                                class="invalid-feedback">
+                                *El campo es requerido.
+                            </div>
+                            <div *ngIf="formGroup.get('name')?.errors?.['minlength'] && formGroup.get('name').dirty"
+                                class="invalid-feedback">
+                                *El nombre debe tener mínimo 3 caracteres.
+                            </div>
+                            <div *ngIf="formGroup.get('name')?.errors?.['maxlength'] && formGroup.get('name').dirty"
+                                class="invalid-feedback">
+                                *El nombre no debe exceder los 20 caracteres.
+                            </div>
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="lastName" class="form-label">Apellido</label>
+                            <div class="input-group">
+                                <input type="text" id="lastName" name="lastName"
+                                    class="form-control formularioCampo border-left-dark"
+                                    placeholder="Digite su Apellido" formControlName="lastName">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-right"><i class="fas fa-user-alt"></i></span>
+                                </div>
+                                <div *ngIf="formGroup.get('lastName')?.errors?.['required'] && formGroup.get('lastName').dirty"
+                                    class="invalid-feedback">
+                                    *El campo es requerido.
+                                </div>
+                                <div *ngIf="formGroup.get('lastName')?.errors?.['minlength'] && formGroup.get('lastName').dirty"
+                                    class="invalid-feedback">
+                                    *El apellido debe tener mínimo 3 caracteres.
+                                </div>
+                                <div *ngIf="formGroup.get('lastName')?.errors?.['maxlength'] && formGroup.get('lastName').dirty"
+                                    class="invalid-feedback">
+                                    *El apellido no debe exceder los 20 caracteres.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="document" class="form-label">Documento</label>
+                            <div class="input-group">
+                                <input type="text" id="document" name="document" placeholder="Número de documento"
+                                    class="form-control formularioCampo border-left-dark" formControlName="document">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-right"><i class="fas fa-id-card"></i></span>
+                                </div>
+                                <div *ngIf="formGroup.get('document').dirty && validateExistingDocument()"
+                                    class="invalid-feedback">
+                                    *El documento ya existe
+                                </div>
+                                <div *ngIf="formGroup.get('document')?.errors?.['required'] && formGroup.get('document').dirty"
+                                    class="invalid-feedback">
+                                    *El campo es requerido.
+                                </div>
+                                <div *ngIf="formGroup.get('document')?.errors?.['minlength'] && formGroup.get('document').dirty"
+                                    class="invalid-feedback">
+                                    *El documento debe tener mínimo 10 caracteres.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="birthDate" class="form-label">Fecha de Nacimiento</label>
+                            <div class="input-group">
+                                <input type="date" id="birthDate" name="birthDate"
+                                    class="form-control formularioCampo border-left-dark" formControlName="birthDate">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-right"><i
+                                            class="fas fa-calendar-week"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="phoneNumber" class="form-label">Número de teléfono</label>
+                            <div class="input-group">
+                                <input type="text" id="phoneNumber" name="phoneNumber"
+                                    class="form-control formularioCampo border-left-dark"
+                                    placeholder="Número de contacto" formControlName="phoneNumber">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-right"><i class="fas fa-phone"></i></span>
+                                </div>
+                                <div *ngIf="formGroup.get('phoneNumber')?.errors?.['required'] && formGroup.get('phoneNumber').dirty"
+                                    class="invalid-feedback">
+                                    *El campo es requerido.
+                                </div>
+                                <div *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber').dirty"
+                                    class="invalid-feedback">
+                                    *El número debe tener mínimo 10 caracteres.
+                                </div>
+                                <div *ngIf="formGroup.get('phoneNumber')?.errors?.['maxlength'] && formGroup.get('phoneNumber').dirty"
+                                    class="invalid-feedback">
+                                    *El número no debe exceder los 20 caracteres.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="eps" class="form-label"
+                            >EPS</label
+                        >
+                        <div class="input-group">
+                            <select
+                                class="custom-select border-left-dark form-control formularioCampo"
+                                id="eps"
+                                name="eps"
+                                formControlName="eps"
+                                placeholder="Seleccione una EPS"
+                                (change)="addForm()"
+                            >
+                                
+                                <option
+                                    *ngFor="let eps of allEps"
+                                    [value]="eps"
+                                >
+                                    {{ eps }}
+                                </option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"
+                                    ><i class="fas fa-user-cog"></i
+                                ></span>
+                            </div> 
+                        </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-12">
+                            <label for="address" class="form-label">Dirección</label>
+                            <div class="input-group">
+                                <input type="text" id="address" name="address"
+                                    class="form-control formularioCampo border-left-dark"
+                                    placeholder="Dirección de vivienda" formControlName="address">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-right"><i class="fas fa-home"></i></span>
+                                </div>
+                                <div *ngIf="formGroup.get('address')?.errors?.['required'] && formGroup.get('address').dirty"
+                                    class="invalid-feedback">
+                                    *El campo es requerido.
+                                </div>
+                                <div *ngIf="formGroup.get('address')?.errors?.['minlength'] && formGroup.get('address').dirty"
+                                    class="invalid-feedback">
+                                    *La dirección debe tener mínimo 10 caracteres.
+                                </div>
+                                <div *ngIf="formGroup.get('address')?.errors?.['maxlength'] && formGroup.get('address').dirty"
+                                    class="invalid-feedback">
+                                    *La dirección no debe exceder los 100 caracteres.
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-end">
+                <div class="row">
+                    <div class="col">
+                        <button (click)="cancel()" type="button" id="cancelButton"
+                            class="btn btn-danger">Cancelar</button>
+                    </div>
+                    <div class="col">
+                        <button *ngIf="validForm()" type="submit" id="saveButton"
+                            class="btn btn-success">Guardar</button>
+                        <button *ngIf="!validForm()" type="submit" id="saveButton"
+                            class="btn btn-secondary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

@@ -23,8 +23,11 @@ export class CreatecostumerformComponent implements OnInit {
   Visible: boolean = false;
   password: string = '';
   public CostumerList: Array<any>
+  public UserList: Array<any>
   public costumerData
   Roles: Array<Role>;
+  public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS', 'OTRA']
+  public otraEps: boolean = false
   constructor(private fb: FormBuilder, private modalService: NgbModal, private store: Store<AppState>) { }
 
   ngOnInit(): void {
@@ -52,7 +55,6 @@ export class CreatecostumerformComponent implements OnInit {
     });
 
     if (this.costumerData != null) {
-      console.log(this.costumerData.birthDate)
       this.ActionTitle = "Editar"
       this.formGroup.setValue({
 
@@ -124,6 +126,22 @@ export class CreatecostumerformComponent implements OnInit {
       }));
     }
   }
+  
+  addForm() {
+    if (this.formGroup.value.eps == 'OTRA') {
+      this.otraEps = true
+    } else {
+      this.otraEps = false
+    }
+  }
+
+  saveEps(): string {
+    if (this.otraEps) {
+      return this.formGroup.value.otherEps
+    } else {
+      return this.formGroup.value.eps
+    }
+  }
 
   displayPassword() {
     this.Visible = !this.Visible;
@@ -138,7 +156,12 @@ export class CreatecostumerformComponent implements OnInit {
   }
 
   validForm(): boolean {
-    return true
+     return this.formGroup.value.name != '' && this.formGroup.value.lastName != '' &&
+    this.formGroup.value.document != '' && !this.validateExistingDocument() && 
+    this.formGroup.value.birthDate != '' && this.formGroup.value.phoneNumber != '' &&
+    this.formGroup.value.eps != '' && this.formGroup.value.address != '' &&
+    this.formGroup.value.userName != '' && !this.validateExistingEmail() && 
+    this.formGroup.value.email != '' && this.formGroup.value.password != '' 
   }
 
   cancel() {
