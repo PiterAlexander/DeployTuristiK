@@ -85,7 +85,7 @@ const routes: Routes = [
         component: RecoverPasswordComponent,
         canActivate: [NonAuthGuard]
     },
-    { path: '**', redirectTo: 'Paquetes' },
+    { path: '**', redirectTo: 'login' },
 ];
 
 @NgModule({

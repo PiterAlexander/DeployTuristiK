@@ -68,6 +68,7 @@ export class LoginComponent implements OnInit {
         await this.store.dispatch(
             new LoginRequest({email: Model.email, password: Model.password})
         );
+
         this.isAuthLoading = false;
     }
 
@@ -97,14 +98,18 @@ export class LoginComponent implements OnInit {
                 );
 
                 this.authService.setToken(this.token.result);
+
+
                 var log = JSON.parse(localStorage.getItem('TokenPayload'));
-                console.log(log)
-                if (log['role'] == 'Administrador') {
-                  this.router.navigate(['/Dashboard']);
+                if (log) {
+                  if (log['role'] == 'Administrador') {
+                    this.router.navigate(['/Dashboard']);
+                  }
+                  if (log['role'] == 'Cliente') {
+                      this.router.navigate(['/Paquetes']);
+                  }
                 }
-                if (log['role'] == 'Cliente') {
-                    this.router.navigate(['/Paquetes']);
-                }
+
 
                 this.toastr.success(this.token.message);
             } else {
