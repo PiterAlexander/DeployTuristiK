@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
     CanActivate,
     CanActivateChild,
@@ -8,7 +8,6 @@ import {
     Router
 } from '@angular/router';
 import { Observable, filter, map } from 'rxjs';
-import { AppService } from '@services/app.service';
 import { AuthService } from '@services/auth/auth.service';
 import { UiState } from '@/store/ui/state';
 import { Store } from '@ngrx/store';
@@ -17,7 +16,8 @@ import { User } from '@/models/user';
 import { Role } from '@/models/role';
 import { UserLog } from '@/models/token';
 import { GetAllRoleRequest} from '@/store/ui/actions';
-import { RoleService } from '@services/configuration/role.service';
+import { ApiService } from '../services/api.service';
+import { AppService } from '../services/app.service';
 
 @Injectable({
     providedIn: 'root'
@@ -32,8 +32,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
     constructor(
         private router: Router,
-        private roleService: RoleService,
-        private appService: AppService,
+        private appService : AppService,
+        private apiService : ApiService,
         private store: Store<AppState>
     ) { }
 
@@ -65,13 +65,13 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       if (this.userLogin) {
         const user = JSON.parse(localStorage.getItem('TokenPayload'));
 
-        const vardas = this.roleService.ReadRoles().pipe(
+        const allRoles = this.apiService.getRoles().pipe(
           map((data) => {
             return data;
           })
         );
 
-        vardas.subscribe((data) => {
+        allRoles.subscribe((data) => {
 
           const role = data.find(r => r.name === user["role"]) || undefined;
 

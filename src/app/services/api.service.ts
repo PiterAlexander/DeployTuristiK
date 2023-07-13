@@ -11,6 +11,9 @@ import { User } from '@/models/user';
 import { FrequentTraveler } from '@/models/frequentTraveler';
 import { Payment } from '@/models/payment';
 import { Token } from '@/models/token';
+import { Role } from '@/models/role';
+import { Permission } from '@/models/permission';
+import { AssociatedPermission } from '@/models/associated-permission';
 @Injectable({
     providedIn: 'root'
 })
@@ -147,5 +150,37 @@ export class ApiService {
     //<--- LOGIN --->
     signIn(email: string, password: string) {
         return this.http.post<Token>(`${this.endpoint}api/Login`, { email, password })
+    }
+
+
+    //<------ROLES-------->
+    getRoles():Observable<Role[]>{
+      return this.http.get<Role[]>(`${this.endpoint}api/Role`);
+    }
+
+    addRole(modelo:Role):Observable<Role>{
+      return this.http.post<Role>(`${this.endpoint}api/Role`,modelo);
+    }
+
+    updateRole(RoleId:string,modelo:Role):Observable<Role>{
+      return this.http.put<Role>(`${this.endpoint}api/Role/${RoleId}`,modelo);
+    }
+
+    deleteRole(RoleId:string):Observable<void>{
+      return this.http.delete<void>(`${this.endpoint}api/Role/${RoleId}`);
+    }
+
+    //<------PERMISSIONS-------->
+    getPermissions():Observable<Permission[]>{
+      return this.http.get<Permission[]>(`${this.endpoint}api/Permission/`);
+    }
+
+    //<------ ASSOCIATED PERMISSIONS-------->
+    addAssociatedPermission(modelo:AssociatedPermission):Observable<AssociatedPermission>{
+      return this.http.post<AssociatedPermission>(`${this.endpoint}api/AssociatedPermission/`,modelo);
+    }
+
+    deleteAssociatedPermission(associatedPermissionId:string):Observable<void>{
+      return this.http.delete<void>(`${this.endpoint}api/AssociatedPermission/${associatedPermissionId}`);
     }
 }
