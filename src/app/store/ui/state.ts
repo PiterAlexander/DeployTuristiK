@@ -2,7 +2,7 @@ import { Package } from "@/models/package";
 import { Order } from "@/models/order";
 import { Role } from '@/models/role';
 import { Permission } from "@/models/permission";
-import { Costumer } from "@/models/costumer";
+import { Customer } from "@/models/customer";
 import { User } from "@/models/user";
 import { Employee } from "@/models/employee";
 import { FrequentTraveler } from "@/models/frequentTraveler";
@@ -68,13 +68,13 @@ export default <UiState>{
     loading: false
   },
   //<----------------->
-  //<--- COSTUMERS --->
-  allCostumers: {
+  //<--- CUSTOMERS --->
+  allCustomers: {
     data: [],
     error: undefined,
     loading: false
   },
-  oneCostumer: {
+  oneCustomer: {
     data: undefined,
     error: undefined,
     loading: false
@@ -181,14 +181,14 @@ export interface UiState {
     loading: boolean
   };
   //<----------------->
-  //<--- COSTUMERS --->
-  allCostumers: {
-    data: Array<Costumer>,
+  //<--- CUSTOMERS --->
+  allCustomers: {
+    data: Array<Customer>,
     error: string,
     loading: boolean
   };
-  oneCostumer: {
-    data: Costumer,
+  oneCustomer: {
+    data: Customer,
     error: string,
     loading: boolean
   };

@@ -1,5 +1,5 @@
 import { AppState } from '@/store/state';
-import { GetAllCostumerRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, OpenModalCreateOrderDetail } from '@/store/ui/actions';
+import { GetAllCustomerRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, OpenModalCreateOrderDetail } from '@/store/ui/actions';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { Package } from '@/models/package';
-import { Costumer } from '@/models/costumer';
+import { Customer } from '@/models/customer';
 import { Role } from '@/models/role';
 import { User } from '@/models/user';
 import Swal from 'sweetalert2';
@@ -23,7 +23,7 @@ export class CreateOrderFormComponent implements OnInit {
   private ui: Observable<UiState>
   public orderProcess: Array<any>
   public allPackages: Array<Package>
-  public allCostumers: Array<Costumer>
+  public allCustomers: Array<Customer>
   public allRoles: Array<Role>
   public allUsers: Array<User>
   public onePackage: Package
@@ -39,7 +39,7 @@ export class CreateOrderFormComponent implements OnInit {
   ngOnInit(): void {
     if (this.orderProcess == null) {
       this.store.dispatch(new GetAllPackagesRequest)
-      this.store.dispatch(new GetAllCostumerRequest)
+      this.store.dispatch(new GetAllCustomerRequest)
       this.store.dispatch(new GetAllRoleRequest)
       this.store.dispatch(new GetUsersRequest)
     }
@@ -47,7 +47,7 @@ export class CreateOrderFormComponent implements OnInit {
     this.ui.subscribe((state: UiState) => {
       this.orderProcess = state.orderProcess.data
       this.allPackages = state.allPackages.data
-      this.allCostumers = state.allCostumers.data
+      this.allCustomers = state.allCustomers.data
       this.allRoles = state.allRoles.data
       this.allUsers = state.allUsers.data
     })
@@ -67,7 +67,7 @@ export class CreateOrderFormComponent implements OnInit {
         }
       }
       this.formGroup.setValue({
-        document: this.orderProcess[0].order.costumer.document,
+        document: this.orderProcess[0].order.customer.document,
         packageId: this.orderProcess[0].order.package.packageId,
         beneficiariesAmount: this.beneficiariesAmount
       })
@@ -102,13 +102,13 @@ export class CreateOrderFormComponent implements OnInit {
   validForm(): boolean {
     return this.formGroup.valid &&
       this.formGroup.value.document != '' && this.formGroup.value.PackageId != 0 &&
-      this.formGroup.value.beneficiariesAmount > 0 && !this.validateCostumerId() && !this.validateRole() &&
+      this.formGroup.value.beneficiariesAmount > 0 && !this.validateCustomerId() && !this.validateRole() &&
       this.validateBeneficiaries() && this.validateBeneficiariesAmount() && this.validateExistingBeneficiariesAmount()
   }
 
-  validateCostumerId(): boolean {
+  validateCustomerId(): boolean {
     if (this.formGroup.value.document.length >= 8) {
-      if (this.allCostumers.find(c => c.document === this.formGroup.value.document) === undefined) {
+      if (this.allCustomers.find(c => c.document === this.formGroup.value.document) === undefined) {
         return true
       }
     }
@@ -117,9 +117,9 @@ export class CreateOrderFormComponent implements OnInit {
 
   validateRole(): boolean {
     if (this.formGroup.value.document.length >= 8) {
-      const oneCostumer = this.allCostumers.find(c => c.document === this.formGroup.value.document)
-      if (oneCostumer != undefined) {
-        const oneUser = this.allUsers.find(u => u.userId === oneCostumer.userId)
+      const oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
+      if (oneCustomer != undefined) {
+        const oneUser = this.allUsers.find(u => u.userId === oneCustomer.userId)
         if (oneUser != undefined) {
           const oneRole = this.allRoles.find(r => r.roleId === oneUser.roleId)
           if (oneRole != undefined) {
@@ -173,11 +173,11 @@ export class CreateOrderFormComponent implements OnInit {
     if (!this.formGroup.invalid) {
       if (this.orderProcess != null) {
         this.modalService.dismissAll()
-        const oneCostumer = this.allCostumers.find(c => c.document === this.formGroup.value.document)
+        const oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
         const orderProcess = ([{
           action: 'CreateOrder',
           order: {
-            costumer: oneCostumer,
+            customer: oneCustomer,
             package: this.onePackage,
             beneficiaries: this.formGroup.value.beneficiariesAmount
           },
@@ -185,11 +185,11 @@ export class CreateOrderFormComponent implements OnInit {
         }])
         this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess));
       } else {
-        const oneCostumer = this.allCostumers.find(c => c.document === this.formGroup.value.document)
+        const oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
         const orderProcess = [{
           action: 'CreateOrder',
           order: {
-            costumer: oneCostumer,
+            customer: oneCustomer,
             package: this.onePackage,
             beneficiaries: this.formGroup.value.beneficiariesAmount
           },

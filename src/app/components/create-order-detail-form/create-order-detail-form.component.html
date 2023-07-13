@@ -28,9 +28,9 @@
                             <div class="form-group">
                                 <label for="name" class="form-label">Nombres</label>
                                 <div class="input-group">
-                                    <input *ngIf="costumerInformation()" type="text" class="form-control"
+                                    <input *ngIf="customerInformation()" type="text" class="form-control"
                                         placeholder="Ingrese los nombres del beneficiario" disabled readonly>
-                                    <input *ngIf="!costumerInformation()" type="text" id="name" formControlName="name"
+                                    <input *ngIf="!customerInformation()" type="text" id="name" formControlName="name"
                                         minlength="3" maxlength="30" class="form-control"
                                         placeholder="Ingrese los nombres del beneficiario" required [ngClass]="{
                                     'invalid': formGroup.get('name').dirty && formGroup.get('name').errors, 
@@ -53,9 +53,9 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="lastName" class="form-label">Apellidos</label>
-                                <input *ngIf="costumerInformation()" type="text" class="form-control"
+                                <input *ngIf="customerInformation()" type="text" class="form-control"
                                     placeholder="Ingrese los apellidos del beneficiario" disabled readonly>
-                                <input *ngIf="!costumerInformation()" type="text" id="lastName"
+                                <input *ngIf="!customerInformation()" type="text" id="lastName"
                                     formControlName="lastName" minlength="3" maxlength="30" class="form-control"
                                     placeholder="Ingrese los apellidos del beneficiario" required [ngClass]="{
                                     'invalid': formGroup.get('lastName').dirty && formGroup.get('lastName').errors, 
@@ -79,7 +79,7 @@
                                         placeholder="Ingrese el documento del beneficiario" minlength="8" maxlength="15"
                                         required [ngClass]="{
                                         'invalid': formGroup.get('document').dirty && formGroup.get('document').errors || (alreadyExists() && formGroup.get('document').dirty) || (alreadyExistsFromEdit() && formGroup.get('document').dirty),
-                                        'valid': formGroup.get('document').dirty && !formGroup.get('document').errors && !alreadyExists() && !alreadyExistsFromEdit() || (costumerInformation() && formGroup.get('document').dirty && !alreadyExists())
+                                        'valid': formGroup.get('document').dirty && !formGroup.get('document').errors && !alreadyExists() && !alreadyExistsFromEdit() || (customerInformation() && formGroup.get('document').dirty && !alreadyExists())
                                     }" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text rounded-right"><i
@@ -101,9 +101,9 @@
                                         class="invalid-feedback">
                                         Este número de documento ya está en uso.
                                     </div>
-                                    <div *ngIf="costumerInformation() && !alreadyExists() && formGroup.get('document').dirty"
+                                    <div *ngIf="customerInformation() && !alreadyExists() && formGroup.get('document').dirty"
                                         class="valid-feedback">
-                                        <a (click)="fillCostumerInformation()"
+                                        <a (click)="fillCustomerInformation()"
                                             class="text-decoration-none text-success">¡Beneficiario encontrado! Haz
                                             click
                                             para acelerar el
@@ -120,9 +120,9 @@
                                     <div class="form-group">
                                         <label for="address" class="form-label">Dirección</label>
                                         <div class="input-group">
-                                            <input *ngIf="costumerInformation()" type="text" class="form-control"
+                                            <input *ngIf="customerInformation()" type="text" class="form-control"
                                                 placeholder="Ej: País - Ciudad - Barrio - Dirección" disabled readonly>
-                                            <input *ngIf="!costumerInformation()" type="text" id="address"
+                                            <input *ngIf="!customerInformation()" type="text" id="address"
                                                 formControlName="address" class="form-control"
                                                 placeholder="Ej: País - Ciudad - Barrio - Dirección" minlength="25"
                                                 required [ngClass]="
@@ -149,9 +149,9 @@
                                     <div class="form-group">
                                         <label for="phoneNumber" class="form-label">Teléfono Celular</label>
                                         <div class="input-group">
-                                            <input *ngIf="costumerInformation()" type="text" class="form-control"
+                                            <input *ngIf="customerInformation()" type="text" class="form-control"
                                                 placeholder="Número del beneficiario" disabled readonly>
-                                            <input *ngIf="!costumerInformation()" type="text" id="phoneNumber"
+                                            <input *ngIf="!customerInformation()" type="text" id="phoneNumber"
                                                 formControlName="phoneNumber" class="form-control"
                                                 placeholder="Número del beneficiario" minlength="10" maxlength="10"
                                                 required [ngClass]="
@@ -182,9 +182,9 @@
                                     <div class="form-group">
                                         <label for="birthdate" class="form-label">Fecha de
                                             nacimiento</label>
-                                        <input *ngIf="costumerInformation()" type="date" class="form-control" disabled
+                                        <input *ngIf="customerInformation()" type="date" class="form-control" disabled
                                             readonly>
-                                        <input *ngIf="!costumerInformation()" type="date" id="birthdate"
+                                        <input *ngIf="!customerInformation()" type="date" id="birthdate"
                                             formControlName="birthdate" class="form-control" required [ngClass]="
                                     {
                                         'invalid': formGroup.get('birthdate').dirty && formGroup.get('birthdate').errors,
@@ -201,12 +201,12 @@
                                         <label for="eps" class="form-label">Tipo de
                                             EPS</label>
                                         <div class="input-group">
-                                            <select *ngIf="costumerInformation()" disabled
+                                            <select *ngIf="customerInformation()" disabled
                                                 class="custom-select form-control">
                                                 <option disabled selected value="0">EPS del beneficiario
                                                 </option>
                                             </select>
-                                            <select *ngIf="!costumerInformation()" class="custom-select form-control"
+                                            <select *ngIf="!customerInformation()" class="custom-select form-control"
                                                 formControlName="eps" id="eps" required [ngClass]="
                                         {
                                             'invalid': formGroup.get('eps').dirty && formGroup.get('eps').errors,

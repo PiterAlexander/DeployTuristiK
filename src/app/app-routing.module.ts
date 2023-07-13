@@ -12,7 +12,7 @@ import { RecoverPasswordComponent } from '@modules/recover-password/recover-pass
 import { PackagesComponent } from '@pages/packages/packages.component';
 import { RolesComponent } from '@pages/roles/roles.component';
 import { OrdersComponent } from '@pages/orders/orders.component';
-import { CostumersComponent } from '@pages/costumers/costumers.component';
+import { CustomersComponent } from '@pages/customers/customers.component';
 import { EmployeesComponent } from '@pages/employees/employees.component';
 import { UsersComponent } from '@pages/users/users.component';
 
@@ -51,7 +51,7 @@ const routes: Routes = [
             {
                 path: 'Clientes',
                 canActivate: [AuthGuard],
-                component: CostumersComponent
+                component: CustomersComponent
             },
             {
                 path: 'Empleados',

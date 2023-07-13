@@ -4,7 +4,7 @@ import { environment } from 'environments/environment';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Package } from '@/models/package';
 import { Order } from '@/models/order';
-import { Costumer } from '@/models/costumer';
+import { Customer } from '@/models/customer';
 import { Employee } from '@/models/employee';
 import { OrderDetail } from '@/models/orderDetail';
 import { User } from '@/models/user';
@@ -74,21 +74,21 @@ export class ApiService {
     }
     //<----------------->
 
-    //<--- COSTUMERS --->
-    getCostumers(): Observable<Costumer[]> {
-        return this.http.get<Costumer[]>(`${this.endpoint}api/Costumer`)
+    //<--- CUSTOMERS --->
+    getCustomers(): Observable<Customer[]> {
+        return this.http.get<Customer[]>(`${this.endpoint}api/Customer`)
     }
 
-    addCostumer(modelo: Costumer): Observable<Costumer> {
-        return this.http.post<Costumer>(`${this.endpoint}api/Costumer`, modelo)
+    addCustomer(modelo: Customer): Observable<Customer> {
+        return this.http.post<Customer>(`${this.endpoint}api/Customer`, modelo)
     }
 
-    updateCostumer(idCostumer: string, modelo: Costumer): Observable<Costumer> {
-        return this.http.put<Costumer>(`${this.endpoint}api/Costumer/${idCostumer}`, modelo)
+    updateCustomer(idCustomer: string, modelo: Customer): Observable<Customer> {
+        return this.http.put<Customer>(`${this.endpoint}api/Customer/${idCustomer}`, modelo)
     }
 
-    deleteCostumer(idCostumer: string): Observable<void> {
-        return this.http.delete<void>(`${this.endpoint}api/Costumer/${idCostumer}`)
+    deleteCustomer(idCustomer: string): Observable<void> {
+        return this.http.delete<void>(`${this.endpoint}api/Customer/${idCustomer}`)
     }
     //<----------------->
 

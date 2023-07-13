@@ -50,7 +50,7 @@ export class UsersComponent {
 
   matches(userResolved: User, term: string, pipe: PipeTransform) {
     return (
-      userResolved.userName.toLowerCase().includes(term.toLowerCase())
+      userResolved.email.toLowerCase().includes(term.toLowerCase())
     );
   }
 
@@ -68,7 +68,7 @@ export class UsersComponent {
       this.total = this.userList.length;
       this.filteredUsersList = this.filteredUsersList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
     } else {
-      this.filteredUsersList = this.userList.filter(user => user.userName.toLocaleLowerCase().includes(this.search.toLocaleLowerCase().trim()));
+      this.filteredUsersList = this.userList.filter(user => user.email.toLocaleLowerCase().includes(this.search.toLocaleLowerCase().trim()));
       this.total = this.filteredUsersList.length;
       this.filteredUsersList = this.filteredUsersList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
     }

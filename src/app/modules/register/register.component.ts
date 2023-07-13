@@ -1,9 +1,9 @@
-import { Costumer } from '@/models/costumer';
+import { Customer } from '@/models/customer';
 import { Role } from '@/models/role';
 import { Token } from '@/models/token';
 import { User } from '@/models/user';
 import { AppState } from '@/store/state';
-import { GetAllCostumerRequest, GetAllRoleRequest, CreateCostumerRequest, LoginRequest } from '@/store/ui/actions';
+import { GetAllCustomerRequest, GetAllRoleRequest, CreateCustomerRequest, LoginRequest } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import {
     Component,
@@ -35,8 +35,8 @@ export class RegisterComponent implements OnInit {
     formGroup: FormGroup;
     Visible: boolean = false;
     password: string = '';
-    public CostumerList: Array<any>
-    public costumerData
+    public CustomerList: Array<any>
+    public customerData
     Roles: Array<Role>;
     public token: Token;
     public userLogin: any;
@@ -52,12 +52,12 @@ export class RegisterComponent implements OnInit {
 
 
     ngOnInit(): void {
-        this.store.dispatch(new GetAllCostumerRequest());
+        this.store.dispatch(new GetAllCustomerRequest());
         this.store.dispatch(new GetAllRoleRequest());
         this.ui = this.store.select('ui');
         this.ui.subscribe((state: UiState) => {
-            this.CostumerList = state.allCostumers.data
-            this.costumerData = state.oneCostumer.data
+            this.CustomerList = state.allCustomers.data
+            this.customerData = state.oneCustomer.data
             this.Roles = state.allRoles.data;
             this.token = state.token.data;
             this.userLogin = state.userLoged.data;
@@ -78,18 +78,17 @@ export class RegisterComponent implements OnInit {
             user: ['', Validators.required],
         });
     }
-    async saveCostumer() {
+    async saveCustomer() {
         var idRole: Role = this.Roles.find((r) => r.name == 'Cliente');
 
         const user: User = {
-            userName: this.formGroup.value.userName,
             email: this.formGroup.value.email,
             password: this.formGroup.value.password,
             status: 1,
             roleId: idRole.roleId,
         }
 
-        const costumer: Costumer = {
+        const customer: Customer = {
             name: this.formGroup.value.name,
             lastName: this.formGroup.value.lastName,
             document: this.formGroup.value.document,
@@ -97,18 +96,18 @@ export class RegisterComponent implements OnInit {
             phoneNumber: this.formGroup.value.phoneNumber,
             address: this.formGroup.value.address,
             eps: this.formGroup.value.eps,
-            User: user
+            user: user
         }
 
-        await this.store.dispatch(new CreateCostumerRequest({
-            ...costumer
+        await this.store.dispatch(new CreateCustomerRequest({
+            ...customer
         }));
 
 
 
         await setTimeout(() => this.login(user), 1000)
 
-        console.log(this.CostumerList)
+        console.log(this.CustomerList)
         this.getToken();
     }
 
@@ -117,11 +116,11 @@ export class RegisterComponent implements OnInit {
     }
 
     validateExistingDocument(): boolean {
-        return this.CostumerList.find(item => item.document == this.formGroup.value.document)
+        return this.CustomerList.find(item => item.document == this.formGroup.value.document)
     }
 
     validateExistingEmail(): boolean {
-        return this.CostumerList.find(item => item.email == this.formGroup.value.email)
+        return this.CustomerList.find(item => item.email == this.formGroup.value.email)
     }
 
     validForm(): boolean {

@@ -1,10 +1,10 @@
-import { Costumer } from '@/models/costumer';
+import { Customer } from '@/models/customer';
 import { OrderDetail } from '@/models/orderDetail';
 import { Package } from '@/models/package';
 import { Role } from '@/models/role';
 import { User } from '@/models/user';
 import { AppState } from '@/store/state';
-import { EditCostumerRequest, GetAllRoleRequest, OpenModalCreateOrder, OpenModalCreatePayment, OpenModalListFrequentTravelersToOrders, OpenModalOrderDetails } from '@/store/ui/actions';
+import { EditCustomerRequest, GetAllRoleRequest, OpenModalCreateOrder, OpenModalCreatePayment, OpenModalListFrequentTravelersToOrders, OpenModalOrderDetails } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -23,14 +23,14 @@ export class CreateOrderDetailFormComponent implements OnInit {
   formGroup: FormGroup;
   private ui: Observable<UiState>
   public orderProcess: Array<any>
-  public beneficiaries: Array<Costumer> = []
-  public allCostumers: Array<Costumer>
+  public beneficiaries: Array<Customer> = []
+  public allCustomers: Array<Customer>
   public orderDetails: Array<OrderDetail>
   public allRoles: Array<Role>
-  public oneCostumer: Costumer
+  public oneCustomer: Customer
   public onePackage: Package
   public oneRole: Role
-  public orderDetailCostumers: Array<Costumer> = []
+  public orderDetailCustomers: Array<Customer> = []
   public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS', 'OTRA']
   public beneficiariesAmount: number
 
@@ -45,7 +45,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
       this.orderProcess = state.orderProcess.data
-      this.allCostumers = state.allCostumers.data
+      this.allCustomers = state.allCustomers.data
       this.allRoles = state.allRoles.data
       if (this.allRoles != undefined) {
         this.oneRole = this.allRoles.find(r => r.name === 'Beneficiario')
@@ -64,9 +64,9 @@ export class CreateOrderDetailFormComponent implements OnInit {
       if (this.orderProcess[0].action === 'CreateOrderDetail') {
         this.orderDetails = this.orderProcess[0].order.orderDetail
         for (const element of this.orderDetails) {
-          const costumer = this.allCostumers.find(c => c.costumerId === element.beneficiaryId)
-          if (costumer != undefined) {
-            this.orderDetailCostumers.push(costumer)
+          const customer = this.allCustomers.find(c => c.customerId === element.beneficiaryId)
+          if (customer != undefined) {
+            this.orderDetailCustomers.push(customer)
           }
         }
         this.onePackage = this.orderProcess[0].order.package
@@ -78,15 +78,15 @@ export class CreateOrderDetailFormComponent implements OnInit {
         }
       } else if ((this.orderProcess[0].action === 'EditOrderDetail')) {
         this.beneficiariesAmount = 1
-        const birthDateValue = this.orderProcess[0].costumer.birthDate.split('T')[0]
+        const birthDateValue = this.orderProcess[0].customer.birthDate.split('T')[0]
         this.formGroup.setValue({
-          name: this.orderProcess[0].costumer.name,
-          lastName: this.orderProcess[0].costumer.lastName,
-          document: this.orderProcess[0].costumer.document,
-          address: this.orderProcess[0].costumer.address,
-          phoneNumber: this.orderProcess[0].costumer.phoneNumber,
+          name: this.orderProcess[0].customer.name,
+          lastName: this.orderProcess[0].customer.lastName,
+          document: this.orderProcess[0].customer.document,
+          address: this.orderProcess[0].customer.address,
+          phoneNumber: this.orderProcess[0].customer.phoneNumber,
           birthdate: birthDateValue,
-          eps: this.orderProcess[0].costumer.eps,
+          eps: this.orderProcess[0].customer.eps,
         })
       } else if (this.orderProcess[0].action === 'CreateOrderFromCustomer') {
         this.onePackage = this.orderProcess[0].order.package
@@ -183,8 +183,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
   }
 
   deleteBeneficiarie(document: string) {
-    const oneCostumer = this.beneficiaries.find(c => c.document === document)
-    const index = this.beneficiaries.indexOf(oneCostumer)
+    const oneCustomer = this.beneficiaries.find(c => c.document === document)
+    const index = this.beneficiaries.indexOf(oneCustomer)
     this.beneficiaries.splice(index, 1)
     if (this.beneficiariesAmount > 1) {
       this.beneficiariesAmount--
@@ -238,7 +238,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
       return this.formGroup.value.name != '' &&
         this.formGroup.value.phoneNumber != '' &&
         this.formGroup.value.birthdate != '' &&
-        this.formGroup.value.eps != 0 && !this.alreadyExists() && !this.costumerInformation() &&
+        this.formGroup.value.eps != 0 && !this.alreadyExists() && !this.customerInformation() &&
         !this.formGroup.invalid && !this.alreadyExistsFromEdit()
     } else {
       return true
@@ -252,11 +252,11 @@ export class CreateOrderDetailFormComponent implements OnInit {
     return true
   }
 
-  costumerInformation(): boolean {
+  customerInformation(): boolean {
     if (this.orderProcess[0].action != 'EditOrderDetail') {
       if (this.formGroup.value.document >= 8) {
-        this.oneCostumer = this.allCostumers.find(c => c.document === this.formGroup.value.document)
-        if (this.oneCostumer != undefined) {
+        this.oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
+        if (this.oneCustomer != undefined) {
           return true
         }
       }
@@ -267,9 +267,9 @@ export class CreateOrderDetailFormComponent implements OnInit {
   alreadyExistsFromEdit(): boolean {
     if (this.orderProcess[0].action === 'EditOrderDetail') {
       if (this.formGroup.value.document >= 8) {
-        this.oneCostumer = this.allCostumers.find(c => c.document === this.formGroup.value.document)
-        if (this.oneCostumer != undefined) {
-          if (this.oneCostumer.document === this.orderProcess[0].costumer.document) {
+        this.oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
+        if (this.oneCustomer != undefined) {
+          if (this.oneCustomer.document === this.orderProcess[0].customer.document) {
             return false
           }
           return true
@@ -279,22 +279,22 @@ export class CreateOrderDetailFormComponent implements OnInit {
     return false
   }
 
-  fillCostumerInformation() {
-    this.beneficiaries.push(this.oneCostumer)
+  fillCustomerInformation() {
+    this.beneficiaries.push(this.oneCustomer)
     this.formGroup.reset()
   }
 
   alreadyExists(): boolean {
     if (this.orderProcess[0].action != 'EditOrderDetail') {
       if (this.orderProcess[0].action === 'CreateOrderDetail') {
-        const oneCostumer = this.orderDetailCostumers.find(b => b.document === this.formGroup.value.document)
-        const anotherCostumer = this.beneficiaries.find(b => b.document === this.formGroup.value.document)
-        if (anotherCostumer == undefined && oneCostumer == undefined) {
+        const oneCustomer = this.orderDetailCustomers.find(b => b.document === this.formGroup.value.document)
+        const anotherCustomer = this.beneficiaries.find(b => b.document === this.formGroup.value.document)
+        if (anotherCustomer == undefined && oneCustomer == undefined) {
           return false
         }
       } else {
-        const oneCostumer = this.beneficiaries.find(b => b.document === this.formGroup.value.document)
-        if (oneCostumer == undefined) {
+        const oneCustomer = this.beneficiaries.find(b => b.document === this.formGroup.value.document)
+        if (oneCustomer == undefined) {
           return false
         }
       }
@@ -313,7 +313,6 @@ export class CreateOrderDetailFormComponent implements OnInit {
   add() {
     if (!this.formGroup.invalid) {
       const user: User = {
-        userName: 'pakitours',
         email: 'pakitours@pakitours.com',
         password: 'pakitours',
         status: 2,
@@ -327,9 +326,11 @@ export class CreateOrderDetailFormComponent implements OnInit {
         phoneNumber: this.formGroup.value.phoneNumber,
         birthDate: this.formGroup.value.birthdate,
         eps: this.formGroup.value.eps,
-        User: user,
+        user: user,
       })
       this.formGroup.reset()
+      console.log(this.beneficiaries);
+
     }
   }
 
@@ -340,7 +341,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         order: {
           orderId: this.orderProcess[0].order.orderId,
           package: this.orderProcess[0].order.package,
-          costumerId: this.orderProcess[0].order.costumerId,
+          customerId: this.orderProcess[0].order.customerId,
           totalCost: this.orderProcess[0].order.package.price * this.beneficiaries.length
         },
         beneficiaries: this.beneficiaries,
@@ -348,8 +349,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
       this.modalService.dismissAll();
       this.store.dispatch(new OpenModalCreatePayment(this.orderProcess))
     } else if (this.orderProcess[0].action === 'EditOrderDetail') {
-      const costumer: Costumer = {
-        costumerId: this.orderProcess[0].costumer.costumerId,
+      const customer: Customer = {
+        customerId: this.orderProcess[0].customer.customerId,
         name: this.formGroup.value.name,
         lastName: this.formGroup.value.lastName,
         document: this.formGroup.value.document,
@@ -357,9 +358,9 @@ export class CreateOrderDetailFormComponent implements OnInit {
         phoneNumber: this.formGroup.value.phoneNumber,
         address: this.formGroup.value.address,
         eps: this.formGroup.value.eps,
-        userId: this.orderProcess[0].costumer.userId
+        userId: this.orderProcess[0].customer.userId
       }
-      this.store.dispatch(new EditCostumerRequest(costumer))
+      this.store.dispatch(new EditCustomerRequest(customer))
       this.modalService.dismissAll();
       Swal.fire({
         icon: 'success',

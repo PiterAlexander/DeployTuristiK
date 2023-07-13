@@ -1,5 +1,5 @@
 export interface FrequentTraveler {
-    costumerId:string;
-    frequentTravelerId?:string;
-    travelerId:string;
+    frequentTravelerId?: string;
+    customerId: string;
+    travelerId: string;
 }
