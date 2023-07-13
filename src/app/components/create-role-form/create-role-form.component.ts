@@ -11,6 +11,7 @@ import { Role } from '@/models/role';
 import { AssociatedPermission } from '@/models/associated-permission';
 import { state } from '@angular/animations';
 import Swal from 'sweetalert2';
+import { ApiService } from '@services/api.service';
 
 @Component({
   selector: 'app-create-role-form',
@@ -32,6 +33,7 @@ export class CreateRoleFormComponent implements OnInit{
     private fb: FormBuilder,
     private modalService: NgbModal,
     private store: Store<AppState>,
+    private apiService : ApiService
   ){}
 
   ngOnInit() {
@@ -90,14 +92,6 @@ export class CreateRoleFormComponent implements OnInit{
     } else {
       this.selectedPermissions.push({ permissionId: permiso["permissionId"], module : permiso["module"]});
     }
-
-
-    // console.log("Pemisos ASOCIADOS")
-    // console.log(this.selectedPermissions)
-    // this.selectedPermissions.forEach(element => {
-    //   console.log("MOdulo",element.module, "Id",element.permissionId)
-    // });
-
   }
 
   saveChanges(){
@@ -197,24 +191,41 @@ export class CreateRoleFormComponent implements OnInit{
       })
 
       //UPDATE
-      this.selectedUpdatePermissions.forEach(updateItem =>{
+      this.selectedUpdatePermissions.forEach(async updateItem =>{
+
+        //Eliminar permiso asociado-------
         if (updateItem.status === false) {
-          //console.log(updateItem, "Se Elimina")
-          const assocPerModelDelete : AssociatedPermission = {
-            associatedPermissionId: updateItem.associatedPermissionId
-          }
-          this.store.dispatch(new DeleteAssociatedPermissionRequest({
-            ...assocPerModelDelete
-          }));
-        }else{
-          //console.log(updateItem, "Se crea")
+
+          const ok = await new Promise((resolve, reject) => {
+            this.apiService.deleteAssociatedPermission(updateItem.associatedPermissionId).subscribe({
+              next: (data) => {
+                resolve(data);
+              },
+              error: (err) => {
+                reject(err);
+              }
+            });
+          });
+
+        }
+        //Crear permiso asociado
+        else{
+
           const assocPerModelCreate : AssociatedPermission = {
             roleId : updateItem.roleId,
             permissionId : updateItem.permissionId,
           }
-          this.store.dispatch(new CreateAssociatedPermissionRequest({
-          ...assocPerModelCreate
-          }));
+
+          const ok = await new Promise((resolve, reject) => {
+            this.apiService.addAssociatedPermission(assocPerModelCreate).subscribe({
+              next: (data) => {
+                resolve(data);
+              },
+              error: (err) => {
+                reject(err);
+              }
+            });
+          });
         }
       })
 
