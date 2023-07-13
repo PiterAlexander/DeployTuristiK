@@ -43,9 +43,6 @@ import { CreatePackageFormComponent } from '@components/create-package-form/crea
 import { CreateOrderFormComponent } from '@components/create-order-form/create-order-form.component';
 import { CreateOrderDetailFormComponent } from '@components/create-order-detail-form/create-order-detail-form.component';
 import { CreateRoleFormComponent } from '@components/create-role-form/create-role-form.component';
-import { PermissionService } from '@services/configuration/permission.service';
-import { RoleService } from '@services/configuration/role.service';
-import { AssociatedPermissionService } from '@services/configuration/associated-permission.service';
 import { DetailsPackageComponent } from '@components/details-package/details-package.component';
 import { CreateEmployeeFormComponent } from '@components/create-employee-form/create-employee-form.component';
 import { CreateUserFormComponent } from '@components/create-user-form/create-user-form.component';
@@ -333,7 +330,7 @@ export class PackageEffects {
     getRoles$ = createEffect(() => this.actions$.pipe(
         ofType(roleActions.GET_ALL_ROLE_REQUEST),
         switchMap((action) => {
-            return this.roleService.ReadRoles().pipe(
+            return this.apiService.getRoles().pipe(
                 mergeMap((roleResolved) => {
                     return [
                         new GetAllRoleSuccess(roleResolved)
@@ -361,7 +358,7 @@ export class PackageEffects {
     getPermissions$ = createEffect(() => this.actions$.pipe(
         ofType(GET_ALL_PERMISSIONS_REQUEST),
         switchMap((action) => {
-            return this.apiPermission.ReadPermissions().pipe(
+            return this.apiService.getPermissions().pipe(
                 mergeMap((permissionResolved) => {
                     return [
                         new GetAllPermissionsSuccess(permissionResolved)
@@ -377,7 +374,7 @@ export class PackageEffects {
         ofType(roleActions.CREATE_ROLE_REQUEST),
         map((action: CreateRoleRequest) => action.payload),
         switchMap((role) => {
-            return this.roleService.CreateRole(role).pipe(
+            return this.apiService.addRole(role).pipe(
                 mergeMap((roleResolved) => {
                     this.modalRef.close();
                     return [
@@ -395,7 +392,7 @@ export class PackageEffects {
         ofType(roleActions.EDIT_ROLE_REQUEST),
         map((action: EditRoleRequest) => action.payload),
         switchMap((role) => {
-            return this.roleService.UpdateRole(role.roleId, role).pipe(
+            return this.apiService.updateRole(role.roleId, role).pipe(
                 mergeMap((roleResolved) => {
                     this.modalRef.close();
                     return [
@@ -412,7 +409,7 @@ export class PackageEffects {
         ofType(roleActions.DELETE_ROLE_REQUEST),
         map((action: DeleteRoleRequest) => action.payload),
         switchMap((role) => {
-            return this.roleService.DeleteRole(role.roleId).pipe(
+            return this.apiService.deleteRole(role.roleId).pipe(
                 mergeMap((roleResolved) => {
                     return [
                         new DeleteRoleSuccess(roleResolved),
@@ -429,7 +426,7 @@ export class PackageEffects {
         ofType(permissionActions.CREATE_ASSOCIATEDPERMISSION_REQUEST),
         map((action: CreateAssociatedPermissionRequest) => action.payload),
         switchMap((asocpermission) => {
-            return this.assocPermissionService.CreateAssociatedPermission(asocpermission).pipe(
+            return this.apiService.addAssociatedPermission(asocpermission).pipe(
                 mergeMap((assocPermissionResolved) => {
                     this.modalRef.close();
                     return [
@@ -446,7 +443,7 @@ export class PackageEffects {
         ofType(permissionActions.DELETE_ASSOCIATEDPERMISSION_REQUEST),
         map((action: DeleteAssociatedPermissionRequest) => action.payload),
         switchMap((asocpermission) => {
-            return this.assocPermissionService.DeleteAssociatedPermission(asocpermission.associatedPermissionId).pipe(
+            return this.apiService.deleteAssociatedPermission(asocpermission.associatedPermissionId).pipe(
                 mergeMap((assocPermissionResolved) => {
                     this.modalRef.close();
                     return [
@@ -728,9 +725,6 @@ export class PackageEffects {
         private actions$: Actions,
         private modalService: NgbModal,
         private apiService: ApiService,
-        private apiPermission: PermissionService,
-        private roleService: RoleService,
-        private assocPermissionService: AssociatedPermissionService,
         private authService: AuthService,
     ) { }
 
