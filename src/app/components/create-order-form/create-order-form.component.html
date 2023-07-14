@@ -22,8 +22,8 @@
                     <input type="text" class="form-control" id="document" minlength="8" maxlength="15"
                         formControlName="document" [ngClass]="
                         {
-                            'invalid': formGroup.get('document').dirty && formGroup.get('document').errors || (validateCostumerId() && formGroup.get('document').dirty) || (validateRole() && formGroup.get('document').dirty),
-                            'valid': formGroup.get('document').dirty && !formGroup.get('document').errors && !validateCostumerId() && !validateRole()
+                            'invalid': formGroup.get('document').dirty && formGroup.get('document').errors || (validateCustomerId() && formGroup.get('document').dirty) || (validateRole() && formGroup.get('document').dirty),
+                            'valid': formGroup.get('document').dirty && !formGroup.get('document').errors && !validateCustomerId() && !validateRole()
                         }" placeholder="Ingrese el número del documento de identidad del titular" required
                         onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
 
@@ -41,7 +41,7 @@
                         class="invalid-feedback">
                         El documento debe tener mínimo 8 números.
                     </div>
-                    <div *ngIf="validateCostumerId() && formGroup.get('document').dirty" class="invalid-feedback">
+                    <div *ngIf="validateCustomerId() && formGroup.get('document').dirty" class="invalid-feedback">
                         Este documento no está asociado a ningún cliente.
                     </div>
                     <div *ngIf="validateRole() && formGroup.get('document').dirty" class="invalid-feedback">

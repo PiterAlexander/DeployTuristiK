@@ -1,7 +1,7 @@
-import { Costumer } from '@/models/costumer';
+import { Customer } from '@/models/customer';
 import { FrequentTraveler } from '@/models/frequentTraveler';
 import { AppState } from '@/store/state';
-import { GetAllCostumerRequest, OpenModalCreateFrequentTraveler } from '@/store/ui/actions';
+import { GetAllCustomerRequest, OpenModalCreateFrequentTraveler } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -21,15 +21,15 @@ interface State {
   // styleUrls: ['./list-frequent-traveler.component.scss']
 })
 export class ListFrequentTravelerComponent {
-  public filteredFrequentTravelerList: Array<Costumer>;
+  public filteredFrequentTravelerList: Array<Customer>;
   public search: string
   public total: number
   public ui: Observable<UiState>
   public FrequentTravelerList: Array<any>
-  public costumerData : Costumer
+  public customerData : Customer
   public frequentTravelers : Array<FrequentTraveler>
-  public allCostumer : Array<Costumer>
-  public frequentTravelerCostumers : Array<Costumer> = []
+  public allCustomer : Array<Customer>
+  public frequentTravelerCustomers : Array<Customer> = []
 
   private _state: State = {
     page: 1,
@@ -39,29 +39,29 @@ export class ListFrequentTravelerComponent {
   constructor(private fb: FormBuilder, private modalService: NgbModal, private store: Store<AppState>) { }
 
   ngOnInit(): void {
-    this.store.dispatch(new GetAllCostumerRequest)
+    this.store.dispatch(new GetAllCustomerRequest)
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
-      this.allCostumer = state.allCostumers.data
-      this.costumerData = state.oneCostumer.data
-      this.frequentTravelers = state.oneCostumer.data.frequentTraveler
-      this.compareCostumerId()
+      this.allCustomer = state.allCustomers.data
+      this.customerData = state.oneCustomer.data
+      this.frequentTravelers = state.oneCustomer.data.frequentTraveler
+      this.compareCustomerId()
       console.log(this.frequentTravelers)
     })
   }
 
-  compareCostumerId(){
+  compareCustomerId(){
     for(const element of this.frequentTravelers){
-    const costumer = this.allCostumer.find(c => c.costumerId === element.travelerId)
-    if (costumer != undefined) {
-      this.frequentTravelerCostumers.push(costumer)
+    const customer = this.allCustomer.find(c => c.customerId === element.travelerId)
+    if (customer != undefined) {
+      this.frequentTravelerCustomers.push(customer)
     }
     };
   }
 
   openModalCreateFrequentTraveler() {
-    this.store.dispatch(new OpenModalCreateFrequentTraveler(this.costumerData));
-    console.log(this.frequentTravelerCostumers)
+    this.store.dispatch(new OpenModalCreateFrequentTraveler(this.customerData));
+    console.log(this.frequentTravelerCustomers)
   }
 
   searchByName() {

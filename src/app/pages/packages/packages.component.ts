@@ -1,11 +1,11 @@
 import { Package } from '@/models/package';
-import { ChangeStatusPackageRequest, GetAllCostumerRequest, GetAllPackagesRequest, OpenModalCreateOrderDetail, OpenModalCreatePackage, OpenModalDetailsPackage } from '@/store/ui/actions';
+import { ChangeStatusPackageRequest, GetAllCustomerRequest, GetAllPackagesRequest, OpenModalCreateOrderDetail, OpenModalCreatePackage, OpenModalDetailsPackage } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit, PipeTransform } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
-import { Costumer } from '@/models/costumer';
+import { Customer } from '@/models/customer';
 import Swal from 'sweetalert2';
 
 interface State {
@@ -33,16 +33,16 @@ export class PackagesComponent implements OnInit {
 
   public role;
   public user;
-  public allCostumers: Array<Costumer>
+  public allCustomers: Array<Customer>
 
   constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
     this.store.dispatch(new GetAllPackagesRequest());
-    this.store.dispatch(new GetAllCostumerRequest())
+    this.store.dispatch(new GetAllCustomerRequest())
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
-      this.allCostumers = state.allCostumers.data
+      this.allCustomers = state.allCustomers.data
       this.packagesList = state.allPackages.data,
         this.loading = state.allPackages.loading
       this.searchByName();
@@ -162,11 +162,11 @@ export class PackagesComponent implements OnInit {
   }
 
   reserve(onePackage: Package) {
-    const costumer: Costumer = this.allCostumers.find(c => c.userId === this.user['id'])
+    const customer: Customer = this.allCustomers.find(c => c.userId === this.user['id'])
     const orderProcess = [{
       action: "CreateOrderFromCustomer",
       order: {
-        costumer: costumer,
+        customer: customer,
         package: onePackage
       },
       beneficiaries: {}

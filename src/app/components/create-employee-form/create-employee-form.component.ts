@@ -1,7 +1,7 @@
 import {
   CreateEmployeeRequest,
   EditEmployeeRequest,
-  GetAllCostumerRequest,
+  GetAllCustomerRequest,
   GetAllEmployeeRequest,
   GetAllRoleRequest
 } from '@/store/ui/actions';
@@ -38,7 +38,7 @@ export class CreateEmployeeFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-      this.store.dispatch(new GetAllCostumerRequest());
+      this.store.dispatch(new GetAllCustomerRequest());
       this.store.dispatch(new GetAllRoleRequest());
 
       this.ui = this.store.select('ui');
@@ -106,7 +106,6 @@ export class CreateEmployeeFormComponent implements OnInit {
       var idRole: Role = this.Roles.find((r) => r.name == 'Empleado');
       if (this.employeeData == null) {
           const user: User = {
-              userName: this.formGroup.value.userName,
               email: this.formGroup.value.email,
               password: this.formGroup.value.password,
               status: 1,
@@ -129,7 +128,6 @@ export class CreateEmployeeFormComponent implements OnInit {
           );
       } else {
           const user: User = {
-              userName: this.formGroup.value.userName,
               email: this.formGroup.value.email,
               password: this.formGroup.value.password,
               status: 1,
