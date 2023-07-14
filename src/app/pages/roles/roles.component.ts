@@ -1,13 +1,17 @@
 import { AppState } from '@/store/state';
-import {GetAllRoleRequest,GetAllPermissionsRequest, OpenModalCreateRole } from '@/store/ui/actions';
+import {GetAllRoleRequest,GetAllPermissionsRequest, OpenModalCreateRole, GetUsersRequest } from '@/store/ui/actions';
 import { Component, OnInit, PipeTransform } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { Role } from '@/models/role';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 import { DeleteRoleRequest } from '../../store/ui/actions';
+import { User } from '@/models/user';
 
+//<--------PRIMENG----------->
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ApiService } from '@services/api.service';
 
 interface State{
   page:number;
@@ -24,6 +28,7 @@ export class RolesComponent implements OnInit{
   public ui:Observable<UiState>
   public roleList:Array<Role>
   public filteredRolesList: Array<Role>
+  public userList: Array<User>
   public loading: boolean;
   public search: string
   public total: number
@@ -34,16 +39,24 @@ export class RolesComponent implements OnInit{
   };
 
 
-  constructor(private store: Store<AppState>){}
+  constructor(
+    private store: Store<AppState>,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
+    private apiService : ApiService,
+  ){}
 
   ngOnInit() {
     this.store.dispatch(new GetAllPermissionsRequest())
     this.store.dispatch(new GetAllRoleRequest())
+    this.store.dispatch(new GetUsersRequest())
 
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
       this.roleList = state.allRoles.data,
-      this.loading = state.allRoles.loading
+      this.loading = state.allRoles.loading,
+      this.userList = state.allUsers.data
+
       this.searchByName();
     });
   }
@@ -54,13 +67,32 @@ export class RolesComponent implements OnInit{
     );
   }
 
-  openCreateRoleModal(role?:Role){
-
+  openCreateRoleModal(){
     this.store.dispatch(new OpenModalCreateRole());
   }
 
-  openEditRoleModal(role:Role){
-    this.store.dispatch(new OpenModalCreateRole(role));
+  async openEditRoleModal(role:Role){
+    const ok = await new Promise((resolve, reject) => {
+      this.apiService.getRoleById(role.roleId).subscribe({
+        next: (data) => {
+          resolve(data);
+        },
+        error: (err) => {
+          reject(err);
+        }
+      });
+    });
+    const roleEdit: Role ={
+      roleId: ok['roleId'],
+      name: ok['name'],
+      status: ok['status'],
+      associatedPermission : ok['associatedPermission']
+    }
+
+    if (ok) {
+      this.store.dispatch(new OpenModalCreateRole(roleEdit));
+    }
+
   }
 
 
@@ -81,44 +113,57 @@ export class RolesComponent implements OnInit{
     })
 
     if(ok){
-      if (role.user.length>0) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'El rol '+role.name+' tiene usuarios asociados.No puede ser eliminado del sistema.',
-          showConfirmButton: true,
-          confirmButtonText: 'Aceptar',
-        }).then(function(){})
-      }else{
+      const usersAssociated = this.userList.find(u=>u.roleId == role.roleId)
 
-        Swal.fire({
-          title: '¿Estás seguro de eliminar a '+role.name+'?',
-          text: "No podrás revertirlo.",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          cancelButtonText: 'Cancelar',
-          confirmButtonText: 'Si, eliminar',
-          reverseButtons: true,
-          customClass: {
-            confirmButton: 'swal2-confirm-right',
-            cancelButton: 'swal2-cancel-left'
+      if (usersAssociated) {
+        this.messageService.add({key: 'alert-message', severity:'warn', summary: 'Acción denegada', detail: 'El rol tiene usuarios asociados.'});
+      }else{
+        this.confirmationService.confirm({
+          message: '¿Estás seguro de eliminar a ' + role.name + '?',
+          header: 'Confirmación', // Cambia el encabezado del cuadro de confirmación
+          icon: 'pi pi-exclamation-triangle', // Cambia el icono del cuadro de confirmación
+          acceptLabel: 'Aceptar', // Cambia el texto del botón de aceptar
+          rejectLabel: 'Cancelar', // Cambia el texto del botón de rechazar
+          acceptButtonStyleClass: 'p-button-primary p-button-sm', // Agrega una clase CSS al botón de aceptar
+          rejectButtonStyleClass: 'p-button-outlined p-button-sm', // Agrega una clase CSS al botón de rechazar
+          accept: () => {
+            // Lógica para confirmar
+            this.store.dispatch(new DeleteRoleRequest(role));
+          },
+          reject: () => {
+            // Lógica para rechazar
           }
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.store.dispatch(new DeleteRoleRequest(role))
-            Swal.fire(
-              'Eliminado con éxito.',
-            )
-          }
-        })
+        });
+        // Swal.fire({
+        //   title: '¿Estás seguro de eliminar a '+role.name+'?',
+        //   text: "No podrás revertirlo.",
+        //   icon: 'warning',
+        //   showCancelButton: true,
+        //   confirmButtonColor: '#3085d6',
+        //   cancelButtonColor: '#d33',
+        //   cancelButtonText: 'Cancelar',
+        //   confirmButtonText: 'Si, eliminar',
+        //   reverseButtons: true,
+        //   customClass: {
+        //     confirmButton: 'swal2-confirm-right',
+        //     cancelButton: 'swal2-cancel-left'
+        //   }
+        // }).then((result) => {
+          // if (result.isConfirmed) {
+          //   this.store.dispatch(new DeleteRoleRequest(role))
+          //   Swal.fire(
+          //     'Eliminado con éxito.',
+          //   )
+          // }
+        // })
       }
     }else{
-      Swal.fire({
-        icon: 'warning',
-        title: 'El rol '+role.name+' no puede ser eliminado del sistema.',
-        showConfirmButton: true,
-      }).then(function(){})
+      // Swal.fire({
+      //   icon: 'warning',
+      //   title: 'El rol '+role.name+' no puede ser eliminado del sistema.',
+      //   showConfirmButton: true,
+      // }).then(function(){})
+      this.messageService.add({key: 'alert-message', severity:'warn', summary: 'Acción denegada', detail: ''});
     }
 
   }

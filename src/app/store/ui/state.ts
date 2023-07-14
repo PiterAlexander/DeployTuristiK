@@ -2,11 +2,12 @@ import { Package } from "@/models/package";
 import { Order } from "@/models/order";
 import { Role } from '@/models/role';
 import { Permission } from "@/models/permission";
-import { Costumer } from "@/models/costumer";
+import { Customer } from "@/models/customer";
 import { User } from "@/models/user";
 import { Employee } from "@/models/employee";
 import { FrequentTraveler } from "@/models/frequentTraveler";
 import { Token, UserLog } from "@/models/token";
+import { Payment } from "@/models/payment";
 
 export default <UiState>{
   //<--- TOGGLER --->
@@ -34,13 +35,18 @@ export default <UiState>{
     error: undefined,
     loading: false
   },
+  orderProcess: {
+    data: [],
+    error: undefined,
+    loading: false
+  },
   oneOrder: {
     data: undefined,
     error: undefined,
     loading: false
   },
-  orderProcess: {
-    data: [],
+  onePayment: {
+    data: undefined,
     error: undefined,
     loading: false
   },
@@ -62,13 +68,13 @@ export default <UiState>{
     loading: false
   },
   //<----------------->
-  //<--- COSTUMERS --->
-  allCostumers: {
+  //<--- CUSTOMERS --->
+  allCustomers: {
     data: [],
     error: undefined,
     loading: false
   },
-  oneCostumer: {
+  oneCustomer: {
     data: undefined,
     error: undefined,
     loading: false
@@ -84,7 +90,7 @@ export default <UiState>{
     data: undefined,
     error: undefined,
     loading: false
-},
+  },
   //<------------->
   //<--- USERS --->
   allUsers: {
@@ -110,8 +116,16 @@ export default <UiState>{
     data: undefined,
     error: undefined,
     loading: false
-  }
+  },
   //<-------------->
+  //<--SAVE DATE CALENDAR SELECTE-------->
+
+  dateCalendarSelected: {
+    data: undefined,
+    error: undefined,
+    loading: false
+  }
+  //<----------------------------------->
 };
 
 
@@ -142,13 +156,18 @@ export interface UiState {
     error: string,
     loading: boolean
   };
+  orderProcess: {
+    data: Array<any>,
+    error: string,
+    loading: boolean
+  };
   oneOrder: {
     data: Order,
     error: string,
     loading: boolean
   };
-  orderProcess: {
-    data: Array<any>,
+  onePayment: {
+    data: Payment,
     error: string,
     loading: boolean
   };
@@ -170,14 +189,14 @@ export interface UiState {
     loading: boolean
   };
   //<----------------->
-  //<--- COSTUMERS --->
-  allCostumers: {
-    data: Array<Costumer>,
+  //<--- CUSTOMERS --->
+  allCustomers: {
+    data: Array<Customer>,
     error: string,
     loading: boolean
   };
-  oneCostumer: {
-    data: Costumer,
+  oneCustomer: {
+    data: Customer,
     error: string,
     loading: boolean
   };
@@ -206,7 +225,7 @@ export interface UiState {
     loading: boolean
   }
   //<------------->
-  
+
   //<--- LOGIN --->
   token: {
     data: Token,
@@ -219,4 +238,12 @@ export interface UiState {
     loading: boolean
   }
   //<-------------->
+
+  //<--SAVE DATE CALENDAR SELECTE-------->
+  dateCalendarSelected: {
+    data: Date,
+    error: undefined,
+    loading: false
+  }
+  //<----------------------------------->
 }

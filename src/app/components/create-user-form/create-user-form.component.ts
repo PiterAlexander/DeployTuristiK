@@ -1,4 +1,4 @@
-import { Costumer } from '@/models/costumer';
+import { Customer } from '@/models/customer';
 import { Employee } from '@/models/employee';
 import { Role } from '@/models/role';
 import { User } from '@/models/user';
@@ -81,7 +81,6 @@ export class CreateUserFormComponent implements OnInit {
       this.ActionTitle = "Editar"
       this.formGroup.setValue({
         userId: this.userData.userId,
-        userName: this.userData.userName,
         role: this.userData.roleId,
         email: this.userData.email,
         password: this.userData.password,
@@ -103,7 +102,6 @@ export class CreateUserFormComponent implements OnInit {
     if (this.userData == null) {
       if (this.admin == 1) {
         this.model = {
-          userName: this.formGroup.value.userName,
           email: this.formGroup.value.email,
           password: this.formGroup.value.password,
           status: 1,
@@ -117,12 +115,11 @@ export class CreateUserFormComponent implements OnInit {
         }
       } else {
         this.model = {
-          userName: this.formGroup.value.userName,
           email: this.formGroup.value.email,
           password: this.formGroup.value.password,
           status: 1,
           roleId: this.formGroup.value.role,
-          costumer: {
+          customer: {
             name: this.formGroup.value.name,
             lastName: this.formGroup.value.lastName,
             document: this.formGroup.value.identification,
@@ -141,7 +138,6 @@ export class CreateUserFormComponent implements OnInit {
     } else {
       this.model = {
         userId: this.formGroup.value.userId,
-        userName: this.formGroup.value.userName,
         email: this.formGroup.value.email,
         password: this.formGroup.value.password,
         status: this.formGroup.value.status,
@@ -158,27 +154,27 @@ export class CreateUserFormComponent implements OnInit {
     if (this.userData == null) {
       if (this.admin == 1) {
         return this.formGroup.valid
-          && !this.allUsers.find(u => u.userName === this.formGroup.value.userName || u.email === this.formGroup.value.email)
+          && !this.allUsers.find(u => u.email === this.formGroup.value.email || u.email === this.formGroup.value.email)
           && this.rolesList.find(r => r.roleId === this.formGroup.value.role) != null
       } else if (this.otraEps) {
         return this.formGroup.valid && this.formGroup.value.birthDate != null
           && this.formGroup.value.address != null
           && this.formGroup.value.eps != null
           && this.formGroup.value.otherEps != null
-          && !this.allUsers.find(u => u.userName === this.formGroup.value.userName || u.email === this.formGroup.value.email)
+          && !this.allUsers.find(u => u.email === this.formGroup.value.email || u.email === this.formGroup.value.email)
           && this.rolesList.find(r => r.roleId === this.formGroup.value.role) != null
       } else {
         return this.formGroup.valid && this.formGroup.value.birthDate != null
           && this.formGroup.value.address != null
           && this.formGroup.value.eps != null
-          && !this.allUsers.find(u => u.userName === this.formGroup.value.userName || u.email === this.formGroup.value.email)
+          && !this.allUsers.find(u => u.email === this.formGroup.value.email || u.email === this.formGroup.value.email)
           && this.rolesList.find(r => r.roleId === this.formGroup.value.role) != null
       }
 
     } else {
       return this.formGroup.valid
         && this.formGroup.value.status != "0"
-        && !this.allUsers.find(u => u.userName === this.formGroup.value.userName && u.userId != this.formGroup.value.userId)
+        && !this.allUsers.find(u => u.email === this.formGroup.value.email && u.userId != this.formGroup.value.userId)
         && !this.allUsers.find(u => u.email === this.formGroup.value.email && u.userId != this.formGroup.value.userId)
     }
   }

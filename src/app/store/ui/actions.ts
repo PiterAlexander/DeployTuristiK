@@ -4,7 +4,7 @@ import { Order } from '@/models/order';
 import { Role } from '@/models/role';
 import { Permission } from '@/models/permission';
 import { AssociatedPermission } from '@/models/associated-permission';
-import { Costumer } from '@/models/costumer';
+import { Customer } from '@/models/customer';
 import { Employee } from '@/models/employee';
 import { User } from '@/models/user';
 import { FrequentTraveler } from '@/models/frequentTraveler';
@@ -92,7 +92,12 @@ export enum packageActions {
 
   EDIT_PACKAGE_REQUEST = '[PACKAGE] EDIT_PACKAGE_REQUEST',
   EDIT_PACKAGE_SUCCESS = '[PACKAGE] EDIT_PACKAGE_SUCCESS',
-  EDIT_PACKAGE_FAILURE = '[PACKAGE] EDIT_PACKAGE_FAILURE'
+  EDIT_PACKAGE_FAILURE = '[PACKAGE] EDIT_PACKAGE_FAILURE',
+
+
+  CHANGE_STATUS_PACKAGE_REQUEST = '[PACKAGE] CHANGE_STATUS_PACKAGE_REQUEST',
+  CHANGE_STATUS_PACKAGE_SUCCESS = '[PACKAGE] CHANGE_STATUS_PACKAGE_SUCCESS',
+  CHANGE_STATUS_PACKAGE_FAILURE = '[PACKAGE] CHANGE_STATUS_PACKAGE_FAILURE',
 }
 
 export class OpenModalDetailsPackage implements Action {
@@ -123,7 +128,7 @@ export class GetOnePackageRequest implements Action {
 
 export class OpenModalCreatePackage implements Action {
   readonly type: string = packageActions.OPEN_MODAL_CREATE_PACKAGE;
-  constructor(public payload?: Package) { }
+  constructor(public payload?: Package,public dateCalendar?:Date) { }
 }
 export class CreatePackageRequest implements Action {
   readonly type: string = packageActions.CREATE_PACKAGE_REQUEST;
@@ -156,20 +161,23 @@ export class EditPackageFailure implements Action {
 
 
 // PACKAGES DISABLE ACTIONS ------------------------------------------------
-export class EditStatusPackageRequest implements Action {
-  readonly type: string = EDIT_PACKAGE_REQUEST;
-  constructor(public payload: Package) { }
+
+export class ChangeStatusPackageRequest implements Action {
+  readonly type = packageActions.CHANGE_STATUS_PACKAGE_REQUEST;
+
+  constructor(public payload: Package) {} // Aquí pasamos el id del paquete como carga útil
 }
 
-export class EditStatusPackageSuccess implements Action {
-  readonly type: string = EDIT_PACKAGE_SUCCESS;
-  readonly string = OPEN_MODAL_CREATE_PACKAGE;
-  constructor(public payload: any) { }
+export class ChangeStatusPackageSuccess implements Action {
+  readonly type = packageActions.CHANGE_STATUS_PACKAGE_SUCCESS;
+
+  constructor(public payload: any) {} // Aquí pasamos el paquete deshabilitado como carga útil
 }
 
-export class EditStatusPackageFailure implements Action {
-  readonly type: string = EDIT_PACKAGE_FAILURE;
-  constructor(public payload: string) { }
+export class ChangeStatusPackageFailure implements Action {
+  readonly type = packageActions.CHANGE_STATUS_PACKAGE_FAILURE;
+
+  constructor(public payload: string) {} // Aquí pasamos cualquier error como carga útil
 }
 
 // PACKAGES DISABLE ACTIONS END -----------------------------------------
@@ -215,6 +223,7 @@ export enum orderActions {
   EDIT_PAYMENT_SUCCESS = '[PAYMENT] EDIT_PAYMENT_SUCCESS',
   EDIT_PAYMENT_FAILURE = '[PAYMENT] EDIT_PAYMENT_FAILURE',
 }
+
 
 export class GetAllOrdersRequest implements Action {
   readonly type: string = orderActions.GET_ALL_ORDERS_REQUEST;
@@ -325,7 +334,7 @@ export class CreatePaymentFailure implements Action {
 
 export class OpenModalEditPayment implements Action {
   readonly type: string = orderActions.OPEN_MODAL_EDIT_PAYMENT;
-  constructor(public payload: any) { }
+  constructor(public payload: Payment) { }
 }
 export class EditPaymentRequest implements Action {
   readonly type: string = orderActions.EDIT_PAYMENT_REQUEST;
@@ -473,63 +482,63 @@ export class DeleteAssociatedPermissionFailure implements Action {
 }
 //<--------------------->
 
-//<--- COSTUMER ACTIONS --->
-export enum costumerActions {
-  GET_ALL_COSTUMER_REQUEST = '[COSTUMERS] GET_ALL_COSTUMER__REQUEST',
-  GET_ALL_COSTUMER_SUCCESS = '[COSTUMERS] GET_ALL_COSTUMER__SUCCESS',
-  GET_ALL_COSTUMER_FAILURE = '[COSTUMERS] GET_ALL_COSTUMER__FAILURE',
+//<--- CUSTOMER ACTIONS --->
+export enum customerActions {
+  GET_ALL_CUSTOMER_REQUEST = '[CUSTOMERS] GET_ALL_CUSTOMER__REQUEST',
+  GET_ALL_CUSTOMER_SUCCESS = '[CUSTOMERS] GET_ALL_CUSTOMER__SUCCESS',
+  GET_ALL_CUSTOMER_FAILURE = '[CUSTOMERS] GET_ALL_CUSTOMER__FAILURE',
 
-  OPEN_MODAL_CREATE_COSTUMER = '[COSTUMERS] OPEN_MODAL_CREATE_COSTUMER',
-  CREATE_COSTUMER_REQUEST = '[COSTUMERS] CREATE_COSTUMER_REQUEST',
-  CREATE_COSTUMER_SUCCESS = '[COSTUMERS] CREATE_COSTUMER_SUCCESS',
-  CREATE_COSTUMER_FAILURE = '[COSTUMERS] CREATE_COSTUMER_FAILURE',
+  OPEN_MODAL_CREATE_CUSTOMER = '[CUSTOMERS] OPEN_MODAL_CREATE_CUSTOMER',
+  CREATE_CUSTOMER_REQUEST = '[CUSTOMERS] CREATE_CUSTOMER_REQUEST',
+  CREATE_CUSTOMER_SUCCESS = '[CUSTOMERS] CREATE_CUSTOMER_SUCCESS',
+  CREATE_CUSTOMER_FAILURE = '[CUSTOMERS] CREATE_CUSTOMER_FAILURE',
 
-  EDIT_COSTUMER_REQUEST = '[COSTUMERS] EDIT_COSTUMER_REQUEST',
-  EDIT_COSTUMER_SUCCESS = '[COSTUMERS] EDIT_COSTUMER_SUCCESS',
-  EDIT_COSTUMER_FAILURE = '[COSTUMERS] EDIT_COSTUMER_FAILURE',
+  EDIT_CUSTOMER_REQUEST = '[CUSTOMERS] EDIT_CUSTOMER_REQUEST',
+  EDIT_CUSTOMER_SUCCESS = '[CUSTOMERS] EDIT_CUSTOMER_SUCCESS',
+  EDIT_CUSTOMER_FAILURE = '[CUSTOMERS] EDIT_CUSTOMER_FAILURE',
 
 }
 
-export class GetAllCostumerRequest implements Action {
-  readonly type: string = costumerActions.GET_ALL_COSTUMER_REQUEST;
+export class GetAllCustomerRequest implements Action {
+  readonly type: string = customerActions.GET_ALL_CUSTOMER_REQUEST;
 }
-export class GetAllCostumerSuccess implements Action {
-  readonly type: string = costumerActions.GET_ALL_COSTUMER_SUCCESS;
-  constructor(public payload: Array<Costumer>) { }
+export class GetAllCustomerSuccess implements Action {
+  readonly type: string = customerActions.GET_ALL_CUSTOMER_SUCCESS;
+  constructor(public payload: Array<Customer>) { }
 }
-export class GetAllCostumerFailure implements Action {
-  readonly type: string = costumerActions.GET_ALL_COSTUMER_FAILURE;
+export class GetAllCustomerFailure implements Action {
+  readonly type: string = customerActions.GET_ALL_CUSTOMER_FAILURE;
   constructor(public payload: string) { }
 }
 
-export class OpenModalCreateCostumer implements Action {
-  readonly type: string = costumerActions.OPEN_MODAL_CREATE_COSTUMER;
-  constructor(public payload?: Costumer) { }
+export class OpenModalCreateCustomer implements Action {
+  readonly type: string = customerActions.OPEN_MODAL_CREATE_CUSTOMER;
+  constructor(public payload?: Customer) { }
 }
-export class CreateCostumerRequest implements Action {
-  readonly type: string = costumerActions.CREATE_COSTUMER_REQUEST;
-  constructor(public payload: Costumer) { }
+export class CreateCustomerRequest implements Action {
+  readonly type: string = customerActions.CREATE_CUSTOMER_REQUEST;
+  constructor(public payload: Customer) { }
 }
-export class CreateCostumerSuccess implements Action {
-  readonly type: string = costumerActions.CREATE_COSTUMER_SUCCESS;
+export class CreateCustomerSuccess implements Action {
+  readonly type: string = customerActions.CREATE_CUSTOMER_SUCCESS;
   constructor(public payload: any) { }
 }
-export class CreateCostumerFailure implements Action {
-  readonly type: string = costumerActions.CREATE_COSTUMER_FAILURE;
+export class CreateCustomerFailure implements Action {
+  readonly type: string = customerActions.CREATE_CUSTOMER_FAILURE;
   constructor(public payload: string) { }
 }
 
-export class EditCostumerRequest implements Action {
-  readonly type: string = costumerActions.EDIT_COSTUMER_REQUEST;
-  constructor(public payload: Costumer) { }
+export class EditCustomerRequest implements Action {
+  readonly type: string = customerActions.EDIT_CUSTOMER_REQUEST;
+  constructor(public payload: Customer) { }
 }
-export class EditCostumerSuccess implements Action {
-  readonly type: string = costumerActions.EDIT_COSTUMER_SUCCESS;
-  readonly string = costumerActions.OPEN_MODAL_CREATE_COSTUMER;
+export class EditCustomerSuccess implements Action {
+  readonly type: string = customerActions.EDIT_CUSTOMER_SUCCESS;
+  readonly string = customerActions.OPEN_MODAL_CREATE_CUSTOMER;
   constructor(public payload: any) { }
 }
-export class EditCostumerFailure implements Action {
-  readonly type: string = costumerActions.EDIT_COSTUMER_FAILURE;
+export class EditCustomerFailure implements Action {
+  readonly type: string = customerActions.EDIT_CUSTOMER_FAILURE;
   constructor(public payload: string) { }
 }
 
@@ -708,11 +717,11 @@ export class GetAllFrequentTravelerFailure implements Action {
 
 export class OpenModalCreateFrequentTraveler implements Action {
   readonly type: string = FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER;
-  constructor(public payload: Costumer) { }
+  constructor(public payload: Customer) { }
 }
 export class OpenModalListFrequentTraveler implements Action {
   readonly type: string = FrequentTravelerActions.OPEN_MODAL_LIST_FREQUENTTRAVELER;
-  constructor(public payload: Costumer) { }
+  constructor(public payload: Customer) { }
 }
 export class CreateFrequentTravelerRequest implements Action {
   readonly type: string = FrequentTravelerActions.CREATE_FREQUENTTRAVELER_REQUEST;
@@ -846,19 +855,19 @@ export type UiAction =
   | DeleteAssociatedPermissionSuccess
   | DeleteAssociatedPermissionFailure
   //<--------------------->
-  //<---COSTUMERS--->
-  | GetAllCostumerSuccess
-  | GetAllCostumerFailure
-  | CreateCostumerRequest
-  | CreateCostumerSuccess
-  | CreateCostumerFailure
-  | EditCostumerRequest
-  | EditCostumerFailure
-  | EditCostumerSuccess
+  //<---CUSTOMERS--->
+  | GetAllCustomerSuccess
+  | GetAllCustomerFailure
+  | CreateCustomerRequest
+  | CreateCustomerSuccess
+  | CreateCustomerFailure
+  | EditCustomerRequest
+  | EditCustomerFailure
+  | EditCustomerSuccess
   //<--------------------->
   //<---FREQUENT TRAVELER--->
-  | GetAllCostumerFailure
-  | GetAllCostumerSuccess
+  | GetAllCustomerFailure
+  | GetAllCustomerSuccess
   | CreateFrequentTravelerRequest
   | CreateFrequentTravelerSuccess
   | CreateFrequentTravelerFailure
@@ -875,9 +884,9 @@ export type UiAction =
   | CreateEmployeeRequest
   | CreateEmployeeSuccess
   | CreateEmployeeFailure
-  | EditCostumerRequest
-  | EditCostumerSuccess
-  | EditCostumerFailure
+  | EditCustomerRequest
+  | EditCustomerSuccess
+  | EditCustomerFailure
   | DeleteEmployeeRequest
   | DeleteEmployeeFailure
   | DeleteEmployeeSuccess

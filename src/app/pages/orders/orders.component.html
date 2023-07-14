@@ -1,4 +1,4 @@
-<div class="content-header">
+<div *ngIf="user['role'] !== 'Cliente'" class="content-header">
     <div class="container-fluid">
         <div class="row m-3">
             <div class="card card-package w-100">
@@ -30,7 +30,6 @@
                                     [(ngModel)]="search" (ngModelChange)="searchByName()" />
                             </div>
                         </div>
-
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -44,8 +43,8 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let order of filteredOrdersList">
-                                    <td>{{order.costumer.name + ' ' + order.costumer.lastName + ' - ' +
-                                        order.costumer.document}}</td>
+                                    <td>{{order.customer.name + ' ' + order.customer.lastName + ' - ' +
+                                        order.customer.document}}</td>
                                     <td>{{order.package.name}}</td>
                                     <td>
                                         <button (click)="sendToOrderDetails(order)"
@@ -72,12 +71,73 @@
                                 </tr>
                             </tbody>
                         </table>
-
                         <div class="d-flex justify-content-end pt-3">
                             <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize">
                             </ngb-pagination>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="user['role'] === 'Cliente'" class="content-header">
+    <div class="container-fluid mt-5">
+        <div *ngFor="let order of ordersList">
+            <div class="card w-100 mb-5">
+                <div class="card-header text-left">
+                    <div class="row">
+                        <div class="col d-flex align-items-center">
+                            <h2 class="m-0 font-weight-bold text-dark"> {{order.package.name}} </h2>
+                        </div>
+                        <div class="col">
+                            <div class="d-flex justify-content-end">
+                                <div>
+                                    <h3 class="m-0 font-weight-bold text-dark">${{ order.totalCost}} COP</h3>
+                                    <p class="m-0 d-flex justify-content-end text-muted">Costo total</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body pt-1 pb-0">
+                    <div class="row">
+                        <div class="col-6 pl-3 pr-2 pt-2 pb-2  mt-auto mb-auto">
+                            <div class="ml-auto mr-auto p-2">
+                                <img src="https://cdn.colombia.com/images/v2/turismo/sitios-turisticos/cartagena/ciudad-cartagena-800.jpg"
+                                    class="card-img-top" alt="Imagen del paquete">
+                            </div>
+                        </div>
+                        <div class="col-6 pt-2 pb-2">
+                            <div class="ml-auto mr-auto p-2 pr-3">
+                                <h3 class="card-title font-weight-bold"> Información del pedido: </h3>
+                                <p class="card-text mb-1"><b>Destino: </b>{{ order.package.destination }} </p>
+                                <p class="card-text "><b>Detalles: </b>{{ order.package.details }} </p>
+                                <p class="card-text mb-0"><b>Fecha de salida:</b> {{ order.package.departureDate }} COP
+                                </p>
+                                <p class="card-text"><b>Fecha de regreso: </b>{{ order.package.departureDate }} COP</p>
+                                <p class="card-text mb-0"><b>Transporte:</b> {{ order.package.transport }}</p>
+                                <p class="card-text mb-0"><b>Hotel: </b>{{ order.package.hotel }}</p>
+                                <p class="card-text"><b>Lugar de encuentro: </b>{{ order.package.departurePoint }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col">
+                            <button *ngIf="order.status === 0" class="btn btn-warning">Pendiente</button>
+                            <button *ngIf="order.status === 1" class="btn btn-primary">En curso</button>
+                            <button *ngIf="order.status === 2" class="btn btn-success">Cancelado</button>
+                        </div>
+                        <div class="col d-flex justify-content-end">
+                            <button type="button" (click)="sendToOrderDetails(order)" class=" btn btn-primary">Ver
+                                beneficiarios</button>
+                            <button type="button" (click)="sendToPayments(order)" class=" btn btn-primary ml-3">Ver
+                                Abonos</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

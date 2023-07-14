@@ -12,9 +12,10 @@ import { RecoverPasswordComponent } from '@modules/recover-password/recover-pass
 import { PackagesComponent } from '@pages/packages/packages.component';
 import { RolesComponent } from '@pages/roles/roles.component';
 import { OrdersComponent } from '@pages/orders/orders.component';
-import { CostumersComponent } from '@pages/costumers/costumers.component';
+import { CustomersComponent } from '@pages/customers/customers.component';
 import { EmployeesComponent } from '@pages/employees/employees.component';
 import { UsersComponent } from '@pages/users/users.component';
+import { CalendarComponent } from '@pages/calendar/calendar.component';
 
 const routes: Routes = [
     {
@@ -30,7 +31,6 @@ const routes: Routes = [
             },
             {
                 path: 'profile',
-                canActivate: [AuthGuard],
                 component: ProfileComponent
             },
             {
@@ -51,7 +51,7 @@ const routes: Routes = [
             {
                 path: 'Clientes',
                 canActivate: [AuthGuard],
-                component: CostumersComponent
+                component: CustomersComponent
             },
             {
                 path: 'Empleados',
@@ -62,6 +62,11 @@ const routes: Routes = [
                 path: 'Usuarios',
                 canActivate: [AuthGuard],
                 component: UsersComponent
+            },
+            {
+              path: 'Calendario',
+              canActivate: [AuthGuard],
+              component: CalendarComponent
             },
         ]
     },
@@ -85,7 +90,7 @@ const routes: Routes = [
         component: RecoverPasswordComponent,
         canActivate: [NonAuthGuard]
     },
-    { path: '**', redirectTo: 'Paquetes' },
+    { path: '**', redirectTo: 'login' },
 ];
 
 @NgModule({

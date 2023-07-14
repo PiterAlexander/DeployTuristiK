@@ -1,8 +1,8 @@
-import { Costumer } from '@/models/costumer';
+import { Customer } from '@/models/customer';
 import { Order } from '@/models/order';
 import { OrderDetail } from '@/models/orderDetail';
 import { AppState } from '@/store/state';
-import { GetAllCostumerRequest, OpenModalCreateOrderDetail } from '@/store/ui/actions';
+import { GetAllCustomerRequest, OpenModalCreateOrderDetail } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -19,9 +19,9 @@ export class ReadOrderOrderDetailComponent implements OnInit {
 
   public ui: Observable<UiState>
   public orderDetails: Array<OrderDetail>
-  public allCostumers: Array<Costumer>
+  public allCustomers: Array<Customer>
   public order: Order
-  public orderDetailCostumers: Array<Costumer> = []
+  public orderDetailCustomers: Array<Customer> = []
 
   constructor(
     private store: Store<AppState>,
@@ -29,21 +29,21 @@ export class ReadOrderOrderDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.store.dispatch(new GetAllCostumerRequest)
+    this.store.dispatch(new GetAllCustomerRequest)
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.order = state.oneOrder.data
       this.orderDetails = state.oneOrder.data.orderDetail
-      this.allCostumers = state.allCostumers.data
-      this.compareCostumerId()
+      this.allCustomers = state.allCustomers.data
+      this.compareCustomerId()
     })
   }
 
-  compareCostumerId() {
+  compareCustomerId() {
     for (const element of this.orderDetails) {
-      const costumer = this.allCostumers.find(c => c.costumerId === element.beneficiaryId)
-      if (costumer != undefined) {
-        this.orderDetailCostumers.push(costumer)
+      const customer = this.allCustomers.find(c => c.customerId === element.beneficiaryId)
+      if (customer != undefined) {
+        this.orderDetailCustomers.push(customer)
       }
     }
   }
@@ -57,7 +57,8 @@ export class ReadOrderOrderDetailComponent implements OnInit {
       this.closeModal()
       const orderProcess = [{
         action: 'CreateOrderDetail',
-        order: this.order
+        order: this.order,
+        beneficiaries: {}
       }]
       this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess))
     } else {
@@ -72,11 +73,11 @@ export class ReadOrderOrderDetailComponent implements OnInit {
     }
   }
 
-  editOrdelDetail(costumer: Costumer) {
-    const orderDetail = this.orderDetails.find(od => od.beneficiaryId === costumer.costumerId)
+  editOrdelDetail(customer: Customer) {
+    const orderDetail = this.orderDetails.find(od => od.beneficiaryId === customer.customerId)
     const orderProcess = [{
       action: 'EditOrderDetail',
-      costumer: costumer,
+      customer: customer,
       orderDetail: orderDetail,
       order: this.order
     }]

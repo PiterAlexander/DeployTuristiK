@@ -7,9 +7,7 @@ import {
     UrlTree,
     Router
 } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AppService } from '@services/app.service';
-import { AuthService } from '@services/auth/auth.service';
+import { Observable, filter, map } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { Store } from '@ngrx/store';
 import { AppState } from '@/store/state';
@@ -17,7 +15,8 @@ import { User } from '@/models/user';
 import { Role } from '@/models/role';
 import { UserLog } from '@/models/token';
 import { GetAllRoleRequest} from '@/store/ui/actions';
-import { RoleService } from '@services/configuration/role.service';
+import { ApiService } from '../services/api.service';
+import { AppService } from '../services/app.service';
 
 @Injectable({
     providedIn: 'root'
@@ -32,8 +31,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
     constructor(
         private router: Router,
-        private roleService: RoleService,
-        private appService: AppService,
+        private appService : AppService,
+        private apiService : ApiService,
         private store: Store<AppState>
     ) { }
 
@@ -61,10 +60,12 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
 
     async getProfile(route?: ActivatedRouteSnapshot) {
+
       if (this.userLogin) {
-        console.log("Actual route",route)
-        const data = await new Promise((resolve, reject) => {
-          this.roleService.ReadRoles().subscribe({
+
+        const user = JSON.parse(localStorage.getItem('TokenPayload'));
+        const response = await new Promise((resolve, reject) => {
+          this.apiService.getRoleById(user['roleId']).subscribe({
             next: (data) => {
               resolve(data);
             },
@@ -74,64 +75,27 @@ export class AuthGuard implements CanActivate, CanActivateChild {
           });
         });
 
-        this.rolesList = data;
-        var user = JSON.parse(localStorage.getItem('TokenPayload'));
-        var role = this.rolesList.find(r => r.roleId === user["roleId"]);
-
-        if (role && route.routeConfig.path !== "") {
-          const allowedModules = role.associatedPermission.map(ap => ap.permission.module);
-          const currentModule = route.routeConfig.path;
-          if (allowedModules.includes(currentModule) || currentModule == "Login") {
-            return true;
-          }else{
-            if (user['role'] == "Administrador") {
-              this.router.navigate(['/Dashboard']);
-              return false
-            }else{
-              this.router.navigate(['/Paquetes']);
-             return false
-            }
-          }
-        }else{
-          return false
+        if (response && route.routeConfig.path !== "") {
+          const allowedModules = response['associatedPermission'].map(ap => ap.permission.module);
+              const currentModule = route.routeConfig.path;
+              if (allowedModules) {
+                if (allowedModules.includes(currentModule) || currentModule == "Login" || currentModule == "profile") {
+                  return true;
+                }else{
+                  if (user['role'] == "Administrador") {
+                    this.router.navigate(['/Dashboard']);
+                    return false;
+                  }else{
+                    this.router.navigate(['/Paquetes']);
+                    return false;
+                  }
+                }
+              }
         }
 
-        // if (!route.routeConfig.path) {
-        //   console.log("Aqui")
-        //   if (user['role'] == "Administrador") {
-        //     this.router.navigate(['/Dashboard']);
-        //     return false
-        //   }else{
-        //     this.router.navigate(['/Paquetes']);
-        //     return false
-        //   }
-        // }else{
-        //   console.log("Aqui no")
-        // }
-
-
+        return true;
       }
 
-      // if (this.userLogin) {
-      //   var user = JSON.parse(localStorage.getItem('TokenPayload'))
-      //   var role = this.rolesList.find(r => r.roleId === user["roleId"])
-
-      //   if (role && route.routeConfig.path!="") {
-      //     const allowedModules = role.associatedPermission.map(ap => ap.permission.module);
-      //     const currentModule = route.routeConfig.path
-      //     if (allowedModules.includes(currentModule) || currentModule=="Login") {
-      //       return true
-      //     }else{
-      //       return false
-      //     }
-      //   }else{
-      //     return true
-      //   }
-
-      //   //const allowedModules = role.associatedPermission.map(ap => ap.permission.module);
-      //   console.log(role);
-      //   return true
-      // }
 
       try {
         await this.appService.getProfile();
@@ -140,9 +104,12 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         this.ui.subscribe((state: UiState) => {
           this.userLogin = state.userLoged.data;
         });
+
         return true;
+
       } catch (error) {
         return false;
       }
     }
+
 }

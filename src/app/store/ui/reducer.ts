@@ -77,6 +77,40 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     data: action.payload,
                     error: undefined,
                     loading: false
+                },
+                dateCalendarSelected: {
+                  data: action['dateCalendar'],
+                  error: undefined,
+                  loading: false
+                }
+            };
+
+            case Actions.packageActions.CHANGE_STATUS_PACKAGE_REQUEST:
+            return {
+                ...state,
+                onePackage: {
+                    data: undefined,
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+        case Actions.packageActions.CHANGE_STATUS_PACKAGE_SUCCESS:
+            return {
+                ...state,
+                onePackage: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+        case Actions.packageActions.CHANGE_STATUS_PACKAGE_FAILURE:
+            return {
+                ...state,
+                onePackage: {
+                    data: undefined,
+                    error: action.payload,
+                    loading: false
                 }
             };
         case Actions.OPEN_MODAL_DETAILS_PACKAGE:
@@ -161,6 +195,16 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             }
 
+        case Actions.orderActions.OPEN_MODAL_CREATE_ORDERDETAIL:
+            return {
+                ...state,
+                orderProcess: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            }
+
         case Actions.orderActions.OPEN_MODAL_PAYMENTS:
             return {
                 ...state,
@@ -181,10 +225,10 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             }
 
-        case Actions.orderActions.OPEN_MODAL_CREATE_ORDERDETAIL:
+        case Actions.orderActions.OPEN_MODAL_EDIT_PAYMENT:
             return {
                 ...state,
-                orderProcess: {
+                onePayment: {
                     data: action.payload,
                     error: undefined,
                     loading: false
@@ -264,41 +308,41 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
             };
         //<----------------->
 
-        //<--- COSTUMERS --->
-        case Actions.costumerActions.GET_ALL_COSTUMER_REQUEST:
+        //<--- CUSTOMERS --->
+        case Actions.customerActions.GET_ALL_CUSTOMER_REQUEST:
             return {
                 ...state,
-                allCostumers: {
+                allCustomers: {
                     data: [],
                     error: undefined,
                     loading: true
                 }
             };
 
-        case Actions.costumerActions.GET_ALL_COSTUMER_SUCCESS:
+        case Actions.customerActions.GET_ALL_CUSTOMER_SUCCESS:
             return {
                 ...state,
-                allCostumers: {
+                allCustomers: {
                     data: action.payload,
                     error: undefined,
                     loading: false
                 }
             };
 
-        case Actions.costumerActions.GET_ALL_COSTUMER_FAILURE:
+        case Actions.customerActions.GET_ALL_CUSTOMER_FAILURE:
             return {
                 ...state,
-                allCostumers: {
+                allCustomers: {
                     data: [],
                     error: action.payload,
                     loading: false
                 }
             };
 
-        case Actions.costumerActions.OPEN_MODAL_CREATE_COSTUMER:
+        case Actions.customerActions.OPEN_MODAL_CREATE_CUSTOMER:
             return {
                 ...state,
-                oneCostumer: {
+                oneCustomer: {
                     data: action.payload,
                     error: undefined,
                     loading: false
@@ -353,7 +397,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
         case Actions.FrequentTravelerActions.OPEN_MODAL_LIST_FREQUENTTRAVELER:
             return {
                 ...state,
-                oneCostumer: {
+                oneCustomer: {
                     data: action.payload,
                     error: undefined,
                     loading: false
@@ -362,7 +406,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
         case Actions.FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER:
             return {
                 ...state,
-                oneCostumer: {
+                oneCustomer: {
                     data: action.payload,
                     error: undefined,
                     loading: false

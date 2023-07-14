@@ -1,4 +1,4 @@
-import { Costumer } from '@/models/costumer';
+import { Customer } from '@/models/customer';
 import { Order } from '@/models/order';
 import { OrderDetail } from '@/models/orderDetail';
 import { Package } from '@/models/package';
@@ -12,7 +12,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { ApiService } from '@services/api.service';
 import { Observable } from 'rxjs';
-import { saveAs } from 'file-saver';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -92,8 +91,7 @@ export class CreatePaymentFormComponent implements OnInit {
       this.orderProcess = [{
         action: 'CreateOrderDetail',
         order: order,
-        beneficiaries: this.orderProcess[0].beneficiaries,
-        payment: {}
+        beneficiaries: this.orderProcess[0].beneficiaries
       }]
       this.modalService.dismissAll();
       this.store.dispatch(new OpenModalCreateOrderDetail(this.orderProcess))
@@ -178,7 +176,7 @@ export class CreatePaymentFormComponent implements OnInit {
         }
         const order: Order = {
           orderId: this.orderProcess[0].order.orderId,
-          costumerId: this.orderProcess[0].order.costumerId,
+          customerId: this.orderProcess[0].order.customerId,
           packageId: this.orderProcess[0].order.packageId,
           totalCost: this.orderProcess[0].order.totalCost,
           status: status,
@@ -208,10 +206,10 @@ export class CreatePaymentFormComponent implements OnInit {
         const unitPrice = this.totalCost / this.beneficiariesAmount
         const remainingAmount = this.totalCost - this.formGroup.value.amount
         for (const element of beneficiaries) {
-          if (element.costumerId === undefined) {
-            const costumerModel: Costumer = element;
+          if (element.customerId === undefined) {
+            const customerModel: Customer = element;
             const data = await new Promise((resolve, reject) => {
-              this.apiService.addCostumer(costumerModel).subscribe({
+              this.apiService.addCustomer(customerModel).subscribe({
                 next: (data) => {
                   resolve(data);
                 },
@@ -223,13 +221,13 @@ export class CreatePaymentFormComponent implements OnInit {
             if (this.orderProcess[0].action === 'CreateOrderDetail') {
               const orderDetail: OrderDetail = {
                 orderId: this.orderProcess[0].order.orderId,
-                beneficiaryId: data['costumerId'],
+                beneficiaryId: data['customerId'],
                 unitPrice: unitPrice
               };
               this.orderDetail.push(orderDetail);
             } else {
               const orderDetail: OrderDetail = {
-                beneficiaryId: data['costumerId'],
+                beneficiaryId: data['customerId'],
                 unitPrice: unitPrice
               };
               this.orderDetail.push(orderDetail);
@@ -238,13 +236,13 @@ export class CreatePaymentFormComponent implements OnInit {
             if (this.orderProcess[0].action === 'CreateOrderDetail') {
               const orderDetail: OrderDetail = {
                 orderId: this.orderProcess[0].order.orderId,
-                beneficiaryId: element.costumerId,
+                beneficiaryId: element.customerId,
                 unitPrice: unitPrice
               }
               this.orderDetail.push(orderDetail);
             } else {
               const orderDetail: OrderDetail = {
-                beneficiaryId: element.costumerId,
+                beneficiaryId: element.customerId,
                 unitPrice: unitPrice
               }
               this.orderDetail.push(orderDetail);
@@ -270,7 +268,7 @@ export class CreatePaymentFormComponent implements OnInit {
           }
           const order: Order = {
             orderId: this.oneOrder.orderId,
-            costumerId: this.oneOrder.costumerId,
+            customerId: this.oneOrder.customerId,
             packageId: this.oneOrder.packageId,
             totalCost: this.oneOrder.totalCost + this.totalCost,
             status: status,
@@ -319,9 +317,10 @@ export class CreatePaymentFormComponent implements OnInit {
           }
 
           this.store.dispatch(new CreatePaymentRequest({ ...payment }))
+          this.modalService.dismissAll();
           Swal.fire({
             icon: 'success',
-            title: '¡Beneficiario/s agregado/s exitosamente!',
+            title: '¡Beneficiario(s) agregado(s) exitosamente!',
             timer: 1500,
             timerProgressBar: true,
             showConfirmButton: false
@@ -343,7 +342,7 @@ export class CreatePaymentFormComponent implements OnInit {
           }
 
           const order: Order = {
-            costumerId: this.orderProcess[0].order.costumer.costumerId,
+            customerId: this.orderProcess[0].order.customer.customerId,
             packageId: this.orderProcess[0].order.package.packageId,
             totalCost: this.totalCost,
             status: status,

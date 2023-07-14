@@ -1,9 +1,9 @@
-import { Costumer } from '@/models/costumer';
+import { Customer } from '@/models/customer';
 import { FrequentTraveler } from '@/models/frequentTraveler';
 import { Role } from '@/models/role';
 import { User } from '@/models/user';
 import { AppState } from '@/store/state';
-import { CreateCostumerRequest, CreateFrequentTravelerRequest, EditCostumerRequest, FrequentTravelerActions } from '@/store/ui/actions';
+import { CreateCustomerRequest, CreateFrequentTravelerRequest, EditCustomerRequest, FrequentTravelerActions } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -21,8 +21,8 @@ import { Observable } from 'rxjs';
 export class CreateFrequentTravelerFormComponent {
   formGroup: FormGroup;
   public ActionTitle: string = "Agregar"
-  public CostumerList: Array<any>
-  public costumerData
+  public CustomerList: Array<any>
+  public customerData
   Roles: Array<Role>;
   Visible: boolean = false;
   password: string = '';
@@ -36,8 +36,8 @@ export class CreateFrequentTravelerFormComponent {
   ngOnInit(): void {
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
-      this.costumerData = state.oneCostumer.data
-      console.log(this.costumerData)
+      this.customerData = state.oneCustomer.data
+      console.log(this.customerData)
     })
 
     this.formGroup = this.fb.group({
@@ -53,36 +53,35 @@ export class CreateFrequentTravelerFormComponent {
       frequentTraveler: ['', Validators.required],
     });
 
-    // if (this.costumerData != null) {
-    //   console.log(this.costumerData.birthDate)
+    // if (this.customerData != null) {
+    //   console.log(this.customerData.birthDate)
     //   this.ActionTitle = "Editar"
     //   this.formGroup.setValue({
-    //     name: this.costumerData.name,
-    //     lastName: this.costumerData.lastName,
-    //     document: this.costumerData.document,
-    //     birthDate: this.costumerData.birthDate,
-    //     phoneNumber: this.costumerData.phoneNumber,
-    //     address: this.costumerData.address,
-    //     eps: this.costumerData.eps,
-    //     user: this.costumerData.user,
-    //     frequentTraveler: this.costumerData.frequentTravel
+    //     name: this.customerData.name,
+    //     lastName: this.customerData.lastName,
+    //     document: this.customerData.document,
+    //     birthDate: this.customerData.birthDate,
+    //     phoneNumber: this.customerData.phoneNumber,
+    //     address: this.customerData.address,
+    //     eps: this.customerData.eps,
+    //     user: this.customerData.user,
+    //     frequentTraveler: this.customerData.frequentTravel
     //   }
     //   )
     // }
   }
 
-  saveCostumer() {
+  saveCustomer() {
     var idRole: Role = this.Roles.find((r) => r.name == 'Cliente');
-    if (this.costumerData == null) {
+    if (this.customerData == null) {
       const user: User = {
-        userName: 'manu',
-        email: 'm@gmail.com',
-        password: '123',
-        status: 0,
-        roleId: idRole.roleId,
+        email: 'a',
+        password: 'a',
+        status: 1,
+        roleId: "9ee28cc1-776a-47c0-0439-08db72b3d141",
       }
 
-      const costumer: Costumer = {
+      const customer: Customer = {
         name: this.formGroup.value.name,
         lastName: this.formGroup.value.lastName,
         document: this.formGroup.value.document,
@@ -90,13 +89,13 @@ export class CreateFrequentTravelerFormComponent {
         phoneNumber: this.formGroup.value.phoneNumber,
         address: this.formGroup.value.address,
         eps: this.saveEps(),
-        User: user,
+        user: user,
       }
-      let costumerId
-        this.apiService.addCostumer(costumer).subscribe({
+      let customerId
+        this.apiService.addCustomer(customer).subscribe({
           next: (data) => {
-            costumerId = data.costumerId
-            console.log(data.costumerId)
+            customerId = data.customerId
+            console.log(data.customerId)
 
           },
           error: (err) => {
@@ -104,15 +103,15 @@ export class CreateFrequentTravelerFormComponent {
         })
 
       const frequentTraveler: FrequentTraveler = {
-        costumerId: this.costumerData.costumerId,
+        customerId: this.customerData.customerId,
         travelerId: ''
       }
-      console.log(costumerId)
-      this.store.dispatch(new CreateFrequentTravelerRequest(frequentTraveler))
+      console.log(customerId)
+      // this.store.dispatch(new CreateFrequentTravelerRequest(frequentTraveler))
       // } else {
       //   const frequentTraveler: FrequentTraveler = {
-      //     titularId: this.costumerData.titularId,
-      //     TravelerId: this.costumerData.TravelerId,
+      //     titularId: this.customerData.titularId,
+      //     TravelerId: this.customerData.TravelerId,
       //   }
 
       //   const user: User = {
@@ -123,8 +122,8 @@ export class CreateFrequentTravelerFormComponent {
       //     roleId: "cdebc66c-8267-47a9-2896-08db71d23baa",
       //   }
 
-      //   const costumer: Costumer = {
-      //     costumerId: this.costumerData.costumerId,
+      //   const customer: Customer = {
+      //     customerId: this.customerData.customerId,
       //     name: this.formGroup.value.name,
       //     lastName: this.formGroup.value.lastName,
       //     document: this.formGroup.value.document,
@@ -133,10 +132,10 @@ export class CreateFrequentTravelerFormComponent {
       //     address: this.formGroup.value.address,
       //     eps: this.formGroup.value.eps,
       //     User: user,
-      //     userId: this.costumerData.userId,
+      //     userId: this.customerData.userId,
       //   }
-      //   this.store.dispatch(new EditCostumerRequest({
-      //     ...costumer
+      //   this.store.dispatch(new EditCustomerRequest({
+      //     ...customer
       //   }));
     }
   }
@@ -159,11 +158,11 @@ export class CreateFrequentTravelerFormComponent {
     }
   }
   validateExistingDocument(): boolean {
-    return this.CostumerList.find(item => item.document == this.formGroup.value.document)
+    return this.CustomerList.find(item => item.document == this.formGroup.value.document)
   }
 
   validateExistingEmail(): boolean {
-    return this.CostumerList.find(item => item.email == this.formGroup.value.email)
+    return this.CustomerList.find(item => item.email == this.formGroup.value.email)
   }
 
   validForm(): boolean {
