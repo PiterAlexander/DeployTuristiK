@@ -12,6 +12,7 @@ import { AssociatedPermission } from '@/models/associated-permission';
 import { state } from '@angular/animations';
 import Swal from 'sweetalert2';
 import { ApiService } from '@services/api.service';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
 interface Status {
   name: string,
@@ -39,6 +40,7 @@ export class CreateRoleFormComponent implements OnInit{
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
+    private modalPrimeNg : DynamicDialogRef,
     private store: Store<AppState>,
     private apiService : ApiService
   ){
@@ -279,7 +281,8 @@ export class CreateRoleFormComponent implements OnInit{
 
   //-----------------------------------------------------------------
   cancel() {
-    this.modalService.dismissAll();
+    // this.modalService.dismissAll();
+    this.modalPrimeNg.close()
   }
 
 }

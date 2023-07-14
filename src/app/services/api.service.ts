@@ -158,6 +158,10 @@ export class ApiService {
       return this.http.get<Role[]>(`${this.endpoint}api/Role`);
     }
 
+    getRoleById(RoleId:string):Observable<Role[]>{
+      return this.http.get<Role[]>(`${this.endpoint}api/Role/${RoleId}`);
+    }
+
     addRole(modelo:Role):Observable<Role>{
       return this.http.post<Role>(`${this.endpoint}api/Role`,modelo);
     }
