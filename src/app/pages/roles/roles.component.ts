@@ -1,5 +1,5 @@
 import { AppState } from '@/store/state';
-import {GetAllRoleRequest,GetAllPermissionsRequest, OpenModalCreateRole } from '@/store/ui/actions';
+import {GetAllRoleRequest,GetAllPermissionsRequest, OpenModalCreateRole, GetUsersRequest } from '@/store/ui/actions';
 import { Component, OnInit, PipeTransform } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -7,6 +7,7 @@ import { UiState } from '@/store/ui/state';
 import { Role } from '@/models/role';
 import Swal from 'sweetalert2';
 import { DeleteRoleRequest } from '../../store/ui/actions';
+import { User } from '@/models/user';
 
 
 interface State{
@@ -24,6 +25,7 @@ export class RolesComponent implements OnInit{
   public ui:Observable<UiState>
   public roleList:Array<Role>
   public filteredRolesList: Array<Role>
+  public userList: Array<User>
   public loading: boolean;
   public search: string
   public total: number
@@ -39,11 +41,14 @@ export class RolesComponent implements OnInit{
   ngOnInit() {
     this.store.dispatch(new GetAllPermissionsRequest())
     this.store.dispatch(new GetAllRoleRequest())
+    this.store.dispatch(new GetUsersRequest())
 
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
       this.roleList = state.allRoles.data,
-      this.loading = state.allRoles.loading
+      this.loading = state.allRoles.loading,
+      this.userList = state.allUsers.data
+
       this.searchByName();
     });
   }
@@ -54,8 +59,7 @@ export class RolesComponent implements OnInit{
     );
   }
 
-  openCreateRoleModal(role?:Role){
-
+  openCreateRoleModal(){
     this.store.dispatch(new OpenModalCreateRole());
   }
 
@@ -81,7 +85,9 @@ export class RolesComponent implements OnInit{
     })
 
     if(ok){
-      if (role.user.length>0) {
+      const usersAssociated = this.userList.find(u=>u.roleId == role.roleId)
+
+      if (usersAssociated) {
         Swal.fire({
           icon: 'warning',
           title: 'El rol '+role.name+' tiene usuarios asociados.No puede ser eliminado del sistema.',

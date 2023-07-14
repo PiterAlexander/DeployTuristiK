@@ -1,3 +1,4 @@
+import { Permission } from '@/models/permission';
 import { Role } from '@/models/role';
 import { AppState } from '@/store/state';
 import { GetAllPermissionsRequest, GetAllRoleRequest } from '@/store/ui/actions';
@@ -18,6 +19,7 @@ export class MenuSidebarComponent implements OnInit {
   public ui: Observable<UiState>;
   public user;
   public roleList:Array<Role>
+  public permissionList:Array<Permission>
   public menu = MENU;
   public role;
 
@@ -27,12 +29,17 @@ export class MenuSidebarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
     this.store.dispatch(new GetAllRoleRequest())
+    this.store.dispatch(new GetAllPermissionsRequest())
 
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.roleList = state.allRoles.data;
-      this.AllowMenuItems()
+      this.permissionList = state.allPermissions.data;
+
+      this.allowMenuItems()
+
       var user = JSON.parse(localStorage.getItem('TokenPayload'))
       this.role = user['role']
 
@@ -44,33 +51,37 @@ export class MenuSidebarComponent implements OnInit {
     this.user = this.appService.user;
   }
 
-  AllowMenuItems(){
-    var user = JSON.parse(localStorage.getItem('TokenPayload'))
-    var role = this.roleList.find(r => r.name === user.role)
-    if (role && role.associatedPermission) {
+  allowMenuItems() {
 
-      this.menu.forEach(item=>{
-        role.associatedPermission.forEach((ap) => {
-          if (ap.permission.module == item.name) {
-            item.allowed = true
+    const user = JSON.parse(localStorage.getItem('TokenPayload'))
+    var role = this.roleList.find(r=>r.name === user.role)
+
+    const permissions = [];
+    if (role) {
+      for (const item of this.permissionList) {
+        for (const associatedPermission of item.associatedPermission) {
+          if (associatedPermission.roleId === role.roleId) {
+            permissions.push(item);
+            break;
           }
-          if (ap.permission.module == "Usuarios" || ap.permission.module == "Roles") {
-              if (item.name == "Configuración") {
-                  item.allowed = true
-              }
-              // item.children.forEach(child=>{
-              //     if (ap.permission.module == child.name) {
-              //         console.log("tiene a",item.name)
-              //         child.allowed = true
-              //     }
-              // })
-          }
-        });
-      })
+        }
+      }
     }
 
-
+    this.menu.forEach(item=>{
+      permissions.forEach((p) => {
+        if (p.module == item.name) {
+          item.allowed = true
+        }
+        if (p.module == "Usuarios" || p.module == "Roles") {
+          if (item.name == "Configuración") {
+              item.allowed = true
+          }
+        }
+      });
+    })
   }
+
 }
 
 export const MENU = [

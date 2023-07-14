@@ -8,7 +8,6 @@ import {
     Router
 } from '@angular/router';
 import { Observable, filter, map } from 'rxjs';
-import { AuthService } from '@services/auth/auth.service';
 import { UiState } from '@/store/ui/state';
 import { Store } from '@ngrx/store';
 import { AppState } from '@/store/state';
@@ -78,7 +77,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
             if (role && route.routeConfig.path !== "") {
               const allowedModules = role.associatedPermission.map(ap => ap.permission.module);
               const currentModule = route.routeConfig.path;
-              if (allowedModules.includes(currentModule) || currentModule == "Login") {
+              if (allowedModules.includes(currentModule) || currentModule == "Login" || currentModule == "profile") {
                 return true;
               }else{
                 if (user['role'] == "Administrador") {
