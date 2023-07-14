@@ -24,7 +24,7 @@ export class CreateRoleFormComponent implements OnInit{
   public ui:Observable<UiState>
   public actionTitle : string = "Agregar"
   public permissionList : Array<any>
-  public AllRoles : Array<any>
+  public allRoles : Array<any>
   public selectedPermissions: { permissionId: any ,module:string,status?:boolean}[] =[];
   public selectedUpdatePermissions: any[] = [];
   public roleData
@@ -42,7 +42,7 @@ export class CreateRoleFormComponent implements OnInit{
     this.ui = this.store.select('ui')
     this.ui.subscribe((state:UiState)=>{
       this.permissionList = state.allPermissions.data
-      this.AllRoles = state.allRoles.data
+      this.allRoles = state.allRoles.data
       this.roleData = state.oneRole.data
     })
 
@@ -253,12 +253,12 @@ export class CreateRoleFormComponent implements OnInit{
     if (this.roleData==null) {
       return this.formGroup.valid
       && this.formGroup.value.status != 1
-      && !this.AllRoles.find(item => item.name === this.formGroup.value.name.trim())
+      && !this.allRoles.find(item => item.name === this.formGroup.value.name.trim())
       && this.selectedPermissions.length>0
     }else{
       return this.formGroup.valid
       && this.formGroup.value.status != 0
-      && !this.AllRoles.find(
+      && !this.allRoles.find(
         item => item.name === this.formGroup.value.name
         && item.roleId !== this.roleData.roleId)
       && this.selectedPermissions.length>0
@@ -267,10 +267,10 @@ export class CreateRoleFormComponent implements OnInit{
 
   validateExistingRoleName():boolean{
     if (this.roleData==null) {
-      return this.AllRoles.find(item => item.name === this.formGroup.value.name.trim())
+      return this.allRoles.find(item => item.name === this.formGroup.value.name.trim())
     }else{
       const name = this.formGroup.value && this.formGroup.value.name ? this.formGroup.value.name.trim() : '';
-        return this.AllRoles.find(
+        return this.allRoles.find(
           item => item.name === name
           && item.roleId !== this.roleData.roleId
         )
