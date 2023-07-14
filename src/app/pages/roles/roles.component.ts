@@ -11,6 +11,7 @@ import { User } from '@/models/user';
 
 //<--------PRIMENG----------->
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { ApiService } from '@services/api.service';
 
 interface State{
   page:number;
@@ -41,7 +42,8 @@ export class RolesComponent implements OnInit{
   constructor(
     private store: Store<AppState>,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private apiService : ApiService,
   ){}
 
   ngOnInit() {
@@ -69,8 +71,28 @@ export class RolesComponent implements OnInit{
     this.store.dispatch(new OpenModalCreateRole());
   }
 
-  openEditRoleModal(role:Role){
-    this.store.dispatch(new OpenModalCreateRole(role));
+  async openEditRoleModal(role:Role){
+    const ok = await new Promise((resolve, reject) => {
+      this.apiService.getRoleById(role.roleId).subscribe({
+        next: (data) => {
+          resolve(data);
+        },
+        error: (err) => {
+          reject(err);
+        }
+      });
+    });
+    const roleEdit: Role ={
+      roleId: ok['roleId'],
+      name: ok['name'],
+      status: ok['status'],
+      associatedPermission : ok['associatedPermission']
+    }
+
+    if (ok) {
+      this.store.dispatch(new OpenModalCreateRole(roleEdit));
+    }
+
   }
 
 
