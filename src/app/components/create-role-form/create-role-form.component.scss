@@ -1,8 +1,20 @@
+
+body {
+  font-family: 'Poppins';
+}
+
 .custom-control-input:checked ~ .custom-control-label::before {
   color: #fff;
   border-color: #28A745!important;
   background-color: #28A745!important;
 }
+
+.custom-control-input:checked ~ .custom-control-label::before {
+  color: #fff;
+  border-color: #326fd1!important;
+  background-color: #326fd1!important;
+}
+
 
 form input:required {
   content:"*";

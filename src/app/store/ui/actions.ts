@@ -94,7 +94,7 @@ export enum packageActions {
   EDIT_PACKAGE_SUCCESS = '[PACKAGE] EDIT_PACKAGE_SUCCESS',
   EDIT_PACKAGE_FAILURE = '[PACKAGE] EDIT_PACKAGE_FAILURE',
 
-  
+
   CHANGE_STATUS_PACKAGE_REQUEST = '[PACKAGE] CHANGE_STATUS_PACKAGE_REQUEST',
   CHANGE_STATUS_PACKAGE_SUCCESS = '[PACKAGE] CHANGE_STATUS_PACKAGE_SUCCESS',
   CHANGE_STATUS_PACKAGE_FAILURE = '[PACKAGE] CHANGE_STATUS_PACKAGE_FAILURE',
@@ -128,7 +128,7 @@ export class GetOnePackageRequest implements Action {
 
 export class OpenModalCreatePackage implements Action {
   readonly type: string = packageActions.OPEN_MODAL_CREATE_PACKAGE;
-  constructor(public payload?: Package) { }
+  constructor(public payload?: Package,public dateCalendar?:Date) { }
 }
 export class CreatePackageRequest implements Action {
   readonly type: string = packageActions.CREATE_PACKAGE_REQUEST;

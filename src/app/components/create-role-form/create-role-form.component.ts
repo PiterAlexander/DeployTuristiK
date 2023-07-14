@@ -13,6 +13,10 @@ import { state } from '@angular/animations';
 import Swal from 'sweetalert2';
 import { ApiService } from '@services/api.service';
 
+interface Status {
+  name: string,
+  code: number
+}
 @Component({
   selector: 'app-create-role-form',
   templateUrl: './create-role-form.component.html',
@@ -28,13 +32,21 @@ export class CreateRoleFormComponent implements OnInit{
   public selectedPermissions: { permissionId: any ,module:string,status?:boolean}[] =[];
   public selectedUpdatePermissions: any[] = [];
   public roleData
+  statuses: Status[];
+  selectedStatusCode:number;
+
 
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
     private store: Store<AppState>,
     private apiService : ApiService
-  ){}
+  ){
+    this.statuses = [
+      {name: 'Habilitado', code: 1},
+      {name: 'Inhabilitado', code: 2},
+    ];
+  }
 
   ngOnInit() {
 
@@ -54,12 +66,12 @@ export class CreateRoleFormComponent implements OnInit{
 
     if (this.roleData!=null) {
 
-
       this.roleData.associatedPermission.forEach(rolpermiso=>{
         this.assignpermissiontolist(rolpermiso.permission)
       })
 
       this.actionTitle = "Editar"
+      this.selectedStatusCode = this.roleData.status
       this.formGroup.setValue({
         name: this.roleData.name,
         status: this.roleData.status,
@@ -110,14 +122,6 @@ export class CreateRoleFormComponent implements OnInit{
           ...model
         }));
 
-        Swal.fire({
-          icon: 'success',
-          title: 'El rol se agregó exitosamente',
-          showConfirmButton: false,
-          timer: 3500
-        }).then(function(){
-          //console.log('El rol se agreró exitosamente')
-        })
 
       }else{
 
@@ -128,6 +132,8 @@ export class CreateRoleFormComponent implements OnInit{
             name : this.roleData.name,
             status : this.formGroup.value.status,
           }
+
+          this.selectedStatusCode = this.formGroup.value.status
 
           this.updatingPermissionRoleAssignment()
 
@@ -146,16 +152,6 @@ export class CreateRoleFormComponent implements OnInit{
                 ...model
           }));
         }
-
-        Swal.fire({
-          icon: 'success',
-          title: 'El rol se editó exitosamente',
-          showConfirmButton: false,
-          timer: 3500
-        }).then(function(){
-          //console.log('El rol se editó exitosamente')
-        })
-
       }
     }
   }

@@ -5,10 +5,12 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { Role } from '@/models/role';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 import { DeleteRoleRequest } from '../../store/ui/actions';
 import { User } from '@/models/user';
 
+//<--------PRIMENG----------->
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 interface State{
   page:number;
@@ -36,7 +38,11 @@ export class RolesComponent implements OnInit{
   };
 
 
-  constructor(private store: Store<AppState>){}
+  constructor(
+    private store: Store<AppState>,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
+  ){}
 
   ngOnInit() {
     this.store.dispatch(new GetAllPermissionsRequest())
@@ -88,43 +94,54 @@ export class RolesComponent implements OnInit{
       const usersAssociated = this.userList.find(u=>u.roleId == role.roleId)
 
       if (usersAssociated) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'El rol '+role.name+' tiene usuarios asociados.No puede ser eliminado del sistema.',
-          showConfirmButton: true,
-          confirmButtonText: 'Aceptar',
-        }).then(function(){})
+        this.messageService.add({key: 'alert-message', severity:'warn', summary: 'Acción denegada', detail: 'El rol tiene usuarios asociados.'});
       }else{
-
-        Swal.fire({
-          title: '¿Estás seguro de eliminar a '+role.name+'?',
-          text: "No podrás revertirlo.",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          cancelButtonText: 'Cancelar',
-          confirmButtonText: 'Si, eliminar',
-          reverseButtons: true,
-          customClass: {
-            confirmButton: 'swal2-confirm-right',
-            cancelButton: 'swal2-cancel-left'
+        this.confirmationService.confirm({
+          message: '¿Estás seguro de eliminar a ' + role.name + '?',
+          header: 'Confirmación', // Cambia el encabezado del cuadro de confirmación
+          icon: 'pi pi-exclamation-triangle', // Cambia el icono del cuadro de confirmación
+          acceptLabel: 'Aceptar', // Cambia el texto del botón de aceptar
+          rejectLabel: 'Cancelar', // Cambia el texto del botón de rechazar
+          acceptButtonStyleClass: 'p-button-primary p-button-sm', // Agrega una clase CSS al botón de aceptar
+          rejectButtonStyleClass: 'p-button-outlined p-button-sm', // Agrega una clase CSS al botón de rechazar
+          accept: () => {
+            // Lógica para confirmar
+            this.store.dispatch(new DeleteRoleRequest(role));
+          },
+          reject: () => {
+            // Lógica para rechazar
           }
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.store.dispatch(new DeleteRoleRequest(role))
-            Swal.fire(
-              'Eliminado con éxito.',
-            )
-          }
-        })
+        });
+        // Swal.fire({
+        //   title: '¿Estás seguro de eliminar a '+role.name+'?',
+        //   text: "No podrás revertirlo.",
+        //   icon: 'warning',
+        //   showCancelButton: true,
+        //   confirmButtonColor: '#3085d6',
+        //   cancelButtonColor: '#d33',
+        //   cancelButtonText: 'Cancelar',
+        //   confirmButtonText: 'Si, eliminar',
+        //   reverseButtons: true,
+        //   customClass: {
+        //     confirmButton: 'swal2-confirm-right',
+        //     cancelButton: 'swal2-cancel-left'
+        //   }
+        // }).then((result) => {
+          // if (result.isConfirmed) {
+          //   this.store.dispatch(new DeleteRoleRequest(role))
+          //   Swal.fire(
+          //     'Eliminado con éxito.',
+          //   )
+          // }
+        // })
       }
     }else{
-      Swal.fire({
-        icon: 'warning',
-        title: 'El rol '+role.name+' no puede ser eliminado del sistema.',
-        showConfirmButton: true,
-      }).then(function(){})
+      // Swal.fire({
+      //   icon: 'warning',
+      //   title: 'El rol '+role.name+' no puede ser eliminado del sistema.',
+      //   showConfirmButton: true,
+      // }).then(function(){})
+      this.messageService.add({key: 'alert-message', severity:'warn', summary: 'Acción denegada', detail: ''});
     }
 
   }

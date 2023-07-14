@@ -56,9 +56,14 @@ import { EditPaymentFormComponent } from '@components/edit-payment-form/edit-pay
 import { CreatecustomerformComponent } from '@components/create-customer-form/create-customer-form.component';
 import { ListFrequentTravelersToOrdersComponent } from '@components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
 
+//<--------PRIMENG----------->
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import {MessageService} from 'primeng/api';
+
 @Injectable()
 export class PackageEffects {
     modalRef: NgbModalRef;
+    dialogRef: DynamicDialogRef;
 
     //<--- PACKAGES --->
     getPackages$ = createEffect(() => this.actions$.pipe(
@@ -106,6 +111,7 @@ export class PackageEffects {
 
                 mergeMap((packageResolved) => {
                     this.modalRef.close();
+                    window.location.reload()
                     return [
                         new CreatePackageSuccess(packageResolved),
                         new GetAllPackagesRequest()
@@ -123,6 +129,7 @@ export class PackageEffects {
             return this.apiService.updatePackage(pack.packageId, pack).pipe(
                 mergeMap((packResolved) => {
                     this.modalRef.close();
+                    window.location.reload()
                     return [
                         new EditPackageSuccess(packResolved),
                         new GetAllPackagesRequest(),
@@ -345,10 +352,13 @@ export class PackageEffects {
         this.actions$.pipe(
             ofType(roleActions.OPEN_MODAL_CREATE_ROLE),
             tap((action) => {
-                this.modalRef = this.modalService.open(CreateRoleFormComponent, {
-                    backdrop: false,
-                    size: 'lg'
+                this.dialogRef = this.dialogService.open(CreateRoleFormComponent, {
+                  /* Opciones del modal */
+                  header: action['payload'] === undefined ? 'Crear Rol' : 'Editar Rol',
+                  width: '45%',
+                  contentStyle: { overflowY: 'auto' },
                 });
+
             })
         ),
         {
@@ -376,7 +386,8 @@ export class PackageEffects {
         switchMap((role) => {
             return this.apiService.addRole(role).pipe(
                 mergeMap((roleResolved) => {
-                    this.modalRef.close();
+                  this.dialogRef.close()
+                  this.messageService.add({key: 'alert-message', severity:'success',summary: 'Exito', detail: 'Rol creado exitosamente.'});
                     return [
                         new CreateRoleSuccess(roleResolved),
                         new GetAllRoleRequest()
@@ -394,7 +405,8 @@ export class PackageEffects {
         switchMap((role) => {
             return this.apiService.updateRole(role.roleId, role).pipe(
                 mergeMap((roleResolved) => {
-                    this.modalRef.close();
+                  this.dialogRef.close()
+                  this.messageService.add({key: 'alert-message', severity:'success', summary: 'Exito', detail: 'Rol editado exitosamente.'});
                     return [
                         new EditRoleSuccess(roleResolved),
                         new GetAllRoleRequest(),
@@ -726,6 +738,8 @@ export class PackageEffects {
         private modalService: NgbModal,
         private apiService: ApiService,
         private authService: AuthService,
+        private dialogService: DialogService,
+        private messageService: MessageService
     ) { }
 
 }

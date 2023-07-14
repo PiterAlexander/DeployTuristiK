@@ -116,8 +116,16 @@ export default <UiState>{
     data: undefined,
     error: undefined,
     loading: false
-  }
+  },
   //<-------------->
+  //<--SAVE DATE CALENDAR SELECTE-------->
+
+  dateCalendarSelected: {
+    data: undefined,
+    error: undefined,
+    loading: false
+  }
+  //<----------------------------------->
 };
 
 
@@ -230,4 +238,12 @@ export interface UiState {
     loading: boolean
   }
   //<-------------->
+
+  //<--SAVE DATE CALENDAR SELECTE-------->
+  dateCalendarSelected: {
+    data: Date,
+    error: undefined,
+    loading: false
+  }
+  //<----------------------------------->
 }

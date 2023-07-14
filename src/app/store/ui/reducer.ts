@@ -77,6 +77,11 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     data: action.payload,
                     error: undefined,
                     loading: false
+                },
+                dateCalendarSelected: {
+                  data: action['dateCalendar'],
+                  error: undefined,
+                  loading: false
                 }
             };
 
