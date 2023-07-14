@@ -1,5 +1,6 @@
 import { Customer } from '@/models/customer';
 import { FrequentTraveler } from '@/models/frequentTraveler';
+import { Role } from '@/models/role';
 import { User } from '@/models/user';
 import { AppState } from '@/store/state';
 import { CreateCustomerRequest, CreateFrequentTravelerRequest, EditCustomerRequest, FrequentTravelerActions } from '@/store/ui/actions';
@@ -22,6 +23,9 @@ export class CreateFrequentTravelerFormComponent {
   public ActionTitle: string = "Agregar"
   public CustomerList: Array<any>
   public customerData
+  Roles: Array<Role>;
+  Visible: boolean = false;
+  password: string = '';
   // public frequentTraveler : any[] = []
   public ui: Observable<UiState>
   public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS', 'OTRA']
@@ -68,8 +72,8 @@ export class CreateFrequentTravelerFormComponent {
   }
 
   saveCustomer() {
-    if (this.customerData != null) {
-
+    var idRole: Role = this.Roles.find((r) => r.name == 'Cliente');
+    if (this.customerData == null) {
       const user: User = {
         email: 'a',
         password: 'a',
@@ -134,6 +138,9 @@ export class CreateFrequentTravelerFormComponent {
       //     ...customer
       //   }));
     }
+  }
+  displayPassword() {
+    this.Visible = !this.Visible;
   }
   addForm() {
     if (this.formGroup.value.eps == 'OTRA') {
