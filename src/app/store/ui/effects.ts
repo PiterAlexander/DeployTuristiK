@@ -634,6 +634,7 @@ export class PackageEffects {
                 mergeMap((employeeResolved) => {
                     return [
                         new DeleteEmployeeSuccess(employeeResolved),
+                        new GetAllEmployeeRequest(),
                     ];
                 }),
                 catchError((err) => of(new DeleteEmployeeFailure(err)))
