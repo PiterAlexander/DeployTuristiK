@@ -15,6 +15,7 @@ import { OrdersComponent } from '@pages/orders/orders.component';
 import { CustomersComponent } from '@pages/customers/customers.component';
 import { EmployeesComponent } from '@pages/employees/employees.component';
 import { UsersComponent } from '@pages/users/users.component';
+import { CalendarComponent } from '@pages/calendar/calendar.component';
 
 const routes: Routes = [
     {
@@ -61,6 +62,11 @@ const routes: Routes = [
                 path: 'Usuarios',
                 canActivate: [AuthGuard],
                 component: UsersComponent
+            },
+            {
+              path: 'Calendario',
+              canActivate: [AuthGuard],
+              component: CalendarComponent
             },
         ]
     },

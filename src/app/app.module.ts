@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from '@/app-routing.module';
 import { AppComponent } from './app.component';
@@ -52,6 +52,18 @@ import { CreateFrequentTravelerFormComponent } from './components/create-frequen
 import { ListFrequentTravelerComponent } from './components/list-frequent-traveler/list-frequent-traveler.component';
 import { EditPaymentFormComponent } from './components/edit-payment-form/edit-payment-form.component';
 import { ListFrequentTravelersToOrdersComponent } from './components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
+
+//<-----------PRIMENG--------------->
+import {InputSwitchModule} from 'primeng/inputswitch';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import {ToastModule} from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {ConfirmationService} from 'primeng/api';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { DialogModule } from 'primeng/dialog';
+import { RippleModule } from 'primeng/ripple';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -60,6 +72,7 @@ import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
+import { CalendarComponent } from './pages/calendar/calendar.component';
 
 
 defineCustomElements();
@@ -104,7 +117,8 @@ registerLocaleData(localeEn, 'en-EN');
         CreateFrequentTravelerFormComponent,
         ListFrequentTravelerComponent,
         EditPaymentFormComponent,
-        ListFrequentTravelersToOrdersComponent
+        ListFrequentTravelersToOrdersComponent,
+        CalendarComponent
     ],
     imports: [
         BrowserModule,
@@ -113,6 +127,18 @@ registerLocaleData(localeEn, 'en-EN');
         HttpClientModule,
         AppRoutingModule,
         ReactiveFormsModule,
+
+        //<--------PRIMENG----------->
+        InputSwitchModule,
+        DynamicDialogModule,
+        DropdownModule,
+        ToastModule,
+        ConfirmDialogModule,
+        FullCalendarModule,
+        FullCalendarModule,
+        DialogModule,
+        InputTextareaModule,
+        RippleModule,
         InputTextModule,
         CardModule,
         ButtonModule,
@@ -122,6 +148,8 @@ registerLocaleData(localeEn, 'en-EN');
         CheckboxModule,
         CalendarModule,
         DropdownModule,
+
+        //<------------------------->
         ToastrModule.forRoot({
             timeOut: 3000,
             positionClass: 'toast-top-right',
@@ -131,7 +159,15 @@ registerLocaleData(localeEn, 'en-EN');
         NgbModule,
         FormsModule
     ],
-    providers: [],
+    providers: [
+      DialogService,
+      ToastModule,
+      MessageService,
+      ConfirmationService,
+    ],
+    schemas:[
+      CUSTOM_ELEMENTS_SCHEMA
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
