@@ -1,11 +1,11 @@
 import { Order } from '@/models/order';
-import { GetAllCostumerRequest, GetAllOrdersRequest, OpenModalCreateOrder, OpenModalCreatePayment, OpenModalOrderDetails, OpenModalPayments } from '@/store/ui/actions';
+import { GetAllCustomerRequest, GetAllOrdersRequest, OpenModalCreateOrder, OpenModalCreatePayment, OpenModalOrderDetails, OpenModalPayments } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit, PipeTransform } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
-import { Costumer } from '@/models/costumer';
+import { Customer } from '@/models/customer';
 
 interface State {
   page: number;
@@ -27,8 +27,8 @@ export class OrdersComponent implements OnInit {
   public total: number
   public user: any
   public role: any
-  public allCostumers: Array<Costumer>
-  public oneCostumer: Costumer
+  public allCustomers: Array<Customer>
+  public oneCustomer: Customer
 
   private _state: State = {
     page: 1,
@@ -39,24 +39,24 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new GetAllOrdersRequest())
-    this.store.dispatch(new GetAllCostumerRequest())
+    this.store.dispatch(new GetAllCustomerRequest())
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.user = JSON.parse(localStorage.getItem('TokenPayload'))
       this.role = this.user['role']
-      this.allCostumers = state.allCostumers.data
+      this.allCustomers = state.allCustomers.data
       this.allOrders = state.allOrders.data
-      this.compareCostumer()
+      this.compareCustomer()
       this.searchByName()
     })
   }
 
-  compareCostumer() {
-    if (this.allCostumers !== undefined) {
-      this.oneCostumer = this.allCostumers.find(c => c.userId === this.user['id'])
-      if (this.oneCostumer !== undefined && this.user['role'] === 'Cliente') {
+  compareCustomer() {
+    if (this.allCustomers !== undefined) {
+      this.oneCustomer = this.allCustomers.find(c => c.userId === this.user['id'])
+      if (this.oneCustomer !== undefined && this.user['role'] === 'Cliente') {
         for (const element of this.allOrders) {
-          if (this.oneCostumer.costumerId === element.costumerId) {
+          if (this.oneCustomer.customerId === element.customerId) {
             const exists = this.ordersList.find(o => o.orderId === element.orderId)
             if (exists === undefined) {
               this.ordersList.push(element)
@@ -71,7 +71,7 @@ export class OrdersComponent implements OnInit {
 
   matches(orderResolved: Order, term: string, pipe: PipeTransform) {
     return (
-      orderResolved.costumerId.toLowerCase().includes(term.toLowerCase())
+      orderResolved.customerId.toLowerCase().includes(term.toLowerCase())
     );
   }
 
@@ -85,7 +85,7 @@ export class OrdersComponent implements OnInit {
       this.total = this.filteredOrdersList.length;
       this.filteredOrdersList = this.filteredOrdersList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
     } else {
-      this.filteredOrdersList = this.ordersList.filter(orderModel => orderModel.costumerId.toLocaleLowerCase().includes(this.search.toLocaleLowerCase().trim()));
+      this.filteredOrdersList = this.ordersList.filter(orderModel => orderModel.customerId.toLocaleLowerCase().includes(this.search.toLocaleLowerCase().trim()));
       this.total = this.filteredOrdersList.length;
       this.filteredOrdersList = this.filteredOrdersList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
     }

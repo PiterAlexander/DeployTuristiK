@@ -4,13 +4,16 @@ import { environment } from 'environments/environment';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Package } from '@/models/package';
 import { Order } from '@/models/order';
-import { Costumer } from '@/models/costumer';
+import { Customer } from '@/models/customer';
 import { Employee } from '@/models/employee';
 import { OrderDetail } from '@/models/orderDetail';
 import { User } from '@/models/user';
 import { FrequentTraveler } from '@/models/frequentTraveler';
 import { Payment } from '@/models/payment';
 import { Token } from '@/models/token';
+import { Role } from '@/models/role';
+import { Permission } from '@/models/permission';
+import { AssociatedPermission } from '@/models/associated-permission';
 @Injectable({
     providedIn: 'root'
 })
@@ -74,21 +77,21 @@ export class ApiService {
     }
     //<----------------->
 
-    //<--- COSTUMERS --->
-    getCostumers(): Observable<Costumer[]> {
-        return this.http.get<Costumer[]>(`${this.endpoint}api/Costumer`)
+    //<--- CUSTOMERS --->
+    getCustomers(): Observable<Customer[]> {
+        return this.http.get<Customer[]>(`${this.endpoint}api/Customer`)
     }
 
-    addCostumer(modelo: Costumer): Observable<Costumer> {
-        return this.http.post<Costumer>(`${this.endpoint}api/Costumer`, modelo)
+    addCustomer(modelo: Customer): Observable<Customer> {
+        return this.http.post<Customer>(`${this.endpoint}api/Customer`, modelo)
     }
 
-    updateCostumer(idCostumer: string, modelo: Costumer): Observable<Costumer> {
-        return this.http.put<Costumer>(`${this.endpoint}api/Costumer/${idCostumer}`, modelo)
+    updateCustomer(idCustomer: string, modelo: Customer): Observable<Customer> {
+        return this.http.put<Customer>(`${this.endpoint}api/Customer/${idCustomer}`, modelo)
     }
 
-    deleteCostumer(idCostumer: string): Observable<void> {
-        return this.http.delete<void>(`${this.endpoint}api/Costumer/${idCostumer}`)
+    deleteCustomer(idCustomer: string): Observable<void> {
+        return this.http.delete<void>(`${this.endpoint}api/Customer/${idCustomer}`)
     }
     //<----------------->
 
@@ -147,5 +150,41 @@ export class ApiService {
     //<--- LOGIN --->
     signIn(email: string, password: string) {
         return this.http.post<Token>(`${this.endpoint}api/Login`, { email, password })
+    }
+
+
+    //<------ROLES-------->
+    getRoles():Observable<Role[]>{
+      return this.http.get<Role[]>(`${this.endpoint}api/Role`);
+    }
+
+    getRoleById(RoleId:string):Observable<Role[]>{
+      return this.http.get<Role[]>(`${this.endpoint}api/Role/${RoleId}`);
+    }
+
+    addRole(modelo:Role):Observable<Role>{
+      return this.http.post<Role>(`${this.endpoint}api/Role`,modelo);
+    }
+
+    updateRole(RoleId:string,modelo:Role):Observable<Role>{
+      return this.http.put<Role>(`${this.endpoint}api/Role/${RoleId}`,modelo);
+    }
+
+    deleteRole(RoleId:string):Observable<void>{
+      return this.http.delete<void>(`${this.endpoint}api/Role/${RoleId}`);
+    }
+
+    //<------PERMISSIONS-------->
+    getPermissions():Observable<Permission[]>{
+      return this.http.get<Permission[]>(`${this.endpoint}api/Permission/`);
+    }
+
+    //<------ ASSOCIATED PERMISSIONS-------->
+    addAssociatedPermission(modelo:AssociatedPermission):Observable<AssociatedPermission>{
+      return this.http.post<AssociatedPermission>(`${this.endpoint}api/AssociatedPermission/`,modelo);
+    }
+
+    deleteAssociatedPermission(associatedPermissionId:string):Observable<void>{
+      return this.http.delete<void>(`${this.endpoint}api/AssociatedPermission/${associatedPermissionId}`);
     }
 }

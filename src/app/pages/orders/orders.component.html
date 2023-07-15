@@ -43,8 +43,8 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let order of filteredOrdersList">
-                                    <td>{{order.costumer.name + ' ' + order.costumer.lastName + ' - ' +
-                                        order.costumer.document}}</td>
+                                    <td>{{order.customer.name + ' ' + order.customer.lastName + ' - ' +
+                                        order.customer.document}}</td>
                                     <td>{{order.package.name}}</td>
                                     <td>
                                         <button (click)="sendToOrderDetails(order)"

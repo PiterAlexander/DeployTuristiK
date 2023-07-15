@@ -3,6 +3,7 @@
 @import 'https://cdn.jsdelivr.net/npm/primeicons@4.1.0/primeicons.css';
 
 
+
 .footer {
     border-top: 0px !important;
 }
@@ -52,4 +53,52 @@ form input:required {
 .custom-calendar {
     width: 100px;
     height: 100px;
+}
+
+.input-design {
+    border: 1px solid #6366F1
+}
+
+.input-design:focus {
+    border: 1px solid #6366F1
+}
+
+.input-design:hover {
+    border: 1px solid #6366F1
+}
+
+:host ::ng-deep {
+    p-dropdown div:first-child {
+        width: 100%;
+        border: 1px #6366F1 solid;
+    }
+
+    p-dropdown div:last-child {}
+}
+
+.divider {
+
+    border: 0.2px solid;
+    color: #6366F1
+
+}
+
+:host ::ng-deep {
+    p-dropdown div:first-child {
+        width: 100%;
+        border: 1px #6366F1 solid;
+    }
+
+    p-dropdown div:last-child {}
+}
+
+.button-design{
+    background-color: #6366F1 !important;
+}
+
+
+:host ::ng-deep {
+    p-calendar span button {
+        background-color: #6366F1;
+    }
 }

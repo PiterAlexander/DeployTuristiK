@@ -1,8 +1,20 @@
+
+body {
+  font-family: 'Poppins';
+}
+
 .custom-control-input:checked ~ .custom-control-label::before {
   color: #fff;
   border-color: #28A745!important;
   background-color: #28A745!important;
 }
+
+.custom-control-input:checked ~ .custom-control-label::before {
+  color: #fff;
+  border-color: #326fd1!important;
+  background-color: #326fd1!important;
+}
+
 
 form input:required {
   content:"*";
@@ -32,6 +44,9 @@ form input:required {
   box-shadow: 0 0 0 0.20rem rgba(25,135,84,.25);
 }
 
+.custom-modal-header{
+  color: #326fd1;
+}
 
 
 

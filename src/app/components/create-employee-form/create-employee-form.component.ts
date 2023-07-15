@@ -1,7 +1,7 @@
 import {
   CreateEmployeeRequest,
   EditEmployeeRequest,
-  GetAllCostumerRequest,
+  GetAllCustomerRequest,
   GetAllEmployeeRequest,
   GetAllRoleRequest
 } from '@/store/ui/actions';
@@ -28,6 +28,7 @@ export class CreateEmployeeFormComponent implements OnInit {
   Visible: boolean = false;
   password: String = '';
   EmployeeList: Array<any>;
+  public UserList: Array<any>
   User: Array<any>;
   Roles: Array<Role>;
   public employeeData;
@@ -38,7 +39,7 @@ export class CreateEmployeeFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-      this.store.dispatch(new GetAllCostumerRequest());
+      this.store.dispatch(new GetAllCustomerRequest());
       this.store.dispatch(new GetAllRoleRequest());
 
       this.ui = this.store.select('ui');
@@ -103,10 +104,9 @@ export class CreateEmployeeFormComponent implements OnInit {
   }
 
   saveEmployee() {
-      var idRole: Role = this.Roles.find((r) => r.name == 'Empleado');
+      var idRole: Role = this.Roles.find((r) => r.name == 'Administrador');
       if (this.employeeData == null) {
           const user: User = {
-              userName: this.formGroup.value.userName,
               email: this.formGroup.value.email,
               password: this.formGroup.value.password,
               status: 1,
@@ -129,7 +129,6 @@ export class CreateEmployeeFormComponent implements OnInit {
           );
       } else {
           const user: User = {
-              userName: this.formGroup.value.userName,
               email: this.formGroup.value.email,
               password: this.formGroup.value.password,
               status: 1,
@@ -163,12 +162,17 @@ export class CreateEmployeeFormComponent implements OnInit {
           (item) => item.document == this.formGroup.value.document
       );
   }
-  // validateExistingEmail(): boolean {
-  //   return this.User.find((item => item.email == this.formGroup.value.email))
-  // }
+  validateExistingEmail(): boolean {
+    return this.EmployeeList.find((item => item.email == this.formGroup.value.email))
+  }
 
   validForm(): boolean {
-      return true;
+    return this.formGroup.value.name != '' && this.formGroup.value.lastName != '' &&
+    this.formGroup.value.document != '' && !this.validateExistingDocument() && 
+    this.formGroup.value.birthDate != '' && this.formGroup.value.phoneNumber != '' &&
+    this.formGroup.value.eps != '' && this.formGroup.value.address != '' &&
+    this.formGroup.value.userName != '' && !this.validateExistingEmail() && 
+    this.formGroup.value.email != '' && this.formGroup.value.password != '' 
   }
 
   cancel() {

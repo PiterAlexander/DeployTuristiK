@@ -11,7 +11,13 @@ import { Role } from '@/models/role';
 import { AssociatedPermission } from '@/models/associated-permission';
 import { state } from '@angular/animations';
 import Swal from 'sweetalert2';
+import { ApiService } from '@services/api.service';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
+interface Status {
+  name: string,
+  code: number
+}
 @Component({
   selector: 'app-create-role-form',
   templateUrl: './create-role-form.component.html',
@@ -23,16 +29,26 @@ export class CreateRoleFormComponent implements OnInit{
   public ui:Observable<UiState>
   public actionTitle : string = "Agregar"
   public permissionList : Array<any>
-  public AllRoles : Array<any>
+  public allRoles : Array<any>
   public selectedPermissions: { permissionId: any ,module:string,status?:boolean}[] =[];
   public selectedUpdatePermissions: any[] = [];
   public roleData
+  statuses: Status[];
+  selectedStatusCode:number;
+
 
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
+    private modalPrimeNg : DynamicDialogRef,
     private store: Store<AppState>,
-  ){}
+    private apiService : ApiService
+  ){
+    this.statuses = [
+      {name: 'Habilitado', code: 1},
+      {name: 'Inhabilitado', code: 2},
+    ];
+  }
 
   ngOnInit() {
 
@@ -40,7 +56,7 @@ export class CreateRoleFormComponent implements OnInit{
     this.ui = this.store.select('ui')
     this.ui.subscribe((state:UiState)=>{
       this.permissionList = state.allPermissions.data
-      this.AllRoles = state.allRoles.data
+      this.allRoles = state.allRoles.data
       this.roleData = state.oneRole.data
     })
 
@@ -52,12 +68,12 @@ export class CreateRoleFormComponent implements OnInit{
 
     if (this.roleData!=null) {
 
-
       this.roleData.associatedPermission.forEach(rolpermiso=>{
         this.assignpermissiontolist(rolpermiso.permission)
       })
 
       this.actionTitle = "Editar"
+      this.selectedStatusCode = this.roleData.status
       this.formGroup.setValue({
         name: this.roleData.name,
         status: this.roleData.status,
@@ -90,14 +106,6 @@ export class CreateRoleFormComponent implements OnInit{
     } else {
       this.selectedPermissions.push({ permissionId: permiso["permissionId"], module : permiso["module"]});
     }
-
-
-    // console.log("Pemisos ASOCIADOS")
-    // console.log(this.selectedPermissions)
-    // this.selectedPermissions.forEach(element => {
-    //   console.log("MOdulo",element.module, "Id",element.permissionId)
-    // });
-
   }
 
   saveChanges(){
@@ -116,14 +124,6 @@ export class CreateRoleFormComponent implements OnInit{
           ...model
         }));
 
-        Swal.fire({
-          icon: 'success',
-          title: 'El rol se agregó exitosamente',
-          showConfirmButton: false,
-          timer: 3500
-        }).then(function(){
-          //console.log('El rol se agreró exitosamente')
-        })
 
       }else{
 
@@ -134,6 +134,8 @@ export class CreateRoleFormComponent implements OnInit{
             name : this.roleData.name,
             status : this.formGroup.value.status,
           }
+
+          this.selectedStatusCode = this.formGroup.value.status
 
           this.updatingPermissionRoleAssignment()
 
@@ -152,16 +154,6 @@ export class CreateRoleFormComponent implements OnInit{
                 ...model
           }));
         }
-
-        Swal.fire({
-          icon: 'success',
-          title: 'El rol se editó exitosamente',
-          showConfirmButton: false,
-          timer: 3500
-        }).then(function(){
-          //console.log('El rol se editó exitosamente')
-        })
-
       }
     }
   }
@@ -197,24 +189,41 @@ export class CreateRoleFormComponent implements OnInit{
       })
 
       //UPDATE
-      this.selectedUpdatePermissions.forEach(updateItem =>{
+      this.selectedUpdatePermissions.forEach(async updateItem =>{
+
+        //Eliminar permiso asociado-------
         if (updateItem.status === false) {
-          //console.log(updateItem, "Se Elimina")
-          const assocPerModelDelete : AssociatedPermission = {
-            associatedPermissionId: updateItem.associatedPermissionId
-          }
-          this.store.dispatch(new DeleteAssociatedPermissionRequest({
-            ...assocPerModelDelete
-          }));
-        }else{
-          //console.log(updateItem, "Se crea")
+
+          const ok = await new Promise((resolve, reject) => {
+            this.apiService.deleteAssociatedPermission(updateItem.associatedPermissionId).subscribe({
+              next: (data) => {
+                resolve(data);
+              },
+              error: (err) => {
+                reject(err);
+              }
+            });
+          });
+
+        }
+        //Crear permiso asociado
+        else{
+
           const assocPerModelCreate : AssociatedPermission = {
             roleId : updateItem.roleId,
             permissionId : updateItem.permissionId,
           }
-          this.store.dispatch(new CreateAssociatedPermissionRequest({
-          ...assocPerModelCreate
-          }));
+
+          const ok = await new Promise((resolve, reject) => {
+            this.apiService.addAssociatedPermission(assocPerModelCreate).subscribe({
+              next: (data) => {
+                resolve(data);
+              },
+              error: (err) => {
+                reject(err);
+              }
+            });
+          });
         }
       })
 
@@ -242,12 +251,12 @@ export class CreateRoleFormComponent implements OnInit{
     if (this.roleData==null) {
       return this.formGroup.valid
       && this.formGroup.value.status != 1
-      && !this.AllRoles.find(item => item.name === this.formGroup.value.name.trim())
+      && !this.allRoles.find(item => item.name === this.formGroup.value.name.trim())
       && this.selectedPermissions.length>0
     }else{
       return this.formGroup.valid
       && this.formGroup.value.status != 0
-      && !this.AllRoles.find(
+      && !this.allRoles.find(
         item => item.name === this.formGroup.value.name
         && item.roleId !== this.roleData.roleId)
       && this.selectedPermissions.length>0
@@ -256,10 +265,10 @@ export class CreateRoleFormComponent implements OnInit{
 
   validateExistingRoleName():boolean{
     if (this.roleData==null) {
-      return this.AllRoles.find(item => item.name === this.formGroup.value.name.trim())
+      return this.allRoles.find(item => item.name === this.formGroup.value.name.trim())
     }else{
       const name = this.formGroup.value && this.formGroup.value.name ? this.formGroup.value.name.trim() : '';
-        return this.AllRoles.find(
+        return this.allRoles.find(
           item => item.name === name
           && item.roleId !== this.roleData.roleId
         )
@@ -272,7 +281,8 @@ export class CreateRoleFormComponent implements OnInit{
 
   //-----------------------------------------------------------------
   cancel() {
-    this.modalService.dismissAll();
+    // this.modalService.dismissAll();
+    this.modalPrimeNg.close()
   }
 
 }

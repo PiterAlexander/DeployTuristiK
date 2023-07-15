@@ -26,10 +26,12 @@ export class CreatePackageFormComponent implements OnInit {
   public allPackages: Array<any>
   selectedDestiny: any;
   transports: any[] = [];
-  selectedDate: Date;
 
+  //From Calendar
+  public departureCalendardate: string
+  public ArrivalCalendardate: string
 
-  constructor(private fb: FormBuilder, private modalService: NgbModal, private store: Store<AppState>, private service: ApiService, private messageService: MessageService) { }
+  constructor(private fb: FormBuilder, private store: Store<AppState>, private service: ApiService, private messageService: MessageService, private modal: DynamicDialogRef) { }
  
   ngOnInit(): void {
     this.transports = [
@@ -55,6 +57,18 @@ export class CreatePackageFormComponent implements OnInit {
     this.ui.subscribe((state: UiState) => {
       this.allPackages = state.allPackages.data
       this.packageData = state.onePackage.data
+      var date = state.dateCalendarSelected.data
+      console.log(date)
+
+      if(date){
+        const fechaFormateada = date.toISOString().slice(0, 16);
+        this.departureCalendardate = fechaFormateada;
+
+        const fechaFormateada_2 = new Date(fechaFormateada);
+        fechaFormateada_2.setDate(fechaFormateada_2.getDate() + 1);
+        const nuevaFechaFormateada = fechaFormateada_2.toISOString().slice(0, 16);
+        this.ArrivalCalendardate = nuevaFechaFormateada
+      }
     })
 
     if (this.packageData != null) {
@@ -75,15 +89,35 @@ export class CreatePackageFormComponent implements OnInit {
         status: this.packageData.status,
       })
     }
-  }
-  ref: DynamicDialogRef;
 
-  ngOnDestroy() {
-    if (this.ref) {
-        this.ref.close;
+    if (this.departureCalendardate) {
+      this.formGroup = this.fb.group({
+        name: [null, [Validators.required, Validators.minLength(8)]],//
+        destination: [null, [Validators.required, Validators.minLength(8)]],//
+        details: [null, [Validators.required, Validators.minLength(25)]],//
+        transport: [0, [Validators.required]],//
+        hotel: [null, Validators.required],//
+        departureDate: new FormControl(this.departureCalendardate, [Validators.required, this.fechaValida.bind(this)]),//
+        arrivalDate: new FormControl(this.ArrivalCalendardate, [Validators.required, this.fechaValida.bind(this), this.validarFechaRegreso.bind(this)]),//
+        departurePoint: [null, Validators.required],//
+        totalQuotas: [null, [Validators.required, Validators.min(15)]],
+        availableQuotas: [0],
+        price: [null, [Validators.required, Validators.min(100000)]],
+        type: [0, Validators.required],
+        status: [1, Validators.required]
+      })
     }
-}
+    
+  };
 
+  resetForm() {
+    this.formGroup.reset();
+  }
+  
+  cancel() {
+    
+    this.modal.close()
+  }
   savePackage() {
     if (this.formGroup.invalid) {
       return;

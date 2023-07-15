@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UiState } from '@/store/ui/state';
-import { Costumer } from '@/models/costumer';
+import { Customer } from '@/models/customer';
 import { OpenModalCreateOrderDetail } from '@/store/ui/actions';
 import Swal from 'sweetalert2';
 
@@ -17,8 +17,8 @@ export class ListFrequentTravelersToOrdersComponent implements OnInit {
 
   private ui: Observable<UiState>
   public orderProcess: Array<any>
-  public frequentTravelers: Array<Costumer>
-  public frequentTravelersToBeneficiaries: Array<Costumer>
+  public frequentTravelers: Array<Customer>
+  public frequentTravelersToBeneficiaries: Array<Customer>
 
   constructor(
     private modalService: NgbModal,
@@ -36,7 +36,7 @@ export class ListFrequentTravelersToOrdersComponent implements OnInit {
   saveFrequentTravelers() {
     if (this.orderProcess != undefined) {
       if (this.orderProcess[0].action == 'CreateOrder') {
-        for (const element of this.orderProcess[0].order.costumer.frequentTraveler) {
+        for (const element of this.orderProcess[0].order.customer.frequentTraveler) {
           this.frequentTravelers.push(element)
         }
       }
@@ -48,15 +48,15 @@ export class ListFrequentTravelersToOrdersComponent implements OnInit {
     this.store.dispatch(new OpenModalCreateOrderDetail(this.orderProcess))
   }
 
-  isBeneficiarie(traveler: Costumer): boolean {
-    const beneficiarie = this.frequentTravelersToBeneficiaries.find(f => f.costumerId === traveler.costumerId)
+  isBeneficiarie(traveler: Customer): boolean {
+    const beneficiarie = this.frequentTravelersToBeneficiaries.find(f => f.customerId === traveler.customerId)
     if (beneficiarie != undefined) {
       return true
     }
     return false
   }
 
-  addTraveler(traveler: Costumer) {
+  addTraveler(traveler: Customer) {
     let availableQuotas: number
     if (this.orderProcess[0].beneficiaries.length > 1) {
       availableQuotas = this.orderProcess[0].order.package.availableQuotas - this.orderProcess[0].beneficiaries.length
@@ -78,8 +78,8 @@ export class ListFrequentTravelersToOrdersComponent implements OnInit {
     }
   }
 
-  discardTraveler(traveler: Costumer) {
-    const beneficiarie = this.frequentTravelersToBeneficiaries.find(f => f.costumerId === traveler.costumerId)
+  discardTraveler(traveler: Customer) {
+    const beneficiarie = this.frequentTravelersToBeneficiaries.find(f => f.customerId === traveler.customerId)
     const index = this.frequentTravelersToBeneficiaries.indexOf(beneficiarie)
     this.frequentTravelersToBeneficiaries.splice(index, 1)
   }

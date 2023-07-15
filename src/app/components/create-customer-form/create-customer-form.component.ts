@@ -1,39 +1,39 @@
-import { CreateCostumerRequest, EditCostumerRequest, GetAllCostumerRequest, GetAllRoleRequest } from '@/store/ui/actions';
+import { CreateCustomerRequest, EditCustomerRequest, GetAllCustomerRequest, GetAllRoleRequest } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
-import { Costumer } from '@/models/costumer';
+import { Customer } from '@/models/customer';
 import { UiState } from '@/store/ui/state';
 import { Observable } from 'rxjs';
 import { User } from '@/models/user';
 import { Role } from '@/models/role';
 
 @Component({
-  selector: 'app-createcostumerform',
-  templateUrl: './createcostumerform.component.html',
-  styleUrls: ['./createcostumerform.component.scss']
+  selector: 'app-createcustomerform',
+  templateUrl: './create-customer-form.component.html',
+  styleUrls: ['./create-customer-form.component.scss']
 })
-export class CreatecostumerformComponent implements OnInit {
+export class CreatecustomerformComponent implements OnInit {
 
   public ui: Observable<UiState>
   public ActionTitle: string = "Agregar"
   formGroup: FormGroup;
   Visible: boolean = false;
   password: string = '';
-  public CostumerList: Array<any>
-  public costumerData
+  public CustomerList: Array<any>
+  public customerData
   Roles: Array<Role>;
   constructor(private fb: FormBuilder, private modalService: NgbModal, private store: Store<AppState>) { }
 
   ngOnInit(): void {
-    this.store.dispatch(new GetAllCostumerRequest());
+    this.store.dispatch(new GetAllCustomerRequest());
     this.store.dispatch(new GetAllRoleRequest());
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
-      this.CostumerList = state.allCostumers.data
-      this.costumerData = state.oneCostumer.data
+      this.CustomerList = state.allCustomers.data
+      this.customerData = state.oneCustomer.data
       this.Roles = state.allRoles.data;
     })
 
@@ -51,38 +51,37 @@ export class CreatecostumerformComponent implements OnInit {
       user: ['', Validators.required],
     });
 
-    if (this.costumerData != null) {
-      console.log(this.costumerData.birthDate)
+    if (this.customerData != null) {
+      console.log(this.customerData.birthDate)
       this.ActionTitle = "Editar"
       this.formGroup.setValue({
 
-        name: this.costumerData.name,
-        lastName: this.costumerData.lastName,
-        document: this.costumerData.document,
-        birthDate: this.costumerData.birthDate,
-        phoneNumber: this.costumerData.phoneNumber,
-        address: this.costumerData.address,
-        eps: this.costumerData.eps,
-        userName: this.costumerData.user.userName,
-        email: this.costumerData.user.email,
-        password: this.costumerData.user.password,
-        user: this.costumerData.user
+        name: this.customerData.name,
+        lastName: this.customerData.lastName,
+        document: this.customerData.document,
+        birthDate: this.customerData.birthDate,
+        phoneNumber: this.customerData.phoneNumber,
+        address: this.customerData.address,
+        eps: this.customerData.eps,
+        userName: this.customerData.user.userName,
+        email: this.customerData.user.email,
+        password: this.customerData.user.password,
+        user: this.customerData.user
       }
       )
     }
   }
-  saveCostumer() {
+  saveCustomer() {
     var idRole: Role = this.Roles.find((r) => r.name == 'Cliente');
-    if (this.costumerData == null) {
+    if (this.customerData == null) {
       const user: User = {
-        userName: this.formGroup.value.userName,
         email: this.formGroup.value.email,
         password: this.formGroup.value.password,
         status: 1,
         roleId: idRole.roleId,
       }
 
-      const costumer: Costumer = {
+      const customer: Customer = {
         name: this.formGroup.value.name,
         lastName: this.formGroup.value.lastName,
         document: this.formGroup.value.document,
@@ -90,23 +89,22 @@ export class CreatecostumerformComponent implements OnInit {
         phoneNumber: this.formGroup.value.phoneNumber,
         address: this.formGroup.value.address,
         eps: this.formGroup.value.eps,
-        User: user
+        user: user
       }
 
-      this.store.dispatch(new CreateCostumerRequest({
-        ...costumer
+      this.store.dispatch(new CreateCustomerRequest({
+        ...customer
       }));
     } else {
       const user: User = {
-        userName: this.formGroup.value.userName,
         email: this.formGroup.value.email,
         password: this.formGroup.value.password,
         status: 1,
         roleId: idRole.roleId,
       }
 
-      const costumer: Costumer = {
-        costumerId: this.costumerData.costumerId,
+      const customer: Customer = {
+        customerId: this.customerData.customerId,
         name: this.formGroup.value.name,
         lastName: this.formGroup.value.lastName,
         document: this.formGroup.value.document,
@@ -114,13 +112,13 @@ export class CreatecostumerformComponent implements OnInit {
         phoneNumber: this.formGroup.value.phoneNumber,
         address: this.formGroup.value.address,
         eps: this.formGroup.value.eps,
-        User: user,
-        userId: this.costumerData.userId
+        user: user,
+        userId: this.customerData.userId
 
       }
-      console.log(user, costumer, 'q')
-      this.store.dispatch(new EditCostumerRequest({
-        ...costumer
+      console.log(user, customer, 'q')
+      this.store.dispatch(new EditCustomerRequest({
+        ...customer
       }));
     }
   }
@@ -130,11 +128,11 @@ export class CreatecostumerformComponent implements OnInit {
   }
 
   validateExistingDocument(): boolean {
-    return this.CostumerList.find(item => item.document == this.formGroup.value.document)
+    return this.CustomerList.find(item => item.document == this.formGroup.value.document)
   }
 
   validateExistingEmail(): boolean {
-    return this.CostumerList.find(item => item.email == this.formGroup.value.email)
+    return this.CustomerList.find(item => item.email == this.formGroup.value.email)
   }
 
   validForm(): boolean {

@@ -38,8 +38,8 @@ import { OrdersComponent } from './pages/orders/orders.component';
 import { CreateOrderFormComponent } from './components/create-order-form/create-order-form.component';
 import { CreateRoleFormComponent } from '@components/create-role-form/create-role-form.component';
 import { DetailsPackageComponent } from './components/details-package/details-package.component';
-import { CostumersComponent } from './pages/costumers/costumers.component';
-import { CreatecostumerformComponent } from './components/create-costumer-form/createcostumerform.component';
+import { CustomersComponent } from './pages/customers/customers.component';
+import { CreatecustomerformComponent } from './components/create-customer-form/create-customer-form.component';
 import { EmployeesComponent } from './pages/employees/employees.component';
 import { CreateEmployeeFormComponent } from './components/create-employee-form/create-employee-form.component';
 import { CreateOrderDetailFormComponent } from './components/create-order-detail-form/create-order-detail-form.component';
@@ -53,30 +53,40 @@ import { ListFrequentTravelerComponent } from './components/list-frequent-travel
 import { EditPaymentFormComponent } from './components/edit-payment-form/edit-payment-form.component';
 import { ListFrequentTravelersToOrdersComponent } from './components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
 import { DataViewModule } from 'primeng/dataview';
-import { TableModule } from 'primeng/table';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
-import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { FileUploadModule } from 'primeng/fileupload';
-import { DropdownModule } from 'primeng/dropdown';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { RatingModule } from 'primeng/rating';
-import { DialogModule } from 'primeng/dialog';
-import { DynamicDialogModule } from 'primeng/dynamicdialog';
-import { DialogService } from 'primeng/dynamicdialog';
 import { OrderListModule } from 'primeng/orderlist';
 import {TooltipModule} from 'primeng/tooltip';
-import {InputSwitchModule} from 'primeng/inputswitch';
 import {CascadeSelectModule} from 'primeng/cascadeselect';
-import { CalendarModule } from 'primeng/calendar';
-import { MessageService } from 'primeng/api';
-import {DividerModule} from 'primeng/divider';
     defineCustomElements();
+
+//<-----------PRIMENG--------------->
+import {InputSwitchModule} from 'primeng/inputswitch';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import {ToastModule} from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {ConfirmationService} from 'primeng/api';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { DialogModule } from 'primeng/dialog';
+import { RippleModule } from 'primeng/ripple';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputTextModule } from 'primeng/inputtext';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table';
+import { DividerModule } from 'primeng/divider';
+import { CheckboxModule } from 'primeng/checkbox';
+import { CalendarModule } from 'primeng/calendar';
+import { DropdownModule } from 'primeng/dropdown';
+import { CalendarComponent } from './pages/calendar/calendar.component';
+
+
+defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
 
 @NgModule({
@@ -105,8 +115,8 @@ registerLocaleData(localeEn, 'en-EN');
         OrdersComponent,
         CreateOrderFormComponent,
         CreateRoleFormComponent,
-        CostumersComponent,
-        CreatecostumerformComponent,
+        CustomersComponent,
+        CreatecustomerformComponent,
         EmployeesComponent,
         CreateEmployeeFormComponent,
         CreateOrderDetailFormComponent,
@@ -118,7 +128,8 @@ registerLocaleData(localeEn, 'en-EN');
         CreateFrequentTravelerFormComponent,
         ListFrequentTravelerComponent,
         EditPaymentFormComponent,
-        ListFrequentTravelersToOrdersComponent
+        ListFrequentTravelersToOrdersComponent,
+        CalendarComponent
     ],
     imports: [
         DividerModule,
@@ -149,7 +160,29 @@ registerLocaleData(localeEn, 'en-EN');
         HttpClientModule,
         AppRoutingModule,
         ReactiveFormsModule,
+
+        //<--------PRIMENG----------->
+        InputSwitchModule,
+        DynamicDialogModule,
+        DropdownModule,
+        ToastModule,
+        ConfirmDialogModule,
+        FullCalendarModule,
+        FullCalendarModule,
+        DialogModule,
+        InputTextareaModule,
+        RippleModule,
+        InputTextModule,
+        CardModule,
+        ButtonModule,
+        TableModule,
+        DividerModule,
         BrowserAnimationsModule,
+        CheckboxModule,
+        CalendarModule,
+        DropdownModule,
+
+        //<------------------------->
         ToastrModule.forRoot({
             timeOut: 3000,
             positionClass: 'toast-top-right',
@@ -160,8 +193,13 @@ registerLocaleData(localeEn, 'en-EN');
         FormsModule,
         TableModule
     ],
-    providers: [DialogService, MessageService],
     bootstrap: [AppComponent],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    providers: [
+      DialogService,
+      ToastModule,
+      MessageService,
+      ConfirmationService,
+    ]
 })
 export class AppModule { }
