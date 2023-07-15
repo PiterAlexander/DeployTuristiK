@@ -1,8 +1,8 @@
-<div class="d-flex justify-content-center align-items-center vh-100">
-    <div class="card o-hidden border-0 shadow-lg my-5 w-25">
+<div class="d-flex justify-content-center align-items-center vh-100 todo">
+    <div class="card o-hidden border-0 shadow-lg my-4 w-25 border-round-lg">
         <div class="d-flex justify-content-around align-items-center mt-3">
             <input
-                class="control-prev rounded text-center bg-primary border-0 col-4 p-2"
+                class="p-element p-ripple mr-2 bg-primary p-component col-4 p-2 rounded text-center border-0"
                 type="text"
                 data-target="#carouselExampleControls"
                 data-slide-to="0"
@@ -11,7 +11,7 @@
             />
 
             <input
-                class="control-prev rounded text-center btn btn-outline-primary col-4 p-2"
+                class="p-element p-ripple mr-2 p-button p-button-outlined p-component col-4 p-2 rounded text-center"
                 type="text"
                 data-target="#carouselExampleControls"
                 data-slide-to="1"
@@ -24,7 +24,7 @@
             <!-- Nested Row within Card Body -->
             <div class="row">
                 <div class="col">
-                    <div class="p-4">
+                    <div class="px-4 py-2">
                         <form
                             class="needs-validation"
                             novalidate
@@ -32,7 +32,7 @@
                             (submit)="saveChanges()"
                             [formGroup]="formGroup"
                         >
-                            <div class="input-group mb-3">
+                            <!-- <div class="input-group mb-3">
                                 <input
                                     formControlName="email"
                                     type="email"
@@ -58,12 +58,84 @@
                                         <span class="fas fa-lock"></span>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
+
+                            <span class="p-input-icon-left w-full mb-4">
+                                <i class="pi pi-envelope"></i>
+                                <input
+                                    id="email"
+                                    type="text"
+                                    pInputText
+                                    class="w-full"
+                                    placeholder="Correo"
+                                    formControlName="email"
+                                    required
+                                />
+                            </span>
+                            <span class="p-input-icon-left w-full mb-4">
+                                <i class="pi pi-lock"></i>
+                                <input
+                                    id="password"
+                                    type="password"
+                                    pInputText
+                                    class="w-full"
+                                    placeholder="Contraseña"
+                                    formControlName="password"
+                                    required
+                                />
+                            </span>
                             <div
                                 class="row d-flex justify-content-end text-right"
                             >
+                                <p class="my-4 h6">
+                                    <a [routerLink]="['/forgot-password']"
+                                        >¿Olvidé mi contraseña?</a
+                                    >
+                                </p>
                                 <div class="col-6">
                                     <button
+                                        *ngIf="validForm()"
+                                        type="submit"
+                                        id="saveButton"
+                                        pbutton=""
+                                        pripple=""
+                                        label="Ingresar"
+                                        icon="pi pi-sign-in"
+                                        class="p-element p-ripple mr-2 p-button p-button-success p-component"
+                                        ng-reflect-label="Ingresar"
+                                        ng-reflect-icon="pi pi-sign-in"
+                                    >
+                                        <span
+                                            class="p-button-icon p-button-icon-left pi pi-sign-in"
+                                            aria-hidden="true"
+                                        ></span
+                                        ><span class="p-button-label"
+                                            >Ingresar</span
+                                        ><span class="p-ink"></span>
+                                    </button>
+                                    <button
+                                        *ngIf="!validForm()"
+                                        type="submit"
+                                        id="saveButton"
+                                        pbutton=""
+                                        pripple=""
+                                        label="Ingresar"
+                                        icon="pi pi-sign-in"
+                                        class="p-element p-ripple mr-2 p-button p-button-success p-component"
+                                        ng-reflect-label="Ingresar"
+                                        ng-reflect-icon="pi pi-sign-in"
+                                        disabled
+                                    >
+                                        <span
+                                            class="p-button-icon p-button-icon-left pi pi-sign-in"
+                                            aria-hidden="true"
+                                        ></span
+                                        ><span class="p-button-label"
+                                            >Ingresar</span
+                                        ><span class="p-ink"></span>
+                                    </button>
+
+                                    <!-- <button
                                         *ngIf="validForm()"
                                         type="submit"
                                         id="saveButton"
@@ -79,16 +151,11 @@
                                         disabled
                                     >
                                         Ingresar
-                                    </button>
+                                    </button> -->
                                 </div>
                                 <!-- /.col -->
                             </div>
                         </form>
-                        <p class="my-4">
-                            <a [routerLink]="['/forgot-password']"
-                                >¿Olvidé mi contraseña?</a
-                            >
-                        </p>
                     </div>
                 </div>
             </div>
