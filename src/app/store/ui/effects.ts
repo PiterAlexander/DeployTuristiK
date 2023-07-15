@@ -33,6 +33,7 @@ import {
     ChangeStatusPackageRequest,
     ChangeStatusPackageSuccess,
     ChangeStatusPackageFailure,
+    OpenModalCreatePackage,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -58,7 +59,7 @@ import { CreateFrequentTravelerFormComponent } from '@components/create-frequent
 import { EditPaymentFormComponent } from '@components/edit-payment-form/edit-payment-form.component';
 import { CreatecostumerformComponent } from '@components/create-costumer-form/createcostumerform.component';
 import { ListFrequentTravelersToOrdersComponent } from '@components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
-
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 @Injectable()
 export class PackageEffects {
     modalRef: NgbModalRef;
@@ -78,16 +79,32 @@ export class PackageEffects {
         })
     ));
 
+    // openModalCreatePackage$ = createEffect(() =>
+    //     this.actions$.pipe(
+    //         ofType(packageActions.OPEN_MODAL_CREATE_PACKAGE),
+    //         tap((action) => {
+    //             this.modalRef = this.modalService.open(CreatePackageFormComponent, {
+    //                 backdrop: false,
+    //                 size: 'xl'
+    //             });
+    //         })
+    //     ), { dispatch: false });
+
     openModalCreatePackage$ = createEffect(() =>
         this.actions$.pipe(
             ofType(packageActions.OPEN_MODAL_CREATE_PACKAGE),
-            tap((action) => {
-                this.modalRef = this.modalService.open(CreatePackageFormComponent, {
-                    backdrop: false,
-                    size: 'xl'
+            tap((action: OpenModalCreatePackage) => {
+                const ref = this.dialogService.open(CreatePackageFormComponent, {
+                    header:'Agregar paquete',
+                    width: '50%',
+                    contentStyle: { 'max-height': '700px', overflow: 'auto' },
+                    baseZIndex: 10000,
+                    data: action.payload // Pasar datos opcionales a la modal desde la acción
                 });
+
             })
-        ), { dispatch: false });
+        ), { dispatch: false }
+    );
 
     openModalDetailsPackage$ = createEffect(() =>
         this.actions$.pipe(
@@ -100,6 +117,7 @@ export class PackageEffects {
             })
         ), { dispatch: false });
 
+    
 
     createPackage$ = createEffect(() => this.actions$.pipe(
         ofType(packageActions.CREATE_PACKAGE_REQUEST),
@@ -108,7 +126,7 @@ export class PackageEffects {
             return this.apiService.addPackage(pack).pipe(
 
                 mergeMap((packageResolved) => {
-                    this.modalRef.close();
+                    this.modalRef.close()
                     return [
                         new CreatePackageSuccess(packageResolved),
                         new GetAllPackagesRequest()
@@ -732,6 +750,7 @@ export class PackageEffects {
         private roleService: RoleService,
         private assocPermissionService: AssociatedPermissionService,
         private authService: AuthService,
+        private dialogService: DialogService
     ) { }
 
 }

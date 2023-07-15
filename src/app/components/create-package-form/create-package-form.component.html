@@ -1,52 +1,209 @@
-<div class="modal-header">
-    <div class="container-fluid">
-        <h5 class="modal-title padding-extra">{{ActionTitle}} paquete</h5>
-    </div>
-</div>
+<p-divider></p-divider>
 <div class="modal-body">
-    <div class="container-fluid">
-        <form class="needs-validation" novalidate id="form" (submit)="savePackage()" [formGroup]="formGroup">
-            <div class=" card-body d-flex">
-                <div class="w-100 p-2">
-                    <div class="row">
-                        <div class="form-group col-6">
-                            <label for="package_name" class="form-label">Nombre</label>
-                            <div class="input-group">
-                                <input type="text" id="package_name" name="name"
-                                    class="form-control formularioCampo border-left-dark" [ngClass]="
-                                        {
-                                            'invalid': formGroup.get('name').dirty && (formGroup.get('name')?.errors || validateExistingPackageName()),
-                                            'valid': formGroup.get('name').dirty && !formGroup.get('name')?.errors
-                                            && !validateExistingPackageName()
-                                        }" placeholder="Ingrese el nombre del paquete" formControlName="name" required
-                                    onkeydown="return /^[A-Za-z0-9\u00C0-\u00FF\s]+$/i.test(event.key)">
 
-                                <div class="input-group-prepend">
-                                    <span *ngIf="formGroup.get('name').errors || validateExistingPackageName()"
-                                        class="input-group-text rounded-right">
-                                        <i class="fas fa-user"></i>
-                                    </span>
-                                    <span *ngIf="!formGroup.get('name')?.errors && !validateExistingPackageName()"
-                                        class="input-group-text rounded-right">
-                                        <i class="fas fa-check"></i>
-                                    </span>
-                                </div>
+    <form class="needs-validation mt-3" novalidate id="form" (submit)="savePackage()" [formGroup]="formGroup">
+        <div class="row mb-4">
+            <div class="col-9">
+                <div>
+                    <span class="p-float-label">
+                        <input type="text" pInputText id="float-input" name="name"
+                            class="form-control formularioCampo border-left-dark" [ngClass]="
+                                                    {
+                                                        'invalid': formGroup.get('name').dirty && (formGroup.get('name')?.errors || validateExistingPackageName()),
+                                                        'valid': formGroup.get('name').dirty && !formGroup.get('name')?.errors
+                                                        && !validateExistingPackageName()
+                                                    }" formControlName="name" required
+                            onkeydown="return /^[A-Za-z0-9\u00C0-\u00FF\s]+$/i.test(event.key)">
+                        <label for="float-input">Nombre</label>
+                    </span>
+                    <div *ngIf="formGroup.get('name').errors?.['required'] && formGroup.get('name').dirty"
+                        class="invalid-feedback">
+                        *Este campo es obligatorio.
+                    </div>
+                    <div *ngIf="formGroup.get('name').errors?.['minlength'] && formGroup.get('name').dirty"
+                        class="invalid-feedback">
+                        *El nombre del paquete debe tener mínimo 8 caracteres.
+                    </div>
+                    <div *ngIf="validateExistingPackageName() && formGroup.get('name').dirty" class="invalid-feedback">
+                        *Hay un paquete con ese nombre ya está registrado.
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 pl-0 w-100">
+                <div class="field">
+                    <p-dropdown inputId="package_transportation" optionValue="label" [options]="transports"
+                        placeholder="Seleccione un transporte">
+                        <ng-template let-option pTemplate="item">
+                            <span [class]="'product-badge status-' + option.value">{{option.label}}</span>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+            </div>
 
+        </div>
+        <div class="row mb-4">
+            <div class="col-12 p-float-label">
+                <textarea class="formularioCampo" pInputTextarea required style="width: 100%; height: 100px;"
+                    id="float-input" name="details" formControlName="details" [ngClass]="
+                        {
+                            'invalid': formGroup.get('details').dirty && (formGroup.get('details')?.errors),
+                            'valid': formGroup.get('details').dirty && !formGroup.get('details')?.errors
+                        }"></textarea>
+                <label for="float-input" class="form-label pl-3">Detalles</label>
 
-                                <div *ngIf="formGroup.get('name').errors?.['required'] && formGroup.get('name').dirty"
-                                    class="invalid-feedback">
-                                    *Este campo es obligatorio.
-                                </div>
-                                <div *ngIf="formGroup.get('name').errors?.['minlength'] && formGroup.get('name').dirty"
-                                    class="invalid-feedback">
-                                    *El nombre del paquete debe tener mínimo 8 caracteres.
-                                </div>
-                                <div *ngIf="validateExistingPackageName() && formGroup.get('name').dirty"
-                                    class="invalid-feedback">
-                                    *Hay un paquete con ese nombre ya está registrado.
-                                </div>
-                            </div>
+                <div *ngIf="formGroup.get('details').errors?.['required'] && formGroup.get('details').dirty"
+                    class="invalid-feedback">
+                    *Este campo es obligatorio.
+                </div>
+                <div *ngIf="formGroup.get('details').errors?.['minlength'] && formGroup.get('details').dirty"
+                    class="invalid-feedback">
+                    *La descripción del paquete debe tener almenos 15 caracteres.
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-6">
+                <span class="p-float-label">
+                    <input type="text" pInputText id="float-input" name="destination"
+                        class="form-control formularioCampo border-left-dark" [ngClass]="
+                                                {
+                                                    'invalid': formGroup.get('destination').dirty && (formGroup.get('destination')?.errors),
+                                                    'valid': formGroup.get('destination').dirty && !formGroup.get('destination')?.errors
+                                                }" formControlName="destination" required
+                        onkeydown="return /^[A-Za-z0-9\u00C0-\u00FF\s]+$/i.test(event.key)">
+                    <label for="float-input">Destino</label>
+                </span>
+                <div *ngIf="formGroup.get('destination').errors?.['required'] && formGroup.get('destination').dirty"
+                    class="invalid-feedback">
+                    *Este campo es obligatorio.
+                </div>
+                <div *ngIf="formGroup.get('destination').errors?.['minlength'] && formGroup.get('destination').dirty"
+                    class="invalid-feedback">
+                    *El destino del paquete debe tener mínimo 8 caracteres.
+                </div>
+            </div>
+            <div class="col-6">
+                <span class="p-float-label">
+                    <input type="text" pInputText id="float-input" name="package_departure_place"
+                        formControlName="package_departure_place" class="form-control formularioCampo border-left-dark"
+                        formControlName="departurePoint" required
+                        onkeydown="return /^[A-Za-z0-9\u00C0-\u00FF\s]+$/i.test(event.key)">
+                    <label for="float-input">Lugar de salida</label>
+                </span>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-3 w-100">
+                <div class="flex flex-column field w-full p-float-label">
+                    <span class="p-input-icon-left w-full" style="height: 2.5rem;">
+                        <i class="pi pi-clock z-1" style="left: 1.5rem;"></i>
+                        <p-calendar [panelStyleClass]="'custom-calendar'" formControlName="departureDate"
+                            placeholder="Fecha de salida" showIcon="true" dateFormat="YYYY-MM-DDTHH:mm:ss"
+                            [showTime]="true" [required]="true" class="float-input" inputId="start"
+                            inputStyleClass="w-full text-900 font-semibold"
+                            [inputStyle]="{'height':'2.5rem'}"></p-calendar>
+                    </span>
+                </div>
+                <div class="invalid-feedback"
+                    *ngIf="formGroup.get('departureDate').errors && formGroup.get('departureDate').errors.fechaInvalida">
+                    *La fecha debe ser mayor que la fecha de hoy.
+                </div>
+            </div>
+            <div class="col-3 w-100">
+                <p-calendar formControlName="arrivalDate" placeholder="Fecha de regreso" showIcon="true"
+                    dateFormat="dd/mm/yy HH:mm" [showTime]="true" [required]="true"
+                    class="formularioCampo border-left-dark" [ngClass]="{
+                            'is-invalid': formGroup.get('arrivalDate').dirty && formGroup.get('arrivalDate').invalid
+                          }"></p-calendar>
+                <div class="invalid-feedback"
+                    *ngIf="formGroup.get('arrivalDate').errors?.required && formGroup.get('arrivalDate').dirty">
+                    *La fecha de regreso es requerida.
+                </div>
+                <div class="invalid-feedback" *ngIf="formGroup.get('arrivalDate').errors?.fechaInvalida">
+                    *La fecha debe ser mayor que la fecha de hoy y mayor que la fecha de salida.
+                </div>
+            </div>
+            <div class="col-6">
+                <div>
+                    <span class="p-float-label">
+                        <input type="text" pInputText id="float-input" name="package_hotel"
+                            class="form-control formularioCampo border-left-dark" formControlName="hotel" required
+                            onkeydown="return /^[A-Za-z0-9\u00C0-\u00FF\s]+$/i.test(event.key)">
+                        <label for="float-input">Hotel</label>
+                    </span>
+
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-6">
+                <div>
+                    <span class="p-float-label">
+                        <input type="number" id="float-input" name="package_quotas"
+                            class="form-control formularioCampo border-left-dark" formControlName="totalQuotas"
+                            pInputNumber [min]="15">
+                        <label for="float-input">Cupos</label>
+
+                        <div *ngIf="formGroup.get('totalQuotas').invalid && formGroup.get('totalQuotas').dirty"
+                            class="invalid-feedback">
+                            <ng-container *ngIf="formGroup.get('totalQuotas').errors?.required">*Este campo es
+                                obligatorio.</ng-container>
+
                         </div>
+                        <div *ngIf="formGroup.get('totalQuotas').invalid" class="invalid-feedback">
+                            <ng-container *ngIf="formGroup.get('totalQuotas').errors?.min">*La cantidad de cupos debe
+                                superar a
+                                15.</ng-container>
+
+                        </div>
+
+                    </span>
+                </div>
+            </div>
+            <div class="col-6">
+                <span class="p-float-label">
+                    <input type="number" id="float-input" name="package_quotas"
+                        class="form-control formularioCampo border-left-dark" formControlName="price" pInputNumber
+                        [min]="15">
+                    <label for="float-input">Precio</label>
+
+                    <div *ngIf="formGroup.get('price').invalid && formGroup.get('price').dirty"
+                        class="invalid-feedback">
+                        <ng-container *ngIf="formGroup.get('price').errors?.required">*Este campo es
+                            obligatorio.</ng-container>
+                        <ng-container *ngIf="formGroup.get('price').errors?.min">*El precio debe ser mayor a
+                            $150.000.</ng-container>
+                    </div>
+                </span>
+            </div>
+        </div>
+        <div>
+            <input type="checkbox" id="typePackage" formControlName="type" class="mr-2 mt-2">
+            <label for="typePackage">Marque esta opción si el paquete sera privado</label>
+
+        </div>
+        <div class="card-footer d-flex justify-content-end">
+            <div class="row">
+                <div class="col">
+                    <button (click)="ngOnDestroy()" type="button" id="cancelButton"
+                        class="btn btn-danger">Cancelar</button>
+                </div>
+                <div class="col">
+                    <p-button *ngIf="validForm()" icon="pi pi-check" iconPos="right" type="submit" id="saveButton"
+                        label="Guardar" class="p-button-success"></p-button>
+                    <p-button *ngIf="!validForm()" icon="pi pi-check" iconPos="right" type="submit" id="saveButton"
+                        label="Guardar" class="p-button-secondary" [disabled]="true"></p-button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+</div>
+
+
+
+<!-- <div class="row">
 
                         <div class="form-group col-6">
                             <label for="package_transportation" class="form-label">Transporte</label>
@@ -69,210 +226,4 @@
                         </div>
 
 
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-12">
-                            <label for="package_details" class="form-label">Detalles</label>
-                            <textarea class="form-control formularioCampo border-left-dark"
-                                placeholder="Escriba la descripción del paquete acá" style="height: 100px" required
-                                id="package_details" name="details" formControlName="details" [ngClass]="
-                                {
-                                    'invalid': formGroup.get('details').dirty && (formGroup.get('details')?.errors),
-                                    'valid': formGroup.get('details').dirty && !formGroup.get('details')?.errors
-                                }"></textarea>
-
-                            <div *ngIf="formGroup.get('details').errors?.['required'] && formGroup.get('details').dirty"
-                                class="invalid-feedback">
-                                *Este campo es obligatorio.
-                            </div>
-                            <div *ngIf="formGroup.get('details').errors?.['minlength'] && formGroup.get('details').dirty"
-                                class="invalid-feedback">
-                                *La descripción del paquete debe tener almenos 15 caracteres.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-4">
-                            <label for="package_destiny" class="form-label">Destino</label>
-                            <div class="input-group">
-                                <input type="text" id="package_destiny" name="destination"
-                                    class="form-control formularioCampo border-left-dark"
-                                    placeholder="Ingrese el destino del paquete" formControlName="destination"
-                                    [ngClass]="
-                                    {
-                                        'invalid': formGroup.get('destination').dirty && (formGroup.get('destination')?.errors),
-                                        'valid': formGroup.get('destination').dirty && !formGroup.get('destination')?.errors
-                                        && !validateExistingPackageName()
-                                    }">
-                                <div class="input-group-prepend">
-                                    <span *ngIf="formGroup.get('destination').errors"
-                                        class="input-group-text rounded-right">
-                                        <i class="fas fa-user"></i>
-                                    </span>
-                                    <span *ngIf="!formGroup.get('destination')?.errors"
-                                        class="input-group-text rounded-right">
-                                        <i class="fas fa-check"></i>
-                                    </span>
-                                </div>
-
-                                <div *ngIf="formGroup.get('destination').errors?.['required'] && formGroup.get('destination').dirty"
-                                    class="invalid-feedback">
-                                    *Este campo es obligatorio.
-                                </div>
-                                <div *ngIf="formGroup.get('destination').errors?.['minlength'] && formGroup.get('destination').dirty"
-                                    class="invalid-feedback">
-                                    *El destino del paquete debe tener mínimo 8 caracteres.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-4">
-                            <label for="package_departure_place" class="form-label">Lugar de salida</label>
-                            <div class="input-group">
-                                <input type="text" id="package_departure_place" name="package_departure_place"
-                                    class="form-control formularioCampo border-left-dark"
-                                    placeholder="Ingrese el lugar de encuentro" formControlName="departurePoint">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text rounded-right"><i
-                                            class="fas fa-location-arrow"></i></span>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="form-group col-4">
-                            <label for="package_hotel" class="form-label">Hotel</label>
-                            <div class="input-group">
-                                <input type="text" id="package_hotel" name="package_hotel"
-                                    class="form-control formularioCampo border-left-dark"
-                                    placeholder="Ingrese el nombre del hotel" formControlName="hotel">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text rounded-right"><i class="fa fa-hotel"></i></span>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-3">
-                            <label for="package_departure_date" class="form-label">Fecha de salida</label>
-                            <div class="input-group">
-                                <input type="datetime-local" id="package_departure_date" name="package_departure_date"
-                                    class="form-control formularioCampo border-left-dark"
-                                    formControlName="departureDate" [ngClass]="
-                                    {
-                                        'invalid': formGroup.get('departureDate').dirty && (formGroup.get('departureDate')?.errors),
-                                        'valid': formGroup.get('departureDate').dirty && !formGroup.get('departureDate')?.errors
-                                    }">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text rounded-right"><i
-                                            class="fas fa-calendar-day"></i></span>
-                                </div>
-                                <div class="invalid-feedback"
-                                    *ngIf="formGroup.get('departureDate').errors && formGroup.get('departureDate').errors.fechaInvalida">
-                                    *La fecha debe ser mayor que la fecha de hoy.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-3">
-                            <label for="package_return_date" class="form-label">Fecha de regreso</label>
-                            <div class="input-group">
-                                <input type="datetime-local" id="package_return_date" name="package_return_date"
-                                    class="form-control formularioCampo border-left-dark" formControlName="arrivalDate"
-                                    [ngClass]="
-                                    {
-                                        'invalid': formGroup.get('arrivalDate').dirty && (formGroup.get('arrivalDate')?.errors),
-                                        'valid': formGroup.get('arrivalDate').dirty && !formGroup.get('arrivalDate')?.errors
-                                    }">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text rounded-right"><i
-                                            class="fas fa-calendar-week"></i></span>
-                                </div>
-                                <div class="invalid-feedback"
-                                    *ngIf="formGroup.get('arrivalDate').errors && formGroup.get('arrivalDate').errors.fechaInvalida">
-                                    *La fecha debe ser mayor que la fecha de hoy y mayor que la fecha de salida.
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="form-group col-3">
-                            <label for="package_quotas" class="form-label">Cupos</label>
-                            <div class="input-group">
-                                <input type="number" id="package_quotas" name="package_quotas"
-                                    class="form-control formularioCampo border-left-dark"
-                                    placeholder="Ingrese el número de cupos" formControlName="totalQuotas">
-                                <div class="input-group-prepend">
-                                    <span *ngIf="formGroup.get('totalQuotas').errors"
-                                        class="input-group-text rounded-right">
-                                        <i class="fas fa-user"></i>
-                                    </span>
-                                    <span *ngIf="!formGroup.get('totalQuotas')?.errors"
-                                        class="input-group-text rounded-right">
-                                        <i class="fas fa-check"></i>
-                                    </span>
-                                </div>
-
-                                <div *ngIf="formGroup.get('totalQuotas').errors?.['required'] && formGroup.get('totalQuotas').dirty"
-                                    class="invalid-feedback">
-                                    *Este campo es obligatorio.
-                                </div>
-                                <div *ngIf="formGroup.get('totalQuotas').errors?.['min'] && formGroup.get('totalQuotas').dirty"
-                                    class="invalid-feedback">
-                                    *La cantidad de cupos debe superar a 15
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-3">
-                            <label for="package_price" class="form-label">Precio</label>
-                            <div class="input-group">
-                                <input type="number" id="package_price" name="package_price"
-                                    class="form-control formularioCampo border-left-dark"
-                                    placeholder="Precio del paquete" formControlName="price" [ngClass]="
-                                {
-                                    'invalid': formGroup.get('price').dirty && (formGroup.get('price')?.errors),
-                                    'valid': formGroup.get('price').dirty && !formGroup.get('price')?.errors
-                                }">
-                                <div class="input-group-prepend">
-                                    <span *ngIf="formGroup.get('price').errors" class="input-group-text rounded-right">
-                                        <i class="fas fa-user"></i>
-                                    </span>
-                                    <span *ngIf="!formGroup.get('price')?.errors"
-                                        class="input-group-text rounded-right">
-                                        <i class="fas fa-check"></i>
-                                    </span>
-                                </div>
-
-                                <div *ngIf="formGroup.get('price').errors?.['required'] && formGroup.get('price').dirty"
-                                    class="invalid-feedback">
-                                    *Este campo es obligatorio.
-                                </div>
-                                <div *ngIf="formGroup.get('price').errors?.['min'] && formGroup.get('price').dirty"
-                                    class="invalid-feedback">
-                                    *El precio del paquete debe superar almenos los $60.000
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="typePackage" formControlName="type"  class="mr-2 mt-2">
-                        <label for="typePackage">Marque esta opción si el paquete sera privado</label>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer d-flex justify-content-end">
-                <div class="row">
-                    <div class="col">
-                        <button (click)="cancel()" type="button" id="cancelButton"
-                            class="btn btn-danger">Cancelar</button>
-                    </div>
-                    <div class="col">
-                        <button *ngIf="validForm()" type="submit" id="saveButton"
-                            class="btn btn-success">Guardar</button>
-                        <button *ngIf="!validForm()" type="submit" id="saveButton" class="btn btn-secondary"
-                            disabled>Guardar</button>
-                    </div>
-                </div>
-            </div>
-
-        </form>
-    </div>
-</div>
+                    </div> -->

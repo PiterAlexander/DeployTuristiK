@@ -8,6 +8,8 @@ import { Package } from '@/models/package';
 import { UiState } from '@/store/ui/state';
 import { Observable } from 'rxjs';
 import { ApiService } from '@services/api.service';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-create-package-form',
@@ -23,16 +25,17 @@ export class CreatePackageFormComponent implements OnInit {
   public packageData
   public allPackages: Array<any>
   selectedDestiny: any;
+  transports: any[] = [];
+  selectedDate: Date;
 
 
-
-  constructor(private fb: FormBuilder, private modalService: NgbModal, private store: Store<AppState>, private service: ApiService) { }
-  public handleDestinationChange(destination: any) {
-    this.selectedDestiny = destination.formatted_address;
-  }
-
+  constructor(private fb: FormBuilder, private modalService: NgbModal, private store: Store<AppState>, private service: ApiService, private messageService: MessageService) { }
+ 
   ngOnInit(): void {
-
+    this.transports = [
+      { label: 'Aereo', value: '1' },
+      { label: 'Terrestre', value: '2' },
+  ];
     this.formGroup = this.fb.group({
       name: [null, [Validators.required, Validators.minLength(8)]],//
       destination: [null, [Validators.required, Validators.minLength(8)]],//
@@ -73,7 +76,13 @@ export class CreatePackageFormComponent implements OnInit {
       })
     }
   }
+  ref: DynamicDialogRef;
 
+  ngOnDestroy() {
+    if (this.ref) {
+        this.ref.close;
+    }
+}
 
   savePackage() {
     if (this.formGroup.invalid) {
@@ -120,6 +129,7 @@ export class CreatePackageFormComponent implements OnInit {
       }
     }
   }
+
   validForm(): boolean {
     if (this.packageData == null) {
       return this.formGroup.valid
@@ -133,7 +143,6 @@ export class CreatePackageFormComponent implements OnInit {
             && item.roleId !== this.packageData.roleId)
     }
   }
-
 
   validateExistingPackageName(): boolean {
     if (this.packageData == null) {
@@ -170,11 +179,6 @@ export class CreatePackageFormComponent implements OnInit {
     }
 
     return null;
-  }
-
-
-  cancel() {
-    this.modalService.dismissAll();
   }
 
   get departureDate() {

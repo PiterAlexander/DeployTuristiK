@@ -1,3 +1,8 @@
+@import 'https://cdn.jsdelivr.net/npm/primeng@14.0.0/resources/themes/saga-blue/theme.css';
+@import 'https://cdn.jsdelivr.net/npm/primeng@14.0.0/resources/primeng.min.css';
+@import 'https://cdn.jsdelivr.net/npm/primeicons@4.1.0/primeicons.css';
+
+
 .footer {
     border-top: 0px !important;
 }
@@ -42,4 +47,9 @@ form input:required {
 
 .form-control.valid:focus {
     box-shadow: 0 0 0 0.20rem rgba(25, 135, 84, .25);
+}
+
+.custom-calendar {
+    width: 100px;
+    height: 100px;
 }

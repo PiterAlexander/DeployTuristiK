@@ -7,6 +7,9 @@ import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { Costumer } from '@/models/costumer';
 import Swal from 'sweetalert2';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { CreatePackageFormComponent } from '@components/create-package-form/create-package-form.component';
+
 
 interface State {
   page: number;
@@ -16,7 +19,8 @@ interface State {
 @Component({
   selector: 'app-packages',
   templateUrl: './packages.component.html',
-  styleUrls: ['./packages.component.scss']
+  styleUrls: ['./packages.component.scss'],
+  providers: [DialogService]
 })
 export class PackagesComponent implements OnInit {
   public ui: Observable<UiState>;
@@ -35,8 +39,9 @@ export class PackagesComponent implements OnInit {
   public user;
   public allCostumers: Array<Costumer>
 
-  constructor(private store: Store<AppState>) { }
 
+  checked2: boolean = true;
+  constructor(private store: Store<AppState>, public dialogService: DialogService) { }
   ngOnInit() {
     this.store.dispatch(new GetAllPackagesRequest());
     this.store.dispatch(new GetAllCostumerRequest())
@@ -57,8 +62,27 @@ export class PackagesComponent implements OnInit {
     );
   }
 
-  openModalCreatePackage(pack?: Package) {
-    this.store.dispatch(new OpenModalCreatePackage());
+
+  // show() {
+  //   const ref = this.dialogService.open(CreatePackageFormComponent, {
+  //     width: '70%'
+  //   });
+  // }
+  ref: DynamicDialogRef;
+  show() {
+    this.ref = this.dialogService.open(CreatePackageFormComponent, {
+      header: 'Agregar paquete',
+      width: '50%',
+      contentStyle: { "max-height": "1000px", "overflow": "auto" },
+      baseZIndex: 10000
+    });
+
+  }
+
+  ngOnDestroy() {
+    if (this.ref) {
+      this.ref.close();
+    }
   }
 
 
@@ -83,24 +107,24 @@ export class PackagesComponent implements OnInit {
       this.filteredPackagesList = this.filteredPackagesList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
     }
   }
-  disablePackage(pack:Package){
+  disablePackage(pack: Package) {
     var text1 = ""
     var text2 = ""
-    if(pack.status){
+    if (pack.status) {
       text1 = "inhabilitar"
       text2 = "Inhabilitado"
-    }else{
+    } else {
       text1 = "habilitar"
       text2 = "Habilitado"
     }
     Swal.fire({
-      title: '¿Estás seguro de '+text1+' el paquete '+pack.name+'?',
+      title: '¿Estás seguro de ' + text1 + ' el paquete ' + pack.name + '?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       cancelButtonText: 'Cancelar',
-      confirmButtonText: 'Si, '+text1,
+      confirmButtonText: 'Si, ' + text1,
       reverseButtons: true,
       customClass: {
         confirmButton: 'swal2-confirm-right',

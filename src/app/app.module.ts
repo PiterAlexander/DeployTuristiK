@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from '@/app-routing.module';
 import { AppComponent } from './app.component';
@@ -52,8 +52,31 @@ import { CreateFrequentTravelerFormComponent } from './components/create-frequen
 import { ListFrequentTravelerComponent } from './components/list-frequent-traveler/list-frequent-traveler.component';
 import { EditPaymentFormComponent } from './components/edit-payment-form/edit-payment-form.component';
 import { ListFrequentTravelersToOrdersComponent } from './components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
-
-defineCustomElements();
+import { DataViewModule } from 'primeng/dataview';
+import { TableModule } from 'primeng/table';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { CommonModule } from '@angular/common';
+import { ToastModule } from 'primeng/toast';
+import { ToolbarModule } from 'primeng/toolbar';
+import { FileUploadModule } from 'primeng/fileupload';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { RatingModule } from 'primeng/rating';
+import { DialogModule } from 'primeng/dialog';
+import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import { DialogService } from 'primeng/dynamicdialog';
+import { OrderListModule } from 'primeng/orderlist';
+import {TooltipModule} from 'primeng/tooltip';
+import {InputSwitchModule} from 'primeng/inputswitch';
+import {CascadeSelectModule} from 'primeng/cascadeselect';
+import { CalendarModule } from 'primeng/calendar';
+import { MessageService } from 'primeng/api';
+import {DividerModule} from 'primeng/divider';
+    defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
 
 @NgModule({
@@ -98,6 +121,28 @@ registerLocaleData(localeEn, 'en-EN');
         ListFrequentTravelersToOrdersComponent
     ],
     imports: [
+        DividerModule,
+        CalendarModule,
+        CascadeSelectModule,
+        InputSwitchModule,
+        TooltipModule,
+        OrderListModule,
+        DialogModule,
+        DynamicDialogModule,
+        DropdownModule,
+        InputTextModule,
+        InputTextareaModule,
+        RadioButtonModule,
+        InputNumberModule,
+        RatingModule,
+        DialogModule,
+        CommonModule,
+        ToastModule,
+        ToolbarModule,
+        FileUploadModule,
+        ButtonModule,
+        CardModule,
+        DataViewModule,
         BrowserModule,
         StoreModule.forRoot({ auth: authReducer, ui: uiReducer }),
         EffectsModule.forRoot([PackageEffects]),
@@ -112,9 +157,11 @@ registerLocaleData(localeEn, 'en-EN');
         }),
         ProfabricComponentsModule,
         NgbModule,
-        FormsModule
+        FormsModule,
+        TableModule
     ],
-    providers: [],
-    bootstrap: [AppComponent]
+    providers: [DialogService, MessageService],
+    bootstrap: [AppComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }
