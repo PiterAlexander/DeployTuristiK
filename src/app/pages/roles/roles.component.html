@@ -1,75 +1,79 @@
-<!--
 <!--Aquí se despliegan los mensajes de exito o error segun sea el caso-->
 <p-toast key="alert-message"></p-toast>
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
-<div class="content-header">
-  <div class="container-fluid">
-      <div class="row m-3">
-          <div class="card card-package w-100">
-            <div class="card-header card-package-header d-flex justify-content-between">
-              <div class="col-sm-10 col-personalized-2">
-                  <h1 class="m-0 text-dark">Roles</h1>
+<div class="col-12">
+  <div class="card px-6 py-6 p-4 m-5" style="border-radius: 15px;">
+    <p-table #dt [value]="roleList" [rows]="5" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10]"
+    [loading]="loading" [paginator]="true"
+    currentPageReportTemplate="Desde {first} hasta {last} de {totalRecords} roles"
+    [globalFilterFields]="['name']">
+        <ng-template pTemplate="caption" class="p-grid">
+          <div class="custom-flex-container flex justify-content-between">
+              <div class="custom-flex-item-left">
+                  <span class="mt-2 md:mt-0 p-input-icon-right">
+                      <i class="pi pi-search"></i>
+                      <input pInputText  (input)="dt.filterGlobal($event.target.value, 'contains')" type="text" placeholder="Buscar..." />
+                  </span>
               </div>
-              <div class="col-sm-2 p-0 d-flex justify-content-end">
-                  <button (click)="openCreateRoleModal()" type="button" class="btn btn-primary">Agregar
-                      Role</button>
-                    <!-- <button (click)="openModal()" type="button" class="btn btn-primary">
-                      primeng
-                    </button> -->
+              <div class="custom-flex-item-right">
+                  <button pButton type="button" label="Agregar Role" (click)="openCreateRoleModal()"
+                      class="p-button-outlined"><i class="pi pi-plus"
+                          style="margin-left: 5px; margin-right: 9px;"></i></button>
               </div>
-            </div>
-            <div class="card-body">
-                <div *ngIf="loading" class="d-flex justify-content-center">
-                    <div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
-                        <span class="visually-hidden"></span>
-                    </div>
-                </div>
-                <form *ngIf="!loading">
-                    <div class="d-flex justify-content-end mb-3 row">
-                        <label for="table-complete-search" class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
-                        <div class="col-xs-3 col-sm-auto">
-                            <input id="table-complete-search" type="text" class="form-control" name="searchTerm" [(ngModel)]="search" (ngModelChange)="searchByName()" maxlength="100"/>
-                        </div>
-                    </div>
-
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">Nombre</th>
-                                <th scope="col" sortable="name">Estado</th>
-                                <th scope="col" sortable="population">Editar</th>
-                                <th scope="col" sortable="population">Eliminar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let role of filteredRolesList">
-                              <td>{{role.name}}</td>
-                              <td>
-                                  <span *ngIf="role.status === 1">Habilitado</span>
-                                  <span *ngIf="role.status !== 1">Deshabilitado</span>
-                              </td>
-                              <td>
-                                  <i class="fas fa-edit text-dark" (click)="openEditRoleModal(role)" style="cursor: pointer">
-
-                                  </i>
-                              </td>
-                              <td>
-                                <i *ngIf="role.name !== 'Administrador' && role.name !== 'Beneficiario' &&
-                                role.name !== 'Cliente' && role.name !== 'Empleado'" class="fas fa-trash text-dark" (click)="deleteRole(role)" style="cursor: pointer"></i>
-                              </td>
-                          </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="d-flex justify-content-end pt-3">
-                        <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize">
-                        </ngb-pagination>
-                    </div>
-                </form>
-
-            </div>
           </div>
-      </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+              <th style="width: 5rem">
+                  <div class="flex justify-content-left align-items-left">
+                      Nombre
+                  </div>
+              </th>
+              <th style="width: 5rem">
+                <div class="flex justify-content-center align-items-center">
+                    Estado
+                </div>
+              </th>
+              <th style="width: 5rem">
+                  <div class="flex justify-content-center align-items-center">
+                      Acciones
+                  </div>
+              </th>
+          </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-role>
+        <tr>
+            <td>
+                {{ role.name }}
+            </td>
+            <td class="text-center">
+                <div *ngIf="role.status !== 1">
+                    Habilitado
+                </div>
+                <div *ngIf="role.status === 1">
+                    Deshabilitado
+                </div>
+            </td>
+            <td class="text-center p-1">
+                <button pButton type="button" icon="pi pi-pencil"
+                    class="p-button-outlined p-button-warning p-button-rounded m-1" (click)="openEditRoleModal(role)" pTooltip="Editar"
+                    tooltipPosition="bottom"></button>
+                <button
+                *ngIf="role.name !== 'Administrador' && role.name !== 'Beneficiario' &&
+                                role.name !== 'Cliente' && role.name !== 'Empleado'"
+                pButton type="button" icon="pi pi-trash"
+                    class="p-button-outlined p-button-rounded m-1 p-button-danger" pTooltip="Ver detalles"  (click)="deleteRole(role)"
+                    tooltipPosition="bottom"></button>
+            </td>
+
+        </tr>
+    </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="9">No se encontraron roles</td>
+        </tr>
+      </ng-template>
+    </p-table>
   </div>
 </div>
-
