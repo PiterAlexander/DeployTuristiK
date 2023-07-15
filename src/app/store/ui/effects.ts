@@ -33,6 +33,7 @@ import {
     ChangeStatusPackageRequest,
     ChangeStatusPackageSuccess,
     ChangeStatusPackageFailure,
+    OpenModalCreatePackage,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -55,9 +56,9 @@ import { CreateFrequentTravelerFormComponent } from '@components/create-frequent
 import { EditPaymentFormComponent } from '@components/edit-payment-form/edit-payment-form.component';
 import { CreatecustomerformComponent } from '@components/create-customer-form/create-customer-form.component';
 import { ListFrequentTravelersToOrdersComponent } from '@components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 //<--------PRIMENG----------->
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
 
 @Injectable()
@@ -80,16 +81,31 @@ export class PackageEffects {
         })
     ));
 
+    // openModalCreatePackage$ = createEffect(() =>
+    //     this.actions$.pipe(
+    //         ofType(packageActions.OPEN_MODAL_CREATE_PACKAGE),
+    //         tap((action) => {
+    //             this.modalRef = this.modalService.open(CreatePackageFormComponent, {
+    //                 backdrop: false,
+    //                 size: 'xl'
+    //             });
+    //         })
+    //     ), { dispatch: false });
+
     openModalCreatePackage$ = createEffect(() =>
         this.actions$.pipe(
             ofType(packageActions.OPEN_MODAL_CREATE_PACKAGE),
-            tap((action) => {
-                this.modalRef = this.modalService.open(CreatePackageFormComponent, {
-                    backdrop: false,
-                    size: 'xl'
+            tap((action: OpenModalCreatePackage) => {
+                const ref = this.dialogService.open(CreatePackageFormComponent, {
+                    showHeader: false,
+                    width: '50%',
+                    contentStyle: { 'max-height': '800px', overflow: 'auto', padding: '0px 50px 0px 50px' },
+                    baseZIndex: 10000,
+                    data: action.payload // Pasar datos opcionales a la modal desde la acción
                 });
             })
-        ), { dispatch: false });
+        ), { dispatch: false }
+    );
 
     openModalDetailsPackage$ = createEffect(() =>
         this.actions$.pipe(
@@ -103,6 +119,7 @@ export class PackageEffects {
         ), { dispatch: false });
 
 
+
     createPackage$ = createEffect(() => this.actions$.pipe(
         ofType(packageActions.CREATE_PACKAGE_REQUEST),
         map((action: CreatePackageRequest) => action.payload),
@@ -110,7 +127,8 @@ export class PackageEffects {
             return this.apiService.addPackage(pack).pipe(
 
                 mergeMap((packageResolved) => {
-                    this.modalRef.close();
+                    this.dialogRef.close()
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Rol creado exitosamente.' });
                     window.location.reload()
                     return [
                         new CreatePackageSuccess(packageResolved),
@@ -121,7 +139,6 @@ export class PackageEffects {
             )
         })
     ));
-
     editPackage$ = createEffect(() => this.actions$.pipe(
         ofType(packageActions.EDIT_PACKAGE_REQUEST),
         map((action: EditPackageRequest) => action.payload),
@@ -637,6 +654,7 @@ export class PackageEffects {
                 mergeMap((employeeResolved) => {
                     return [
                         new DeleteEmployeeSuccess(employeeResolved),
+                        new GetAllEmployeeRequest(),
                     ];
                 }),
                 catchError((err) => of(new DeleteEmployeeFailure(err)))

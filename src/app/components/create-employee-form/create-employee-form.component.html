@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-4">
+                        <div class="form-group {{ ActionTitle !== 'Editar' ? 'col-4' : 'col-6' }}">
                             <label for="document" class="form-label">Documento</label>
                             <div class="input-group">
                                 <input type="text" id="document" name="document" placeholder="Número de documento"
@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-4">
+                        <div class="form-group {{ ActionTitle !== 'Editar' ? 'col-4' : 'col-6' }}">
                             <label for="phoneNumber" class="form-label">Número de teléfono</label>
                             <div class="input-group">
                                 <input type="text" id="phoneNumber" name="phoneNumber"
@@ -98,7 +98,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-4">
+                        <div *ngIf="ActionTitle !== 'Editar'"class="form-group col-4">
                             <label for="userName" class="form-label">Nombre de usuario</label>
                             <div class="input-group">
                                 <input type="text" id="userName" name="userName"
@@ -123,7 +123,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div *ngIf="ActionTitle !== 'Editar'" class="row">
                         <div class="form-group col-6">
                             <label for="email" class="form-label">Correo</label>
                             <div class="input-group">
@@ -136,10 +136,10 @@
                                     class="invalid-feedback">
                                     *El campo es requerido.
                                 </div>
-                                <!-- <div *ngIf="formGroup.get('email').dirty && validateExistingEmail()"
+                                <div *ngIf="formGroup.get('email').dirty && validateExistingEmail()"
                                     class="invalid-feedback">
                                     *El correo ya existe
-                                </div> -->
+                                </div>
                                 <div *ngIf="formGroup.get('email')?.errors?.['pattern'] && formGroup.get('email').dirty"
                                     class="invalid-feedback">
                                     *Ingrese un correo valido.
@@ -155,7 +155,7 @@
                                 <div class="input-group-prepend">
                                     <span (click)="displayPassword()" class="input-group-text rounded-right"><i
                                             class="fa"
-                                            [ngClass]="{'fa-eye': Visible, 'fa-eye-slash': !Visible}"></i></span>
+                                            [ngClass]="{'fa-eye': Visible, 'fa-eye-slash': !Visible}" style="cursor: pointer"></i></span>
                                 </div>
                                 <div *ngIf="formGroup.get('password')?.errors?.['required'] && formGroup.get('password').dirty"
                                     class="invalid-feedback">

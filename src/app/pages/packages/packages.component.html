@@ -1,235 +1,232 @@
-<ng-container *ngIf="role!=='Cliente'">
-  <div class="content-header">
-    <div class="container-fluid">
-        <div class="row m-3">
-            <div class="card card-package">
-                <div class="card-header card-package-header">
-                    <div class="col-sm-9 col-personalized-1">
-                        <h1 class="m-0 text-dark">Paquetes</h1>
-                    </div>
-                    <div class="col-sm-3 col-personalized-2">
-                        <button (click)="openModalCreatePackage()" type="button" class="btn btn-primary">Agregar
-                            paquete</button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div *ngIf="loading" class="d-flex justify-content-center">
-                        <div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
-                            <span class="visually-hidden"></span>
-                        </div>
-                    </div>
-                    <form *ngIf="!loading">
-                        <div class="d-flex justify-content-end mb-3 row">
-                            <label for="table-complete-search"
-                                class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
-                            <div class="col-xs-3 col-sm-auto">
-                                <input id="table-complete-search" type="text" class="form-control" name="searchTerm"
-                                    [(ngModel)]="search" (ngModelChange)="searchByName()" />
-                            </div>
-                        </div>
-
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col">Destino</th>
-                                    <th scope="col">Fecha de salida</th>
-                                    <th scope="col">Fecha de regreso</th>
-                                    <th scope="col">Cupos disponibles</th>
-                                    <th scope="col">Precio</th>
-                                    <th scope="col">Información</th>
-                                    <th scope="col">Estado</th>
-                                    <th scope="col">Editar</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let pack of filteredPackagesList">
-                                    <td>{{pack.name}}</td>
-                                    <td>{{pack.destination}}</td>
-                                    <td>{{pack.departureDate | date}}</td>
-                                    <td>{{pack.arrivalDate | date}}</td>
-                                    <td>{{pack.availableQuotas }}</td>
-                                    <td>{{pack.price | currency:'COP '}}</td>
-
-
-                                    <td class="infoData">
-                                        <button (click)="modalShowDetailsPackage(pack)"
-                                            class="hover-text btn btn-outline-secondary"><i style="cursor: pointer; display: grid;"
-                                            style="font-size: 100%" class="fas fa-eye"></i>
-                                            <span class="tooltip-text bottom">Ver detalles</span>
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <button  *ngIf="pack.status === false" type="button"  style="width: 100%" class="hover-text btn btn-outline-danger" (click)="disablePackage(pack)">
-                                        
-                                            <span><i class="fa fa-toggle-off" style="font-size: 100%"
-                                                    aria-hidden="true"></i></span>
-                                        </button>
-                                        <button type="button" *ngIf="pack.status === true" style="width: 100%" class="hover-text btn btn-outline-success" (click)="disablePackage(pack)">
-                                                <span >
-                                                    <i class="fa fa-toggle-on"  style="width: 70%" aria-hidden="true"></i></span>
-                                        </button>
-                                    </td>
-                                    <td class="infoData">
-                                        <button  (click)="openEditPackageModal(pack)"
-                                            class="hover-text btn btn-outline-primary"><i style="cursor: pointer; display: grid;"
-                                                class="fas fa-edit" style="font-size: 100%"></i>
-                                            <span class="tooltip-text bottom">Editar paquete</span>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <div class="d-flex justify-content-end pt-3">
-                            <ngb-pagination [collectionSize]="total" [(page)]="page"
-                                [pageSize]="pageSize"></ngb-pagination>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</ng-container>
-
-
-
 <ng-container *ngIf="role==='Cliente'">
     <br><br>
-  <div class="container">
-
-
-    <div class="text-initial">
-        <p class="title">Explora nuestros <span class="span-title">paquetes</span></p>
-    </div>
-
-</div>
-
-<div class="container">
-
-    <div class="buttons-content">
-        <div class="row">
-            <div class="col-3 btn-edit-style"><button type="button" style="text-align: start; display: flex;"
-                    class="btn btn-outline-dark w-100 h-100 "><span class="textButton"
-                        style="width: 95%;">Lugares</span><i style="width: 5%;"
-                        class="textButton icon-style far fa-map"></i></button></div>
-            <div class="col-3 btn-edit-style"><button type="button" style="text-align: start; display: flex;"
-                    class="btn btn-outline-dark w-100 h-100 "><span class="textButton"
-                        style="width: 95%;">Fechas</span><i style="width: 5%;"
-                        class="textButton icon-style far fa-calendar-alt"></i></button></div>
-            <div class="col-3 btn-edit-style"><button type="button" style="text-align: start; display: flex;"
-                    class="btn btn-outline-dark w-100 h-100 "><span class="textButton" style="width: 95%;">Cosas que
-                        hacer</span><i style="width: 5%;" class="textButton icon-style fas fa-route"></i></button></div>
-            <div class="col-3 btn-edit-style"><button type="button" style="text-align: start; display: flex;"
-                    class="btn btn-outline-dark w-100 h-100 "><span class="textButton"
-                        style="width: 95%;">Vuelos</span><i style="width: 5%;"
-                        class="textButton icon-style fa fa-plane"></i></button></div>
+    <div class="container">
+        <div class="text-initial">
+            <p class="title">Explora nuestros <span class="span-title">paquetes</span></p>
         </div>
     </div>
-    <!--
-    <div class="container-fluid">
-        <div class="row p-4">
-            <div class="col-3 w-100 h-100">
-                <div class="img-volante p-0 m-0 h-100 w-100"  style="height: 300px;">
-                    <img class="w-100 h-100 " src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/italian-tour-packages-flyer-template-design-e038c5b1a6a0f5acaf69bb87a66705c0_screen.jpg?ts=1636996851" alt="">
+    <div class="container">
+        <div class="buttons-content">
+            <div class="row">
+                <div class="col-3 btn-edit-style"><button type="button" style="text-align: start; display: flex;"
+                        class="btn btn-outline-dark w-100 h-100 "><span class="textButton"
+                            style="width: 95%;">Lugares</span><i style="width: 5%;"
+                            class="textButton icon-style far fa-map"></i></button></div>
+                <div class="col-3 btn-edit-style"><button type="button" style="text-align: start; display: flex;"
+                        class="btn btn-outline-dark w-100 h-100 "><span class="textButton"
+                            style="width: 95%;">Fechas</span><i style="width: 5%;"
+                            class="textButton icon-style far fa-calendar-alt"></i></button></div>
+                <div class="col-3 btn-edit-style"><button type="button" style="text-align: start; display: flex;"
+                        class="btn btn-outline-dark w-100 h-100 "><span class="textButton" style="width: 95%;">Cosas que
+                            hacer</span><i style="width: 5%;" class="textButton icon-style fas fa-route"></i></button>
                 </div>
-            </div>
-            <div class="col-3 w-100 h-100">
-                <div class="img-volante p-0 m-0"  style="height: 300px;">
-                    <img class="w-100 h-100 " src="https://marketplace.canva.com/EAFGLLP0Yx8/1/0/1236w/canva-volante-agencia-de-viajes-promocion-paquetes-organico-blanco-y-verde-JpUSxwW_WFU.jpg" alt="">
-                </div>
-            </div>
-            <div class="col-6 w-100 h-100">
-                <div class=" img-volante p-0 m-0"  style="height: 300px;">
-                    <img class="w-100 h-100" src="https://4.bp.blogspot.com/-RzHl_hmuel8/VVN9c-e3j_I/AAAAAAAABE4/LYlbOABXwGM/s1600/Volantes%2Bmuestra%2B%2B1.jpg" alt="">
-                </div>
+                <div class="col-3 btn-edit-style"><button type="button" style="text-align: start; display: flex;"
+                        class="btn btn-outline-dark w-100 h-100 "><span class="textButton"
+                            style="width: 95%;">Vuelos</span><i style="width: 5%;"
+                            class="textButton icon-style fa fa-plane"></i></button></div>
             </div>
         </div>
-    </div> -->
+        <div>
+            <div class="parallax m-4 border border-radius-1">
 
-
-    <!-- Container element -->
-
-    <div>
-    <div class="parallax m-4 border border-radius-1" >
-
-    <div class="container-fluid">
-        <div class="row p-4">
-            <div class="col-3 w-100 h-100">
-                <div class="img-volante p-0 m-0 h-100 w-100"  style="height: 300px;">
-                    <img class="w-100 h-100 " src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/italian-tour-packages-flyer-template-design-e038c5b1a6a0f5acaf69bb87a66705c0_screen.jpg?ts=1636996851" alt="">
+                <div class="container-fluid">
+                    <div class="row p-4">
+                        <div class="col-3 w-100 h-100">
+                            <div class="img-volante p-0 m-0 h-100 w-100" style="height: 300px;">
+                                <img class="w-100 h-100 "
+                                    src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/italian-tour-packages-flyer-template-design-e038c5b1a6a0f5acaf69bb87a66705c0_screen.jpg?ts=1636996851"
+                                    alt="">
+                            </div>
+                        </div>
+                        <div class="col-3 w-100 h-100">
+                            <div class="img-volante p-0 m-0" style="height: 300px;">
+                                <img class="w-100 h-100 "
+                                    src="https://marketplace.canva.com/EAFGLLP0Yx8/1/0/1236w/canva-volante-agencia-de-viajes-promocion-paquetes-organico-blanco-y-verde-JpUSxwW_WFU.jpg"
+                                    alt="">
+                            </div>
+                        </div>
+                        <div class="col-6 w-100 h-100">
+                            <div class=" img-volante p-0 m-0" style="height: 300px;">
+                                <img class="w-100 h-100"
+                                    src="https://4.bp.blogspot.com/-RzHl_hmuel8/VVN9c-e3j_I/AAAAAAAABE4/LYlbOABXwGM/s1600/Volantes%2Bmuestra%2B%2B1.jpg"
+                                    alt="">
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
-            <div class="col-3 w-100 h-100">
-                <div class="img-volante p-0 m-0"  style="height: 300px;">
-                    <img class="w-100 h-100 " src="https://marketplace.canva.com/EAFGLLP0Yx8/1/0/1236w/canva-volante-agencia-de-viajes-promocion-paquetes-organico-blanco-y-verde-JpUSxwW_WFU.jpg" alt="">
-                </div>
-            </div>
-            <div class="col-6 w-100 h-100">
-                <div class=" img-volante p-0 m-0"  style="height: 300px;">
-                    <img class="w-100 h-100" src="https://4.bp.blogspot.com/-RzHl_hmuel8/VVN9c-e3j_I/AAAAAAAABE4/LYlbOABXwGM/s1600/Volantes%2Bmuestra%2B%2B1.jpg" alt="">
+        </div>
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-3 row-cols-xl-3 justify-content-center">
+                <div class="col mb-5" *ngFor="let pack of filteredPackagesList">
+                    <div class="card h-100 hoverCard" style="cursor: pointer;">
+                        <div class="card-header p-0">
+                            <div class="d-flex">
+                                <img class="card-img-top"
+                                    src="https://st2.depositphotos.com/3725083/5485/i/600/depositphotos_54856347-stock-photo-travel-the-world-monument-concept.jpg"
+                                    alt="..." />
+                                <span
+                                    class="position-absolute style-edit translate-middle bg-primary border border-light rounded-circle">
+                                    <span class="visually-hidden">{{calculateDays(pack.departureDate,
+                                        pack.arrivalDate)}}
+                                        dias / {{calculateDays(pack.departureDate, pack.arrivalDate)-1}} noches</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body pl-4 pr-4 pb-1">
+                            <div class="text-left small mb-1">
+                                <h5 class="fw-bolder">{{pack.name}}</h5>
+                                <p class="text-card">Desde {{pack.departureDate | date}} hasta {{pack.arrivalDate |
+                                    date}}
+                                </p>
+                                <i *ngIf="pack.transport=== 1" class="p-1 fa fa-plane"></i> <i
+                                    *ngIf="pack.transport=== 2" class="p-1 fa fa-bus"></i>
+                                <span class="m-1" *ngIf="pack.transport=== 1">Aereo</span>
+                                <span class="m-1" *ngIf="pack.transport=== 2">Terrestre</span>
+                                <i class="p-1 fas fa-hotel"></i>
+                                <span class="m-1">{{pack.hotel}}</span>
+                            </div>
+                            <div class="text-left small">
+                                <i class="p-1 	fas fa-plane-departure"></i>
+                                <span class="m-1">Partiendo desde {{pack.departurePoint}}</span>
+                            </div>
+                            <hr class="solid">
+                            <div class="text-left small">
+                                <span class="m-1">Precio por persona</span>
+                                <p class="price-text p-1 m-0">{{pack.price | currency:'COP '}}</p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end card-footer pt-0 mb-1 border-top-0 bg-transparent">
+                            <button type="button" (click)="reserve(pack)"
+                                class="btn btn-primary col-6">Reservar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</ng-container>
 
-    </div>
-</div>
 
-    <div class="container px-4 px-lg-5 mt-5">
-        <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-3 row-cols-xl-3 justify-content-center">
-            <div class="col mb-5" *ngFor="let pack of filteredPackagesList">
-                <!-- (click)="modalShowDetailsPackage(pack)" -->
-                <div class="card h-100 hoverCard"  style="cursor: pointer;">
-                    <div class="card-header p-0">
-                        <div class="d-flex">
-                            <img class="card-img-top"
-                                src="https://st2.depositphotos.com/3725083/5485/i/600/depositphotos_54856347-stock-photo-travel-the-world-monument-concept.jpg"
-                                alt="..." />
-                            <span
-                                class="position-absolute style-edit translate-middle bg-primary border border-light rounded-circle">
-                                <span class="visually-hidden">{{calculateDays(pack.departureDate, pack.arrivalDate)}}
-                                    dias / {{calculateDays(pack.departureDate, pack.arrivalDate)-1}} noches</span>
+
+<div *ngIf="role!=='Cliente'" class="p-5">
+    <div class="col-12">
+        <div class="card px-6 py-6 p-4" style="border-radius: 15px;">
+            <p-table #dt [value]="packagesList" [rows]="5" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10]"
+                [loading]="loading" [paginator]="true"
+                currentPageReportTemplate="Desde {first} hasta {last} de {totalRecords} paquetes"
+                [globalFilterFields]="['name', 'destination', 'departureDate', 'arrivalDate', 'availableQuotas', 'price', 'status']">
+                <ng-template pTemplate="caption" class="p-grid">
+                    <div class="custom-flex-container">
+                        <div class="custom-flex-item-left">
+                            <span class="mt-2 md:mt-0 p-input-icon-right">
+                                <i class="pi pi-search"></i>
+                                <input pInputText  (input)="dt.filterGlobal($event.target.value, 'contains')" type="text" placeholder="Buscar..." />
                             </span>
                         </div>
-                    </div>
-                    <div class="card-body pl-4 pr-4 pb-1">
-                        <div class="text-left small mb-1">
-                            <h5 class="fw-bolder">{{pack.name}}</h5>
-                            <p class="text-card">Desde {{pack.departureDate | date}} hasta {{pack.arrivalDate | date}}
-                            </p>
-
-
-                            <i *ngIf="pack.transport=== 1" class="p-1 fa fa-plane"></i> <i *ngIf="pack.transport=== 2"
-                                class="p-1 fa fa-bus"></i>
-                            <span class="m-1" *ngIf="pack.transport=== 1">Aereo</span>
-                            <span class="m-1" *ngIf="pack.transport=== 2">Terrestre</span>
-
-                            <i class="p-1 fas fa-hotel"></i>
-                            <span class="m-1">{{pack.hotel}}</span>
-
-                        </div>
-                        <div class="text-left small">
-
-                            <i class="p-1 	fas fa-plane-departure"></i>
-                            <span class="m-1">Partiendo desde {{pack.departurePoint}}</span>
-
-                        </div>
-                        <hr class="solid">
-
-                        <div class="text-left small">
-                            <span class="m-1">Precio por persona</span>
-                            <p class="price-text p-1 m-0">{{pack.price | currency:'COP '}}</p>
+                        <div class="custom-flex-item-right">
+                            <button pButton type="button" label="Agregar paquete" (click)="show()"
+                                class="p-button-outlined"><i class="pi pi-plus"
+                                    style="margin-left: 5px; margin-right: 9px;"></i></button>
                         </div>
                     </div>
-                    <!-- Product actions-->
-                    <div class="d-flex justify-content-end card-footer pt-0 mb-1 border-top-0 bg-transparent">
-                     <button type="button" (click)="reserve(pack)" class="btn btn-primary col-6">Reservar</button>
-                    </div>
-                </div>
-            </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width: 15rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Nombre
+                            </div>
+                        </th>
+                        <th style="min-width: 15rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Destino
+                            </div>
+                        </th>
+                        <th style="min-width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Fecha de salida
+                            </div>
+                        </th>
+                        <th style="min-width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Fecha de regreso
+                            </div>
+                        </th>
+                        <th style="min-width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Cupos disponibles
+                            </div>
+                        </th>
+                        <th style="width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Precio
+                            </div>
+                        </th>
+                        <th style="min-width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Estado
+                            </div>
+                        </th>
+                        <th style="width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Acciones
+                            </div>
+                        </th>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-package>
+                    <tr>
+                        <td>
+                            {{ package.name }}
+                        </td>
+                        <td>
+                            {{ package.destination }}
+                        </td>
+                        <td>
+                            {{ package.departureDate | date: 'MM/dd/yyyy' }}
+                        </td>
+                        <td>
+                            {{ package.arrivalDate | date: 'MM/dd/yyyy' }}
+                        </td>
+                        <td>
+                            {{ package.availableQuotas }}
+                        </td>
+                        <td>
+                            {{ package.price }}
+                        </td>
+                        <td class="text-center">
+                            
+                            
+                            <div *ngIf="package.status == true">
+                                <p-inputSwitch  (click)="disablePackage(package)" [(ngModel)]="checked2"  pTooltip="Activo" tooltipPosition="bottom"></p-inputSwitch>
+                                
+                            </div>
+                            <div *ngIf="package.status == false">
+                                <p-inputSwitch  (click)="disablePackage(package)"pTooltip="Inactivo" tooltipPosition="bottom"></p-inputSwitch>
+                                
+                            </div>
+                        </td>
+                        <td class="text-center p-1">
+                            <button pButton type="button" icon="pi pi-pencil"
+                                class="p-button-outlined p-button-warning p-button-rounded m-1" (click)="openEditPackageModal(package)" pTooltip="Editar"
+                                tooltipPosition="bottom"></button>
+                            <button pButton type="button" icon="pi pi-info-circle"
+                                class="p-button-outlined p-button-rounded m-1" pTooltip="Ver detalles"  (click)="modalShowDetailsPackage(package)"
+                                tooltipPosition="bottom"></button>
+
+                        </td>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="9">No se encontraron paquetes</td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
     </div>
 </div>
-</ng-container>

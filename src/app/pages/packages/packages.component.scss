@@ -238,3 +238,23 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+
+.custom-flex-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.custom-flex-item-left {
+  flex-grow: 1;
+}
+
+.custom-flex-item-right {
+  margin-left: auto;
+}
+
+.custom-modal-header{
+  color: #326fd1;
+  border-radius: 25px;
+  height: max-content;
+}

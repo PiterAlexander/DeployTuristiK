@@ -40,7 +40,6 @@
                                     type="text"
                                     class="form-control"
                                     name="searchTerm"
-                                    [(ngModel)]="search"
                                     (ngModelChange)="searchByUserName()"
                                 />
                             </div>
@@ -80,14 +79,6 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="d-flex justify-content-end pt-3">
-                            <ngb-pagination
-                                [collectionSize]="total"
-                                [(page)]="page"
-                                [pageSize]="pageSize"
-                            >
-                            </ngb-pagination>
-                        </div>
                     </form>
                 </div>
             </div>
