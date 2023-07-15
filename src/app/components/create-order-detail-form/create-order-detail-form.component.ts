@@ -12,16 +12,18 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
+import { ApiService } from '@services/api.service';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-create-order-detail-form',
   templateUrl: './create-order-detail-form.component.html',
   styleUrls: ['./create-order-detail-form.component.scss']
 })
-export class CreateOrderDetailFormComponent implements OnInit {
 
-  formGroup: FormGroup;
+export class CreateOrderDetailFormComponent implements OnInit {
   private ui: Observable<UiState>
+  public formGroup: FormGroup
   public orderProcess: Array<any>
   public beneficiaries: Array<Customer> = []
   public allCustomers: Array<Customer>
@@ -36,8 +38,9 @@ export class CreateOrderDetailFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private modalService: NgbModal,
     private store: Store<AppState>,
+    private modalPrimeNg: DynamicDialogRef,
+    private apiService: ApiService
   ) { }
 
   ngOnInit(): void {
@@ -51,6 +54,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         this.oneRole = this.allRoles.find(r => r.name === 'Beneficiario')
       }
     })
+    
     this.formGroup = this.fb.group({
       name: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -59,7 +63,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
       phoneNumber: ['', Validators.required],
       birthdate: ['', Validators.required],
       eps: [0, Validators.required],
-    });
+    })
     if (this.orderProcess != undefined) {
       if (this.orderProcess[0].action === 'CreateOrderDetail') {
         this.orderDetails = this.orderProcess[0].order.orderDetail
@@ -135,16 +139,16 @@ export class CreateOrderDetailFormComponent implements OnInit {
           confirmButtonText: 'Permanecer',
         }).then((result) => {
           if (result.isDenied) {
-            this.modalService.dismissAll();
+            this.modalPrimeNg.close()
             this.store.dispatch(new OpenModalOrderDetails(this.orderProcess[0].order))
           }
         })
       } else {
-        this.modalService.dismissAll();
+        this.modalPrimeNg.close()
         this.store.dispatch(new OpenModalOrderDetails(this.orderProcess[0].order))
       }
     } else if (this.orderProcess[0].action === 'EditOrderDetail') {
-      this.modalService.dismissAll();
+      this.modalPrimeNg.close()
       this.store.dispatch(new OpenModalOrderDetails(this.orderProcess[0].order))
     } else if (this.orderProcess[0].action === 'CreateOrderFromCustomer') {
       if (this.beneficiaries.length > 0) {
@@ -157,18 +161,18 @@ export class CreateOrderDetailFormComponent implements OnInit {
           confirmButtonText: 'Permanecer',
         }).then((result) => {
           if (result.isDenied) {
-            this.modalService.dismissAll();
+            this.modalPrimeNg.close()
           }
         })
       } else {
-        this.modalService.dismissAll();
+        this.modalPrimeNg.close()
       }
     } else {
       this.orderProcess = [{
         order: this.orderProcess[0].order,
         beneficiaries: this.beneficiaries,
       }]
-      this.modalService.dismissAll();
+      this.modalPrimeNg.close()
       this.store.dispatch(new OpenModalCreateOrder(this.orderProcess))
     }
   }
@@ -178,7 +182,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
       order: this.orderProcess[0].order,
       beneficiaries: this.beneficiaries,
     }]
-    this.modalService.dismissAll();
+    this.modalPrimeNg.close()
     this.store.dispatch(new OpenModalListFrequentTravelersToOrders(this.orderProcess))
   }
 
@@ -329,7 +333,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         user: user,
       })
       this.formGroup.reset()
-      console.log(this.beneficiaries);
+      console.log(this.beneficiaries)
 
     }
   }
@@ -346,7 +350,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         },
         beneficiaries: this.beneficiaries,
       }]
-      this.modalService.dismissAll();
+      this.modalPrimeNg.close()
       this.store.dispatch(new OpenModalCreatePayment(this.orderProcess))
     } else if (this.orderProcess[0].action === 'EditOrderDetail') {
       const customer: Customer = {
@@ -361,7 +365,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         userId: this.orderProcess[0].customer.userId
       }
       this.store.dispatch(new EditCustomerRequest(customer))
-      this.modalService.dismissAll();
+      this.modalPrimeNg.close()
       Swal.fire({
         icon: 'success',
         title: '¡Beneficiario editado exitosamente!',
@@ -375,7 +379,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         order: this.orderProcess[0].order,
         beneficiaries: this.beneficiaries,
       }]
-      this.modalService.dismissAll();
+      this.modalPrimeNg.close()
       this.store.dispatch(new OpenModalCreatePayment(this.orderProcess))
     } else {
       this.orderProcess = [{
@@ -383,7 +387,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         order: this.orderProcess[0].order,
         beneficiaries: this.beneficiaries,
       }]
-      this.modalService.dismissAll();
+      this.modalPrimeNg.close()
       this.store.dispatch(new OpenModalCreatePayment(this.orderProcess))
     }
   }

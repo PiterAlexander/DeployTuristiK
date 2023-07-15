@@ -60,17 +60,16 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { RatingModule } from 'primeng/rating';
 import { OrderListModule } from 'primeng/orderlist';
-import {TooltipModule} from 'primeng/tooltip';
-import {CascadeSelectModule} from 'primeng/cascadeselect';
-    defineCustomElements();
+import { TooltipModule } from 'primeng/tooltip';
+import { CascadeSelectModule } from 'primeng/cascadeselect';
 
 //<-----------PRIMENG--------------->
-import {InputSwitchModule} from 'primeng/inputswitch';
+import { InputSwitchModule } from 'primeng/inputswitch';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
-import {ToastModule} from 'primeng/toast';
+import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import {ConfirmDialogModule} from 'primeng/confirmdialog';
-import {ConfirmationService} from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { DialogModule } from 'primeng/dialog';
 import { RippleModule } from 'primeng/ripple';
@@ -85,121 +84,121 @@ import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarComponent } from './pages/calendar/calendar.component';
 
-
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        MainComponent,
-        LoginComponent,
-        HeaderComponent,
-        FooterComponent,
-        MenuSidebarComponent,
-        ProfileComponent,
-        RegisterComponent,
-        DashboardComponent,
-        NotificationsComponent,
-        UserComponent,
-        ForgotPasswordComponent,
-        RecoverPasswordComponent,
-        MenuItemComponent,
-        ControlSidebarComponent,
-        SidebarSearchComponent,
-        PackagesComponent,
-        CreatePackageFormComponent,
-        RolesComponent,
-        CreateRoleFormComponent,
-        DetailsPackageComponent,
-        OrdersComponent,
-        CreateOrderFormComponent,
-        CreateRoleFormComponent,
-        CustomersComponent,
-        CreatecustomerformComponent,
-        EmployeesComponent,
-        CreateEmployeeFormComponent,
-        CreateOrderDetailFormComponent,
-        UsersComponent,
-        CreateUserFormComponent,
-        CreatePaymentFormComponent,
-        ReadOrderOrderDetailComponent,
-        ReadOrderPaymentComponent,
-        CreateFrequentTravelerFormComponent,
-        ListFrequentTravelerComponent,
-        EditPaymentFormComponent,
-        ListFrequentTravelersToOrdersComponent,
-        CalendarComponent
-    ],
-    imports: [
-        DividerModule,
-        CalendarModule,
-        CascadeSelectModule,
-        InputSwitchModule,
-        TooltipModule,
-        OrderListModule,
-        DialogModule,
-        DynamicDialogModule,
-        DropdownModule,
-        InputTextModule,
-        InputTextareaModule,
-        RadioButtonModule,
-        InputNumberModule,
-        RatingModule,
-        DialogModule,
-        CommonModule,
-        ToastModule,
-        ToolbarModule,
-        FileUploadModule,
-        ButtonModule,
-        CardModule,
-        DataViewModule,
-        BrowserModule,
-        StoreModule.forRoot({ auth: authReducer, ui: uiReducer }),
-        EffectsModule.forRoot([PackageEffects]),
-        HttpClientModule,
-        AppRoutingModule,
-        ReactiveFormsModule,
+  declarations: [
+    AppComponent,
+    MainComponent,
+    LoginComponent,
+    HeaderComponent,
+    FooterComponent,
+    MenuSidebarComponent,
+    ProfileComponent,
+    RegisterComponent,
+    DashboardComponent,
+    NotificationsComponent,
+    UserComponent,
+    ForgotPasswordComponent,
+    RecoverPasswordComponent,
+    MenuItemComponent,
+    ControlSidebarComponent,
+    SidebarSearchComponent,
+    PackagesComponent,
+    CreatePackageFormComponent,
+    RolesComponent,
+    CreateRoleFormComponent,
+    DetailsPackageComponent,
+    OrdersComponent,
+    CreateOrderFormComponent,
+    CreateRoleFormComponent,
+    CustomersComponent,
+    CreatecustomerformComponent,
+    EmployeesComponent,
+    CreateEmployeeFormComponent,
+    CreateOrderDetailFormComponent,
+    UsersComponent,
+    CreateUserFormComponent,
+    CreatePaymentFormComponent,
+    ReadOrderOrderDetailComponent,
+    ReadOrderPaymentComponent,
+    CreateFrequentTravelerFormComponent,
+    ListFrequentTravelerComponent,
+    EditPaymentFormComponent,
+    ListFrequentTravelersToOrdersComponent,
+    CalendarComponent
+  ],
+  imports: [
+    DividerModule,
+    CalendarModule,
+    CascadeSelectModule,
+    InputSwitchModule,
+    TooltipModule,
+    OrderListModule,
+    DialogModule,
+    DynamicDialogModule,
+    DropdownModule,
+    InputTextModule,
+    InputTextareaModule,
+    RadioButtonModule,
+    InputNumberModule,
+    RatingModule,
+    DialogModule,
+    CommonModule,
+    ToastModule,
+    ToolbarModule,
+    FileUploadModule,
+    ButtonModule,
+    CardModule,
+    DataViewModule,
+    BrowserModule,
+    StoreModule.forRoot({ auth: authReducer, ui: uiReducer }),
+    EffectsModule.forRoot([PackageEffects]),
+    HttpClientModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
 
-        //<--------PRIMENG----------->
-        InputSwitchModule,
-        DynamicDialogModule,
-        DropdownModule,
-        ToastModule,
-        ConfirmDialogModule,
-        FullCalendarModule,
-        FullCalendarModule,
-        DialogModule,
-        InputTextareaModule,
-        RippleModule,
-        InputTextModule,
-        CardModule,
-        ButtonModule,
-        TableModule,
-        DividerModule,
-        BrowserAnimationsModule,
-        CheckboxModule,
-        CalendarModule,
-        DropdownModule,
+    //<--------PRIMENG----------->
+    InputSwitchModule,
+    DynamicDialogModule,
+    DropdownModule,
+    ToastModule,
+    ConfirmDialogModule,
+    FullCalendarModule,
+    DialogModule,
+    InputTextareaModule,
+    RippleModule,
+    InputTextModule,
+    CardModule,
+    ButtonModule,
+    TableModule,
+    DividerModule,
+    BrowserAnimationsModule,
+    CheckboxModule,
+    CalendarModule,
+    DropdownModule,
+    InputNumberModule,
 
-        //<------------------------->
-        ToastrModule.forRoot({
-            timeOut: 3000,
-            positionClass: 'toast-top-right',
-            preventDuplicates: true
-        }),
-        ProfabricComponentsModule,
-        NgbModule,
-        FormsModule,
-        TableModule
-    ],
-    bootstrap: [AppComponent],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    providers: [
-      DialogService,
-      ToastModule,
-      MessageService,
-      ConfirmationService,
-    ]
+    //<------------------------->
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true
+    }),
+    ProfabricComponentsModule,
+    NgbModule,
+    FormsModule
+  ],
+  providers: [
+    DialogService,
+    ToastModule,
+    MessageService,
+    ConfirmationService,
+  ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
