@@ -58,7 +58,7 @@ import { ListFrequentTravelersToOrdersComponent } from '@components/list-frequen
 
 //<--------PRIMENG----------->
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import {MessageService} from 'primeng/api';
+import { MessageService } from 'primeng/api';
 
 @Injectable()
 export class PackageEffects {
@@ -177,9 +177,11 @@ export class PackageEffects {
         this.actions$.pipe(
             ofType(orderActions.OPEN_MODAL_CREATE_ORDER),
             tap((action) => {
-                this.modalRef = this.modalService.open(CreateOrderFormComponent, {
-                    backdrop: false,
-                    size: 'lg'
+                this.dialogRef = this.dialogService.open(CreateOrderFormComponent, {
+                    /* Opciones del modal */
+                    header: 'Proceso de Reserva',
+                    width: '45%',
+                    contentStyle: { overflowY: 'auto' },
                 });
             })
         ), { dispatch: false });
@@ -243,9 +245,10 @@ export class PackageEffects {
         this.actions$.pipe(
             ofType(orderActions.OPEN_MODAL_CREATE_ORDERDETAIL),
             tap((action) => {
-                this.modalRef = this.modalService.open(CreateOrderDetailFormComponent, {
-                    backdrop: false,
-                    size: 'xl'
+                this.dialogRef = this.dialogService.open(CreateOrderDetailFormComponent, {
+                    /* Opciones del modal */
+                    width: '90%',
+                    contentStyle: { overflowY: 'auto' },
                 });
             })
         ), { dispatch: false });
@@ -353,10 +356,10 @@ export class PackageEffects {
             ofType(roleActions.OPEN_MODAL_CREATE_ROLE),
             tap((action) => {
                 this.dialogRef = this.dialogService.open(CreateRoleFormComponent, {
-                  /* Opciones del modal */
-                  header: action['payload'] === undefined ? 'Crear Rol' : 'Editar Rol',
-                  width: '45%',
-                  contentStyle: { overflowY: 'auto' },
+                    /* Opciones del modal */
+                    header: action['payload'] === undefined ? 'Crear Rol' : 'Editar Rol',
+                    width: '45%',
+                    contentStyle: { overflowY: 'auto' },
                 });
 
             })
@@ -386,8 +389,8 @@ export class PackageEffects {
         switchMap((role) => {
             return this.apiService.addRole(role).pipe(
                 mergeMap((roleResolved) => {
-                  this.dialogRef.close()
-                  this.messageService.add({key: 'alert-message', severity:'success',summary: 'Exito', detail: 'Rol creado exitosamente.'});
+                    this.dialogRef.close()
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Rol creado exitosamente.' });
                     return [
                         new CreateRoleSuccess(roleResolved),
                         new GetAllRoleRequest()
@@ -405,8 +408,8 @@ export class PackageEffects {
         switchMap((role) => {
             return this.apiService.updateRole(role.roleId, role).pipe(
                 mergeMap((roleResolved) => {
-                  this.dialogRef.close()
-                  this.messageService.add({key: 'alert-message', severity:'success', summary: 'Exito', detail: 'Rol editado exitosamente.'});
+                    this.dialogRef.close()
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Rol editado exitosamente.' });
                     return [
                         new EditRoleSuccess(roleResolved),
                         new GetAllRoleRequest(),

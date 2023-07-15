@@ -54,12 +54,12 @@ import { EditPaymentFormComponent } from './components/edit-payment-form/edit-pa
 import { ListFrequentTravelersToOrdersComponent } from './components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
 
 //<-----------PRIMENG--------------->
-import {InputSwitchModule} from 'primeng/inputswitch';
+import { InputSwitchModule } from 'primeng/inputswitch';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
-import {ToastModule} from 'primeng/toast';
+import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import {ConfirmDialogModule} from 'primeng/confirmdialog';
-import {ConfirmationService} from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { DialogModule } from 'primeng/dialog';
 import { RippleModule } from 'primeng/ripple';
@@ -73,101 +73,101 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarComponent } from './pages/calendar/calendar.component';
-
+import { InputNumberModule } from 'primeng/inputnumber';
 
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        MainComponent,
-        LoginComponent,
-        HeaderComponent,
-        FooterComponent,
-        MenuSidebarComponent,
-        ProfileComponent,
-        RegisterComponent,
-        DashboardComponent,
-        NotificationsComponent,
-        UserComponent,
-        ForgotPasswordComponent,
-        RecoverPasswordComponent,
-        MenuItemComponent,
-        ControlSidebarComponent,
-        SidebarSearchComponent,
-        PackagesComponent,
-        CreatePackageFormComponent,
-        RolesComponent,
-        CreateRoleFormComponent,
-        DetailsPackageComponent,
-        OrdersComponent,
-        CreateOrderFormComponent,
-        CreateRoleFormComponent,
-        CustomersComponent,
-        CreatecustomerformComponent,
-        EmployeesComponent,
-        CreateEmployeeFormComponent,
-        CreateOrderDetailFormComponent,
-        UsersComponent,
-        CreateUserFormComponent,
-        CreatePaymentFormComponent,
-        ReadOrderOrderDetailComponent,
-        ReadOrderPaymentComponent,
-        CreateFrequentTravelerFormComponent,
-        ListFrequentTravelerComponent,
-        EditPaymentFormComponent,
-        ListFrequentTravelersToOrdersComponent,
-        CalendarComponent
-    ],
-    imports: [
-        BrowserModule,
-        StoreModule.forRoot({ auth: authReducer, ui: uiReducer }),
-        EffectsModule.forRoot([PackageEffects]),
-        HttpClientModule,
-        AppRoutingModule,
-        ReactiveFormsModule,
+  declarations: [
+    AppComponent,
+    MainComponent,
+    LoginComponent,
+    HeaderComponent,
+    FooterComponent,
+    MenuSidebarComponent,
+    ProfileComponent,
+    RegisterComponent,
+    DashboardComponent,
+    NotificationsComponent,
+    UserComponent,
+    ForgotPasswordComponent,
+    RecoverPasswordComponent,
+    MenuItemComponent,
+    ControlSidebarComponent,
+    SidebarSearchComponent,
+    PackagesComponent,
+    CreatePackageFormComponent,
+    RolesComponent,
+    CreateRoleFormComponent,
+    DetailsPackageComponent,
+    OrdersComponent,
+    CreateOrderFormComponent,
+    CreateRoleFormComponent,
+    CustomersComponent,
+    CreatecustomerformComponent,
+    EmployeesComponent,
+    CreateEmployeeFormComponent,
+    CreateOrderDetailFormComponent,
+    UsersComponent,
+    CreateUserFormComponent,
+    CreatePaymentFormComponent,
+    ReadOrderOrderDetailComponent,
+    ReadOrderPaymentComponent,
+    CreateFrequentTravelerFormComponent,
+    ListFrequentTravelerComponent,
+    EditPaymentFormComponent,
+    ListFrequentTravelersToOrdersComponent,
+    CalendarComponent
+  ],
+  imports: [
+    BrowserModule,
+    StoreModule.forRoot({ auth: authReducer, ui: uiReducer }),
+    EffectsModule.forRoot([PackageEffects]),
+    HttpClientModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
 
-        //<--------PRIMENG----------->
-        InputSwitchModule,
-        DynamicDialogModule,
-        DropdownModule,
-        ToastModule,
-        ConfirmDialogModule,
-        FullCalendarModule,
-        FullCalendarModule,
-        DialogModule,
-        InputTextareaModule,
-        RippleModule,
-        InputTextModule,
-        CardModule,
-        ButtonModule,
-        TableModule,
-        DividerModule,
-        BrowserAnimationsModule,
-        CheckboxModule,
-        CalendarModule,
-        DropdownModule,
+    //<--------PRIMENG----------->
+    InputSwitchModule,
+    DynamicDialogModule,
+    DropdownModule,
+    ToastModule,
+    ConfirmDialogModule,
+    FullCalendarModule,
+    DialogModule,
+    InputTextareaModule,
+    RippleModule,
+    InputTextModule,
+    CardModule,
+    ButtonModule,
+    TableModule,
+    DividerModule,
+    BrowserAnimationsModule,
+    CheckboxModule,
+    CalendarModule,
+    DropdownModule,
+    InputNumberModule,
 
-        //<------------------------->
-        ToastrModule.forRoot({
-            timeOut: 3000,
-            positionClass: 'toast-top-right',
-            preventDuplicates: true
-        }),
-        ProfabricComponentsModule,
-        NgbModule,
-        FormsModule
-    ],
-    providers: [
-      DialogService,
-      ToastModule,
-      MessageService,
-      ConfirmationService,
-    ],
-    schemas:[
-      CUSTOM_ELEMENTS_SCHEMA
-    ],
-    bootstrap: [AppComponent]
+    //<------------------------->
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true
+    }),
+    ProfabricComponentsModule,
+    NgbModule,
+    FormsModule
+  ],
+  providers: [
+    DialogService,
+    ToastModule,
+    MessageService,
+    ConfirmationService,
+  ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
