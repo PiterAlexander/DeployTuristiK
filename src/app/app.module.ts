@@ -52,6 +52,17 @@ import { CreateFrequentTravelerFormComponent } from './components/create-frequen
 import { ListFrequentTravelerComponent } from './components/list-frequent-traveler/list-frequent-traveler.component';
 import { EditPaymentFormComponent } from './components/edit-payment-form/edit-payment-form.component';
 import { ListFrequentTravelersToOrdersComponent } from './components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
+import { DataViewModule } from 'primeng/dataview';
+import { CommonModule } from '@angular/common';
+import { ToolbarModule } from 'primeng/toolbar';
+import { FileUploadModule } from 'primeng/fileupload';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { RatingModule } from 'primeng/rating';
+import { OrderListModule } from 'primeng/orderlist';
+import {TooltipModule} from 'primeng/tooltip';
+import {CascadeSelectModule} from 'primeng/cascadeselect';
+    defineCustomElements();
 
 //<-----------PRIMENG--------------->
 import {InputSwitchModule} from 'primeng/inputswitch';
@@ -121,6 +132,28 @@ registerLocaleData(localeEn, 'en-EN');
         CalendarComponent
     ],
     imports: [
+        DividerModule,
+        CalendarModule,
+        CascadeSelectModule,
+        InputSwitchModule,
+        TooltipModule,
+        OrderListModule,
+        DialogModule,
+        DynamicDialogModule,
+        DropdownModule,
+        InputTextModule,
+        InputTextareaModule,
+        RadioButtonModule,
+        InputNumberModule,
+        RatingModule,
+        DialogModule,
+        CommonModule,
+        ToastModule,
+        ToolbarModule,
+        FileUploadModule,
+        ButtonModule,
+        CardModule,
+        DataViewModule,
         BrowserModule,
         StoreModule.forRoot({ auth: authReducer, ui: uiReducer }),
         EffectsModule.forRoot([PackageEffects]),
@@ -157,17 +190,16 @@ registerLocaleData(localeEn, 'en-EN');
         }),
         ProfabricComponentsModule,
         NgbModule,
-        FormsModule
+        FormsModule,
+        TableModule
     ],
+    bootstrap: [AppComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
       DialogService,
       ToastModule,
       MessageService,
       ConfirmationService,
-    ],
-    schemas:[
-      CUSTOM_ELEMENTS_SCHEMA
-    ],
-    bootstrap: [AppComponent]
+    ]
 })
 export class AppModule { }

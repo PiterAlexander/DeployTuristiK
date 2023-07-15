@@ -7,6 +7,7 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppService } from '@services/app.service';
 import { Observable } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 var BASE_CLASSES = 'main-sidebar elevation-4 sidebar-light';
 @Component({

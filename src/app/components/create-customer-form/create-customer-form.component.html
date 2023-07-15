@@ -112,31 +112,36 @@
                             </div>
                         </div>
                         <div class="form-group col-6">
-                            <label for="eps" class="form-label">EPS</label>
-                            <div class="input-group">
-                                <input type="text" id="eps" name="eps"
-                                    class="form-control formularioCampo border-left-dark"
-                                    placeholder="EPS a la que se encuentra afiliado" formControlName="eps">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text rounded-left"><i class="	fa fa-medkit"></i></span>
-                                </div>
-                                <div *ngIf="formGroup.get('eps')?.errors?.['required'] && formGroup.get('eps').dirty"
-                                    class="invalid-feedback">
-                                    *El campo es requerido.
-                                </div>
-                                <div *ngIf="formGroup.get('eps')?.errors?.['minlength'] && formGroup.get('eps').dirty"
-                                    class="invalid-feedback">
-                                    *La eps debe tener mínimo 4 caracteres.
-                                </div>
-                                <div *ngIf="formGroup.get('eps')?.errors?.['maxlength'] && formGroup.get('eps').dirty"
-                                    class="invalid-feedback">
-                                    *La eps no debe exceder los 20 caracteres.
-                                </div>
-                            </div>
+                            <label for="eps" class="form-label"
+                                        >EPS</label
+                                    >
+                                    <div class="input-group">
+                                        <select
+                                            class="custom-select border-left-dark form-control formularioCampo"
+                                            id="eps"
+                                            name="eps"
+                                            formControlName="eps"
+                                            placeholder="Seleccione una EPS"
+                                            
+                                        >
+                                        <!-- (change)="addForm()" -->
+                                            <!-- <option
+                                                *ngFor="let eps of allEps"
+                                                [value]="eps"
+                                            >
+                                                {{ eps }}
+                                            </option> -->
+                                        </select>
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"
+                                                ><i class="fas fa-user-cog"></i
+                                            ></span>
+                                        </div>
+                                    </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-6">
+                        <div class="form-group {{ ActionTitle !== 'Editar' ? 'col-6' : 'col-12' }}">
                             <label for="address" class="form-label">Dirección</label>
                             <div class="input-group">
                                 <input type="text" id="address" name="address"
@@ -159,7 +164,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-6">
+                        <div *ngIf="ActionTitle !== 'Editar'" class="form-group col-6">
                             <label for="userName" class="form-label">Nombre de Usuario</label>
                             <div class="input-group">
                                 <input type="text" id="userName" name="userName"
@@ -184,10 +189,10 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-6">
+                        <div *ngIf="ActionTitle !== 'Editar'" class="form-group col-6">
                             <label for="email" class="form-label">Correo</label>
                             <div class="input-group">
-                                <input type="email" id="email" name="email"
+                                <input  type="email" id="email" name="email"
                                     class="form-control formularioCampo border-left-dark"
                                     placeholder="Correo Electrónico" formControlName="email">
                                 <div class="input-group-prepend">
@@ -207,7 +212,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-6">
+                        <div *ngIf="ActionTitle !== 'Editar'" class="form-group col-6">
                             <label for="password" class="form-label">Contraseña</label>
                             <div class="input-group">
                                 <input [type]="Visible ? 'text' : 'password'" [(ngModel)]="password" id="password"
@@ -216,7 +221,7 @@
                                 <div class="input-group-prepend">
                                     <span (click)="displayPassword()" class="input-group-text rounded-right"><i
                                             class="fa"
-                                            [ngClass]="{'fa-eye': Visible, 'fa-eye-slash': !Visible}"></i></span>
+                                            [ngClass]="{'fa-eye': Visible, 'fa-eye-slash': !Visible}" style="cursor: pointer"></i></span>
                                 </div>
                                 <div *ngIf="formGroup.get('password')?.errors?.['required'] && formGroup.get('password').dirty"
                                     class="invalid-feedback">

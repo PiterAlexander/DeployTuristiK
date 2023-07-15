@@ -62,39 +62,43 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     async getProfile(route?: ActivatedRouteSnapshot) {
 
       if (this.userLogin) {
+
         const user = JSON.parse(localStorage.getItem('TokenPayload'));
+        console.log(user);
+        console.log(user['roleId']);
+        
+        
+        const response = await new Promise((resolve, reject) => {
+          this.apiService.getRoleById(user['roleId']).subscribe({
+            next: (data) => {
+              resolve(data);
+            },
+            error: (err) => {
+              reject(err);
+            }
+          });
+        });
 
-        const allRoles = this.apiService.getRoles().pipe(
-          map((data) => {
-            return data;
-          })
-        );
-
-        allRoles.subscribe((data) => {
-
-          const role = data.find(r => r.name === user["role"]) || undefined;
-
-            if (role && route.routeConfig.path !== "") {
-              const allowedModules = role.associatedPermission.map(ap => ap.permission.module);
+        if (response && route.routeConfig.path !== "") {
+          const allowedModules = response['associatedPermission'].map(ap => ap.permission.module);
               const currentModule = route.routeConfig.path;
-              if (allowedModules.includes(currentModule) || currentModule == "Login" || currentModule == "profile") {
-                return true;
-              }else{
-                if (user['role'] == "Administrador") {
-                  this.router.navigate(['/Dashboard']);
-                  return false
+              if (allowedModules) {
+                if (allowedModules.includes(currentModule) || currentModule == "Login" || currentModule == "profile") {
+                  return true;
                 }else{
-                  this.router.navigate(['/Paquetes']);
-                 return false
+                  if (user['role'] == "Administrador") {
+                    this.router.navigate(['/Dashboard']);
+                    return false;
+                  }else{
+                    this.router.navigate(['/Paquetes']);
+                    return false;
+                  }
                 }
               }
-            }
-        }, (error) => {
-          // Maneja el error aquí
-          console.error(error);
-        });
-        return true
-    }
+        }
+
+        return true;
+      }
 
 
       try {
