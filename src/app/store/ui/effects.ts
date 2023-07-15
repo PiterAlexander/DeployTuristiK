@@ -194,9 +194,11 @@ export class PackageEffects {
         this.actions$.pipe(
             ofType(orderActions.OPEN_MODAL_CREATE_ORDER),
             tap((action) => {
-                this.modalRef = this.modalService.open(CreateOrderFormComponent, {
-                    backdrop: false,
-                    size: 'lg'
+                this.dialogRef = this.dialogService.open(CreateOrderFormComponent, {
+                    /* Opciones del modal */
+                    header: 'Proceso de Reserva',
+                    width: '45%',
+                    contentStyle: { overflowY: 'auto' },
                 });
             })
         ), { dispatch: false });
@@ -260,9 +262,10 @@ export class PackageEffects {
         this.actions$.pipe(
             ofType(orderActions.OPEN_MODAL_CREATE_ORDERDETAIL),
             tap((action) => {
-                this.modalRef = this.modalService.open(CreateOrderDetailFormComponent, {
-                    backdrop: false,
-                    size: 'xl'
+                this.dialogRef = this.dialogService.open(CreateOrderDetailFormComponent, {
+                    /* Opciones del modal */
+                    width: '90%',
+                    contentStyle: { overflowY: 'auto' },
                 });
             })
         ), { dispatch: false });
