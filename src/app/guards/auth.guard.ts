@@ -64,10 +64,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       if (this.userLogin) {
 
         const user = JSON.parse(localStorage.getItem('TokenPayload'));
-        console.log(user);
-        console.log(user['roleId']);
-        
-        
+
         const response = await new Promise((resolve, reject) => {
           this.apiService.getRoleById(user['roleId']).subscribe({
             next: (data) => {

@@ -33,7 +33,7 @@
             </div>
             <div class="col-3 w-100">
                 <div>
-                    <p-dropdown inputId="package_transportation" optionValue="label" [options]="transports" 
+                    <p-dropdown inputId="package_transportation" optionValue="label" [options]="transports"
                         placeholder="Seleccione un transporte">
                         <ng-template class="w-100" let-option pTemplate="item">
                             <span class="w-100" [class]="'product-badge status-' + option.value">{{option.label}}</span>
@@ -101,8 +101,9 @@
                     <span class="p-input-icon-left w-full" style="width: 100%;
                     border: 1px #0060fa solid; border-radius: 5px;">
                         <p-calendar formControlName="departureDate" placeholder="Fecha de salida" showIcon="true"
-                            dateFormat="dd/mm/yy HH:mm" [showTime]="true" [required]="true" class="calendar"
-                             [ngClass]="{
+                            dateFormat="dd/mm/yy" [showTime]="true" [required]="true" class="calendar"
+                            
+                            [ngClass]="{
                                 'is-invalid': formGroup.get('departureDate').dirty && formGroup.get('departureDate').invalid
                               }"></p-calendar>
                     </span>
@@ -117,7 +118,9 @@
                 <span class="p-input-icon-left w-full" style="width: 100%;
                 border: 1px #0060fa solid; border-radius: 5px;">
                     <p-calendar formControlName="arrivalDate" placeholder="Fecha de regreso" showIcon="true" class="calendar"
-                        dateFormat="dd/mm/yy HH:mm" [showTime]="true" [required]="true"
+                        dateFormat="dd/mm/yy"
+                        [showTime]="true"
+                        [required]="true"
                          [ngClass]="{
                             'is-invalid': formGroup.get('arrivalDate').dirty && formGroup.get('arrivalDate').invalid
                           }"></p-calendar>
