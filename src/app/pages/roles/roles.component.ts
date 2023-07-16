@@ -95,7 +95,6 @@ export class RolesComponent implements OnInit{
 
   }
 
-
   deleteRole(role:Role){
 
     var rolesNoPermitidosbyName = [
