@@ -97,6 +97,12 @@
                                         </small>
                                         <small
                                             class="p-error block"
+                                            *ngIf="formGroup.get('email').dirty && formGroup.get('email')?.errors?.pattern"
+                                        >
+                                            Coreo no válido
+                                        </small>
+                                        <small
+                                            class="p-error block"
                                             *ngIf="
                                                 formGroup.get('email').dirty &&
                                                 validateExistingEmail()
@@ -306,7 +312,7 @@
                                         <span class="p-input-icon-right">
                                             <i
                                                 (click)="displayPassword()"
-                                                class="pi"
+                                                class="pi cursor-pointer"
                                                 [ngClass]="{
                                                     'pi-eye': Visible,
                                                     'pi-eye-slash': !Visible
@@ -314,7 +320,7 @@
                                             ></i>
                                             <input
                                                 pInputText
-                                                placeholder="Ingrese el nombre"
+                                                placeholder="Ingrese la contraseña"
                                                 [type]="
                                                     Visible
                                                         ? 'text'
@@ -356,7 +362,7 @@
                                                 (click)="
                                                     displayConfirmPassword()
                                                 "
-                                                class="pi"
+                                                class="pi cursor-pointer"
                                                 [ngClass]="{
                                                     'pi-eye': Visible2,
                                                     'pi-eye-slash': !Visible2
@@ -364,7 +370,7 @@
                                             ></i>
                                             <input
                                                 pInputText
-                                                placeholder="Ingrese el nombre"
+                                                placeholder="Ingrese la confirmación de la contraseña"
                                                 [type]="
                                                     Visible2
                                                         ? 'text'

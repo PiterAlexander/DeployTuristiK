@@ -32,58 +32,61 @@
                             (submit)="saveChanges()"
                             [formGroup]="formGroup"
                         >
-                            <!-- <div class="input-group mb-3">
-                                <input
-                                    formControlName="email"
-                                    type="email"
-                                    class="form-control"
-                                    placeholder="Email"
-                                />
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <span class="fas fa-envelope"></span>
-                                    </div>
-                                </div>
+                            <div class="field">
+                                <span class="p-input-icon-left w-full">
+                                    <i class="pi pi-envelope"></i>
+                                    <input
+                                        id="email"
+                                        type="text"
+                                        pInputText
+                                        class="w-full"
+                                        placeholder="Correo"
+                                        formControlName="email"
+                                        required
+                                    />
+                                </span>
+                                <small
+                                    class="p-error block"
+                                    *ngIf="formGroup.get('email').dirty && formGroup.get('email')?.errors?.['required']"
+                                >
+                                    Este campo es obligatorio.
+                                </small>
+                                <small
+                                    class="p-error block"
+                                    *ngIf="
+                                        formGroup.get('email').dirty &&
+                                        formGroup.get('email')?.errors?.pattern
+                                    "
+                                >
+                                    Coreo no válido
+                                </small>
                             </div>
-                            <div class="input-group mb-3">
-                                <input
-                                    formControlName="password"
-                                    type="password"
-                                    id="passwordLogin"
-                                    class="form-control"
-                                    placeholder="Password"
-                                />
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <span class="fas fa-lock"></span>
-                                    </div>
-                                </div>
-                            </div> -->
-
-                            <span class="p-input-icon-left w-full mb-4">
-                                <i class="pi pi-envelope"></i>
-                                <input
-                                    id="email"
-                                    type="text"
-                                    pInputText
-                                    class="w-full"
-                                    placeholder="Correo"
-                                    formControlName="email"
-                                    required
-                                />
-                            </span>
-                            <span class="p-input-icon-left w-full mb-4">
-                                <i class="pi pi-lock"></i>
-                                <input
-                                    id="password"
-                                    type="password"
-                                    pInputText
-                                    class="w-full"
-                                    placeholder="Contraseña"
-                                    formControlName="password"
-                                    required
-                                />
-                            </span>
+                            <div class="field mb-4">
+                                <span class="p-input-icon-left w-full">
+                                    <i class="pi pi-lock"></i>
+                                    <input
+                                        id="password"
+                                        type="password"
+                                        pInputText
+                                        class="w-full"
+                                        placeholder="Contraseña"
+                                        formControlName="password"
+                                        required
+                                    />
+                                </span>
+                                <small
+                                    class="p-error block"
+                                    *ngIf="formGroup.get('password').dirty && formGroup.get('password')?.errors?.['required']"
+                                >
+                                    Este campo es obligatorio.
+                                </small>
+                                <small
+                                    class="p-error block"
+                                    *ngIf="formGroup.get('password').dirty && formGroup.get('password')?.errors?.['minlength']"
+                                >
+                                    Este campo debe tener mínimo 8 caracteres
+                                </small>
+                            </div>
                             <div
                                 class="grid d-flex justify-content-end text-right"
                             >
