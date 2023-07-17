@@ -1,5 +1,5 @@
 import { AppState } from '@/store/state';
-import {GetAllRoleRequest,GetAllPermissionsRequest, OpenModalCreateRole, GetUsersRequest } from '@/store/ui/actions';
+import {GetAllRoleRequest,GetAllPermissionsRequest, OpenModalCreateRole, GetUsersRequest, ChangeStatusRoleRequest } from '@/store/ui/actions';
 import { Component, OnInit, PipeTransform } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -133,40 +133,50 @@ export class RolesComponent implements OnInit{
             // Lógica para rechazar
           }
         });
-        // Swal.fire({
-        //   title: '¿Estás seguro de eliminar a '+role.name+'?',
-        //   text: "No podrás revertirlo.",
-        //   icon: 'warning',
-        //   showCancelButton: true,
-        //   confirmButtonColor: '#3085d6',
-        //   cancelButtonColor: '#d33',
-        //   cancelButtonText: 'Cancelar',
-        //   confirmButtonText: 'Si, eliminar',
-        //   reverseButtons: true,
-        //   customClass: {
-        //     confirmButton: 'swal2-confirm-right',
-        //     cancelButton: 'swal2-cancel-left'
-        //   }
-        // }).then((result) => {
-          // if (result.isConfirmed) {
-          //   this.store.dispatch(new DeleteRoleRequest(role))
-          //   Swal.fire(
-          //     'Eliminado con éxito.',
-          //   )
-          // }
-        // })
+
       }
     }else{
-      // Swal.fire({
-      //   icon: 'warning',
-      //   title: 'El rol '+role.name+' no puede ser eliminado del sistema.',
-      //   showConfirmButton: true,
-      // }).then(function(){})
       this.messageService.add({key: 'alert-message', severity:'warn', summary: 'Acción denegada', detail: ''});
     }
 
   }
 
+  disableRole(role: Role) {
+    var text1 = ""
+    var text2 = ""
+    console.log(role.status)
+    console.log(role)
+    if (role.status==1) {
+      text1 = "inhabilitar"
+      text2 = "Inhabilitado"
+    } else {
+      text1 = "habilitar"
+      text2 = "Habilitado"
+    }
+
+    this.confirmationService.confirm({
+      message: '¿Estás seguro de '+ text1+' a ' + role.name + '?',
+      header: 'Confirmación', // Cambia el encabezado del cuadro de confirmación
+      icon: 'pi pi-exclamation-triangle', // Cambia el icono del cuadro de confirmación
+      acceptLabel: 'Aceptar', // Cambia el texto del botón de aceptar
+      rejectLabel: 'Cancelar', // Cambia el texto del botón de rechazar
+      acceptButtonStyleClass: 'p-button-primary p-button-sm', // Agrega una clase CSS al botón de aceptar
+      rejectButtonStyleClass: 'p-button-outlined p-button-sm', // Agrega una clase CSS al botón de rechazar
+      accept: () => {
+        // Lógica para confirmar
+        this.store.dispatch(new ChangeStatusRoleRequest(role));
+        if (role.status==1) {
+          this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Rol activado exitosamente' });
+        }else{
+          this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Rol desactivado exitosamente' });
+        }
+        // window.location.reload();
+      },
+      reject: () => {
+        // Lógica para rechazar
+      }
+    });
+  }
 
   searchByName() {
     if (this.search === undefined || this.search.length <= 0) {

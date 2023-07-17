@@ -25,6 +25,10 @@ export const GET_ALL_PACKAGES_REQUEST: string = '[PACKAGE] GET_ALL_PACKAGES_REQU
 export const GET_ALL_PACKAGES_SUCCESS: string = '[PACKAGE] GET_ALL_PACKAGES_SUCCESS';
 export const GET_ALL_PACKAGES_FAILURE: string = '[PACKAGE] GET_ALL_PACKAGES_FAILURE';
 
+export const GET_TOP_PACKAGES_REQUEST: string = '[PACKAGE] GET_TOP_PACKAGES_REQUEST';
+export const GET_TOP_PACKAGES_SUCCESS: string = '[PACKAGE] GET_TOP_PACKAGES_SUCCESS';
+export const GET_TOP_PACKAGES_FAILURE: string = '[PACKAGE] GET_TOP_PACKAGES_FAILURE';
+
 export const GET_ONE_PACKAGES_REQUEST: string = '[PACKAGE] GET_ONE_PACKAGE_REQUEST'
 
 export const CREATE_PACKAGE_REQUEST: string = '[PACKAGE] CREATE_PACKAGE_REQUEST';
@@ -58,6 +62,10 @@ export const EDIT_ROLE_REQUEST: string = '[ROLES] EDIT_ROLE_REQUEST';
 export const EDIT_ROLE_SUCCESS: string = '[ROLES] EDIT_ROLE_SUCCESS';
 export const EDIT_ROLE_FAILURE: string = '[ROLES] EDIT_ROLE_FAILURE';
 
+export const CHANGE_STATUS_ROLE_REQUEST: string = '[ROLE] CHANGE_STATUS_ROLE_REQUEST';
+export const CHANGE_STATUS_ROLE_SUCCESS: string = '[ROLE] CHANGE_STATUS_ROLE_SUCCESS';
+export const CHANGE_STATUS_ROLE_FAILURE: string = '[ROLE] CHANGE_STATUS_ROLE_FAILURE';
+
 export const CREATE_ASSOCIATEDPERMISSION_REQUEST: string = '[ASSOCIATEDPERMISSION] CREATE_ASSOCIATEDPERMISSION_REQUEST';
 export const CREATE_ASSOCIATEDPERMISSION_SUCCESS: string = '[ASSOCIATEDPERMISSION] CREATE_ASSOCIATEDPERMISSION_SUCCESS';
 export const CREATE_ASSOCIATEDPERMISSION_FAILURE: string = '[ASSOCIATEDPERMISSION] CREATE_ASSOCIATEDPERMISSION_FAILURE';
@@ -84,6 +92,10 @@ export enum packageActions {
   GET_ALL_PACKAGES_REQUEST = '[PACKAGE] GET_ALL_PACKAGES_REQUEST',
   GET_ALL_PACKAGES_SUCCESS = '[PACKAGE] GET_ALL_PACKAGES_SUCCESS',
   GET_ALL_PACKAGES_FAILURE = '[PACKAGE] GET_ALL_PACKAGES_FAILURE',
+
+  GET_TOP_PACKAGES_REQUEST = '[PACKAGE] GET_TOP_PACKAGES_REQUEST',
+  GET_TOP_PACKAGES_SUCCESS = '[PACKAGE] GET_TOP_PACKAGES_SUCCESS',
+  GET_TOP_PACKAGES_FAILURE = '[PACKAGE] GET_TOP_PACKAGES_FAILURE',
 
   OPEN_MODAL_CREATE_PACKAGE = '[PACKAGE] OPEN_MODAL_CREATE_PACKAGE',
   CREATE_PACKAGE_REQUEST = '[PACKAGE] CREATE_PACKAGE_REQUEST',
@@ -119,6 +131,20 @@ export class GetAllPackagesFailure implements Action {
   constructor(public payload: string) { }
 }
 // END PACKAGES LIST -------------------------------------------------------------
+
+// PACKAGES TOP LIST -------------------------------------------------------------
+export class GetTopPackagesRequest implements Action {
+  readonly type: string = packageActions.GET_TOP_PACKAGES_REQUEST;
+}
+export class GetTopPackagesSuccess implements Action {
+  readonly type: string = packageActions.GET_TOP_PACKAGES_SUCCESS;
+  constructor(public payload: Array<Package>) { }
+}
+export class GetTopPackagesFailure implements Action {
+  readonly type: string = packageActions.GET_TOP_PACKAGES_FAILURE;
+  constructor(public payload: string) { }
+}
+// END PACKAGES TOP LIST -------------------------------------------------------------
 
 export class GetOnePackageRequest implements Action {
   readonly type: string = GET_ONE_PACKAGES_REQUEST;
@@ -369,6 +395,10 @@ export enum roleActions {
   DELETE_ROLE_REQUEST = '[ROLES] DELETE_ROLE_REQUEST',
   DELETE_ROLE_SUCCESS = '[ROLES] DELETE_ROLE_SUCCESS',
   DELETE_ROLE_FAILURE = '[ROLES] DELETE_ROLE_FAILURE',
+
+  CHANGE_STATUS_ROLE_REQUEST = '[ROLE] CHANGE_STATUS_ROLE_REQUEST',
+  CHANGE_STATUS_ROLE_SUCCESS = '[ROLE] CHANGE_STATUS_ROLE_SUCCESS',
+  CHANGE_STATUS_ROLE_FAILURE = '[ROLE] CHANGE_STATUS_ROLE_FAILURE',
 }
 
 export class GetAllRoleRequest implements Action {
@@ -426,6 +456,28 @@ export class DeleteRoleFailure implements Action {
   readonly type: string = roleActions.DELETE_ROLE_FAILURE;
   constructor(public payload: string) { }
 }
+
+// PACKAGES DISABLE ACTIONS ------------------------------------------------
+
+export class ChangeStatusRoleRequest implements Action {
+  readonly type = roleActions.CHANGE_STATUS_ROLE_REQUEST;
+
+  constructor(public payload: Role) {} // Aquí pasamos el id del paquete como carga útil
+}
+
+export class ChangeStatusRoleSuccess implements Action {
+  readonly type = roleActions.CHANGE_STATUS_ROLE_SUCCESS;
+
+  constructor(public payload: any) {} // Aquí pasamos el paquete deshabilitado como carga útil
+}
+
+export class ChangeStatusRoleFailure implements Action {
+  readonly type = roleActions.CHANGE_STATUS_ROLE_FAILURE;
+
+  constructor(public payload: string) {} // Aquí pasamos cualquier error como carga útil
+}
+
+// PACKAGES DISABLE ACTIONS END -----------------------------------------
 //<--------------------->
 
 //<--- PERMISSION ACTIONS --->
@@ -812,6 +864,8 @@ export type UiAction =
   //<---PACKAGES--->
   | GetAllPackagesSuccess
   | GetAllPackagesFailure
+  | GetTopPackagesSuccess
+  | GetTopPackagesFailure
   | CreatePackageRequest
   | CreatePackageSuccess
   | CreatePackageFailure
