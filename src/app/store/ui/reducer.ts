@@ -398,15 +398,21 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
             return {
                 ...state,
                 allFrequentTraveler: {
+                    data: action.payload['frequentTraveler'],
+                    error: undefined,
+                    loading: false
+                },
+                oneCustomer: {
                     data: action.payload,
                     error: undefined,
                     loading: false
                 }
             };
         case Actions.FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER:
+            
             return {
                 ...state,
-                oneCostumer: {
+                oneCustomer: {
                     data: action.payload,
                     error: undefined,
                     loading: false
