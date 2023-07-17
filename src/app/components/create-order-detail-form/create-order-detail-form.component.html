@@ -1,876 +1,448 @@
-<div class="p-2">
-    <!-- <ng-template pTemplate="header"> -->
-    <div class="flex justify-content-between px-3 pt-3">
-        <h2 class="m-0">Proceso de Reserva</h2>
-        <div *ngIf="orderProcess[0].action != 'EditOrderDetail'">
-            <button *ngIf="beneficiariesAmount > 1" (click)="reduceBeneficiariesAmount()" pButton type="button"
-                label="Disminuir beneficiario" icon="pi pi-user-minus" class="p-button-outlined mr-3"></button>
-            <button (click)="addAnotherBeneficiarie()" pButton type="button" label="Añadir beneficiario"
-                icon="pi pi-user-plus"></button>
-        </div>
-    </div>
-    <!-- </ng-template> -->
-    <div class="flex justify-content-between">
-        <div *ngIf="beneficiariesForm() && showBeneficiariesTable()" class="col-5 py-0">
-            <p-divider align="left">
-                <b>Formulario de Beneficiarios</b>
-            </p-divider>
-            <form novalidate [formGroup]="formGroup">
-                <div class="grid">
-                    <div class="col">
-                        <div *ngIf="!customerInformation() && !alreadyExists()" class="field">
-                            <label for="document" class="block">Documento</label>
-                            <input id="document" type="text" minlength="8" maxlength="15" pInputText
-                                placeholder="Ingrese el documento" class="w-full" required="true"
-                                formControlName="document" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)" />
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('document').dirty && formGroup.get('document')?.errors?.['required']">
-                                Este campo es obligatorio.
-                            </small>
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('document').dirty && formGroup.get('document')?.errors?.['minlength']">
-                                Este campo debe tener mínimo 8 números.
-                            </small>
-                            <small class="p-error block" *ngIf="alreadyExists() && formGroup.get('document').dirty">
-                                Ya existe un beneficiario con este documento.
-                            </small>
-                            <small class="p-error block"
-                                *ngIf="alreadyExistsFromEdit() && formGroup.get('document').dirty">
-                                Este número de documento ya está en uso.
-                            </small>
-                            <small class="p-error block"
-                                *ngIf="alreadyExistsFromEdit() && formGroup.get('document').dirty">
-                                Ya existe un beneficiario con este documento.
-                            </small>
-                        </div>
-                        <div *ngIf="customerInformation() && !alreadyExists() && formGroup.get('document').dirty"
-                            class="field">
-                            <label for="document" class="block">Documento</label>
-                            <div class="p-inputgroup">
-                                <input id="document" type="text" pInputText placeholder="Ingrese el documento"
-                                    class="w-full" formControlName="document"
-                                    onkeydown="return /^\d|Backspace|Delete$/.test(event.key)" />
-                                <button (click)="fillCustomerInformation()" type="button" pButton pRipple
-                                    icon="pi pi-user-plus" class="p-button-success"></button>
-                            </div>
-                            <small [ngStyle]="{color:'var(--green-500)' }" class="block">
-                                !Beneficiario encontrado! Haz click en el icono para añadirlo.
-                            </small>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="field">
-                            <label for="userName" class="block">Nombres</label>
-                            <input id="userName" type="text" pInputText placeholder="Ingrese los nombres" class="w-full"
-                                formControlName="name" minlength="3" maxlength="30" required="true"
-                                onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)" />
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('name').dirty && formGroup.get('name')?.errors?.['required']">
-                                Este campo es obligatorio.
-                            </small>
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('name')?.errors?.['minlength'] && formGroup.get('name').dirty">
-                                Este campo debe contener al menos 3 letras.
-                            </small>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid">
-                    <div class="col">
-                        <div class="field">
-                            <label for="lastName" class="block">Apellidos</label>
-                            <input id="lastName" type="text" pInputText placeholder="Ingrese los apellidos"
-                                class="w-full" formControlName="lastName" minlength="3" maxlength="30" required="true"
-                                onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('lastName').dirty && formGroup.get('lastName')?.errors?.['required']">
-                                Este campo es obligatorio.
-                            </small>
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('lastName')?.errors?.['minlength'] && formGroup.get('lastName').dirty">
-                                Este campo debe contener al menos 3 letras.
-                            </small>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="field">
-                            <label for="birthdate" class="block">Fecha de Nacimiento</label>
-                            <p-calendar [showIcon]="true" dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy"
-                                [readonlyInput]="true" required="true" formControlName="birthdate"
-                                [style]="{ width: '15.4rem' }"></p-calendar>
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('birthdate').dirty && formGroup.get('birthdate')?.errors?.['required']">
-                                Este campo es obligatorio.
-                            </small>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid">
-                    <div class="col-12">
-                        <div class="field">
-                            <label for="address" class="block">Dirección</label>
-                            <input id="address" type="text" pInputText required="true" formControlName="address"
-                                placeholder="País - Departamento - Ciudad - Dirección" class="w-full" />
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('address').dirty && formGroup.get('address')?.errors?.['required']">
-                                Este campo es obligatorio.
-                            </small>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid">
-                    <div class="col">
-                        <div class="field">
-                            <label for="phoneNumber" class="block">Teléfono celular</label>
-                            <input id="phoneNumber" type="text" pInputText placeholder="Ingrese el número teléfonico"
-                                class="w-full" formControlName="phoneNumber" minlength="10" maxlength="10"
-                                required="true" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)" />
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('phoneNumber').dirty && formGroup.get('phoneNumber')?.errors?.['required']">
-                                Este campo es obligatorio.
-                            </small>
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber').dirty">
-                                Este campo debe contener 10 números.
-                            </small>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="field">
-                            <label for="eps" class="block">EPS</label>
-                            <p-dropdown [options]="allEps" placeholder="Seleccione la EPS" required="true"
-                                formControlName="eps" [showClear]="true" [style]="{ width: '15.4rem' }"></p-dropdown>
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('eps')?.errors?.['required'] && formGroup.get('eps').dirty">
-                                Este campo es obligatorio.
-                            </small>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid">
-                    <div class="col-12">
-                        <div class="field-checkbox">
-                            <p-checkbox name="group1" value="New York" inputId="addToFt"></p-checkbox>
-                            <label for="addToFt">Agregar beneficiario a mis Viajeros Frecuentes.</label>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div *ngIf="beneficiariesForm() && !showBeneficiariesTable()" class="col-12 py-0">
-            <p-divider align="left">
-                <b>Formulario de Beneficiarios</b>
-            </p-divider>
-            <form novalidate [formGroup]="formGroup">
-                <div class="grid">
-                    <div class="col">
-                        <div *ngIf="!customerInformation()" class="field">
-                            <label for="document" class="block">Documento</label>
-                            <input id="document" type="text" minlength="8" maxlength="15" pInputText
-                                placeholder="Ingrese el documento" class="w-full" required="true"
-                                formControlName="document" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)" />
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('document').dirty && formGroup.get('document')?.errors?.['required']">
-                                Este campo es obligatorio.
-                            </small>
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('document').dirty && formGroup.get('document')?.errors?.['minlength']">
-                                Este campo debe tener mínimo 8 números.
-                            </small>
-                            <small class="p-error block" *ngIf="alreadyExists() && formGroup.get('document').dirty">
-                                Ya existe un beneficiario con este documento.
-                            </small>
-                            <small class="p-error block"
-                                *ngIf="alreadyExistsFromEdit() && formGroup.get('document').dirty">
-                                Este número de documento ya está en uso.
-                            </small>
-                            <small class="p-error block"
-                                *ngIf="alreadyExistsFromEdit() && formGroup.get('document').dirty">
-                                Ya existe un beneficiario con este documento.
-                            </small>
-                        </div>
-                        <div *ngIf="customerInformation() && !alreadyExists() && formGroup.get('document').dirty"
-                            class="field">
-                            <label for="document" class="block">Documento</label>
-                            <div class="p-inputgroup">
-                                <input id="document" type="text" pInputText placeholder="Ingrese el documento"
-                                    class="w-full" formControlName="document"
-                                    onkeydown="return /^\d|Backspace|Delete$/.test(event.key)" />
-                                <button (click)="fillCustomerInformation()" type="button" pButton pRipple
-                                    icon="pi pi-user-plus" class="p-button-success"></button>
-                            </div>
-                            <small [ngStyle]="{color:'var(--green-500)' }" class="block">
-                                !Beneficiario encontrado! Haz click en el icono para añadirlo.
-                            </small>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="field">
-                            <label for="userName" class="block">Nombres</label>
-                            <input id="userName" type="text" pInputText placeholder="Ingrese los nombres" class="w-full"
-                                formControlName="name" minlength="3" maxlength="30" required="true"
-                                onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)" />
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('name').dirty && formGroup.get('name')?.errors?.['required']">
-                                Este campo es obligatorio.
-                            </small>
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('name')?.errors?.['minlength'] && formGroup.get('name').dirty">
-                                Este campo debe contener al menos 3 letras.
-                            </small>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid">
-                    <div class="col">
-                        <div class="field">
-                            <label for="lastName" class="block">Apellidos</label>
-                            <input id="lastName" type="text" pInputText placeholder="Ingrese los apellidos"
-                                class="w-full" formControlName="lastName" minlength="3" maxlength="30" required="true"
-                                onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('lastName').dirty && formGroup.get('lastName')?.errors?.['required']">
-                                Este campo es obligatorio.
-                            </small>
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('lastName')?.errors?.['minlength'] && formGroup.get('lastName').dirty">
-                                Este campo debe contener al menos 3 letras.
-                            </small>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="field">
-                            <label for="birthdate" class="block">Fecha de Nacimiento</label>
-                            <p-calendar [showIcon]="true" dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy"
-                                [readonlyInput]="true" required="true" formControlName="birthdate"
-                                [style]="{ width: '33.3rem' }"></p-calendar>
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('birthdate').dirty && formGroup.get('birthdate')?.errors?.['required']">
-                                Este campo es obligatorio.
-                            </small>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid">
-                    <div class="col-12">
-                        <div class="field">
-                            <label for="address" class="block">Dirección</label>
-                            <input id="address" type="text" pInputText required="true" formControlName="address"
-                                placeholder="País - Departamento - Ciudad - Dirección" class="w-full" />
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('address').dirty && formGroup.get('address')?.errors?.['required']">
-                                Este campo es obligatorio.
-                            </small>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid">
-                    <div class="col">
-                        <div class="field">
-                            <label for="phoneNumber" class="block">Teléfono celular</label>
-                            <input id="phoneNumber" type="text" pInputText placeholder="Ingrese el número teléfonico"
-                                class="w-full" formControlName="phoneNumber" minlength="10" maxlength="10"
-                                required="true" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)" />
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('phoneNumber').dirty && formGroup.get('phoneNumber')?.errors?.['required']">
-                                Este campo es obligatorio.
-                            </small>
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber').dirty">
-                                Este campo debe contener 10 números.
-                            </small>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="field">
-                            <label for="eps" class="block">EPS</label>
-                            <p-dropdown [options]="allEps" placeholder="Seleccione la EPS" required="true"
-                                formControlName="eps" [showClear]="true" [style]="{ width: '33.3rem' }"></p-dropdown>
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('eps')?.errors?.['required'] && formGroup.get('eps').dirty">
-                                Este campo es obligatorio.
-                            </small>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid">
-                    <div class="col-12">
-                        <div class="field-checkbox">
-                            <p-checkbox name="group1" value="New York" inputId="addToFt"></p-checkbox>
-                            <label for="addToFt">Agregar beneficiario a mis Viajeros Frecuentes.</label>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div *ngIf="beneficiariesForm() && showBeneficiariesTable()" class="col-1 py-0">
-            <p-divider layout="vertical">
-            </p-divider>
-        </div>
-        <div *ngIf="showBeneficiariesTable() && beneficiariesForm()" class="col-6 py-0">
-
-            <p-divider align="right">
-                <b>Lista de Beneficiarios</b>
-            </p-divider>
-            <p-table [value]="beneficiaries" [paginator]="true" [rows]="3" [scrollable]="true">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th style="min-width: 9rem" pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon>
-                        </th>
-                        <th style="min-width: 9rem" pSortableColumn="lastName">Apellidos <p-sortIcon
-                                field="lastName"></p-sortIcon>
-                        </th>
-                        <th style="min-width: 9rem" pSortableColumn="document">Documento <p-sortIcon
-                                field="document"></p-sortIcon>
-                        </th>
-                        <th style="min-width: 14rem" pSortableColumn="birthdate">Fecha de nacimiento<p-sortIcon
-                                field="birthdate"></p-sortIcon>
-                        </th>
-                        <th style="min-width: 9rem" pSortableColumn="phoneNumber">Teléfono <p-sortIcon
-                                field="phoneNumber"></p-sortIcon></th>
-                        <th style="min-width: 15rem" pSortableColumn="address">Dirección <p-sortIcon
-                                field="address"></p-sortIcon>
-                        </th>
-                        <th style="min-width: 9rem" pSortableColumn="eps">EPS <p-sortIcon field="eps"></p-sortIcon>
-                        </th>
-                        <th style="min-width: 9rem" pSortableColumn="price">Precio <p-sortIcon
-                                field="price"></p-sortIcon>
-                        </th>
-                        <th style="min-width: 6rem" pFrozenColumn alignFrozen="right" class="frozen-col">
-                            Eliminar
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-beneficiarie>
-                    <tr>
-                        <td style="min-width: 9rem">{{ beneficiarie.name }}</td>
-                        <td style="min-width: 9rem">{{ beneficiarie.lastName }}</td>
-                        <td style="min-width: 9rem">{{ beneficiarie.document }}</td>
-                        <td style="min-width: 14rem">{{ beneficiarie.birthdate }}</td>
-                        <td style="min-width: 9rem">{{ beneficiarie.phoneNumber }}</td>
-                        <td style="min-width: 15rem">{{ beneficiarie.address }}</td>
-                        <td style="min-width: 9rem">{{ beneficiarie.eps }}</td>
-                        <td style="min-width: 8rem">{{ onePackage.price }}</td>
-                        <td style="min-width: 6rem" pFrozenColumn alignFrozen="right"
-                            class="frozen-col flex justify-content-center">
-                            <button (click)="deleteBeneficiarie(beneficiarie.document)" pButton pRipped type="button"
-                                icon="pi pi-trash"
-                                class="p-button-rounded p-button-danger p-button-outlined p-button-sm"></button>
-                        </td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="footer">
-                    <tr>
-                        <td colspan="12">Costo Total: $49,666,50</td>
-                    </tr>
-                </ng-template>
-            </p-table>
-
-        </div>
-        <div *ngIf="showBeneficiariesTable() && !beneficiariesForm()" class="col-12 py-0">
-            <p-divider align="right">
-                <b>Lista de Beneficiarios</b>
-            </p-divider>
-            <p-table [value]="beneficiaries" [paginator]="true" [rows]="3" [scrollable]="true">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th style="min-width: 9rem" pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon>
-                        </th>
-                        <th style="min-width: 9rem" pSortableColumn="lastName">Apellidos <p-sortIcon
-                                field="lastName"></p-sortIcon>
-                        </th>
-                        <th style="min-width: 9rem" pSortableColumn="document">Documento <p-sortIcon
-                                field="document"></p-sortIcon>
-                        </th>
-                        <th style="min-width: 14rem" pSortableColumn="birthdate">Fecha de nacimiento<p-sortIcon
-                                field="birthdate"></p-sortIcon>
-                        </th>
-                        <th style="min-width: 9rem" pSortableColumn="phoneNumber">Teléfono <p-sortIcon
-                                field="phoneNumber"></p-sortIcon></th>
-                        <th style="min-width: 15rem" pSortableColumn="address">Dirección <p-sortIcon
-                                field="address"></p-sortIcon>
-                        </th>
-                        <th style="min-width: 9rem" pSortableColumn="eps">EPS <p-sortIcon field="eps"></p-sortIcon>
-                        </th>
-                        <th style="min-width: 9rem" pSortableColumn="price">Precio <p-sortIcon
-                                field="price"></p-sortIcon>
-                        </th>
-                        <th style="min-width: 6rem" pFrozenColumn alignFrozen="right" class="frozen-col">
-                            Eliminar
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-beneficiarie>
-                    <tr>
-                        <td style="min-width: 9rem">{{ beneficiarie.name }}</td>
-                        <td style="min-width: 9rem">{{ beneficiarie.lastName }}</td>
-                        <td style="min-width: 9rem">{{ beneficiarie.document }}</td>
-                        <td style="min-width: 14rem">{{ beneficiarie.birthdate }}</td>
-                        <td style="min-width: 9rem">{{ beneficiarie.phoneNumber }}</td>
-                        <td style="min-width: 15rem">{{ beneficiarie.address }}</td>
-                        <td style="min-width: 9rem">{{ beneficiarie.eps }}</td>
-                        <td style="min-width: 8rem">{{ onePackage.price }}</td>
-                        <td style="min-width: 6rem" pFrozenColumn alignFrozen="right"
-                            class="frozen-col flex justify-content-center">
-                            <button (click)="deleteBeneficiarie(beneficiarie.document)" pButton pRipped type="button"
-                                icon="pi pi-trash"
-                                class="p-button-rounded p-button-danger p-button-outlined p-button-sm"></button>
-                        </td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="footer">
-                    <tr>
-                        <td colspan="12">Costo Total: $49,666,50</td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
-    </div>
-    <!-- <ng-template pTemplate="footer" style="padding-top: 0%;"> -->
-    <div class="flex justify-content-between">
-        <div>
-            <button pButton type="button" label="Tus Viajeros Frecuentes" icon="pi pi-users"></button>
-        </div>
-        <div>
-            <button (click)="back()" pButton pRipple type="button" label="Regresar" icon="pi pi-undo"
-                class="p-button-outlined mr-3"></button>
-            <button *ngIf="orderProcess[0].action != 'EditOrderDetail' && validForm() && beneficiariesForm()"
-                (click)="add()" pButton type="button" label="Guardar" icon="pi pi-check"></button>
-
-            <button *ngIf="orderProcess[0].action != 'EditOrderDetail' && !validForm() && beneficiariesForm()" pButton
-                type="button" label="Guardar" icon="pi pi-check" disabled="true"></button>
-
-            <button *ngIf="orderProcess[0].action != 'EditOrderDetail' && validForm() && !beneficiariesForm()"
-                (click)="next()" pButton type="button" label="Siguiente" icon="pi pi-check"></button>
-
-            <button *ngIf="orderProcess[0].action === 'EditOrderDetail' && validForm() && beneficiariesForm()"
-                (click)="next()" pButton type="button" label="Guardar" icon="pi pi-check"></button>
-
-            <button *ngIf="orderProcess[0].action === 'EditOrderDetail' && !validForm() && beneficiariesForm()" pButton
-                type="button" label="Guardar" icon="pi pi-check" disabled="true"></button>
-        </div>
-    </div>
-    <!-- </ng-template> -->
-</div>
-
-
-<!-- <div class="card-header py-3">
-    <div class="row">
-        <div class="col">
-            <h4 class="m-0 font-weight-bold text-dark"><span>Formulario de Beneficiarios</span></h4>
-        </div>
-        <div class="col d-flex justify-content-end">
-            <div *ngIf="orderProcess[0].action != 'EditOrderDetail'" class="d-flex align-items-cente">
-                <h4 class="m-0 font-weight-bold">Beneficiarios: {{ beneficiariesAmount }} -</h4>
-                <a class="hover-text-2 text-decoration-none text-dark" (click)="addAnotherBeneficiarie()"><i
-                        class="ml-2 fas fa-plus-square fa-2x"></i>
-                    <span class="tooltip-text bottom">Añadir beneficiario</span>
-                </a>
-                <a *ngIf="beneficiariesAmount > 1" class="hover-text-2 text-decoration-none text-dark"
-                    (click)="reduceBeneficiariesAmount()"><i class="ml-2 fas fa-minus-square fa-2x"></i>
-                    <span class="tooltip-text bottom">Reducir beneficiario</span>
-                </a>
-            </div>
-        </div>
+<!-- <ng-template pTemplate="header"> -->
+<div class="flex justify-content-between">
+    <h2 class="m-0 text-blue-500">Proceso de Reserva</h2>
+    <div *ngIf="orderProcess[0].action !== 'EditOrderDetail'">
+        <button *ngIf="beneficiariesForm() && showBeneficiariesTable()" (click)="reduceBeneficiariesAmount()" pButton
+            pRipple type="button" label="Disminuir beneficiario" icon="pi pi-user-minus"
+            class="p-button-outlined mr-3"></button>
+        <p-button
+            *ngIf="beneficiariesForm() && showBeneficiariesTable() || !beneficiariesForm() && showBeneficiariesTable()"
+            (click)="addAnotherBeneficiarie()" label="Añadir beneficiario" icon="pi pi-user-plus"></p-button>
     </div>
 </div>
-<form class="needs-validation" novalidate [formGroup]="formGroup">
-    <div class="card-body d-flex justify-content-center">
-        <div class="w-100 p-2">
-            <div class="container-fluid m-0 p-0">
-                <div *ngIf="beneficiariesForm()" class="mb-3">
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="name" class="form-label">Nombres</label>
-                                <div class="input-group">
-                                    <input *ngIf="customerInformation()" type="text" class="form-control"
-                                        placeholder="Ingrese los nombres del beneficiario" disabled readonly>
-                                    <input *ngIf="!customerInformation()" type="text" id="name" formControlName="name"
-                                        minlength="3" maxlength="30" class="form-control"
-                                        placeholder="Ingrese los nombres del beneficiario" required [ngClass]="{
-                                    'invalid': formGroup.get('name').dirty && formGroup.get('name').errors, 
-                                    'valid': formGroup.get('name').dirty && !formGroup.get('name').errors
-                            }" onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
-                            
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text rounded-right"><i class="fas fa-user"></i></span>
-                                    </div>
-                                    <div *ngIf="formGroup.get('name').dirty && formGroup.get('name')?.errors?.['required']"
-                                        class="invalid-feedback">
-                                        Este campo es obligatorio.
-                                    </div>
-                                    <div *ngIf="formGroup.get('name')?.errors?.['minlength'] && formGroup.get('name').dirty"
-                                        class="invalid-feedback">
-                                        El nombre debe contener al menos 3 letras.
-                                    </div>
-                                </div>
-                            </div>
+<!-- </ng-template> -->
+<div class="flex justify-content-between">
+    <div *ngIf="beneficiariesForm() && showBeneficiariesTable()" class="col-5 py-0">
+        <p-divider align="left">
+            <b>Formulario de Beneficiarios</b>
+        </p-divider>
+        <form novalidate [formGroup]="formGroup">
+            <div class="grid">
+                <div class="col">
+                    <div class="field">
+                        <label for="document" class="block">Documento</label>
+                        <div class="p-inputgroup">
+                            <input pInputText type="text" formControlName="document" required="true" minlength="8"
+                                maxlength="15" placeholder="Ingrese el documento" class="w-full" [ngClass]="{ 
+                                    'border-green-500': customerInformation(),
+                                    'border-red-600': formGroup.get('document')?.dirty && alreadyExists()}"
+                                onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
+                            <button *ngIf="customerInformation() && !alreadyExists()" pButton pRipple type="button"
+                                (click)="fillCustomerInformation()" icon="pi pi-user-plus"
+                                class="p-button-success"></button>
                         </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="lastName" class="form-label">Apellidos</label>
-                                <input *ngIf="customerInformation()" type="text" class="form-control"
-                                    placeholder="Ingrese los apellidos del beneficiario" disabled readonly>
-                                <input *ngIf="!customerInformation()" type="text" id="lastName"
-                                    formControlName="lastName" minlength="3" maxlength="30" class="form-control"
-                                    placeholder="Ingrese los apellidos del beneficiario" required [ngClass]="{
-                                    'invalid': formGroup.get('lastName').dirty && formGroup.get('lastName').errors, 
-                                    'valid': formGroup.get('lastName').dirty && !formGroup.get('lastName').errors
-                            }" onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
-                                <div *ngIf="formGroup.get('lastName').dirty && formGroup.get('lastName')?.errors?.['required']"
-                                    class="invalid-feedback">
-                                    Este campo es obligatorio.
-                                </div>
-                                <div *ngIf="formGroup.get('lastName').dirty && formGroup.get('lastName')?.errors?.['minlength']"
-                                    class="invalid-feedback">
-                                    Este campo debe contener al menos 3 letras.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="document" class="form-label">Documento</label>
-                                <div class="input-group">
-                                    <input type="text" id="document" formControlName="document" class="form-control"
-                                        placeholder="Ingrese el documento del beneficiario" minlength="8" maxlength="15"
-                                        required [ngClass]="{
-                                        'invalid': formGroup.get('document').dirty && formGroup.get('document').errors || (alreadyExists() && formGroup.get('document').dirty) || (alreadyExistsFromEdit() && formGroup.get('document').dirty),
-                                        'valid': formGroup.get('document').dirty && !formGroup.get('document').errors && !alreadyExists() && !alreadyExistsFromEdit() || (customerInformation() && formGroup.get('document').dirty && !alreadyExists())
-                                    }" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text rounded-right"><i
-                                                class="fas fa-id-card"></i></span>
-                                    </div>
-                                    <div *ngIf="formGroup.get('document').dirty && formGroup.get('document')?.errors?.['required']"
-                                        class="invalid-feedback">
-                                        Este campo es obligatorio.
-                                    </div>
-                                    <div *ngIf="formGroup.get('document').dirty && formGroup.get('document')?.errors?.['minlength']"
-                                        class="invalid-feedback">
-                                        El documento debe tener mínimo 8 números.
-                                    </div>
-                                    <div *ngIf="alreadyExists() && formGroup.get('document').dirty"
-                                        class="invalid-feedback">
-                                        Ya existe un beneficiario con este documento.
-                                    </div>
-                                    <div *ngIf="alreadyExistsFromEdit() && formGroup.get('document').dirty"
-                                        class="invalid-feedback">
-                                        Este número de documento ya está en uso.
-                                    </div>
-                                    <div *ngIf="customerInformation() && !alreadyExists() && formGroup.get('document').dirty"
-                                        class="valid-feedback">
-                                        <a (click)="fillCustomerInformation()"
-                                            class="text-decoration-none text-success">¡Beneficiario encontrado! Haz
-                                            click
-                                            para acelerar el
-                                            proceso.</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-7">
-                            <div class="row">
-                                <div class="col-7">
-                                    <div class="form-group">
-                                        <label for="address" class="form-label">Dirección</label>
-                                        <div class="input-group">
-                                            <input *ngIf="customerInformation()" type="text" class="form-control"
-                                                placeholder="Ej: País - Ciudad - Barrio - Dirección" disabled readonly>
-                                            <input *ngIf="!customerInformation()" type="text" id="address"
-                                                formControlName="address" class="form-control"
-                                                placeholder="Ej: País - Ciudad - Barrio - Dirección" minlength="25"
-                                                required [ngClass]="
-                                            {
-                                                'invalid': formGroup.get('address').dirty && formGroup.get('address').errors,
-                                                'valid': formGroup.get('address').dirty && !formGroup.get('address').errors
-                                            }">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text rounded-right"><i
-                                                        class="fas fa-location-arrow"></i></span>
-                                            </div>
-                                            <div *ngIf="formGroup.get('address')?.errors?.['required'] && formGroup.get('address').dirty"
-                                                class="invalid-feedback">
-                                                Este campo es obligatorio.
-                                            </div>
-                                            <div *ngIf="formGroup.get('address')?.errors?.['minlength'] && formGroup.get('address').dirty"
-                                                class="invalid-feedback">
-                                                Por favor ingrese: País, ciudad, barrio y dirección.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-5">
-                                    <div class="form-group">
-                                        <label for="phoneNumber" class="form-label">Teléfono Celular</label>
-                                        <div class="input-group">
-                                            <input *ngIf="customerInformation()" type="text" class="form-control"
-                                                placeholder="Número del beneficiario" disabled readonly>
-                                            <input *ngIf="!customerInformation()" type="text" id="phoneNumber"
-                                                formControlName="phoneNumber" class="form-control"
-                                                placeholder="Número del beneficiario" minlength="10" maxlength="10"
-                                                required [ngClass]="
-                                            {
-                                                'invalid': formGroup.get('phoneNumber').dirty && formGroup.get('phoneNumber').errors,
-                                                'valid': formGroup.get('phoneNumber').dirty && !formGroup.get('phoneNumber').errors
-                                            }" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text rounded-right"><i
-                                                        class="fas fa-phone-alt"></i></span>
-                                            </div>
-                                            <div *ngIf="formGroup.get('phoneNumber')?.errors?.['required'] && formGroup.get('phoneNumber').dirty"
-                                                class="invalid-feedback">
-                                                Este campo es obligatorio.
-                                            </div>
-                                            <div *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber').dirty"
-                                                class="invalid-feedback">
-                                                Este campo debe contener 10 números.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-5">
-                            <div class="row">
-                                <div class="col-5">
-                                    <div class="form-group">
-                                        <label for="birthdate" class="form-label">Fecha de
-                                            nacimiento</label>
-                                        <input *ngIf="customerInformation()" type="date" class="form-control" disabled
-                                            readonly>
-                                        <input *ngIf="!customerInformation()" type="date" id="birthdate"
-                                            formControlName="birthdate" class="form-control" required [ngClass]="
-                                    {
-                                        'invalid': formGroup.get('birthdate').dirty && formGroup.get('birthdate').errors,
-                                        'valid': formGroup.get('birthdate').dirty && !formGroup.get('birthdate').errors
-                                    }">
-                                        <div *ngIf="formGroup.get('birthdate')?.errors?.['required'] && formGroup.get('birthdate').dirty"
-                                            class="invalid-feedback">
-                                            Este campo es obligatorio.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-7">
-                                    <div class="form-group">
-                                        <label for="eps" class="form-label">Tipo de
-                                            EPS</label>
-                                        <div class="input-group">
-                                            <select *ngIf="customerInformation()" disabled
-                                                class="custom-select form-control">
-                                                <option disabled selected value="0">EPS del beneficiario
-                                                </option>
-                                            </select>
-                                            <select *ngIf="!customerInformation()" class="custom-select form-control"
-                                                formControlName="eps" id="eps" required [ngClass]="
-                                        {
-                                            'invalid': formGroup.get('eps').dirty && formGroup.get('eps').errors,
-                                            'valid': formGroup.get('eps').dirty && !formGroup.get('eps').errors
-                                        }">
-                                                <option disabled selected value="0">EPS del beneficiario
-                                                </option>
-                                                <option *ngFor="let eps of allEps" [value]="eps">{{ eps }}</option>
-                                            </select>
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text rounded-right"><i
-                                                        class="fas fa-hospital-user"></i></span>
-                                            </div>
-                                            <div *ngIf="formGroup.get('eps')?.errors?.['required'] && formGroup.get('eps').dirty"
-                                                class="invalid-feedback">
-                                                Este campo es obligatorio.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div *ngIf="showBeneficiariesTable()" class="table-responsive">
-                    <table class="table table-striped shadow-sm table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Apellidos</th>
-                                <th>Documento</th>
-                                <th>Fecha Nacimiento</th>
-                                <th>Celular</th>
-                                <th>Dirección</th>
-                                <th>EPS</th>
-                                <th>Precio unitario</th>
-                                <th>Eliminar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let beneficiarie of beneficiaries">
-                                <td>{{beneficiarie.name}}</td>
-                                <td>{{beneficiarie.lastName}}</td>
-                                <td>{{beneficiarie.document}}</td>
-                                <td>{{beneficiarie.birthDate.getDate()}}</td>
-                                <td>{{beneficiarie.phoneNumber}}</td>
-                                <td>{{beneficiarie.address}}</td>
-                                <td>{{beneficiarie.eps}}</td>
-                                <td>{{onePackage.price}}</td>
-                                <td class="infoData">
-                                    <button (click)="deleteBeneficiarie(beneficiarie.document)"
-                                        class="hover-text btn btn-outline-danger"><i
-                                            style="cursor: pointer; display: grid;" class="fas fa-trash"
-                                            style="font-size: 100%"></i>
-                                        <span class="tooltip-text bottom">Eliminar</span>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="card-footer">
-        <div class="row">
-            <div class="col">
-            
-            </div>
-            <div class="col">
-                <div class="d-flex justify-content-end">
-                    <button (click)="back()" type="button" id="cancelButton"
-                        class="btn btn-danger mr-3">Regresar</button>
-                    <button *ngIf="orderProcess[0].action != 'EditOrderDetail' && validForm() && beneficiariesForm()"
-                        type="submit" (click)="add()" class="btn btn-success">Agregar</button>
-
-                    <button *ngIf="orderProcess[0].action != 'EditOrderDetail' && validForm() && !beneficiariesForm()"
-                        type="submit" (click)="next()" class="btn btn-success">Siguiente</button>
-
-                    <button *ngIf="orderProcess[0].action != 'EditOrderDetail' && !validForm() && beneficiariesForm()"
-                        type="submit" class="btn btn-secondary" disabled>Agregar</button>
-
-                    <button *ngIf="orderProcess[0].action === 'EditOrderDetail' && validForm() && beneficiariesForm()"
-                        type="submit" (click)="next()" class="btn btn-success">Guardar</button>
-
-                    <button *ngIf="orderProcess[0].action === 'EditOrderDetail' && !validForm() && beneficiariesForm()"
-                        type="submit" (click)="next()" class="btn btn-secondary" disabled>Guardar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</form> -->
-
-
-<!-- <div class="grid field">
-            <div class="col-5">
-                <label for="document" class="form-label">Persona
-                    titular</label>
-            </div>
-            <div class="col-7">
-                <div class="flex justify-content-end align-items-end">
-                    <span class="font-italic" style="font-size: 15px;">¿El titular no
-                        tiene una cuenta? <a class="text-decoration-none" href="">
-                            Crear cuenta.</a></span>
-                </div>
-            </div>
-        </div>
-        <div class="input-group">
-            <input type="text" class="form-control" id="document" minlength="8" maxlength="15"
-                formControlName="document" [ngClass]="
-                        {
-                            'invalid': formGroup.get('document').dirty && formGroup.get('document').errors || (validateCustomerId() && formGroup.get('document').dirty) || (validateRole() && formGroup.get('document').dirty),
-                            'valid': formGroup.get('document').dirty && !formGroup.get('document').errors && !validateCustomerId() && !validateRole()
-                        }" placeholder="Ingrese el número del documento de identidad del titular" required
-                onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
-
-            <div class="input-group-prepend">
-                <span class="input-group-text rounded-right">
-                    <i class="fas fa-user"></i>
-                </span>
-            </div>
-
-            <div *ngIf="formGroup.get('document')?.errors?.['required'] && formGroup.get('document').dirty"
-                >
-                Este campo es obligatorio.
-            </div>
-            <div *ngIf="formGroup.get('document')?.errors?.['minlength'] && formGroup.get('document').dirty"
-                >
-                El documento debe tener mínimo 8 números.
-            </div>
-            <div *ngIf="validateCustomerId() && formGroup.get('document').dirty" >
-                Este documento no está asociado a ningún cliente.
-            </div>
-            <div *ngIf="validateRole() && formGroup.get('document').dirty" >
-                Solo los clientes pueden ser titulares de un pedido.
-            </div>
-        </div>
-        <div class="col">
-            <div class="col">
-                <div class="form-group">
-                    <label for="packageId" class="form-label">Paquete</label>
-                    <div class="input-group">
-                        <select class="custom-select form-control" formControlName="packageId" id="packageId" required
-                            [ngClass]="
-                            {
-                                'invalid': formGroup.get('packageId').dirty && formGroup.get('packageId').errors,
-                                'valid': formGroup.get('packageId').dirty && !formGroup.get('packageId').errors
-                            }">
-                            <option disabled selected value="0">Seleccione el paquete
-                            </option>
-                            <option *ngFor="let package of allPackages" [value]="package.packageId">{{ package.name
-                                }}</option>
-                        </select>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text rounded-right"><i class="fas fa-umbrella-beach"></i></span>
-                        </div>
-                        <div *ngIf="formGroup.get('packageId')?.errors?.['required'] && formGroup.get('packageId').dirty"
-                            >
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['required']">
                             Este campo es obligatorio.
-                        </div>
+                        </small>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['minlength']">
+                            Deben ser mínimo 8 números.
+                        </small>
+                        <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && alreadyExists()">
+                            Este documento ya está en uso.
+                        </small>
+                        <small class="block text-green-500"
+                            *ngIf="formGroup.get('document')?.dirty && customerInformation() && !alreadyExists()">
+                            !Beneficiario encontrado! Haz click en el icono para añadirlo.
+                        </small>
                     </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label for="beneficiariesAmount" class="form-label">Beneficiarios</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" placeholder="Seleccione un paquete"
-                            *ngIf="!formGroup.get('packageId').dirty && orderProcess == null" readonly disabled>
-                        <input type="number" id="beneficiariesAmount" minlength="1" class="form-control"
-                            *ngIf="formGroup.get('packageId').dirty || orderProcess != null" [ngClass]="
-                          {
-                            'invalid': formGroup.get('beneficiariesAmount').dirty && (formGroup.get('beneficiariesAmount').errors) ||
-                             (orderProcess == null && formGroup.get('beneficiariesAmount').dirty && !validateBeneficiaries()) ||
-                             (orderProcess != null && formGroup.get('packageId').dirty && !validateBeneficiaries()) ||
-                             (orderProcess != null && formGroup.get('beneficiariesAmount').dirty && !validateBeneficiaries()) ||
-                              (formGroup.get('beneficiariesAmount').dirty && !validateBeneficiariesAmount()) ||
-                               (formGroup.get('beneficiariesAmount').dirty && !validateExistingBeneficiariesAmount()),
-                            'valid': formGroup.get('beneficiariesAmount').dirty && !formGroup.get('beneficiariesAmount').errors &&
-                            validateBeneficiaries() && validateBeneficiariesAmount() && validateExistingBeneficiariesAmount()
-                          }" placeholder="¿Cuántos viajarán?" formControlName="beneficiariesAmount" required
-                            onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text rounded-right"><i class="fas fa-users"></i></span>
-                        </div>
-                        <div *ngIf="formGroup.get('beneficiariesAmount')?.errors?.['required'] && formGroup.get('beneficiariesAmount').dirty"
-                            >
+                <div class="col">
+                    <div class="field">
+                        <label for="name" class="block">Nombres</label>
+                        <input pInputText type="text" formControlName="name" required="true" minlength="3"
+                            maxlength="30" placeholder="Ingrese los nombres" class="w-full"
+                            onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)" />
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('name')?.dirty && formGroup.get('name')?.errors?.['required']">
                             Este campo es obligatorio.
-                        </div>
-                        <div *ngIf="!validateBeneficiariesAmount() && formGroup.get('beneficiariesAmount').dirty"
-                            >
-                            Debe haber al menos 1 beneficiario.
-                        </div>
-                        <div *ngIf="orderProcess == null && !validateBeneficiaries() && formGroup.get('beneficiariesAmount').dirty"
-                            >
-                            Cupos disponibles: {{onePackage.availableQuotas}}.
-                        </div>
-                        <div *ngIf="(orderProcess != null && !validateBeneficiaries() && formGroup.get('packageId').dirty) || (orderProcess != null && !validateBeneficiaries() && formGroup.get('beneficiariesAmount').dirty)"
-                            >
-                            Cupos disponibles: {{onePackage.availableQuotas}}.
-                        </div>
-                        <div *ngIf="validateBeneficiaries() && !validateExistingBeneficiariesAmount() && formGroup.get('beneficiariesAmount').dirty"
-                            >
-                            Capacidad minima de beneficiarios: {{beneficiariesAmount}}.
-                        </div>
-
+                        </small>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('name')?.dirty && formGroup.get('name')?.errors?.['minlength']">
+                            Deben ser al menos 3 letras.
+                        </small>
                     </div>
                 </div>
             </div>
-        </div> -->
+            <div class="grid">
+                <div class="col">
+                    <div class="field">
+                        <label for="lastName" class="block">Apellidos</label>
+                        <input pInputText type="text" formControlName="lastName" required="true" minlength="3"
+                            maxlength="30" placeholder="Ingrese los apellidos" class="w-full"
+                            onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('lastName')?.dirty && formGroup.get('lastName')?.errors?.['required']">
+                            Este campo es obligatorio.
+                        </small>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('lastName')?.errors?.['minlength'] && formGroup.get('lastName')?.dirty">
+                            Deben ser al menos 3 letras.
+                        </small>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="field">
+                        <label for="birthdate" class="block">Fecha de Nacimiento</label>
+                        <p-calendar dateFormat="dd/mm/yy" formControlName="birthdate" required="true"
+                            placeholder="dd/mm/yyyy" [showIcon]="true" [style]="{ width: '100%' }"
+                            [readonlyInput]="true"></p-calendar>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('birthdate')?.dirty && formGroup.get('birthdate')?.errors?.['required']">
+                            Este campo es obligatorio.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="grid">
+                <div class="col-12">
+                    <div class="field">
+                        <label for="address" class="block">Dirección</label>
+                        <div class="p-input-icon-left w-full">
+                            <i class="pi pi-map-marker"></i>
+                            <input pInputText type="text" formControlName="address" required="true"
+                                placeholder="País - Departamento - Ciudad - Dirección" class="w-full">
+                        </div>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('address')?.dirty && formGroup.get('address')?.errors?.['required']">
+                            Este campo es obligatorio.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="grid">
+                <div class="col">
+                    <div class="field">
+                        <label for="eps" class="block">EPS</label>
+                        <p-dropdown formControlName="eps" required="true" [options]="allEps"
+                            placeholder="Seleccione la EPS" [showClear]="true"
+                            [style]="{ width: '100%', 'max-width': '13.7rem'}"></p-dropdown>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('eps')?.dirty && formGroup.get('eps')?.errors?.['required']">
+                            Este campo es obligatorio.
+                        </small>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="field">
+                        <label for="phoneNumber" class="block">Teléfono celular</label>
+                        <span class="p-input-icon-left w-full">
+                            <i class="pi pi-phone"></i>
+                            <input pInputText type="text" formControlName="phoneNumber" minlength="10" maxlength="10"
+                                required="true" placeholder="Ingrese el número" class="w-full"
+                                onkeydown="return /^\d|Backspace|Delete$/.test(event.key)" />
+                        </span>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('phoneNumber')?.dirty && formGroup.get('phoneNumber')?.errors?.['required']">
+                            Este campo es obligatorio.
+                        </small>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber')?.dirty">
+                            Deben ser 10 números.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="grid">
+                <div class="col">
+                    <div class="field-checkbox">
+                        <p-checkbox formControlName="addToFt" [binary]="true"></p-checkbox>
+                        <label for="addToFt" class="mb-0">Agregar beneficiario a tus Viajeros Frecuentes</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div *ngIf="beneficiariesForm() && !showBeneficiariesTable()" class="col-12 py-0">
+        <p-divider align="left">
+            <b>Formulario de Beneficiarios</b>
+        </p-divider>
+        <form novalidate [formGroup]="formGroup">
+            <div class="grid">
+                <div class="col">
+                    <div class="field">
+                        <label for="document" class="block">Documento</label>
+                        <div class="p-inputgroup">
+                            <input pInputText type="text" formControlName="document" required="true" minlength="8"
+                                maxlength="15" placeholder="Ingrese el número del documento del beneficiario"
+                                class="w-full" [ngClass]="{ 
+                                    'border-green-500': customerInformation(),
+                                    'border-red-600': formGroup.get('document')?.dirty && alreadyExistsFromEdit()}"
+                                onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
+                            <button *ngIf="customerInformation() && !alreadyExists()" pButton pRipple type="button"
+                                (click)="fillCustomerInformation()" icon="pi pi-user-plus"
+                                class="p-button-success"></button>
+                        </div>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['required']">
+                            Este campo es obligatorio.
+                        </small>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['minlength']">
+                            Este campo debe tener mínimo 8 números.
+                        </small>
+                        <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && alreadyExists()">
+                            Ya existe un beneficiario con este documento.
+                        </small>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('document')?.dirty && alreadyExistsFromEdit()">
+                            Este número de documento ya está en uso.
+                        </small>
+                        <small class="block text-green-500"
+                            *ngIf="formGroup.get('document')?.dirty && customerInformation() && !alreadyExists()">
+                            !Beneficiario encontrado! Haz click en el icono para añadirlo.
+                        </small>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="field">
+                        <label for="name" class="block">Nombres</label>
+                        <input pInputText type="text" formControlName="name" required="true" minlength="3"
+                            maxlength="30" placeholder="Ingrese los nombres del beneficiario" class="w-full"
+                            onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)" />
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('name')?.dirty && formGroup.get('name')?.errors?.['required']">
+                            Este campo es obligatorio.
+                        </small>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('name')?.dirty && formGroup.get('name')?.errors?.['minlength']">
+                            Este campo debe contener al menos 3 letras.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="grid">
+                <div class="col">
+                    <div class="field">
+                        <label for="lastName" class="block">Apellidos</label>
+                        <input pInputText type="text" formControlName="lastName" required="true" minlength="3"
+                            maxlength="30" placeholder="Ingrese los apellidos del beneficiario" class="w-full"
+                            onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('lastName')?.dirty && formGroup.get('lastName')?.errors?.['required']">
+                            Este campo es obligatorio.
+                        </small>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('lastName')?.errors?.['minlength'] && formGroup.get('lastName')?.dirty">
+                            Este campo debe contener al menos 3 letras.
+                        </small>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="field">
+                        <label for="birthdate" class="block">Fecha de Nacimiento</label>
+                        <p-calendar dateFormat="dd/mm/yy" formControlName="birthdate" required="true"
+                            placeholder="dd/mm/yyyy" [showIcon]="true" [style]="{ width: '100%' }"
+                            [readonlyInput]="true"></p-calendar>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('birthdate')?.dirty && formGroup.get('birthdate')?.errors?.['required']">
+                            Este campo es obligatorio.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="grid">
+                <div class="col-12">
+                    <div class="field">
+                        <label for="address" class="block">Dirección</label>
+                        <div class="p-input-icon-left w-full">
+                            <i class="pi pi-map-marker"></i>
+                            <input pInputText type="text" formControlName="address" required="true"
+                                placeholder="País - Departamento - Ciudad - Dirección" class="w-full">
+                        </div>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('address')?.dirty && formGroup.get('address')?.errors?.['required']">
+                            Este campo es obligatorio.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="grid">
+                <div class="col">
+                    <div class="field">
+                        <label for="eps" class="block">EPS</label>
+                        <p-dropdown formControlName="eps" required="true" [options]="allEps"
+                            placeholder="Seleccione la EPS del beneficiario" [showClear]="true"
+                            [style]="{ width: '100%', 'max-width': '34.6rem'}"></p-dropdown>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('eps')?.dirty && formGroup.get('eps')?.errors?.['required']">
+                            Este campo es obligatorio.
+                        </small>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="field">
+                        <label for="phoneNumber" class="block">Teléfono celular</label>
+                        <span class="p-input-icon-left w-full">
+                            <i class="pi pi-phone"></i>
+                            <input pInputText type="text" formControlName="phoneNumber" minlength="10" maxlength="10"
+                                required="true" placeholder="Ingrese el número teléfonico del beneficiario"
+                                class="w-full" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)" />
+                        </span>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('phoneNumber')?.dirty && formGroup.get('phoneNumber')?.errors?.['required']">
+                            Este campo es obligatorio.
+                        </small>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber')?.dirty">
+                            Este campo debe contener 10 números.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="grid">
+                <div class="col">
+                    <div class="field-checkbox">
+                        <p-checkbox formControlName="addToFt" [binary]="true"></p-checkbox>
+                        <label for="addToFt" class="mb-0">Agregar beneficiario a tus Viajeros Frecuentes</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div *ngIf="beneficiariesForm() && showBeneficiariesTable()" class="col-1 py-0">
+        <p-divider layout="vertical">
+        </p-divider>
+    </div>
+    <div *ngIf="showBeneficiariesTable() && beneficiariesForm()" class="col-6 py-0">
+        <p-divider align="right">
+            <b>Lista de Beneficiarios</b>
+        </p-divider>
+        <p-table [value]="beneficiaries" [paginator]="true" [rows]="3" [scrollable]="true">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="min-width: 9rem" pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 9rem" pSortableColumn="lastName">Apellidos <p-sortIcon
+                            field="lastName"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 9rem" pSortableColumn="document">Documento <p-sortIcon
+                            field="document"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 14rem" pSortableColumn="birthdate">Fecha de nacimiento<p-sortIcon
+                            field="birthdate"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 9rem" pSortableColumn="phoneNumber">Teléfono <p-sortIcon
+                            field="phoneNumber"></p-sortIcon></th>
+                    <th style="min-width: 15rem" pSortableColumn="address">Dirección <p-sortIcon
+                            field="address"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 9rem" pSortableColumn="eps">EPS <p-sortIcon field="eps"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 9rem" pSortableColumn="price">Precio <p-sortIcon field="price"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 6rem" pFrozenColumn alignFrozen="right" class="frozen-col">
+                        Eliminar
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-beneficiarie>
+                <tr>
+                    <td style="min-width: 9rem">{{ beneficiarie.name }}</td>
+                    <td style="min-width: 9rem">{{ beneficiarie.lastName }}</td>
+                    <td style="min-width: 9rem">{{ beneficiarie.document }}</td>
+                    <td style="min-width: 14rem">{{ beneficiarie.birthdate }}</td>
+                    <td style="min-width: 9rem">{{ beneficiarie.phoneNumber }}</td>
+                    <td style="min-width: 15rem">{{ beneficiarie.address }}</td>
+                    <td style="min-width: 9rem">{{ beneficiarie.eps }}</td>
+                    <td style="min-width: 8rem">{{ onePackage.price | currency:'USD':'symbol' }}</td>
+                    <td style="min-width: 6rem" pFrozenColumn alignFrozen="right"
+                        class="frozen-col flex justify-content-center">
+                        <button (click)="deleteBeneficiarie(beneficiarie.document)" pButton pRipped type="button"
+                            icon="pi pi-trash"
+                            class="p-button-rounded p-button-danger p-button-outlined p-button-sm"></button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <tr>
+                    <td colspan="12">Costo Total: {{ onePackage.price * beneficiariesAmount | currency:'USD':'symbol'}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+    </div>
+    <div *ngIf="showBeneficiariesTable() && !beneficiariesForm()" class="col-12 py-0">
+        <p-divider align="right">
+            <b>Lista de Beneficiarios</b>
+        </p-divider>
+        <p-table [value]="beneficiaries" [paginator]="true" [rows]="3" [scrollable]="true">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="min-width: 9rem" pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 9rem" pSortableColumn="lastName">Apellidos <p-sortIcon
+                            field="lastName"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 9rem" pSortableColumn="document">Documento <p-sortIcon
+                            field="document"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 14rem" pSortableColumn="birthdate">Fecha de nacimiento<p-sortIcon
+                            field="birthdate"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 9rem" pSortableColumn="phoneNumber">Teléfono <p-sortIcon
+                            field="phoneNumber"></p-sortIcon></th>
+                    <th style="min-width: 15rem" pSortableColumn="address">Dirección <p-sortIcon
+                            field="address"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 9rem" pSortableColumn="eps">EPS <p-sortIcon field="eps"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 9rem" pSortableColumn="price">Precio <p-sortIcon field="price"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 6rem" pFrozenColumn alignFrozen="right" class="frozen-col">
+                        Eliminar
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-beneficiarie>
+                <tr>
+                    <td style="min-width: 9rem">{{ beneficiarie.name }}</td>
+                    <td style="min-width: 9rem">{{ beneficiarie.lastName }}</td>
+                    <td style="min-width: 9rem">{{ beneficiarie.document }}</td>
+                    <td style="min-width: 14rem">{{ beneficiarie.birthdate }}</td>
+                    <td style="min-width: 9rem">{{ beneficiarie.phoneNumber }}</td>
+                    <td style="min-width: 15rem">{{ beneficiarie.address }}</td>
+                    <td style="min-width: 9rem">{{ beneficiarie.eps }}</td>
+                    <td style="min-width: 8rem">{{ onePackage.price | currency:'USD':'symbol' }}</td>
+                    <td style="min-width: 6rem" pFrozenColumn alignFrozen="right"
+                        class="frozen-col flex justify-content-center">
+                        <button (click)="deleteBeneficiarie(beneficiarie.document)" pButton pRipped type="button"
+                            icon="pi pi-trash"
+                            class="p-button-rounded p-button-danger p-button-outlined p-button-sm"></button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <tr>
+                    <td colspan="12">Costo Total: {{ onePackage.price * beneficiariesAmount | currency:'USD':'symbol'}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+<!-- <ng-template pTemplate="footer" style="padding-top: 0%;"> -->
+<div class="flex justify-content-between">
+    <div>
+        <p-button label="Tus Viajeros Frecuentes" icon="pi pi-users"></p-button>
+    </div>
+    <div>
+        <button pButton pRipple type="button" (click)="back()" label="Regresar" icon="pi pi-undo"
+            class="p-button-outlined mr-3"></button>
+        <p-button *ngIf="orderProcess[0].action !== 'EditOrderDetail' && validForm() && beneficiariesForm()"
+            (click)="add()" label="Guardar" icon="pi pi-check"></p-button>
+
+        <p-button *ngIf="orderProcess[0].action !== 'EditOrderDetail' && !validForm() && beneficiariesForm()"
+            label="Guardar" icon="pi pi-check" disabled="true"></p-button>
+
+        <p-button *ngIf="orderProcess[0].action !== 'EditOrderDetail' && validForm() && !beneficiariesForm()"
+            (click)="next()" label="Siguiente" icon="pi pi-check"></p-button>
+
+        <p-button *ngIf="orderProcess[0].action === 'EditOrderDetail' && validForm() && beneficiariesForm()"
+            (click)="next()" label="Guardar" icon="pi pi-check"></p-button>
+
+        <p-button *ngIf="orderProcess[0].action === 'EditOrderDetail' && !validForm() && beneficiariesForm()"
+            label="Guardar" icon="pi pi-check" disabled="true"></p-button>
+    </div>
+</div>
+<!-- </ng-template> -->

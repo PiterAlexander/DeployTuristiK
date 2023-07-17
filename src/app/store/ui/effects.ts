@@ -196,9 +196,10 @@ export class PackageEffects {
             tap((action) => {
                 this.dialogRef = this.dialogService.open(CreateOrderFormComponent, {
                     /* Opciones del modal */
-                    header: 'Proceso de Reserva',
-                    width: '45%',
-                    contentStyle: { overflowY: 'auto' },
+                    showHeader: false,
+                    width: '48%',
+                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
+                    baseZIndex: 10000,
                 });
             })
         ), { dispatch: false });
@@ -209,7 +210,8 @@ export class PackageEffects {
         switchMap((order) => {
             return this.apiService.addOrder(order).pipe(
                 mergeMap((orderResolved) => {
-                    this.modalRef.close();
+                    this.dialogRef.close()
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Proceso completado', detail: '¡Pedido registrado exitosamente!' });
                     return [
                         new CreateOrderSuccess(orderResolved),
                         new GetAllOrdersRequest()
@@ -264,8 +266,9 @@ export class PackageEffects {
             tap((action) => {
                 this.dialogRef = this.dialogService.open(CreateOrderDetailFormComponent, {
                     /* Opciones del modal */
-                    width: '90%',
-                    contentStyle: { overflowY: 'auto' },
+                    showHeader: false,
+                    width: '80%',
+                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
                 });
             })
         ), { dispatch: false });
@@ -301,9 +304,11 @@ export class PackageEffects {
         this.actions$.pipe(
             ofType(orderActions.OPEN_MODAL_CREATE_PAYMENT),
             tap((action) => {
-                this.modalRef = this.modalService.open(CreatePaymentFormComponent, {
-                    backdrop: false,
-                    size: 'xl'
+                this.dialogRef = this.dialogService.open(CreatePaymentFormComponent, {
+                    /* Opciones del modal */
+                    showHeader: false,
+                    width: '40%',
+                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
                 });
             })
         ), { dispatch: false });
