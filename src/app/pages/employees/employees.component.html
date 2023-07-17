@@ -1,63 +1,90 @@
-<div class="content-header">
-    <div class="container-fluid">
-        <div class="row m-3">
-            <div class="card card-package">
-                <div class="card-header card-package-header">
-                    <div class="col-sm-9 col-personalized-1">
-                        <h1 class="m-0 text-dark">Empleados</h1>
-                    </div>
-                    <div class="col-sm-3 col-personalized-2">
-                        <button (click)="openModalCreateEmployee()" type="button" class="btn btn-primary">Agregar
-                            Empleado</button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div *ngIf="loading" class="d-flex justify-content-center">
-                        <div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
-                            <span class="visually-hidden"></span>
+<div class="p-5">
+    <div class="col-12">
+        <div class="card px-6 py-6 p-4" style="border-radius: 15px;">
+            <p-table #dt [value]="employeesList" [rows]="5" [showCurrentPageReport]="true"
+                [rowsPerPageOptions]="[5, 10]" [loading]="loading" [paginator]="true"
+                currentPageReportTemplate="Desde {first} hasta {last} de {totalRecords} empleados"
+                [globalFilterFields]="['name', 'lastName', 'document', 'phoneNumber']">
+                <ng-template pTemplate="caption" class="p-grid">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <div class="custom-flex-item-left">
+                            <span class="mt-2 md:mt-0 p-input-icon-right">
+                                <i class="pi pi-search"></i>
+                                <input pInputText (input)="dt.filterGlobal($event.target.value, 'contains')" type="text"
+                                    placeholder="Buscar..." />
+                            </span>
+                        </div>
+                        <div class="p-input-icon-left mb-2">
+                            <button pButton="" pRipple="" label="Agregar empleado" (click)="openModalCreateEmployee()"
+                                class="p-button-outlined"><i class="pi pi-plus"
+                                    style="margin-left: 5px; margin-right: 9px;"></i></button>
+                                    
                         </div>
                     </div>
-                    <form *ngIf="!loading">
-                        <div class="d-flex justify-content-end mb-3 row">
-                            <label for="table-complete-search"
-                                class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
-                            <div class="col-xs-3 col-sm-auto">
-                                <input id="table-complete-search" type="text" class="form-control" name="searchTerm"
-                                    [(ngModel)]="search" (ngModelChange)="searchByName()" />
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width: 12rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Nombre  completo
                             </div>
-                        </div>
+                        </th>
+                        <th style="min-width: 12rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Documento
+                            </div>
+                        </th>
+                        
+                        <th style="width: 12rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Número
+                            </div>
+                        </th>
+                        
+                        <th style="width: 12rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Acciones
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-employee>
+                    <tr>
+                        <td>
+                            <span>
+                                {{ employee.name }}
+                            </span>
+                            <span>
+                                {{ employee.lastName }}
+                            </span>
+                            <br>
 
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col" sortable="population">Documento</th>
-                                    <th scope="col" sortable="population">Número</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let employee of filteredEmployeesList">
-                                    <td>{{employee.name}}&nbsp;{{employee.lastName}}</td>
-                                    <td>{{employee.document}}</td>
-                                    <td>{{employee.phoneNumber}}</td>
-                                    <!-- <td><a href="">Ver detalles</a></td> -->
-                                    <td><i class="fas fa-edit text-dark" (click)="openModalEditEmployee(employee)"
-                                            style="cursor: pointer"></i></td>
-                                    <td>
-                                        <i class="fas fa-trash text-dark" (click)="deleteEmployee(employee)"
-                                            style="cursor: pointer"></i>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <div class="d-flex justify-content-end pt-3">
-                            <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize">
-                            </ngb-pagination>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                        </td>
+                        <td>
+                            {{ employee.document }}
+                        </td>
+                        <td>
+                            {{ employee.phoneNumber }}
+                        </td>
+                        
+                        
+                        <td class="text-center p-1">
+                            <span><button pButton type="button" icon="pi pi-pencil"
+                                    class="p-button-outlined p-button-warning p-button-rounded m-1"
+                                    (click)="openModalEditEmployee(employee)" pTooltip="Editar"
+                                    tooltipPosition="bottom"></button></span>
+                            <span> <button pButton type="button" icon="pi pi-trash"
+                                    class="p-button-outlined p-button-rounded m-1" pTooltip="Ver detalles"
+                                    (click)="deleteEmployee(employee)" tooltipPosition="bottom"></button></span>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="9">No se encontraron clientes</td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
     </div>
 </div>

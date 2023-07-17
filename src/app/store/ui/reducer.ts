@@ -79,13 +79,13 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 },
                 dateCalendarSelected: {
-                  data: action['dateCalendar'],
-                  error: undefined,
-                  loading: false
+                    data: action['dateCalendar'],
+                    error: undefined,
+                    loading: false
                 }
             };
 
-            case Actions.packageActions.CHANGE_STATUS_PACKAGE_REQUEST:
+        case Actions.packageActions.CHANGE_STATUS_PACKAGE_REQUEST:
             return {
                 ...state,
                 onePackage: {
@@ -397,7 +397,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
         case Actions.FrequentTravelerActions.OPEN_MODAL_LIST_FREQUENTTRAVELER:
             return {
                 ...state,
-                oneCustomer: {
+                allFrequentTraveler: {
                     data: action.payload,
                     error: undefined,
                     loading: false
@@ -406,9 +406,38 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
         case Actions.FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER:
             return {
                 ...state,
-                oneCustomer: {
+                oneCostumer: {
                     data: action.payload,
                     error: undefined,
+                    loading: false
+                }
+            };
+        case Actions.FrequentTravelerActions.GET_ALL_FREQUENTTRAVELER_REQUEST:
+            return {
+                ...state,
+                AllFrequentTraveler: {
+                    data: [],
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+        case Actions.FrequentTravelerActions.GET_ALL_FREQUENTTRAVELER_SUCCESS:
+            return {
+                ...state,
+                allFrequentTraveler: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.FrequentTravelerActions.GET_ALL_FREQUENTTRAVELER_FAILURE:
+            return {
+                ...state,
+                allFrequentTraveler: {
+                    data: [],
+                    error: action.payload,
                     loading: false
                 }
             };
