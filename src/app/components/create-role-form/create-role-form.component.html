@@ -9,54 +9,34 @@
       <form class="needs-validation" novalidate id="form" (submit)="saveChanges()" [formGroup]="formGroup">
           <div class="card-body d-flex">
               <div class="w-100 p-2">
-                  <div class="row">
-                      <div class="formgrid grid">
-                        <!-- <label for="role_name" class="form-label">Nombre</label> -->
-                        <div class="field col">
-                          <!-- <input type="text" id="role_name" name="name" maxlength="20"
-                          class="form-control formularioCampo border-left-dark"
-
-                          [ngClass]="
-                          {
-                            'invalid': formGroup.get('name').dirty && (formGroup.get('name').errors || validateExistingRoleName()),
-                            'valid': formGroup.get('name').dirty && !formGroup.get('name').errors
-                            && !validateExistingRoleName()
-                          }"
-
-                          placeholder="Ingrese el nombre del rol" formControlName="name" required
-                          onkeydown="return /[a-z, ]/i.test(event.key)"
-
-                          >
-
-
-                          <div class="input-group-prepend">
-                            <span *ngIf="formGroup.get('name').errors || validateExistingRoleName()" class="input-group-text rounded-right">
-                              <i class="fas fa-user"></i>
-                            </span>
-                            <span *ngIf="!formGroup.get('name')?.errors && !validateExistingRoleName()" class="input-group-text rounded-right">
-                              <i class="fas fa-check"></i>
-                            </span>
-                          </div> -->
-
-                          <span class="p-input-icon-left">
-                            <i class="pi pi-user"></i>
-                            <input type="text" pInputText placeholder="Ingrese el nombre del rol" formControlName="name" required>
-                          </span>
-                          <!--MENSAJES DE VALIDACION ROLE NAME-->
-                          <div *ngIf="formGroup.get('name')?.errors?.['required'] && formGroup.get('name').dirty" class="invalid-feedback">
-                            *Este campo es obligatorio.
-                          </div>
-                          <div *ngIf="formGroup.get('name')?.errors?.['minlength'] && formGroup.get('name').dirty" class="invalid-feedback">
-                            *El nombre debe tener mínimo 3 caracteres.
-                          </div>
-                          <div *ngIf="validateExistingRoleName() && formGroup.get('name').dirty" class="invalid-feedback">
+                  <div class="grid">
+                    <div class="col"
+                    [ngClass]="
+                      {
+                        'col-6': actionTitle!=='Editar'
+                      }"
+                    >
+                      <div class="field">
+                        <label for="role_name" class="block">Nombre</label>
+                        <input id="role_name" type="text" pInputText placeholder="Ingrese el nombre" class="w-full"
+                            formControlName="name" minlength="3" maxlength="30" required="true"
+                            onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)" />
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('name').dirty && formGroup.get('name')?.errors?.['required']">
+                            Este campo es obligatorio.
+                        </small>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('name')?.errors?.['minlength'] && formGroup.get('name').dirty">
+                            Este campo debe contener al menos 3 letras.
+                        </small>
+                        <small class="p-error block"
+                            *ngIf="validateExistingRoleName() && formGroup.get('name').dirty">
                             *El rol ya está registrado.
-                          </div>
-                          <!---------------------------------->
+                        </small>
                       </div>
                     </div>
 
-                    <div class="field col" *ngIf="actionTitle==='Editar'">
+                    <div class="col" *ngIf="actionTitle==='Editar'">
                       <!-- <label for="status" class="form-label">Estado</label>
                       <div class="input-group">
                           <select class="custom-select border-left-dark form-control formularioCampo" [ngClass]="{'invalid': formGroup.get('status').dirty,'valid': formGroup.get('status').dirty}"
@@ -69,10 +49,19 @@
                               <span class="input-group-text"><i class="fas fa-user-cog"></i></span>
                           </div>
                       </div> -->
-                      <p-dropdown [options]="statuses" [(ngModel)]="selectedStatusCode" formControlName="status" optionLabel="name" optionValue="code"></p-dropdown>
+                      <div class="field">
+                        <label for="eps" class="block">Estado</label>
+                        <p-dropdown [options]="statuses" [(ngModel)]="selectedStatusCode" formControlName="status" optionLabel="name" optionValue="code" [style]="{ width: '15.4rem' }"></p-dropdown>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('status')?.errors?.['required'] && formGroup.get('status').dirty">
+                            Este campo es obligatorio.
+                        </small>
+                    </div>
+                    
+                      <!-- <p-dropdown [options]="statuses" [(ngModel)]="selectedStatusCode" formControlName="status" optionLabel="name" optionValue="code"></p-dropdown>
                       <div *ngIf="this.formGroup.value.status===0 && formGroup.get('status').dirty" class="invalid-feedback">
                         *Por favor seleccione una opción.
-                      </div>
+                      </div> -->
                     </div>
                   </div>
 

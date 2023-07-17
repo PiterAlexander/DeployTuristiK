@@ -141,7 +141,7 @@ export class CreatePackageFormComponent implements OnInit {
           status: this.formGroup.value.status,
         }
         this.store.dispatch(new CreatePackageRequest({ ...model }));
-        console.log(model)
+
       } else {
         const model: Package = {
           packageId: this.packageData.packageId,
