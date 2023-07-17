@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { GetAllCustomerRequest, OpenModalCreateFrequentTraveler } from '@/store/ui/actions';
+import { GetAllCustomerRequest, OpenModalCreateCustomer, OpenModalCreateFrequentTraveler } from '@/store/ui/actions';
 import { Customer } from '@/models/customer';
 import { FrequentTraveler } from '@/models/frequentTraveler';
 import { AppState } from '@/store/state';
@@ -26,9 +26,9 @@ export class ListFrequentTravelerComponent implements OnInit {
   public ui: Observable<UiState>;
   public loading: boolean;
   public FrequentTravelerList: Array<any>;
-  public costumerData: Customer;
+  public customerData: Customer;
   public frequentTravelers: Array<FrequentTraveler>;
-  public allCostumer: Array<Customer>;
+  public allcustomer: Array<Customer>;
   public frequentTravelerCustomers: Array<Customer> = [];
 
   private _state: State = {
@@ -47,27 +47,33 @@ export class ListFrequentTravelerComponent implements OnInit {
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.loading = state.allCustomers.loading;
-      this.allCostumer = state.allCustomers.data;
-      this.costumerData = state.oneCustomer.data;
-      this.frequentTravelers = state.oneCustomer.data.frequentTraveler;
-      this.compareCostumerId();
+      this.allcustomer = state.allCustomers.data;
+      this.customerData = state.oneCustomer.data;
+
+      this.frequentTravelers = state.allFrequentTraveler.data;
+      this.comparecustomerId();
     });
   }
 
-  compareCostumerId() {
+  comparecustomerId() {
+    
     this.frequentTravelerCustomers = [];
     for (const element of this.frequentTravelers) {
-      const costumer = this.allCostumer.find(c => c.customerId === element.travelerId);
-      if (costumer != undefined) {
-        this.frequentTravelerCustomers.push(costumer);
+      const customer = this.allcustomer.find(c => c.customerId === element.travelerId);
+      if (customer != undefined) {
+        this.frequentTravelerCustomers.push(customer);
       }
     }
     
   }
 
   openModalCreateFrequentTraveler() {
-    this.store.dispatch(new OpenModalCreateFrequentTraveler(this.costumerData));
-    console.log(this.frequentTravelerCustomers);
+    this.store.dispatch(new OpenModalCreateFrequentTraveler(this.customerData));
+  } 
+
+  openModalEditCustomer(customer:Customer){
+  
+    this.store.dispatch(new OpenModalCreateCustomer(customer));
   }
 
   cancel() {

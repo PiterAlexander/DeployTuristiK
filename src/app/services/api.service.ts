@@ -83,6 +83,7 @@ export class ApiService {
     }
 
     addCustomer(modelo: Customer): Observable<Customer> {
+        console.log(modelo)
         return this.http.post<Customer>(`${this.endpoint}api/Customer`, modelo)
     }
 
@@ -136,6 +137,7 @@ export class ApiService {
     }
 
     addFrequentTraveler(modelo: FrequentTraveler): Observable<FrequentTraveler> {
+        console.log(modelo,"desde servicio")
         return this.http.post<FrequentTraveler>(`${this.endpoint}api/FrequentTraveler`, modelo)
     }
 
