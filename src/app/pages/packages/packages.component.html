@@ -139,19 +139,9 @@
                                 Nombre
                             </div>
                         </th>
-                        <th style="min-width: 15rem">
-                            <div class="flex justify-content-left align-items-left">
-                                Destino
-                            </div>
-                        </th>
                         <th style="min-width: 10rem">
                             <div class="flex justify-content-left align-items-left">
-                                Fecha de salida
-                            </div>
-                        </th>
-                        <th style="min-width: 10rem">
-                            <div class="flex justify-content-left align-items-left">
-                                Fecha de regreso
+                                Fechas
                             </div>
                         </th>
                         <th style="min-width: 10rem">
@@ -183,13 +173,13 @@
                             {{ package.name }}
                         </td>
                         <td>
-                            {{ package.destination }}
-                        </td>
-                        <td>
-                            {{ package.departureDate | date: 'MM/dd/yyyy' }}
-                        </td>
-                        <td>
-                            {{ package.arrivalDate | date: 'MM/dd/yyyy' }}
+                            <span pTooltip="Fecha de salida">
+                                {{ package.departureDate | date: 'MM/dd/yyyy' }}
+                            </span>
+                            <br>
+                            <span pTooltip="Fecha de regreso">
+                                {{ package.arrivalDate | date: 'MM/dd/yyyy' }}
+                            </span>
                         </td>
                         <td>
                             {{ package.availableQuotas }}

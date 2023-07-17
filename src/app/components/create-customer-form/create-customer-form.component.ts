@@ -9,6 +9,7 @@ import { UiState } from '@/store/ui/state';
 import { Observable } from 'rxjs';
 import { User } from '@/models/user';
 import { Role } from '@/models/role';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-createcustomerform',
@@ -25,7 +26,13 @@ export class CreatecustomerformComponent implements OnInit {
   public CustomerList: Array<any>
   public customerData
   Roles: Array<Role>;
-  constructor(private fb: FormBuilder, private modalService: NgbModal, private store: Store<AppState>) { }
+  public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS', 'OTRA']
+  public otraEps: boolean = false
+  
+  constructor(private fb: FormBuilder, 
+    private modalService: NgbModal, 
+    private store: Store<AppState>,
+    ) { }
 
   ngOnInit(): void {
     this.store.dispatch(new GetAllCustomerRequest());
@@ -38,7 +45,6 @@ export class CreatecustomerformComponent implements OnInit {
     })
 
     this.formGroup = this.fb.group({
-      userName: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]),
       email: new FormControl('', [Validators.required, Validators.email, Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')]),
       password: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]),
       name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
@@ -63,7 +69,6 @@ export class CreatecustomerformComponent implements OnInit {
         phoneNumber: this.customerData.phoneNumber,
         address: this.customerData.address,
         eps: this.customerData.eps,
-        userName: this.customerData.user.userName,
         email: this.customerData.user.email,
         password: this.customerData.user.password,
         user: this.customerData.user
@@ -123,6 +128,22 @@ export class CreatecustomerformComponent implements OnInit {
     }
   }
 
+  addForm() {
+    if (this.formGroup.value.eps == 'OTRA') {
+      this.otraEps = true
+    } else {
+      this.otraEps = false
+    }
+  }
+
+  saveEps(): string {
+    if (this.otraEps) {
+      return this.formGroup.value.otherEps
+    } else {
+      return this.formGroup.value.eps
+    }
+  }
+
   displayPassword() {
     this.Visible = !this.Visible;
   }
@@ -143,4 +164,3 @@ export class CreatecustomerformComponent implements OnInit {
     this.modalService.dismissAll();
   }
 }
-

@@ -80,6 +80,18 @@ export default <UiState>{
     loading: false
   },
   //<----------------->
+  //<--- FREQUENT TRAVELER --->
+  allFrequentTraveler: {
+    data: [],
+    error: undefined,
+    loading: false
+  },
+  oneFrequentTraveler: {
+    data: undefined,
+    error: undefined,
+    loading: false
+  },
+  //<----------------->
   //<--- EMPLOYEES --->
   allEmployees: {
     data: [],
@@ -197,6 +209,18 @@ export interface UiState {
   };
   oneCustomer: {
     data: Customer,
+    error: string,
+    loading: boolean
+  };
+  //<----------------->
+  //<--- FREQUENT TRAVELER --->
+  allFrequentTraveler: {
+    data: Array<FrequentTraveler>,
+    error: string,
+    loading: boolean
+  };
+  oneFrequentTraveler: {
+    data: FrequentTraveler,
     error: string,
     loading: boolean
   };

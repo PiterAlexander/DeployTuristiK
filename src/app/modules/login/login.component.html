@@ -1,8 +1,8 @@
-<div class="d-flex justify-content-center align-items-center vh-100">
-    <div class="card o-hidden border-0 shadow-lg my-5 w-25">
+<div class="d-flex justify-content-center align-items-center vh-100 todo">
+    <div class="card o-hidden border-0 shadow-lg my-4 w-25 border-round-lg">
         <div class="d-flex justify-content-around align-items-center mt-3">
             <input
-                class="control-prev rounded text-center bg-primary border-0 col-4 p-2"
+                class="p-element p-ripple mr-2 bg-primary p-component col-4 p-2 rounded text-center border-0"
                 type="text"
                 data-target="#carouselExampleControls"
                 data-slide-to="0"
@@ -11,7 +11,7 @@
             />
 
             <input
-                class="control-prev rounded text-center btn btn-outline-primary col-4 p-2"
+                class="p-element p-ripple mr-2 p-button p-button-outlined p-component col-4 p-2 rounded text-center"
                 type="text"
                 data-target="#carouselExampleControls"
                 data-slide-to="1"
@@ -21,10 +21,10 @@
             />
         </div>
         <div class="card-body p-0 mt-3">
-            <!-- Nested Row within Card Body -->
-            <div class="row">
+            <!-- Nested grid within Card Body -->
+            <div class="grid">
                 <div class="col">
-                    <div class="p-4">
+                    <div class="px-4 py-2">
                         <form
                             class="needs-validation"
                             novalidate
@@ -32,38 +32,113 @@
                             (submit)="saveChanges()"
                             [formGroup]="formGroup"
                         >
-                            <div class="input-group mb-3">
-                                <input
-                                    formControlName="email"
-                                    type="email"
-                                    class="form-control"
-                                    placeholder="Email"
-                                />
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <span class="fas fa-envelope"></span>
-                                    </div>
-                                </div>
+                            <div class="field">
+                                <span class="p-input-icon-left w-full">
+                                    <i class="pi pi-envelope"></i>
+                                    <input
+                                        id="email"
+                                        type="text"
+                                        pInputText
+                                        class="w-full"
+                                        placeholder="Correo"
+                                        formControlName="email"
+                                        required
+                                    />
+                                </span>
+                                <small
+                                    class="p-error block"
+                                    *ngIf="formGroup.get('email').dirty && formGroup.get('email')?.errors?.['required']"
+                                >
+                                    Este campo es obligatorio.
+                                </small>
+                                <small
+                                    class="p-error block"
+                                    *ngIf="
+                                        formGroup.get('email').dirty &&
+                                        formGroup.get('email')?.errors?.pattern
+                                    "
+                                >
+                                    Coreo no válido
+                                </small>
                             </div>
-                            <div class="input-group mb-3">
-                                <input
-                                    formControlName="password"
-                                    type="password"
-                                    id="passwordLogin"
-                                    class="form-control"
-                                    placeholder="Password"
-                                />
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <span class="fas fa-lock"></span>
-                                    </div>
-                                </div>
+                            <div class="field mb-4">
+                                <span class="p-input-icon-left w-full">
+                                    <i class="pi pi-lock"></i>
+                                    <input
+                                        id="password"
+                                        type="password"
+                                        pInputText
+                                        class="w-full"
+                                        placeholder="Contraseña"
+                                        formControlName="password"
+                                        required
+                                    />
+                                </span>
+                                <small
+                                    class="p-error block"
+                                    *ngIf="formGroup.get('password').dirty && formGroup.get('password')?.errors?.['required']"
+                                >
+                                    Este campo es obligatorio.
+                                </small>
+                                <small
+                                    class="p-error block"
+                                    *ngIf="formGroup.get('password').dirty && formGroup.get('password')?.errors?.['minlength']"
+                                >
+                                    Este campo debe tener mínimo 8 caracteres
+                                </small>
                             </div>
                             <div
-                                class="row d-flex justify-content-end text-right"
+                                class="grid d-flex justify-content-end text-right"
                             >
+                                <p class="my-4 h6">
+                                    <a [routerLink]="['/forgot-password']"
+                                        >¿Olvidé mi contraseña?</a
+                                    >
+                                </p>
                                 <div class="col-6">
                                     <button
+                                        *ngIf="validForm()"
+                                        type="submit"
+                                        id="saveButton"
+                                        pbutton=""
+                                        pripple=""
+                                        label="Ingresar"
+                                        icon="pi pi-sign-in"
+                                        class="p-element p-ripple mr-2 p-button p-button-success p-component"
+                                        ng-reflect-label="Ingresar"
+                                        ng-reflect-icon="pi pi-sign-in"
+                                    >
+                                        <span
+                                            class="p-button-icon p-button-icon-left pi pi-sign-in"
+                                            aria-hidden="true"
+                                        ></span
+                                        ><span class="p-button-label"
+                                            >Ingresar</span
+                                        ><span class="p-ink"></span>
+                                    </button>
+                                    <button
+                                        *ngIf="!validForm()"
+                                        type="submit"
+                                        id="saveButton"
+                                        pbutton=""
+                                        pripple=""
+                                        label="Ingresar"
+                                        icon="pi pi-sign-in"
+                                        class="p-element p-ripple mr-2 p-button p-button-success p-component"
+                                        ng-reflect-label="Ingresar"
+                                        ng-reflect-icon="pi pi-sign-in"
+                                        disabled
+                                    >
+                                        <span
+                                            class="p-button-icon p-button-icon-left pi pi-sign-in"
+                                            aria-hidden="true"
+                                        ></span
+                                        ><span class="p-button-label"
+                                            >Ingresar</span
+                                        ><span class="p-ink"></span>
+                                    </button>
+
+                                    <!-- <button
                                         *ngIf="validForm()"
                                         type="submit"
                                         id="saveButton"
@@ -79,16 +154,11 @@
                                         disabled
                                     >
                                         Ingresar
-                                    </button>
+                                    </button> -->
                                 </div>
                                 <!-- /.col -->
                             </div>
                         </form>
-                        <p class="my-4">
-                            <a [routerLink]="['/forgot-password']"
-                                >¿Olvidé mi contraseña?</a
-                            >
-                        </p>
                     </div>
                 </div>
             </div>

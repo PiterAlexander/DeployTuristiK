@@ -38,7 +38,7 @@ export class RolesComponent implements OnInit{
     pageSize: 5
   };
 
-
+  checked2: boolean = true;
   constructor(
     private store: Store<AppState>,
     private confirmationService: ConfirmationService,
@@ -61,7 +61,7 @@ export class RolesComponent implements OnInit{
     });
   }
 
-  matches(roleResolved: Role, term: string, pipe: PipeTransform) {
+  matches(roleResolved: Role, term: string) {
     return (
       roleResolved.name.toLowerCase().includes(term.toLowerCase())
     );
@@ -94,7 +94,6 @@ export class RolesComponent implements OnInit{
     }
 
   }
-
 
   deleteRole(role:Role){
 

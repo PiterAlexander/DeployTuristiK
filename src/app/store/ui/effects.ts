@@ -431,7 +431,7 @@ export class PackageEffects {
             return this.apiService.updateRole(role.roleId, role).pipe(
                 mergeMap((roleResolved) => {
                     this.dialogRef.close()
-                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Rol editado exitosamente.' });
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Rol editado exitosamente' });
                     return [
                         new EditRoleSuccess(roleResolved),
                         new GetAllRoleRequest(),
@@ -448,6 +448,7 @@ export class PackageEffects {
         switchMap((role) => {
             return this.apiService.deleteRole(role.roleId).pipe(
                 mergeMap((roleResolved) => {
+                  this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Rol eliminado exitosamente' });
                     return [
                         new DeleteRoleSuccess(roleResolved),
                         new GetAllRoleRequest(),
