@@ -36,9 +36,17 @@ export class ApiService {
         console.log(`${this.endpoint}${idPackage}`);
         return this.http.put<Package>(`${this.endpoint}api/package/${idPackage}`, modelo)
     }
+
     disablePackage(pack:Package):Observable<Package>{
         console.log(`${this.endpoint}api/package/${pack.packageId}/changeStatus`);
         return this.http.post<Package>(`${this.endpoint}api/package/${pack.packageId}/changeStatus`, null)
+    }
+
+    getTopPackage(startDate?:Date,endDate?:Date):Observable<Package[]>{
+      if (startDate && endDate) {
+        return this.http.get<Package[]>(`${this.endpoint}api/package/Top/${startDate}/${endDate}`)
+      }
+      return this.http.get<Package[]>(`${this.endpoint}api/package/Top`)
     }
 
     //<-------------->
@@ -175,6 +183,7 @@ export class ApiService {
     deleteRole(RoleId:string):Observable<void>{
       return this.http.delete<void>(`${this.endpoint}api/Role/${RoleId}`);
     }
+
 
     //<------PERMISSIONS-------->
     getPermissions():Observable<Permission[]>{

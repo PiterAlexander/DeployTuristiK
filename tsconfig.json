@@ -19,8 +19,9 @@
     "esModuleInterop": true,
     "paths": {
       "path": [
-        "../node_modules/path-browserify"
+        "../node_modules/path-browserify",
       ],
+      "rxjs/*": ["node_modules/rxjs/*"],
       "os": [
         "../node_modules/os-browserify/browser"
       ],

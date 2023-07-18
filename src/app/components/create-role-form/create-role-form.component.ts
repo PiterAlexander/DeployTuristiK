@@ -1,7 +1,6 @@
-import { Permission } from '@/models/permission';
-import {CreateAssociatedPermissionRequest, CreateRoleRequest, DeleteAssociatedPermissionRequest, EditRoleRequest, GetAllPermissionsRequest, OpenModalCreateRole } from '@/store/ui/actions';
-import { Component, Inject, OnInit, PipeTransform } from '@angular/core';
-import { Store, select } from '@ngrx/store';
+import { CreateRoleRequest, EditRoleRequest, GetAllPermissionsRequest } from '@/store/ui/actions';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { AppState } from '@/store/state';
@@ -9,8 +8,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Role } from '@/models/role';
 import { AssociatedPermission } from '@/models/associated-permission';
-import { state } from '@angular/animations';
-import Swal from 'sweetalert2';
 import { ApiService } from '@services/api.service';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
@@ -37,13 +34,12 @@ export class CreateRoleFormComponent implements OnInit{
   statuses: Status[];
   selectedStatusCode:number;
 
-
+  checked = true;
   constructor(
     private fb: FormBuilder,
-    private modalService: NgbModal,
     private modalPrimeNg : DynamicDialogRef,
     private store: Store<AppState>,
-    private apiService : ApiService
+    private apiService : ApiService,
   ){
     this.statuses = [
       {name: 'Habilitado', code: 1},
@@ -285,5 +281,4 @@ export class CreateRoleFormComponent implements OnInit{
     // this.modalService.dismissAll();
     this.modalPrimeNg.close()
   }
-
 }

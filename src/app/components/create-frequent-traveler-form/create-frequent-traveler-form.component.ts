@@ -11,6 +11,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { ApiService } from '@services/api.service';
 import { type } from 'os';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -31,7 +32,14 @@ export class CreateFrequentTravelerFormComponent {
   public ui: Observable<UiState>
   public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS', 'OTRA']
   public otraEps: boolean = false
-  constructor(private fb: FormBuilder, private modalService: NgbModal, private store: Store<AppState>, public apiService: ApiService,) { }
+
+  constructor(private fb: FormBuilder, 
+    private modalService: NgbModal, 
+    private store: Store<AppState>, 
+    public apiService: ApiService,
+    private modalPrimeNg: DynamicDialogRef,
+    ) 
+    { }
 
 
   ngOnInit(): void {
@@ -172,6 +180,6 @@ export class CreateFrequentTravelerFormComponent {
   }
 
   cancel() {
-    this.modalService.dismissAll();
+    this.modalPrimeNg.close();
   }
 }

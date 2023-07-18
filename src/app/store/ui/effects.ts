@@ -34,6 +34,11 @@ import {
     ChangeStatusPackageSuccess,
     ChangeStatusPackageFailure,
     OpenModalCreatePackage,
+    DeleteFrequentTravelerRequest,
+    DeleteFrequentTravelerSuccess,
+    DeleteFrequentTravelerFailure,
+    GetTopPackagesSuccess,
+    GetTopPackagesFailure,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -80,6 +85,21 @@ export class PackageEffects {
             )
         })
     ));
+
+    getTopPackages$ = createEffect(() => this.actions$.pipe(
+      ofType(packageActions.GET_TOP_PACKAGES_REQUEST),
+      switchMap((action) => {
+          return this.apiService.getTopPackage().pipe(
+              mergeMap((packagesResolved) => {
+
+                  return [
+                      new GetTopPackagesSuccess(packagesResolved)
+                  ];
+              }),
+              catchError((err) => of(new GetTopPackagesFailure(err)))
+          )
+      })
+  ));
 
     // openModalCreatePackage$ = createEffect(() =>
     //     this.actions$.pipe(
@@ -435,7 +455,7 @@ export class PackageEffects {
                 catchError((err) => of(new EditRoleFailure(err)))
             )
         })
-    ))
+    ));
 
     deleteRole$ = createEffect(() => this.actions$.pipe(
         ofType(roleActions.DELETE_ROLE_REQUEST),
@@ -452,24 +472,26 @@ export class PackageEffects {
                 catchError((err) => of(new DeleteRoleFailure(err)))
             )
         })
-    ))
-
-    createAssociatedPermission$ = createEffect(() => this.actions$.pipe(
-        ofType(CREATE_ASSOCIATEDPERMISSION_REQUEST),
-        ofType(permissionActions.CREATE_ASSOCIATEDPERMISSION_REQUEST),
-        map((action: CreateAssociatedPermissionRequest) => action.payload),
-        switchMap((asocpermission) => {
-            return this.apiService.addAssociatedPermission(asocpermission).pipe(
-                mergeMap((assocPermissionResolved) => {
-                    this.modalRef.close();
-                    return [
-                        new CreateAssociatedPermissionSuccess(assocPermissionResolved),
-                    ];
-                }),
-                catchError((err) => of(new CreateAssociatedPermissionFailure(err)))
-            )
-        })
     ));
+
+
+
+  createAssociatedPermission$ = createEffect(() => this.actions$.pipe(
+      ofType(CREATE_ASSOCIATEDPERMISSION_REQUEST),
+      ofType(permissionActions.CREATE_ASSOCIATEDPERMISSION_REQUEST),
+      map((action: CreateAssociatedPermissionRequest) => action.payload),
+      switchMap((asocpermission) => {
+          return this.apiService.addAssociatedPermission(asocpermission).pipe(
+              mergeMap((assocPermissionResolved) => {
+                  this.modalRef.close();
+                  return [
+                      new CreateAssociatedPermissionSuccess(assocPermissionResolved),
+                  ];
+              }),
+              catchError((err) => of(new CreateAssociatedPermissionFailure(err)))
+          )
+      })
+  ));
 
     DeleteAssociatedPermission$ = createEffect(() => this.actions$.pipe(
         ofType(DELETE_ASSOCIATEDPERMISSION_REQUEST),
@@ -504,16 +526,22 @@ export class PackageEffects {
         })
     ));
 
-    openModalCreateCustomer = createEffect(() =>
+    openModalCreateCustomer$ = createEffect(() =>
         this.actions$.pipe(
             ofType(customerActions.OPEN_MODAL_CREATE_CUSTOMER),
             tap((action) => {
-                this.modalRef = this.modalService.open(CreatecustomerformComponent, {
-                    backdrop: false,
-                    size: 'lg'
+                this.dialogRef = this.dialogService.open(CreatecustomerformComponent, {
+                    /* Opciones del modal */
+                    header: action['payload'] === undefined ? 'Crear cliente' : 'Editar cliente',
+                    width: '55%',
+                    contentStyle: { overflowY: 'auto' },
                 });
+
             })
-        ), { dispatch: false });
+        ),
+        {
+            dispatch: false
+        });
 
     createCustomer$ = createEffect(() => this.actions$.pipe(
         ofType(customerActions.CREATE_CUSTOMER_REQUEST),
@@ -549,27 +577,38 @@ export class PackageEffects {
     ));
     //<------------------>
     //<---FREQUENT TRAVELER---->
+    
     listModalTraveler$ = createEffect(() =>
         this.actions$.pipe(
             ofType(FrequentTravelerActions.OPEN_MODAL_LIST_FREQUENTTRAVELER),
-            tap(() => {
-                this.modalRef = this.modalService.open(ListFrequentTravelerComponent, {
-                    backdrop: false,
-                    size: 'lg'
-                })
+            tap((action) => {
+                this.dialogRef = this.dialogService.open(ListFrequentTravelerComponent, {
+                    /* Opciones del modal */
+                    header: action['payload'] === undefined ? 'Viajeros frecuentes' : 'Viajeros frecuentes',
+                    width: '60%',
+                });
+
             })
-        ), { dispatch: false });
+        ),
+        {
+            dispatch: false
+        });
 
     createModalTraveler$ = createEffect(() =>
         this.actions$.pipe(
             ofType(FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER),
-            tap(() => {
-                this.modalRef = this.modalService.open(CreateFrequentTravelerFormComponent, {
-                    backdrop: false,
-                    size: 'lg'
-                })
+            tap((action) => {
+                this.dialogRef = this.dialogService.open(CreateFrequentTravelerFormComponent, {
+                    /* Opciones del modal */
+                    header: action['payload'] === undefined ? 'Crear frecuentes' : 'Editar frecuentes',
+                    width: '60%',
+                });
+
             })
-        ), { dispatch: false });
+        ),
+        {
+            dispatch: false
+        });
 
     createFrequentTraveler$ = createEffect(() => this.actions$.pipe(
         ofType(FrequentTravelerActions.CREATE_FREQUENTTRAVELER_REQUEST),
@@ -587,6 +626,21 @@ export class PackageEffects {
             )
         })
     ));
+    // DeleteFrequentTraveler$ = createEffect(() => this.actions$.pipe(
+    //     ofType(FrequentTravelerActions.DELETE_FREQUENTTRAVELER_REQUEST),
+    //     map((action: DeleteFrequentTravelerRequest) => action.payload),
+    //     switchMap((FrequentTraveler) => {
+    //         return this.apiService.deleteFrequentTraveler(FrequentTraveler.frequentTravelerId).pipe(
+    //             mergeMap((frequentTravelerResolved) => {
+    //                 return [
+    //                     new DeleteFrequentTravelerSuccess(frequentTravelerResolved),
+    //                     new GetAllFrequentTravelerRequest(),
+    //                 ];
+    //             }),
+    //             catchError((err) => of(new DeleteFrequentTravelerFailure(err)))
+    //         )
+    //     })
+    // ));
     //<--------------->
 
     //<---- EMPLOYEE ---->
