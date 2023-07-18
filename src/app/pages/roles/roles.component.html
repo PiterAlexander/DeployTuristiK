@@ -16,7 +16,7 @@
                   </span>
               </div>
               <div class="custom-flex-item-right">
-                  <button pButton type="button" label="Agregar Role" (click)="openCreateRoleModal()"
+                  <button pButton type="button" label="Registrar Role" (click)="openCreateRoleModal()"
                       class="p-button-outlined"><i class="pi pi-plus"
                           style="margin-left: 5px; margin-right: 9px;"></i></button>
               </div>
@@ -48,17 +48,11 @@
                 {{ role.name }}
             </td>
             <td class="text-center">
-                <!-- <div *ngIf="role.status !== 1">
+                <div *ngIf="role.status !== 1">
                     Habilitado
                 </div>
                 <div *ngIf="role.status === 1">
                     Deshabilitado
-                </div> -->
-                <div *ngIf="role.status !== 1">
-                  <p-inputSwitch  (click)="disableRole(role)"pTooltip="Inactivo" tooltipPosition="bottom"></p-inputSwitch>
-                </div>
-                <div *ngIf="role.status === 1">
-                  <p-inputSwitch  (click)="disableRole(role)" [(ngModel)]="checked2"  pTooltip="Activo" tooltipPosition="bottom"></p-inputSwitch>
                 </div>
             </td>
             <td class="text-center p-1">

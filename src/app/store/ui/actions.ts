@@ -396,9 +396,6 @@ export enum roleActions {
   DELETE_ROLE_SUCCESS = '[ROLES] DELETE_ROLE_SUCCESS',
   DELETE_ROLE_FAILURE = '[ROLES] DELETE_ROLE_FAILURE',
 
-  CHANGE_STATUS_ROLE_REQUEST = '[ROLE] CHANGE_STATUS_ROLE_REQUEST',
-  CHANGE_STATUS_ROLE_SUCCESS = '[ROLE] CHANGE_STATUS_ROLE_SUCCESS',
-  CHANGE_STATUS_ROLE_FAILURE = '[ROLE] CHANGE_STATUS_ROLE_FAILURE',
 }
 
 export class GetAllRoleRequest implements Action {
@@ -457,27 +454,6 @@ export class DeleteRoleFailure implements Action {
   constructor(public payload: string) { }
 }
 
-// PACKAGES DISABLE ACTIONS ------------------------------------------------
-
-export class ChangeStatusRoleRequest implements Action {
-  readonly type = roleActions.CHANGE_STATUS_ROLE_REQUEST;
-
-  constructor(public payload: Role) {} // Aquí pasamos el id del paquete como carga útil
-}
-
-export class ChangeStatusRoleSuccess implements Action {
-  readonly type = roleActions.CHANGE_STATUS_ROLE_SUCCESS;
-
-  constructor(public payload: any) {} // Aquí pasamos el paquete deshabilitado como carga útil
-}
-
-export class ChangeStatusRoleFailure implements Action {
-  readonly type = roleActions.CHANGE_STATUS_ROLE_FAILURE;
-
-  constructor(public payload: string) {} // Aquí pasamos cualquier error como carga útil
-}
-
-// PACKAGES DISABLE ACTIONS END -----------------------------------------
 //<--------------------->
 
 //<--- PERMISSION ACTIONS --->

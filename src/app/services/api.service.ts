@@ -184,10 +184,6 @@ export class ApiService {
       return this.http.delete<void>(`${this.endpoint}api/Role/${RoleId}`);
     }
 
-    disableRole(role:Role):Observable<Package>{
-      //console.log(`${this.endpoint}api/package/${pack.packageId}/changeStatus`);
-      return this.http.post<Package>(`${this.endpoint}api/package/changeStatus/${role.roleId}`, null)
-  }
 
     //<------PERMISSIONS-------->
     getPermissions():Observable<Permission[]>{
