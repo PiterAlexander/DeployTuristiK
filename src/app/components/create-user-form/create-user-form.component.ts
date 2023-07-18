@@ -9,6 +9,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -20,8 +21,9 @@ export class CreateUserFormComponent implements OnInit {
 
   formGroup: FormGroup;
   public ui: Observable<UiState>
-  public ActionTitle: string = "Agregar"
   public rolesList: Array<Role>
+  public allRoles: Array<Role>
+
   public allUsers: Array<User>
   public model: User
   public userData: User
@@ -33,7 +35,8 @@ export class CreateUserFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private modalPrimeNg: DynamicDialogRef,
   ) { }
 
   ngOnInit() {
@@ -42,17 +45,13 @@ export class CreateUserFormComponent implements OnInit {
     this.ui.subscribe((state: UiState) => {
       this.allUsers = state.allUsers.data
       this.userData = state.currentUser.data
-      this.rolesList = state.allRoles.data
+      this.allRoles = state.allRoles.data
+      this.rolesList = this.allRoles.filter(role => role.name !== "Beneficiario")
     })
 
 
     this.formGroup = this.fb.group({
       userId: [null],
-      userName: [null,
-        [Validators.required,
-        Validators.minLength(5),
-        Validators.maxLength(20)]
-      ],
       role: [null, Validators.required],
       email: [null,
         [Validators.required,
@@ -78,7 +77,6 @@ export class CreateUserFormComponent implements OnInit {
 
     if (this.userData != null) {
 
-      this.ActionTitle = "Editar"
       this.formGroup.setValue({
         userId: this.userData.userId,
         role: this.userData.roleId,
@@ -98,7 +96,6 @@ export class CreateUserFormComponent implements OnInit {
   }
 
   saveChanges() {
-
     if (this.userData == null) {
       if (this.admin == 1) {
         this.model = {
@@ -180,13 +177,13 @@ export class CreateUserFormComponent implements OnInit {
   }
 
   cancel() {
-    this.modalService.dismissAll();
+    this.modalPrimeNg.close();
   }
 
 
   addForm() {
     var role = this.rolesList.find(r => r.roleId == this.formGroup.value.role)
-    if (role.name == "Administrador") {
+    if (role.name != "Cliente") {
       this.admin = 1
     } else (
       this.admin = 2

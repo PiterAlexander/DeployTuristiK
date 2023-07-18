@@ -463,7 +463,7 @@ export class PackageEffects {
         switchMap((role) => {
             return this.apiService.deleteRole(role.roleId).pipe(
                 mergeMap((roleResolved) => {
-                  this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Rol eliminado exitosamente' });
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Rol eliminado exitosamente' });
                     return [
                         new DeleteRoleSuccess(roleResolved),
                         new GetAllRoleRequest(),
@@ -736,10 +736,12 @@ export class PackageEffects {
     openModalUser$ = createEffect(() =>
         this.actions$.pipe(
             ofType(userActions.OPEN_MODAL_USER),
-            tap(() => {
-                this.modalRef = this.modalService.open(CreateUserFormComponent, {
-                    backdrop: false,
-                    size: 'lg'
+            tap((action) => {
+                this.dialogRef = this.dialogService.open(CreateUserFormComponent, {
+                    /* Opciones del modal */
+                    header: action['payload'] === undefined ? 'Registrar Usuario' : 'Editar Usuario',
+                    width: '45%',
+                    contentStyle: { overflowY: 'auto' },
                 })
             })
         ), { dispatch: false });
@@ -750,7 +752,8 @@ export class PackageEffects {
         switchMap((user) => {
             return this.apiService.createUser(user).pipe(
                 mergeMap((userResolved) => {
-                    this.modalRef.close();
+                    this.dialogRef.close();
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Usuario creado exitosamente.' });
                     return [
                         new CreateUserSuccess(userResolved),
                         new GetUsersRequest()
@@ -767,7 +770,9 @@ export class PackageEffects {
         switchMap((user) => {
             return this.apiService.updateUser(user.userId, user).pipe(
                 mergeMap((userResolved) => {
-                    this.modalRef.close(); return [
+                    this.dialogRef.close(); 
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Usuario editado exitosamente' });
+                    return [
                         new UpdateUserSuccess(userResolved),
                         new GetUsersRequest(),
                     ]
