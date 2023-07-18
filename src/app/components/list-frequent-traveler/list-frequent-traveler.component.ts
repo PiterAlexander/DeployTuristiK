@@ -3,11 +3,12 @@ import { FormBuilder } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { GetAllCustomerRequest, OpenModalCreateCustomer, OpenModalCreateFrequentTraveler } from '@/store/ui/actions';
+import { DeleteFrequentTravelerRequest, GetAllCustomerRequest, OpenModalCreateCustomer, OpenModalCreateFrequentTraveler } from '@/store/ui/actions';
 import { Customer } from '@/models/customer';
 import { FrequentTraveler } from '@/models/frequentTraveler';
 import { AppState } from '@/store/state';
 import { UiState } from '@/store/ui/state';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
 interface State {
   page: number;
@@ -39,7 +40,8 @@ export class ListFrequentTravelerComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private modalPrimeNg: DynamicDialogRef,
   ) {}
 
   ngOnInit(): void {
@@ -72,12 +74,15 @@ export class ListFrequentTravelerComponent implements OnInit {
   } 
 
   openModalEditCustomer(customer:Customer){
-  
     this.store.dispatch(new OpenModalCreateCustomer(customer));
   }
 
+  // delete(ft:FrequentTraveler){
+  //   this.store.dispatch(new DeleteFrequentTravelerRequest(ft));
+  // }
+
   cancel() {
-    this.modalService.dismissAll();
+    this.modalPrimeNg.close();
   }
 
   

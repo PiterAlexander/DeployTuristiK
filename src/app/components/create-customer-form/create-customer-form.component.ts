@@ -32,6 +32,7 @@ export class CreatecustomerformComponent implements OnInit {
   constructor(private fb: FormBuilder, 
     private modalService: NgbModal, 
     private store: Store<AppState>,
+    private modalPrimeNg: DynamicDialogRef,
     ) { }
 
   ngOnInit(): void {
@@ -65,7 +66,7 @@ export class CreatecustomerformComponent implements OnInit {
         name: this.customerData.name,
         lastName: this.customerData.lastName,
         document: this.customerData.document,
-        birthDate: this.customerData.birthDate,
+        birthDate: this.formatDate(this.customerData.birthDate),
         phoneNumber: this.customerData.phoneNumber,
         address: this.customerData.address,
         eps: this.customerData.eps,
@@ -156,11 +157,21 @@ export class CreatecustomerformComponent implements OnInit {
     return this.CustomerList.find(item => item.email == this.formGroup.value.email)
   }
 
+  formatDate(date:any) : Date {
+    const opcionesFecha = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' };
+
+    date = new Date(date)
+    let fechaConvertida = date.toLocaleString('en-ES', opcionesFecha).replace(/,/g, '');;
+    fechaConvertida = new Date(fechaConvertida.replace(/PM GMT-5/g, 'GMT-0500 (Colombia Standard Time)'))
+
+    return fechaConvertida;
+  }
+
   validForm(): boolean {
     return true
   }
 
   cancel() {
-    this.modalService.dismissAll();
+    this.modalPrimeNg.close();
   }
 }
