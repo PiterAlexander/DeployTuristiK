@@ -83,7 +83,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarComponent } from './pages/calendar/calendar.component';
-
+import {ChartModule} from 'primeng/chart';
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
 
@@ -188,7 +188,8 @@ registerLocaleData(localeEn, 'en-EN');
     }),
     ProfabricComponentsModule,
     NgbModule,
-    FormsModule
+    FormsModule,
+    ChartModule
   ],
   providers: [
     DialogService,

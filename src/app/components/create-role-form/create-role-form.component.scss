@@ -50,6 +50,63 @@ form input:required {
 }
 
 
+.formulario .checkbox label {
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  color: grey;
+  position: static;
+  padding: 10px 10px 10px 10px;
+  font-size: 1em;
+  border-radius: 5px;
+  -webkit-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  border: solid 1px grey;
+  width: 100% !important;
+  i{
+    display: none;
+  }
+}
+.formulario .radio label:hover,
+.formulario .checkbox label:hover {
+  background: rgb(241, 241, 241);
+  color: grey;
+}
+.formulario .checkbox label:before {
+  display: inline-block;
+  width: 17px;
+  height: 17px;
+  position: static;
+  left: 5px;
+  border-radius: 50%;
+  background: none;
+  border: 3px solid grey;
+}
+.formulario .checkbox input[type="checkbox"] {
+  display: none;
+}
+.formulario .checkbox input[type="checkbox"]:checked + label:before {
+  display: none;
+}
+.formulario .checkbox input[type="checkbox"]:checked + label:before {
+  display: none;
+}
+.formulario .checkbox input[type="checkbox"]:checked + label {
+  border: #326fd1;
+  background: #3B82F6;
+  color: #fff;
+  padding: 10px 10px 10px 10px;
+  i{
+    display: block;
+  }
+}
+input[type="checkbox"] {
+  display: none;
+}
+
+
+
 
 
 
