@@ -133,41 +133,15 @@ export class RolesComponent implements OnInit{
             // Lógica para rechazar
           }
         });
-        // Swal.fire({
-        //   title: '¿Estás seguro de eliminar a '+role.name+'?',
-        //   text: "No podrás revertirlo.",
-        //   icon: 'warning',
-        //   showCancelButton: true,
-        //   confirmButtonColor: '#3085d6',
-        //   cancelButtonColor: '#d33',
-        //   cancelButtonText: 'Cancelar',
-        //   confirmButtonText: 'Si, eliminar',
-        //   reverseButtons: true,
-        //   customClass: {
-        //     confirmButton: 'swal2-confirm-right',
-        //     cancelButton: 'swal2-cancel-left'
-        //   }
-        // }).then((result) => {
-          // if (result.isConfirmed) {
-          //   this.store.dispatch(new DeleteRoleRequest(role))
-          //   Swal.fire(
-          //     'Eliminado con éxito.',
-          //   )
-          // }
-        // })
+
       }
     }else{
-      // Swal.fire({
-      //   icon: 'warning',
-      //   title: 'El rol '+role.name+' no puede ser eliminado del sistema.',
-      //   showConfirmButton: true,
-      // }).then(function(){})
       this.messageService.add({key: 'alert-message', severity:'warn', summary: 'Acción denegada', detail: ''});
     }
 
   }
 
-
+ 
   searchByName() {
     if (this.search === undefined || this.search.length <= 0) {
       this.filteredRolesList = this.roleList;

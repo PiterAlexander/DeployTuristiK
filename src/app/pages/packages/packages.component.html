@@ -1,3 +1,4 @@
+<!-- eslint-disable @angular-eslint/template/eqeqeq -->
 <ng-container *ngIf="role==='Cliente'">
     <br><br>
     <div class="container">
@@ -188,15 +189,15 @@
                             {{ package.price }}
                         </td>
                         <td class="text-center">
-                            
-                            
+
+
                             <div *ngIf="package.status == true">
                                 <p-inputSwitch  (click)="disablePackage(package)" [(ngModel)]="checked2"  pTooltip="Activo" tooltipPosition="bottom"></p-inputSwitch>
-                                
+
                             </div>
                             <div *ngIf="package.status == false">
                                 <p-inputSwitch  (click)="disablePackage(package)"pTooltip="Inactivo" tooltipPosition="bottom"></p-inputSwitch>
-                                
+
                             </div>
                         </td>
                         <td class="text-center p-1">
