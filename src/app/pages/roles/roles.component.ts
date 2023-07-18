@@ -1,11 +1,10 @@
 import { AppState } from '@/store/state';
 import {GetAllRoleRequest,GetAllPermissionsRequest, OpenModalCreateRole, GetUsersRequest } from '@/store/ui/actions';
-import { Component, OnInit, PipeTransform } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { Role } from '@/models/role';
-// import Swal from 'sweetalert2';
 import { DeleteRoleRequest } from '../../store/ui/actions';
 import { User } from '@/models/user';
 
@@ -32,6 +31,7 @@ export class RolesComponent implements OnInit{
   public loading: boolean;
   public search: string
   public total: number
+  public statuses: any[]=[]
 
   private _state: State = {
     page: 1,
@@ -59,6 +59,10 @@ export class RolesComponent implements OnInit{
 
       this.searchByName();
     });
+    this.statuses = [
+      {name: 'Activo', code: 1},
+      {name: 'Inactivo', code: 2},
+    ];
   }
 
   matches(roleResolved: Role, term: string) {
@@ -82,11 +86,13 @@ export class RolesComponent implements OnInit{
         }
       });
     });
+    
     const roleEdit: Role ={
       roleId: ok['roleId'],
       name: ok['name'],
       status: ok['status'],
-      associatedPermission : ok['associatedPermission']
+      associatedPermission : ok['associatedPermission'],
+      user: ok['user'],
     }
 
     if (ok) {
@@ -141,7 +147,7 @@ export class RolesComponent implements OnInit{
 
   }
 
- 
+
   searchByName() {
     if (this.search === undefined || this.search.length <= 0) {
       this.filteredRolesList = this.roleList;
@@ -151,6 +157,15 @@ export class RolesComponent implements OnInit{
       this.filteredRolesList = this.roleList.filter(packageModel => packageModel.name.toLocaleLowerCase().includes(this.search.toLocaleLowerCase().trim()));
       this.total = this.filteredRolesList.length;
       this.filteredRolesList = this.filteredRolesList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+    }
+  }
+
+  showStatus(roleStatus:any):string{
+    for(let status of this.statuses){
+      if (roleStatus === status.code){
+
+        return status.name
+      }
     }
   }
 

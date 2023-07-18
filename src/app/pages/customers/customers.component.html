@@ -3,7 +3,7 @@
     <div class="col-12">
         <div class="card px-6 py-6 p-4" style="border-radius: 15px;">
             <p-table #dt [value]="customersList" [rows]="5" [showCurrentPageReport]="true"
-                [rowsPerPageOptions]="[5, 10]" [loading]="loading" [paginator]="true"
+                [rowsPerPageOptions]="[5, 10]" scrollable="true" [loading]="loading" [paginator]="true"
                 currentPageReportTemplate="Desde {first} hasta {last} de {totalRecords} clientes"
                 [globalFilterFields]="['name', 'lastName', 'document', 'eps', 'phoneNumber']">
                 <ng-template pTemplate="caption" class="p-grid">
@@ -19,7 +19,7 @@
                             <button pButton="" pRipple="" label="Agregar cliente" (click)="openModalCreateCustomer()"
                                 class="p-button-outlined"><i class="pi pi-plus"
                                     style="margin-left: 5px; margin-right: 9px;"></i></button>
-                                    
+
                         </div>
                     </div>
                 </ng-template>
@@ -98,7 +98,7 @@
                                     class="p-button-outlined p-button-rounded m-1" pTooltip="Ver detalles"
                                     (click)="openModalListTraveler(customer)" tooltipPosition="bottom"></button></span>
                         </td>
-                        
+
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">

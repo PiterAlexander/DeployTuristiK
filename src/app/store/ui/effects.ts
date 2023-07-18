@@ -394,7 +394,7 @@ export class PackageEffects {
             tap((action) => {
                 this.dialogRef = this.dialogService.open(CreateRoleFormComponent, {
                     /* Opciones del modal */
-                    header: action['payload'] === undefined ? 'Crear Rol' : 'Editar Rol',
+                    header: action['payload'] === undefined ? 'Registrar Rol' : 'Editar Rol',
                     width: '45%',
                     contentStyle: { overflowY: 'auto' },
                 });
@@ -577,7 +577,7 @@ export class PackageEffects {
     ));
     //<------------------>
     //<---FREQUENT TRAVELER---->
-    
+
     listModalTraveler$ = createEffect(() =>
         this.actions$.pipe(
             ofType(FrequentTravelerActions.OPEN_MODAL_LIST_FREQUENTTRAVELER),
