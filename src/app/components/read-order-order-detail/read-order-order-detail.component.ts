@@ -5,9 +5,9 @@ import { AppState } from '@/store/state';
 import { GetAllCustomerRequest, OpenModalCreateOrderDetail } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -18,14 +18,14 @@ import Swal from 'sweetalert2';
 export class ReadOrderOrderDetailComponent implements OnInit {
 
   public ui: Observable<UiState>
-  public orderDetails: Array<OrderDetail>
   public allCustomers: Array<Customer>
   public order: Order
   public orderDetailCustomers: Array<Customer> = []
+  public loading: boolean = true
 
   constructor(
     private store: Store<AppState>,
-    private modalService: NgbModal
+    private modalPrimeNg: DynamicDialogRef,
   ) { }
 
   ngOnInit(): void {
@@ -33,23 +33,27 @@ export class ReadOrderOrderDetailComponent implements OnInit {
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.order = state.oneOrder.data
-      this.orderDetails = state.oneOrder.data.orderDetail
       this.allCustomers = state.allCustomers.data
       this.compareCustomerId()
     })
   }
 
   compareCustomerId() {
-    for (const element of this.orderDetails) {
+    for (const element of this.order.orderDetail) {
       const customer = this.allCustomers.find(c => c.customerId === element.beneficiaryId)
       if (customer != undefined) {
         this.orderDetailCustomers.push(customer)
       }
     }
+    if (this.orderDetailCustomers !== undefined) {
+      if (this.orderDetailCustomers.length === this.order.orderDetail.length) {
+        this.loading = false
+      }
+    }
   }
 
   closeModal() {
-    this.modalService.dismissAll()
+    this.modalPrimeNg.close()
   }
 
   addOrderDetail() {
@@ -73,15 +77,15 @@ export class ReadOrderOrderDetailComponent implements OnInit {
     }
   }
 
-  editOrdelDetail(customer: Customer) {
-    const orderDetail = this.orderDetails.find(od => od.beneficiaryId === customer.customerId)
+  editOrderDetail(customer: Customer) {
+    const orderDetail = this.order.orderDetail.find(od => od.beneficiaryId === customer.customerId)
     const orderProcess = [{
       action: 'EditOrderDetail',
       customer: customer,
       orderDetail: orderDetail,
       order: this.order
     }]
-    this.modalService.dismissAll();
+    this.modalPrimeNg.close()
     this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess))
   }
 }

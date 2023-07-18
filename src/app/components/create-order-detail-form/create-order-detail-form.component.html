@@ -342,7 +342,7 @@
                     <td style="min-width: 9rem">{{ beneficiarie.name }}</td>
                     <td style="min-width: 9rem">{{ beneficiarie.lastName }}</td>
                     <td style="min-width: 9rem">{{ beneficiarie.document }}</td>
-                    <td style="min-width: 14rem">{{ beneficiarie.birthdate }}</td>
+                    <td style="min-width: 14rem">{{ beneficiarie.birthDate | date: 'MM/dd/yy' }}</td>
                     <td style="min-width: 9rem">{{ beneficiarie.phoneNumber }}</td>
                     <td style="min-width: 15rem">{{ beneficiarie.address }}</td>
                     <td style="min-width: 9rem">{{ beneficiarie.eps }}</td>
@@ -357,7 +357,8 @@
             </ng-template>
             <ng-template pTemplate="footer">
                 <tr>
-                    <td colspan="12">Costo Total: {{ onePackage.price * beneficiariesAmount | currency:'USD':'symbol'}}</td>
+                    <td colspan="12">Costo Total: {{ onePackage.price * beneficiariesAmount | currency:'USD':'symbol'}}
+                    </td>
                 </tr>
             </ng-template>
         </p-table>
@@ -400,7 +401,7 @@
                     <td style="min-width: 9rem">{{ beneficiarie.name }}</td>
                     <td style="min-width: 9rem">{{ beneficiarie.lastName }}</td>
                     <td style="min-width: 9rem">{{ beneficiarie.document }}</td>
-                    <td style="min-width: 14rem">{{ beneficiarie.birthdate }}</td>
+                    <td style="min-width: 14rem">{{ beneficiarie.birthDate | date: 'MM/dd/yy' }}</td>
                     <td style="min-width: 9rem">{{ beneficiarie.phoneNumber }}</td>
                     <td style="min-width: 15rem">{{ beneficiarie.address }}</td>
                     <td style="min-width: 9rem">{{ beneficiarie.eps }}</td>
@@ -415,7 +416,8 @@
             </ng-template>
             <ng-template pTemplate="footer">
                 <tr>
-                    <td colspan="12">Costo Total: {{ onePackage.price * beneficiariesAmount | currency:'USD':'symbol'}}</td>
+                    <td colspan="12">Costo Total: {{ onePackage.price * beneficiariesAmount | currency:'USD':'symbol'}}
+                    </td>
                 </tr>
             </ng-template>
         </p-table>

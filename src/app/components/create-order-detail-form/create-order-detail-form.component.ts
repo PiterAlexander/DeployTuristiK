@@ -101,6 +101,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
           this.beneficiariesAmount = 1
         }
       } else {
+        console.log(this.orderProcess[0].order.customer);
+
         this.onePackage = this.orderProcess[0].order.package
         if (this.orderProcess[0].beneficiaries.length > 0) {
           this.fillBeneficiariesArray()

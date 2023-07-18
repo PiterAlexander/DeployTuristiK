@@ -191,15 +191,14 @@ export class CreatePaymentFormComponent implements OnInit {
           image: 'url',
           status: 1
         }
-        this.modalPrimeNg.close()
         this.store.dispatch(new CreatePaymentRequest({ ...payment }))
-        Swal.fire({
-          icon: 'success',
-          title: '¡Abono agregado exitosamente!',
-          timer: 1500,
-          timerProgressBar: true,
-          showConfirmButton: false
-        })
+        // Swal.fire({
+        //   icon: 'success',
+        //   title: '¡Abono agregado exitosamente!',
+        //   timer: 1500,
+        //   timerProgressBar: true,
+        //   showConfirmButton: false
+        // })
       } else {
         const beneficiaries = this.orderProcess[0].beneficiaries;
         const unitPrice = this.totalCost / this.beneficiariesAmount

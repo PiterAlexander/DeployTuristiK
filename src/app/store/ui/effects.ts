@@ -253,9 +253,12 @@ export class PackageEffects {
         this.actions$.pipe(
             ofType(orderActions.OPEN_MODAL_ORDERDETAILS),
             tap((action) => {
-                this.modalRef = this.modalService.open(ReadOrderOrderDetailComponent, {
-                    backdrop: false,
-                    size: 'xl'
+                this.dialogRef = this.dialogService.open(ReadOrderOrderDetailComponent, {
+                    /* Opciones del modal */
+                    showHeader: false,
+                    width: '70%',
+                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
+                    baseZIndex: 10000,
                 });
             })
         ), { dispatch: false });
@@ -293,9 +296,12 @@ export class PackageEffects {
         this.actions$.pipe(
             ofType(orderActions.OPEN_MODAL_PAYMENTS),
             tap((action) => {
-                this.modalRef = this.modalService.open(ReadOrderPaymentComponent, {
-                    backdrop: false,
-                    size: 'xl'
+                this.dialogRef = this.dialogService.open(ReadOrderPaymentComponent, {
+                    /* Opciones del modal */
+                    showHeader: false,
+                    width: '70%',
+                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
+                    baseZIndex: 10000,
                 });
             })
         ), { dispatch: false });
@@ -319,10 +325,13 @@ export class PackageEffects {
         switchMap((payment) => {
             return this.apiService.addPayment(payment).pipe(
                 mergeMap((paymentResolved) => {
+                    console.log(paymentResolved);
+                    
                     this.modalRef.close();
                     return [
                         new CreatePaymentSuccess(paymentResolved),
-                        new GetAllOrdersRequest(),
+                        // new GetAllOrdersRequest(),
+                        // new OpenModalPayments(paymentResolved.order)
                     ];
                 }),
                 catchError((err) => of(new CreatePaymentFailure(err)))
@@ -448,7 +457,7 @@ export class PackageEffects {
         switchMap((role) => {
             return this.apiService.deleteRole(role.roleId).pipe(
                 mergeMap((roleResolved) => {
-                  this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Rol eliminado exitosamente' });
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Rol eliminado exitosamente' });
                     return [
                         new DeleteRoleSuccess(roleResolved),
                         new GetAllRoleRequest(),

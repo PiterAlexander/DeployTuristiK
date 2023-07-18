@@ -1,5 +1,236 @@
 <p-toast key="alert-message"></p-toast>
-<div *ngIf="user['role'] !== 'Cliente'" class="content-header">
+
+<div *ngIf="role!=='Cliente'" class="p-3">
+    <div class="col-12">
+        <div class="card px-6 py-6" style="border-radius: 15px;">
+            <p-table *ngIf="loading === false" #dt [value]="ordersList" [paginator]="true" [rows]="5"
+                [showCurrentPageReport]="true" scrollable="true" [rowsPerPageOptions]="[5, 10]"
+                currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} pedidos."
+                [globalFilterFields]="['customer.name', 'customer.lastName', 'customer.document', 'package.name', 'totalCost', 'status']">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between">
+                        <span class="mt-2 md:mt-0 p-input-icon-right">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Buscar..." />
+                        </span>
+                        <button pButton p pRipple type="button" label="Registrar pedido" icon="pi pi-plus"
+                            (click)="createOrder()" class="p-button-outlined"></button>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="customer.name" style="min-width: 15rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Titular <p-sortIcon field="customer.name"></p-sortIcon>
+                            </div>
+                        </th>
+                        <th pSortableColumn="package.name" style="min-width: 13rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Paquete <p-sortIcon field="package.name"></p-sortIcon>
+                            </div>
+                        </th>
+                        <th style="min-width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Beneficiarios
+                            </div>
+                        </th>
+                        <th pSortableColumn="totalCost" tyle="width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Costo total </div> <p-sortIcon field="totalCost"></p-sortIcon>
+                        </th>
+                        <th style="min-width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Abonos
+                            </div>
+                        </th>
+                        <th pSortableColumn="status" tyle="min-width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Estado </div> <p-sortIcon field="status"></p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-order>
+                    <tr>
+                        <td style="min-width: 15rem">{{ order.customer.name + ' ' + order.customer.lastName + ' - ' +
+                            order.customer.document }}</td>
+                        <td style="min-width: 13rem">{{ order.package.name }}</td>
+                        <td style="min-width: 10rem">
+                            <button pButton pRipple type="button" icon="pi pi-eye"
+                                class="p-button-outlined p-button-rounded" pTooltip="Ver beneficiarios"
+                                (click)="sendToOrderDetails(order)" tooltipPosition="bottom"></button>
+                        </td>
+                        <td style="min-width: 10rem">{{ order.totalCost | currency: 'USD':'symbol' }}</td>
+                        <td style="min-width: 10rem">
+                            <button pButton pRipple type="button" icon="pi pi-eye"
+                                class="p-button-outlined p-button-rounded" pTooltip="Ver abonos"
+                                (click)="sendToPayments(order)" tooltipPosition="bottom"></button>
+                        </td>
+                        <td style="min-width: 10rem">
+                            <span [class]="'order-badge status-' + order.status">{{ statuses[order.status]['label']
+                                }}</span>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="9">No se encontraron pedidos.</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-table *ngIf="loading === true" [loading]="loading" #dt [value]="ordersList" [paginator]="true" [rows]="5"
+                [showCurrentPageReport]="true" scrollable="true" [rowsPerPageOptions]="[5, 10]"
+                currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} pedidos."
+                [globalFilterFields]="['customer.name', 'customer.lastName', 'customer.document', 'package.name', 'totalCost', 'status']">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between">
+                        <span class="mt-2 md:mt-0 p-input-icon-right">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Buscar..." />
+                        </span>
+                        <button pButton p pRipple type="button" label="Registrar pedido" icon="pi pi-plus"
+                            (click)="createOrder()" class="p-button-outlined"></button>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="customer.name" style="min-width: 15rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Titular <p-sortIcon field="customer.name"></p-sortIcon>
+                            </div>
+                        </th>
+                        <th pSortableColumn="package.name" style="min-width: 13rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Paquete <p-sortIcon field="package.name"></p-sortIcon>
+                            </div>
+                        </th>
+                        <th style="min-width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Beneficiarios
+                            </div>
+                        </th>
+                        <th pSortableColumn="totalCost" tyle="width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Costo total </div> <p-sortIcon field="totalCost"></p-sortIcon>
+                        </th>
+                        <th style="min-width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Abonos
+                            </div>
+                        </th>
+                        <th pSortableColumn="status" tyle="min-width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Estado </div> <p-sortIcon field="status"></p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-order>
+                    <tr>
+                        <!-- <td style="min-width: 15rem">{{ order.customer.name + ' ' + order.customer.lastName + ' - ' +
+                            order.customer.document }}</td>
+                        <td style="min-width: 13rem">{{ order.package.name }}</td>
+                        <td style="min-width: 10rem">
+                            <button pButton pRipple type="button" icon="pi pi-eye"
+                                class="p-button-outlined p-button-rounded" pTooltip="Ver beneficiarios"
+                                (click)="sendToOrderDetails(order)" tooltipPosition="bottom"></button>
+                        </td>
+                        <td style="min-width: 10rem">{{ order.totalCost | currency: 'USD':'symbol' }}</td>
+                        <td style="min-width: 10rem">
+                            <button pButton pRipple type="button" icon="pi pi-eye"
+                                class="p-button-outlined p-button-rounded" pTooltip="Ver abonos"
+                                (click)="sendToPayments(order)" tooltipPosition="bottom"></button>
+                        </td>
+                        <td style="min-width: 10rem">
+                            <span [class]="'order-badge status-' + order.status">{{ statuses[order.status]['label']
+                                }}</span>
+                        </td> -->
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="9">No se encontraron pedidos.</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <!-- <p-table #dt [value]="ordersList" [rows]="5" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10]"
+                [loading]="loading" [paginator]="true"
+                currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} pedidos."
+                [globalFilterFields]="['customer.name', 'customer.lastName', 'customer.document', 'package.name', 'totalCost', 'status']">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between">
+                        <span class="mt-2 md:mt-0 p-input-icon-right">
+                            <i class="pi pi-search"></i>
+                            <input pInputText (input)="dt.filterGlobal($event.target.value, 'contains')" type="text"
+                                placeholder="Buscar..." />
+                        </span>
+                        <button pButton p pRipple type="button" label="Registrar pedido" icon="pi pi-plus"
+                            (click)="openModalCreateOrder()" class="p-button-outlined"></button>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width: 15rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Titular>
+                            </div>
+                        </th>
+                        <th style="min-width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Paquete
+                            </div>
+                        </th>
+                        <th style="min-width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Beneficiarios
+                            </div>
+                        </th>
+                        <th tyle="min-width: 10rem">Costo Total <p-sortIcon
+                                field="totalCost"></p-sortIcon></th>
+                        <th style="min-width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Abonos
+                            </div>
+                        </th>
+                        <th style="min-width: 10rem">
+                            <div class="flex justify-content-left align-items-left">
+                                Estado
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-order>
+                    <tr>
+                        <td>{{ order.customer.name + ' ' + order.customer.lastName + ' - ' +
+                            order.customer.document }}</td>
+                        <td>{{ order.package.name }}</td>
+                        <td>
+                            <button pButton pRipple type="button" icon="pi pi-eye"
+                                class="p-button-outlined p-button-rounded" pTooltip="Ver beneficiarios"
+                                (click)="sendToOrderDetails(order)" tooltipPosition="bottom"></button>
+                        </td>
+                        <td>{{ order.totalCost | currency: 'USD':'symbol' }}</td>
+                        <td>
+                            <button pButton pRipple type="button" icon="pi pi-eye"
+                                class="p-button-outlined p-button-rounded" pTooltip="Ver abonos"
+                                (click)="sendToPayments(order)" tooltipPosition="bottom"></button>
+                        </td>
+                        <td>
+                            <span [class]="'customer-badge status-' + order.status">{{showStatus(order.status)}}</span>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="9">No se encontraron pedidos.</td>
+                    </tr>
+                </ng-template>
+            </p-table> -->
+        </div>
+    </div>
+</div>
+
+<!-- <div *ngIf="user['role'] !== 'Cliente'" class="content-header">
     <div class="container-fluid">
         <div class="row m-3">
             <div class="card card-package w-100">
@@ -81,7 +312,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <div *ngIf="user['role'] === 'Cliente'" class="content-header">
     <div class="container-fluid mt-5">

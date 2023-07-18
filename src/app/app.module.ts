@@ -84,6 +84,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarComponent } from './pages/calendar/calendar.component';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { BadgeModule } from 'primeng/badge';
 
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
@@ -181,6 +182,7 @@ registerLocaleData(localeEn, 'en-EN');
     DropdownModule,
     InputNumberModule,
     ConfirmPopupModule,
+    BadgeModule,
 
     //<------------------------->
     ToastrModule.forRoot({

@@ -1,7 +1,7 @@
 import { Order } from '@/models/order';
-import { GetAllCustomerRequest, GetAllOrdersRequest, OpenModalCreateOrder, OpenModalCreatePayment, OpenModalOrderDetails, OpenModalPayments } from '@/store/ui/actions';
+import { GetAllCustomerRequest, GetAllOrdersRequest, OpenModalCreateOrder, OpenModalOrderDetails, OpenModalPayments } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
-import { Component, OnInit, PipeTransform } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
@@ -22,24 +22,22 @@ export class OrdersComponent implements OnInit {
   public allOrders: Array<Order>
   public ordersList: Array<Order> = []
   public filteredOrdersList: Array<Order>;
-  public loading: boolean;
+  public loading: boolean = true
   public search: string
   public total: number
   public user: any
   public role: any
   public allCustomers: Array<Customer>
   public oneCustomer: Customer
+  public statuses: any[] = [];
 
-  private _state: State = {
-    page: 1,
-    pageSize: 5
-  };
-
-  constructor(private store: Store<AppState>) { }
+  constructor(
+    private store: Store<AppState>
+  ) { }
 
   ngOnInit() {
     this.store.dispatch(new GetAllOrdersRequest())
-    this.store.dispatch(new GetAllCustomerRequest())
+    this.store.dispatch(new GetAllCustomerRequest)
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.user = JSON.parse(localStorage.getItem('TokenPayload'))
@@ -47,8 +45,14 @@ export class OrdersComponent implements OnInit {
       this.allCustomers = state.allCustomers.data
       this.allOrders = state.allOrders.data
       this.compareCustomer()
-      this.searchByName()
     })
+
+    this.statuses = [
+      { 'label': 'Cancelado', 'code': 0 },
+      { 'label': 'En curso', 'code': 1 },
+      { 'label': 'Pagado', 'code': 2 },
+      { 'label': 'Pendiente', 'code': 3 }
+    ]
   }
 
   compareCustomer() {
@@ -64,31 +68,34 @@ export class OrdersComponent implements OnInit {
           }
         }
       } else if (this.user['role'] !== 'Cliente') {
-        this.ordersList = this.allOrders
+        if (this.allOrders.length > 0) {
+          console.log(this.allOrders);
+          for (const element of this.allOrders) {
+            if (element !== undefined) {
+              this.ordersList.push(element)
+            }
+          }
+          if (this.ordersList !== undefined) {
+            if (this.ordersList.length === this.allOrders.length) {
+              this.loading = false
+            }
+          }
+        } else {
+        }
       }
     }
   }
 
-  matches(orderResolved: Order, term: string, pipe: PipeTransform) {
-    return (
-      orderResolved.customerId.toLowerCase().includes(term.toLowerCase())
-    );
-  }
-
-  openModalCreateOrder() {
-    this.store.dispatch(new OpenModalCreateOrder());
-  }
-
-  searchByName() {
-    if (this.search === undefined || this.search.length <= 0) {
-      this.filteredOrdersList = this.ordersList;
-      this.total = this.filteredOrdersList.length;
-      this.filteredOrdersList = this.filteredOrdersList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
-    } else {
-      this.filteredOrdersList = this.ordersList.filter(orderModel => orderModel.customerId.toLocaleLowerCase().includes(this.search.toLocaleLowerCase().trim()));
-      this.total = this.filteredOrdersList.length;
-      this.filteredOrdersList = this.filteredOrdersList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+  showStatus(OrderStatus: any): string {
+    for (let status of this.statuses) {
+      if (OrderStatus === status.code) {
+        return status.label
+      }
     }
+  }
+
+  createOrder() {
+    this.store.dispatch(new OpenModalCreateOrder());
   }
 
   sendToOrderDetails(order: Order) {
@@ -97,24 +104,5 @@ export class OrdersComponent implements OnInit {
 
   sendToPayments(order: Order) {
     this.store.dispatch(new OpenModalPayments(order))
-  }
-
-  get page() {
-    return this._state.page;
-  }
-  get pageSize() {
-    return this._state.pageSize;
-  }
-
-  set page(page: number) {
-    this._set({ page });
-  }
-  set pageSize(pageSize: number) {
-    this._set({ pageSize });
-  }
-
-  private _set(patch: Partial<State>) {
-    Object.assign(this._state, patch);
-    this.searchByName();
   }
 }

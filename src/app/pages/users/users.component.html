@@ -7,41 +7,25 @@
                         <h1 class="text-dark">Usuarios</h1>
                     </div>
                     <div class="col-sm-3 col-personalized-2">
-                        <button
-                            (click)="openCreateUserModal()"
-                            type="button"
-                            class="btn btn-primary"
-                        >
-                            Agregar Usuario
+                        <button (click)="openCreateUserModal()" type="button" class="btn btn-primary">
+                            Registrar Usuario
                         </button>
                     </div>
                 </div>
 
                 <div class="card-body">
                     <div *ngIf="loading" class="d-flex justify-content-center">
-                        <div
-                            class="spinner-border"
-                            style="width: 5rem; height: 5rem"
-                            user="status"
-                        >
+                        <div class="spinner-border" style="width: 5rem; height: 5rem" user="status">
                             <span class="visually-hidden"></span>
                         </div>
                     </div>
                     <form *ngIf="!loading">
                         <div class="d-flex justify-content-end mb-3 row">
-                            <label
-                                for="table-complete-search"
-                                class="col-xs-3 col-sm-auto col-form-label label-search"
-                                >Búsqueda:</label
-                            >
+                            <label for="table-complete-search"
+                                class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
                             <div class="col-xs-3 col-sm-auto">
-                                <input
-                                    id="table-complete-search"
-                                    type="text"
-                                    class="form-control"
-                                    name="searchTerm"
-                                    (ngModelChange)="searchByUserName()"
-                                />
+                                <input id="table-complete-search" type="text" class="form-control" name="searchTerm"
+                                    (ngModelChange)="searchByUserName()" />
                             </div>
                         </div>
 
@@ -63,18 +47,11 @@
                                         {{ user.role.name }}
                                     </td>
                                     <td>
-                                        <span *ngIf="user.status === 1"
-                                            >Habilitado</span
-                                        >
-                                        <span *ngIf="user.status !== 1"
-                                            >Deshabilitado</span
-                                        >
+                                        <span *ngIf="user.status === 1">Habilitado</span>
+                                        <span *ngIf="user.status !== 1">Deshabilitado</span>
                                     </td>
                                     <td>
-                                        <i
-                                            class="btn fas fa-edit text-dark"
-                                            (click)="openUpdateUserModal(user)"
-                                        ></i>
+                                        <i class="btn fas fa-edit text-dark" (click)="openUpdateUserModal(user)"></i>
                                     </td>
                                 </tr>
                             </tbody>
