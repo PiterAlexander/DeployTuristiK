@@ -37,12 +37,16 @@ import {
     DeleteFrequentTravelerRequest,
     DeleteFrequentTravelerSuccess,
     DeleteFrequentTravelerFailure,
+    GetTopPackagesSuccess,
+    GetTopPackagesFailure,
+    ChangeStatusRoleSuccess,
+    ChangeStatusRoleFailure,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ApiService } from '@services/api.service';
 import { of } from 'rxjs';
-import { CreateAssociatedPermissionFailure, CreateAssociatedPermissionRequest, CreateAssociatedPermissionSuccess, CreateCustomerFailure, CreateCustomerRequest, CreateCustomerSuccess, CreateEmployeeFailure, CreateEmployeeRequest, CreateEmployeeSuccess, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, CreatePaymentFailure, CreatePaymentRequest, CreatePaymentSuccess, CreateRoleFailure, CreateRoleRequest, CreateRoleSuccess, CreateUserFailure, CreateUserRequest, CreateUserSuccess, DeleteAssociatedPermissionFailure, DeleteAssociatedPermissionRequest, DeleteAssociatedPermissionSuccess, DeleteEmployeeFailure, DeleteEmployeeRequest, DeleteEmployeeSuccess, DeleteRoleFailure, DeleteRoleRequest, DeleteRoleSuccess, EditCustomerFailure, EditCustomerRequest, EditCustomerSuccess, EditEmployeeFailure, EditEmployeeRequest, EditEmployeeSuccess, EditOrderDetailFailure, EditOrderDetailRequest, EditOrderDetailSuccess, EditOrderFailure, EditOrderRequest, EditOrderSuccess, EditPackageFailure, EditPackageRequest, EditPackageSuccess, EditRoleFailure, EditRoleRequest, EditRoleSuccess, GetAllCustomerFailure, GetAllCustomerRequest, GetAllCustomerSuccess, GetAllEmployeeFailure, GetAllEmployeeRequest, GetAllEmployeeSuccess, GetAllOrdersFailure, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesFailure, GetAllPackagesRequest, GetAllPackagesSuccess, GetAllPermissionsFailure, GetAllPermissionsSuccess, GetAllRoleFailure, GetAllRoleRequest, GetAllRoleSuccess, GetUsersFailure, GetUsersRequest, GetUsersSuccess, OpenModalPayments, UpdateUserFailure, UpdateUserRequest, UpdateUserSuccess, customerActions, employeeActions, orderActions, packageActions, permissionActions, roleActions, userActions } from './actions';
+import { CreateAssociatedPermissionFailure, CreateAssociatedPermissionRequest, CreateAssociatedPermissionSuccess, CreateCustomerFailure, CreateCustomerRequest, CreateCustomerSuccess, CreateEmployeeFailure, CreateEmployeeRequest, CreateEmployeeSuccess, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, CreatePaymentFailure, CreatePaymentRequest, CreatePaymentSuccess, CreateRoleFailure, CreateRoleRequest, CreateRoleSuccess, CreateUserFailure, CreateUserRequest, CreateUserSuccess, DeleteAssociatedPermissionFailure, DeleteAssociatedPermissionRequest, DeleteAssociatedPermissionSuccess, DeleteEmployeeFailure, DeleteEmployeeRequest, DeleteEmployeeSuccess, DeleteRoleFailure, DeleteRoleRequest, DeleteRoleSuccess, EditCustomerFailure, EditCustomerRequest, EditCustomerSuccess, EditEmployeeFailure, EditEmployeeRequest, EditEmployeeSuccess, EditOrderDetailFailure, EditOrderDetailRequest, EditOrderDetailSuccess, EditOrderFailure, EditOrderRequest, EditOrderSuccess, EditPackageFailure, EditPackageRequest, EditPackageSuccess, EditRoleFailure, EditRoleRequest, EditRoleSuccess, GetAllCustomerFailure, GetAllCustomerRequest, GetAllCustomerSuccess, GetAllEmployeeFailure, GetAllEmployeeRequest, GetAllEmployeeSuccess, GetAllOrdersFailure, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesFailure, GetAllPackagesRequest, GetAllPackagesSuccess, GetAllPermissionsFailure, GetAllPermissionsSuccess, GetAllRoleFailure, GetAllRoleRequest, GetAllRoleSuccess, GetUsersFailure, GetUsersRequest, GetUsersSuccess, OpenModalPayments, UpdateUserFailure, UpdateUserRequest, UpdateUserSuccess, customerActions, employeeActions, orderActions, packageActions, permissionActions, roleActions, userActions, ChangeStatusRoleRequest } from './actions';
 import { CreatePackageFormComponent } from '@components/create-package-form/create-package-form.component';
 import { CreateOrderFormComponent } from '@components/create-order-form/create-order-form.component';
 import { CreateOrderDetailFormComponent } from '@components/create-order-detail-form/create-order-detail-form.component';
@@ -83,6 +87,21 @@ export class PackageEffects {
             )
         })
     ));
+
+    getTopPackages$ = createEffect(() => this.actions$.pipe(
+      ofType(packageActions.GET_TOP_PACKAGES_REQUEST),
+      switchMap((action) => {
+          return this.apiService.getTopPackage().pipe(
+              mergeMap((packagesResolved) => {
+
+                  return [
+                      new GetTopPackagesSuccess(packagesResolved)
+                  ];
+              }),
+              catchError((err) => of(new GetTopPackagesFailure(err)))
+          )
+      })
+  ));
 
     // openModalCreatePackage$ = createEffect(() =>
     //     this.actions$.pipe(
@@ -438,7 +457,7 @@ export class PackageEffects {
                 catchError((err) => of(new EditRoleFailure(err)))
             )
         })
-    ))
+    ));
 
     deleteRole$ = createEffect(() => this.actions$.pipe(
         ofType(roleActions.DELETE_ROLE_REQUEST),
@@ -455,24 +474,41 @@ export class PackageEffects {
                 catchError((err) => of(new DeleteRoleFailure(err)))
             )
         })
-    ))
-
-    createAssociatedPermission$ = createEffect(() => this.actions$.pipe(
-        ofType(CREATE_ASSOCIATEDPERMISSION_REQUEST),
-        ofType(permissionActions.CREATE_ASSOCIATEDPERMISSION_REQUEST),
-        map((action: CreateAssociatedPermissionRequest) => action.payload),
-        switchMap((asocpermission) => {
-            return this.apiService.addAssociatedPermission(asocpermission).pipe(
-                mergeMap((assocPermissionResolved) => {
-                    this.modalRef.close();
-                    return [
-                        new CreateAssociatedPermissionSuccess(assocPermissionResolved),
-                    ];
-                }),
-                catchError((err) => of(new CreateAssociatedPermissionFailure(err)))
-            )
-        })
     ));
+
+    disableRole$ = createEffect(() => this.actions$.pipe(
+      ofType(roleActions.CHANGE_STATUS_ROLE_REQUEST),
+      map((action: ChangeStatusRoleRequest) => action.payload),
+      switchMap((role) => {
+          return this.apiService.disableRole(role).pipe(
+              mergeMap((roleResolved) => {
+                  this.dialogRef.close()
+                  return [
+                      new ChangeStatusRoleSuccess(roleResolved),
+                      new GetAllRoleRequest(),
+                  ];
+              }),
+              catchError((err) => of(new ChangeStatusRoleFailure(err)))
+          )
+      })
+  ));
+
+  createAssociatedPermission$ = createEffect(() => this.actions$.pipe(
+      ofType(CREATE_ASSOCIATEDPERMISSION_REQUEST),
+      ofType(permissionActions.CREATE_ASSOCIATEDPERMISSION_REQUEST),
+      map((action: CreateAssociatedPermissionRequest) => action.payload),
+      switchMap((asocpermission) => {
+          return this.apiService.addAssociatedPermission(asocpermission).pipe(
+              mergeMap((assocPermissionResolved) => {
+                  this.modalRef.close();
+                  return [
+                      new CreateAssociatedPermissionSuccess(assocPermissionResolved),
+                  ];
+              }),
+              catchError((err) => of(new CreateAssociatedPermissionFailure(err)))
+          )
+      })
+  ));
 
     DeleteAssociatedPermission$ = createEffect(() => this.actions$.pipe(
         ofType(DELETE_ASSOCIATEDPERMISSION_REQUEST),
