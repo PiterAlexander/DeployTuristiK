@@ -34,6 +34,9 @@ import {
     ChangeStatusPackageSuccess,
     ChangeStatusPackageFailure,
     OpenModalCreatePackage,
+    DeleteFrequentTravelerRequest,
+    DeleteFrequentTravelerSuccess,
+    DeleteFrequentTravelerFailure,
     GetTopPackagesSuccess,
     GetTopPackagesFailure,
     ChangeStatusRoleSuccess,
@@ -540,16 +543,22 @@ export class PackageEffects {
         })
     ));
 
-    openModalCreateCustomer = createEffect(() =>
+    openModalCreateCustomer$ = createEffect(() =>
         this.actions$.pipe(
             ofType(customerActions.OPEN_MODAL_CREATE_CUSTOMER),
             tap((action) => {
-                this.modalRef = this.modalService.open(CreatecustomerformComponent, {
-                    backdrop: false,
-                    size: 'lg'
+                this.dialogRef = this.dialogService.open(CreatecustomerformComponent, {
+                    /* Opciones del modal */
+                    header: action['payload'] === undefined ? 'Crear cliente' : 'Editar cliente',
+                    width: '55%',
+                    contentStyle: { overflowY: 'auto' },
                 });
+
             })
-        ), { dispatch: false });
+        ),
+        {
+            dispatch: false
+        });
 
     createCustomer$ = createEffect(() => this.actions$.pipe(
         ofType(customerActions.CREATE_CUSTOMER_REQUEST),
@@ -585,27 +594,38 @@ export class PackageEffects {
     ));
     //<------------------>
     //<---FREQUENT TRAVELER---->
+    
     listModalTraveler$ = createEffect(() =>
         this.actions$.pipe(
             ofType(FrequentTravelerActions.OPEN_MODAL_LIST_FREQUENTTRAVELER),
-            tap(() => {
-                this.modalRef = this.modalService.open(ListFrequentTravelerComponent, {
-                    backdrop: false,
-                    size: 'lg'
-                })
+            tap((action) => {
+                this.dialogRef = this.dialogService.open(ListFrequentTravelerComponent, {
+                    /* Opciones del modal */
+                    header: action['payload'] === undefined ? 'Viajeros frecuentes' : 'Viajeros frecuentes',
+                    width: '60%',
+                });
+
             })
-        ), { dispatch: false });
+        ),
+        {
+            dispatch: false
+        });
 
     createModalTraveler$ = createEffect(() =>
         this.actions$.pipe(
             ofType(FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER),
-            tap(() => {
-                this.modalRef = this.modalService.open(CreateFrequentTravelerFormComponent, {
-                    backdrop: false,
-                    size: 'lg'
-                })
+            tap((action) => {
+                this.dialogRef = this.dialogService.open(CreateFrequentTravelerFormComponent, {
+                    /* Opciones del modal */
+                    header: action['payload'] === undefined ? 'Crear frecuentes' : 'Editar frecuentes',
+                    width: '60%',
+                });
+
             })
-        ), { dispatch: false });
+        ),
+        {
+            dispatch: false
+        });
 
     createFrequentTraveler$ = createEffect(() => this.actions$.pipe(
         ofType(FrequentTravelerActions.CREATE_FREQUENTTRAVELER_REQUEST),
@@ -623,6 +643,21 @@ export class PackageEffects {
             )
         })
     ));
+    // DeleteFrequentTraveler$ = createEffect(() => this.actions$.pipe(
+    //     ofType(FrequentTravelerActions.DELETE_FREQUENTTRAVELER_REQUEST),
+    //     map((action: DeleteFrequentTravelerRequest) => action.payload),
+    //     switchMap((FrequentTraveler) => {
+    //         return this.apiService.deleteFrequentTraveler(FrequentTraveler.frequentTravelerId).pipe(
+    //             mergeMap((frequentTravelerResolved) => {
+    //                 return [
+    //                     new DeleteFrequentTravelerSuccess(frequentTravelerResolved),
+    //                     new GetAllFrequentTravelerRequest(),
+    //                 ];
+    //             }),
+    //             catchError((err) => of(new DeleteFrequentTravelerFailure(err)))
+    //         )
+    //     })
+    // ));
     //<--------------->
 
     //<---- EMPLOYEE ---->
