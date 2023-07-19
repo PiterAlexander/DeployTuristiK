@@ -52,6 +52,9 @@ import { CreateFrequentTravelerFormComponent } from './components/create-frequen
 import { ListFrequentTravelerComponent } from './components/list-frequent-traveler/list-frequent-traveler.component';
 import { EditPaymentFormComponent } from './components/edit-payment-form/edit-payment-form.component';
 import { ListFrequentTravelersToOrdersComponent } from './components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
+import { MainPublicComponent } from '@modules/main copy/main.component';
+import { PackagePublicComponent } from '@modules/packages/package-public.component';
+
 
 //<-----------PRIMENG--------------->
 import { DataViewModule } from 'primeng/dataview';
@@ -94,6 +97,8 @@ registerLocaleData(localeEn, 'en-EN');
   declarations: [
     AppComponent,
     MainComponent,
+    MainPublicComponent,
+    PackagePublicComponent,
     LoginComponent,
     HeaderComponent,
     FooterComponent,
