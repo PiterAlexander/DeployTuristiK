@@ -13,36 +13,24 @@
                             type="button"
                             class="btn btn-primary"
                         >
-                            Agregar Usuario
+                            Registrar Usuario
                         </button>
                     </div>
                 </div>
 
                 <div class="card-body">
                     <div *ngIf="loading" class="d-flex justify-content-center">
-                        <div
-                            class="spinner-border"
-                            style="width: 5rem; height: 5rem"
-                            user="status"
-                        >
+                        <div class="spinner-border" style="width: 5rem; height: 5rem" user="status">
                             <span class="visually-hidden"></span>
                         </div>
                     </div>
                     <form *ngIf="!loading">
                         <div class="d-flex justify-content-end mb-3 row">
-                            <label
-                                for="table-complete-search"
-                                class="col-xs-3 col-sm-auto col-form-label label-search"
-                                >Búsqueda:</label
-                            >
+                            <label for="table-complete-search"
+                                class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
                             <div class="col-xs-3 col-sm-auto">
-                                <input
-                                    id="table-complete-search"
-                                    type="text"
-                                    class="form-control"
-                                    name="searchTerm"
-                                    (ngModelChange)="searchByUserName()"
-                                />
+                                <input id="table-complete-search" type="text" class="form-control" name="searchTerm"
+                                    (ngModelChange)="searchByUserName()" />
                             </div>
                         </div>
 
@@ -64,18 +52,11 @@
                                         {{ user.role.name }}
                                     </td>
                                     <td>
-                                        <span *ngIf="user.status === 1"
-                                            >Habilitado</span
-                                        >
-                                        <span *ngIf="user.status !== 1"
-                                            >Deshabilitado</span
-                                        >
+                                        <span *ngIf="user.status === 1">Habilitado</span>
+                                        <span *ngIf="user.status !== 1">Deshabilitado</span>
                                     </td>
                                     <td>
-                                        <i
-                                            class="btn fas fa-edit text-dark"
-                                            (click)="openUpdateUserModal(user)"
-                                        ></i>
+                                        <i class="btn fas fa-edit text-dark" (click)="openUpdateUserModal(user)"></i>
                                     </td>
                                 </tr>
                             </tbody>
@@ -84,5 +65,124 @@
                 </div>
             </div>
         </div>
+    </div>
+</div> 
+
+<!--Aquí se despliegan los mensajes de exito o error segun sea el caso-->
+<p-toast key="alert-message"></p-toast>
+<p-confirmDialog
+    header="Confirmation"
+    icon="pi pi-exclamation-triangle"
+></p-confirmDialog>
+<div class="col-12">
+    <div class="card px-6 py-6 p-4 m-5" style="border-radius: 15px">
+        <p-table
+            #dt
+            [value]="userList"
+            [rows]="5"
+            [showCurrentPageReport]="true"
+            [rowsPerPageOptions]="[5, 10]"
+            [loading]="loading"
+            [paginator]="true"
+            currentPageReportTemplate="Desde {first} hasta {last} de {totalRecords} usuarios"
+            [globalFilterFields]="['email', 'role.name']"
+        >
+            <ng-template pTemplate="caption" class="p-grid">
+                <div class="custom-flex-container flex justify-content-between">
+                    <div class="custom-flex-item-left">
+                        <span class="mt-2 md:mt-0 p-input-icon-right">
+                            <i class="pi pi-search"></i>
+                            <input
+                                pInputText
+                                (input)="
+                                    dt.filterGlobal(
+                                        $event.target.value,
+                                        'contains'
+                                    )
+                                "
+                                type="text"
+                                placeholder="Buscar..."
+                            />
+                        </span>
+                    </div>
+                    <div class="custom-flex-item-right">
+                        <button
+                            pButton
+                            type="button"
+                            label="Registrar Usuario"
+                            class="p-button-outlined"
+                            (click)="openCreateUserModal()"
+
+                        >
+                            <i class="pi pi-plus" style="margin-right: 9px"></i>
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <!-- <th style="width: 5rem">
+                  <div class="flex justify-content-left align-items-left">
+                      Nombre Completo
+                  </div>
+              </th> -->
+                    <th style="width: 5rem">
+                        <div class="flex justify-content-left align-items-left">
+                            Correo
+                        </div>
+                    </th>
+                    <th style="width: 5rem">
+                        <div class="flex justify-content-left align-items-left">
+                            Rol
+                        </div>
+                    </th>
+                    <th style="width: 5rem">
+                        <div
+                            class="flex justify-content-center align-items-center"
+                        >
+                            Estado
+                        </div>
+                    </th>
+                    <th style="width: 5rem">
+                        <div
+                            class="flex justify-content-center align-items-center"
+                        >
+                            Acciones
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-user>
+                <tr>
+                    <td>
+                        {{ user.email }}
+                    </td>
+                    <td>
+                        {{ user.role.name }}
+                    </td>
+                    <td class="text-center">
+                        <div *ngIf="user.status !== 1">Deshabilitado</div>
+                        <div *ngIf="user.status === 1">Habilitado</div>
+                    </td>
+                    <td class="text-center p-1">
+                        <button
+                            pButton
+                            type="button"
+                            icon="pi pi-pencil"
+                            class="p-button-outlined p-button-warning p-button-rounded m-1"
+                            (click)="openUpdateUserModal(user)"
+                            pTooltip="Editar"
+                            tooltipPosition="bottom"
+                        ></button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="9">No se encontraron usuarios</td>
+                </tr>
+            </ng-template>
+        </p-table>
     </div>
 </div>

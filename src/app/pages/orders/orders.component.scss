@@ -1,38 +1,28 @@
-.tooltip-text {
-  visibility: hidden;
-  position: absolute;
-  z-index: 1;
-  width: 100px;
-  color: white;
-  background-color: black;
-  font-size: 15px;
-  padding: 5px;
-  border-radius: 15px;
+.order-badge {
+    border-radius: var(--border-radius);
+    padding: .25em .5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .3px;
 
-}
+    &.status-0 {
+        background: var(--red-200);
+        color: var(--red-800);
+    }
 
-.hover-text:hover .tooltip-text {
-  visibility: visible;
-  font-style: italic;
-}
+    &.status-1 {
+        background: var(--cyan-200);
+        color: var(--cyan-800);
+    }
 
-.bottom {
-  top: 30px;
-  left: -100%;
-}
+    &.status-2 {
+        background: var(--green-200);
+        color: var(--green-800);
+    }
 
-.hover-text {
-  position: relative;
-  margin: 40px;
-  text-align: center;
-}
-
-.hover-text {
-  padding: 5px;
-  margin: 0px;
-}
-
-.infoData {
-  display: flex;
-  justify-content: center;
+    &.status-3 {
+        background: var(--yellow-200);
+        color: var(--yellow-800);
+    }
 }

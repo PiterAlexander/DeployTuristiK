@@ -1,3 +1,5 @@
+import { Order } from "./order";
+
 export interface Payment {
     paymentId?: string;
     orderId?: string;
@@ -6,4 +8,5 @@ export interface Payment {
     date: Date
     image: string;
     status: number
+    order?: Order
 }

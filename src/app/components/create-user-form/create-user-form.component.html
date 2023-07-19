@@ -1,9 +1,3 @@
-<!-- eslint-disable @angular-eslint/template/eqeqeq -->
-<div class="modal-header">
-    <div class="container">
-        <h5 class="modal-title padding-extra">{{ ActionTitle }} Usuario</h5>
-    </div>
-</div>
 <div class="modal-body">
     <div class="container-fluid">
         <form
@@ -24,23 +18,7 @@
                             class="form-control formularioCampo border-left-dark"
                             formControlName="userId"
                         />
-                        <div class="form-group col-6">
-                            <label for="userName" class="form-label"
-                                >Nombre de Usuario </label
-                            >
-                            <input
-                                type="text"
-                                id="username"
-                                name="userName"
-                                class="form-control formularioCampo border-left-dark"
-                                placeholder="Ingrese el Nombre de Usuario"
-                                formControlName="userName"
-                                onkeydown="return /[a-z,0-9]/i.test(event.key)"
-                            />
-                            <div class="invalid-feedback">
-                                En este campo solo se permiten letras
-                            </div>
-                        </div>
+                        
 
                         <div class="form-group col-5">
                             <label for="role" class="form-label">Rol</label>

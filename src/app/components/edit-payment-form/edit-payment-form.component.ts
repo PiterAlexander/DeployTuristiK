@@ -59,7 +59,7 @@ export class EditPaymentFormComponent implements OnInit {
     this.modalService.dismissAll()
   }
 
-  async decline() {
+  decline() {
     const payment: Payment = {
       paymentId: this.payment.paymentId,
       orderId: this.order.orderId,
@@ -69,7 +69,7 @@ export class EditPaymentFormComponent implements OnInit {
       image: this.payment.image,
       status: 2
     }
-    await this.store.dispatch(new EditPaymentRequest(payment))
+    this.store.dispatch(new EditPaymentRequest(payment))
     this.modalService.dismissAll()
   }
 }

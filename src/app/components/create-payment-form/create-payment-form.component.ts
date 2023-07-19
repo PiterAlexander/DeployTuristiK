@@ -8,11 +8,11 @@ import { CreateOrderRequest, CreatePaymentRequest, EditOrderRequest, EditPackage
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { ApiService } from '@services/api.service';
 import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-create-payment-form',
@@ -37,8 +37,8 @@ export class CreatePaymentFormComponent implements OnInit {
   constructor(
     public apiService: ApiService,
     private fb: FormBuilder,
-    private modalService: NgbModal,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private modalPrimeNg: DynamicDialogRef,
   ) { }
 
   ngOnInit(): void {
@@ -63,28 +63,29 @@ export class CreatePaymentFormComponent implements OnInit {
       if (this.orderProcess[0].action === 'CreateOrderDetail') {
         this.oneOrder = this.allOrders.find(o => o.orderId === this.orderProcess[0].order.orderId)
         this.totalCost = this.orderProcess[0].order.totalCost
-        let addition = 0
-        this.oneOrder.payment.forEach(element => {
-          if (element != undefined) {
-            addition += element.amount
-          }
-        })
-        const totalCost = this.oneOrder.totalCost + this.totalCost
-        this.remainingAmount = totalCost - addition
+        // let addition = 0
+        // this.oneOrder.payment.forEach(element => {
+        //   if (element != undefined) {
+        //     addition += element.amount
+        //   }
+        // })
+        // const totalCost = this.oneOrder.totalCost + this.totalCost
+        this.remainingAmount = this.totalCost * 20 / 100
       } else {
         this.totalCost = this.onePackage.price * this.beneficiariesAmount
+        this.remainingAmount = this.totalCost * 20 / 100
       }
     }
 
     this.formGroup = this.fb.group({
-      amount: ['', Validators.required],
+      amount: [null, Validators.required],
       img: [null, Validators.required],
     });
   }
 
   back() {
     if (this.orderProcess[0].action === 'CreatePayment') {
-      this.modalService.dismissAll();
+      this.modalPrimeNg.close()
       this.store.dispatch(new OpenModalPayments(this.orderProcess[0].order))
     } else if (this.orderProcess[0].action === 'CreateOrderDetail') {
       const order = this.allOrders.find(o => o.orderId === this.orderProcess[0].order.orderId)
@@ -93,10 +94,10 @@ export class CreatePaymentFormComponent implements OnInit {
         order: order,
         beneficiaries: this.orderProcess[0].beneficiaries
       }]
-      this.modalService.dismissAll();
+      this.modalPrimeNg.close()
       this.store.dispatch(new OpenModalCreateOrderDetail(this.orderProcess))
     } else {
-      this.modalService.dismissAll();
+      this.modalPrimeNg.close()
       this.store.dispatch(new OpenModalCreateOrderDetail(this.orderProcess))
     }
   }
@@ -110,64 +111,57 @@ export class CreatePaymentFormComponent implements OnInit {
   }
 
   validForm(): boolean {
-    return this.formGroup.value.amount > 0 &&
-      this.formGroup.value.img != undefined && !this.formGroup.invalid &&
-      !this.validateInitialPayment() && !this.validateFullPrice()
+    return this.formGroup.value.amount !== null
   }
 
-  validateInitialPayment(): boolean {
-    if (this.orderProcess[0].action === 'CreatePayment') {
-      if (this.formGroup.value.amount != undefined) {
-        if (this.formGroup.value.amount <= 0) {
-          return true
-        }
-      }
-    } else {
-      if (this.formGroup.value.amount != undefined) {
-        const initialPayment = this.totalCost * 20 / 100
-        if (this.formGroup.value.amount < initialPayment) {
-          return true
-        }
-      }
-    }
-    return false
-  }
+  // validateInitialPayment(): boolean {
+  //   if (this.orderProcess[0].action === 'CreatePayment') {
+  //     if (this.formGroup.value.amount != null) {
+  //       if (this.formGroup.value.amount <= 0) {
+  //         return true
+  //       }
+  //     }
+  //   } else {
+  //     if (this.formGroup.value.amount != undefined) {
+  //       const initialPayment = this.totalCost * 20 / 100
+  //       if (this.formGroup.value.amount < initialPayment) {
+  //         return true
+  //       }
+  //     }
+  //   }
+  //   return false
+  // }
 
-  validateFullPrice(): boolean {
-    if (this.orderProcess[0].action === 'CreatePayment') {
-      if (this.formGroup.value.amount != undefined) {
-        if (this.formGroup.value.amount > this.remainingAmount) {
-          return true
-        }
-      }
-    } else {
-      if (this.formGroup.value.amount != undefined) {
-        if (!this.validateInitialPayment()) {
-          if (this.formGroup.value.amount > this.totalCost) {
-            return true
-          }
-        }
-      }
-    }
-    return false
-  }
+  // validateFullPrice(): boolean {
+  //   if (this.orderProcess[0].action === 'CreatePayment') {
+  //     if (this.formGroup.value.amount != undefined) {
+  //       if (this.formGroup.value.amount > this.remainingAmount) {
+  //         return true
+  //       }
+  //     }
+  //   } else {
+  //     if (this.formGroup.value.amount != undefined) {
+  //       if (!this.validateInitialPayment()) {
+  //         if (this.formGroup.value.amount > this.totalCost) {
+  //           return true
+  //         }
+  //       }
+  //     }
+  //   }
+  //   return false
+  // }
 
   //<------------------->
 
-  onFileSelected(event: any) {
-    if (event.target.files && event.target.files.length > 0) {
-      this.file = event.target.files[0];
-    }
-  }
+  // onFileSelected(event: any) {
+  //   if (event.target.files && event.target.files.length > 0) {
+  //     this.file = event.target.files[0];
+  //   }
+  // }
 
   async save() {
-    if (!this.formGroup.invalid) {
+    if (this.validForm()) {
       if (this.orderProcess[0].action === 'CreatePayment') {
-        // const urlName = this.file.name.replace(/\s/g, '-')
-        // const imgURL = '../src/assets/img/' + urlName
-        // saveAs(imgURL, this.file);
-        // console.log('Imagen: ', urlName);
-        // console.log('url: ', imgURL);
         let status: number
         if (this.formGroup.value.amount === this.remainingAmount) {
           status = 2
@@ -192,15 +186,14 @@ export class CreatePaymentFormComponent implements OnInit {
           image: 'url',
           status: 1
         }
-
         this.store.dispatch(new CreatePaymentRequest({ ...payment }))
-        Swal.fire({
-          icon: 'success',
-          title: '¡Abono agregado exitosamente!',
-          timer: 1500,
-          timerProgressBar: true,
-          showConfirmButton: false
-        })
+        // Swal.fire({
+        //   icon: 'success',
+        //   title: '¡Abono agregado exitosamente!',
+        //   timer: 1500,
+        //   timerProgressBar: true,
+        //   showConfirmButton: false
+        // })
       } else {
         const beneficiaries = this.orderProcess[0].beneficiaries;
         const unitPrice = this.totalCost / this.beneficiariesAmount
@@ -316,8 +309,8 @@ export class CreatePaymentFormComponent implements OnInit {
             status: 1
           }
 
+          this.modalPrimeNg.close()
           this.store.dispatch(new CreatePaymentRequest({ ...payment }))
-          this.modalService.dismissAll();
           Swal.fire({
             icon: 'success',
             title: '¡Beneficiario(s) agregado(s) exitosamente!',
@@ -366,16 +359,8 @@ export class CreatePaymentFormComponent implements OnInit {
             type: this.orderProcess[0].order.package.type,
             status: this.orderProcess[0].order.package.status
           }
-
-          this.store.dispatch(new EditPackageRequest(updatePackage))
+          this.store.dispatch(new EditPackageRequest({ ...updatePackage }))
           this.store.dispatch(new CreateOrderRequest({ ...order }))
-          Swal.fire({
-            icon: 'success',
-            title: '¡Pedido agregado exitosamente!',
-            timer: 1500,
-            timerProgressBar: true,
-            showConfirmButton: false
-          })
         }
       }
     }

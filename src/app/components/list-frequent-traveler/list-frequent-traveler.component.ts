@@ -70,11 +70,12 @@ export class ListFrequentTravelerComponent implements OnInit {
   }
 
   openModalCreateFrequentTraveler() {
-    this.cancel
+    this.cancel()
     this.store.dispatch(new OpenModalCreateFrequentTraveler(this.customerData));
   } 
 
   openModalEditCustomer(customer:Customer){
+    this.cancel()
     this.store.dispatch(new OpenModalCreateCustomer(customer));
   }
 

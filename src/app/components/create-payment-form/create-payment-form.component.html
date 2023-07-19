@@ -1,4 +1,61 @@
-<div class="card-header py-3">
+<form novalidate [formGroup]="formGroup">
+    <div>
+        <h2 class="mx-0 mt-0 mb-4 text-blue-500">Proceso de Reserva</h2>
+    </div>
+    <div class="mb-4">
+        <div class="py-2 mb-2 bg-bluegray-50 flex align-items-center justify-content-center border-round">
+            <i class="text-black-alpha-90 font-medium pi pi-info-circle mr-2"></i>
+            <span class="text-black-alpha-90 font-medium">Información relacionada con el pago</span>
+        </div>
+        <div class="flex justify-content-between align-items-center mb-2">
+            <span *ngIf="!fromCreatePayment()" class="text-900">Monto inicial (20%)</span>
+            <span *ngIf="fromCreatePayment()" class="text-900">Restante</span>
+            <span class="text-900">{{remainingAmount | currency:'USD':'symbol'}} COP
+                COP</span>
+        </div>
+        <div class="flex justify-content-between align-items-center">
+            <span class="text-900 font-bold">Total</span>
+            <span class="text-900 font-bold">{{totalCost | currency:'USD':'symbol'}} COP</span>
+        </div>
+    </div>
+    <p-divider></p-divider>
+    <div class="grid mt-1 mb-2">
+        <div class="col-7">
+            <div class="field">
+                <label for="amount" class="block">Monto</label>
+                <p-inputNumber *ngIf="!fromCreatePayment()" inputId="minmax" formControlName="amount" required="true"
+                    placeholder="Ingrese el monto del abono" [style]="{ width: '19rem' }" mode="currency" currency="USD"
+                    locale="en-US" [min]="remainingAmount" [max]="totalCost">
+                </p-inputNumber>
+                <p-inputNumber *ngIf="fromCreatePayment()" inputId="minmax" formControlName="amount" required="true"
+                    placeholder="Ingrese el monto del abono" [style]="{ width: '19rem' }" mode="currency" currency="USD"
+                    locale="en-US" [min]="1" [max]="remainingAmount">
+                </p-inputNumber>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('amount')?.dirty && formGroup.get('amount')?.errors?.['required']">
+                    Este campo es obligatorio.
+                </small>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="field">
+                <label for="amount" class="block">Comprobante de pago</label>
+                <p-fileUpload name="payments[]" mode="basic" formControlName="img" url="./src/assets/img"
+                    chooseLabel="Subir comprobante" [style]="{ width: '100%'}"></p-fileUpload>
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-content-end">
+        <div class="flex align-items-end">
+            <button pButton pRipple type="button" (click)="back()" label="Regresar" icon="pi pi-undo"
+                class="p-button-outlined mr-3"></button>
+            <p-button *ngIf="validForm()" (click)="save()" label="Guardar" icon="pi pi-check"></p-button>
+            <p-button *ngIf="!validForm()" label="Guardar" icon="pi pi-check" disabled="true"></p-button>
+        </div>
+    </div>
+</form>
+
+<!-- <div class="card-header py-3">
     <div class="row">
         <div class="col">
             <h3 class="m-0 font-weight-bold text-dark"><span>Formulario de pago</span></h3>
@@ -99,4 +156,4 @@
             </div>
         </div>
     </div>
-</form>
+</form> -->
