@@ -87,19 +87,19 @@ export class PackageEffects {
     ));
 
     getTopPackages$ = createEffect(() => this.actions$.pipe(
-        ofType(packageActions.GET_TOP_PACKAGES_REQUEST),
-        switchMap((action) => {
-            return this.apiService.getTopPackage().pipe(
-                mergeMap((packagesResolved) => {
+      ofType(packageActions.GET_TOP_PACKAGES_REQUEST),
+      switchMap((action) => {
+          return this.apiService.getTopPackage().pipe(
+              mergeMap((packagesResolved) => {
 
-                    return [
-                        new GetTopPackagesSuccess(packagesResolved)
-                    ];
-                }),
-                catchError((err) => of(new GetTopPackagesFailure(err)))
-            )
-        })
-    ));
+                  return [
+                      new GetTopPackagesSuccess(packagesResolved)
+                  ];
+              }),
+              catchError((err) => of(new GetTopPackagesFailure(err)))
+          )
+      })
+  ));
 
     // openModalCreatePackage$ = createEffect(() =>
     //     this.actions$.pipe(
@@ -406,7 +406,7 @@ export class PackageEffects {
             tap((action) => {
                 this.dialogRef = this.dialogService.open(CreateRoleFormComponent, {
                     /* Opciones del modal */
-                    header: action['payload'] === undefined ? 'Crear Rol' : 'Editar Rol',
+                    header: action['payload'] === undefined ? 'Registrar Rol' : 'Editar Rol',
                     width: '45%',
                     contentStyle: { overflowY: 'auto' },
                 });
@@ -488,22 +488,22 @@ export class PackageEffects {
 
 
 
-    createAssociatedPermission$ = createEffect(() => this.actions$.pipe(
-        ofType(CREATE_ASSOCIATEDPERMISSION_REQUEST),
-        ofType(permissionActions.CREATE_ASSOCIATEDPERMISSION_REQUEST),
-        map((action: CreateAssociatedPermissionRequest) => action.payload),
-        switchMap((asocpermission) => {
-            return this.apiService.addAssociatedPermission(asocpermission).pipe(
-                mergeMap((assocPermissionResolved) => {
-                    this.modalRef.close();
-                    return [
-                        new CreateAssociatedPermissionSuccess(assocPermissionResolved),
-                    ];
-                }),
-                catchError((err) => of(new CreateAssociatedPermissionFailure(err)))
-            )
-        })
-    ));
+  createAssociatedPermission$ = createEffect(() => this.actions$.pipe(
+      ofType(CREATE_ASSOCIATEDPERMISSION_REQUEST),
+      ofType(permissionActions.CREATE_ASSOCIATEDPERMISSION_REQUEST),
+      map((action: CreateAssociatedPermissionRequest) => action.payload),
+      switchMap((asocpermission) => {
+          return this.apiService.addAssociatedPermission(asocpermission).pipe(
+              mergeMap((assocPermissionResolved) => {
+                  this.modalRef.close();
+                  return [
+                      new CreateAssociatedPermissionSuccess(assocPermissionResolved),
+                  ];
+              }),
+              catchError((err) => of(new CreateAssociatedPermissionFailure(err)))
+          )
+      })
+  ));
 
     DeleteAssociatedPermission$ = createEffect(() => this.actions$.pipe(
         ofType(DELETE_ASSOCIATEDPERMISSION_REQUEST),
@@ -748,10 +748,12 @@ export class PackageEffects {
     openModalUser$ = createEffect(() =>
         this.actions$.pipe(
             ofType(userActions.OPEN_MODAL_USER),
-            tap(() => {
-                this.modalRef = this.modalService.open(CreateUserFormComponent, {
-                    backdrop: false,
-                    size: 'lg'
+            tap((action) => {
+                this.dialogRef = this.dialogService.open(CreateUserFormComponent, {
+                    /* Opciones del modal */
+                    header: action['payload'] === undefined ? 'Registrar Usuario' : 'Editar Usuario',
+                    width: '45%',
+                    contentStyle: { overflowY: 'auto' },
                 })
             })
         ), { dispatch: false });
@@ -762,7 +764,8 @@ export class PackageEffects {
         switchMap((user) => {
             return this.apiService.createUser(user).pipe(
                 mergeMap((userResolved) => {
-                    this.modalRef.close();
+                    this.dialogRef.close();
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Usuario creado exitosamente.' });
                     return [
                         new CreateUserSuccess(userResolved),
                         new GetUsersRequest()
@@ -779,7 +782,9 @@ export class PackageEffects {
         switchMap((user) => {
             return this.apiService.updateUser(user.userId, user).pipe(
                 mergeMap((userResolved) => {
-                    this.modalRef.close(); return [
+                    this.dialogRef.close(); 
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Usuario editado exitosamente' });
+                    return [
                         new UpdateUserSuccess(userResolved),
                         new GetUsersRequest(),
                     ]

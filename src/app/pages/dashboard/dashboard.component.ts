@@ -1,19 +1,17 @@
-import { Subscription } from 'rxjs';
 import { Order } from '@/models/order';
 import { Package } from '@/models/package';
 import { AppState } from '@/store/state';
 import { GetAllOrdersRequest, GetTopPackagesRequest } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss']
 })
-
 export class DashboardComponent implements OnInit {
 
   public ui: Observable<UiState>;
