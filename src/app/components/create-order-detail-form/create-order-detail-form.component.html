@@ -6,7 +6,7 @@
             pRipple type="button" label="Disminuir beneficiario" icon="pi pi-user-minus"
             class="p-button-outlined mr-3"></button>
         <p-button
-            *ngIf="beneficiariesForm() && showBeneficiariesTable() || !beneficiariesForm() && showBeneficiariesTable()"
+            *ngIf="addAnotherBeneficiarieButton() && beneficiariesForm() && showBeneficiariesTable() || addAnotherBeneficiarieButton() && !beneficiariesForm() && showBeneficiariesTable()"
             (click)="addAnotherBeneficiarie()" label="Añadir beneficiario" icon="pi pi-user-plus"></p-button>
     </div>
 </div>
@@ -24,8 +24,8 @@
                         <div class="p-inputgroup">
                             <input pInputText type="text" formControlName="document" required="true" minlength="8"
                                 maxlength="15" placeholder="Ingrese el documento" class="w-full" [ngClass]="{ 
-                                    'border-green-500': customerInformation(),
-                                    'border-red-600': formGroup.get('document')?.dirty && alreadyExists()}"
+                                    'border-green-500': customerInformation() && !alreadyExists(),
+                                    'border-red-600': formGroup.get('document')?.dirty && alreadyExists() && alreadyExists()}"
                                 onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
                             <button *ngIf="customerInformation() && !alreadyExists()" pButton pRipple type="button"
                                 (click)="fillCustomerInformation()" icon="pi pi-user-plus"
@@ -40,7 +40,7 @@
                             Deben ser mínimo 8 números.
                         </small>
                         <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && alreadyExists()">
-                            Este documento ya está en uso.
+                            Este número de documento ya está en uso.
                         </small>
                         <small class="block text-green-500"
                             *ngIf="formGroup.get('document')?.dirty && customerInformation() && !alreadyExists()">
@@ -167,8 +167,8 @@
                             <input pInputText type="text" formControlName="document" required="true" minlength="8"
                                 maxlength="15" placeholder="Ingrese el número del documento del beneficiario"
                                 class="w-full" [ngClass]="{ 
-                                    'border-green-500': customerInformation(),
-                                    'border-red-600': formGroup.get('document')?.dirty && alreadyExistsFromEdit()}"
+                                    'border-green-500': customerInformation() && !alreadyExists(),
+                                    'border-red-600': formGroup.get('document')?.dirty && alreadyExistsFromEdit() || alreadyExists()}"
                                 onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
                             <button *ngIf="customerInformation() && !alreadyExists()" pButton pRipple type="button"
                                 (click)="fillCustomerInformation()" icon="pi pi-user-plus"
@@ -183,7 +183,7 @@
                             Este campo debe tener mínimo 8 números.
                         </small>
                         <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && alreadyExists()">
-                            Ya existe un beneficiario con este documento.
+                            Este número de documento ya está en uso.
                         </small>
                         <small class="p-error block"
                             *ngIf="formGroup.get('document')?.dirty && alreadyExistsFromEdit()">
@@ -309,7 +309,7 @@
         <p-divider align="right">
             <b>Lista de Beneficiarios</b>
         </p-divider>
-        <p-table [value]="beneficiaries" [paginator]="true" [rows]="3" [scrollable]="true">
+        <p-table *ngIf="visible" [value]="beneficiaries" [paginator]="true" [rows]="3" [scrollable]="true">
             <ng-template pTemplate="header">
                 <tr>
                     <th style="min-width: 9rem" pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon>
@@ -320,8 +320,8 @@
                     <th style="min-width: 9rem" pSortableColumn="document">Documento <p-sortIcon
                             field="document"></p-sortIcon>
                     </th>
-                    <th style="min-width: 14rem" pSortableColumn="birthdate">Fecha de nacimiento<p-sortIcon
-                            field="birthdate"></p-sortIcon>
+                    <th style="min-width: 15rem" pSortableColumn="birthDate">Fecha de nacimiento<p-sortIcon
+                            field="birthDate"></p-sortIcon>
                     </th>
                     <th style="min-width: 9rem" pSortableColumn="phoneNumber">Teléfono <p-sortIcon
                             field="phoneNumber"></p-sortIcon></th>
@@ -342,7 +342,7 @@
                     <td style="min-width: 9rem">{{ beneficiarie.name }}</td>
                     <td style="min-width: 9rem">{{ beneficiarie.lastName }}</td>
                     <td style="min-width: 9rem">{{ beneficiarie.document }}</td>
-                    <td style="min-width: 14rem">{{ beneficiarie.birthDate | date: 'MM/dd/yy' }}</td>
+                    <td style="min-width: 15rem">{{ beneficiarie.birthDate | date: 'MM/dd/yy' }}</td>
                     <td style="min-width: 9rem">{{ beneficiarie.phoneNumber }}</td>
                     <td style="min-width: 15rem">{{ beneficiarie.address }}</td>
                     <td style="min-width: 9rem">{{ beneficiarie.eps }}</td>
@@ -357,7 +357,7 @@
             </ng-template>
             <ng-template pTemplate="footer">
                 <tr>
-                    <td colspan="12">Costo Total: {{ onePackage.price * beneficiariesAmount | currency:'USD':'symbol'}}
+                    <td colspan="12">Costo Total: {{ onePackage.price * beneficiaries.length | currency:'USD':'symbol'}}
                     </td>
                 </tr>
             </ng-template>
@@ -368,7 +368,9 @@
         <p-divider align="right">
             <b>Lista de Beneficiarios</b>
         </p-divider>
-        <p-table [value]="beneficiaries" [paginator]="true" [rows]="3" [scrollable]="true">
+        <p-table *ngIf="visible" [value]="beneficiaries" [paginator]="true" [rows]="3" [scrollable]="true"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} beneficiarios.">
             <ng-template pTemplate="header">
                 <tr>
                     <th style="min-width: 9rem" pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon>
@@ -379,8 +381,8 @@
                     <th style="min-width: 9rem" pSortableColumn="document">Documento <p-sortIcon
                             field="document"></p-sortIcon>
                     </th>
-                    <th style="min-width: 14rem" pSortableColumn="birthdate">Fecha de nacimiento<p-sortIcon
-                            field="birthdate"></p-sortIcon>
+                    <th style="min-width: 15rem" pSortableColumn="birthDate">Fecha de nacimiento<p-sortIcon
+                            field="birthDate"></p-sortIcon>
                     </th>
                     <th style="min-width: 9rem" pSortableColumn="phoneNumber">Teléfono <p-sortIcon
                             field="phoneNumber"></p-sortIcon></th>
@@ -401,7 +403,7 @@
                     <td style="min-width: 9rem">{{ beneficiarie.name }}</td>
                     <td style="min-width: 9rem">{{ beneficiarie.lastName }}</td>
                     <td style="min-width: 9rem">{{ beneficiarie.document }}</td>
-                    <td style="min-width: 14rem">{{ beneficiarie.birthDate | date: 'MM/dd/yy' }}</td>
+                    <td style="min-width: 15rem">{{ beneficiarie.birthDate | date: 'MM/dd/yy' }}</td>
                     <td style="min-width: 9rem">{{ beneficiarie.phoneNumber }}</td>
                     <td style="min-width: 15rem">{{ beneficiarie.address }}</td>
                     <td style="min-width: 9rem">{{ beneficiarie.eps }}</td>
@@ -416,7 +418,7 @@
             </ng-template>
             <ng-template pTemplate="footer">
                 <tr>
-                    <td colspan="12">Costo Total: {{ onePackage.price * beneficiariesAmount | currency:'USD':'symbol'}}
+                    <td colspan="12">Costo Total: {{ onePackage.price * beneficiaries.length | currency:'USD':'symbol'}}
                     </td>
                 </tr>
             </ng-template>

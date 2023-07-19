@@ -63,14 +63,14 @@ export class CreatePaymentFormComponent implements OnInit {
       if (this.orderProcess[0].action === 'CreateOrderDetail') {
         this.oneOrder = this.allOrders.find(o => o.orderId === this.orderProcess[0].order.orderId)
         this.totalCost = this.orderProcess[0].order.totalCost
-        let addition = 0
-        this.oneOrder.payment.forEach(element => {
-          if (element != undefined) {
-            addition += element.amount
-          }
-        })
-        const totalCost = this.oneOrder.totalCost + this.totalCost
-        this.remainingAmount = totalCost - addition
+        // let addition = 0
+        // this.oneOrder.payment.forEach(element => {
+        //   if (element != undefined) {
+        //     addition += element.amount
+        //   }
+        // })
+        // const totalCost = this.oneOrder.totalCost + this.totalCost
+        this.remainingAmount = this.totalCost * 20 / 100
       } else {
         this.totalCost = this.onePackage.price * this.beneficiariesAmount
         this.remainingAmount = this.totalCost * 20 / 100
@@ -162,11 +162,6 @@ export class CreatePaymentFormComponent implements OnInit {
   async save() {
     if (this.validForm()) {
       if (this.orderProcess[0].action === 'CreatePayment') {
-        // const urlName = this.file.name.replace(/\s/g, '-')
-        // const imgURL = '../src/assets/img/' + urlName
-        // saveAs(imgURL, this.file);
-        // console.log('Imagen: ', urlName);
-        // console.log('url: ', imgURL);
         let status: number
         if (this.formGroup.value.amount === this.remainingAmount) {
           status = 2
@@ -364,7 +359,7 @@ export class CreatePaymentFormComponent implements OnInit {
             type: this.orderProcess[0].order.package.type,
             status: this.orderProcess[0].order.package.status
           }
-          this.store.dispatch(new EditPackageRequest(updatePackage))
+          this.store.dispatch(new EditPackageRequest({ ...updatePackage }))
           this.store.dispatch(new CreateOrderRequest({ ...order }))
         }
       }

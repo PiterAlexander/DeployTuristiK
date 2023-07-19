@@ -11,6 +11,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { ApiService } from '@services/api.service';
 import { type } from 'os';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -22,16 +23,23 @@ import { Observable } from 'rxjs';
 export class CreateFrequentTravelerFormComponent {
   formGroup: FormGroup;
   public ActionTitle: string = "Agregar"
-  public CostumerList: Array<any>
+  public customerList: Array<any>
   public customerData
   Roles: Array<Role>;
   Visible: boolean = false;
   password: string = '';
-  // public frequentTraveler : any[] = []
+  public frequentTraveler : any[] = []
   public ui: Observable<UiState>
   public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS', 'OTRA']
   public otraEps: boolean = false
-  constructor(private fb: FormBuilder, private modalService: NgbModal, private store: Store<AppState>, public apiService: ApiService,) { }
+
+  constructor(private fb: FormBuilder, 
+    private modalService: NgbModal, 
+    private store: Store<AppState>, 
+    public apiService: ApiService,
+    private modalPrimeNg: DynamicDialogRef,
+    ) 
+    { }
 
 
   ngOnInit(): void {
@@ -55,26 +63,26 @@ export class CreateFrequentTravelerFormComponent {
       frequentTraveler: ['', Validators.required],
     });
 
-    // if (this.costumerData != null) {
-    //   console.log(this.costumerData.birthDate)
-    //   this.ActionTitle = "Editar"
-    //   this.formGroup.setValue({
-    //     name: this.costumerData.name,
-    //     lastName: this.costumerData.lastName,
-    //     document: this.costumerData.document,
-    //     birthDate: this.costumerData.birthDate,
-    //     phoneNumber: this.costumerData.phoneNumber,
-    //     address: this.costumerData.address,
-    //     eps: this.costumerData.eps,
-    //     user: this.costumerData.user,
-    //     frequentTraveler: this.costumerData.frequentTravel
-    //   }
-    //   )
-    // }
+    if (this.customerData != null) {
+      console.log(this.customerData.birthDate)
+      this.ActionTitle = "Editar"
+      this.formGroup.setValue({
+        name: this.customerData.name,
+        lastName: this.customerData.lastName,
+        document: this.customerData.document,
+        birthDate: this.customerData.birthDate,
+        phoneNumber: this.customerData.phoneNumber,
+        address: this.customerData.address,
+        eps: this.customerData.eps,
+        user: this.customerData.user,
+        frequentTraveler: this.customerData.frequentTravel
+      }
+      )
+    }
   }
 
   async saveCustomer() {
-    var idRole: Role = this.Roles.find((r) => r.name == 'Cliente');
+    var idRole: Role = this.Roles.find((r) => r.name == 'Beneficiario');
     const user: User = {
       email: 'm@gmail.com',
       password: '123',
@@ -82,7 +90,7 @@ export class CreateFrequentTravelerFormComponent {
       roleId: idRole.roleId,
     }
 
-    const costumer: Customer = {
+    const customer: Customer = {
       name: this.formGroup.value.name,
       lastName: this.formGroup.value.lastName,
       document: this.formGroup.value.document,
@@ -92,11 +100,12 @@ export class CreateFrequentTravelerFormComponent {
       eps: this.formGroup.value.eps,
       user: user,
     }
-    console.log(costumer)
+    console.log(customer)
     let customerId
-    await this.apiService.addCustomer(costumer).subscribe({
+    await this.apiService.addCustomer(customer).subscribe({
       next: (data) => {
         customerId = data.customerId
+        console.log(customerId)
         this.saveTraveler(customerId)
       },
       error: (err) => {
@@ -106,8 +115,8 @@ export class CreateFrequentTravelerFormComponent {
     
     // } else {
     //   const frequentTraveler: FrequentTraveler = {
-    //     titularId: this.costumerData.titularId,
-    //     TravelerId: this.costumerData.TravelerId,
+    //     titularId: this.customerData.titularId,
+    //     TravelerId: this.customerData.TravelerId,
     //   }
 
     //   const user: User = {
@@ -118,8 +127,8 @@ export class CreateFrequentTravelerFormComponent {
     //     roleId: "cdebc66c-8267-47a9-2896-08db71d23baa",
     //   }
 
-    //   const costumer: Costumer = {
-    //     costumerId: this.costumerData.costumerId,
+    //   const customer: customer = {
+    //     customerId: this.customerData.customerId,
     //     name: this.formGroup.value.name,
     //     lastName: this.formGroup.value.lastName,
     //     document: this.formGroup.value.document,
@@ -128,10 +137,10 @@ export class CreateFrequentTravelerFormComponent {
     //     address: this.formGroup.value.address,
     //     eps: this.formGroup.value.eps,
     //     User: user,
-    //     userId: this.costumerData.userId,
+    //     userId: this.customerData.userId,
     //   }
-    //   this.store.dispatch(new EditCostumerRequest({
-    //     ...costumer
+    //   this.store.dispatch(new EditcustomerRequest({
+    //     ...customer
     //   }));
 
   }
@@ -171,6 +180,6 @@ export class CreateFrequentTravelerFormComponent {
   }
 
   cancel() {
-    this.modalService.dismissAll();
+    this.modalPrimeNg.close();
   }
 }

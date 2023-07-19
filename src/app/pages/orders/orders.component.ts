@@ -17,12 +17,14 @@ interface State {
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.scss']
 })
+
 export class OrdersComponent implements OnInit {
   public ui: Observable<UiState>;
   public allOrders: Array<Order>
   public ordersList: Array<Order> = []
   public filteredOrdersList: Array<Order>;
   public loading: boolean = true
+  public visible: boolean = true
   public search: string
   public total: number
   public user: any
@@ -30,6 +32,7 @@ export class OrdersComponent implements OnInit {
   public allCustomers: Array<Customer>
   public oneCustomer: Customer
   public statuses: any[] = [];
+  public hasBeenSend: boolean = false
 
   constructor(
     private store: Store<AppState>
@@ -68,22 +71,22 @@ export class OrdersComponent implements OnInit {
           }
         }
       } else if (this.user['role'] !== 'Cliente') {
-        if (this.allOrders.length > 0) {
-          console.log(this.allOrders);
-          for (const element of this.allOrders) {
-            if (element !== undefined) {
-              this.ordersList.push(element)
-            }
-          }
-          if (this.ordersList !== undefined) {
-            if (this.ordersList.length === this.allOrders.length) {
-              this.loading = false
-            }
-          }
-        } else {
-        }
+        this.ordersList = this.allOrders
+        this.loading = false
+        //   for (const element of this.allOrders) {
+        //     if (element !== undefined) {
+        //       this.ordersList.push(element)
+        //     }
+        //   }
+        // this.updateVisibility()
       }
     }
+  }
+
+  updateVisibility(): void {
+    this.loading = false
+    this.visible = false;
+    setTimeout(() => this.visible = true, 0)
   }
 
   showStatus(OrderStatus: any): string {
@@ -99,10 +102,12 @@ export class OrdersComponent implements OnInit {
   }
 
   sendToOrderDetails(order: Order) {
+    this.hasBeenSend = true
     this.store.dispatch(new OpenModalOrderDetails(order))
   }
 
   sendToPayments(order: Order) {
+    this.hasBeenSend = true
     this.store.dispatch(new OpenModalPayments(order))
   }
 }

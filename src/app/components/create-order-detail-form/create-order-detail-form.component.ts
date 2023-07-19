@@ -33,6 +33,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
   public orderDetailCustomers: Array<Customer> = []
   public orderProcess: Array<any>
   public beneficiariesAmount: number
+  public visible: boolean = true
   public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS', 'OTRA']
 
   constructor(
@@ -118,6 +119,11 @@ export class CreateOrderDetailFormComponent implements OnInit {
     }
   }
 
+  updateVisibility(): void {
+    this.visible = false;
+    setTimeout(() => this.visible = true, 0);
+  }
+
   fillBeneficiariesArray() {
     for (const element of this.orderProcess[0].beneficiaries) {
       if (element !== undefined) {
@@ -195,20 +201,19 @@ export class CreateOrderDetailFormComponent implements OnInit {
     if (this.beneficiariesAmount > 1) {
       this.beneficiariesAmount--
     }
+    this.updateVisibility()
+  }
+
+  addAnotherBeneficiarieButton(): boolean {
+    if (this.onePackage.availableQuotas >= this.beneficiariesAmount + 1) {
+      return true
+    }
+    return false
   }
 
   addAnotherBeneficiarie() {
     if (this.onePackage.availableQuotas >= this.beneficiariesAmount + 1) {
       this.beneficiariesAmount++
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: '¡Error!',
-        text: 'Lo sentimos no quedan cupos disponibles.',
-        showConfirmButton: false,
-        timer: 1500,
-        timerProgressBar: true
-      })
     }
   }
 
@@ -288,6 +293,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
   fillCustomerInformation() {
     this.beneficiaries.push(this.oneCustomer)
     this.formGroup.reset()
+    this.updateVisibility()
   }
 
   alreadyExists(): boolean {
@@ -335,6 +341,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         user: user,
       })
       this.formGroup.reset()
+      this.updateVisibility()
     }
   }
 

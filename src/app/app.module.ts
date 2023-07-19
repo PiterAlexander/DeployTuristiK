@@ -85,6 +85,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CalendarComponent } from './pages/calendar/calendar.component';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { BadgeModule } from 'primeng/badge';
+import { ChartModule } from 'primeng/chart';
 
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
@@ -183,6 +184,7 @@ registerLocaleData(localeEn, 'en-EN');
     InputNumberModule,
     ConfirmPopupModule,
     BadgeModule,
+    ChartModule,
 
     //<------------------------->
     ToastrModule.forRoot({
@@ -192,7 +194,8 @@ registerLocaleData(localeEn, 'en-EN');
     }),
     ProfabricComponentsModule,
     NgbModule,
-    FormsModule
+    FormsModule,
+    ChartModule
   ],
   providers: [
     DialogService,

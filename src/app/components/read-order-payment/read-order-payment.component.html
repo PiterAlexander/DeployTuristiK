@@ -3,7 +3,8 @@
         <h2 class="text-blue-500">Abonos</h2>
     </div>
     <div class="mb-2" style="border-radius: 15px;">
-        <p-table #dt [value]="payments" [paginator]="true" [rows]="2" [showCurrentPageReport]="true" scrollable="true"
+        <p-table *ngIf="visible" #dt [value]="payments" [paginator]="true" [rows]="2" [showCurrentPageReport]="true"
+            scrollable="true" [loading]="loading"
             currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} abonos."
             [globalFilterFields]="['amount', 'remainingAmount', 'date']">
             <ng-template pTemplate="caption">
@@ -13,42 +14,29 @@
                         <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
                             placeholder="Buscar..." />
                     </span>
-                    <button *ngIf="existingRemainingAmount()" pButton p pRipple type="button"
-                        label="Agregar beneficiario" icon="pi pi-plus" (click)="addPayment()"
-                        class="p-button-outlined"></button>
+                    <button *ngIf="existingRemainingAmount()" pButton p pRipple type="button" label="Agregar abono"
+                        icon="pi pi-plus" (click)="addPayment()" class="p-button-outlined"></button>
                 </div>
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="amount" style="min-width: 9rem">
-                        <div class="flex justify-content-left align-items-left">
-                            Monto <p-sortIcon field="amount"></p-sortIcon>
-                        </div>
+                        Monto <p-sortIcon field="amount"></p-sortIcon>
                     </th>
                     <th pSortableColumn="remainingAmount" style="min-width: 12rem">
-                        <div class="flex justify-content-left align-items-left">
-                            Monto restante <p-sortIcon field="remainingAmount"></p-sortIcon>
-                        </div>
+                        Monto restante <p-sortIcon field="remainingAmount"></p-sortIcon>
                     </th>
                     <th pSortableColumn="date" style="min-width: 13rem">
-                        <div class="flex justify-content-left align-items-left">
-                            Fecha de registro <p-sortIcon field="date"></p-sortIcon>
-                        </div>
+                        Fecha de registro <p-sortIcon field="date"></p-sortIcon>
                     </th>
-                    <th style="min-width: 9rem">
-                        <div class="flex justify-content-left align-items-left">
-                            Comprobante
-                        </div>
+                    <th style="min-width: 10rem">
+                        Comprobante
                     </th>
-                    <th pSortableColumn="status" style="min-width: 9rem">
-                        <div class="flex justify-content-left align-items-left">
-                            Estado <p-sortIcon field="status"></p-sortIcon>
-                        </div>
+                    <th pSortableColumn="status" style="min-width: 8rem">
+                        Estado <p-sortIcon field="status"></p-sortIcon>
                     </th>
-                    <th style="min-width: 8rem" alignFrozen="right" pFrozenColumn>
-                        <div class="flex justify-content-left align-items-left">
-                            Editar
-                        </div>
+                    <th style="min-width: 7rem" alignFrozen="right" pFrozenColumn class="flex justify-content-center">
+                        Editar
                     </th>
                 </tr>
             </ng-template>
@@ -63,17 +51,17 @@
                     <td style="min-width: 13rem">
                         {{ payment.date | date:'MM/dd/yyyy - HH:mm' }}
                     </td>
-                    <td style="min-width: 9rem">
+                    <td style="min-width: 10rem" >
                         <span>
                             <button pButton pRipple type="button" icon="pi pi-eye"
                                 class="p-button-outlined p-button-rounded" (click)="editPayment(payment)"
                                 pTooltip="Ver comprobante" tooltipPosition="bottom"></button>
                         </span>
                     </td>
-                    <td style="min-width: 9rem">
+                    <td style="min-width: 8rem">
                         <span [class]="'payment-badge status-' + payment.status">{{showStatus(payment.status)}}</span>
                     </td>
-                    <td alignFrozen="right" pFrozenColumn style="min-width: 8rem"
+                    <td alignFrozen="right" pFrozenColumn style="min-width: 7rem"
                         class="flex justify-content-around align-items-center">
                         <span>
                             <button pButton pRipple type="button" icon="pi pi-pencil"
@@ -98,7 +86,7 @@
         </p-table>
     </div>
     <div class="flex justify-content-end">
-        <button pButton pRipple type="button" label="Regresar" icon="pi pi-times" class="p-button-outlined"
+        <button pButton pRipple type="button" label="Regresar" icon="pi pi-undo" class="p-button-outlined"
             (click)="closeModal()"></button>
     </div>
 </div>

@@ -20,6 +20,8 @@ export class ReadOrderPaymentComponent {
   public payments: Array<Payment> = []
   public statuses: any[] = [];
   public remainingAmount: number
+  public loading: boolean = true
+  public visible: boolean = true
 
   constructor(
     private store: Store<AppState>,
@@ -43,10 +45,16 @@ export class ReadOrderPaymentComponent {
   pushPayments() {
     for (const element of this.order.payment) {
       if (element != undefined) {
-        this.payments.push(element)        
+        this.payments.push(element)
       }
     }
-    console.log(this.payments);
+    this.updateVisibility()
+  }
+
+  updateVisibility(): void {
+    this.loading = false
+    this.visible = false;
+    setTimeout(() => this.visible = true, 0);
   }
 
   closeModal() {

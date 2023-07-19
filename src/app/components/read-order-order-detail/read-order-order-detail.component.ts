@@ -1,6 +1,5 @@
 import { Customer } from '@/models/customer';
 import { Order } from '@/models/order';
-import { OrderDetail } from '@/models/orderDetail';
 import { AppState } from '@/store/state';
 import { GetAllCustomerRequest, OpenModalCreateOrderDetail } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
@@ -9,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import Swal from 'sweetalert2';
+import { Role } from '@/models/role';
 
 @Component({
   selector: 'app-read-order-order-detail',
@@ -18,10 +18,12 @@ import Swal from 'sweetalert2';
 export class ReadOrderOrderDetailComponent implements OnInit {
 
   public ui: Observable<UiState>
+  public allRoles: Array<Role>
   public allCustomers: Array<Customer>
   public order: Order
-  public orderDetailCustomers: Array<Customer> = []
+  public orderDetailCustomers: Array<any> = []
   public loading: boolean = true
+  public visible: boolean = true
 
   constructor(
     private store: Store<AppState>,
@@ -32,6 +34,7 @@ export class ReadOrderOrderDetailComponent implements OnInit {
     this.store.dispatch(new GetAllCustomerRequest)
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
+      this.allRoles = state.allRoles.data
       this.order = state.oneOrder.data
       this.allCustomers = state.allCustomers.data
       this.compareCustomerId()
@@ -40,20 +43,56 @@ export class ReadOrderOrderDetailComponent implements OnInit {
 
   compareCustomerId() {
     for (const element of this.order.orderDetail) {
-      const customer = this.allCustomers.find(c => c.customerId === element.beneficiaryId)
+      const customer: Customer = this.allCustomers.find(c => c.customerId === element.beneficiaryId)
       if (customer != undefined) {
-        this.orderDetailCustomers.push(customer)
+        const orderDetailCustomer: any = {
+          customerId: customer.customerId,
+          name: customer.name,
+          lastName: customer.lastName,
+          document: customer.document,
+          birthDate: customer.birthDate,
+          phoneNumber: customer.phoneNumber,
+          address: customer.address,
+          eps: customer.eps,
+          userId: customer.userId,
+          user: customer.user,
+          unitPrice: element.unitPrice
+        }
+        this.orderDetailCustomers.push(orderDetailCustomer)
       }
     }
-    if (this.orderDetailCustomers !== undefined) {
-      if (this.orderDetailCustomers.length === this.order.orderDetail.length) {
-        this.loading = false
+    console.log(this.orderDetailCustomers);
+
+    this.updateVisibility()
+  }
+
+  updateVisibility(): void {
+    this.loading = false
+    this.visible = false;
+    setTimeout(() => this.visible = true, 0);
+  }
+
+  validateEditAllowing(beneficiarie: any): boolean {
+    if (this.allRoles !== undefined) {
+      const role = this.allRoles.find(r => r.roleId === beneficiarie.user.roleId)
+      if (role !== undefined) {
+        if (role.name !== 'Cliente') {
+          return true
+        }
       }
     }
+    return false
   }
 
   closeModal() {
     this.modalPrimeNg.close()
+  }
+
+  addOrderDetailButton(): boolean {
+    if (this.order.package.availableQuotas >= 1) {
+      return true
+    }
+    return false
   }
 
   addOrderDetail() {
@@ -65,15 +104,6 @@ export class ReadOrderOrderDetailComponent implements OnInit {
         beneficiaries: {}
       }]
       this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess))
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: '¡Error!',
-        text: 'Lo sentimos no quedan cupos disponibles.',
-        showConfirmButton: false,
-        timer: 2000,
-        timerProgressBar: true
-      })
     }
   }
 

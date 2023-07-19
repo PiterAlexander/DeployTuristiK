@@ -23,6 +23,11 @@ export default <UiState>{
     error: undefined,
     loading: false
   },
+  allTopPackages: {
+    data: [],
+    error: undefined,
+    loading: false
+  },
   onePackage: {
     data: undefined,
     error: undefined,
@@ -152,6 +157,11 @@ export interface UiState {
   //<---------------->
   //<--- PACKAGES --->
   allPackages: {
+    data: Array<Package>,
+    error: string,
+    loading: boolean
+  },
+  allTopPackages: {
     data: Array<Package>,
     error: string,
     loading: boolean

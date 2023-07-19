@@ -5,8 +5,8 @@ import {
     SIDEBAR_LIGHT_SKINS
 } from '@/utils/themes';
 import * as Actions from './actions';
-import { UiAction } from './actions';
-import initialState, { UiState } from './state';
+import {UiAction} from './actions';
+import initialState, {UiState} from './state';
 
 export function uiReducer(state: UiState = initialState, action: UiAction) {
     switch (action.type) {
@@ -64,6 +64,36 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
             return {
                 ...state,
                 allPackages: {
+                    data: [],
+                    error: action.payload,
+                    loading: false
+                }
+            };
+
+        case Actions.packageActions.GET_TOP_PACKAGES_REQUEST:
+            return {
+                ...state,
+                allTopPackages: {
+                    data: [],
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+        case Actions.packageActions.GET_TOP_PACKAGES_SUCCESS:
+            return {
+                ...state,
+                allTopPackages: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.packageActions.GET_TOP_PACKAGES_FAILURE:
+            return {
+                ...state,
+                allTopPackages: {
                     data: [],
                     error: action.payload,
                     loading: false
@@ -173,7 +203,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     error: undefined,
                     loading: false
                 }
-            }
+            };
 
         case Actions.orderActions.OPEN_MODAL_LIST_FREQUENTTRAVELERS_TO_ORDERS:
             return {
@@ -183,7 +213,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     error: undefined,
                     loading: false
                 }
-            }
+            };
 
         case Actions.orderActions.OPEN_MODAL_ORDERDETAILS:
             return {
@@ -193,7 +223,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     error: undefined,
                     loading: false
                 }
-            }
+            };
 
         case Actions.orderActions.OPEN_MODAL_CREATE_ORDERDETAIL:
             return {
@@ -203,7 +233,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     error: undefined,
                     loading: false
                 }
-            }
+            };
 
         case Actions.orderActions.OPEN_MODAL_PAYMENTS:
             return {
@@ -213,7 +243,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     error: undefined,
                     loading: false
                 }
-            }
+            };
 
         case Actions.orderActions.OPEN_MODAL_CREATE_PAYMENT:
             return {
@@ -223,7 +253,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     error: undefined,
                     loading: false
                 }
-            }
+            };
 
         case Actions.orderActions.OPEN_MODAL_EDIT_PAYMENT:
             return {
@@ -233,7 +263,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     error: undefined,
                     loading: false
                 }
-            }
+            };
         //<----------------------------->
 
         //<--- ROLES AND PERMISSIONS --->
@@ -398,6 +428,11 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
             return {
                 ...state,
                 allFrequentTraveler: {
+                    data: action.payload['frequentTraveler'],
+                    error: undefined,
+                    loading: false
+                },
+                oneCustomer: {
                     data: action.payload,
                     error: undefined,
                     loading: false
@@ -406,7 +441,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
         case Actions.FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER:
             return {
                 ...state,
-                oneCostumer: {
+                oneCustomer: {
                     data: action.payload,
                     error: undefined,
                     loading: false
@@ -515,7 +550,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     data: action.payload,
                     error: undefined,
                     loading: false
-                },
+                }
             };
 
         case Actions.loginActions.LOGIN_FAILURE:
@@ -528,9 +563,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
 
-
         case Actions.loginActions.GET_USER_INFO_REQUEST:
-
             return {
                 ...state,
                 userLoged: {
@@ -538,10 +571,9 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     error: undefined,
                     loading: true
                 }
-            }
+            };
 
         case Actions.loginActions.GET_USER_INFO_SUCCESS:
-
             return {
                 ...state,
                 userLoged: {
@@ -549,7 +581,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     error: undefined,
                     loading: false
                 }
-            }
+            };
 
         case Actions.loginActions.GET_USER_INFO_FAILURE:
             return {
@@ -559,7 +591,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     error: action.payload,
                     loading: false
                 }
-            }
+            };
         //<------------>
         default:
             return state;
