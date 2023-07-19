@@ -1,4 +1,5 @@
-<!-- <div class="content-header">
+<p-toast key="alert-message"></p-toast>
+<div class="content-header">
     <div class="container-fluid">
         <div class="row d-flex justify-content-center">
             <div class="card card-user">
@@ -24,14 +25,14 @@
                         </div>
                     </div>
                     <form *ngIf="!loading">
-                        <div class="d-flex justify-content-end mb-3 row">
+                        <!-- <div class="d-flex justify-content-end mb-3 row">
                             <label for="table-complete-search"
                                 class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
                             <div class="col-xs-3 col-sm-auto">
                                 <input id="table-complete-search" type="text" class="form-control" name="searchTerm"
                                     (ngModelChange)="searchByUserName()" />
                             </div>
-                        </div>
+                        </div> -->
 
                         <table class="table table-striped">
                             <thead>
@@ -44,7 +45,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let user of filteredUsersList">
+                                <tr *ngFor="let user of userList">
                                     <td>{{ user.userName }}</td>
                                     <td>{{ user.email }}</td>
                                     <td>
@@ -65,7 +66,7 @@
             </div>
         </div>
     </div>
-</div> -->
+</div> 
 
 <!--Aquí se despliegan los mensajes de exito o error segun sea el caso-->
 <p-toast key="alert-message"></p-toast>

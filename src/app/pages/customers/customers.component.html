@@ -1,4 +1,4 @@
-
+<p-toast key="alert-message"></p-toast>
 <div class="p-5">
     <div class="col-12">
         <div class="card px-6 py-6 p-4" style="border-radius: 15px;">
@@ -27,7 +27,7 @@
                     <tr>
                         <th style="min-width: 11rem">
                             <div class="flex justify-content-left align-items-left">
-                                Nombre  completo
+                                Nombre completo
                             </div>
                         </th>
                         <th style="min-width: 10rem">
@@ -65,14 +65,7 @@
                 <ng-template pTemplate="body" let-customer>
                     <tr>
                         <td>
-                            <span>
-                                {{ customer.name }}
-                            </span>
-                            <span>
-                                {{ customer.lastName }}
-                            </span>
-                            <br>
-
+                            {{ customer.name + ' ' + customer.lastName }}
                         </td>
                         <td>
                             {{ customer.document }}
@@ -94,8 +87,8 @@
                                     class="p-button-outlined p-button-warning p-button-rounded m-1"
                                     (click)="openModalEditCustomer(customer)" pTooltip="Editar"
                                     tooltipPosition="bottom"></button></span>
-                            <span> <button pButton type="button" icon="pi pi-info-circle"
-                                    class="p-button-outlined p-button-rounded m-1" pTooltip="Ver detalles"
+                            <span> <button pButton type="button" icon="pi pi-eye"
+                                    class="p-button-outlined p-button-rounded m-1" pTooltip="Viajeros frecuentes"
                                     (click)="openModalListTraveler(customer)" tooltipPosition="bottom"></button></span>
                         </td>
                     </tr>

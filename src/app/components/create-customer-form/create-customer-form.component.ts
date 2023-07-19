@@ -47,11 +47,11 @@ export class CreatecustomerformComponent implements OnInit {
 
     this.formGroup = this.fb.group({
       email: new FormControl('', [Validators.required, Validators.email, Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')]),
-      password: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
       name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
       lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
-      document: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
-      birthDate: [0, Validators.required],
+      document: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]),
+      birthDate: [null, [Validators.required, this.birthDateValidator.bind(this)]],
       phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
       address: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
       eps: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]),
@@ -166,6 +166,28 @@ export class CreatecustomerformComponent implements OnInit {
 
     return fechaConvertida;
   }
+
+  birthDateValidator(control: FormControl): { [key: string]: any } | null {
+    if (control.value) {
+      const birthDate = new Date(control.value);
+      const currentDate = new Date();
+      const diffTime = currentDate.getTime() - birthDate.getTime();
+      const diffYears = diffTime / (1000 * 60 * 60 * 24 * 365.25);
+
+      // Comprueba si el usuario tiene al menos 18 años (18 años completos)
+      if (diffYears < 18) {
+        return { 'invalidAge': true };
+      }
+    }
+
+    return null;
+  }
+
+  // ... Resto del código del componente ...
+
+
+
+
 
   validForm(): boolean {
     return true
