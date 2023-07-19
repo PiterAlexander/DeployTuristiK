@@ -87,19 +87,19 @@ export class PackageEffects {
     ));
 
     getTopPackages$ = createEffect(() => this.actions$.pipe(
-      ofType(packageActions.GET_TOP_PACKAGES_REQUEST),
-      switchMap((action) => {
-          return this.apiService.getTopPackage().pipe(
-              mergeMap((packagesResolved) => {
+        ofType(packageActions.GET_TOP_PACKAGES_REQUEST),
+        switchMap((action) => {
+            return this.apiService.getTopPackage().pipe(
+                mergeMap((packagesResolved) => {
 
-                  return [
-                      new GetTopPackagesSuccess(packagesResolved)
-                  ];
-              }),
-              catchError((err) => of(new GetTopPackagesFailure(err)))
-          )
-      })
-  ));
+                    return [
+                        new GetTopPackagesSuccess(packagesResolved)
+                    ];
+                }),
+                catchError((err) => of(new GetTopPackagesFailure(err)))
+            )
+        })
+    ));
 
     // openModalCreatePackage$ = createEffect(() =>
     //     this.actions$.pipe(
@@ -487,39 +487,39 @@ export class PackageEffects {
     ));
 
 
-    disableRole$ = createEffect(() => this.actions$.pipe(
-        ofType(roleActions.CHANGE_STATUS_ROLE_REQUEST),
-        map((action: ChangeStatusRoleRequest) => action.payload),
-        switchMap((role) => {
-            return this.apiService.disableRole(role).pipe(
-                mergeMap((roleResolved) => {
-                    this.dialogRef.close()
+    // disableRole$ = createEffect(() => this.actions$.pipe(
+    //     ofType(roleActions.CHANGE_STATUS_ROLE_REQUEST),
+    //     map((action: ChangeStatusRoleRequest) => action.payload),
+    //     switchMap((role) => {
+    //         return this.apiService.disableRole(role).pipe(
+    //             mergeMap((roleResolved) => {
+    //                 this.dialogRef.close()
+    //                 return [
+    //                     new ChangeStatusRoleSuccess(roleResolved),
+    //                     new GetAllRoleRequest(),
+    //                 ];
+    //             }),
+    //             catchError((err) => of(new ChangeStatusRoleFailure(err)))
+    //         )
+    //     })
+    // ));
+
+    createAssociatedPermission$ = createEffect(() => this.actions$.pipe(
+        ofType(CREATE_ASSOCIATEDPERMISSION_REQUEST),
+        ofType(permissionActions.CREATE_ASSOCIATEDPERMISSION_REQUEST),
+        map((action: CreateAssociatedPermissionRequest) => action.payload),
+        switchMap((asocpermission) => {
+            return this.apiService.addAssociatedPermission(asocpermission).pipe(
+                mergeMap((assocPermissionResolved) => {
+                    this.modalRef.close();
                     return [
-                        new ChangeStatusRoleSuccess(roleResolved),
-                        new GetAllRoleRequest(),
+                        new CreateAssociatedPermissionSuccess(assocPermissionResolved),
                     ];
                 }),
-                catchError((err) => of(new ChangeStatusRoleFailure(err)))
+                catchError((err) => of(new CreateAssociatedPermissionFailure(err)))
             )
         })
     ));
-
-  createAssociatedPermission$ = createEffect(() => this.actions$.pipe(
-      ofType(CREATE_ASSOCIATEDPERMISSION_REQUEST),
-      ofType(permissionActions.CREATE_ASSOCIATEDPERMISSION_REQUEST),
-      map((action: CreateAssociatedPermissionRequest) => action.payload),
-      switchMap((asocpermission) => {
-          return this.apiService.addAssociatedPermission(asocpermission).pipe(
-              mergeMap((assocPermissionResolved) => {
-                  this.modalRef.close();
-                  return [
-                      new CreateAssociatedPermissionSuccess(assocPermissionResolved),
-                  ];
-              }),
-              catchError((err) => of(new CreateAssociatedPermissionFailure(err)))
-          )
-      })
-  ));
 
     DeleteAssociatedPermission$ = createEffect(() => this.actions$.pipe(
         ofType(DELETE_ASSOCIATEDPERMISSION_REQUEST),
@@ -564,7 +564,6 @@ export class PackageEffects {
                     width: '55%',
                     contentStyle: { overflowY: 'auto' },
                 });
-
             })
         ),
         {
@@ -593,7 +592,7 @@ export class PackageEffects {
         switchMap((customer) => {
             return this.apiService.updateCustomer(customer.customerId, customer).pipe(
                 mergeMap((customerResolved) => {
-                    this.modalRef.close();
+                    this.dialogRef.close();
                     return [
                         new EditCustomerSuccess(customerResolved),
                         new GetAllCustomerRequest(),
@@ -612,7 +611,9 @@ export class PackageEffects {
             tap((action) => {
                 this.dialogRef = this.dialogService.open(ListFrequentTravelerComponent, {
                     /* Opciones del modal */
-                    header: action['payload'] === undefined ? 'Viajeros frecuentes' : 'Viajeros frecuentes',
+                    // header: action['payload'] === undefined ? 'Viajeros frecuentes' : 'Viajeros frecuentes',
+                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
+                    showHeader: false,
                     width: '60%',
                 });
 
@@ -644,31 +645,34 @@ export class PackageEffects {
         switchMap((frequentTraveler) => {
             return this.apiService.addFrequentTraveler(frequentTraveler).pipe(
                 mergeMap((frequentTravelerResolver) => {
-                    this.modalRef.close();
+                    this.dialogRef.close();
                     return [
                         new CreateFrequentTravelerSuccess(frequentTravelerResolver),
-                        new GetAllFrequentTravelerRequest()
+                        new GetAllCustomerRequest()
                     ];
                 }),
                 catchError((err) => of(new CreateFrequentTravelerFailure(err)))
             )
         })
     ));
-    // DeleteFrequentTraveler$ = createEffect(() => this.actions$.pipe(
-    //     ofType(FrequentTravelerActions.DELETE_FREQUENTTRAVELER_REQUEST),
-    //     map((action: DeleteFrequentTravelerRequest) => action.payload),
-    //     switchMap((FrequentTraveler) => {
-    //         return this.apiService.deleteFrequentTraveler(FrequentTraveler.frequentTravelerId).pipe(
-    //             mergeMap((frequentTravelerResolved) => {
-    //                 return [
-    //                     new DeleteFrequentTravelerSuccess(frequentTravelerResolved),
-    //                     new GetAllFrequentTravelerRequest(),
-    //                 ];
-    //             }),
-    //             catchError((err) => of(new DeleteFrequentTravelerFailure(err)))
-    //         )
-    //     })
-    // ));
+
+    DeleteFrequentTraveler$ = createEffect(() => this.actions$.pipe(
+        ofType(FrequentTravelerActions.DELETE_FREQUENTTRAVELER_REQUEST),
+        map((action: DeleteFrequentTravelerRequest) => action.payload),
+        switchMap((FrequentTraveler) => {
+            return this.apiService.deleteFrequentTraveler(FrequentTraveler.frequentTravelerId).pipe(
+                mergeMap((frequentTravelerResolved) => {
+                    this.dialogRef.close();
+                    return [
+                        new DeleteFrequentTravelerSuccess(frequentTravelerResolved),
+                        // new GetAllFrequentTravelerRequest(),
+                        new GetAllCustomerRequest(),
+                    ];
+                }),
+                catchError((err) => of(new DeleteFrequentTravelerFailure(err)))
+            )
+        })
+    ));
     //<--------------->
 
     //<---- EMPLOYEE ---->
@@ -690,9 +694,10 @@ export class PackageEffects {
         this.actions$.pipe(
             ofType(employeeActions.OPEN_MODAL_CREATE_EMPLOYEE),
             tap((action) => {
-                this.modalRef = this.modalService.open(CreateEmployeeFormComponent, {
-                    backdrop: false,
-                    size: 'lg'
+                this.dialogRef = this.dialogService.open(CreateEmployeeFormComponent, {
+                    /* Opciones del modal */
+                    header: action['payload'] === undefined ? 'Registrar empleado' : 'Editar empleado',
+                    width: '60%',
                 });
             })
         ), { dispatch: false });
@@ -702,10 +707,10 @@ export class PackageEffects {
         map((action: CreateEmployeeRequest) => action.payload),
         switchMap((employee) => {
             return this.apiService.addEmployee(employee).pipe(
-                mergeMap((employeeResolver) => {
-                    this.modalRef.close();
+                mergeMap((employeeResolved) => {
+                    this.dialogRef.close();
                     return [
-                        new CreateEmployeeSuccess(employeeResolver),
+                        new CreateEmployeeSuccess(employeeResolved),
                         new GetAllEmployeeRequest()
                     ];
                 }),
@@ -713,13 +718,14 @@ export class PackageEffects {
             )
         })
     ));
+
     editEmployee$ = createEffect(() => this.actions$.pipe(
         ofType(employeeActions.EDIT_EMPLOYEE_REQUEST),
         map((action: EditEmployeeRequest) => action.payload),
         switchMap((employee) => {
             return this.apiService.updateEmployee(employee.employeeId, employee).pipe(
                 mergeMap((employeeResolved) => {
-                    this.modalRef.close();
+                    this.dialogRef.close();
                     return [
                         new EditEmployeeSuccess(employeeResolved),
                         new GetAllEmployeeRequest(),
@@ -798,7 +804,7 @@ export class PackageEffects {
         switchMap((user) => {
             return this.apiService.updateUser(user.userId, user).pipe(
                 mergeMap((userResolved) => {
-                    this.dialogRef.close(); 
+                    this.dialogRef.close();
                     this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Usuario editado exitosamente' });
                     return [
                         new UpdateUserSuccess(userResolved),

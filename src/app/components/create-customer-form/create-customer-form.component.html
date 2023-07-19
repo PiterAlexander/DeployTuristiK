@@ -3,45 +3,42 @@
         <form class="needs-validation" novalidate id="form" (submit)="saveCustomer()" [formGroup]="formGroup">
             <div class=" card-body d-flex">
                 <div class="w-100 p-2">
-                    <div class="row">
-                        <div class="form-group col-6">
-                            <label for="name" class="block">Nombre</label>
-                            <span>
+                    <div class="grid">
+                        <div class="col">
+                            <div class="field">
+                                <label for="name" class="block">Nombre</label>
                                 <input pInputText placeholder="Ingrese su nombre" type="text" formControlName="name"
-                                    required="true" minlength="3" maxlength="20" [style]="{ width: '20.5rem' }"
+                                    required="true" minlength="3" maxlength="20" class="w-full"
                                     onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
-                            </span>
-
-                            <!-- validaciones del nombre -->
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('name').dirty && formGroup.get('name')?.errors?.['required']">
-                                Este campo es obligatorio.
-                            </small>
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('name')?.errors?.['minlength'] && formGroup.get('name').dirty">
-                                Este campo debe contener al menos 3 letras.
-                            </small>
-                        </div>
-
-                        <div class="form-group col-6">
-                            <label for="lastName" class="form-label">Apellido</label>
-                            <div class="input-group">
-                                <span>
-                                    <input pInputText placeholder="Ingrese su apellido" type="text"
-                                        formControlName="lastName" required="true" minlength="3" maxlength="20"
-                                        [style]="{ width: '20.5rem' }"
-                                        onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
-                                </span>
-
-                                <!-- validacion de apellidos -->
+                                <!-- validaciones del nombre -->
                                 <small class="p-error block"
-                                    *ngIf="formGroup.get('lastName').dirty && formGroup.get('lastName')?.errors?.['required']">
+                                    *ngIf="formGroup.get('name').dirty && formGroup.get('name')?.errors?.['required']">
                                     Este campo es obligatorio.
                                 </small>
                                 <small class="p-error block"
-                                    *ngIf="formGroup.get('lastName')?.errors?.['minlength'] && formGroup.get('lastName').dirty">
+                                    *ngIf="formGroup.get('name')?.errors?.['minlength'] && formGroup.get('name').dirty">
                                     Este campo debe contener al menos 3 letras.
                                 </small>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="field">
+                                <label for="lastName" class="form-label">Apellido</label>
+                                <div class="input-group">
+                                        <input pInputText placeholder="Ingrese su apellido" type="text"
+                                            formControlName="lastName" required="true" minlength="3" maxlength="20"
+                                            class="w-full"
+                                            onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
+                                    <!-- validacion de apellidos -->
+                                    <small class="p-error block"
+                                        *ngIf="formGroup.get('lastName').dirty && formGroup.get('lastName')?.errors?.['required']">
+                                        Este campo es obligatorio.
+                                    </small>
+                                    <small class="p-error block"
+                                        *ngIf="formGroup.get('lastName')?.errors?.['minlength'] && formGroup.get('lastName').dirty">
+                                        Este campo debe contener al menos 3 letras.
+                                    </small>
+                                </div>
                             </div>
                         </div>
                     </div>

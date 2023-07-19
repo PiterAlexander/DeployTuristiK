@@ -27,7 +27,7 @@
                     <tr>
                         <th style="min-width: 11rem">
                             <div class="flex justify-content-left align-items-left">
-                                Nombre  completo
+                                Nombre completo
                             </div>
                         </th>
                         <th style="min-width: 10rem">
@@ -65,14 +65,7 @@
                 <ng-template pTemplate="body" let-customer>
                     <tr>
                         <td>
-                            <span>
-                                {{ customer.name }}
-                            </span>
-                            <span>
-                                {{ customer.lastName }}
-                            </span>
-                            <br>
-
+                            {{ customer.name + ' ' + customer.lastName }}
                         </td>
                         <td>
                             {{ customer.document }}
