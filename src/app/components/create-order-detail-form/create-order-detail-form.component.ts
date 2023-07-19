@@ -1,19 +1,18 @@
-import { Customer } from '@/models/customer';
-import { OrderDetail } from '@/models/orderDetail';
-import { Package } from '@/models/package';
+import { AppState } from '@/store/state';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { UiState } from '@/store/ui/state';
+import { Observable } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Role } from '@/models/role';
 import { User } from '@/models/user';
-import { AppState } from '@/store/state';
-import { EditCustomerRequest, GetAllRoleRequest, OpenModalCreateOrder, OpenModalCreatePayment, OpenModalListFrequentTravelersToOrders, OpenModalOrderDetails } from '@/store/ui/actions';
-import { UiState } from '@/store/ui/state';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Customer } from '@/models/customer';
+import { Package } from '@/models/package';
+import { OrderDetail } from '@/models/orderDetail';
 import Swal from 'sweetalert2';
 import { ApiService } from '@services/api.service';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { EditCustomerRequest, GetAllRoleRequest, OpenModalCreateOrder, OpenModalCreatePayment, OpenModalListFrequentTravelersToOrders, OpenModalOrderDetails } from '@/store/ui/actions';
 
 @Component({
   selector: 'app-create-order-detail-form',
@@ -24,17 +23,18 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
 export class CreateOrderDetailFormComponent implements OnInit {
   private ui: Observable<UiState>
   public formGroup: FormGroup
-  public orderProcess: Array<any>
-  public beneficiaries: Array<Customer> = []
-  public allCustomers: Array<Customer>
-  public orderDetails: Array<OrderDetail>
   public allRoles: Array<Role>
-  public oneCustomer: Customer
-  public onePackage: Package
-  public oneRole: Role
+  public oneRole: Role | undefined
+  public allCustomers: Array<Customer>
+  public oneCustomer: Customer | undefined
+  public onePackage: Package | undefined
+  public orderDetails: Array<OrderDetail>
+  public beneficiaries: Array<Customer> = []
   public orderDetailCustomers: Array<Customer> = []
-  public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS', 'OTRA']
+  public orderProcess: Array<any>
   public beneficiariesAmount: number
+  public visible: boolean = true
+  public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS', 'OTRA']
 
   constructor(
     private fb: FormBuilder,
@@ -50,11 +50,11 @@ export class CreateOrderDetailFormComponent implements OnInit {
       this.orderProcess = state.orderProcess.data
       this.allCustomers = state.allCustomers.data
       this.allRoles = state.allRoles.data
-      if (this.allRoles != undefined) {
+      if (this.allRoles !== undefined) {
         this.oneRole = this.allRoles.find(r => r.name === 'Beneficiario')
       }
     })
-    
+
     this.formGroup = this.fb.group({
       name: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -62,14 +62,15 @@ export class CreateOrderDetailFormComponent implements OnInit {
       address: ['', Validators.required],
       phoneNumber: ['', Validators.required],
       birthdate: ['', Validators.required],
-      eps: [0, Validators.required],
+      eps: [null, Validators.required],
     })
-    if (this.orderProcess != undefined) {
+
+    if (this.orderProcess !== undefined) {
       if (this.orderProcess[0].action === 'CreateOrderDetail') {
         this.orderDetails = this.orderProcess[0].order.orderDetail
         for (const element of this.orderDetails) {
           const customer = this.allCustomers.find(c => c.customerId === element.beneficiaryId)
-          if (customer != undefined) {
+          if (customer !== undefined) {
             this.orderDetailCustomers.push(customer)
           }
         }
@@ -101,6 +102,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
           this.beneficiariesAmount = 1
         }
       } else {
+        console.log(this.orderProcess[0].order.customer);
+
         this.onePackage = this.orderProcess[0].order.package
         if (this.orderProcess[0].beneficiaries.length > 0) {
           this.fillBeneficiariesArray()
@@ -116,11 +119,16 @@ export class CreateOrderDetailFormComponent implements OnInit {
     }
   }
 
+  updateVisibility(): void {
+    this.visible = false;
+    setTimeout(() => this.visible = true, 0);
+  }
+
   fillBeneficiariesArray() {
     for (const element of this.orderProcess[0].beneficiaries) {
-      if (element != undefined) {
+      if (element !== undefined) {
         const exists = this.beneficiaries.find(b => b.document === element.document)
-        if (exists == undefined) {
+        if (exists === undefined) {
           this.beneficiaries.push(element)
         }
       }
@@ -140,16 +148,16 @@ export class CreateOrderDetailFormComponent implements OnInit {
         }).then((result) => {
           if (result.isDenied) {
             this.modalPrimeNg.close()
-            this.store.dispatch(new OpenModalOrderDetails(this.orderProcess[0].order))
+            this.store.dispatch(new OpenModalOrderDetails({ ...this.orderProcess[0].order }))
           }
         })
       } else {
         this.modalPrimeNg.close()
-        this.store.dispatch(new OpenModalOrderDetails(this.orderProcess[0].order))
+        this.store.dispatch(new OpenModalOrderDetails({ ...this.orderProcess[0].order }))
       }
     } else if (this.orderProcess[0].action === 'EditOrderDetail') {
       this.modalPrimeNg.close()
-      this.store.dispatch(new OpenModalOrderDetails(this.orderProcess[0].order))
+      this.store.dispatch(new OpenModalOrderDetails({ ...this.orderProcess[0].order }))
     } else if (this.orderProcess[0].action === 'CreateOrderFromCustomer') {
       if (this.beneficiaries.length > 0) {
         Swal.fire({
@@ -173,7 +181,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         beneficiaries: this.beneficiaries,
       }]
       this.modalPrimeNg.close()
-      this.store.dispatch(new OpenModalCreateOrder(this.orderProcess))
+      this.store.dispatch(new OpenModalCreateOrder({ ...this.orderProcess }))
     }
   }
 
@@ -183,7 +191,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
       beneficiaries: this.beneficiaries,
     }]
     this.modalPrimeNg.close()
-    this.store.dispatch(new OpenModalListFrequentTravelersToOrders(this.orderProcess))
+    this.store.dispatch(new OpenModalListFrequentTravelersToOrders({ ...this.orderProcess }))
   }
 
   deleteBeneficiarie(document: string) {
@@ -193,26 +201,25 @@ export class CreateOrderDetailFormComponent implements OnInit {
     if (this.beneficiariesAmount > 1) {
       this.beneficiariesAmount--
     }
+    this.updateVisibility()
+  }
+
+  addAnotherBeneficiarieButton(): boolean {
+    if (this.onePackage.availableQuotas >= this.beneficiariesAmount + 1) {
+      return true
+    }
+    return false
   }
 
   addAnotherBeneficiarie() {
     if (this.onePackage.availableQuotas >= this.beneficiariesAmount + 1) {
       this.beneficiariesAmount++
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: '¡Error!',
-        text: 'Lo sentimos no quedan cupos disponibles.',
-        showConfirmButton: false,
-        timer: 1500,
-        timerProgressBar: true
-      })
     }
   }
 
   reduceBeneficiariesAmount() {
     if (this.beneficiariesAmount > this.beneficiaries.length) {
-      if (this.beneficiariesAmount == 1) {
+      if (this.beneficiariesAmount === 1) {
         Swal.fire({
           icon: 'error',
           title: '¡Error!',
@@ -239,10 +246,10 @@ export class CreateOrderDetailFormComponent implements OnInit {
 
   validForm(): boolean {
     if (this.beneficiariesForm()) {
-      return this.formGroup.value.name != '' &&
-        this.formGroup.value.phoneNumber != '' &&
-        this.formGroup.value.birthdate != '' &&
-        this.formGroup.value.eps != 0 && !this.alreadyExists() && !this.customerInformation() &&
+      return this.formGroup.value.name !== '' &&
+        this.formGroup.value.phoneNumber !== '' &&
+        this.formGroup.value.birthdate !== '' &&
+        this.formGroup.value.eps !== 0 && !this.alreadyExists() && !this.customerInformation() &&
         !this.formGroup.invalid && !this.alreadyExistsFromEdit()
     } else {
       return true
@@ -257,10 +264,10 @@ export class CreateOrderDetailFormComponent implements OnInit {
   }
 
   customerInformation(): boolean {
-    if (this.orderProcess[0].action != 'EditOrderDetail') {
+    if (this.orderProcess[0].action !== 'EditOrderDetail') {
       if (this.formGroup.value.document >= 8) {
         this.oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
-        if (this.oneCustomer != undefined) {
+        if (this.oneCustomer !== undefined) {
           return true
         }
       }
@@ -272,7 +279,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
     if (this.orderProcess[0].action === 'EditOrderDetail') {
       if (this.formGroup.value.document >= 8) {
         this.oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
-        if (this.oneCustomer != undefined) {
+        if (this.oneCustomer !== undefined) {
           if (this.oneCustomer.document === this.orderProcess[0].customer.document) {
             return false
           }
@@ -286,19 +293,20 @@ export class CreateOrderDetailFormComponent implements OnInit {
   fillCustomerInformation() {
     this.beneficiaries.push(this.oneCustomer)
     this.formGroup.reset()
+    this.updateVisibility()
   }
 
   alreadyExists(): boolean {
-    if (this.orderProcess[0].action != 'EditOrderDetail') {
+    if (this.orderProcess[0].action !== 'EditOrderDetail') {
       if (this.orderProcess[0].action === 'CreateOrderDetail') {
         const oneCustomer = this.orderDetailCustomers.find(b => b.document === this.formGroup.value.document)
         const anotherCustomer = this.beneficiaries.find(b => b.document === this.formGroup.value.document)
-        if (anotherCustomer == undefined && oneCustomer == undefined) {
+        if (anotherCustomer === undefined && oneCustomer === undefined) {
           return false
         }
       } else {
         const oneCustomer = this.beneficiaries.find(b => b.document === this.formGroup.value.document)
-        if (oneCustomer == undefined) {
+        if (oneCustomer === undefined) {
           return false
         }
       }
@@ -333,8 +341,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         user: user,
       })
       this.formGroup.reset()
-      console.log(this.beneficiaries)
-
+      this.updateVisibility()
     }
   }
 
@@ -351,7 +358,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         beneficiaries: this.beneficiaries,
       }]
       this.modalPrimeNg.close()
-      this.store.dispatch(new OpenModalCreatePayment(this.orderProcess))
+      this.store.dispatch(new OpenModalCreatePayment({ ...this.orderProcess }))
     } else if (this.orderProcess[0].action === 'EditOrderDetail') {
       const customer: Customer = {
         customerId: this.orderProcess[0].customer.customerId,
@@ -364,7 +371,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         eps: this.formGroup.value.eps,
         userId: this.orderProcess[0].customer.userId
       }
-      this.store.dispatch(new EditCustomerRequest(customer))
+      this.store.dispatch(new EditCustomerRequest({ ...customer }))
       this.modalPrimeNg.close()
       Swal.fire({
         icon: 'success',
@@ -380,7 +387,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         beneficiaries: this.beneficiaries,
       }]
       this.modalPrimeNg.close()
-      this.store.dispatch(new OpenModalCreatePayment(this.orderProcess))
+      this.store.dispatch(new OpenModalCreatePayment({ ...this.orderProcess }))
     } else {
       this.orderProcess = [{
         action: 'CreateOrder',
@@ -388,7 +395,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         beneficiaries: this.beneficiaries,
       }]
       this.modalPrimeNg.close()
-      this.store.dispatch(new OpenModalCreatePayment(this.orderProcess))
+      this.store.dispatch(new OpenModalCreatePayment({ ...this.orderProcess }))
     }
   }
 }

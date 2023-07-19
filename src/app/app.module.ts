@@ -52,6 +52,8 @@ import { CreateFrequentTravelerFormComponent } from './components/create-frequen
 import { ListFrequentTravelerComponent } from './components/list-frequent-traveler/list-frequent-traveler.component';
 import { EditPaymentFormComponent } from './components/edit-payment-form/edit-payment-form.component';
 import { ListFrequentTravelersToOrdersComponent } from './components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
+
+//<-----------PRIMENG--------------->
 import { DataViewModule } from 'primeng/dataview';
 import { CommonModule } from '@angular/common';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -62,8 +64,6 @@ import { RatingModule } from 'primeng/rating';
 import { OrderListModule } from 'primeng/orderlist';
 import { TooltipModule } from 'primeng/tooltip';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
-
-//<-----------PRIMENG--------------->
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { ToastModule } from 'primeng/toast';
@@ -83,7 +83,9 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarComponent } from './pages/calendar/calendar.component';
-import {ChartModule} from 'primeng/chart';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { BadgeModule } from 'primeng/badge';
+import { ChartModule } from 'primeng/chart';
 
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
@@ -180,6 +182,8 @@ registerLocaleData(localeEn, 'en-EN');
     CalendarModule,
     DropdownModule,
     InputNumberModule,
+    ConfirmPopupModule,
+    BadgeModule,
     ChartModule,
 
     //<------------------------->

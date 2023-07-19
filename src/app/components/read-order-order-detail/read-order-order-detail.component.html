@@ -1,62 +1,101 @@
-<div class="card card-package w-100 m-0">
-    <div class="card-header text-left">
-        <div class="row">
-            <div class="col text-dark">
-                <h1 class="m-0">Beneficiarios</h1>
-            </div>
-            <div class="col">
-                <div class="text-dark d-flex align-items-center justify-content-end">
-                    <button (click)="addOrderDetail()" type="button" class="btn btn-primary">Agregar
-                        beneficiario</button>
-                </div>
-            </div>
-        </div>
+<div class="col-12">
+    <div class="flex align-items-center mb-3">
+        <h2 class="text-blue-500">Beneficiarios</h2>
     </div>
-    <div class="card-body">
-        <form>
-            <div class="d-flex justify-content-end mb-3 row">
-                <label for="table-complete-search"
-                    class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
-                <div class="col-xs-3 col-sm-auto">
-                    <input id="table-complete-search" type="text" class="form-control" name="searchTerm" />
+    <div style="border-radius: 15px;">
+        <p-table *ngIf="visible" #dt [value]="orderDetailCustomers" [paginator]="true" [rows]="3"
+            [showCurrentPageReport]="true" scrollable="true" [loading]="loading"
+            currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} beneficiarios."
+            [globalFilterFields]="['name', 'lastName', 'document', 'birthDate', 'phoneNumber', 'address', 'eps']">
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between">
+                    <span class="mt-2 md:mt-0 p-input-icon-right">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Buscar..." />
+                    </span>
+                    <button *ngIf="addOrderDetailButton()" pButton p pRipple type="button" label="Agregar beneficiario"
+                        icon="pi pi-plus" (click)="addOrderDetail()" class="p-button-outlined"></button>
                 </div>
-            </div>
-
-            <table (load)="compareCustomerId()" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Nombres</th>
-                        <th>Apellidos</th>
-                        <th>Documento</th>
-                        <th>Fecha de nacimiento</th>
-                        <th>Número</th>
-                        <th>Dirección</th>
-                        <th>EPS</th>
-                        <th>Editar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let customer of orderDetailCustomers">
-                        <td>{{customer.name}}</td>
-                        <td>{{customer.lastName}}</td>
-                        <td>{{customer.document}}</td>
-                        <td>{{customer.birthDate | date}}</td>
-                        <td>{{customer.phoneNumber}}</td>
-                        <td>{{customer.address}}</td>
-                        <td>{{customer.eps}}</td>
-                        <td class="infoData">
-                            <button (click)="editOrdelDetail(customer)" class="hover-text btn btn-outline-primary"><i
-                                    style="cursor: pointer; display: grid;" class="fas fa-edit"
-                                    style="font-size: 100%"></i>
-                                <span class="tooltip-text bottom">Editar</span>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="name" style="min-width: 14rem">
+                        Nombre completo <p-sortIcon field="name"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="document" style="min-width: 10rem">
+                        Documento <p-sortIcon field="document"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="birthDate" style="min-width: 15rem">
+                        Fecha de nacimiento <p-sortIcon field="birthDate"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="phoneNumber" style="width: 8rem">
+                        Teléfono <p-sortIcon field="phoneNumber"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="address" style="min-width: 15rem">
+                        Dirección <p-sortIcon field="address"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="eps" style="min-width: 10rem">
+                        EPS <p-sortIcon field="eps"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="unitPrice" style="min-width: 9rem">
+                        Precio <p-sortIcon field="unitPrice"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 10rem" alignFrozen="right" pFrozenColumn
+                        class="flex justify-content-center align-items-center">
+                        Acciones
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-beneficiarie>
+                <tr>
+                    <td style="min-width: 14rem">
+                        {{ beneficiarie.name + ' ' + beneficiarie.lastName }}
+                    </td>
+                    <td style="min-width: 10rem">
+                        {{ beneficiarie.document }}
+                    </td>
+                    <td style="min-width: 15rem">
+                        {{ beneficiarie.birthDate | date: 'MM/dd/yyyy' }}
+                    </td>
+                    <td style="min-width: 8rem">
+                        {{ beneficiarie.phoneNumber }}
+                    </td>
+                    <td style="min-width: 15rem">
+                        {{ beneficiarie.address }}
+                    </td>
+                    <td style="min-width: 10rem">
+                        {{ beneficiarie.eps }}
+                    </td>
+                    <td style="min-width: 9rem">
+                        {{ beneficiarie.unitPrice | currency: 'USD':'symbol' }}
+                    </td>
+                    <td alignFrozen="right" pFrozenColumn style="min-width: 10rem"
+                        class="flex justify-content-around align-items-center">
+                        <span *ngIf="validateEditAllowing(beneficiarie)">
+                            <button pButton pRipple type="button" icon="pi pi-pencil"
+                                class="p-button-outlined p-button-warning p-button-rounded"
+                                (click)="editOrderDetail(beneficiarie)" pTooltip="Editar"
+                                tooltipPosition="bottom"></button>
+                        </span>
+                        <span>
+                            <button pButton pRipple type="button" icon="pi pi-trash"
+                                class="p-button-outlined p-button-danger p-button-rounded"
+                                (click)="editOrderDetail(beneficiarie)" pTooltip="Eliminar"
+                                tooltipPosition="bottom"></button>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="9">No se encontraron beneficiarios.</td>
+                </tr>
+            </ng-template>
+        </p-table>
     </div>
-    <div class="card-footer d-flex justify-content-end">
-        <button type="button" (click)="closeModal()" class="btn btn-danger">Regresar</button>
+    <div class="flex justify-content-end">
+        <button pButton pRipple type="button" label="Regresar" icon="pi pi-undo" class="p-button-outlined"
+            (click)="closeModal()"></button>
     </div>
 </div>

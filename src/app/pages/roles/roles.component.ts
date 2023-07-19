@@ -147,7 +147,7 @@ export class RolesComponent implements OnInit{
 
   }
 
-
+ 
   searchByName() {
     if (this.search === undefined || this.search.length <= 0) {
       this.filteredRolesList = this.roleList;
