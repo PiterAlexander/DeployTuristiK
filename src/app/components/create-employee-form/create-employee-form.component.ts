@@ -15,6 +15,7 @@ import {Store} from '@ngrx/store';
 import {UiState} from '@/store/ui/state';
 import {Observable} from 'rxjs';
 import {Role} from '../../models/role';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-create-employee-form',
@@ -35,7 +36,9 @@ export class CreateEmployeeFormComponent implements OnInit {
   constructor(
       private fb: FormBuilder,
       private modalService: NgbModal,
-      private store: Store<AppState>
+      private store: Store<AppState>,
+      private modalPrimeNg : DynamicDialogRef,
+
   ) {}
 
   ngOnInit(): void {
@@ -176,6 +179,6 @@ export class CreateEmployeeFormComponent implements OnInit {
   }
 
   cancel() {
-      this.modalService.dismissAll();
+      this.modalPrimeNg.close();
   }
 }

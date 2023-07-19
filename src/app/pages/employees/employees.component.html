@@ -1,3 +1,4 @@
+<p-toast key="alert-message"></p-toast>
 <div class="p-5">
     <div class="col-12">
         <div class="card px-6 py-6 p-4" style="border-radius: 15px;">
@@ -41,7 +42,7 @@
                             </div>
                         </th>
                         
-                        <th style="width: 12rem">
+                        <th style="width: 9rem">
                             <div class="flex justify-content-left align-items-left">
                                 Acciones
                             </div>
@@ -74,7 +75,7 @@
                                     (click)="openModalEditEmployee(employee)" pTooltip="Editar"
                                     tooltipPosition="bottom"></button></span>
                             <span> <button pButton type="button" icon="pi pi-trash"
-                                    class="p-button-outlined p-button-rounded m-1" pTooltip="Ver detalles"
+                                    class="p-button-outlined p-button-rounded p-button-danger m-1" pTooltip="Ver detalles"
                                     (click)="deleteEmployee(employee)" tooltipPosition="bottom"></button></span>
                         </td>
                     </tr>

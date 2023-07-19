@@ -1,4 +1,4 @@
-
+<p-toast key="alert-message"></p-toast>
 <div class="p-5">
     <div class="col-12">
         <div class="card px-6 py-6 p-4" style="border-radius: 15px;">
@@ -16,7 +16,7 @@
                             </span>
                         </div>
                         <div class="p-input-icon-left mb-2">
-                            <button pButton="" pRipple="" label="Agregar cliente" (click)="openModalCreateCustomer()"
+                            <button pButton="" pRipple="" label="Registrar cliente" (click)="openModalCreateCustomer()"
                                 class="p-button-outlined"><i class="pi pi-plus"
                                     style="margin-left: 5px; margin-right: 9px;"></i></button>
                                     
@@ -94,8 +94,8 @@
                                     class="p-button-outlined p-button-warning p-button-rounded m-1"
                                     (click)="openModalEditCustomer(customer)" pTooltip="Editar"
                                     tooltipPosition="bottom"></button></span>
-                            <span> <button pButton type="button" icon="pi pi-info-circle"
-                                    class="p-button-outlined p-button-rounded m-1" pTooltip="Ver detalles"
+                            <span> <button pButton type="button" icon="pi pi-eye"
+                                    class="p-button-outlined p-button-rounded m-1" pTooltip="Viajeros frecuentes"
                                     (click)="openModalListTraveler(customer)" tooltipPosition="bottom"></button></span>
                         </td>
                         
