@@ -103,10 +103,10 @@ export class LoginComponent implements OnInit {
                 var log = JSON.parse(localStorage.getItem('TokenPayload'));
                 if (log) {
                   if (log['role'] == 'Administrador') {
-                    this.router.navigate(['/Dashboard']);
+                    this.router.navigate(['/Home/Dashboard']);
                   }
                   if (log['role'] == 'Cliente') {
-                      this.router.navigate(['/Paquetes']);
+                      this.router.navigate(['/Home/Paquetes']);
                   }
                 }
 

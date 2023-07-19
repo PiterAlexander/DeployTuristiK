@@ -80,14 +80,14 @@ export class AuthGuard implements CanActivate, CanActivateChild {
           const allowedModules = response['associatedPermission'].map(ap => ap.permission.module);
               const currentModule = route.routeConfig.path;
               if (allowedModules) {
-                if (allowedModules.includes(currentModule) || currentModule == "Login" || currentModule == "profile") {
+                if (allowedModules.includes(currentModule) || currentModule == "Login" || currentModule == "profile" || currentModule == "Turistik") {
                   return true;
                 }else{
                   if (user['role'] == "Administrador") {
-                    this.router.navigate(['/Dashboard']);
+                    this.router.navigate(['/Home/Dashboard']);
                     return false;
                   }else{
-                    this.router.navigate(['/Paquetes']);
+                    this.router.navigate(['/Home/Paquetes']);
                     return false;
                   }
                 }

@@ -1,5 +1,5 @@
 <!-- eslint-disable @angular-eslint/template/eqeqeq -->
-<ng-container *ngIf="role==='Cliente'">
+<ng-container *ngIf="role==='Cliente' || role=== undefined">
     <br><br>
     <div class="container">
         <div class="text-initial">
@@ -60,7 +60,7 @@
         </div>
         <div class="container px-4 px-lg-5 mt-5">
             <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-3 row-cols-xl-3 justify-content-center">
-                <div class="col mb-5" *ngFor="let pack of filteredPackagesList">
+                <div class="col-4 p-3 mb-2" *ngFor="let pack of filteredPackagesList">
                     <div class="card h-100 hoverCard" style="cursor: pointer;">
                         <div class="card-header p-0">
                             <div class="d-flex">
@@ -111,7 +111,7 @@
 
 
 
-<div *ngIf="role!=='Cliente'" class="p-5">
+<div *ngIf="role!=='Cliente' && role !== undefined" class="p-5">
     <div class="col-12">
         <div class="card px-6 py-6 p-4" style="border-radius: 15px;">
             <p-table #dt [value]="packagesList" [rows]="5" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10]"
