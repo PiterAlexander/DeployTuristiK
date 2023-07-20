@@ -39,6 +39,9 @@ import {
     DeleteFrequentTravelerFailure,
     GetTopPackagesSuccess,
     GetTopPackagesFailure,
+    DeleteOrderDetailRequest,
+    DeleteOrderDetailSuccess,
+    DeleteOrderDetailFailure,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -312,6 +315,23 @@ export class PackageEffects {
         })
     ));
 
+    deleteOrderDetail$ = createEffect(() => this.actions$.pipe(
+        ofType(orderActions.DELETE_ORDERDETAIL_REQUEST),
+        map((action: DeleteOrderDetailRequest) => action.payload),
+        switchMap((OrderDetail) => {
+            return this.apiService.deleteOrderDetail(OrderDetail.orderDetailId).pipe(
+                mergeMap((orderDetailResolved) => {
+                    this.dialogRef.close();
+                    return [
+                        new DeleteOrderDetailSuccess(orderDetailResolved),
+                        new GetAllOrdersRequest(),
+                    ];
+                }),
+                catchError((err) => of(new DeleteOrderDetailFailure(err)))
+            )
+        })
+    ));
+
     openModalPayments$ = createEffect(() =>
         this.actions$.pipe(
             ofType(orderActions.OPEN_MODAL_PAYMENTS),
@@ -361,9 +381,11 @@ export class PackageEffects {
         this.actions$.pipe(
             ofType(orderActions.OPEN_MODAL_EDIT_PAYMENT),
             tap((action) => {
-                this.modalRef = this.modalService.open(EditPaymentFormComponent, {
-                    backdrop: false,
-                    size: 'l'
+                this.dialogRef = this.dialogService.open(EditPaymentFormComponent, {
+                    /* Opciones del modal */
+                    showHeader: false,
+                    width: '45%',
+                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
                 });
             })
         ), { dispatch: false });
@@ -838,7 +860,6 @@ export class PackageEffects {
             switchMap((response) => {
                 return this.authService.getUserInfo(response).pipe(
                     mergeMap((data) => {
-                        //console.log(typeof (data))
                         return [new GetUserInfoSuccess(data)]
 
                     }),

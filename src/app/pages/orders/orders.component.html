@@ -45,7 +45,7 @@
                                 (click)="sendToPayments(order)" tooltipPosition="bottom"></button>
                         </td>
                         <td style="min-width: 10rem">
-                            <span [class]="'order-badge status-' + order.status">{{ statuses[order.status]['label']
+                            <span [class]="'order-badge status-' + order.status">{{ showStatus(order.status)
                                 }}</span>
                         </td>
                     </tr>

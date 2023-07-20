@@ -154,7 +154,7 @@ export class GetOnePackageRequest implements Action {
 
 export class OpenModalCreatePackage implements Action {
   readonly type: string = packageActions.OPEN_MODAL_CREATE_PACKAGE;
-  constructor(public payload?: Package,public dateCalendar?:Date) { }
+  constructor(public payload?: Package, public dateCalendar?: Date) { }
 }
 export class CreatePackageRequest implements Action {
   readonly type: string = packageActions.CREATE_PACKAGE_REQUEST;
@@ -191,19 +191,19 @@ export class EditPackageFailure implements Action {
 export class ChangeStatusPackageRequest implements Action {
   readonly type = packageActions.CHANGE_STATUS_PACKAGE_REQUEST;
 
-  constructor(public payload: Package) {} // Aquí pasamos el id del paquete como carga útil
+  constructor(public payload: Package) { } // Aquí pasamos el id del paquete como carga útil
 }
 
 export class ChangeStatusPackageSuccess implements Action {
   readonly type = packageActions.CHANGE_STATUS_PACKAGE_SUCCESS;
 
-  constructor(public payload: any) {} // Aquí pasamos el paquete deshabilitado como carga útil
+  constructor(public payload: any) { } // Aquí pasamos el paquete deshabilitado como carga útil
 }
 
 export class ChangeStatusPackageFailure implements Action {
   readonly type = packageActions.CHANGE_STATUS_PACKAGE_FAILURE;
 
-  constructor(public payload: string) {} // Aquí pasamos cualquier error como carga útil
+  constructor(public payload: string) { } // Aquí pasamos cualquier error como carga útil
 }
 
 // PACKAGES DISABLE ACTIONS END -----------------------------------------
@@ -236,6 +236,10 @@ export enum orderActions {
   EDIT_ORDERDETAIL_REQUEST = '[ORDERDETAIL] EDIT_ORDERDETAIL_REQUEST',
   EDIT_ORDERDETAIL_SUCCESS = '[ORDERDETAIL] EDIT_ORDERDETAIL_SUCCESS',
   EDIT_ORDERDETAIL_FAILURE = '[ORDERDETAIL] EDIT_ORDERDETAIL_FAILURE',
+  
+  DELETE_ORDERDETAIL_REQUEST = '[ORDERDETAIL] DELETE_ORDERDETAIL_REQUEST',
+  DELETE_ORDERDETAIL_SUCCESS = '[ORDERDETAIL] DELETE_ORDERDETAIL_SUCCESS',
+  DELETE_ORDERDETAIL_FAILURE = '[ORDERDETAIL] DELETE_ORDERDETAIL_FAILURE',
 
   OPEN_MODAL_PAYMENTS = '[PAYMENTS] OPEN_MODAL_PAYMENTS',
 
@@ -332,6 +336,19 @@ export class EditOrderDetailSuccess implements Action {
 }
 export class EditOrderDetailFailure implements Action {
   readonly type: string = orderActions.EDIT_ORDERDETAIL_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class DeleteOrderDetailRequest implements Action {
+  readonly type: string = orderActions.DELETE_ORDERDETAIL_REQUEST;
+  constructor(public payload: OrderDetail) { }
+}
+export class DeleteOrderDetailSuccess implements Action {
+  readonly type: string = orderActions.DELETE_ORDERDETAIL_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class DeleteOrderDetailFailure implements Action {
+  readonly type: string = orderActions.DELETE_ORDERDETAIL_FAILURE;
   constructor(public payload: string) { }
 }
 
@@ -858,6 +875,9 @@ export type UiAction =
   | EditOrderDetailRequest
   | EditOrderDetailSuccess
   | EditOrderDetailFailure
+  | DeleteOrderDetailRequest
+  | DeleteOrderDetailFailure
+  | DeleteOrderDetailSuccess
   | CreatePaymentRequest
   | CreatePaymentSuccess
   | CreatePaymentFailure

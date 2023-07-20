@@ -1,14 +1,15 @@
 import { Customer } from '@/models/customer';
 import { Order } from '@/models/order';
 import { AppState } from '@/store/state';
-import { GetAllCustomerRequest, OpenModalCreateOrderDetail } from '@/store/ui/actions';
+import { DeleteOrderDetailRequest, GetAllCustomerRequest, OpenModalCreateOrderDetail } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import Swal from 'sweetalert2';
+import { ConfirmationService } from 'primeng/api';
 import { Role } from '@/models/role';
+import { OrderDetail } from '@/models/orderDetail';
 
 @Component({
   selector: 'app-read-order-order-detail',
@@ -28,6 +29,7 @@ export class ReadOrderOrderDetailComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private modalPrimeNg: DynamicDialogRef,
+    private confirmationService: ConfirmationService,
   ) { }
 
   ngOnInit(): void {
@@ -61,8 +63,6 @@ export class ReadOrderOrderDetailComponent implements OnInit {
         this.orderDetailCustomers.push(orderDetailCustomer)
       }
     }
-    console.log(this.orderDetailCustomers);
-
     this.updateVisibility()
   }
 
@@ -108,7 +108,7 @@ export class ReadOrderOrderDetailComponent implements OnInit {
   }
 
   editOrderDetail(customer: Customer) {
-    const orderDetail = this.order.orderDetail.find(od => od.beneficiaryId === customer.customerId)
+    const orderDetail: OrderDetail = this.order.orderDetail.find(od => od.beneficiaryId === customer.customerId)
     const orderProcess = [{
       action: 'EditOrderDetail',
       customer: customer,
@@ -117,5 +117,27 @@ export class ReadOrderOrderDetailComponent implements OnInit {
     }]
     this.modalPrimeNg.close()
     this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess))
+  }
+
+  deleteOrderDetail(customer: Customer) {
+    this.confirmationService.confirm({
+      message: 'Ten en cuenta que el precio del pedido no cambiará y no se hará un reembolso por el beneficiario.',
+      header: '¿Estás seguro de eliminar a ' + customer.name + ' ' + customer.lastName + '?', // Cambia el encabezado del cuadro de confirmación
+      icon: 'pi pi-exclamation-triangle', // Cambia el icono del cuadro de confirmación
+      acceptLabel: 'Aceptar', // Cambia el texto del botón de aceptar
+      rejectLabel: 'Cancelar', // Cambia el texto del botón de rechazar
+      rejectIcon: 'pi pi-times',
+      acceptIcon: 'pi pi-check',
+      acceptButtonStyleClass: 'p-button-primary p-button-sm', // Agrega una clase CSS al botón de aceptar
+      rejectButtonStyleClass: 'p-button-outlined p-button-sm', // Agrega una clase CSS al botón de rechazar
+      accept: () => {
+        const orderDetail: OrderDetail = this.order.orderDetail.find(od => od.beneficiaryId === customer.customerId)
+        if (orderDetail !== undefined) {
+          this.store.dispatch(new DeleteOrderDetailRequest({ ...orderDetail }))
+        }
+        // Lógica para confirmar
+        // this.store.dispatch(new DeleteRoleRequest(role));
+      }
+    })
   }
 }

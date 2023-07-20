@@ -51,10 +51,10 @@ export class OrdersComponent implements OnInit {
     })
 
     this.statuses = [
-      { 'label': 'Cancelado', 'code': 0 },
+      { 'label': 'Pendiente', 'code': 0 },
       { 'label': 'En curso', 'code': 1 },
       { 'label': 'Pagado', 'code': 2 },
-      { 'label': 'Pendiente', 'code': 3 }
+      { 'label': 'Cancelado', 'code': 3 }
     ]
   }
 
