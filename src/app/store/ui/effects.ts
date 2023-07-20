@@ -26,7 +26,6 @@ import {
     CreateFrequentTravelerRequest,
     CreateFrequentTravelerSuccess,
     FrequentTravelerActions,
-    GetAllFrequentTravelerRequest,
     EditPaymentRequest,
     EditPaymentSuccess,
     EditPaymentFailure,
@@ -39,6 +38,9 @@ import {
     DeleteFrequentTravelerFailure,
     GetTopPackagesSuccess,
     GetTopPackagesFailure,
+    DeleteOrderDetailRequest,
+    DeleteOrderDetailSuccess,
+    DeleteOrderDetailFailure,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -57,7 +59,6 @@ import { ReadOrderOrderDetailComponent } from '@components/read-order-order-deta
 import { ReadOrderPaymentComponent } from '@components/read-order-payment/read-order-payment.component';
 import { AuthService } from '@services/auth/auth.service';
 import { ListFrequentTravelerComponent } from '@components/list-frequent-traveler/list-frequent-traveler.component';
-import { CreateFrequentTravelerFormComponent } from '@components/create-frequent-traveler-form/create-frequent-traveler-form.component';
 import { EditPaymentFormComponent } from '@components/edit-payment-form/edit-payment-form.component';
 import { CreatecustomerformComponent } from '@components/create-customer-form/create-customer-form.component';
 import { ListFrequentTravelersToOrdersComponent } from '@components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
@@ -312,6 +313,23 @@ export class PackageEffects {
         })
     ));
 
+    deleteOrderDetail$ = createEffect(() => this.actions$.pipe(
+        ofType(orderActions.DELETE_ORDERDETAIL_REQUEST),
+        map((action: DeleteOrderDetailRequest) => action.payload),
+        switchMap((OrderDetail) => {
+            return this.apiService.deleteOrderDetail(OrderDetail.orderDetailId).pipe(
+                mergeMap((orderDetailResolved) => {
+                    this.dialogRef.close();
+                    return [
+                        new DeleteOrderDetailSuccess(orderDetailResolved),
+                        new GetAllOrdersRequest(),
+                    ];
+                }),
+                catchError((err) => of(new DeleteOrderDetailFailure(err)))
+            )
+        })
+    ));
+
     openModalPayments$ = createEffect(() =>
         this.actions$.pipe(
             ofType(orderActions.OPEN_MODAL_PAYMENTS),
@@ -361,9 +379,11 @@ export class PackageEffects {
         this.actions$.pipe(
             ofType(orderActions.OPEN_MODAL_EDIT_PAYMENT),
             tap((action) => {
-                this.modalRef = this.modalService.open(EditPaymentFormComponent, {
-                    backdrop: false,
-                    size: 'l'
+                this.dialogRef = this.dialogService.open(EditPaymentFormComponent, {
+                    /* Opciones del modal */
+                    showHeader: false,
+                    width: '45%',
+                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
                 });
             })
         ), { dispatch: false });
@@ -560,9 +580,9 @@ export class PackageEffects {
             tap((action) => {
                 this.dialogRef = this.dialogService.open(CreatecustomerformComponent, {
                     /* Opciones del modal */
-                    header: action['payload'] === undefined ? 'Crear cliente' : 'Editar cliente',
-                    width: '55%',
-                    contentStyle: { overflowY: 'auto' },
+                    showHeader: false,
+                    width: '50%',
+                    contentStyle: { padding: '1.50rem 2.25rem 1.50rem 2.25rem', overflowY: 'auto' },
                 });
             })
         ),
@@ -576,7 +596,7 @@ export class PackageEffects {
         switchMap((customer) => {
             return this.apiService.addCustomer(customer).pipe(
                 mergeMap((customerResolved) => {
-                    this.modalRef.close();
+                    this.dialogRef.close();
                     return [
                         new CreateCustomerSuccess(customerResolved),
                         new GetAllCustomerRequest()
@@ -623,21 +643,6 @@ export class PackageEffects {
             dispatch: false
         });
 
-    createModalTraveler$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER),
-            tap((action) => {
-                this.dialogRef = this.dialogService.open(CreateFrequentTravelerFormComponent, {
-                    /* Opciones del modal */
-                    header: action['payload'] === undefined ? 'Crear frecuentes' : 'Editar frecuentes',
-                    width: '60%',
-                });
-
-            })
-        ),
-        {
-            dispatch: false
-        });
 
     createFrequentTraveler$ = createEffect(() => this.actions$.pipe(
         ofType(FrequentTravelerActions.CREATE_FREQUENTTRAVELER_REQUEST),
@@ -838,7 +843,6 @@ export class PackageEffects {
             switchMap((response) => {
                 return this.authService.getUserInfo(response).pipe(
                     mergeMap((data) => {
-                        //console.log(typeof (data))
                         return [new GetUserInfoSuccess(data)]
 
                     }),

@@ -51,7 +51,7 @@
                     <td style="min-width: 13rem">
                         {{ payment.date | date:'MM/dd/yyyy - HH:mm' }}
                     </td>
-                    <td style="min-width: 10rem" >
+                    <td style="min-width: 10rem">
                         <span>
                             <button pButton pRipple type="button" icon="pi pi-eye"
                                 class="p-button-outlined p-button-rounded" (click)="editPayment(payment)"
@@ -64,8 +64,8 @@
                     <td alignFrozen="right" pFrozenColumn style="min-width: 7rem"
                         class="flex justify-content-around align-items-center">
                         <span>
-                            <button pButton pRipple type="button" icon="pi pi-pencil"
-                                class="p-button-outlined p-button-warning p-button-rounded"
+                            <button *ngIf="validateEditAllowing(payment)" pButton pRipple type="button"
+                                icon="pi pi-pencil" class="p-button-outlined p-button-warning p-button-rounded"
                                 (click)="editPayment(payment)" pTooltip="Editar" tooltipPosition="bottom"></button>
                         </span>
                     </td>

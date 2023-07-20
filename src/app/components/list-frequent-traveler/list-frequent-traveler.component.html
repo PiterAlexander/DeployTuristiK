@@ -1,9 +1,10 @@
+<p-confirmDialog icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <div class="col-12">
     <div class="flex align-items-center mb-3">
         <h2 class="text-blue-500">Viajeros frecuentes</h2>
     </div>
     <div style="border-radius: 15px;">
-        <p-table *ngIf="visible" #dt [value]="frequentTravelerCustomers" [paginator]="true" [rows]="3"
+        <p-table *ngIf="visible" #dt [value]="frequentTravelersList" [paginator]="true" [rows]="3"
             [showCurrentPageReport]="true" scrollable="true" [loading]="loading"
             currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} viajeros frecuentes."
             [globalFilterFields]="['name', 'lastName', 'document', 'birthDate', 'phoneNumber', 'address', 'eps']">
@@ -14,8 +15,8 @@
                         <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
                             placeholder="Buscar..." />
                     </span>
-                    <button pButton p pRipple type="button" label="Agregar beneficiario" icon="pi pi-plus"
-                        (click)="openModalCreateFrequentTraveler()" class="p-button-outlined"></button>
+                    <button pButton p pRipple type="button" label="Agregar viajero" icon="pi pi-plus"
+                        (click)="createFrequentTraveler()" class="p-button-outlined"></button>
                 </div>
             </ng-template>
             <ng-template pTemplate="header">
@@ -44,51 +45,52 @@
                     </th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-beneficiarie>
+            <ng-template pTemplate="body" let-frequentTraveler>
                 <tr>
                     <td style="min-width: 14rem">
-                        {{ beneficiarie.name + ' ' + beneficiarie.lastName }}
+                        {{ frequentTraveler.name + ' ' + frequentTraveler.lastName }}
                     </td>
                     <td style="min-width: 10rem">
-                        {{ beneficiarie.document }}
+                        {{ frequentTraveler.document }}
                     </td>
                     <td style="min-width: 15rem">
-                        {{ beneficiarie.birthDate | date: 'MM/dd/yyyy' }}
+                        {{ frequentTraveler.birthDate | date: 'MM/dd/yyyy' }}
                     </td>
                     <td style="min-width: 8rem">
-                        {{ beneficiarie.phoneNumber }}
+                        {{ frequentTraveler.phoneNumber }}
                     </td>
                     <td style="min-width: 15rem">
-                        {{ beneficiarie.address }}
+                        {{ frequentTraveler.address }}
                     </td>
                     <td style="min-width: 10rem">
-                        {{ beneficiarie.eps }}
+                        {{ frequentTraveler.eps }}
                     </td>
                     <td alignFrozen="right" pFrozenColumn style="min-width: 10rem"
                         class="flex justify-content-around align-items-center">
-                        <span *ngIf="validateEditAllowing(beneficiarie)">
+                        <span *ngIf="validateEditAllowing(frequentTraveler)">
                             <button pButton pRipple type="button" icon="pi pi-pencil"
                                 class="p-button-outlined p-button-warning p-button-rounded"
-                                (click)="openModalEditCustomer(beneficiarie)" pTooltip="Editar"
+                                (click)="editFrequentTraveler(frequentTraveler)" pTooltip="Editar"
                                 tooltipPosition="bottom"></button>
                         </span>
                         <span>
                             <button pButton pRipple type="button" icon="pi pi-trash"
                                 class="p-button-outlined p-button-danger p-button-rounded"
-                                (click)="delete(beneficiarie)" pTooltip="Eliminar" tooltipPosition="bottom"></button>
+                                (click)="deleteFrequentTraveler(frequentTraveler)" pTooltip="Eliminar"
+                                tooltipPosition="bottom"></button>
                         </span>
                     </td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>
-                    <td colspan="9">No se encontraron beneficiarios.</td>
+                    <td colspan="9">No se encontraron viajeros frecuentes.</td>
                 </tr>
             </ng-template>
         </p-table>
     </div>
     <div class="flex justify-content-end">
         <button pButton pRipple type="button" label="Regresar" icon="pi pi-undo" class="p-button-outlined"
-            (click)="cancel()"></button>
+            (click)="close()"></button>
     </div>
 </div>

@@ -3,8 +3,8 @@
 <div *ngIf="role!=='Cliente'" class="p-3">
     <div class="col-12">
         <div class="card px-6 py-6" style="border-radius: 15px;">
-            <p-table *ngIf="visible" #dt [value]="ordersList" [paginator]="true" [rows]="5"
-                [showCurrentPageReport]="true" scrollable="true" [rowsPerPageOptions]="[5, 10]" [loading]="loading"
+            <p-table #dt [value]="ordersList" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+                scrollable="true" [rowsPerPageOptions]="[5, 10]" [loading]="loading"
                 currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} pedidos."
                 [globalFilterFields]="['customer.name', 'customer.lastName', 'customer.document', 'package.name', 'totalCost', 'status']">
                 <ng-template pTemplate="caption">
@@ -15,7 +15,7 @@
                                 placeholder="Buscar..." />
                         </span>
                         <button pButton p pRipple type="button" label="Registrar pedido" icon="pi pi-plus"
-                            (click)="createOrder()" class="p-button-outlined"></button>
+                            (click)="create()" class="p-button-outlined"></button>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -45,8 +45,7 @@
                                 (click)="sendToPayments(order)" tooltipPosition="bottom"></button>
                         </td>
                         <td style="min-width: 10rem">
-                            <span [class]="'order-badge status-' + order.status">{{ statuses[order.status]['label']
-                                }}</span>
+                            <span [class]="'order-badge status-' + order.status">{{ showStatus(order.status) }}</span>
                         </td>
                     </tr>
                 </ng-template>

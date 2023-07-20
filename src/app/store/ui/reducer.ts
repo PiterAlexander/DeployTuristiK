@@ -438,44 +438,6 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 }
             };
-        case Actions.FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER:
-            return {
-                ...state,
-                oneCustomer: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
-                }
-            };
-        case Actions.FrequentTravelerActions.GET_ALL_FREQUENTTRAVELER_REQUEST:
-            return {
-                ...state,
-                AllFrequentTraveler: {
-                    data: [],
-                    error: undefined,
-                    loading: true
-                }
-            };
-
-        case Actions.FrequentTravelerActions.GET_ALL_FREQUENTTRAVELER_SUCCESS:
-            return {
-                ...state,
-                allFrequentTraveler: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
-                }
-            };
-
-        case Actions.FrequentTravelerActions.GET_ALL_FREQUENTTRAVELER_FAILURE:
-            return {
-                ...state,
-                allFrequentTraveler: {
-                    data: [],
-                    error: action.payload,
-                    loading: false
-                }
-            };
         //<----------------->
 
         //<--- USER --->

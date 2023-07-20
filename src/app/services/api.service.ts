@@ -37,16 +37,16 @@ export class ApiService {
         return this.http.put<Package>(`${this.endpoint}api/package/${idPackage}`, modelo)
     }
 
-    disablePackage(pack:Package):Observable<Package>{
+    disablePackage(pack: Package): Observable<Package> {
         console.log(`${this.endpoint}api/package/${pack.packageId}/changeStatus`);
         return this.http.post<Package>(`${this.endpoint}api/package/${pack.packageId}/changeStatus`, null)
     }
 
-    getTopPackage(startDate?:Date,endDate?:Date):Observable<Package[]>{
-      if (startDate && endDate) {
-        return this.http.get<Package[]>(`${this.endpoint}api/package/Top/${startDate}/${endDate}`)
-      }
-      return this.http.get<Package[]>(`${this.endpoint}api/package/Top`)
+    getTopPackage(startDate?: Date, endDate?: Date): Observable<Package[]> {
+        if (startDate && endDate) {
+            return this.http.get<Package[]>(`${this.endpoint}api/package/Top/${startDate}/${endDate}`)
+        }
+        return this.http.get<Package[]>(`${this.endpoint}api/package/Top`)
     }
 
     //<-------------->
@@ -64,10 +64,6 @@ export class ApiService {
         return this.http.put<Order>(`${this.endpoint}api/Order/${orderId}`, modelo)
     }
 
-    deleteOrder(idOrder: number): Observable<void> {
-        return this.http.delete<void>(`${this.endpoint}api/Order/${idOrder}`)
-    }
-
     addPayment(modelo: Payment): Observable<Payment> {
         return this.http.post<Payment>(`${this.endpoint}api/Payment`, modelo)
     }
@@ -82,6 +78,10 @@ export class ApiService {
 
     updatePayment(paymentId: string, modelo: Payment): Observable<Payment> {
         return this.http.put<Payment>(`${this.endpoint}api/Payment/${paymentId}`, modelo)
+    }
+
+    deleteOrderDetail(orderDetailId: string): Observable<void> {
+        return this.http.delete<void>(`${this.endpoint}api/OrderDetail/${orderDetailId}`)
     }
     //<----------------->
 
@@ -145,7 +145,7 @@ export class ApiService {
     }
 
     addFrequentTraveler(modelo: FrequentTraveler): Observable<FrequentTraveler> {
-        console.log(modelo,"desde servicio")
+        console.log(modelo, "desde servicio")
         return this.http.post<FrequentTraveler>(`${this.endpoint}api/FrequentTraveler`, modelo)
     }
 
@@ -164,38 +164,38 @@ export class ApiService {
 
 
     //<------ROLES-------->
-    getRoles():Observable<Role[]>{
-      return this.http.get<Role[]>(`${this.endpoint}api/Role`);
+    getRoles(): Observable<Role[]> {
+        return this.http.get<Role[]>(`${this.endpoint}api/Role`);
     }
 
-    getRoleById(RoleId:string):Observable<Role[]>{
-      return this.http.get<Role[]>(`${this.endpoint}api/Role/${RoleId}`);
+    getRoleById(RoleId: string): Observable<Role[]> {
+        return this.http.get<Role[]>(`${this.endpoint}api/Role/${RoleId}`);
     }
 
-    addRole(modelo:Role):Observable<Role>{
-      return this.http.post<Role>(`${this.endpoint}api/Role`,modelo);
+    addRole(modelo: Role): Observable<Role> {
+        return this.http.post<Role>(`${this.endpoint}api/Role`, modelo);
     }
 
-    updateRole(RoleId:string,modelo:Role):Observable<Role>{
-      return this.http.put<Role>(`${this.endpoint}api/Role/${RoleId}`,modelo);
+    updateRole(RoleId: string, modelo: Role): Observable<Role> {
+        return this.http.put<Role>(`${this.endpoint}api/Role/${RoleId}`, modelo);
     }
 
-    deleteRole(RoleId:string):Observable<void>{
-      return this.http.delete<void>(`${this.endpoint}api/Role/${RoleId}`);
+    deleteRole(RoleId: string): Observable<void> {
+        return this.http.delete<void>(`${this.endpoint}api/Role/${RoleId}`);
     }
 
 
     //<------PERMISSIONS-------->
-    getPermissions():Observable<Permission[]>{
-      return this.http.get<Permission[]>(`${this.endpoint}api/Permission/`);
+    getPermissions(): Observable<Permission[]> {
+        return this.http.get<Permission[]>(`${this.endpoint}api/Permission/`);
     }
 
     //<------ ASSOCIATED PERMISSIONS-------->
-    addAssociatedPermission(modelo:AssociatedPermission):Observable<AssociatedPermission>{
-      return this.http.post<AssociatedPermission>(`${this.endpoint}api/AssociatedPermission/`,modelo);
+    addAssociatedPermission(modelo: AssociatedPermission): Observable<AssociatedPermission> {
+        return this.http.post<AssociatedPermission>(`${this.endpoint}api/AssociatedPermission/`, modelo);
     }
 
-    deleteAssociatedPermission(associatedPermissionId:string):Observable<void>{
-      return this.http.delete<void>(`${this.endpoint}api/AssociatedPermission/${associatedPermissionId}`);
+    deleteAssociatedPermission(associatedPermissionId: string): Observable<void> {
+        return this.http.delete<void>(`${this.endpoint}api/AssociatedPermission/${associatedPermissionId}`);
     }
 }

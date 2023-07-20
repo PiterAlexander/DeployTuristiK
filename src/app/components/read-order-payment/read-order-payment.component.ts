@@ -42,6 +42,13 @@ export class ReadOrderPaymentComponent {
     ]
   }
 
+  validateEditAllowing(payment: Payment): boolean {
+    if (payment.status === 0) {
+      return true
+    }
+    return false
+  }
+
   pushPayments() {
     for (const element of this.order.payment) {
       if (element != undefined) {
@@ -78,7 +85,9 @@ export class ReadOrderPaymentComponent {
     let addition = 0
     this.order.payment.forEach(element => {
       if (element != undefined) {
-        addition += element.amount
+        if (element.status === 1) {
+          addition += element.amount
+        }
       }
     })
     this.remainingAmount = this.order.totalCost - addition
