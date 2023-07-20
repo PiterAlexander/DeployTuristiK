@@ -26,7 +26,6 @@ import {
     CreateFrequentTravelerRequest,
     CreateFrequentTravelerSuccess,
     FrequentTravelerActions,
-    GetAllFrequentTravelerRequest,
     EditPaymentRequest,
     EditPaymentSuccess,
     EditPaymentFailure,
@@ -60,7 +59,6 @@ import { ReadOrderOrderDetailComponent } from '@components/read-order-order-deta
 import { ReadOrderPaymentComponent } from '@components/read-order-payment/read-order-payment.component';
 import { AuthService } from '@services/auth/auth.service';
 import { ListFrequentTravelerComponent } from '@components/list-frequent-traveler/list-frequent-traveler.component';
-import { CreateFrequentTravelerFormComponent } from '@components/create-frequent-traveler-form/create-frequent-traveler-form.component';
 import { EditPaymentFormComponent } from '@components/edit-payment-form/edit-payment-form.component';
 import { CreatecustomerformComponent } from '@components/create-customer-form/create-customer-form.component';
 import { ListFrequentTravelersToOrdersComponent } from '@components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
@@ -582,9 +580,9 @@ export class PackageEffects {
             tap((action) => {
                 this.dialogRef = this.dialogService.open(CreatecustomerformComponent, {
                     /* Opciones del modal */
-                    header: action['payload'] === undefined ? 'Crear cliente' : 'Editar cliente',
-                    width: '55%',
-                    contentStyle: { overflowY: 'auto' },
+                    showHeader: false,
+                    width: '50%',
+                    contentStyle: { padding: '1.50rem 2.25rem 1.50rem 2.25rem', overflowY: 'auto' },
                 });
             })
         ),
@@ -598,7 +596,7 @@ export class PackageEffects {
         switchMap((customer) => {
             return this.apiService.addCustomer(customer).pipe(
                 mergeMap((customerResolved) => {
-                    this.modalRef.close();
+                    this.dialogRef.close();
                     return [
                         new CreateCustomerSuccess(customerResolved),
                         new GetAllCustomerRequest()
@@ -645,21 +643,6 @@ export class PackageEffects {
             dispatch: false
         });
 
-    createModalTraveler$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER),
-            tap((action) => {
-                this.dialogRef = this.dialogService.open(CreateFrequentTravelerFormComponent, {
-                    /* Opciones del modal */
-                    header: action['payload'] === undefined ? 'Crear frecuentes' : 'Editar frecuentes',
-                    width: '60%',
-                });
-
-            })
-        ),
-        {
-            dispatch: false
-        });
 
     createFrequentTraveler$ = createEffect(() => this.actions$.pipe(
         ofType(FrequentTravelerActions.CREATE_FREQUENTTRAVELER_REQUEST),

@@ -48,7 +48,6 @@ import { CreateUserFormComponent } from '@components/create-user-form/create-use
 import { CreatePaymentFormComponent } from './components/create-payment-form/create-payment-form.component';
 import { ReadOrderOrderDetailComponent } from './components/read-order-order-detail/read-order-order-detail.component';
 import { ReadOrderPaymentComponent } from './components/read-order-payment/read-order-payment.component';
-import { CreateFrequentTravelerFormComponent } from './components/create-frequent-traveler-form/create-frequent-traveler-form.component';
 import { ListFrequentTravelerComponent } from './components/list-frequent-traveler/list-frequent-traveler.component';
 import { EditPaymentFormComponent } from './components/edit-payment-form/edit-payment-form.component';
 import { ListFrequentTravelersToOrdersComponent } from './components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
@@ -131,7 +130,6 @@ registerLocaleData(localeEn, 'en-EN');
     CreatePaymentFormComponent,
     ReadOrderOrderDetailComponent,
     ReadOrderPaymentComponent,
-    CreateFrequentTravelerFormComponent,
     ListFrequentTravelerComponent,
     EditPaymentFormComponent,
     ListFrequentTravelersToOrdersComponent,

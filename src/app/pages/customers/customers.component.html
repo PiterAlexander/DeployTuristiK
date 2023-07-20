@@ -2,100 +2,75 @@
 <div class="p-5">
     <div class="col-12">
         <div class="card px-6 py-6 p-4" style="border-radius: 15px;">
-            <p-table #dt [value]="customersList" [rows]="5" [showCurrentPageReport]="true"
-                [rowsPerPageOptions]="[5, 10]" scrollable="true" [loading]="loading" [paginator]="true"
-                currentPageReportTemplate="Desde {first} hasta {last} de {totalRecords} clientes"
-                [globalFilterFields]="['name', 'lastName', 'document', 'eps', 'phoneNumber']">
-                <ng-template pTemplate="caption" class="p-grid">
-                    <div class="flex justify-content-between flex-column sm:flex-row">
-                        <div class="custom-flex-item-left">
-                            <span class="mt-2 md:mt-0 p-input-icon-right">
-                                <i class="pi pi-search"></i>
-                                <input pInputText (input)="dt.filterGlobal($event.target.value, 'contains')" type="text"
-                                    placeholder="Buscar..." />
-                            </span>
-                        </div>
-                        <div class="p-input-icon-left mb-2">
-                            <button pButton="" pRipple="" label="Registrar cliente" (click)="openModalCreateCustomer()"
-                                class="p-button-outlined"><i class="pi pi-plus"
-                                    style="margin-left: 5px; margin-right: 9px;"></i></button>
-
-                        </div>
+            <p-table #dt [value]="allCustomers" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10]"
+                [showCurrentPageReport]="true" scrollable="true"
+                currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} clientes."
+                [globalFilterFields]="['name', 'lastName', 'document', 'birthDate', 'phoneNumber', 'address', 'eps']">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between">
+                        <span class="mt-2 md:mt-0 p-input-icon-right">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Buscar..." />
+                        </span>
+                        <button pButton p pRipple type="button" label="Registrar cliente" icon="pi pi-plus"
+                            (click)="createCustomer()" class="p-button-outlined"></button>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="min-width: 11rem">
-                            <div class="flex justify-content-left align-items-left">
-                                Nombre completo
-                            </div>
-                        </th>
-                        <th style="min-width: 10rem">
-                            <div class="flex justify-content-left align-items-left">
-                                Documento
-                            </div>
-                        </th>
-                        <th style="min-width: 10rem">
-                            <div class="flex justify-content-left align-items-left">
-                                Fecha de nacimiento
-                            </div>
-                        </th>
-                        <th style="width: 10rem">
-                            <div class="flex justify-content-left align-items-left">
-                                Número
-                            </div>
-                        </th>
-                        <th style="min-width: 10rem">
-                            <div class="flex justify-content-left align-items-left">
-                                Dirección
-                            </div>
-                        </th>
-                        <th style="width: 10rem">
-                            <div class="flex justify-content-left align-items-left">
-                                EPS
-                            </div>
-                        </th>
-                        <th style="width: 15rem">
-                            <div class="flex justify-content-left align-items-left">
-                                Acciones
-                            </div>
+                        <th style="min-width: 12rem">Nombre completo</th>
+                        <th style="min-width: 9rem">Documento</th>
+                        <th style="min-width: 13rem">Fecha de nacimiento</th>
+                        <th style="width: 7rem">Teléfono</th>
+                        <th style="min-width: 15rem">Dirección</th>
+                        <th style="min-width: 9rem">EPS</th>
+                        <th style="min-width: 10rem" alignFrozen="right" pFrozenColumn
+                            class="flex justify-content-center align-items-center">
+                            Acciones
                         </th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-customer>
                     <tr>
-                        <td>
+                        <td style="min-width: 12rem">
                             {{ customer.name + ' ' + customer.lastName }}
                         </td>
-                        <td>
+                        <td style="min-width: 9rem">
                             {{ customer.document }}
                         </td>
-                        <td>
+                        <td style="min-width: 13rem">
                             {{ customer.birthDate | date: 'MM/dd/yyyy' }}
                         </td>
-                        <td>
+                        <td style="min-width: 7rem">
                             {{ customer.phoneNumber }}
                         </td>
-                        <td>
+                        <td style="min-width: 15rem">
                             {{ customer.address }}
                         </td>
-                        <td>
+                        <td style="min-width: 9rem">
                             {{ customer.eps }}
                         </td>
-                        <td class="text-center p-1">
-                            <span><button pButton type="button" icon="pi pi-pencil"
-                                    class="p-button-outlined p-button-warning p-button-rounded m-1"
-                                    (click)="openModalEditCustomer(customer)" pTooltip="Editar"
-                                    tooltipPosition="bottom"></button></span>
-                            <span> <button pButton type="button" icon="pi pi-eye"
-                                    class="p-button-outlined p-button-rounded m-1" pTooltip="Viajeros frecuentes"
-                                    (click)="openModalListTraveler(customer)" tooltipPosition="bottom"></button></span>
+                        <td alignFrozen="right" pFrozenColumn style="min-width: 10rem"
+                            class="flex justify-content-around align-items-center">
+                            <span>
+                                <button pButton pRipple type="button" icon="pi pi-pencil"
+                                    class="p-button-outlined p-button-warning p-button-rounded"
+                                    (click)="editCustomer(customer)" pTooltip="Editar"
+                                    tooltipPosition="bottom"></button>
+                            </span>
+                            <span *ngIf="validateListFrequentTravelersAllowing(customer)">
+                                <button pButton pRipple type="button"
+                                    icon="pi pi-users" class="p-button-outlined p-button-rounded"
+                                    (click)="listFrequentTravelers(customer)" pTooltip="Viajeros frecuentes"
+                                    tooltipPosition="bottom"></button>
+                            </span>
                         </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td colspan="9">No se encontraron clientes</td>
+                        <td colspan="9">No se encontraron clientes.</td>
                     </tr>
                 </ng-template>
             </p-table>

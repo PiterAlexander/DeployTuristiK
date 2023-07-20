@@ -42,14 +42,12 @@ export class ReadOrderPaymentComponent {
     ]
   }
 
-
   validateEditAllowing(payment: Payment): boolean {
     if (payment.status === 0) {
       return true
     }
     return false
   }
-
 
   pushPayments() {
     for (const element of this.order.payment) {

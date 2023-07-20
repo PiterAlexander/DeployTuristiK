@@ -7,7 +7,7 @@
         <p-table *ngIf="visible" #dt [value]="orderDetailCustomers" [paginator]="true" [rows]="3"
             [showCurrentPageReport]="true" scrollable="true" [loading]="loading"
             currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} beneficiarios."
-            [globalFilterFields]="['name', 'lastName', 'document', 'birthDate', 'phoneNumber', 'address', 'eps']">
+            [globalFilterFields]="['name', 'lastName', 'document', 'birthDate', 'phoneNumber', 'address', 'eps', 'unitPrice']">
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between">
                     <span class="mt-2 md:mt-0 p-input-icon-right">

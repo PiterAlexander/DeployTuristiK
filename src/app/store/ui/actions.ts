@@ -541,7 +541,6 @@ export enum customerActions {
   EDIT_CUSTOMER_REQUEST = '[CUSTOMERS] EDIT_CUSTOMER_REQUEST',
   EDIT_CUSTOMER_SUCCESS = '[CUSTOMERS] EDIT_CUSTOMER_SUCCESS',
   EDIT_CUSTOMER_FAILURE = '[CUSTOMERS] EDIT_CUSTOMER_FAILURE',
-
 }
 
 export class GetAllCustomerRequest implements Action {
@@ -558,7 +557,7 @@ export class GetAllCustomerFailure implements Action {
 
 export class OpenModalCreateCustomer implements Action {
   readonly type: string = customerActions.OPEN_MODAL_CREATE_CUSTOMER;
-  constructor(public payload?: Customer) { }
+  constructor(public payload?: any) { }
 }
 export class CreateCustomerRequest implements Action {
   readonly type: string = customerActions.CREATE_CUSTOMER_REQUEST;
@@ -727,43 +726,17 @@ export class UpdateUserFailure implements Action {
 //<--------------------->
 //<--- FREQUENTTRAVELER ACTIONS --->
 export enum FrequentTravelerActions {
-  GET_ALL_FREQUENTTRAVELER_REQUEST = '[FREQUENTTRAVELERS] GET_ALL_FREQUENTTRAVELER__REQUEST',
-  GET_ALL_FREQUENTTRAVELER_SUCCESS = '[FREQUENTTRAVELERS] GET_ALL_FREQUENTTRAVELER__SUCCESS',
-  GET_ALL_FREQUENTTRAVELER_FAILURE = '[FREQUENTTRAVELERS] GET_ALL_FREQUENTTRAVELER__FAILURE',
-
-  OPEN_MODAL_CREATE_FREQUENTTRAVELER = '[FREQUENTTRAVELERS] OPEN_MODAL_CREATE_FREQUENTTRAVELER',
   OPEN_MODAL_LIST_FREQUENTTRAVELER = '[FREQUENTTRAVELERS] OPEN_MODAL_LIST_FREQUENTTRAVELER',
-
 
   CREATE_FREQUENTTRAVELER_REQUEST = '[FREQUENTTRAVELERS] CREATE_FREQUENTTRAVELER_REQUEST',
   CREATE_FREQUENTTRAVELER_SUCCESS = '[FREQUENTTRAVELERS] CREATE_FREQUENTTRAVELER_SUCCESS',
   CREATE_FREQUENTTRAVELER_FAILURE = '[FREQUENTTRAVELERS] CREATE_FREQUENTTRAVELER_FAILURE',
-
-  EDIT_FREQUENTTRAVELER_REQUEST = '[FREQUENTTRAVELERS] EDIT_FREQUENTTRAVELER_REQUEST',
-  EDIT_FREQUENTTRAVELER_SUCCESS = '[FREQUENTTRAVELERS] EDIT_FREQUENTTRAVELER_SUCCESS',
-  EDIT_FREQUENTTRAVELER_FAILURE = '[FREQUENTTRAVELERS] EDIT_FREQUENTTRAVELER_FAILURE',
 
   DELETE_FREQUENTTRAVELER_REQUEST = '[FREQUENTTRAVELERS] DELETE_FREQUENTTRAVELER_REQUEST',
   DELETE_FREQUENTTRAVELER_SUCCESS = '[FREQUENTTRAVELERS] DELETE_FREQUENTTRAVELER_SUCCESS',
   DELETE_FREQUENTTRAVELER_FAILURE = '[FREQUENTTRAVELERS] DELETE_FREQUENTTRAVELER_FAILURE',
 }
 
-export class GetAllFrequentTravelerRequest implements Action {
-  readonly type: string = FrequentTravelerActions.GET_ALL_FREQUENTTRAVELER_REQUEST;
-}
-export class GetAllFrequentTravelerSuccess implements Action {
-  readonly type: string = FrequentTravelerActions.GET_ALL_FREQUENTTRAVELER_SUCCESS;
-  constructor(public payload: Array<FrequentTraveler>) { }
-}
-export class GetAllFrequentTravelerFailure implements Action {
-  readonly type: string = FrequentTravelerActions.GET_ALL_FREQUENTTRAVELER_FAILURE;
-  constructor(public payload: string) { }
-}
-
-export class OpenModalCreateFrequentTraveler implements Action {
-  readonly type: string = FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER;
-  constructor(public payload: Customer) { }
-}
 export class OpenModalListFrequentTraveler implements Action {
   readonly type: string = FrequentTravelerActions.OPEN_MODAL_LIST_FREQUENTTRAVELER;
   constructor(public payload: Customer) { }
@@ -778,20 +751,6 @@ export class CreateFrequentTravelerSuccess implements Action {
 }
 export class CreateFrequentTravelerFailure implements Action {
   readonly type: string = FrequentTravelerActions.CREATE_FREQUENTTRAVELER_FAILURE;
-  constructor(public payload: string) { }
-}
-
-export class EditFrequentTravelerRequest implements Action {
-  readonly type: string = FrequentTravelerActions.EDIT_FREQUENTTRAVELER_REQUEST;
-  constructor(public payload: FrequentTraveler) { }
-}
-export class EditFrequentTravelerSuccess implements Action {
-  readonly type: string = FrequentTravelerActions.EDIT_FREQUENTTRAVELER_SUCCESS;
-  readonly string = FrequentTravelerActions.OPEN_MODAL_CREATE_FREQUENTTRAVELER;
-  constructor(public payload: any) { }
-}
-export class EditFrequentTravelerFailure implements Action {
-  readonly type: string = FrequentTravelerActions.EDIT_FREQUENTTRAVELER_FAILURE;
   constructor(public payload: string) { }
 }
 
@@ -921,9 +880,6 @@ export type UiAction =
   | CreateFrequentTravelerRequest
   | CreateFrequentTravelerSuccess
   | CreateFrequentTravelerFailure
-  | EditFrequentTravelerRequest
-  | EditFrequentTravelerSuccess
-  | EditFrequentTravelerFailure
   | DeleteFrequentTravelerRequest
   | DeleteFrequentTravelerFailure
   | DeleteFrequentTravelerSuccess

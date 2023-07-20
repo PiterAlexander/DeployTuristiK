@@ -29,7 +29,7 @@ export class ReadOrderOrderDetailComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private modalPrimeNg: DynamicDialogRef,
-    private confirmationService: ConfirmationService,
+    private confirmationService: ConfirmationService
   ) { }
 
   ngOnInit(): void {
@@ -46,7 +46,7 @@ export class ReadOrderOrderDetailComponent implements OnInit {
   compareCustomerId() {
     for (const element of this.order.orderDetail) {
       const customer: Customer = this.allCustomers.find(c => c.customerId === element.beneficiaryId)
-      if (customer != undefined) {
+      if (customer !== undefined) {
         const orderDetailCustomer: any = {
           customerId: customer.customerId,
           name: customer.name,
@@ -72,18 +72,6 @@ export class ReadOrderOrderDetailComponent implements OnInit {
     setTimeout(() => this.visible = true, 0);
   }
 
-  validateEditAllowing(beneficiarie: any): boolean {
-    if (this.allRoles !== undefined) {
-      const role = this.allRoles.find(r => r.roleId === beneficiarie.user.roleId)
-      if (role !== undefined) {
-        if (role.name !== 'Cliente') {
-          return true
-        }
-      }
-    }
-    return false
-  }
-
   closeModal() {
     this.modalPrimeNg.close()
   }
@@ -103,8 +91,20 @@ export class ReadOrderOrderDetailComponent implements OnInit {
         order: this.order,
         beneficiaries: {}
       }]
-      this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess))
+      this.store.dispatch(new OpenModalCreateOrderDetail({ ...orderProcess }))
     }
+  }
+
+  validateEditAllowing(customer: any): boolean {
+    if (this.allRoles !== undefined) {
+      const role = this.allRoles.find(r => r.roleId === customer.user.roleId)
+      if (role !== undefined) {
+        if (role.name === 'Beneficiario') {
+          return true
+        }
+      }
+    }
+    return false
   }
 
   editOrderDetail(customer: Customer) {
@@ -116,27 +116,25 @@ export class ReadOrderOrderDetailComponent implements OnInit {
       order: this.order
     }]
     this.modalPrimeNg.close()
-    this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess))
+    this.store.dispatch(new OpenModalCreateOrderDetail({ ...orderProcess }))
   }
 
   deleteOrderDetail(customer: Customer) {
     this.confirmationService.confirm({
+      header: '¿Estás seguro de eliminar a ' + customer.name + ' ' + customer.lastName + '?',
       message: 'Ten en cuenta que el precio del pedido no cambiará y no se hará un reembolso por el beneficiario.',
-      header: '¿Estás seguro de eliminar a ' + customer.name + ' ' + customer.lastName + '?', // Cambia el encabezado del cuadro de confirmación
-      icon: 'pi pi-exclamation-triangle', // Cambia el icono del cuadro de confirmación
-      acceptLabel: 'Aceptar', // Cambia el texto del botón de aceptar
-      rejectLabel: 'Cancelar', // Cambia el texto del botón de rechazar
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Aceptar',
+      rejectLabel: 'Cancelar',
       rejectIcon: 'pi pi-times',
       acceptIcon: 'pi pi-check',
-      acceptButtonStyleClass: 'p-button-primary p-button-sm', // Agrega una clase CSS al botón de aceptar
-      rejectButtonStyleClass: 'p-button-outlined p-button-sm', // Agrega una clase CSS al botón de rechazar
+      acceptButtonStyleClass: 'p-button-primary p-button-sm',
+      rejectButtonStyleClass: 'p-button-outlined p-button-sm',
       accept: () => {
         const orderDetail: OrderDetail = this.order.orderDetail.find(od => od.beneficiaryId === customer.customerId)
         if (orderDetail !== undefined) {
           this.store.dispatch(new DeleteOrderDetailRequest({ ...orderDetail }))
         }
-        // Lógica para confirmar
-        // this.store.dispatch(new DeleteRoleRequest(role));
       }
     })
   }

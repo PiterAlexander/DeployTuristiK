@@ -7,11 +7,6 @@ import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { Customer } from '@/models/customer';
 
-interface State {
-  page: number;
-  pageSize: number;
-}
-
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
@@ -20,26 +15,21 @@ interface State {
 
 export class OrdersComponent implements OnInit {
   public ui: Observable<UiState>;
-  public allOrders: Array<Order>
-  public ordersList: Array<Order> = []
-  public filteredOrdersList: Array<Order>;
-  public loading: boolean = true
-  public visible: boolean = true
-  public search: string
-  public total: number
-  public user: any
   public role: any
+  public user: any
   public allCustomers: Array<Customer>
   public oneCustomer: Customer
+  public allOrders: Array<Order>
+  public ordersList: Array<Order> = []
   public statuses: any[] = [];
-  public hasBeenSend: boolean = false
+  public loading: boolean = true
 
   constructor(
     private store: Store<AppState>
   ) { }
 
   ngOnInit() {
-    this.store.dispatch(new GetAllOrdersRequest())
+    this.store.dispatch(new GetAllOrdersRequest)
     this.store.dispatch(new GetAllCustomerRequest)
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
@@ -73,20 +63,8 @@ export class OrdersComponent implements OnInit {
       } else if (this.user['role'] !== 'Cliente') {
         this.ordersList = this.allOrders
         this.loading = false
-        //   for (const element of this.allOrders) {
-        //     if (element !== undefined) {
-        //       this.ordersList.push(element)
-        //     }
-        //   }
-        // this.updateVisibility()
       }
     }
-  }
-
-  updateVisibility(): void {
-    this.loading = false
-    this.visible = false;
-    setTimeout(() => this.visible = true, 0)
   }
 
   showStatus(OrderStatus: any): string {
@@ -97,17 +75,15 @@ export class OrdersComponent implements OnInit {
     }
   }
 
-  createOrder() {
+  create() {
     this.store.dispatch(new OpenModalCreateOrder());
   }
 
   sendToOrderDetails(order: Order) {
-    this.hasBeenSend = true
-    this.store.dispatch(new OpenModalOrderDetails(order))
+    this.store.dispatch(new OpenModalOrderDetails({ ...order }))
   }
 
   sendToPayments(order: Order) {
-    this.hasBeenSend = true
-    this.store.dispatch(new OpenModalPayments(order))
+    this.store.dispatch(new OpenModalPayments({ ...order }))
   }
 }
