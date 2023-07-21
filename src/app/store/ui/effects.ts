@@ -632,9 +632,9 @@ export class PackageEffects {
                 this.dialogRef = this.dialogService.open(ListFrequentTravelerComponent, {
                     /* Opciones del modal */
                     // header: action['payload'] === undefined ? 'Viajeros frecuentes' : 'Viajeros frecuentes',
+                    width: '60%',
                     contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
                     showHeader: false,
-                    width: '60%',
                 });
 
             })
@@ -701,8 +701,10 @@ export class PackageEffects {
             tap((action) => {
                 this.dialogRef = this.dialogService.open(CreateEmployeeFormComponent, {
                     /* Opciones del modal */
-                    header: action['payload'] === undefined ? 'Registrar empleado' : 'Editar empleado',
+                    // header: action['payload'] === undefined ? 'Registrar empleado' : 'Editar empleado',
                     width: '60%',
+                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
+                    showHeader: false,
                 });
             })
         ), { dispatch: false });
@@ -779,7 +781,7 @@ export class PackageEffects {
                 this.dialogRef = this.dialogService.open(CreateUserFormComponent, {
                     /* Opciones del modal */
                     header: action['payload'] === undefined ? 'Registrar Usuario' : 'Editar Usuario',
-                    width: '45%',
+                    width: '55%',
                     contentStyle: { overflowY: 'auto' },
                 })
             })
