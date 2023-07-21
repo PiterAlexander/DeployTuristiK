@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { Customer } from '@/models/customer';
+import { SelectItem } from 'primeng/api';
 
 @Component({
   selector: 'app-orders',
@@ -46,6 +47,7 @@ export class OrdersComponent implements OnInit {
       { 'label': 'Pagado', 'code': 2 },
       { 'label': 'Cancelado', 'code': 3 }
     ]
+
   }
 
   compareCustomer() {
@@ -85,5 +87,12 @@ export class OrdersComponent implements OnInit {
 
   sendToPayments(order: Order) {
     this.store.dispatch(new OpenModalPayments({ ...order }))
+  }
+
+  //CUSTOMER
+
+
+  onFilter(event: Event) {
+    // dv.filter((event.target as HTMLInputElement).value);
   }
 }

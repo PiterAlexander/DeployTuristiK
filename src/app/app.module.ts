@@ -89,6 +89,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { BadgeModule } from 'primeng/badge';
 import { ChartModule } from 'primeng/chart';
 
+
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
 
@@ -157,7 +158,6 @@ registerLocaleData(localeEn, 'en-EN');
     FileUploadModule,
     ButtonModule,
     CardModule,
-    DataViewModule,
     BrowserModule,
     StoreModule.forRoot({ auth: authReducer, ui: uiReducer }),
     EffectsModule.forRoot([PackageEffects]),
@@ -188,6 +188,7 @@ registerLocaleData(localeEn, 'en-EN');
     ConfirmPopupModule,
     BadgeModule,
     ChartModule,
+    DataViewModule,
 
     //<------------------------->
     ToastrModule.forRoot({

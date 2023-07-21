@@ -35,7 +35,8 @@
                     <th pSortableColumn="status" style="min-width: 8rem">
                         Estado <p-sortIcon field="status"></p-sortIcon>
                     </th>
-                    <th style="min-width: 7rem" alignFrozen="right" pFrozenColumn class="flex justify-content-center">
+                    <th *ngIf="user['role'] !== 'Cliente'" style="min-width: 7rem" alignFrozen="right" pFrozenColumn
+                        class="flex justify-content-center">
                         Editar
                     </th>
                 </tr>
@@ -54,14 +55,14 @@
                     <td style="min-width: 10rem">
                         <span>
                             <button pButton pRipple type="button" icon="pi pi-eye"
-                                class="p-button-outlined p-button-rounded" (click)="editPayment(payment)"
-                                pTooltip="Ver comprobante" tooltipPosition="bottom"></button>
+                                class="p-button-outlined p-button-rounded" pTooltip="Ver comprobante"
+                                tooltipPosition="bottom"></button>
                         </span>
                     </td>
                     <td style="min-width: 8rem">
                         <span [class]="'payment-badge status-' + payment.status">{{showStatus(payment.status)}}</span>
                     </td>
-                    <td alignFrozen="right" pFrozenColumn style="min-width: 7rem"
+                    <td *ngIf="user['role'] !== 'Cliente'" alignFrozen="right" pFrozenColumn style="min-width: 7rem"
                         class="flex justify-content-around align-items-center">
                         <span>
                             <button *ngIf="validateEditAllowing(payment)" pButton pRipple type="button"
