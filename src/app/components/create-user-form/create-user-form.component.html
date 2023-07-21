@@ -1,318 +1,304 @@
 <div class="modal-body">
     <div class="container-fluid">
-        <form
-            class="needs-validation"
-            novalidate
-            id="form"
-            (submit)="saveChanges()"
-            [formGroup]="formGroup"
-        >
+        <form class="needs-validation" novalidate id="form" (submit)="saveChanges()" [formGroup]="formGroup">
             <div class="card-body d-flex">
                 <div class="w-100 p-2">
-                    <div class="row">
-                        <input
-                            type="text"
-                            name="userId"
-                            id="userId"
-                            hidden
-                            class="form-control formularioCampo border-left-dark"
-                            formControlName="userId"
-                        />
-                        
+                    <div class="grid">
+                        <input type="text" name="userId" id="userId" hidden
+                            class="form-control formularioCampo border-left-dark" formControlName="userId" />
 
-                        <div class="form-group col-5">
-                            <label for="role" class="form-label">Rol</label>
-                            <div class="input-group">
-                                <select
-                                    class="custom-select border-left-dark form-control formularioCampo"
-                                    id="role"
-                                    name="role"
-                                    formControlName="role"
-                                    placeholder="Seleccione un rol"
-                                    (change)="addForm()"
-                                >
-                                    <option selected disabled value="0">
-                                        Seleccione un rol
-                                    </option>
-                                    <option
-                                        *ngFor="let role of rolesList"
-                                        [value]="role.roleId"
-                                    >
-                                        {{ role.name }}
-                                    </option>
-                                </select>
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"
-                                        ><i class="fas fa-user-cog"></i
-                                    ></span>
-                                </div>
-                                <div class="invalid-feedback">
-                                    Por favor seleccione una opción.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-6">
-                            <label for="email" class="form-label">Correo</label>
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                class="form-control formularioCampo border-left-dark"
-                                placeholder="Ingrese el Correo"
-                                formControlName="email"
-                                onkeydown="return /[a-z,0-9,.,@]/i.test(event.key)"
-                            />
-                            <div class="invalid-feedback">
-                                En este campo solo se permiten letras
-                            </div>
-                        </div>
+                        <div class="col-6">
+                            <div class="field ">
+                                <label for="role" class="form-label">Rol</label>
+                                <div class="input-group">
+                                    <!-- <select class="custom-select border-left-dark form-control formularioCampo"
+                                        id="role" name="role" formControlName="role" placeholder="Seleccione un rol"
+                                        (change)="addForm()">
+                                        <option selected disabled value="0">
+                                            Seleccione un rol
+                                        </option>
+                                        <option *ngFor="let role of rolesList" [value]="role.roleId">
+                                            {{ role.name }}
+                                        </option>
+                                    </select> -->
+                                    <div [style]="{width: '15.4rem'}">
+                                        <p-dropdown [options]="rolesList" optionLabel="name" optionValue="roleId"
+                                            placeholder="Seleccione el rol" required="true" formControlName="role"
+                                            id="role"
+                                            (click)="addForm()"></p-dropdown>
+                                    </div>
 
-                        <div class="form-group col-5">
-                            <label for="password" class="form-label"
-                                >Contraseña</label
-                            >
-                            <input
-                                type="password"
-                                id="password"
-                                name="password"
-                                class="form-control formularioCampo border-left-dark"
-                                placeholder="Ingrese la contraseña"
-                                formControlName="password"
-                                onkeydown="return /[a-z,0-9,A-Z ]/i.test(event.key)"
-                            />
-                            <div class="invalid-feedback">
-                                En este campo solo se permiten letras
+                                    <div class="invalid-feedback">
+                                        Por favor seleccione una opción.
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row" *ngIf="this.userData != null">
-                        <div class="form-group col-6">
-                            <label for="status" class="form-label"
-                                >Estado</label
-                            >
-                            <div class="input-group">
-                                <select
-                                    class="custom-select border-left-dark form-control formularioCampo"
-                                    id="status"
-                                    name="status"
-                                    formControlName="status"
-                                    placeholder="Seleccione un estado"
-                                >
-                                    <option selected disabled value="0">
-                                        Seleccione un estado
-                                    </option>
-                                    <option value="1">Activo</option>
-                                    <option value="2">Inactivo</option>
-                                </select>
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"
-                                        ><i class="fas fa-user-cog"></i
-                                    ></span>
-                                </div>
-                                <div class="invalid-feedback">
-                                    Por favor seleccione una opción.
+                        <div class="col" *ngIf="this.userData != null">
+                            <div class="field">
+                                <label for="status" class="form-label">Estado</label>
+                                <div class="input-group">
+                                    <select class="custom-select border-left-dark form-control formularioCampo"
+                                        id="status" name="status" formControlName="status"
+                                        placeholder="Seleccione un estado">
+                                        <option selected disabled value="0">
+                                            Seleccione un estado
+                                        </option>
+                                        <option value="1">Activo</option>
+                                        <option value="2">Inactivo</option>
+                                    </select>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user-cog"></i></span>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Por favor seleccione una opción.
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="grid">
+                        <div class="col">
+                            <div class="field">
+                                <label for="email" class="form-label">Correo</label>
+                                <div class="input-group">
+                                    <div class="p-input-icon-left w-full">
+                                        <i class="pi pi-at"></i>
+                                        <input pInputText placeholder="Ingrese su correo electronico" type="text"
+                                            formControlName="email" required="true" minlength="10" maxlength="30"
+                                            class="w-full">
+                                    </div>
+                                    <small class="p-error block"
+                                        *ngIf="formGroup.get('email')?.errors?.['required'] && formGroup.get('email').dirty">
+                                        Este campo es obligatorio.
+                                    </small>
+                                    <!-- <small class="p-error block"
+                                        *ngIf="formGroup.get('email').dirty && validateExistingEmail()">
+                                        El correo ya existe.
+                                    </small> -->
+                                    <small class="p-error block"
+                                        *ngIf="formGroup.get('email')?.errors?.['pattern'] && formGroup.get('email').dirty">
+                                        Ingrese un correo valido.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="field">
+                                <label for="password" class="form-label">Contraseña</label>
+                                <div class="input-group">
+
+                                    <div class="p-input-icon-right w-full">
+                                        <i (click)="displayPassword()" class="pi" [ngClass]="{
+                                            'pi-eye': Visible,
+                                            'pi-eye-slash': !Visible
+                                        }"></i>
+                                        <input pInputText placeholder="Ingrese su contraseña" [type]="
+                                            Visible
+                                                ? 'text'
+                                                : 'password'
+                                        " formControlName="password" required="true" minlength="8" maxlength="30"
+                                            onkeydown="return /[a-z A-Z .*- 0-9]/i.test(event.key)" class="w-full" />
+                                    </div>
+                                    <small class="p-error block"
+                                        *ngIf="formGroup.get('password')?.errors?.['required'] && formGroup.get('password').dirty">
+                                        Este campo es obligatorio.
+                                    </small>
+                                    <small class="p-error block"
+                                        *ngIf="formGroup.get('password')?.errors?.['minlength'] && formGroup.get('password').dirty">
+                                        La contraseña debe tener mínimo 8 caracteres.
+                                    </small>
+                                    <small class="p-error block"
+                                        *ngIf="formGroup.get('password')?.errors?.['maxlength'] && formGroup.get('password').dirty">
+                                        La contraseña no debe exceder los 30 caracteres.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div *ngIf="this.userData == null && admin != null">
-                        <div class="row">
-                            <div class="form-group col-6">
-                                <label for="name" class="form-label"
-                                    >Nombre</label
-                                >
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    class="form-control formularioCampo border-left-dark"
-                                    placeholder="Ingrese el Nombre"
-                                    formControlName="name"
-                                    onkeydown="return /[a-z,A-Z, ]/i.test(event.key)"
-                                />
-                                <div class="invalid-feedback">
-                                    En este campo solo se permiten letras
+                        <div class="grid">
+                            <div class="col">
+                                <div class="field">
+                                    <label for="name" class="block">Nombre</label>
+                                    <input pInputText placeholder="Ingrese su nombre" type="text" formControlName="name"
+                                        required="true" minlength="3" maxlength="20" class="w-full"
+                                        onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
+                                    <!-- validaciones del nombre -->
+                                    <small class="p-error block"
+                                        *ngIf="formGroup.get('name').dirty && formGroup.get('name')?.errors?.['required']">
+                                        Este campo es obligatorio.
+                                    </small>
+                                    <small class="p-error block"
+                                        *ngIf="formGroup.get('name')?.errors?.['minlength'] && formGroup.get('name').dirty">
+                                        Este campo debe contener al menos 3 letras.
+                                    </small>
                                 </div>
                             </div>
-
-                            <div class="form-group col-5">
-                                <label for="lastName" class="form-label"
-                                    >Apellidos</label
-                                >
-                                <input
-                                    type="text"
-                                    id="lastName"
-                                    name="lastName"
-                                    class="form-control formularioCampo border-left-dark"
-                                    placeholder="Ingrese los apellidos"
-                                    formControlName="lastName"
-                                    onkeydown="return /[a-z, ,A-Z ]/i.test(event.key)"
-                                />
-                                <div class="invalid-feedback">
-                                    En este campo solo se permiten letras
+                            <div class="col">
+                                <div class="field">
+                                    <label for="lastName" class="form-label">Apellido</label>
+                                    <div class="input-group">
+                                        <input pInputText placeholder="Ingrese su apellido" type="text"
+                                            formControlName="lastName" required="true" minlength="3" maxlength="20"
+                                            class="w-full"
+                                            onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
+                                        <!-- validacion de apellidos -->
+                                        <small class="p-error block"
+                                            *ngIf="formGroup.get('lastName').dirty && formGroup.get('lastName')?.errors?.['required']">
+                                            Este campo es obligatorio.
+                                        </small>
+                                        <small class="p-error block"
+                                            *ngIf="formGroup.get('lastName')?.errors?.['minlength'] && formGroup.get('lastName').dirty">
+                                            Este campo debe contener al menos 3 letras.
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="form-group col-6">
-                                <label for="identification" class="form-label"
-                                    >Documento</label
-                                >
-                                <input
-                                    type="text"
-                                    id="identification"
-                                    name="identification"
-                                    class="form-control formularioCampo border-left-dark"
-                                    placeholder="Ingrese la identificación"
-                                    formControlName="identification"
-                                    onkeydown="return /[A-Z,0-9]/i.test(event.key)"
-                                />
-                                <div class="invalid-feedback">
-                                    En este campo solo se permiten letras
+                        <div class="grid">
+                            <div class="col">
+                                <div class="field">
+                                    <label for="document" class="form-label">Documento</label>
+                                    <div class="input-group">
+                                        <div class="p-input-icon-left w-full">
+                                            <i class="pi pi-id-card"></i>
+                                            <input pInputText placeholder="Ingrese el número de documento" type="text"
+                                                formControlName="document" required="true" minlength="8" maxlength="15"
+                                                class="w-full"
+                                                onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
+                                        </div>
+                                        <!-- validacion de documento -->
+
+                                        <small class="p-error block"
+                                            *ngIf="formGroup.get('document').dirty && formGroup.get('document')?.errors?.['required']">
+                                            Este campo es obligatorio.
+                                        </small>
+                                        <small class="p-error block"
+                                            *ngIf="formGroup.get('document')?.errors?.['minlength'] && formGroup.get('document').dirty">
+                                            El documento debe tener mínimo 8 caracteres.
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="form-group col-5">
-                                <label for="lastName" class="form-label"
-                                    >Teléfono</label
-                                >
-                                <input
-                                    type="number"
-                                    id="phone"
-                                    name="phone"
-                                    class="form-control formularioCampo border-left-dark"
-                                    placeholder="Ingrese los apellidos"
-                                    formControlName="phone"
-                                />
-                                <div class="invalid-feedback">
-                                    En este campo solo se permiten letras
+                            <div class="col">
+                                <div class="field">
+                                    <label for="phoneNumber" class="form-label">Número de teléfono</label>
+                                    <div class="input-group">
+                                        <div class="p-input-icon-left w-full">
+                                            <i class="pi pi-phone"></i>
+                                            <input pInputText placeholder="Ingrese el número" type="text"
+                                                formControlName="phoneNumber" required="true" minlength="10"
+                                                maxlength="20" class="w-full"
+                                                onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
+                                        </div>
+                                        <!-- validaciones de número -->
+                                        <small class="p-error block"
+                                            *ngIf="formGroup.get('phoneNumber')?.errors?.['required'] && formGroup.get('phoneNumber').dirty">
+                                            Este campo es obligatorio
+                                        </small>
+                                        <small class="p-error block"
+                                            *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber').dirty">
+                                            El número debe tener mínimo 10 caracteres.
+                                        </small>
+                                        <small class="p-error block"
+                                            *ngIf="formGroup.get('phoneNumber')?.errors?.['maxlength'] && formGroup.get('phoneNumber').dirty">
+                                            El número no debe exceder los 20 caracteres.
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div *ngIf="admin == 2">
-                            <div class="row">
-                                <div class="form-group col-6">
-                                    <label for="birthDate" class="form-label"
-                                        >Fecha de Nacimiento</label
-                                    >
-                                    <input
-                                        type="date"
-                                        id="birthDate"
-                                        name="birthDate"
-                                        class="form-control formularioCampo border-left-dark"
-                                        placeholder="Ingrese la fecha de nacimiento"
-                                        formControlName="birthDate"
-                                    />
-                                    <div class="invalid-feedback">
-                                        En este campo solo se permiten letras
-                                    </div>
-                                </div>
-                                <div class="form-group col-5">
-                                    <label for="address" class="form-label"
-                                        >Dirección de Residencia</label
-                                    >
-                                    <input
-                                        type="text"
-                                        id="address"
-                                        name="address"
-                                        class="form-control formularioCampo border-left-dark"
-                                        placeholder="Ingrese la dirección de residencia"
-                                        formControlName="address"
-                                        onkeydown="return /[A-Z,0-9,#,-,()]/i.test(event.key)"
-                                    />
-                                    <div class="invalid-feedback">
-                                        En este campo solo se permiten letras
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-6">
-                                    <label for="eps" class="form-label"
-                                        >EPS</label
-                                    >
-                                    <div class="input-group">
-                                        <select
-                                            class="custom-select border-left-dark form-control formularioCampo"
-                                            id="eps"
-                                            name="eps"
-                                            formControlName="eps"
-                                            placeholder="Seleccione una EPS"
-                                            (change)="addForm()"
-                                        >
-                                            <option selected disabled value="0">
-                                                Seleccione un rol
-                                            </option>
-                                            <option
-                                                *ngFor="let eps of allEps"
-                                                [value]="eps"
-                                            >
-                                                {{ eps }}
-                                            </option>
-                                        </select>
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"
-                                                ><i class="fas fa-user-cog"></i
-                                            ></span>
+                            <div class="grid">
+                                <div class="col-4">
+                                    <div class="field">
+                                        <label for="birthDate" class="form-label">Fecha de nacimiento</label>
+                                        <div class="p-input-icon-left w-full">
+                                            <p-calendar dateFormat="dd/mm/yy" formControlName="birthDate"
+                                                placeholder="Fecha de nacimiento" showIcon="true" [required]="true"
+                                                class="calendar" class="w-full"></p-calendar>
                                         </div>
-                                        <div class="invalid-feedback">
-                                            Por favor seleccione una opción.
+
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="field">
+                                        <label for="address" class="form-label">Dirección</label>
+                                        <div class="input-group">
+
+                                            <input pInputText placeholder="Ingrese su dirección" type="text"
+                                                formControlName="address" required="true" minlength="10" maxlength="30"
+                                                class="w-full">
+
+                                            <small class="p-error block"
+                                                *ngIf="formGroup.get('address')?.errors?.['required'] && formGroup.get('address').dirty">
+                                                Este campo es obligatorio.
+                                            </small>
+                                            <small class="p-error block"
+                                                *ngIf="formGroup.get('address')?.errors?.['minlength'] && formGroup.get('address').dirty">
+                                                La dirección debe tener mínimo 10 caracteres.
+                                            </small>
+
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group col-5" *ngIf="otraEps">
-                                    <label for="otherEps" class="form-label"
-                                        >¿Cuál?</label
-                                    >
-                                    <input
-                                        type="text"
-                                        id="otherEps"
-                                        name="otherEps"
-                                        class="form-control formularioCampo border-left-dark"
-                                        placeholder="Ingrese la dirección de residencia"
-                                        formControlName="otherEps"
-                                        onkeydown="return /[A-Z,.-]/i.test(event.key)"
-                                    />
-                                    <div class="invalid-feedback">
-                                        En este campo solo se permiten letras
+                                <div class="col-4">
+                                    <div class="field ">
+                                        <label for="eps" class="block">EPS</label>
+                                        <div class="p-input-icon-left ">
+                                            <i class="pi pi-sun"></i>
+                                            <p-dropdown [options]="allEps" placeholder="Seleccione su EPS"
+                                                required="true" formControlName="eps" class="w-full"
+                                                [style]="{ width: '14rem' }"></p-dropdown>
+                                        </div>
+                                        <small class="p-error block"
+                                            *ngIf="formGroup.get('eps').errors?.['required'] && formGroup.get('eps').dirty">
+                                            Este campo es obligatorio.
+                                        </small>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card-footer d-flex justify-content-end">
-                <div class="row">
+            <div class="card-footer d-flex justify-content-end surface-0">
+                <div class="grid">
                     <div class="col">
-                        <button
-                            (click)="cancel()"
-                            type="button"
-                            id="cancelButton"
-                            class="btn btn-danger"
-                        >
-                            Cancelar
-                        </button>
+                        <button pbutton="" label="Clear" icon="pi pi-times" (click)="cancel()" id="cancelButton"
+                            style="border-color: #6366F1;" type="button"
+                            class="p-element p-button-outlined mb-2 p-button p-component text-indigo-300"
+                            ng-reflect-label="Clear" ng-reflect-icon="pi pi-times"><span
+                                class="p-button-icon p-button-icon-left pi pi-times" aria-hidden="true"></span><span
+                                class="p-button-label">Cancelar</span></button>
+
+
                     </div>
                     <div class="col">
-                        <button
-                            *ngIf="validForm()"
-                            type="submit"
-                            id="saveButton"
-                            class="btn btn-success"
-                        >
-                            Guardar
-                        </button>
-                        <button
-                            *ngIf="!validForm()"
-                            type="submit"
-                            id="saveButton"
-                            class="btn btn-secondary"
-                            disabled
-                        >
-                            Guardar
-                        </button>
+                        <button pbutton="" pripple="" type="button" *ngIf="!validForm()"
+                            style="background-color: #6366F1; border-color: #6366F1;" type="submit" id="saveButton"
+                            label="Save" icon="pi pi-check" ptooltip="Clic para guardar"
+                            class="p-element p-ripple p-button p-component" ng-reflect-text="Clic para guardar"
+                            ng-reflect-label="Save" ng-reflect-icon="pi pi-check" fdprocessedid="x7i42q">
+                            <span class="p-button-icon p-button-icon-left pi pi-check" aria-hidden="true">
+                            </span>
+                            <span class="p-button-label">Guardar</span>
+                            <span class="p-ink"></span></button>
+
+                        <!-- Button to valid form -->
+                        <button pbutton="" pripple="" type="button" *ngIf="validForm()"
+                            style="background-color: #6366F1; border-color: #6366F1;" type="submit" id="saveButton"
+                            label="Save" icon="pi pi-check" ptooltip="Clic para guardar"
+                            class="p-element p-ripple p-button p-component" ng-reflect-text="Clic para guardar"
+                            ng-reflect-label="Save" ng-reflect-icon="pi pi-check" fdprocessedid="x7i42q">
+                            <span class="p-button-icon p-button-icon-left pi pi-check" aria-hidden="true">
+                            </span>
+                            <span class="p-button-label">Guardar</span>
+                            <span class="p-ink"></span></button>
                     </div>
                 </div>
             </div>

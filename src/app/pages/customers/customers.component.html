@@ -25,64 +25,52 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="min-width: 11rem">
-                            <div class="flex justify-content-left align-items-left">
-                                Nombre completo
-                            </div>
+                        <th style="min-width: 14rem">
+                            Nombre completo 
                         </th>
                         <th style="min-width: 10rem">
-                            <div class="flex justify-content-left align-items-left">
-                                Documento
-                            </div>
+                            Documento 
+                        </th>
+                        <th style="min-width: 15rem">
+                            Fecha de nacimiento 
+                        </th>
+                        <th style="width: 8rem">
+                            Teléfono 
+                        </th>
+                        <th style="min-width: 15rem">
+                            Dirección 
                         </th>
                         <th style="min-width: 10rem">
-                            <div class="flex justify-content-left align-items-left">
-                                Fecha de nacimiento
-                            </div>
+                            EPS 
                         </th>
-                        <th style="width: 10rem">
-                            <div class="flex justify-content-left align-items-left">
-                                Número
-                            </div>
-                        </th>
-                        <th style="min-width: 10rem">
-                            <div class="flex justify-content-left align-items-left">
-                                Dirección
-                            </div>
-                        </th>
-                        <th style="width: 10rem">
-                            <div class="flex justify-content-left align-items-left">
-                                EPS
-                            </div>
-                        </th>
-                        <th style="width: 15rem">
-                            <div class="flex justify-content-left align-items-left">
-                                Acciones
-                            </div>
+                        <th style="min-width: 10rem" alignFrozen="right" pFrozenColumn
+                            class="flex justify-content-center align-items-center">
+                            Acciones
                         </th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-customer>
                     <tr>
-                        <td>
+                        <td style="min-width: 14rem">
                             {{ customer.name + ' ' + customer.lastName }}
                         </td>
-                        <td>
+                        <td style="min-width: 10rem">
                             {{ customer.document }}
                         </td>
-                        <td>
+                        <td style="min-width: 15rem">
                             {{ customer.birthDate | date: 'MM/dd/yyyy' }}
                         </td>
-                        <td>
+                        <td style="min-width: 8rem">
                             {{ customer.phoneNumber }}
                         </td>
-                        <td>
+                        <td style="min-width: 15rem">
                             {{ customer.address }}
                         </td>
-                        <td>
+                        <td style="min-width: 10rem">
                             {{ customer.eps }}
                         </td>
-                        <td class="text-center p-1">
+                        <td alignFrozen="right" pFrozenColumn style="min-width: 10rem"
+                            class="flex justify-content-around align-items-center">
                             <span><button pButton type="button" icon="pi pi-pencil"
                                     class="p-button-outlined p-button-warning p-button-rounded m-1"
                                     (click)="openModalEditCustomer(customer)" pTooltip="Editar"
