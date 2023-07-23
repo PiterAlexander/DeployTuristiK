@@ -1,98 +1,281 @@
-<div class="modal-header">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-11">
-                <h3 class="modal-title padding-extra mt-2">{{packageData.name}} - {{packageData.destination}}</h3>
-            </div>
-            <div class="col-1">
-                <div class="col-1 pl-0">
-                    <div class="hover-text btn btn-secondary">
-                        <p class="p-0 m-0" *ngIf="packageData.type == true">Privado</p>
-                        <p class="p-0 m-0" *ngIf="packageData.type == false">Publico</p><i
-                            *ngIf="packageData.type == true" class="fas fa-lock"></i>
-                        <i *ngIf="packageData.type == false" class="fas fa-lock-open"></i>
+<div class="mt-4" style="width: 90%; margin-left: auto; margin-right: auto;">
+
+    <div class="card p-5" style="box-shadow: 0px 4px 30px rgba(221, 224, 255, .54); border-radius: 25px;">
+        <div class="grid mb-7">
+            <div class="col-12 lg:col-7">
+                <div class="flex">
+                    <div class="flex flex-column w-2 justify-content-between" style="row-gap: 1rem;">
+                        <img *ngFor="let image of images; let i = index"
+                            [ngClass]="{'border-primary': selectedImageIndex === i}" src="{{image}}"
+                            class="w-full cursor-pointer border-2 border-transparent transition-colors transition-duration-150 border-round"
+                            (click)="selectedImageIndex = i" />
+                    </div>
+                    <div class="pl-3 w-10 flex">
+                        <img src="{{images[selectedImageIndex]}}"
+                            class="w-full border-2 border-transparent border-round" />
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-<div class="modal-body ">
-    <div class="container-fluid">
-        <div class="col-12 card-body d-flex">
-            <div class="card mb-3">
-                <div class="row">
-                    <div class="col-6">
-                        <div class="row" style="justify-content: center;">
-                            <div class="col-12 img-details">
-                                <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0d/b9/ed/93/piedra-del-penol.jpg?w=700&h=500&s=1"
-                                    class="rounded-start" alt="...">
-                            </div>
-                        </div>
+            <div class="col-12 lg:col-5 py-3 lg:pl-4 lg:pr-5">
 
+                <div class="flex align-items-center text-xl justify-content-between  text-900 mb-4">
+                    <h1>{{pack.name}}</h1>
+                </div>
+                <span class="text-900 font-medium text-3xl block"></span><span class="ml-0 mr-2 text-lg">Con destino a
+                </span>
+                <span class="text-lg"><b class="text-900 mr-1">{{pack.destination}}</b><span
+                        class="text-500"></span></span>
+                <div class="flex align-items-center justify-content-between mb-2 mt-4">
+                    <div>
+                        <div><small class="text-lg"><b class="text-900 mr-1 text-500">Desde</b></small></div>
                     </div>
-                    <div class="col-6 p-4">
-                        <div class="row">
-                            <div class="col-11 p-0">
-                                <fieldset>
-                                    <legend>
-                                        <p class="h5 pt-2 ml-0">Descripción:</p>
-                                    </legend>
-                                    <p class="card-text m-0 mb-2 text-justify">{{packageData.details}}</p>
-                                </fieldset>
-                            </div>
-                        </div>
-
-                        <div class="row mt-2">
-                            <div class="col-9 p-0">
-                                <div class="col-12 p-0">
-                                    <p class="h3"><b>{{packageData.price | currency:'COP '}}</b></p>
-                                </div>
-                            </div>
-                            <div class="col-1 pl-0">
-                                <div class="hover-text btn btn-secondary"><i *ngIf="packageData.transport== 1"
-                                        class="fa fa-plane"></i> <i *ngIf="packageData.transport== 2"
-                                        class="fa fa-bus"></i>
-                                    <span class="tooltip-text bottom" *ngIf="packageData.transport== 1">Aereo</span>
-                                    <span class="tooltip-text bottom" *ngIf="packageData.transport== 2">Terrestre</span>
-                                </div>
-                            </div>
-
-                            <div class="col-1 pl-0">
-                                <div class="hover-text btn btn-secondary"><i class="fas fa-hotel"></i>
-                                    <span class="tooltip-text bottom">{{packageData.hotel}}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-2 p-0">
-                            <div class="col-4 p-0">
-                                <p><b>Fecha de salida:</b><br>{{packageData.departureDate | date}}</p>
-                            </div>
-                            <div class="col-4 p-0">
-                                <p><b>Fecha de llegada:</b><br>{{packageData.arrivalDate | date}}</p>
-                            </div>
-                        </div>
-                        <div class="row mt-1 p-0">
-                            <div class="col-9 p-0">
-                                <p><b>Lugar de salida:</b><br>{{packageData.departurePoint}}</p>
-                            </div>
-                            <div class="col-3 p-0">
-                                <p><b>Cupos:</b><br>{{packageData.totalQuotas}}</p>
-                            </div>
-                        </div>
+                    <div class="flex align-items-center">
+                        <span class="mr-3">
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star text-600 mr-1"></i>
+                        </span>
+                        <span class="text-sm"><b class="text-900 mr-1">{{pack.availableQuotas}}</b><span
+                                class="text-500"></span>cupos</span>
                     </div>
                 </div>
+                <div class="flex align-items-center text-xl font-medium text-900 mb-4">
+                    <span class="text-900 font-medium text-3xl block">{{pack.price | currency: 'USD':
+                        'symbol'}}</span><span class="ml-2  text-lg">por persona</span>
+                </div>
+
+
+
+                <div class="flex align-items-center mb-5">
+                    <span class="text-lg"><b class="text-900 mr-1">Desde</b><span
+                            class="text-500"></span>{{pack.departureDate | date}}</span>
+                    <span class="text-lg"><b class="text-900 mr-1 ml-2">Hasta</b>
+                        <span class="text-500"></span>{{pack.arrivalDate | date}}</span>
+                </div>
+
+                <p-tabView class="first">
+                    <p-tabPanel header="Especificaciones">
+                        <div class="grid grid-nogutter align-items-center mb-5">
+                            <div tooltipPosition="bottom" pTooltip="Transporte"
+                                class="col h-3rem border-1 border-300 text-900 inline-flex justify-content-center align-items-center flex-shrink-0 border-round mr-3 cursor-pointer hover:surface-100 transition-duration-150 transition-colors">
+                                <i *ngIf="pack.transport=== '1'" class="p-1 fa fa-plane"></i> <i
+                                    *ngIf="pack.transport=== '2'" class="p-1 fa fa-bus"></i>
+                                <span class="m-1" *ngIf="pack.transport=== '1'">Aereo</span>
+                                <span class="m-1" *ngIf="pack.transport=== '2'">Terrestre</span>
+                            </div>
+                            <div tooltipPosition="bottom" pTooltip="Alojamiento"
+                                class="col h-3rem border-1 border-300 text-900 inline-flex justify-content-center align-items-center flex-shrink-0 border-round mr-3 cursor-pointer hover:surface-100 transition-duration-150 transition-colors">
+                                <i class="p-1 fas fa-hotel"></i>
+                                <span class="m-1">{{pack.hotel}}</span>
+                            </div>
+                            <div tooltipPosition="bottom" pTooltip="Lugar de salida"
+                                class="col h-3rem border-1 border-300 text-900 inline-flex justify-content-center align-items-center flex-shrink-0 border-round mr-3 cursor-pointer hover:surface-100 transition-duration-150 transition-colors">
+                                <i class="fas fa-plane-departure"></i>
+                                <span class="m-1">{{pack.departurePoint}}</span>
+                            </div>
+                        </div>
+                    </p-tabPanel>
+                    <p-tabPanel leftIcon="pi pi-angle-right">
+                        <div>
+                            <p class="text-lg fw-bold">
+                                Disfruta de una habitación única en el hotel {{pack.hotel}}, hospedándote al mejor
+                                estilo, nuestras carretas inmensas en el hermoso embalse de {{pack.destination}} te
+                                permitirán deleitarte de esta experiencia, ya
+                                sea para una escapada romántica o para compartir con familia y amigos partiendo desde
+                                {{pack.departurePoint}}.
+                            </p>
+                        </div>
+                    </p-tabPanel>
+                </p-tabView>
+                <div class="font-bold text-900 mb-3">Cantidad de viajeros</div>
+                <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between">
+                    <p-inputNumber [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" [min]="0"
+                        inputStyleClass="w-3rem text-center" [(ngModel)]="quantity" decrementButtonClass="p-button-text"
+                        incrementButtonClass="p-button-text" incrementButtonIcon="pi pi-plus"
+                        decrementButtonIcon="pi pi-minus"></p-inputNumber>
+                    <div class="flex align-items-center flex-1 mt-3 sm:mt-0 ml-0 sm:ml-5">
+                        <!-- Si el usuario tiene una sesión iniciada, mostrar el botón de reserva -->
+                        <button *ngIf="isLoggedIn" pButton label="Reservar" class="flex-1 mr-5"
+                            (click)="reserve(pack)"></button>
+
+                        <!-- Si el usuario NO tiene una sesión iniciada, mostrar el botón de login -->
+                        <button *ngIf="!isLoggedIn" pButton label="Reservar" class="flex-1 mr-5"
+                            (click)="goToLogin()"></button>
+
+                        <i class="pi text-2xl cursor-pointer"
+                            [ngClass]="{'pi-heart text-600': !liked, 'pi-heart-fill text-orange-500': liked}"
+                            (click)="liked = !liked"></i>
+                    </div>
+                </div>
+                <div class="p-4 font-medium">No esperes más para vivir una aventura increíble. ¡Reserva ahora y
+                    comienza a explorar los tesoros que el mundo tiene para ofrecerte!</div>
             </div>
         </div>
+
+        <p-tabView>
+            <p-tabPanel header="Detalles">
+                <div class="text-900 font-bold text-3xl mb-4 mt-2">Detalles del paquete</div>
+                <p class="line-height-3 text-600 p-0 mx-0 mt-0 mb-4">{{pack.details}}</p>
+
+                <!-- <div class="grid">
+                    <div class="col-12 lg:col-4">
+                        <span class="text-900 block font-medium mb-3 font-bold">Highlights</span>
+                        <ul class="py-0 pl-3 m-0 text-600 mb-3">
+                            <li class="mb-2">Vulputate sapien nec.</li>
+                            <li class="mb-2">Purus gravida quis blandit.</li>
+                            <li class="mb-2">Nisi quis eleifend quam adipiscing.</li>
+                            <li>Imperdiet proin fermentum.</li>
+                        </ul>
+                    </div>
+                    <div class="col-12 lg:col-4">
+                        <span class="text-900 block mb-3 font-bold">Size and Fit</span>
+                        <ul class="list-none p-0 m-0 text-600 mb-4 text-600">
+                            <li class="mb-3"><span class="font-semibold">Leo vel:</span> Egestas congue.</li>
+                            <li class="mb-3"><span class="font-semibold">Sociis natoque:</span> Parturient montes
+                                nascetur.</li>
+                            <li><span class="font-semibold">Suspendisse in:</span> Purus sit amet volutpat.</li>
+                        </ul>
+                    </div>
+                    <div class="col-12 lg:col-4">
+                        <span class="text-900 block mb-3 font-bold">Material & Care</span>
+                        <ul class="p-0 m-0 flex flex-wrap flex-column xl:flex-row text-600">
+                            <li class="flex align-items-center white-space-nowrap w-10rem block mr-2 mb-3">
+                                <i class="pi pi-sun mr-2 text-900"></i>
+                                <span>Not dryer safe</span>
+                            </li>
+                            <li class="flex align-items-center white-space-nowrap w-10rem block mb-3">
+                                <i class="pi pi-times-circle mr-2 text-900"></i>
+                                <span>No chemical wash</span>
+                            </li>
+                            <li class="flex align-items-center white-space-nowrap w-10rem block mb-3 mr-2">
+                                <i class="pi pi-sliders-h mr-2 text-900"></i>
+                                <span>Iron medium heat</span>
+                            </li>
+                            <li class="flex align-items-center white-space-nowrap w-10rem block mb-3">
+                                <i class="pi pi-minus-circle mr-2 text-900"></i>
+                                <span>Dry flat</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div> -->
+            </p-tabPanel>
+            <p-tabPanel header="Información sobre los paquetes">
+                
+                <ul class="list-none p-0 m-0">
+                    <li class="p-3 border-bottom-1 m-1 surface-border">
+
+                        <div class="text-900 font-bold text-xl my-3">Descubre el Mundo con Nuestros Paquetes Turísticos
+                        </div>
+                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">¡Bienvenido a una emocionante aventura de
+                            descubrimiento! Nuestros paquetes turísticos te invitan a explorar algunos de los destinos
+                            más increíbles del mundo. Sumérgete en la rica cultura, historia y belleza natural de
+                            diversos lugares mientras creas recuerdos invaluables.</p>
+                    </li>
+                    <li class="p-3 border-bottom-1 m-1 surface-border">
+
+                        <div class="text-900 font-bold text-xl my-3">Experiencias Únicas:</div>
+                        <span>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500"></i>
+                        </span>
+                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Cada uno de nuestros paquetes turísticos ofrece
+                            experiencias únicas y emocionantes. Desde explorar ciudades vibrantes hasta adentrarte en
+                            paisajes naturales impresionantes, cada destino tiene algo especial para ofrecer.</p>
+                    </li>
+                    <li class="p-3 border-bottom-1 m-1 surface-border">
+
+                        <div class="text-900 font-bold text-xl my-3">Cultura y Tradiciones:</div>
+                        <span>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500"></i>
+                        </span>
+                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Descubre la fascinante cultura y tradiciones de
+                            cada lugar que visitas. Desde festivales coloridos hasta arte y música local, tendrás la
+                            oportunidad de sumergirte en las auténticas expresiones culturales de cada destino.</p>
+                    </li>
+                    <li class="p-3 border-bottom-1 m-1 surface-border">
+
+                        <div class="text-900 font-bold text-xl my-3">Aventura y Naturaleza:</div>
+                        <span>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500"></i>
+                        </span>
+                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Si te apasiona la aventura y la naturaleza,
+                            nuestros paquetes te brindan la oportunidad de explorar majestuosos paisajes, realizar
+                            emocionantes actividades al aire libre y conectar con la belleza natural de nuestro planeta.
+                        </p>
+                    </li>
+                    <li class="p-3 border-bottom-1 m-1 surface-border">
+
+                        <div class="text-900 font-bold text-xl my-3">Gastronomía Deliciosa:</div>
+                        <span>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500"></i>
+                        </span>
+                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Disfruta de la diversidad culinaria de cada
+                            región. Nuestros paquetes te llevarán a degustar sabores auténticos y platos tradicionales
+                            que deleitarán tus sentidos.</p>
+                    </li>
+                    <li class="p-3 border-bottom-1 m-1 surface-border">
+
+                        <div class="text-900 font-bold text-xl my-3">Descanso y Bienestar:</div>
+                        <span>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500"></i>
+                        </span>
+                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Después de días llenos de emociones, también
+                            encontrarás momentos de relajación y bienestar. Descansa en cómodos alojamientos y, si lo
+                            deseas, disfruta de spas y tratamientos revitalizantes.</p>
+                    </li>
+                    <li class="p-3 border-bottom-1 m-1 surface-border">
+
+                        <div class="text-900 font-bold text-xl my-3">Grupos Pequeños y Guías Expertos:</div>
+                        <span>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500"></i>
+                        </span>
+                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Viajarás en grupos pequeños, lo que garantiza
+                            una experiencia más personalizada y auténtica. Nuestros guías expertos estarán contigo en
+                            cada paso del camino para asegurarse de que vivas una experiencia inolvidable.</p>
+                    </li>
+                    <li class="p-3 border-bottom-1 m-1 surface-border">
+
+                        <div class="text-900 font-bold text-xl my-3">El Viaje de tus Sueños:</div>
+                        <span>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500"></i>
+                        </span>
+                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">No importa cuál de nuestros paquetes elijas,
+                            cada uno promete ser un viaje de ensueño. Nuestro objetivo es proporcionarte momentos
+                            inolvidables y la oportunidad de descubrir el mundo desde una perspectiva única.</p>
+                    </li>
+
+                </ul>
+            </p-tabPanel>
+        </p-tabView>
     </div>
-</div>
-<div class="modal-footer m-0 p-0">
-    <div class="row">
-        <button (click)="cancel()" class="btn btn-danger m-2">
-            Cerrar
-        </button>
-        <button class="btn btn-success m-2">
-            Editar
-        </button>
-    </div>
+
 </div>

@@ -120,25 +120,13 @@ export class PackageEffects {
                 const ref = this.dialogService.open(CreatePackageFormComponent, {
                     showHeader: false,
                     width: '50%',
-                    contentStyle: { 'max-height': '800px', overflow: 'auto', padding: '0px 50px 0px 50px' },
+                    contentStyle: { 'max-height': '900px', overflow: 'auto', padding: '0px 50px 0px 50px' },
                     baseZIndex: 10000,
                     data: action.payload // Pasar datos opcionales a la modal desde la acción
                 });
             })
         ), { dispatch: false }
     );
-
-    openModalDetailsPackage$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(OPEN_MODAL_DETAILS_PACKAGE),
-            tap((action) => {
-                this.modalRef = this.modalService.open(DetailsPackageComponent, {
-                    backdrop: false,
-                    size: 'xl'
-                });
-            })
-        ), { dispatch: false });
-
 
 
     createPackage$ = createEffect(() => this.actions$.pipe(

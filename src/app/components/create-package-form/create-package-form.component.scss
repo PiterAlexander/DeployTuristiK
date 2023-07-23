@@ -8,6 +8,13 @@
 
 * {
     font-weight: 600 !important;
+    ::placeholder{
+        font-weight: 400;
+    }
+}
+
+label{
+    font-weight: 400 !important;
 }
 
 .custom-control-input:checked~.custom-control-label::before {
@@ -49,41 +56,11 @@ form input:required {
     height: 100px;
 }
 
-.input-design {
-    border: 1px solid #6366F1
-}
-
-.input-design:focus {
-    border: 1px solid #6366F1
-}
-
-.input-design:hover {
-    border: 1px solid #6366F1
-}
 
 :host ::ng-deep {
     p-dropdown div:first-child {
         width: 100%;
-        border: 1px #6366F1 solid;
     }
-
-    p-dropdown div:last-child {}
-}
-
-.divider {
-
-    border: 0.2px solid;
-    color: #6366F1
-
-}
-
-:host ::ng-deep {
-    p-dropdown div:first-child {
-        width: 100%;
-        border: 1px #6366F1 solid;
-    }
-
-    p-dropdown div:last-child {}
 }
 
 .button-design{
@@ -91,8 +68,4 @@ form input:required {
 }
 
 
-:host ::ng-deep {
-    p-calendar span button {
-        background-color: #6366F1;
-    }
-}
+

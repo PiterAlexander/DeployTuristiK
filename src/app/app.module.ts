@@ -88,6 +88,8 @@ import { CalendarComponent } from './pages/calendar/calendar.component';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { BadgeModule } from 'primeng/badge';
 import { ChartModule } from 'primeng/chart';
+import { TabViewModule } from 'primeng/tabview';
+import {TabMenuModule} from 'primeng/tabmenu';
 
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
@@ -136,6 +138,8 @@ registerLocaleData(localeEn, 'en-EN');
     CalendarComponent
   ],
   imports: [
+    TabViewModule,
+    TabMenuModule,
     DividerModule,
     CalendarModule,
     CascadeSelectModule,

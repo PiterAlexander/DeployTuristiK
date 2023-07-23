@@ -1,15 +1,14 @@
-<div>
-    <h3 class="pt-5 text-indigo-300 mb-5">{{ActionTitle}} paquete</h3>
+<div class="modal-header">
+    <h3 class="pt-3 mb-1" style="color: #6366F1;">{{ActionTitle}} paquete</h3>
 </div>
-<hr class="divider">
 <div class="modal-body">
 
     <form class="needs-validation" novalidate id="form" (submit)="savePackage()" [formGroup]="formGroup">
         <div class="row">
             <div class="col-9">
-                <div>
-                    <span class="p-input-icon-left w-100">
-                        <i class="pi pi-ticket  text-indigo-300"></i>
+                <div class="field">
+                    <label for="name">Nombre del paquete</label>
+                    <span class="w-100">
                         <input type="text" pInputText class="w-full input-design" [ngClass]="
                                 {'invalid': formGroup.get('name').dirty && (formGroup.get('name')?.errors || validateExistingPackageName()),
                                 'valid': formGroup.get('name').dirty && !formGroup.get('name')?.errors
@@ -32,7 +31,8 @@
                 </div>
             </div>
             <div class="col-3 w-100">
-                <div>
+                <div class="field">
+                    <label for="transport">Transporte</label>
                     <p-dropdown inputId="package_transportation" optionValue="label" [options]="transports"
                         placeholder="Seleccione un transporte">
                         <ng-template class="w-100" let-option pTemplate="item">
@@ -43,10 +43,10 @@
             </div>
 
         </div>
-        <div class="row mb-4">
-            <div class="col-12 p-input-icon-left ">
-                <i class="pi pi-book  text-indigo-300" style="top:25% !important; position: inherit;"></i>
-                <textarea pInputTextarea required style="width: 100%; height: 100px;" class="input-design"
+        <div class="row">
+            <div class="col-12">
+            <label for="description">Descripción</label>
+                <textarea pInputTextarea required style="width: 100%; height: 100px;"
                     placeholder="Ingrese la descripción del paquete" formControlName="details" [ngClass]="
                         {
                             'invalid': formGroup.get('details').dirty && (formGroup.get('details')?.errors),
@@ -63,47 +63,51 @@
                 </div>
             </div>
         </div>
-        <div class="row mb-4">
+        <div class="row">
             <div class="col-6">
-                <span class="p-input-icon-left w-100">
-                    <i class="pi pi-map  text-indigo-300"></i>
-                    <input type="text" class="w-100 input-design" pInputText [ngClass]="
-                                                {
-                                                    'invalid': formGroup.get('destination').dirty && (formGroup.get('destination')?.errors),
-                                                    'valid': formGroup.get('destination').dirty && !formGroup.get('destination')?.errors
-                                                }" formControlName="destination" required
-                        placeholder="Ingrese el lugar de destino"
-                        onkeydown="return /^[A-Za-z0-9\u00C0-\u00FF\s]+$/i.test(event.key)">
-                </span>
-                <div *ngIf="formGroup.get('destination').errors?.['required'] && formGroup.get('destination').dirty"
-                    class="invalid-feedback">
-                    *Este campo es obligatorio.
-                </div>
-                <div *ngIf="formGroup.get('destination').errors?.['minlength'] && formGroup.get('destination').dirty"
-                    class="invalid-feedback">
-                    *El destino del paquete debe tener mínimo 8 caracteres.
+                <div class="field">
+                    <label for="destination">Destino</label>
+                    <span class="p-input-icon-left w-100">
+                        <i class="pi pi-map-marker "></i>
+                        <input type="text" class="w-100 input-design" pInputText [ngClass]="
+                                                    {
+                                                        'invalid': formGroup.get('destination').dirty && (formGroup.get('destination')?.errors),
+                                                        'valid': formGroup.get('destination').dirty && !formGroup.get('destination')?.errors
+                                                    }" formControlName="destination" required
+                            placeholder="Ingrese el lugar de destino"
+                            onkeydown="return /^[A-Za-z0-9\u00C0-\u00FF\s]+$/i.test(event.key)">
+                    </span>
+                    <div *ngIf="formGroup.get('destination').errors?.['required'] && formGroup.get('destination').dirty"
+                        class="invalid-feedback">
+                        *Este campo es obligatorio.
+                    </div>
+                    <div *ngIf="formGroup.get('destination').errors?.['minlength'] && formGroup.get('destination').dirty"
+                        class="invalid-feedback">
+                        *El destino del paquete debe tener mínimo 8 caracteres.
+                    </div>
                 </div>
             </div>
             <div class="col-6">
-                <span class="p-input-icon-left w-100">
-                    <i class="pi pi-map-marker  text-indigo-300"></i>
-                    <input type="text" pInputText id="float-input" name="package_departure_place"
-                        placeholder="Ingrese el lugar de partida" formControlName="package_departure_place"
-                        class="input-design w-100" formControlName="departurePoint" required
-                        onkeydown="return /^[A-Za-z0-9\u00C0-\u00FF\s]+$/i.test(event.key)">
-                </span>
+                <div class="field">
+                    <label for="package_departure_place">Lugar de salida</label>
+                    <span class="p-input-icon-left w-100">
+                        <i class="pi pi-map-marker "></i>
+                        <input type="text" pInputText id="float-input" name="package_departure_place"
+                            placeholder="Ingrese el lugar de partida" formControlName="package_departure_place"
+                            class="input-design w-100" formControlName="departurePoint" required
+                            onkeydown="return /^[A-Za-z0-9\u00C0-\u00FF\s]+$/i.test(event.key)">
+                    </span>
+                </div>
             </div>
         </div>
-        <div class="row mb-4">
+        <div class="row">
             <div class="col-3 w-100">
                 <div class="flex flex-column">
+                    <label for="calendar">Fecha de Salida</label>
 
-                    <span class="p-input-icon-left w-full" style="width: 100%;
-                    border: 1px #0060fa solid; border-radius: 5px;">
-                        <p-calendar formControlName="departureDate" placeholder="Fecha de salida" showIcon="true"
-                            dateFormat="dd/mm/yy" [showTime]="true" [required]="true" class="calendar"
-                            
-                            [ngClass]="{
+                    <span class="p-input-icon-left w-full">
+                        <p-calendar formControlName="departureDate" id="calendar" name="calendar" placeholder="Fecha de salida" showIcon="true"
+                            dateFormat="dd/mm/yy" [showTime]="true" [required]="true" class="calendar" [ngClass]="{
                                 'is-invalid': formGroup.get('departureDate').dirty && formGroup.get('departureDate').invalid
                               }"></p-calendar>
                     </span>
@@ -115,13 +119,10 @@
 
             </div>
             <div class="col-3 w-100">
-                <span class="p-input-icon-left w-full" style="width: 100%;
-                border: 1px #0060fa solid; border-radius: 5px;">
-                    <p-calendar formControlName="arrivalDate" placeholder="Fecha de regreso" showIcon="true" class="calendar"
-                        dateFormat="dd/mm/yy"
-                        [showTime]="true"
-                        [required]="true"
-                         [ngClass]="{
+                <label for="calendar">Fecha de regreso</label>
+                <span class="p-input-icon-left w-full">
+                    <p-calendar formControlName="arrivalDate" placeholder="Fecha de regreso" showIcon="true" id="calendar" name="calendar"
+                        class="calendar" dateFormat="dd/mm/yy" [showTime]="true" [required]="true" [ngClass]="{
                             'is-invalid': formGroup.get('arrivalDate').dirty && formGroup.get('arrivalDate').invalid
                           }"></p-calendar>
                 </span>
@@ -134,11 +135,12 @@
                 </div>
             </div>
             <div class="col-6">
-                <div>
+                <div class="field">
+                    <label for="package_hotel">Hotel</label>
                     <span class="p-input-icon-left w-full">
-                        <i class="pi pi-building text-indigo-300"></i>
-                        <input type="text" pInputText name="package_hotel"
-                            class="input-design w-100" formControlName="hotel" required
+                        <i class="pi pi-building"></i>
+                        <input type="text" pInputText name="package_hotel" class="input-design w-100"
+                            formControlName="hotel" required
                             onkeydown="return /^[A-Za-z0-9\u00C0-\u00FF\s]+$/i.test(event.key)"
                             placeholder="Ingrese el nombre del hotel">
                     </span>
@@ -148,45 +150,44 @@
         </div>
         <div class="row">
             <div class="col-6">
-                <div>
+                <div class="field">
+                    <label for="totalQuotas">Cantidad de cupos</label>
+
                     <span class="p-input-icon-left w-full">
-                        <i class="pi pi-search-plus  text-indigo-300"></i>
-                        <input type="number" name="package_quotas"
-                            class="form-control formularioCampo border-left-dark input-design pl-5" formControlName="totalQuotas"
-                            pInputNumber [min]="15" placeholder="Ingrese la cantidad de cupos">
+                        <i class="pi pi-search-plus "></i>
+                        <span class="p-input-icon-left w-full">
+                            <i class="pi pi-users"></i>
+                            <input type="number" id="totalQuotas" name="totalQuotas" pInputText class="w-full"
+                                formControlName="totalQuotas" placeholder="Ingrese el precio del paquete"
+                                required="true" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
+                        </span>
 
-                        <div *ngIf="formGroup.get('totalQuotas').invalid && formGroup.get('totalQuotas').dirty"
-                            class="invalid-feedback">
-                            <ng-container *ngIf="formGroup.get('totalQuotas').errors?.required">*Este campo es
-                                obligatorio.</ng-container>
+                        <small class="p-error block" *ngIf="formGroup.get('totalQuotas').errors?.required.dirty">*Este
+                            campo es
+                            obligatorio.</small>
 
-                        </div>
-                        <div *ngIf="formGroup.get('totalQuotas').invalid" class="invalid-feedback">
-                            <ng-container *ngIf="formGroup.get('totalQuotas').errors?.min">*La cantidad de cupos
-                                debe
-                                superar a
-                                15.</ng-container>
-
-                        </div>
-
+                        <small class="p-error block" *ngIf="formGroup.get('totalQuotas').errors?.min">*La cantidad de
+                            cupos
+                            debe
+                            superar a
+                            15.</small>
                     </span>
                 </div>
             </div>
             <div class="col-6">
-                <span class="p-input-icon-left w-full">
-                    <i class="pi pi-money-bill  text-indigo-300"></i>
-                    <input type="number" name="package_quotas"
-                        class="form-control formularioCampo border-left-dark input-design pl-5" formControlName="price" pInputNumber
-                        [min]="15" placeholder="Ingrese el precio del paquete">
-
-                    <div *ngIf="formGroup.get('price').invalid && formGroup.get('price').dirty"
-                        class="invalid-feedback">
-                        <ng-container *ngIf="formGroup.get('price').errors?.required">*Este campo es
-                            obligatorio.</ng-container>
-                        <ng-container *ngIf="formGroup.get('price').errors?.min">*El precio debe ser mayor a
-                            $150.000.</ng-container>
-                    </div>
-                </span>
+                <div class="field">
+                    <label for="price">Precio</label>
+                    <span class="p-input-icon-left w-full">
+                        <i class="pi pi-users"></i>
+                        <input type="number" id="price" name="price" pInputText class="w-full" formControlName="price"
+                            placeholder="Ingrese el precio del paquete" required="true"
+                            onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
+                    </span>
+                    <small class="p-error block" *ngIf="formGroup.get('price').errors?.required.dirty">*Este campo es
+                        obligatorio.</small>
+                    <small class="p-error block" *ngIf="formGroup.get('price').errors?.min">*El precio debe ser mayor a
+                        $150.000.</small>
+                </div>
             </div>
         </div>
         <div>
@@ -194,19 +195,20 @@
             <label for="typePackage">Marque esta opción si el paquete sera privado</label>
 
         </div>
-        <div class="card-footer d-flex justify-content-end surface-0">
+        <div class="modal-footer d-flex justify-content-end surface-0">
             <div class="row">
                 <div class="col">
-                    <button pbutton="" label="Clear" icon="pi pi-times" (click)="cancel()" id="cancelButton" style="border-color: #6366F1;"
-                        type="button" class="p-element p-button-outlined mb-2 p-button p-component text-indigo-300"
-                        ng-reflect-label="Clear" ng-reflect-icon="pi pi-times"><span
-                            class="p-button-icon p-button-icon-left pi pi-times" aria-hidden="true"></span><span
-                            class="p-button-label">Cancelar</span></button>
+                    <button pbutton="" label="Clear" icon="pi pi-times" (click)="cancel()" id="cancelButton"
+                        style="border-color: #6366F1;" type="button"
+                        class="p-element p-button-outlined mb-2 p-button p-component" ng-reflect-label="Clear"
+                        ng-reflect-icon="pi pi-times"><span class="p-button-icon p-button-icon-left pi pi-times"
+                            aria-hidden="true"></span><span class="p-button-label">Cancelar</span></button>
 
 
                 </div>
                 <div class="col">
-                    <button pbutton="" pripple="" type="button" *ngIf="!validForm()" style="background-color: #6366F1; border-color: #6366F1;" type="submit" id="saveButton"
+                    <button pbutton="" pripple="" type="button" *ngIf="!validForm()"
+                        style="background-color: #6366F1; border-color: #6366F1;" type="submit" id="saveButton"
                         label="Save" icon="pi pi-check" ptooltip="Clic para guardar"
                         class="p-element p-ripple p-button p-component" ng-reflect-text="Clic para guardar"
                         ng-reflect-label="Save" ng-reflect-icon="pi pi-check" fdprocessedid="x7i42q">
@@ -216,7 +218,8 @@
                         <span class="p-ink"></span></button>
 
                     <!-- Button to valid form -->
-                    <button pbutton="" pripple="" type="button" *ngIf="validForm()" style="background-color: #6366F1; border-color: #6366F1;" type="submit" id="saveButton"
+                    <button pbutton="" pripple="" type="button" *ngIf="validForm()"
+                        style="background-color: #6366F1; border-color: #6366F1;" type="submit" id="saveButton"
                         label="Save" icon="pi pi-check" ptooltip="Clic para guardar"
                         class="p-element p-ripple p-button p-component" ng-reflect-text="Clic para guardar"
                         ng-reflect-label="Save" ng-reflect-icon="pi pi-check" fdprocessedid="x7i42q">
