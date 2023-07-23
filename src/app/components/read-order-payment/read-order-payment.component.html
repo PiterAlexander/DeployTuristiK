@@ -3,10 +3,8 @@
         <h2 class="text-blue-500">Abonos</h2>
     </div>
     <div class="mb-2" style="border-radius: 15px;">
-        <p-table *ngIf="visible" #dt [value]="payments" [paginator]="true" [rows]="2" [showCurrentPageReport]="true"
-            scrollable="true" [loading]="loading"
-            currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} abonos."
-            [globalFilterFields]="['amount', 'remainingAmount', 'date']">
+        <p-table *ngIf="visible" #dt [value]="payments" [paginator]="true" [rows]="2" scrollable="true"
+            [loading]="loading" [globalFilterFields]="['amount', 'remainingAmount', 'date']">
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between">
                     <span class="mt-2 md:mt-0 p-input-icon-right">
@@ -52,7 +50,7 @@
                     <td style="min-width: 13rem">
                         {{ payment.date | date:'MM/dd/yyyy - HH:mm' }}
                     </td>
-                    <td style="min-width: 10rem">
+                    <td class="flex justify-content-center" style="min-width: 10rem">
                         <span>
                             <button pButton pRipple type="button" icon="pi pi-eye"
                                 class="p-button-outlined p-button-rounded" pTooltip="Ver comprobante"
@@ -68,6 +66,8 @@
                             <button *ngIf="validateEditAllowing(payment)" pButton pRipple type="button"
                                 icon="pi pi-pencil" class="p-button-outlined p-button-warning p-button-rounded"
                                 (click)="editPayment(payment)" pTooltip="Editar" tooltipPosition="bottom"></button>
+                            <button *ngIf="!validateEditAllowing(payment)" pButton pRipple icon="pi pi-pencil"
+                                class="p-button-outlined p-button-warning p-button-rounded" disabled="true"></button>
                         </span>
                     </td>
                 </tr>
@@ -87,7 +87,7 @@
         </p-table>
     </div>
     <div class="flex justify-content-end">
-        <button pButton pRipple type="button" label="Regresar" icon="pi pi-undo" class="p-button-outlined"
+        <button pButton pRipple type="button" label="Regresar" icon="pi pi-angle-left" class="p-button-outlined"
             (click)="closeModal()"></button>
     </div>
 </div>

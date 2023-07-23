@@ -1,20 +1,18 @@
 <p-confirmPopup></p-confirmPopup>
 <form novalidate [formGroup]="formGroup">
-    <h2 class="mx-0 mt-0 mb-4 text-blue-500">Proceso de Reserva</h2>
-    <div class="field">
-        <label for="packageId" class="block">Paquete</label>
-        <p-dropdown [options]="allPackages" optionLabel="name" optionValue="packageId"
-            placeholder="Seleccione el nombre del paquete" required="true" formControlName="packageId"
-            [style]="{ width: '100%'}"></p-dropdown>
+    <h2 class="text-center mx-0 mt-0 mb-4 text-indigo-500">Proceso de Reserva</h2>
+    <div class="field mb-4">
+        <p-dropdown class="jaja" [options]="allPackages" optionLabel="name" optionValue="packageId"
+            placeholder="Por favor seleccione el nombre del paquete" required="true" formControlName="packageId"
+            [style]="{ width: '100%' }"></p-dropdown>
         <small class="p-error block"
             *ngIf="formGroup.get('packageId')?.errors?.['required'] && formGroup.get('packageId')?.dirty">
-            Este campo es obligatorio.
+            Este campo es obligatorio
         </small>
     </div>
     <div class="grid">
         <div class="col-7">
             <div class="field">
-                <label for="document" class="block">Persona titular</label>
                 <span class="p-input-icon-left w-full">
                     <i class="pi pi-user"></i>
                     <input pInputText placeholder="Ingrese el número de documento del titular" type="text" [ngClass]="
@@ -26,26 +24,25 @@
                 </span>
                 <small class="p-error block"
                     *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['required']">
-                    Este campo es obligatorio.
+                    Este campo es obligatorio
                 </small>
                 <small class="p-error block"
                     *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['minlength']">
-                    Este campo debe tener mínimo 8 números.
+                    Este campo debe tener mínimo 8 números
                 </small>
                 <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && validateCustomerId()">
-                    Este documento no está asociado a ningún cliente.
+                    Este documento no está asociado a ningún cliente
                 </small>
                 <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && validateRole()">
-                    Solo los clientes pueden ser titulares de un pedido.
+                    Solo los clientes pueden ser titulares de un pedido
                 </small>
                 <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && validateStatus()">
-                    Este cliente está deshabilitado.
+                    Este cliente está deshabilitado
                 </small>
             </div>
         </div>
         <div class="col-5">
             <div class="field">
-                <label for="beneficiariesAmount">Beneficiarios</label>
                 <span class="p-input-icon-left w-full">
                     <i class="pi pi-users"></i>
                     <input type="number" *ngIf="!formGroup.get('packageId')?.dirty && orderProcess === undefined"
@@ -60,30 +57,30 @@
                 </span>
                 <small class="p-error block"
                     *ngIf="formGroup.get('beneficiariesAmount')?.dirty && formGroup.get('beneficiariesAmount')?.errors?.['required']">
-                    Este campo es obligatorio.
+                    Este campo es obligatorio
                 </small>
                 <small class="p-error block"
                     *ngIf="formGroup.get('beneficiariesAmount')?.dirty && !validateBeneficiariesAmount()">
-                    Debe haber al menos un beneficiario.
+                    Debe haber al menos un beneficiario
                 </small>
                 <small class="p-error block"
                     *ngIf="formGroup.get('beneficiariesAmount')?.dirty && orderProcess === undefined && !validateBeneficiaries()">
-                    Cupos disponibles: {{onePackage.availableQuotas}}.
+                    Cupos disponibles: {{onePackage.availableQuotas}}
                 </small>
                 <small class="p-error block"
                     *ngIf="(orderProcess !== undefined && formGroup.get('packageId')?.dirty && !validateBeneficiaries()) ||
                          (orderProcess !== undefined && formGroup.get('beneficiariesAmount')?.dirty && !validateBeneficiaries())">
-                    Cupos disponibles: {{onePackage.availableQuotas}}.
+                    Cupos disponibles: {{onePackage.availableQuotas}}
                 </small>
                 <small class="p-error block"
                     *ngIf="validateBeneficiaries() && !validateExistingBeneficiariesAmount() && formGroup.get('beneficiariesAmount')?.dirty">
-                    Capacidad minima de beneficiarios: {{beneficiariesAmount}}.
+                    Capacidad minima de beneficiarios: {{beneficiariesAmount}}
                 </small>
             </div>
         </div>
     </div>
     <div *ngIf="orderProcess === undefined" class="field-checkbox mb-4">
-        <p-checkbox [binary]="true" formControlName="titularAsBeneficiarie"></p-checkbox>
+        <p-checkbox [binary]="true" formControlName="titularAsBeneficiarie" inputId="titularAsBeneficiarie"></p-checkbox>
         <label for="titularAsBeneficiarie" class="mb-0">Marque esta opción si el titular también viajará</label>
     </div>
     <div class="flex justify-content-end">

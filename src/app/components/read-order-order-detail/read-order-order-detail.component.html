@@ -1,12 +1,11 @@
 <p-confirmDialog icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <div class="col-12">
-    <div class="flex align-items-center mb-3">
-        <h2 class="text-blue-500">Beneficiarios</h2>
+    <div class="flex align-items-center mb-2">
+        <h2 class="text-indigo-500">Beneficiarios</h2>
     </div>
-    <div style="border-radius: 15px;">
-        <p-table *ngIf="visible" #dt [value]="orderDetailCustomers" [paginator]="true" [rows]="3"
-            [showCurrentPageReport]="true" scrollable="true" [loading]="loading"
-            currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} beneficiarios."
+    <div class="mb-4">
+        <p-table *ngIf="visible" #dt [value]="orderDetailCustomers" [paginator]="true" [rows]="3" scrollable="true"
+            [loading]="loading" dataKey="customerId"
             [globalFilterFields]="['name', 'lastName', 'document', 'birthDate', 'phoneNumber', 'address', 'eps', 'unitPrice']">
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between">
@@ -21,6 +20,7 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
+                    <th style="max-width: 5rem"></th>
                     <th pSortableColumn="name" style="min-width: 14rem">
                         Nombre completo <p-sortIcon field="name"></p-sortIcon>
                     </th>
@@ -30,26 +30,22 @@
                     <th pSortableColumn="birthDate" style="min-width: 15rem">
                         Fecha de nacimiento <p-sortIcon field="birthDate"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="phoneNumber" style="width: 8rem">
-                        Teléfono <p-sortIcon field="phoneNumber"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="address" style="min-width: 15rem">
-                        Dirección <p-sortIcon field="address"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="eps" style="min-width: 10rem">
-                        EPS <p-sortIcon field="eps"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="unitPrice" style="min-width: 9rem">
+                    <th pSortableColumn="unitPrice" style="min-width: 8rem">
                         Precio <p-sortIcon field="unitPrice"></p-sortIcon>
                     </th>
-                    <th style="min-width: 10rem" alignFrozen="right" pFrozenColumn
+                    <th style="min-width: 7rem" alignFrozen="right" pFrozenColumn
                         class="flex justify-content-center align-items-center">
                         Acciones
                     </th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-beneficiarie>
+            <ng-template pTemplate="body" let-beneficiarie let-expanded="expanded">
                 <tr>
+                    <td style="max-width: 5rem">
+                        <button type="button" pButton pRipple [pRowToggler]="beneficiarie"
+                            class="p-button-text p-button-rounded p-button-plain"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                    </td>
                     <td style="min-width: 14rem">
                         {{ beneficiarie.name + ' ' + beneficiarie.lastName }}
                     </td>
@@ -60,24 +56,17 @@
                         {{ beneficiarie.birthDate | date: 'MM/dd/yyyy' }}
                     </td>
                     <td style="min-width: 8rem">
-                        {{ beneficiarie.phoneNumber }}
-                    </td>
-                    <td style="min-width: 15rem">
-                        {{ beneficiarie.address }}
-                    </td>
-                    <td style="min-width: 10rem">
-                        {{ beneficiarie.eps }}
-                    </td>
-                    <td style="min-width: 9rem">
                         {{ beneficiarie.unitPrice | currency: 'USD':'symbol' }}
                     </td>
-                    <td alignFrozen="right" pFrozenColumn style="min-width: 10rem"
+                    <td alignFrozen="right" pFrozenColumn style="min-width: 7rem"
                         class="flex justify-content-around align-items-center">
-                        <span *ngIf="validateEditAllowing(beneficiarie)">
-                            <button pButton pRipple type="button" icon="pi pi-pencil"
-                                class="p-button-outlined p-button-warning p-button-rounded"
+                        <span>
+                            <button *ngIf="validateEditAllowing(beneficiarie)" pButton pRipple type="button"
+                                icon="pi pi-pencil" class="p-button-outlined p-button-warning p-button-rounded"
                                 (click)="editOrderDetail(beneficiarie)" pTooltip="Editar"
                                 tooltipPosition="bottom"></button>
+                            <button *ngIf="!validateEditAllowing(beneficiarie)" pButton pRipple icon="pi pi-pencil"
+                                class="p-button-outlined p-button-warning p-button-rounded" disabled="true"></button>
                         </span>
                         <span>
                             <button pButton pRipple type="button" icon="pi pi-trash"
@@ -88,6 +77,32 @@
                     </td>
                 </tr>
             </ng-template>
+            <ng-template pTemplate="rowexpansion" let-beneficiarie>
+                <div class="mx-4 p-3">
+                    <p-table [value]="oneBeneficiarie">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="min-width: 33rem">Dirección residencial</th>
+                                <th style="min-width: 7rem">Teléfono</th>
+                                <th style="min-width: 13rem">EPS</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body">
+                            <tr>
+                                <td style="min-width: 33rem">
+                                    {{ beneficiarie.address }}
+                                </td>
+                                <td style="min-width: 7rem">
+                                    {{ beneficiarie.phoneNumber }}
+                                </td>
+                                <td style="min-width: 13rem">
+                                    {{ beneficiarie.eps }}
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>
                     <td colspan="9">No se encontraron beneficiarios.</td>
@@ -96,7 +111,7 @@
         </p-table>
     </div>
     <div class="flex justify-content-end">
-        <button pButton pRipple type="button" label="Regresar" icon="pi pi-undo" class="p-button-outlined"
+        <button pButton pRipple type="button" label="Regresar" icon="pi pi-angle-left" class="p-button-outlined"
             (click)="closeModal()"></button>
     </div>
 </div>

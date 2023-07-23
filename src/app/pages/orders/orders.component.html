@@ -3,9 +3,8 @@
 <div *ngIf="role!=='Cliente'" class="p-3">
     <div class="col-12">
         <div class="card px-6 py-6" style="border-radius: 15px;">
-            <p-table #dt [value]="ordersList" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
-                scrollable="true" [rowsPerPageOptions]="[5, 10]" [loading]="loading"
-                currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} pedidos."
+            <p-table #dt [value]="ordersList" [paginator]="true" [rows]="5" scrollable="true"
+                [rowsPerPageOptions]="[5, 10]" [loading]="loading"
                 [globalFilterFields]="['customer.name', 'customer.lastName', 'customer.document', 'package.name', 'totalCost', 'status']">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between">
@@ -20,26 +19,26 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="min-width: 15rem">Titular</th>
-                        <th style="min-width: 13rem">Paquete</th>
-                        <th style="min-width: 10rem">Beneficiarios</th>
-                        <th style="width: 10rem">Costo total</th>
-                        <th style="min-width: 10rem">Abonos</th>
+                        <th style="min-width: 16rem">Titular</th>
+                        <th style="min-width: 14rem">Paquete</th>
+                        <th style="min-width: 7rem">Beneficiarios</th>
+                        <th style="min-width: 9rem">Costo total</th>
+                        <th style="min-width: 5rem">Abonos</th>
                         <th style="min-width: 10rem">Estado</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-order>
                     <tr>
-                        <td style="min-width: 15rem">{{ order.customer.name + ' ' + order.customer.lastName + ' - ' +
+                        <td style="min-width: 16rem">{{ order.customer.name + ' ' + order.customer.lastName + ' - ' +
                             order.customer.document }}</td>
-                        <td style="min-width: 13rem">{{ order.package.name }}</td>
-                        <td style="min-width: 10rem">
+                        <td style="min-width: 14rem">{{ order.package.name }}</td>
+                        <td style="min-width: 7rem" class="flex justify-content-center">
                             <button pButton pRipple type="button" icon="pi pi-eye"
                                 class="p-button-outlined p-button-rounded" pTooltip="Ver beneficiarios"
                                 (click)="sendToOrderDetails(order)" tooltipPosition="bottom"></button>
                         </td>
-                        <td style="min-width: 10rem">{{ order.totalCost | currency: 'USD':'symbol' }}</td>
-                        <td style="min-width: 10rem">
+                        <td style="min-width: 9rem">{{ order.totalCost | currency: 'USD':'symbol' }}</td>
+                        <td style="min-width: 5rem" class="flex justify-content-center">
                             <button pButton pRipple type="button" icon="pi pi-eye"
                                 class="p-button-outlined p-button-rounded" pTooltip="Ver abonos"
                                 (click)="sendToPayments(order)" tooltipPosition="bottom"></button>
@@ -147,7 +146,7 @@
                         <span class="text-yellow-500">Tu pedido está en revision</span>
                     </div>
                     -->
-                    
+
                     <div class="bg-cyan-50 mr-0 lg:mr-3 mt-4 lg:mt-0 p-2 flex align-items-center"
                         [style.border-radius]="'2.5rem'">
                         <span
@@ -171,13 +170,13 @@
             </div>
             <div class="col-12 p-0 flex border-top-1 surface-border">
                 <a (click)="sendToOrderDetails(order)" tabindex="0"
-                    class="cursor-pointer py-4 flex flex-column md:flex-row text-center justify-content-center align-items-center text-indigo-500 hover:bg-indigo-500 hover:text-0 transition-duration-150 w-full"><i
+                    class="cursor-pointer py-4 flex flex-column md:flex-row text-center justify-content-center align-items-center text-indigo-500 hover:bg-primary hover:text-0 transition-duration-150 w-full"><i
                         class="pi pi-info-circle mr-2"></i>Ver detalles</a>
                 <a (click)="sendToOrderDetails(order)" tabindex="0"
-                    class="cursor-pointer py-4 flex flex-column md:flex-row text-center justify-content-center align-items-center text-indigo-500 hover:bg-indigo-500 hover:text-0 transition-duration-150 w-full"><i
+                    class="cursor-pointer py-4 flex flex-column md:flex-row text-center justify-content-center align-items-center text-indigo-500 hover:bg-primary hover:text-0 transition-duration-150 w-full"><i
                         class="pi pi-users mr-2"></i>Ver mis Beneficiarios</a>
                 <a (click)="sendToPayments(order)" tabindex="0"
-                    class="cursor-pointer py-4 flex flex-column md:flex-row text-center justify-content-center align-items-center text-indigo-500 hover:bg-indigo-500 hover:text-0 transition-duration-150 w-full"><i
+                    class="cursor-pointer py-4 flex flex-column md:flex-row text-center justify-content-center align-items-center text-indigo-500 hover:bg-primary hover:text-0 transition-duration-150 w-full"><i
                         class="pi pi-dollar mr-2"></i>Ver mis Abonos</a>
             </div>
         </div>

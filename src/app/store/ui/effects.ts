@@ -235,6 +235,7 @@ export class PackageEffects {
                     this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Proceso completado', detail: '¡Pedido registrado exitosamente!' });
                     return [
                         new CreateOrderSuccess(orderResolved),
+                        new GetAllCustomerRequest(),
                         new GetAllOrdersRequest()
                     ];
                 }),
@@ -291,7 +292,7 @@ export class PackageEffects {
                 this.dialogRef = this.dialogService.open(CreateOrderDetailFormComponent, {
                     /* Opciones del modal */
                     showHeader: false,
-                    width: '80%',
+                    width: '85%',
                     contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
                 });
             })

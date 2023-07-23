@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { Customer } from '@/models/customer';
-import { SelectItem } from 'primeng/api';
+import { Package } from '@/models/package';
 
 @Component({
   selector: 'app-orders',
@@ -69,9 +69,9 @@ export class OrdersComponent implements OnInit {
     }
   }
 
-  showStatus(OrderStatus: any): string {
+  showStatus(orderStatus: any): string {
     for (let status of this.statuses) {
-      if (OrderStatus === status.code) {
+      if (orderStatus === status.code) {
         return status.label
       }
     }

@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { UiState } from '@/store/ui/state';
 import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ApiService } from '@services/api.service';
 import { ConfirmationService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Role } from '@/models/role';
@@ -16,8 +15,7 @@ import { GetAllCustomerRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUse
 @Component({
   selector: 'app-create-order-form',
   templateUrl: './create-order-form.component.html',
-  styleUrls: ['./create-order-form.component.scss'],
-  providers: [ConfirmationService]
+  styleUrls: ['./create-order-form.component.scss']
 })
 
 export class CreateOrderFormComponent implements OnInit {
@@ -35,7 +33,6 @@ export class CreateOrderFormComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private fb: FormBuilder,
-    private apiService: ApiService,
     private confirmationService: ConfirmationService,
     private modalPrimeNg: DynamicDialogRef,
   ) { }
@@ -59,7 +56,7 @@ export class CreateOrderFormComponent implements OnInit {
 
     this.formGroup = this.fb.group({
       document: ['', Validators.required],
-      packageId: ['', Validators.required],
+      packageId: [null, Validators.required],
       beneficiariesAmount: [null, Validators.required],
       titularAsBeneficiarie: [false]
     })

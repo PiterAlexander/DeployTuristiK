@@ -1,6 +1,6 @@
-<!-- <ng-template pTemplate="header"> -->
+<p-confirmPopup></p-confirmPopup>
 <div class="flex justify-content-between">
-    <h2 class="m-0 text-blue-500">Proceso de Reserva</h2>
+    <h2 class="m-0 text-indigo-500">Proceso de Reserva</h2>
     <div *ngIf="orderProcess[0].action !== 'EditOrderDetail'">
         <button *ngIf="beneficiariesForm() && showBeneficiariesTable()" (click)="reduceBeneficiariesAmount()" pButton
             pRipple type="button" label="Disminuir beneficiario" icon="pi pi-user-minus"
@@ -10,20 +10,19 @@
             (click)="addAnotherBeneficiarie()" label="Añadir beneficiario" icon="pi pi-user-plus"></p-button>
     </div>
 </div>
-<!-- </ng-template> -->
 <div class="flex justify-content-between">
     <div *ngIf="beneficiariesForm() && showBeneficiariesTable()" class="col-5 py-0">
-        <p-divider align="left">
+        <p-divider class="text-indigo-500" align="center">
             <b>Formulario de Beneficiarios</b>
         </p-divider>
         <form novalidate [formGroup]="formGroup">
             <div class="grid">
                 <div class="col">
                     <div class="field">
-                        <label for="document" class="block">Documento</label>
                         <div class="p-inputgroup">
                             <input pInputText type="text" formControlName="document" required="true" minlength="8"
-                                maxlength="15" placeholder="Ingrese el documento" class="w-full" [ngClass]="{ 
+                                maxlength="15" placeholder="Ingrese el documento" class="w-full"
+                                [ngClass]="{ 
                                     'border-green-500': customerInformation() && !alreadyExists(),
                                     'border-red-600': formGroup.get('document')?.dirty && alreadyExists() && alreadyExists()}"
                                 onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
@@ -50,7 +49,6 @@
                 </div>
                 <div class="col">
                     <div class="field">
-                        <label for="name" class="block">Nombres</label>
                         <input pInputText type="text" formControlName="name" required="true" minlength="3"
                             maxlength="30" placeholder="Ingrese los nombres" class="w-full"
                             onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)" />
@@ -68,7 +66,6 @@
             <div class="grid">
                 <div class="col">
                     <div class="field">
-                        <label for="lastName" class="block">Apellidos</label>
                         <input pInputText type="text" formControlName="lastName" required="true" minlength="3"
                             maxlength="30" placeholder="Ingrese los apellidos" class="w-full"
                             onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
@@ -84,9 +81,8 @@
                 </div>
                 <div class="col">
                     <div class="field">
-                        <label for="birthdate" class="block">Fecha de Nacimiento</label>
                         <p-calendar dateFormat="dd/mm/yy" formControlName="birthdate" required="true"
-                            placeholder="dd/mm/yyyy" [showIcon]="true" [style]="{ width: '100%' }"
+                            placeholder="Fecha de nacimiento" [showIcon]="true" [style]="{ width: '100%' }"
                             [readonlyInput]="true"></p-calendar>
                         <small class="p-error block"
                             *ngIf="formGroup.get('birthdate')?.dirty && formGroup.get('birthdate')?.errors?.['required']">
@@ -98,7 +94,6 @@
             <div class="grid">
                 <div class="col-12">
                     <div class="field">
-                        <label for="address" class="block">Dirección</label>
                         <div class="p-input-icon-left w-full">
                             <i class="pi pi-map-marker"></i>
                             <input pInputText type="text" formControlName="address" required="true"
@@ -114,7 +109,6 @@
             <div class="grid">
                 <div class="col">
                     <div class="field">
-                        <label for="eps" class="block">EPS</label>
                         <p-dropdown formControlName="eps" required="true" [options]="allEps"
                             placeholder="Seleccione la EPS" [showClear]="true"
                             [style]="{ width: '100%', 'max-width': '13.7rem'}"></p-dropdown>
@@ -126,7 +120,6 @@
                 </div>
                 <div class="col">
                     <div class="field">
-                        <label for="phoneNumber" class="block">Teléfono celular</label>
                         <span class="p-input-icon-left w-full">
                             <i class="pi pi-phone"></i>
                             <input pInputText type="text" formControlName="phoneNumber" minlength="10" maxlength="10"
@@ -147,7 +140,7 @@
             <div class="grid">
                 <div class="col">
                     <div class="field-checkbox">
-                        <p-checkbox formControlName="addToFt" [binary]="true"></p-checkbox>
+                        <p-checkbox formControlName="addToFt" inputId="addToFt" [binary]="true"></p-checkbox>
                         <label for="addToFt" class="mb-0">Agregar beneficiario a tus Viajeros Frecuentes</label>
                     </div>
                 </div>
@@ -155,18 +148,18 @@
         </form>
     </div>
     <div *ngIf="beneficiariesForm() && !showBeneficiariesTable()" class="col-12 py-0">
-        <p-divider align="left">
+        <p-divider class="text-indigo-500" align="center">
             <b>Formulario de Beneficiarios</b>
         </p-divider>
         <form novalidate [formGroup]="formGroup">
             <div class="grid">
                 <div class="col">
                     <div class="field">
-                        <label for="document" class="block">Documento</label>
                         <div class="p-inputgroup">
                             <input pInputText type="text" formControlName="document" required="true" minlength="8"
                                 maxlength="15" placeholder="Ingrese el número del documento del beneficiario"
-                                class="w-full" [ngClass]="{ 
+                                class="w-full"
+                                [ngClass]="{ 
                                     'border-green-500': customerInformation() && !alreadyExists(),
                                     'border-red-600': formGroup.get('document')?.dirty && alreadyExistsFromEdit() || alreadyExists()}"
                                 onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
@@ -197,7 +190,6 @@
                 </div>
                 <div class="col">
                     <div class="field">
-                        <label for="name" class="block">Nombres</label>
                         <input pInputText type="text" formControlName="name" required="true" minlength="3"
                             maxlength="30" placeholder="Ingrese los nombres del beneficiario" class="w-full"
                             onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)" />
@@ -215,7 +207,6 @@
             <div class="grid">
                 <div class="col">
                     <div class="field">
-                        <label for="lastName" class="block">Apellidos</label>
                         <input pInputText type="text" formControlName="lastName" required="true" minlength="3"
                             maxlength="30" placeholder="Ingrese los apellidos del beneficiario" class="w-full"
                             onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
@@ -231,10 +222,9 @@
                 </div>
                 <div class="col">
                     <div class="field">
-                        <label for="birthdate" class="block">Fecha de Nacimiento</label>
                         <p-calendar dateFormat="dd/mm/yy" formControlName="birthdate" required="true"
-                            placeholder="dd/mm/yyyy" [showIcon]="true" [style]="{ width: '100%' }"
-                            [readonlyInput]="true"></p-calendar>
+                            placeholder="Ingrese la fecha de nacimiento del beneficiario" [showIcon]="true"
+                            [style]="{ width: '100%' }" [readonlyInput]="true"></p-calendar>
                         <small class="p-error block"
                             *ngIf="formGroup.get('birthdate')?.dirty && formGroup.get('birthdate')?.errors?.['required']">
                             Este campo es obligatorio.
@@ -245,7 +235,6 @@
             <div class="grid">
                 <div class="col-12">
                     <div class="field">
-                        <label for="address" class="block">Dirección</label>
                         <div class="p-input-icon-left w-full">
                             <i class="pi pi-map-marker"></i>
                             <input pInputText type="text" formControlName="address" required="true"
@@ -261,7 +250,6 @@
             <div class="grid">
                 <div class="col">
                     <div class="field">
-                        <label for="eps" class="block">EPS</label>
                         <p-dropdown formControlName="eps" required="true" [options]="allEps"
                             placeholder="Seleccione la EPS del beneficiario" [showClear]="true"
                             [style]="{ width: '100%', 'max-width': '34.6rem'}"></p-dropdown>
@@ -273,7 +261,6 @@
                 </div>
                 <div class="col">
                     <div class="field">
-                        <label for="phoneNumber" class="block">Teléfono celular</label>
                         <span class="p-input-icon-left w-full">
                             <i class="pi pi-phone"></i>
                             <input pInputText type="text" formControlName="phoneNumber" minlength="10" maxlength="10"
@@ -294,7 +281,7 @@
             <div class="grid">
                 <div class="col">
                     <div class="field-checkbox">
-                        <p-checkbox formControlName="addToFt" [binary]="true"></p-checkbox>
+                        <p-checkbox formControlName="addToFt" inputId="addToFt" [binary]="true"></p-checkbox>
                         <label for="addToFt" class="mb-0">Agregar beneficiario a tus Viajeros Frecuentes</label>
                     </div>
                 </div>
@@ -306,7 +293,60 @@
         </p-divider>
     </div>
     <div *ngIf="showBeneficiariesTable() && beneficiariesForm()" class="col-6 py-0">
-        <p-divider align="right">
+        <p-divider class="text-indigo-500" align="center">
+            <b>Lista de Beneficiarios</b>
+        </p-divider>
+        <p-table *ngIf="visible" [value]="beneficiaries" [paginator]="true" [rows]="2" [scrollable]="true">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="min-width: 9rem" pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 9rem" pSortableColumn="lastName">Apellidos <p-sortIcon
+                            field="lastName"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 9rem" pSortableColumn="document">Documento <p-sortIcon
+                            field="document"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 15rem" pSortableColumn="birthDate">Fecha de nacimiento<p-sortIcon
+                            field="birthDate"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 9rem" pSortableColumn="phoneNumber">Teléfono <p-sortIcon
+                            field="phoneNumber"></p-sortIcon></th>
+                    <th style="min-width: 15rem" pSortableColumn="address">Dirección <p-sortIcon
+                            field="address"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 9rem" pSortableColumn="eps">EPS <p-sortIcon field="eps"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 9rem" pSortableColumn="price">Precio <p-sortIcon field="price"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 6rem" pFrozenColumn alignFrozen="right" class="frozen-col">
+                        Eliminar
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-beneficiarie>
+                <tr>
+                    <td style="min-width: 9rem">{{ beneficiarie.name }}</td>
+                    <td style="min-width: 9rem">{{ beneficiarie.lastName }}</td>
+                    <td style="min-width: 9rem">{{ beneficiarie.document }}</td>
+                    <td style="min-width: 15rem">{{ beneficiarie.birthDate | date: 'MM/dd/yy' }}</td>
+                    <td style="min-width: 9rem">{{ beneficiarie.phoneNumber }}</td>
+                    <td style="min-width: 15rem">{{ beneficiarie.address }}</td>
+                    <td style="min-width: 9rem">{{ beneficiarie.eps }}</td>
+                    <td style="min-width: 8rem">{{ onePackage.price | currency:'USD':'symbol' }}</td>
+                    <td style="min-width: 6rem" pFrozenColumn alignFrozen="right"
+                        class="frozen-col flex justify-content-center">
+                        <button (click)="deleteBeneficiarie(beneficiarie.document)" pButton pRipped type="button"
+                            icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-outlined p-button-sm"
+                            pTooltip="Eliminar" tooltipPosition="bottom"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+    </div>
+    <div *ngIf="showBeneficiariesTable() && !beneficiariesForm()" class="col-12 py-0">
+        <p-divider class="text-indigo-500" align="center">
             <b>Lista de Beneficiarios</b>
         </p-divider>
         <p-table *ngIf="visible" [value]="beneficiaries" [paginator]="true" [rows]="3" [scrollable]="true">
@@ -350,88 +390,43 @@
                     <td style="min-width: 6rem" pFrozenColumn alignFrozen="right"
                         class="frozen-col flex justify-content-center">
                         <button (click)="deleteBeneficiarie(beneficiarie.document)" pButton pRipped type="button"
-                            icon="pi pi-trash"
+                            icon="pi pi-trash" pTooltip="Eliminar" tooltipPosition="bottom"
                             class="p-button-rounded p-button-danger p-button-outlined p-button-sm"></button>
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="footer">
-                <tr>
-                    <td colspan="12">Costo Total: {{ onePackage.price * beneficiaries.length | currency:'USD':'symbol'}}
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-
-    </div>
-    <div *ngIf="showBeneficiariesTable() && !beneficiariesForm()" class="col-12 py-0">
-        <p-divider align="right">
-            <b>Lista de Beneficiarios</b>
-        </p-divider>
-        <p-table *ngIf="visible" [value]="beneficiaries" [paginator]="true" [rows]="3" [scrollable]="true"
-            [showCurrentPageReport]="true"
-            currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} beneficiarios.">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th style="min-width: 9rem" pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon>
-                    </th>
-                    <th style="min-width: 9rem" pSortableColumn="lastName">Apellidos <p-sortIcon
-                            field="lastName"></p-sortIcon>
-                    </th>
-                    <th style="min-width: 9rem" pSortableColumn="document">Documento <p-sortIcon
-                            field="document"></p-sortIcon>
-                    </th>
-                    <th style="min-width: 15rem" pSortableColumn="birthDate">Fecha de nacimiento<p-sortIcon
-                            field="birthDate"></p-sortIcon>
-                    </th>
-                    <th style="min-width: 9rem" pSortableColumn="phoneNumber">Teléfono <p-sortIcon
-                            field="phoneNumber"></p-sortIcon></th>
-                    <th style="min-width: 15rem" pSortableColumn="address">Dirección <p-sortIcon
-                            field="address"></p-sortIcon>
-                    </th>
-                    <th style="min-width: 9rem" pSortableColumn="eps">EPS <p-sortIcon field="eps"></p-sortIcon>
-                    </th>
-                    <th style="min-width: 9rem" pSortableColumn="price">Precio <p-sortIcon field="price"></p-sortIcon>
-                    </th>
-                    <th style="min-width: 6rem" pFrozenColumn alignFrozen="right" class="frozen-col">
-                        Eliminar
-                    </th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-beneficiarie>
-                <tr>
-                    <td style="min-width: 9rem">{{ beneficiarie.name }}</td>
-                    <td style="min-width: 9rem">{{ beneficiarie.lastName }}</td>
-                    <td style="min-width: 9rem">{{ beneficiarie.document }}</td>
-                    <td style="min-width: 15rem">{{ beneficiarie.birthDate | date: 'MM/dd/yy' }}</td>
-                    <td style="min-width: 9rem">{{ beneficiarie.phoneNumber }}</td>
-                    <td style="min-width: 15rem">{{ beneficiarie.address }}</td>
-                    <td style="min-width: 9rem">{{ beneficiarie.eps }}</td>
-                    <td style="min-width: 8rem">{{ onePackage.price | currency:'USD':'symbol' }}</td>
-                    <td style="min-width: 6rem" pFrozenColumn alignFrozen="right"
-                        class="frozen-col flex justify-content-center">
-                        <button (click)="deleteBeneficiarie(beneficiarie.document)" pButton pRipped type="button"
-                            icon="pi pi-trash"
-                            class="p-button-rounded p-button-danger p-button-outlined p-button-sm"></button>
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="footer">
-                <tr>
-                    <td colspan="12">Costo Total: {{ onePackage.price * beneficiaries.length | currency:'USD':'symbol'}}
                     </td>
                 </tr>
             </ng-template>
         </p-table>
     </div>
 </div>
-<!-- <ng-template pTemplate="footer" style="padding-top: 0%;"> -->
 <div class="flex justify-content-between">
     <div>
-        <p-button label="Tus Viajeros Frecuentes" icon="pi pi-users"></p-button>
+        <p-button label="Tus Viajeros Frecuentes" icon="pi pi-users" (click)="op.toggle($event)"></p-button>
+        <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}">
+            <ng-template pTemplate>
+                <p-table [value]="frequentTravelers" selectionMode="multiple"
+                    [(selection)]="selectedFrequentTravelers" [paginator]="true" [rows]="3" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="name">Nombre completo <p-sortIcon field="name"></p-sortIcon></th>
+                            <th pSortableColumn="document">Documento <p-sortIcon field="document"></p-sortIcon></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-frequentTraveler>
+                        <tr [pSelectableRow]="rowData">
+                            <td>{{frequentTraveler.name + ' ' + frequentTraveler.lastName}}</td>
+                            <td>{{frequentTraveler.document}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <div *ngIf="selectedFrequentTravelers.length > 0" class="flex justify-content-end">
+                    <button pButton pRipple type="button" (click)="addFrequentTraveler()" label="Agregar"
+                        icon="pi pi-check"></button>
+                </div>
+            </ng-template>
+        </p-overlayPanel>
     </div>
     <div>
-        <button pButton pRipple type="button" (click)="back()" label="Regresar" icon="pi pi-undo"
+        <button pButton pRipple type="button" (click)="back($event)" label="Regresar" icon="pi pi-angle-left"
             class="p-button-outlined mr-3"></button>
         <p-button *ngIf="orderProcess[0].action !== 'EditOrderDetail' && validForm() && beneficiariesForm()"
             (click)="add()" label="Guardar" icon="pi pi-check"></p-button>
@@ -449,4 +444,3 @@
             label="Guardar" icon="pi pi-check" disabled="true"></p-button>
     </div>
 </div>
-<!-- </ng-template> -->

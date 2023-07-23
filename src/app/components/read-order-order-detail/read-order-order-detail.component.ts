@@ -25,6 +25,7 @@ export class ReadOrderOrderDetailComponent implements OnInit {
   public orderDetailCustomers: Array<any> = []
   public loading: boolean = true
   public visible: boolean = true
+  public oneBeneficiarie: Array<any> = [{ 'test': 1 }]
 
   constructor(
     private store: Store<AppState>,
@@ -33,7 +34,6 @@ export class ReadOrderOrderDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.store.dispatch(new GetAllCustomerRequest)
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.allRoles = state.allRoles.data
@@ -124,11 +124,11 @@ export class ReadOrderOrderDetailComponent implements OnInit {
       header: '¿Estás seguro de eliminar a ' + customer.name + ' ' + customer.lastName + '?',
       message: 'Ten en cuenta que el precio del pedido no cambiará y no se hará un reembolso por el beneficiario.',
       icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Aceptar',
+      acceptLabel: 'Eliminar',
       rejectLabel: 'Cancelar',
       rejectIcon: 'pi pi-times',
       acceptIcon: 'pi pi-check',
-      acceptButtonStyleClass: 'p-button-primary p-button-sm',
+      acceptButtonStyleClass: 'p-button-danger p-button-sm',
       rejectButtonStyleClass: 'p-button-outlined p-button-sm',
       accept: () => {
         const orderDetail: OrderDetail = this.order.orderDetail.find(od => od.beneficiaryId === customer.customerId)

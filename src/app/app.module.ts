@@ -88,7 +88,7 @@ import { CalendarComponent } from './pages/calendar/calendar.component';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { BadgeModule } from 'primeng/badge';
 import { ChartModule } from 'primeng/chart';
-
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
@@ -189,6 +189,7 @@ registerLocaleData(localeEn, 'en-EN');
     BadgeModule,
     ChartModule,
     DataViewModule,
+    OverlayPanelModule,
 
     //<------------------------->
     ToastrModule.forRoot({
