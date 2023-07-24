@@ -41,6 +41,10 @@ import {
     DeleteOrderDetailRequest,
     DeleteOrderDetailSuccess,
     DeleteOrderDetailFailure,
+    LoadDataRequest,
+    LoadDataSuccess,
+    LoadDataFailure,
+    LOAD_DATA_REQUEST,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -87,6 +91,18 @@ export class PackageEffects {
         })
     ));
 
+    loadIngresos$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LOAD_DATA_REQUEST),
+      mergeMap(() =>
+        this.apiService.getIngresosMensuales().pipe(
+          map((data: number[]) => new LoadDataSuccess({  data })),
+          catchError((error) => of(new LoadDataFailure({ error })))
+        )
+      )
+    )
+  );
+
     getTopPackages$ = createEffect(() => this.actions$.pipe(
         ofType(packageActions.GET_TOP_PACKAGES_REQUEST),
         switchMap((action) => {
@@ -120,25 +136,13 @@ export class PackageEffects {
                 const ref = this.dialogService.open(CreatePackageFormComponent, {
                     showHeader: false,
                     width: '50%',
-                    contentStyle: { 'max-height': '800px', overflow: 'auto', padding: '0px 50px 0px 50px' },
+                    contentStyle: { 'max-height': '900px', overflow: 'auto', padding: '0px 50px 0px 50px' },
                     baseZIndex: 10000,
                     data: action.payload // Pasar datos opcionales a la modal desde la acción
                 });
             })
         ), { dispatch: false }
     );
-
-    openModalDetailsPackage$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(OPEN_MODAL_DETAILS_PACKAGE),
-            tap((action) => {
-                this.modalRef = this.modalService.open(DetailsPackageComponent, {
-                    backdrop: false,
-                    size: 'xl'
-                });
-            })
-        ), { dispatch: false });
-
 
 
     createPackage$ = createEffect(() => this.actions$.pipe(

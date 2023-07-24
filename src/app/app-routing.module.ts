@@ -18,6 +18,7 @@ import { UsersComponent } from '@pages/users/users.component';
 import { CalendarComponent } from '@pages/calendar/calendar.component';
 import { MainPublicComponent } from '@modules/main copy/main.component';
 import { PackagePublicComponent } from '@modules/packages/package-public.component';
+import { DetailsPackageComponent } from '@components/details-package/details-package.component';
 
 
 const routes: Routes = [
@@ -85,8 +86,8 @@ const routes: Routes = [
                 canActivate: [NonAuthGuard]
             },
             {
-                path: 'aboutUs',
-                component: LoginComponent,
+                path: 'detailsPackage/:id',
+                component: DetailsPackageComponent,
                 canActivate:[NonAuthGuard]
             },
             {

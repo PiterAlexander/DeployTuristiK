@@ -8,9 +8,9 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 @Component({
-    selector: 'app-dashboard',
-    templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.scss']
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
 
@@ -22,7 +22,19 @@ export class DashboardComponent implements OnInit {
   public packagesList: Array<Package>;
   public ordersList: Array<Order> = []
 
-  constructor(private store: Store<AppState>){
+  
+  public lineChartData: any = {};
+
+  public lineChartOptions: any = {
+    legend: {
+      display: true,
+      position: 'top'
+    }
+  };
+
+  public dataLoaded = false;
+
+  constructor(private store: Store<AppState>) {
 
   }
 
@@ -37,36 +49,37 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  initCharts(){
+
+  initCharts() {
     const documentStyle = getComputedStyle(document.documentElement);
 
-   if(this.packagesList.length>0){
+    if (this.packagesList.length > 0) {
 
 
-    let cantidad1 = this.ordersList.filter(o => o.packageId === this.packagesList[0].packageId).length;
-    let cantidad2 = this.ordersList.filter(o => o.packageId === this.packagesList[1].packageId).length;
-    let cantidad3 = this.ordersList.filter(o => o.packageId === this.packagesList[2].packageId).length;
+      let cantidad1 = this.ordersList.filter(o => o.packageId === this.packagesList[0].packageId).length;
+      let cantidad2 = this.ordersList.filter(o => o.packageId === this.packagesList[1].packageId).length;
+      let cantidad3 = this.ordersList.filter(o => o.packageId === this.packagesList[2].packageId).length;
 
-    this.pieData = {
-      labels: [this.packagesList[0].name, this.packagesList[1].name, this.packagesList[2].name],
+      this.pieData = {
+        labels: [this.packagesList[0].name, this.packagesList[1].name, this.packagesList[2].name],
         datasets: [
-            {
-                data: [
-                  cantidad1, cantidad2, cantidad3
-                ],
-                backgroundColor: [
-                    documentStyle.getPropertyValue('--primary-700'),
-                    documentStyle.getPropertyValue('--primary-400'),
-                    documentStyle.getPropertyValue('--primary-100')
-                ],
-                hoverBackgroundColor: [
-                    documentStyle.getPropertyValue('--primary-600'),
-                    documentStyle.getPropertyValue('--primary-300'),
-                    documentStyle.getPropertyValue('--primary-200')
-                ]
-            }
+          {
+            data: [
+              cantidad1, cantidad2, cantidad3
+            ],
+            backgroundColor: [
+              documentStyle.getPropertyValue('--primary-700'),
+              documentStyle.getPropertyValue('--primary-400'),
+              documentStyle.getPropertyValue('--primary-100')
+            ],
+            hoverBackgroundColor: [
+              documentStyle.getPropertyValue('--primary-600'),
+              documentStyle.getPropertyValue('--primary-300'),
+              documentStyle.getPropertyValue('--primary-200')
+            ]
+          }
         ]
-    };
-   }
+      };
+    }
   }
 }

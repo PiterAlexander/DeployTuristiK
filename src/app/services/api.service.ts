@@ -198,4 +198,8 @@ export class ApiService {
     deleteAssociatedPermission(associatedPermissionId: string): Observable<void> {
         return this.http.delete<void>(`${this.endpoint}api/AssociatedPermission/${associatedPermissionId}`);
     }
+
+    getIngresosMensuales(): Observable<number[]> {
+        return this.http.get<number[]>(`${this.endpoint}api/Ingresos/Mensuales`);
+      }
 }

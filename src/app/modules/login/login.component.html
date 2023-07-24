@@ -1,4 +1,4 @@
-<div class="d-flex justify-content-center align-items-center vh-100 todo">
+<!-- <div class="d-flex justify-content-center align-items-center vh-100 todo">
     <div class="card o-hidden border-0 shadow-lg my-4 w-25 border-round-lg">
         <div class="d-flex justify-content-around align-items-center mt-3">
             <input
@@ -21,7 +21,6 @@
             />
         </div>
         <div class="card-body p-0 mt-3">
-            <!-- Nested grid within Card Body -->
             <div class="grid">
                 <div class="col">
                     <div class="px-4 py-2">
@@ -106,7 +105,7 @@
                                         icon="pi pi-sign-in"
                                         class="p-element p-ripple mr-2 p-button p-button-success p-component"
                                         ng-reflect-label="Ingresar"
-                                        ng-reflect-icon="pi pi-sign-in"
+                                       
                                     >
                                         <span
                                             class="p-button-icon p-button-icon-left pi pi-sign-in"
@@ -126,7 +125,7 @@
                                         icon="pi pi-sign-in"
                                         class="p-element p-ripple mr-2 p-button p-button-success p-component"
                                         ng-reflect-label="Ingresar"
-                                        ng-reflect-icon="pi pi-sign-in"
+                                       
                                         disabled
                                     >
                                         <span
@@ -138,30 +137,70 @@
                                         ><span class="p-ink"></span>
                                     </button>
 
-                                    <!-- <button
-                                        *ngIf="validForm()"
-                                        type="submit"
-                                        id="saveButton"
-                                        class="btn btn-success"
-                                    >
-                                        Ingresar
-                                    </button>
-                                    <button
-                                        *ngIf="!validForm()"
-                                        type="submit"
-                                        id="saveButton"
-                                        class="btn btn-secondary"
-                                        disabled
-                                    >
-                                        Ingresar
-                                    </button> -->
                                 </div>
-                                <!-- /.col -->
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div> -->
+
+
+<div class="height-edit px-5 flex justify-content-center align-items-center">
+    <div class="border-1 surface-border surface-card border-round py-7 px-4 md:px-7 z-1" style="width: 30%;">
+        <div class="mb-4">
+            <div class="text-900 text-xl font-bold mb-2">Ingresar</div>
+            <span class="text-600 font-medium">Porfavor ingrese sus datos</span>
+        </div>
+        <div class="flex flex-column">
+            <form class="needs-validation"
+            novalidate
+            id="form"
+            (submit)="saveChanges()"
+            [formGroup]="formGroup">
+                <div class="field">
+                    <span class="p-input-icon-left w-full">
+                        <i class="pi pi-envelope"></i>
+                        <input id="email" type="text" pInputText class="w-full" placeholder="Correo" formControlName="email"
+                            required />
+                    </span>
+                    <small class="p-error block"
+                        *ngIf="formGroup.get('email').dirty && formGroup.get('email')?.errors?.['required']">
+                        Este campo es obligatorio.
+                    </small>
+                    <small class="p-error block" *ngIf="
+                            formGroup.get('email').dirty &&
+                            formGroup.get('email')?.errors?.pattern
+                        ">
+                        Coreo no válido
+                    </small>
+                </div>
+                <div class="field">
+                    <span class="p-input-icon-left w-full">
+                        <i class="pi pi-lock"></i>
+                        <input id="password" type="password" pInputText class="w-full" placeholder="Contraseña"
+                            formControlName="password" required />
+                    </span>
+                    <small class="p-error block"
+                        *ngIf="formGroup.get('password').dirty && formGroup.get('password')?.errors?.['required']">
+                        Este campo es obligatorio.
+                    </small>
+                    <small class="p-error block"
+                        *ngIf="formGroup.get('password').dirty && formGroup.get('password')?.errors?.['minlength']">
+                        Este campo debe tener mínimo 8 caracteres
+                    </small>
+                </div>
+                <div class="d-block flex-wrap gap-3">
+                    <p class="my-4 h6">
+                        <a [routerLink]="['/forgot-password']">¿Olvidé mi contraseña?</a>
+                    </p>
+                </div>
+                <button type="submit" id="saveButton" pButton pRipple label="Ingresar" class="w-full"
+                    ng-reflect-label="Ingresar" [disabled]="!validForm()">
+                </button>
+            </form>
         </div>
     </div>
 </div>

@@ -8,9 +8,11 @@ import { UiState } from '@/store/ui/state';
 import { Customer } from '@/models/customer';
 import Swal from 'sweetalert2';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { CreatePackageFormComponent } from '@components/create-package-form/create-package-form.component';
-
-
+import { SelectItem } from 'primeng/api';
+import { DataView } from 'primeng/dataview';
+import { element } from 'protractor';
+import { HostBinding } from '@angular/core';
+import { Router } from '@angular/router';
 interface State {
   page: number;
   pageSize: number;
@@ -23,6 +25,7 @@ interface State {
   providers: [DialogService]
 })
 export class PackagesComponent implements OnInit {
+  @HostBinding('class') miSombraStyles = 'miSombraStyles';
   public ui: Observable<UiState>;
   public packagesList: Array<Package>;
   public filteredPackagesList: Array<Package>;
@@ -30,6 +33,10 @@ export class PackagesComponent implements OnInit {
   public search: string
   public total: number
 
+  sortOptions: SelectItem[] = [];
+  sortOrder: number = 0;
+  sortField: string = '';
+  arrayPackagesClient: Array<Package>
   private _state: State = {
     page: 1,
     pageSize: 5
@@ -41,19 +48,45 @@ export class PackagesComponent implements OnInit {
 
 
   checked2: boolean = true;
-  constructor(private store: Store<AppState>, public dialogService: DialogService) { }
+  constructor(private store: Store<AppState>, public dialogService: DialogService, private router: Router) { }
   ngOnInit() {
     this.store.dispatch(new GetAllPackagesRequest());
     this.store.dispatch(new GetAllCustomerRequest())
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.allCustomers = state.allCustomers.data
-      this.packagesList = state.allPackages.data,
-        this.loading = state.allPackages.loading
+      this.packagesList = state.allPackages.data;
+      this.arrayPackagesClient = state.allPackages.data.filter(element => element.availableQuotas > 0);
+      console.log(this.arrayPackagesClient);
+      console.log(this.packagesList);
+      this.loading = state.allPackages.loading
       this.searchByName();
       this.user = JSON.parse(localStorage.getItem('TokenPayload'))
       this.role = this.user['role']
     });
+
+    this.sortOptions = [
+      { label: 'Del mayor al menor', value: '!price' },
+      { label: 'Del menor al mayor', value: 'price' }
+    ];
+
+    
+  }
+
+  onFilter(dv: DataView, event: Event) {
+    dv.filter((event.target as HTMLInputElement).value);
+  }
+
+  verDetalles(elementoId: string) {
+    this.router.navigate(['detailsPackage/'+ elementoId]);
+  }
+
+  quotas(cant: number){
+    if (cant > 10) {
+      return 1
+    } else {
+      return 2
+    }
   }
 
   matches(packageResolved: Package, term: string, pipe: PipeTransform) {
@@ -71,7 +104,7 @@ export class PackagesComponent implements OnInit {
   ref: DynamicDialogRef;
   show() {
     this.store.dispatch(new OpenModalCreatePackage());
-    
+
     // this.ref = this.dialogService.open(OpenModalCreatePackage, {
     //   header: 'Agregar paquete',
     //   width: '50%',
@@ -81,7 +114,7 @@ export class PackagesComponent implements OnInit {
 
   }
 
-  
+
 
 
   openEditPackageModal(pack: Package) {
@@ -104,6 +137,7 @@ export class PackagesComponent implements OnInit {
       this.filteredPackagesList = this.filteredPackagesList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
     }
   }
+
   disablePackage(pack: Package) {
     var text1 = ""
     var text2 = ""
@@ -182,16 +216,5 @@ export class PackagesComponent implements OnInit {
     return diferenciaDias
   }
 
-  reserve(onePackage: Package) {
-    const customer: Customer = this.allCustomers.find(c => c.userId === this.user['id'])
-    const orderProcess = [{
-      action: "CreateOrderFromCustomer",
-      order: {
-        customer: customer,
-        package: onePackage
-      },
-      beneficiaries: {}
-    }]
-    this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess))
-  }
+  
 }
