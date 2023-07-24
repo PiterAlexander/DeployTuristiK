@@ -1,5 +1,5 @@
 import { Order } from '@/models/order';
-import { GetAllCustomerRequest, GetAllOrdersRequest, OpenModalCreateOrder, OpenModalOrderDetails, OpenModalPayments } from '@/store/ui/actions';
+import { GetAllCustomerRequest, GetAllOrdersRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, OpenModalCreateOrder, OpenModalOrderDetails, OpenModalPayments } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -30,8 +30,11 @@ export class OrdersComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.store.dispatch(new GetAllOrdersRequest)
+    this.store.dispatch(new GetAllRoleRequest)
+    this.store.dispatch(new GetUsersRequest)
     this.store.dispatch(new GetAllCustomerRequest)
+    this.store.dispatch(new GetAllPackagesRequest)
+    this.store.dispatch(new GetAllOrdersRequest)
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.user = JSON.parse(localStorage.getItem('TokenPayload'))
@@ -47,7 +50,6 @@ export class OrdersComponent implements OnInit {
       { 'label': 'Pagado', 'code': 2 },
       { 'label': 'Cancelado', 'code': 3 }
     ]
-
   }
 
   compareCustomer() {

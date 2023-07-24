@@ -191,8 +191,6 @@
 }
 
 .style-edit{
-    top: 95%;
-    left: 5%;
     border-radius: 10px !important;
     padding: 4px !important;
     font-size: small;
@@ -207,13 +205,20 @@
 }
 
 .hoverCard{
-  
   transition: transform 0.3s ease;
+  cursor: pointer; border-radius: 4%; 
+  box-shadow: 0px 4px 30px rgba(221, 224, 255, .54);
 }
+
 .hoverCard:hover{
-    transform: scale(1.1); /* Escala al 110% */
+    transform: scale(104%); /* Escala al 110% */
   
 }
+
+.shadowContent {
+  --custom-shadow: 0px 4px 30px rgba(221, 224, 255, .54) !important;
+}
+
 
 .img-volante{
   border: #343a40 solid 1px;
@@ -223,20 +228,6 @@
 .img-volante img{
   border: #343a40 solid 1px;
   border-radius: 15px;
-}
-
-.parallax {
-  /* The image used */
-  background-image: url("https://www.exoticca.com/es/blog/wp-content/uploads/2016/09/07-cabecera-e1542356501890.jpg");
-
-  /* Set a specific height */
-  min-height: 350px;
-
-  /* Create the parallax scrolling effect */
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 
 
@@ -257,3 +248,34 @@
   color: #326fd1;
   border-radius: 25px;
 }
+
+.package-badge {
+  border-radius: var(--border-radius);
+  padding: .25em .5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: .3px;
+
+  &.quotas-1 {
+      background: var(--green-200);
+      color: var(--green-800);
+  }
+
+  &.quotas-2 {
+    background: var(--yellow-200);
+    color: var(--yellow-800);
+}
+}
+
+// .card {
+//   background: var(--surface-card);
+//   border: 1px solid var(--surface-border);
+//   padding: 2rem;
+//   margin-bottom: 2rem;
+//   border-radius: 12px;
+
+//   &:last-child {
+//       margin-bottom: 0;
+//   }
+// }

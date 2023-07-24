@@ -39,10 +39,7 @@ export class CreateOrderFormComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.orderProcess === undefined) {
-      this.store.dispatch(new GetAllPackagesRequest)
-      this.store.dispatch(new GetAllCustomerRequest)
-      this.store.dispatch(new GetAllRoleRequest)
-      this.store.dispatch(new GetUsersRequest)
+
     }
 
     this.ui = this.store.select('ui')
@@ -189,7 +186,7 @@ export class CreateOrderFormComponent implements OnInit {
     if (!this.formGroup.invalid) {
       if (this.orderProcess !== undefined) {
         const oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
-        const beneficiaries: Array<Customer> = []
+        const beneficiaries: Array<any> = []
         for (const element of this.orderProcess[0].beneficiaries) {
           if (element !== undefined) {
             const exists = beneficiaries.find(b => b.document === element.document)
@@ -205,7 +202,19 @@ export class CreateOrderFormComponent implements OnInit {
               const index = beneficiaries.indexOf(this.orderProcess[0].order.customer)
               if (index !== undefined) {
                 beneficiaries.splice(index, 1)
-                beneficiaries.push(oneCustomer)
+                beneficiaries.push({
+                  customerId: oneCustomer.customerId,
+                  name: oneCustomer.name,
+                  lastName: oneCustomer.lastName,
+                  document: oneCustomer.document,
+                  birthDate: oneCustomer.birthDate,
+                  phoneNumber: oneCustomer.phoneNumber,
+                  address: oneCustomer.address,
+                  eps: oneCustomer.eps,
+                  user: oneCustomer.user,
+                  price: this.onePackage.price,
+                  addToFt: false
+                })
               }
             }
           }
@@ -224,8 +233,19 @@ export class CreateOrderFormComponent implements OnInit {
       } else {
         const oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
         if (this.formGroup.value.titularAsBeneficiarie) {
-          console.log('true');
-          const beneficiaries: Array<any> = [oneCustomer]
+          const beneficiaries: Array<any> = [{
+            customerId: oneCustomer.customerId,
+            name: oneCustomer.name,
+            lastName: oneCustomer.lastName,
+            document: oneCustomer.document,
+            birthDate: oneCustomer.birthDate,
+            phoneNumber: oneCustomer.phoneNumber,
+            address: oneCustomer.address,
+            eps: oneCustomer.eps,
+            user: oneCustomer.user,
+            price: this.onePackage.price,
+            addToFt: false
+          }]
           const orderProcess = [{
             action: 'CreateOrder',
             order: {
@@ -238,7 +258,6 @@ export class CreateOrderFormComponent implements OnInit {
           this.modalPrimeNg.close()
           this.store.dispatch(new OpenModalCreateOrderDetail({ ...orderProcess }))
         } else {
-          console.log('false');
           const orderProcess = [{
             action: 'CreateOrder',
             order: {

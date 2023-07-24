@@ -103,12 +103,21 @@ export class ReadOrderPaymentComponent {
 
   addPayment() {
     if (this.remainingAmount > 0) {
-      this.closeModal()
-      const orderProcess = [{
-        action: 'CreatePayment',
-        order: this.order
-      }]
-      this.store.dispatch(new OpenModalCreatePayment(orderProcess))
+      if (this.user['role'] === 'Cliente') {
+        const orderProcess = [{
+          action: 'CreatePaymentFromCustomer',
+          order: this.order
+        }]
+        this.closeModal()
+        this.store.dispatch(new OpenModalCreatePayment(orderProcess))
+      } else {
+        const orderProcess = [{
+          action: 'CreatePayment',
+          order: this.order
+        }]
+        this.closeModal()
+        this.store.dispatch(new OpenModalCreatePayment(orderProcess))
+      }
     }
   }
 }

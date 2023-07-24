@@ -3,8 +3,7 @@
 <div *ngIf="role!=='Cliente'" class="p-3">
     <div class="col-12">
         <div class="card px-6 py-6" style="border-radius: 15px;">
-            <p-table #dt [value]="ordersList" [paginator]="true" [rows]="5" scrollable="true"
-                [rowsPerPageOptions]="[5, 10]" [loading]="loading"
+            <p-table #dt [value]="ordersList" [paginator]="true" [rows]="5" scrollable="true" [loading]="loading"
                 [globalFilterFields]="['customer.name', 'customer.lastName', 'customer.document', 'package.name', 'totalCost', 'status']">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between">
@@ -58,7 +57,7 @@
     </div>
 </div>
 
-<div *ngIf="user['role'] === 'Cliente'" class="mt-8">
+<div *ngIf="user['role'] === 'Cliente'" style="margin-top: 8%;">
     <div class="surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border" style="border-radius: 15px;">
         <div class="flex flex-column md:flex-row justify-content-between align-items-center mb-4">
             <div class="flex flex-column text-center md:text-left">
@@ -124,30 +123,18 @@
                             </div> -->
                         </div>
                     </div>
-
-                    <!-- <div class="bg-green-50 mr-0 lg:mr-3 mt-4 lg:mt-0 p-2 flex align-items-center"
-                        [style.border-radius]="'2.5rem'">
-                        <span
-                            class="bg-green-500 text-white flex align-items-center justify-content-center border-circle mr-2"
-                            style="min-width:2rem; min-height: 2rem">
-                            <i class="pi pi-check"></i>
-                        </span>
-                        <span class="text-green-500">¡Tu pedido ya está pago!</span>
-                    </div> -->
-                    <!-- 
-                    PENDIENTE
-                    <div class="bg-yellow-100 mr-0 lg:mr-3 mt-4 lg:mt-0 p-2 flex align-items-center"
+                    <div *ngIf="order.status === 0"
+                        class="bg-yellow-100 mr-0 lg:mr-3 mt-4 lg:mt-0 p-2 flex align-items-center"
                         [style.border-radius]="'2.5rem'">
                         <span
                             class="bg-yellow-500 text-white flex align-items-center justify-content-center border-circle mr-2"
                             style="min-width:2rem; min-height: 2rem">
-                            <i class="pi pi-clock"></i>
+                            <i class="pi pi-stopwatch"></i>
                         </span>
-                        <span class="text-yellow-500">Tu pedido está en revision</span>
+                        <span class="text-yellow-500">¡Tu pedido está en revision!</span>
                     </div>
-                    -->
-
-                    <div class="bg-cyan-50 mr-0 lg:mr-3 mt-4 lg:mt-0 p-2 flex align-items-center"
+                    <div *ngIf="order.status === 1"
+                        class="bg-cyan-50 mr-0 lg:mr-3 mt-4 lg:mt-0 p-2 flex align-items-center"
                         [style.border-radius]="'2.5rem'">
                         <span
                             class="bg-cyan-500 text-white flex align-items-center justify-content-center border-circle mr-2"
@@ -156,8 +143,18 @@
                         </span>
                         <span class="text-cyan-500">¡Tu pedido está en curso!</span>
                     </div>
-                    <!-- CANCELADO
-                    <div class="bg-red-50 mr-0 lg:mr-3 mt-4 lg:mt-0 p-2 flex align-items-center"
+                    <div *ngIf="order.status === 2"
+                        class="bg-green-50 mr-0 lg:mr-3 mt-4 lg:mt-0 p-2 flex align-items-center"
+                        [style.border-radius]="'2.5rem'">
+                        <span
+                            class="bg-green-500 text-white flex align-items-center justify-content-center border-circle mr-2"
+                            style="min-width:2rem; min-height: 2rem">
+                            <i class="pi pi-check"></i>
+                        </span>
+                        <span class="text-green-500">¡Tu pedido ya está pago!</span>
+                    </div>
+                    <div *ngIf="order.status === 3"
+                        class="bg-red-50 mr-0 lg:mr-3 mt-4 lg:mt-0 p-2 flex align-items-center"
                         [style.border-radius]="'2.5rem'">
                         <span
                             class="bg-red-500 text-white flex align-items-center justify-content-center border-circle mr-2"
@@ -165,7 +162,7 @@
                             <i class="pi pi-times"></i>
                         </span>
                         <span class="text-red-500">¡Tu pedido fue cancelado!</span>
-                    </div> -->
+                    </div>
                 </div>
             </div>
             <div class="col-12 p-0 flex border-top-1 surface-border">

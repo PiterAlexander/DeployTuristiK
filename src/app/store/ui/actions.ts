@@ -148,6 +148,7 @@ export class GetTopPackagesFailure implements Action {
 
 export class GetOnePackageRequest implements Action {
   readonly type: string = GET_ONE_PACKAGES_REQUEST;
+  constructor(public payload : Package) {}
 }
 
 // PACKAGES CREATE--------------------------------------------------------
