@@ -112,6 +112,25 @@ export enum packageActions {
   CHANGE_STATUS_PACKAGE_FAILURE = '[PACKAGE] CHANGE_STATUS_PACKAGE_FAILURE',
 }
 
+export const LOAD_DATA_REQUEST = '[DASHBOARD] LOAD_DATA_REQUEST';
+export const LOAD_DATA_SUCCESS = '[DASHBOARD] LOAD_DATA_SUCCESS';
+export const LOAD_DATA_FAILURE = '[DASHBOARD] LOAD_DATA_FAILURE';
+
+export class LoadDataRequest implements Action {
+  readonly type: string = LOAD_DATA_REQUEST;
+  constructor() {}
+}
+
+export class LoadDataSuccess implements Action {
+  readonly type: string = LOAD_DATA_SUCCESS;
+  constructor(public payload: any) { }
+}
+
+export class LoadDataFailure implements Action {
+  readonly type: string = LOAD_DATA_FAILURE;
+  constructor(public payload: any) { }
+}
+
 export class OpenModalDetailsPackage implements Action {
   readonly type: string = OPEN_MODAL_DETAILS_PACKAGE;
   constructor(public payload?: Package) { }
@@ -148,7 +167,7 @@ export class GetTopPackagesFailure implements Action {
 
 export class GetOnePackageRequest implements Action {
   readonly type: string = GET_ONE_PACKAGES_REQUEST;
-  constructor(public payload : Package) {}
+  constructor(public payload: Package) { }
 }
 
 // PACKAGES CREATE--------------------------------------------------------
@@ -192,21 +211,20 @@ export class EditPackageFailure implements Action {
 export class ChangeStatusPackageRequest implements Action {
   readonly type = packageActions.CHANGE_STATUS_PACKAGE_REQUEST;
 
-  constructor(public payload: Package) { } // Aquí pasamos el id del paquete como carga útil
+  constructor(public payload: Package) { }
 }
 
 export class ChangeStatusPackageSuccess implements Action {
   readonly type = packageActions.CHANGE_STATUS_PACKAGE_SUCCESS;
 
-  constructor(public payload: any) { } // Aquí pasamos el paquete deshabilitado como carga útil
+  constructor(public payload: any) { }
 }
 
 export class ChangeStatusPackageFailure implements Action {
   readonly type = packageActions.CHANGE_STATUS_PACKAGE_FAILURE;
 
-  constructor(public payload: string) { } // Aquí pasamos cualquier error como carga útil
+  constructor(public payload: string) { }
 }
-
 // PACKAGES DISABLE ACTIONS END -----------------------------------------
 //<--------------------->
 
@@ -237,7 +255,7 @@ export enum orderActions {
   EDIT_ORDERDETAIL_REQUEST = '[ORDERDETAIL] EDIT_ORDERDETAIL_REQUEST',
   EDIT_ORDERDETAIL_SUCCESS = '[ORDERDETAIL] EDIT_ORDERDETAIL_SUCCESS',
   EDIT_ORDERDETAIL_FAILURE = '[ORDERDETAIL] EDIT_ORDERDETAIL_FAILURE',
-  
+
   DELETE_ORDERDETAIL_REQUEST = '[ORDERDETAIL] DELETE_ORDERDETAIL_REQUEST',
   DELETE_ORDERDETAIL_SUCCESS = '[ORDERDETAIL] DELETE_ORDERDETAIL_SUCCESS',
   DELETE_ORDERDETAIL_FAILURE = '[ORDERDETAIL] DELETE_ORDERDETAIL_FAILURE',

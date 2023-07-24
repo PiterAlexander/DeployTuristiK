@@ -41,6 +41,10 @@ import {
     DeleteOrderDetailRequest,
     DeleteOrderDetailSuccess,
     DeleteOrderDetailFailure,
+    LoadDataRequest,
+    LoadDataSuccess,
+    LoadDataFailure,
+    LOAD_DATA_REQUEST,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -86,6 +90,18 @@ export class PackageEffects {
             )
         })
     ));
+
+    loadIngresos$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LOAD_DATA_REQUEST),
+      mergeMap(() =>
+        this.apiService.getIngresosMensuales().pipe(
+          map((data: number[]) => new LoadDataSuccess({  data })),
+          catchError((error) => of(new LoadDataFailure({ error })))
+        )
+      )
+    )
+  );
 
     getTopPackages$ = createEffect(() => this.actions$.pipe(
         ofType(packageActions.GET_TOP_PACKAGES_REQUEST),
