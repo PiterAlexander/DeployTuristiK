@@ -1,13 +1,10 @@
-import { Customer } from '@/models/customer';
-import { Employee } from '@/models/employee';
 import { Role } from '@/models/role';
 import { User } from '@/models/user';
 import { AppState } from '@/store/state';
 import { CreateUserRequest, UpdateUserRequest } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Observable } from 'rxjs';
@@ -32,32 +29,38 @@ export class CreateUserFormComponent implements OnInit {
   public otraEps: boolean = false
   Visible: boolean = false;
   roles: any[] = [];
-  // statuses: Status[];
+  public statuses: any[] = [];
 
   constructor(
     private fb: FormBuilder,
-    private modalService: NgbModal,
     private store: Store<AppState>,
     private modalPrimeNg: DynamicDialogRef,
   ) { }
 
   ngOnInit() {
-
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
       this.allUsers = state.allUsers.data
       this.userData = state.currentUser.data
       this.allRoles = state.allRoles.data
       this.rolesList = this.allRoles.filter(role => role.name !== "Beneficiario")
+      if (this.userData) {
+        this.rolesList = this.allRoles
+      }
+      console.log(this.userData);
+
     })
     this.roles = [
       { label: 'Administrador', value: '1' },
       { label: 'Cliente', value: '2' },
+      { label: 'Empleado', value: '3' },
+      { label: 'Beneficiario', value: '4' },
     ];
-    //   this.statuses = [
-    //     {name: 'Activo', code: 1},
-    //     {name: 'Inactivo', code: 2}
-    // ];
+
+    this.statuses = [
+      { 'label': 'Activo', 'value': 1 },
+      { 'label': 'Inactivo', 'value': 2 }
+    ]
 
     this.formGroup = this.fb.group({
       userId: [null],
@@ -71,7 +74,7 @@ export class CreateUserFormComponent implements OnInit {
         [Validators.required,
         Validators.minLength(8)]
       ],
-      status: [1, Validators.required],
+      status: [null, Validators.required],
       name: [null, Validators.required],
       lastName: [null, Validators.required],
       document: [null, Validators.required],
@@ -80,9 +83,7 @@ export class CreateUserFormComponent implements OnInit {
       address: [null],
       eps: [null],
       otherEps: [null]
-
     })
-
 
     if (this.userData != null) {
 

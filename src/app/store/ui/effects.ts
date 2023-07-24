@@ -780,9 +780,11 @@ export class PackageEffects {
             tap((action) => {
                 this.dialogRef = this.dialogService.open(CreateUserFormComponent, {
                     /* Opciones del modal */
-                    header: action['payload'] === undefined ? 'Registrar Usuario' : 'Editar Usuario',
-                    width: '55%',
-                    contentStyle: { overflowY: 'auto' },
+                    /* Opciones del modal */
+                    showHeader: false,
+                    width: '50%',
+                    contentStyle: { padding: '1.50rem 2.25rem 1.50rem 2.25rem', overflowY: 'auto' },
+                    baseZIndex: 10000,
                 })
             })
         ), { dispatch: false });
