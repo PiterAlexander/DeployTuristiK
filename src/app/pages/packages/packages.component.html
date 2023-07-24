@@ -9,11 +9,10 @@
                             <span class="p-input-icon-left input-design">
                                 <i class="pi pi-search"></i>
                                 <input class="w-full small-input" type="search" pInputText placeholder="Busca por el nombre..."  (input)="onFilter(dv, $event)">
-                            </span>	 
-                            <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+                            </span>
+                            <p-dataViewLayoutOptions style="display: contents;"></p-dataViewLayoutOptions>
                         </div>
                     </ng-template>
-    
                     <ng-template let-package pTemplate="listItem">
                         <div class="col-12">
                             <div class="flex flex-column md:flex-row align-items-center p-3 w-full ">
@@ -35,7 +34,7 @@
                             </div>
                         </div>
                     </ng-template>
-    
+
                     <ng-template let-package pTemplate="gridItem">
                         <div class="col-12 md:col-4 ">
                             <div class="card m-3 layout-light p-3 hoverCard" (click)="verDetalles(package.packageId)">
