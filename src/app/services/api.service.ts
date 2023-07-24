@@ -14,6 +14,7 @@ import { Token } from '@/models/token';
 import { Role } from '@/models/role';
 import { Permission } from '@/models/permission';
 import { AssociatedPermission } from '@/models/associated-permission';
+import { recoverPasswordEmail } from '@/models/recoverPasswordEmail';
 @Injectable({
     providedIn: 'root'
 })
@@ -160,6 +161,10 @@ export class ApiService {
     //<--- LOGIN --->
     signIn(email: string, password: string) {
         return this.http.post<Token>(`${this.endpoint}api/Login`, { email, password })
+    }
+
+    recoverPassword(model: recoverPasswordEmail) {
+        return this.http.post<any>(`${this.endpoint}api/ResetPassword`, model)
     }
 
 

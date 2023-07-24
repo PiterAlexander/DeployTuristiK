@@ -1,53 +1,95 @@
 import {
     Component,
-    HostBinding,
-    OnDestroy,
-    OnInit,
-    Renderer2
+    OnInit
 } from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
-import {ToastrService} from 'ngx-toastr';
-import {AppService} from '@services/app.service';
+import { FormBuilder, FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { Store } from '@ngrx/store';
+import { AppState } from '@/store/state';
+import { UiState } from '@/store/ui/state';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { User } from '@/models/user';
+import { UpdateUserRequest, SaveCurrentUserRequest } from '@/store/ui/actions';
 
 @Component({
     selector: 'app-recover-password',
     templateUrl: './recover-password.component.html',
     styleUrls: ['./recover-password.component.scss']
 })
-export class RecoverPasswordComponent implements OnInit, OnDestroy {
-    @HostBinding('class') class = 'login-box';
+export class RecoverPasswordComponent implements OnInit {
+    public formGroup: FormGroup;
+    public ui: Observable<UiState>;
+    public currentUser: User
+    public modelUser: User;
 
-    public recoverPasswordForm: UntypedFormGroup;
-    public isAuthLoading = false;
+    Visible: boolean = false;
+    Visible2: boolean = false;
+
 
     constructor(
-        private renderer: Renderer2,
-        private toastr: ToastrService,
-        private appService: AppService
-    ) {}
+        private fb: FormBuilder,
+        private store: Store<AppState>,
+        private router: Router,
+        private toastr: ToastrService
+    ) { }
 
     ngOnInit(): void {
-        this.renderer.addClass(
-            document.querySelector('app-root'),
-            'login-page'
-        );
-        this.recoverPasswordForm = new UntypedFormGroup({
-            password: new UntypedFormControl(null, Validators.required),
-            confirmPassword: new UntypedFormControl(null, Validators.required)
+        this.ui = this.store.select('ui');
+        this.ui.subscribe((state: UiState) => {
+            this.currentUser = state.currentUser.data
+
         });
+
+        this.formGroup = this.fb.group({
+            codePassword: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(10)]),
+            password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
+            confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
+
+        });
+
     }
 
     recoverPassword() {
-        if (this.recoverPasswordForm.valid) {
+
+        if (this.formGroup.value.codePassword == this.currentUser.password) {
+            this.modelUser = {
+                userId: this.currentUser.userId,
+                email: this.currentUser.email,
+                password: this.formGroup.value.password,
+                status: this.currentUser.status,
+                roleId: this.currentUser.roleId
+            }
+            this.store.dispatch(new UpdateUserRequest({
+                ...this.modelUser,
+            }))
+            console.log(this.modelUser)
+
+
+            this.toastr.success('Ya puedes acceder nuevamente al sistema', 'Contraseña Cambiada Correctamente!');
+            this.router.navigate(['/login'])
+
         } else {
             this.toastr.error('Hello world!', 'Toastr fun!');
+            console.log(this.currentUser)
         }
     }
 
-    ngOnDestroy(): void {
-        this.renderer.removeClass(
-            document.querySelector('app-root'),
-            'login-page'
-        );
+    displayPassword() {
+        this.Visible = !this.Visible;
+    }
+    displayConfirmPassword() {
+        this.Visible2 = !this.Visible2;
+    }
+
+    validatePassword(): boolean {
+        const password1 = this.formGroup.value.password
+        const password2 = this.formGroup.value.confirmPassword
+
+        if (password1 === password2) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

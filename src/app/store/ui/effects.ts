@@ -38,6 +38,12 @@ import {
     DeleteFrequentTravelerFailure,
     GetTopPackagesSuccess,
     GetTopPackagesFailure,
+    RecoverPasswordRequest,
+    RecoverPasswordSuccess,
+    RecoverPasswordFailure,
+    SaveCurrentUserRequest,
+    SaveCurrentUserSuccess,
+    SaveCurrentUserFailure,
     DeleteOrderDetailRequest,
     DeleteOrderDetailSuccess,
     DeleteOrderDetailFailure,
@@ -859,6 +865,30 @@ export class PackageEffects {
 
         )
     )
+
+    recoverPassword$ = createEffect(() => this.actions$.pipe(
+        ofType(loginActions.RECOVER_PASSWORD_REQUEST),
+        map((action: RecoverPasswordRequest) => action.payload),
+        switchMap((recoverPasswordEmail) => {
+            return this.apiService.recoverPassword(recoverPasswordEmail).pipe(
+                mergeMap((data) => {
+                    return [new RecoverPasswordSuccess(data)]
+
+                }),
+                catchError((error) => of(new RecoverPasswordFailure(error))))
+        })
+    ))
+
+    saveCurrentUser$ = createEffect(() => this.actions$.pipe(
+        ofType(loginActions.SAVE_CURRENT_USER_REQUEST),
+        map((action: SaveCurrentUserRequest) => action.payload),
+        mergeMap((data) => {
+            return [new SaveCurrentUserSuccess(data)]
+
+        }),
+        catchError((error) => of(new SaveCurrentUserFailure(error)))
+    ))
+
     //<----------------------------->
     constructor(
         private actions$: Actions,
