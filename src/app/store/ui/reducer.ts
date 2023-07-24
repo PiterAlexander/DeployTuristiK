@@ -576,7 +576,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
         case Actions.loginActions.GET_USER_INFO_SUCCESS:
             return {
                 ...state,
-                userLoged: {
+                userLogged: {
                     data: action.payload,
                     error: undefined,
                     loading: false
@@ -586,12 +586,43 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
         case Actions.loginActions.GET_USER_INFO_FAILURE:
             return {
                 ...state,
-                userLoged: {
+                userLogged: {
                     data: undefined,
                     error: action.payload,
                     loading: false
                 }
             };
+
+
+            case Actions.loginActions.SAVE_CURRENT_USER_REQUEST:
+                return {
+                    ...state,
+                    currentUser: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: true
+                    }
+                };
+    
+            case Actions.loginActions.SAVE_CURRENT_USER_SUCCESS:
+                return {
+                    ...state,
+                    currentUser: {
+                        data: action.payload,
+                        error: undefined,
+                        loading: false
+                    }
+                };
+    
+            case Actions.loginActions.SAVE_CURRENT_USER_FAILURE:
+                return {
+                    ...state,
+                    currentUser: {
+                        data: undefined,
+                        error: action.payload,
+                        loading: false
+                    }
+                };
         //<------------>
         default:
             return state;

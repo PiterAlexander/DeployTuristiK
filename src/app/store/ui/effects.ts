@@ -39,6 +39,12 @@ import {
     DeleteFrequentTravelerFailure,
     GetTopPackagesSuccess,
     GetTopPackagesFailure,
+    RecoverPasswordRequest,
+    RecoverPasswordSuccess,
+    RecoverPasswordFailure,
+    SaveCurrentUserRequest,
+    SaveCurrentUserSuccess,
+    SaveCurrentUserFailure,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -87,19 +93,19 @@ export class PackageEffects {
     ));
 
     getTopPackages$ = createEffect(() => this.actions$.pipe(
-      ofType(packageActions.GET_TOP_PACKAGES_REQUEST),
-      switchMap((action) => {
-          return this.apiService.getTopPackage().pipe(
-              mergeMap((packagesResolved) => {
+        ofType(packageActions.GET_TOP_PACKAGES_REQUEST),
+        switchMap((action) => {
+            return this.apiService.getTopPackage().pipe(
+                mergeMap((packagesResolved) => {
 
-                  return [
-                      new GetTopPackagesSuccess(packagesResolved)
-                  ];
-              }),
-              catchError((err) => of(new GetTopPackagesFailure(err)))
-          )
-      })
-  ));
+                    return [
+                        new GetTopPackagesSuccess(packagesResolved)
+                    ];
+                }),
+                catchError((err) => of(new GetTopPackagesFailure(err)))
+            )
+        })
+    ));
 
     // openModalCreatePackage$ = createEffect(() =>
     //     this.actions$.pipe(
@@ -476,22 +482,22 @@ export class PackageEffects {
 
 
 
-  createAssociatedPermission$ = createEffect(() => this.actions$.pipe(
-      ofType(CREATE_ASSOCIATEDPERMISSION_REQUEST),
-      ofType(permissionActions.CREATE_ASSOCIATEDPERMISSION_REQUEST),
-      map((action: CreateAssociatedPermissionRequest) => action.payload),
-      switchMap((asocpermission) => {
-          return this.apiService.addAssociatedPermission(asocpermission).pipe(
-              mergeMap((assocPermissionResolved) => {
-                  this.modalRef.close();
-                  return [
-                      new CreateAssociatedPermissionSuccess(assocPermissionResolved),
-                  ];
-              }),
-              catchError((err) => of(new CreateAssociatedPermissionFailure(err)))
-          )
-      })
-  ));
+    createAssociatedPermission$ = createEffect(() => this.actions$.pipe(
+        ofType(CREATE_ASSOCIATEDPERMISSION_REQUEST),
+        ofType(permissionActions.CREATE_ASSOCIATEDPERMISSION_REQUEST),
+        map((action: CreateAssociatedPermissionRequest) => action.payload),
+        switchMap((asocpermission) => {
+            return this.apiService.addAssociatedPermission(asocpermission).pipe(
+                mergeMap((assocPermissionResolved) => {
+                    this.modalRef.close();
+                    return [
+                        new CreateAssociatedPermissionSuccess(assocPermissionResolved),
+                    ];
+                }),
+                catchError((err) => of(new CreateAssociatedPermissionFailure(err)))
+            )
+        })
+    ));
 
     DeleteAssociatedPermission$ = createEffect(() => this.actions$.pipe(
         ofType(DELETE_ASSOCIATEDPERMISSION_REQUEST),
@@ -577,7 +583,7 @@ export class PackageEffects {
     ));
     //<------------------>
     //<---FREQUENT TRAVELER---->
-    
+
     listModalTraveler$ = createEffect(() =>
         this.actions$.pipe(
             ofType(FrequentTravelerActions.OPEN_MODAL_LIST_FREQUENTTRAVELER),
@@ -770,7 +776,7 @@ export class PackageEffects {
         switchMap((user) => {
             return this.apiService.updateUser(user.userId, user).pipe(
                 mergeMap((userResolved) => {
-                    this.dialogRef.close(); 
+                    this.dialogRef.close();
                     this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Usuario editado exitosamente' });
                     return [
                         new UpdateUserSuccess(userResolved),
@@ -804,7 +810,6 @@ export class PackageEffects {
             switchMap((response) => {
                 return this.authService.getUserInfo(response).pipe(
                     mergeMap((data) => {
-                        //console.log(typeof (data))
                         return [new GetUserInfoSuccess(data)]
 
                     }),
@@ -813,6 +818,30 @@ export class PackageEffects {
 
         )
     )
+
+    recoverPassword$ = createEffect(() => this.actions$.pipe(
+        ofType(loginActions.RECOVER_PASSWORD_REQUEST),
+        map((action: RecoverPasswordRequest) => action.payload),
+        switchMap((recoverPasswordEmail) => {
+            return this.apiService.recoverPassword(recoverPasswordEmail).pipe(
+                mergeMap((data) => {
+                    return [new RecoverPasswordSuccess(data)]
+
+                }),
+                catchError((error) => of(new RecoverPasswordFailure(error))))
+        })
+    ))
+
+    saveCurrentUser$ = createEffect(() => this.actions$.pipe(
+        ofType(loginActions.SAVE_CURRENT_USER_REQUEST),
+        map((action: SaveCurrentUserRequest) => action.payload),
+        mergeMap((data) => {
+            return [new SaveCurrentUserSuccess(data)]
+
+        }),
+        catchError((error) => of(new SaveCurrentUserFailure(error)))
+    ))
+
     //<----------------------------->
     constructor(
         private actions$: Actions,
