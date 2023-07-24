@@ -1,0 +1,18 @@
+.payment-badge {
+    border-radius: var(--border-radius);
+    padding: .25em .5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .3px;
+
+    &.status-1 {
+        background: var(--green-200);
+        color: var(--green-800);
+    }
+
+    &.status-2 {
+        background: var(--red-200);
+        color: var(--red-800);
+    }
+}

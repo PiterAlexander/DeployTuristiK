@@ -11,9 +11,8 @@
 @import '~admin-lte/plugins/fontawesome-free/css/all.min.css';
 @import '~admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css';
 @import '~admin-lte/dist/css/adminlte.min.css';
-
+@import 'typeface-poppins';
 @import 'ngx-toastr/toastr';
-
 // body {
 //     width: 100vw;
 //     height: 100vh;
@@ -22,6 +21,10 @@
 // ::-webkit-scrollbar {
 //     display: none;
 // }
+
+*{
+    font-family: 'Poppins', sans-serif;
+}
 
 .p-dialog .p-dialog-content::-webkit-scrollbar {
   display: none;

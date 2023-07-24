@@ -1,60 +1,92 @@
-<div class="card card-package w-100 m-0">
-    <div class="card-header text-left">
-        <div class="row">
-            <div class="col text-dark">
-                <h1 class="m-0">Abonos</h1>
-            </div>
-            <div class="col">
-                <div class="text-dark d-flex align-items-center justify-content-end">
-                    <button (click)="addPayment()" type="button" class="btn btn-primary">Agregar
-                        abono</button>
-                </div>
-            </div>
-        </div>
+<div class="col-12">
+    <div class="flex align-items-center mb-1">
+        <h2 class="text-blue-500">Abonos</h2>
     </div>
-    <div class="card-body">
-        <form>
-            <div class="d-flex justify-content-end mb-3 row">
-                <label for="table-complete-search"
-                    class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
-                <div class="col-xs-3 col-sm-auto">
-                    <input id="table-complete-search" type="text" class="form-control" name="searchTerm" />
+    <div class="mb-2" style="border-radius: 15px;">
+        <p-table *ngIf="visible" #dt [value]="payments" [paginator]="true" [rows]="2" [showCurrentPageReport]="true"
+            scrollable="true" [loading]="loading"
+            currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} abonos."
+            [globalFilterFields]="['amount', 'remainingAmount', 'date']">
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between">
+                    <span class="mt-2 md:mt-0 p-input-icon-right">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Buscar..." />
+                    </span>
+                    <button *ngIf="existingRemainingAmount()" pButton p pRipple type="button" label="Agregar abono"
+                        icon="pi pi-plus" (click)="addPayment()" class="p-button-outlined"></button>
                 </div>
-            </div>
-
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Monto</th>
-                        <th>Restante</th>
-                        <th>Fecha</th>
-                        <th>Comprobante</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let payment of payments">
-                        <td>{{payment.amount}}</td>
-                        <td>{{payment.remainingAmount}}</td>
-                        <td>{{payment.date}}</td>
-                        <td>
-                            <button (click)="editPayment(payment)" class="hover-text btn btn-outline-secondary"><i
-                                    style="cursor: pointer; display: grid;" style="font-size: 100%"
-                                    class="fas fa-eye"></i>
-                                <span class="tooltip-text bottom">Inspeccionar</span>
-                            </button>
-                        </td>
-                        <td>
-                            <span *ngIf="payment.status === 0">Pendiente</span>
-                            <span *ngIf="payment.status === 1">Aceptado</span>
-                            <span *ngIf="payment.status === 2">Rechazado</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="amount" style="min-width: 9rem">
+                        Monto <p-sortIcon field="amount"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="remainingAmount" style="min-width: 12rem">
+                        Monto restante <p-sortIcon field="remainingAmount"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="date" style="min-width: 13rem">
+                        Fecha de registro <p-sortIcon field="date"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 10rem">
+                        Comprobante
+                    </th>
+                    <th pSortableColumn="status" style="min-width: 8rem">
+                        Estado <p-sortIcon field="status"></p-sortIcon>
+                    </th>
+                    <th style="min-width: 7rem" alignFrozen="right" pFrozenColumn class="flex justify-content-center">
+                        Editar
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-payment>
+                <tr>
+                    <td style="min-width: 9rem">
+                        {{ payment.amount | currency: 'USD':'symbol' }}
+                    </td>
+                    <td style="min-width: 12rem">
+                        {{ payment.remainingAmount | currency: 'USD':'symbol' }}
+                    </td>
+                    <td style="min-width: 13rem">
+                        {{ payment.date | date:'MM/dd/yyyy - HH:mm' }}
+                    </td>
+                    <td style="min-width: 10rem">
+                        <span>
+                            <button pButton pRipple type="button" icon="pi pi-eye"
+                                class="p-button-outlined p-button-rounded" (click)="editPayment(payment)"
+                                pTooltip="Ver comprobante" tooltipPosition="bottom"></button>
+                        </span>
+                    </td>
+                    <td style="min-width: 8rem">
+                        <span [class]="'payment-badge status-' + payment.status">{{showStatus(payment.status)}}</span>
+                    </td>
+                    <td alignFrozen="right" pFrozenColumn style="min-width: 7rem"
+                        class="flex justify-content-around align-items-center">
+                        <span>
+                            <button *ngIf="validateEditAllowing(payment)" pButton pRipple type="button"
+                                icon="pi pi-pencil" class="p-button-outlined p-button-warning p-button-rounded"
+                                (click)="editPayment(payment)" pTooltip="Editar" tooltipPosition="bottom"></button>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="9">No se encontraron abonos.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <tr>
+                    <td *ngIf="existingRemainingAmount()" colspan="12">Restante: {{ remainingAmount |
+                        currency:'USD':'symbol'}}</td>
+                    <td *ngIf="!existingRemainingAmount()" colspan="12">¡Ya pagaste la totalidad del pedido!</td>
+                </tr>
+            </ng-template>
+        </p-table>
     </div>
-    <div class="card-footer d-flex justify-content-end">
-        <button type="button" (click)="closeModal()" class="btn btn-danger">Regresar</button>
+    <div class="flex justify-content-end">
+        <button pButton pRipple type="button" label="Regresar" icon="pi pi-undo" class="p-button-outlined"
+            (click)="closeModal()"></button>
     </div>
 </div>

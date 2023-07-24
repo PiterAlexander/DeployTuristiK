@@ -1,94 +1,63 @@
 import { Customer } from '@/models/customer';
-import { GetAllCustomerRequest, OpenModalCreateCustomer, OpenModalListFrequentTraveler} from '@/store/ui/actions';
+import { GetAllCustomerRequest, GetAllRoleRequest, OpenModalCreateCustomer, OpenModalListFrequentTraveler } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
-import { Component, OnInit, PipeTransform } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
-
-interface State {
-  page: number;
-  pageSize: number;
-}
+import { Role } from '@/models/role';
 
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
   styleUrls: ['./customers.component.scss']
 })
+
 export class CustomersComponent implements OnInit {
-  public ui: Observable<UiState>;
-  public customersList: Array<Customer>;
-  public filteredCustomersList: Array<Customer>;
-  public loading: boolean;
-  public search: string
+  public ui: Observable<UiState>
+  public allRoles: Array<Role>
+  public allCustomers: Array<Customer>
   public total: number
 
-  private _state: State = {
-    page: 1,
-    pageSize: 5
-  };
-
-  constructor(private store: Store<AppState>) { }
+  constructor(
+    private store: Store<AppState>
+  ) { }
 
   ngOnInit() {
-    this.store.dispatch(new GetAllCustomerRequest());
-
-    this.ui = this.store.select('ui');
+    this.store.dispatch(new GetAllRoleRequest)
+    this.store.dispatch(new GetAllCustomerRequest)
+    this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
-      this.customersList = state.allCustomers.data,
-      this.loading = state.allCustomers.loading
-      this.searchByName();
-    });
+      this.allCustomers = state.allCustomers.data
+      this.allRoles = state.allRoles.data
+    })
   }
 
-  matches(customerResolved: Customer, term: string, pipe: PipeTransform) {
-    return (
-      customerResolved.name.toLowerCase().includes(term.toLowerCase())
-    );
+  createCustomer() {
+    this.store.dispatch(new OpenModalCreateCustomer())
   }
 
-  openModalCreateCustomer(customer?:Customer) {
-    this.store.dispatch(new OpenModalCreateCustomer());
-  }
-
-  openModalEditCustomer(customer:Customer){
-    this.store.dispatch(new OpenModalCreateCustomer(customer));
-  }
-  
-  openModalListTraveler(customer:Customer){
-    this.store.dispatch(new OpenModalListFrequentTraveler(customer));
-  }
-
-  searchByName() {
-    if (this.search === undefined || this.search.length <= 0) {
-      this.filteredCustomersList = this.customersList;
-      this.total = this.filteredCustomersList.length;
-      this.filteredCustomersList = this.filteredCustomersList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
-    } else {
-      this.filteredCustomersList = this.customersList.filter(customerModel => customerModel.name.toLocaleLowerCase().includes(this.search.toLocaleLowerCase().trim()));
-      this.total = this.filteredCustomersList.length;
-      this.filteredCustomersList = this.filteredCustomersList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+  editCustomer(customer: Customer) {
+    const oneCustomer = {
+      action: 'editCustomer',
+      customer: customer
     }
+    this.store.dispatch(new OpenModalCreateCustomer({ ...oneCustomer }))
   }
 
-
-  get page() {
-    return this._state.page;
-  }
-  get pageSize() {
-    return this._state.pageSize;
-  }
-
-  set page(page: number) {
-    this._set({ page });
-  }
-  set pageSize(pageSize: number) {
-    this._set({ pageSize });
+  validateListFrequentTravelersAllowing(customer: Customer): boolean {
+    if (this.allRoles !== undefined) {
+      const role: Role = this.allRoles.find(r => r.roleId === customer.user.roleId)
+      if (role !== undefined) {
+        if (role.name === 'Cliente') {
+          return true
+        }
+      }
+    }
+    return false
   }
 
-  private _set(patch: Partial<State>) {
-    Object.assign(this._state, patch);
-    this.searchByName();
+  listFrequentTravelers(customer: Customer) {
+    this.store.dispatch(new OpenModalListFrequentTraveler({ ...customer }))
   }
 }

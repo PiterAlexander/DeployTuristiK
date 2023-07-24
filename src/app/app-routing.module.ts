@@ -16,10 +16,14 @@ import { CustomersComponent } from '@pages/customers/customers.component';
 import { EmployeesComponent } from '@pages/employees/employees.component';
 import { UsersComponent } from '@pages/users/users.component';
 import { CalendarComponent } from '@pages/calendar/calendar.component';
+import { MainPublicComponent } from '@modules/main copy/main.component';
+import { PackagePublicComponent } from '@modules/packages/package-public.component';
+import { DetailsPackageComponent } from '@components/details-package/details-package.component';
+
 
 const routes: Routes = [
     {
-        path: '',
+        path: 'Home',
         component: MainComponent,
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
@@ -71,26 +75,45 @@ const routes: Routes = [
         ]
     },
     {
-        path: 'login',
-        component: LoginComponent,
-        canActivate: [NonAuthGuard]
+        path: '',
+        canActivate: [NonAuthGuard],
+        component: MainPublicComponent,
+        canActivateChild: [NonAuthGuard],
+        children:[
+            {
+                path: '',
+                component: PackagesComponent,
+                canActivate: [NonAuthGuard]
+            },
+            {
+                path: 'detailsPackage/:id',
+                component: DetailsPackageComponent,
+                canActivate:[NonAuthGuard]
+            },
+            {
+                path: 'login',
+                component: LoginComponent,
+                canActivate: [NonAuthGuard]
+            },
+            {
+                path: 'register',
+                component: RegisterComponent,
+                canActivate: [NonAuthGuard]
+            },
+            {
+                path: 'forgot-password',
+                component: ForgotPasswordComponent,
+                canActivate: [NonAuthGuard]
+            },
+            {
+                path: 'recover-password',
+                component: RecoverPasswordComponent,
+                canActivate: [NonAuthGuard]
+            },
+        ]
     },
-    {
-        path: 'register',
-        component: RegisterComponent,
-        canActivate: [NonAuthGuard]
-    },
-    {
-        path: 'forgot-password',
-        component: ForgotPasswordComponent,
-        canActivate: [NonAuthGuard]
-    },
-    {
-        path: 'recover-password',
-        component: RecoverPasswordComponent,
-        canActivate: [NonAuthGuard]
-    },
-    { path: '**', redirectTo: 'login' },
+    
+    { path: '**', redirectTo: '' },
 ];
 
 @NgModule({

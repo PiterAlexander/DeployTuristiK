@@ -1,22 +1,43 @@
-.card-user{
+.user-badge{
+    border-radius: var(--border-radius);
+    padding: .25em .5em;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .3px;
+  
+    &.status-1{
+      background: var(--green-200);
+      color:var(--green-800);
+    }
+  
+    &.status-2{
+      background: var(--red-200);
+      color:var(--red-800);
+    }
+  }
+  
+
+
+.card-user {
     width: 90%;
 }
 
-.card-user-header{
+.card-user-header {
     display: flex;
 }
 
-.col-personalized-1{
+.col-personalized-1 {
     padding-left: 0px;
 }
 
-.col-personalized-2{
+.col-personalized-2 {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     padding-right: 0px;
 }
 
-.label-search{
+.label-search {
     padding-right: 0px;
 }

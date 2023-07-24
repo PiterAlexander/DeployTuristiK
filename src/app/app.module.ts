@@ -48,10 +48,14 @@ import { CreateUserFormComponent } from '@components/create-user-form/create-use
 import { CreatePaymentFormComponent } from './components/create-payment-form/create-payment-form.component';
 import { ReadOrderOrderDetailComponent } from './components/read-order-order-detail/read-order-order-detail.component';
 import { ReadOrderPaymentComponent } from './components/read-order-payment/read-order-payment.component';
-import { CreateFrequentTravelerFormComponent } from './components/create-frequent-traveler-form/create-frequent-traveler-form.component';
 import { ListFrequentTravelerComponent } from './components/list-frequent-traveler/list-frequent-traveler.component';
 import { EditPaymentFormComponent } from './components/edit-payment-form/edit-payment-form.component';
 import { ListFrequentTravelersToOrdersComponent } from './components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
+import { MainPublicComponent } from '@modules/main copy/main.component';
+import { PackagePublicComponent } from '@modules/packages/package-public.component';
+
+
+//<-----------PRIMENG--------------->
 import { DataViewModule } from 'primeng/dataview';
 import { CommonModule } from '@angular/common';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -62,8 +66,6 @@ import { RatingModule } from 'primeng/rating';
 import { OrderListModule } from 'primeng/orderlist';
 import { TooltipModule } from 'primeng/tooltip';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
-
-//<-----------PRIMENG--------------->
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { ToastModule } from 'primeng/toast';
@@ -83,8 +85,12 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarComponent } from './pages/calendar/calendar.component';
-import {ChartModule} from 'primeng/chart';
-
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { BadgeModule } from 'primeng/badge';
+import { ChartModule } from 'primeng/chart';
+import { TabViewModule } from 'primeng/tabview';
+import {TabMenuModule} from 'primeng/tabmenu';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
 
@@ -92,6 +98,8 @@ registerLocaleData(localeEn, 'en-EN');
   declarations: [
     AppComponent,
     MainComponent,
+    MainPublicComponent,
+    PackagePublicComponent,
     LoginComponent,
     HeaderComponent,
     FooterComponent,
@@ -124,13 +132,15 @@ registerLocaleData(localeEn, 'en-EN');
     CreatePaymentFormComponent,
     ReadOrderOrderDetailComponent,
     ReadOrderPaymentComponent,
-    CreateFrequentTravelerFormComponent,
     ListFrequentTravelerComponent,
     EditPaymentFormComponent,
     ListFrequentTravelersToOrdersComponent,
     CalendarComponent
   ],
   imports: [
+    AutoCompleteModule,
+    TabViewModule,
+    TabMenuModule,
     DividerModule,
     CalendarModule,
     CascadeSelectModule,
@@ -180,6 +190,8 @@ registerLocaleData(localeEn, 'en-EN');
     CalendarModule,
     DropdownModule,
     InputNumberModule,
+    ConfirmPopupModule,
+    BadgeModule,
     ChartModule,
 
     //<------------------------->

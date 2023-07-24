@@ -1,8 +1,9 @@
+<p-toast key="alert-message"></p-toast>
 <div class="p-5">
     <div class="col-12">
         <div class="card px-6 py-6 p-4" style="border-radius: 15px;">
             <p-table #dt [value]="employeesList" [rows]="5" [showCurrentPageReport]="true"
-                [rowsPerPageOptions]="[5, 10]" [loading]="loading" [paginator]="true"
+                [rowsPerPageOptions]="[5, 10]" [loading]="loading" [paginator]="true" [scrollable]="true"
                 currentPageReportTemplate="Desde {first} hasta {last} de {totalRecords} empleados"
                 [globalFilterFields]="['name', 'lastName', 'document', 'phoneNumber']">
                 <ng-template pTemplate="caption" class="p-grid">
@@ -15,10 +16,10 @@
                             </span>
                         </div>
                         <div class="p-input-icon-left mb-2">
-                            <button pButton="" pRipple="" label="Agregar empleado" (click)="openModalCreateEmployee()"
+                            <button pButton="" pRipple="" label="Registrar empleado" (click)="openModalCreateEmployee()"
                                 class="p-button-outlined"><i class="pi pi-plus"
                                     style="margin-left: 5px; margin-right: 9px;"></i></button>
-                                    
+
                         </div>
                     </div>
                 </ng-template>
@@ -26,7 +27,7 @@
                     <tr>
                         <th style="min-width: 12rem">
                             <div class="flex justify-content-left align-items-left">
-                                Nombre  completo
+                                Nombre completo
                             </div>
                         </th>
                         <th style="min-width: 12rem">
@@ -34,14 +35,14 @@
                                 Documento
                             </div>
                         </th>
-                        
+
                         <th style="width: 12rem">
                             <div class="flex justify-content-left align-items-left">
                                 Número
                             </div>
                         </th>
-                        
-                        <th style="width: 12rem">
+
+                        <th style="width: 9rem">
                             <div class="flex justify-content-left align-items-left">
                                 Acciones
                             </div>
@@ -66,16 +67,17 @@
                         <td>
                             {{ employee.phoneNumber }}
                         </td>
-                        
-                        
+
+
                         <td class="text-center p-1">
                             <span><button pButton type="button" icon="pi pi-pencil"
                                     class="p-button-outlined p-button-warning p-button-rounded m-1"
                                     (click)="openModalEditEmployee(employee)" pTooltip="Editar"
                                     tooltipPosition="bottom"></button></span>
                             <span> <button pButton type="button" icon="pi pi-trash"
-                                    class="p-button-outlined p-button-rounded m-1" pTooltip="Ver detalles"
-                                    (click)="deleteEmployee(employee)" tooltipPosition="bottom"></button></span>
+                                    class="p-button-outlined p-button-rounded p-button-danger m-1"
+                                    pTooltip="Eliminar" (click)="deleteEmployee(employee)"
+                                    tooltipPosition="bottom"></button></span>
                         </td>
                     </tr>
                 </ng-template>

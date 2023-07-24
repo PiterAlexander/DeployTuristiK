@@ -3,7 +3,7 @@
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <div class="col-12">
   <div class="card px-6 py-6 p-4 m-5" style="border-radius: 15px;">
-    <p-table #dt [value]="roleList" [rows]="5" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10]"
+    <p-table #dt [value]="roleList" [rows]="5" scrollable="true" [rowsPerPageOptions]="[5, 10]"
     [loading]="loading" [paginator]="true"
     currentPageReportTemplate="Desde {first} hasta {last} de {totalRecords} roles"
     [globalFilterFields]="['name']">
@@ -16,7 +16,7 @@
                   </span>
               </div>
               <div class="custom-flex-item-right">
-                  <button pButton type="button" label="Registrar Role" (click)="openCreateRoleModal()"
+                  <button pButton type="button" label="Registrar Rol" (click)="openCreateRoleModal()"
                       class="p-button-outlined"><i class="pi pi-plus"
                           style="margin-left: 5px; margin-right: 9px;"></i></button>
               </div>
@@ -48,12 +48,14 @@
                 {{ role.name }}
             </td>
             <td class="text-center">
-                <div *ngIf="role.status !== 1">
+              <span [class]="'role-badge status-' + role.status">{{showStatus(role.status)}}</span>
+                <!-- <div *ngIf="role.status !== 1">
+                  <span [class]="'role-badge status-' + role.status">{{showStatus(role.status)}}</span>
                     Habilitado
                 </div>
                 <div *ngIf="role.status === 1">
                     Deshabilitado
-                </div>
+                </div> -->
             </td>
             <td class="text-center p-1">
                 <button pButton type="button" icon="pi pi-pencil"

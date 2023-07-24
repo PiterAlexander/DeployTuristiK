@@ -31,19 +31,19 @@
     font-size: 15px;
     padding: 5px;
     border-radius: 15px;
-    
+
   }
-  
+
   .hover-text:hover .tooltip-text {
     visibility: visible;
     font-style: italic;
   }
-  
+
   .bottom {
     top: 30px;
     left: -100%;
   }
-  
+
   .hover-text {
     position: relative;
     margin: 40px;
@@ -78,30 +78,6 @@
     margin-top: 25px;
 }
 
-
-
-.btn-edit-style{
-    height: 70px !important;
-    padding: 2px;
-    border: none;
-}
-
-.btn-edit-style button:hover{
-    .textButton{
-        color: white;
-        background-color: #343a40;
-    }
-}
-
-.icon-style{
-    margin: 4px;
-}
-
-.textButton{
-    color: black;
-    background-color: white;
-}
-
 * {box-sizing:border-box}
 
 /* Slideshow container */
@@ -111,12 +87,10 @@
   margin: auto;
 }
 
-/* Hide the images by default */
 .mySlides {
   display: none;
 }
 
-/* Next & previous buttons */
 .prev, .next {
   cursor: pointer;
   position: absolute;
@@ -191,8 +165,6 @@
 }
 
 .style-edit{
-    top: 95%;
-    left: 5%;
     border-radius: 10px !important;
     padding: 4px !important;
     font-size: small;
@@ -207,13 +179,24 @@
 }
 
 .hoverCard{
-  
   transition: transform 0.3s ease;
+  cursor: pointer; border-radius: 4%;
+  box-shadow: 0px 4px 30px rgba(221, 224, 255, .54);
+  background-color: white !important;
+  div{
+  background-color: white !important;
+  }
 }
+
 .hoverCard:hover{
-    transform: scale(1.1); /* Escala al 110% */
-  
+    transform: scale(104%); /* Escala al 110% */
+
 }
+
+.shadowContent {
+  --custom-shadow: 0px 4px 30px rgba(221, 224, 255, .54) !important;
+}
+
 
 .img-volante{
   border: #343a40 solid 1px;
@@ -223,20 +206,6 @@
 .img-volante img{
   border: #343a40 solid 1px;
   border-radius: 15px;
-}
-
-.parallax {
-  /* The image used */
-  background-image: url("https://www.exoticca.com/es/blog/wp-content/uploads/2016/09/07-cabecera-e1542356501890.jpg");
-
-  /* Set a specific height */
-  min-height: 350px;
-
-  /* Create the parallax scrolling effect */
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 
 
@@ -256,4 +225,42 @@
 .custom-modal-header{
   color: #326fd1;
   border-radius: 25px;
+}
+
+.package-badge {
+  border-radius: var(--border-radius);
+  padding: .25em .5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: .3px;
+
+  &.quotas-1 {
+      background: var(--green-200);
+      color: var(--green-800);
+  }
+
+  &.quotas-2 {
+    background: var(--yellow-200);
+    color: var(--yellow-800);
+}
+}
+:host ::ng-deep {
+  .first div {
+    background-color: #eff3f8;
+    border: none;
+  }
+}
+
+.input-design{
+  width: 90% !important;
+}
+
+.control{
+  width: 7% !important
+}
+
+.small-input{
+  height: 93%;
+  border: none;
 }

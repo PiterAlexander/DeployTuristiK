@@ -65,10 +65,6 @@ export class ApiService {
         return this.http.put<Order>(`${this.endpoint}api/Order/${orderId}`, modelo)
     }
 
-    deleteOrder(idOrder: number): Observable<void> {
-        return this.http.delete<void>(`${this.endpoint}api/Order/${idOrder}`)
-    }
-
     addPayment(modelo: Payment): Observable<Payment> {
         return this.http.post<Payment>(`${this.endpoint}api/Payment`, modelo)
     }
@@ -83,6 +79,10 @@ export class ApiService {
 
     updatePayment(paymentId: string, modelo: Payment): Observable<Payment> {
         return this.http.put<Payment>(`${this.endpoint}api/Payment/${paymentId}`, modelo)
+    }
+
+    deleteOrderDetail(orderDetailId: string): Observable<void> {
+        return this.http.delete<void>(`${this.endpoint}api/OrderDetail/${orderDetailId}`)
     }
     //<----------------->
 
@@ -203,4 +203,8 @@ export class ApiService {
     deleteAssociatedPermission(associatedPermissionId: string): Observable<void> {
         return this.http.delete<void>(`${this.endpoint}api/AssociatedPermission/${associatedPermissionId}`);
     }
+
+    getIngresosMensuales(): Observable<number[]> {
+        return this.http.get<number[]>(`${this.endpoint}api/Ingresos/Mensuales`);
+      }
 }
