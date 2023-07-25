@@ -86,7 +86,7 @@ export class RolesComponent implements OnInit{
         }
       });
     });
-    
+
     const roleEdit: Role ={
       roleId: ok['roleId'],
       name: ok['name'],
@@ -142,12 +142,12 @@ export class RolesComponent implements OnInit{
 
       }
     }else{
-      this.messageService.add({key: 'alert-message', severity:'warn', summary: 'Acción denegada', detail: ''});
+      this.messageService.add({key: 'alert-message', severity:'warn', summary: 'Acción denegada', detail: 'El rol no puede ser eliminado'});
     }
 
   }
 
- 
+
   searchByName() {
     if (this.search === undefined || this.search.length <= 0) {
       this.filteredRolesList = this.roleList;
