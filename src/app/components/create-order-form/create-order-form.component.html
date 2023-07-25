@@ -18,7 +18,7 @@
                     <input pInputText placeholder="Ingrese el número de documento del titular" type="text" [ngClass]="
                             {
                                 'border-red-600': formGroup.get('document')?.dirty && validateCustomerId() || 
-                                validateRole() || validateStatus() 
+                                validateRole() || validateStatus() || !validateOnlyNumbers()
                             }" formControlName="document" required="true" minlength="8" maxlength="15"
                         onkeydown="return /^\d|Backspace|Delete$/.test(event.key)" class="w-full">
                 </span>
@@ -37,7 +37,10 @@
                     Solo los clientes pueden ser titulares de un pedido
                 </small>
                 <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && validateStatus()">
-                    Este cliente está deshabilitado
+                    Este cliente está inhabilitado
+                </small>
+                <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && !validateOnlyNumbers()">
+                    Por favor ingrese solo números
                 </small>
             </div>
         </div>
@@ -80,7 +83,8 @@
         </div>
     </div>
     <div *ngIf="orderProcess === undefined" class="field-checkbox mb-4">
-        <p-checkbox [binary]="true" formControlName="titularAsBeneficiarie" inputId="titularAsBeneficiarie"></p-checkbox>
+        <p-checkbox [binary]="true" formControlName="titularAsBeneficiarie"
+            inputId="titularAsBeneficiarie"></p-checkbox>
         <label for="titularAsBeneficiarie" class="mb-0">Marque esta opción si el titular también viajará</label>
     </div>
     <div class="flex justify-content-end">

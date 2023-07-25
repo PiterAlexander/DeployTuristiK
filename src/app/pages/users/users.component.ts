@@ -22,7 +22,7 @@ export class UsersComponent {
   public ui: Observable<UiState>
   public userList: Array<User>
   public loading: boolean;
-
+  public statuses: any[]=[]
 
 
   constructor(private store: Store<AppState>) { }
@@ -36,8 +36,20 @@ export class UsersComponent {
       this.userList = state.allUsers.data
       this.loading = state.allUsers.loading
     });
-  }
 
+    this.statuses = [
+      {name: 'Activo', code: 1},
+      {name: 'Inactivo', code: 2},
+    ];
+  }
+  showStatus(userStatus:any):string{
+    for(let status of this.statuses){
+      if (userStatus === status.code){
+
+        return status.name
+      }
+    }
+  }
   openCreateUserModal() {
     this.store.dispatch(new OpenModalUser())
   }

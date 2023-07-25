@@ -1,13 +1,10 @@
-import { Customer } from '@/models/customer';
-import { Employee } from '@/models/employee';
 import { Role } from '@/models/role';
 import { User } from '@/models/user';
 import { AppState } from '@/store/state';
 import { CreateUserRequest, UpdateUserRequest } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Observable } from 'rxjs';
@@ -30,25 +27,40 @@ export class CreateUserFormComponent implements OnInit {
   public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS', 'OTRA']
   public admin: number = null
   public otraEps: boolean = false
-
+  Visible: boolean = false;
+  roles: any[] = [];
+  public statuses: any[] = [];
 
   constructor(
     private fb: FormBuilder,
-    private modalService: NgbModal,
     private store: Store<AppState>,
     private modalPrimeNg: DynamicDialogRef,
   ) { }
 
   ngOnInit() {
-
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
       this.allUsers = state.allUsers.data
       this.userData = state.currentUser.data
       this.allRoles = state.allRoles.data
       this.rolesList = this.allRoles.filter(role => role.name !== "Beneficiario")
-    })
+      if (this.userData) {
+        this.rolesList = this.allRoles
+      }
+      console.log(this.userData);
 
+    })
+    this.roles = [
+      { label: 'Administrador', value: '1' },
+      { label: 'Cliente', value: '2' },
+      { label: 'Empleado', value: '3' },
+      { label: 'Beneficiario', value: '4' },
+    ];
+
+    this.statuses = [
+      { 'label': 'Activo', 'value': 1 },
+      { 'label': 'Inactivo', 'value': 2 }
+    ]
 
     this.formGroup = this.fb.group({
       userId: [null],
@@ -62,18 +74,16 @@ export class CreateUserFormComponent implements OnInit {
         [Validators.required,
         Validators.minLength(8)]
       ],
-      status: [1, Validators.required],
+      status: [null, Validators.required],
       name: [null, Validators.required],
       lastName: [null, Validators.required],
-      identification: [null, Validators.required],
-      phone: [null, Validators.required],
+      document: [null, Validators.required],
+      phoneNumber: [null, Validators.required],
       birthDate: [null],
       address: [null],
       eps: [null],
       otherEps: [null]
-
     })
-
 
     if (this.userData != null) {
 
@@ -85,8 +95,8 @@ export class CreateUserFormComponent implements OnInit {
         status: this.userData.status,
         name: " ",
         lastName: " ",
-        identification: " ",
-        phone: " ",
+        document: " ",
+        phoneNumber: " ",
         birthDate: " ",
         address: " ",
         eps: " ",
@@ -106,8 +116,8 @@ export class CreateUserFormComponent implements OnInit {
           employee: {
             name: this.formGroup.value.name,
             lastName: this.formGroup.value.lastName,
-            document: this.formGroup.value.identification,
-            phoneNumber: this.formGroup.value.phone
+            document: this.formGroup.value.document,
+            phoneNumber: this.formGroup.value.phoneNumber
           }
         }
       } else {
@@ -119,9 +129,9 @@ export class CreateUserFormComponent implements OnInit {
           customer: {
             name: this.formGroup.value.name,
             lastName: this.formGroup.value.lastName,
-            document: this.formGroup.value.identification,
+            document: this.formGroup.value.document,
             birthDate: this.formGroup.value.birthDate,
-            phoneNumber: this.formGroup.value.phone,
+            phoneNumber: this.formGroup.value.phoneNumber,
             address: this.formGroup.value.address,
             eps: this.saveEps()
           }
@@ -183,7 +193,7 @@ export class CreateUserFormComponent implements OnInit {
 
   addForm() {
     var role = this.rolesList.find(r => r.roleId == this.formGroup.value.role)
-    if (role.name != "Cliente") {
+    if (role?.name != "Cliente") {
       this.admin = 1
     } else (
       this.admin = 2
@@ -201,6 +211,9 @@ export class CreateUserFormComponent implements OnInit {
     } else {
       return this.formGroup.value.eps
     }
+  }
+  displayPassword() {
+    this.Visible = !this.Visible;
   }
 
 }

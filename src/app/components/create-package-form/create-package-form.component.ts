@@ -27,6 +27,24 @@ export class CreatePackageFormComponent implements OnInit {
   selectedDestiny: any;
   transports: any[] = [];
 
+
+  date: Date;
+  showCalendar: boolean = false;
+
+  // Función para abrir el p-calendar
+  openCalendar() {
+    this.showCalendar = true;
+  }
+
+  // Función para manejar la selección de fecha del p-calendar
+  onDateSelect(event: any) {
+    // Aquí puedes hacer lo que desees con la fecha seleccionada, por ejemplo, asignarla a un FormControl en tu formulario
+    // O realizar cualquier otro procesamiento necesario.
+
+    // Luego, cierra el p-calendar
+    this.showCalendar = false;
+  }
+
   //From Calendar
   public departureCalendardate: Date
   public ArrivalCalendardate: Date

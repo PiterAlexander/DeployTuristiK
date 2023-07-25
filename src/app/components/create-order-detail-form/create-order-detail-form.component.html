@@ -25,7 +25,7 @@
                                 maxlength="15" placeholder="Ingrese el documento" class="w-full"
                                 [ngClass]="{ 
                                     'border-green-500': customerInformation() && !alreadyExists(),
-                                    'border-red-600': formGroup.get('document')?.dirty && alreadyExists() && alreadyExists()}"
+                                    'border-red-600': alreadyExistsFromEdit() || alreadyExists() || !validateOnlyNumbers() || validateStatus()}"
                                 onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
                             <button *ngIf="customerInformation() && !alreadyExists()" pButton pRipple type="button"
                                 (click)="fillCustomerInformation()" icon="pi pi-user-plus"
@@ -45,6 +45,12 @@
                         <small class="block text-green-500"
                             *ngIf="formGroup.get('document')?.dirty && customerInformation() && !alreadyExists()">
                             !Beneficiario encontrado!
+                        </small>
+                        <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && !validateOnlyNumbers()">
+                            Por favor ingrese solo números
+                        </small>
+                        <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && validateStatus()">
+                            Este documento no está disponible
                         </small>
                     </div>
                 </div>
@@ -162,7 +168,7 @@
                                 class="w-full"
                                 [ngClass]="{ 
                                     'border-green-500': customerInformation() && !alreadyExists(),
-                                    'border-red-600': formGroup.get('document')?.dirty && alreadyExistsFromEdit() || alreadyExists()}"
+                                    'border-red-600': alreadyExistsFromEdit() || alreadyExists() || !validateOnlyNumbers() || validateStatus()}"
                                 onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
                             <button *ngIf="customerInformation() && !alreadyExists()" pButton pRipple type="button"
                                 (click)="fillCustomerInformation()" icon="pi pi-user-plus"
@@ -170,22 +176,28 @@
                         </div>
                         <small class="p-error block"
                             *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['required']">
-                            Este campo es obligatorio.
+                            Este campo es obligatorio
                         </small>
                         <small class="p-error block"
                             *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['minlength']">
-                            Este campo debe tener mínimo 8 números.
+                            Este campo debe tener mínimo 8 números
                         </small>
                         <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && alreadyExists()">
-                            Este número de documento ya está en uso.
+                            Este número de documento ya está en uso
                         </small>
                         <small class="p-error block"
                             *ngIf="formGroup.get('document')?.dirty && alreadyExistsFromEdit()">
-                            Este número de documento ya está en uso.
+                            Este número de documento ya está en uso
                         </small>
                         <small class="block text-green-500"
                             *ngIf="formGroup.get('document')?.dirty && customerInformation() && !alreadyExists()">
-                            !Beneficiario encontrado! Haz click en el botón para añadirlo.
+                            !Beneficiario encontrado! Haga click en el botón para añadirlo
+                        </small>
+                        <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && !validateOnlyNumbers()">
+                            Por favor ingrese solo números
+                        </small>
+                        <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && validateStatus()">
+                            Este documento no está disponible
                         </small>
                     </div>
                 </div>

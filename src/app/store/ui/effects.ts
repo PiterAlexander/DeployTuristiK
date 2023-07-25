@@ -41,6 +41,10 @@ import {
     DeleteOrderDetailRequest,
     DeleteOrderDetailSuccess,
     DeleteOrderDetailFailure,
+    LoadDataRequest,
+    LoadDataSuccess,
+    LoadDataFailure,
+    LOAD_DATA_REQUEST,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -86,6 +90,18 @@ export class PackageEffects {
             )
         })
     ));
+
+    loadIngresos$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LOAD_DATA_REQUEST),
+      mergeMap(() =>
+        this.apiService.getIngresosMensuales().pipe(
+          map((data: number[]) => new LoadDataSuccess({  data })),
+          catchError((error) => of(new LoadDataFailure({ error })))
+        )
+      )
+    )
+  );
 
     getTopPackages$ = createEffect(() => this.actions$.pipe(
         ofType(packageActions.GET_TOP_PACKAGES_REQUEST),
@@ -621,9 +637,9 @@ export class PackageEffects {
                 this.dialogRef = this.dialogService.open(ListFrequentTravelerComponent, {
                     /* Opciones del modal */
                     // header: action['payload'] === undefined ? 'Viajeros frecuentes' : 'Viajeros frecuentes',
+                    width: '60%',
                     contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
                     showHeader: false,
-                    width: '60%',
                 });
 
             })
@@ -690,8 +706,10 @@ export class PackageEffects {
             tap((action) => {
                 this.dialogRef = this.dialogService.open(CreateEmployeeFormComponent, {
                     /* Opciones del modal */
-                    header: action['payload'] === undefined ? 'Registrar empleado' : 'Editar empleado',
+                    // header: action['payload'] === undefined ? 'Registrar empleado' : 'Editar empleado',
                     width: '60%',
+                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
+                    showHeader: false,
                 });
             })
         ), { dispatch: false });
@@ -767,9 +785,11 @@ export class PackageEffects {
             tap((action) => {
                 this.dialogRef = this.dialogService.open(CreateUserFormComponent, {
                     /* Opciones del modal */
-                    header: action['payload'] === undefined ? 'Registrar Usuario' : 'Editar Usuario',
-                    width: '45%',
-                    contentStyle: { overflowY: 'auto' },
+                    /* Opciones del modal */
+                    showHeader: false,
+                    width: '50%',
+                    contentStyle: { padding: '1.50rem 2.25rem 1.50rem 2.25rem', overflowY: 'auto' },
+                    baseZIndex: 10000,
                 })
             })
         ), { dispatch: false });

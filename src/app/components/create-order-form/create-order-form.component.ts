@@ -10,7 +10,7 @@ import { Role } from '@/models/role';
 import { User } from '@/models/user';
 import { Customer } from '@/models/customer';
 import { Package } from '@/models/package';
-import { GetAllCustomerRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, OpenModalCreateOrderDetail } from '@/store/ui/actions';
+import { OpenModalCreateOrderDetail } from '@/store/ui/actions';
 
 @Component({
   selector: 'app-create-order-form',
@@ -108,6 +108,14 @@ export class CreateOrderFormComponent implements OnInit {
       this.validateBeneficiaries() && this.validateBeneficiariesAmount() && this.validateExistingBeneficiariesAmount() && !this.validateStatus()
   }
 
+  validateOnlyNumbers(): boolean {
+    const regularExpresion = /^[0-9]+$/;
+    if (this.formGroup.value.document.length >= 8 && !this.validateRole() && !this.validateStatus() && !this.validateCustomerId()) {
+      return regularExpresion.test(this.formGroup.value.document)
+    }
+    return true
+  }
+
   validateCustomerId(): boolean {
     if (this.formGroup.value.document.length >= 8) {
       if (this.allCustomers.find(c => c.document === this.formGroup.value.document) === undefined) {
@@ -136,10 +144,12 @@ export class CreateOrderFormComponent implements OnInit {
   }
 
   validateStatus(): boolean {
-    if (!this.validateRole()) {
-      if (this.oneUser !== undefined) {
-        if (this.oneUser.status === 0) {
-          return true
+    if (this.formGroup.value.document.length >= 8) {
+      if (!this.validateRole() && !this.validateCustomerId()) {
+        if (this.oneUser !== undefined) {
+          if (this.oneUser.status === 2) {
+            return true
+          }
         }
       }
     }

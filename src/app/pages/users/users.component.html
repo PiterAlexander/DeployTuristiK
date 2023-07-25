@@ -1,73 +1,3 @@
-<p-toast key="alert-message"></p-toast>
-<div class="content-header">
-    <div class="container-fluid">
-        <div class="row d-flex justify-content-center">
-            <div class="card card-user">
-                <div class="card-header card-user-header d-flex">
-                    <div class="col-sm-9 col-personalized-1">
-                        <h1 class="text-dark">Usuarios</h1>
-                    </div>
-                    <div class="col-sm-3 col-personalized-2">
-                        <button
-                            (click)="openCreateUserModal()"
-                            type="button"
-                            class="btn btn-primary"
-                        >
-                            Registrar Usuario
-                        </button>
-                    </div>
-                </div>
-
-                <div class="card-body">
-                    <div *ngIf="loading" class="d-flex justify-content-center">
-                        <div class="spinner-border" style="width: 5rem; height: 5rem" user="status">
-                            <span class="visually-hidden"></span>
-                        </div>
-                    </div>
-                    <form *ngIf="!loading">
-                        <!-- <div class="d-flex justify-content-end mb-3 row">
-                            <label for="table-complete-search"
-                                class="col-xs-3 col-sm-auto col-form-label label-search">Búsqueda:</label>
-                            <div class="col-xs-3 col-sm-auto">
-                                <input id="table-complete-search" type="text" class="form-control" name="searchTerm"
-                                    (ngModelChange)="searchByUserName()" />
-                            </div>
-                        </div> -->
-
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Nombre de Usuario</th>
-                                    <th scope="col">Correo</th>
-                                    <th scope="col">Rol</th>
-                                    <th scope="col">Estado</th>
-                                    <th scope="col">Editar</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let user of userList">
-                                    <td>{{ user.userName }}</td>
-                                    <td>{{ user.email }}</td>
-                                    <td>
-                                        {{ user.role.name }}
-                                    </td>
-                                    <td>
-                                        <span *ngIf="user.status === 1">Habilitado</span>
-                                        <span *ngIf="user.status !== 1">Deshabilitado</span>
-                                    </td>
-                                    <td>
-                                        <i class="btn fas fa-edit text-dark" (click)="openUpdateUserModal(user)"></i>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> 
-
 <!--Aquí se despliegan los mensajes de exito o error segun sea el caso-->
 <p-toast key="alert-message"></p-toast>
 <p-confirmDialog
@@ -162,8 +92,7 @@
                         {{ user.role.name }}
                     </td>
                     <td class="text-center">
-                        <div *ngIf="user.status !== 1">Deshabilitado</div>
-                        <div *ngIf="user.status === 1">Habilitado</div>
+                        <span [class]="'user-badge status-' + user.status">{{showStatus(user.status)}}</span>
                     </td>
                     <td class="text-center p-1">
                         <button

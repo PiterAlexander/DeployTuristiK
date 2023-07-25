@@ -68,4 +68,22 @@ form input:required {
 }
 
 
+:host ::ng-deep {
+  p-calendar span div{
 
+  }
+}
+
+
+.main-container {
+  position: relative;
+}
+
+/* Estilos para el p-calendar */
+.calendar-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Asegúrate de que este valor sea mayor que el z-index de la modal para que aparezca por encima */
+}
+  

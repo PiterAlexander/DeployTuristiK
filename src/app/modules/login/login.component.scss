@@ -1,6 +1,22 @@
-div.todo {
-    background-image: url('../../../assets/img/FondoAuth.avif');
-    background-repeat: no-repeat;
-    background-size:cover;
-    background-position: center
+.height-edit{
+    height: 82vh;
+}
+
+a {
+    color: #007bff !important; /* Color de texto azul (puedes cambiarlo a tu preferencia) */
+}
+
+/* Estilo al pasar el cursor sobre los enlaces a */
+a:hover {
+    color: #0056b3 !important; /* Color de texto azul oscuro al pasar el cursor */
+}
+
+
+button {
+    overflow: visible !important;
+}
+
+/* Estilo al pasar el cursor sobre los enlaces a */
+a:hover {
+    color: #0056b3 !important; /* Color de texto azul oscuro al pasar el cursor */
 }

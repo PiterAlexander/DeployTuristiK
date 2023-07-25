@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { UiState } from '@/store/ui/state';
 import { Observable } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Role } from '@/models/role';
 import { User } from '@/models/user';
 import { Customer } from '@/models/customer';
@@ -21,7 +21,7 @@ import { EditCustomerRequest, OpenModalCreateOrder, OpenModalCreatePayment, Open
 
 export class CreateOrderDetailFormComponent implements OnInit {
   private ui: Observable<UiState>
-  public formGroup: FormGroup
+  formGroup: FormGroup
   public allRoles: Array<Role>
   public oneRole: Role | undefined
   public allCustomers: Array<Customer>
@@ -56,13 +56,27 @@ export class CreateOrderDetailFormComponent implements OnInit {
     })
 
     this.formGroup = this.fb.group({
-      name: ['', Validators.required],
-      lastName: ['', Validators.required],
-      document: ['', Validators.required],
-      address: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
-      birthdate: ['', Validators.required],
-      eps: [null, Validators.required],
+      name: ['',
+        [Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(30)]],
+      lastName: ['',
+        [Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(30)]],
+      document: ['',
+        [Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(15)
+        ]],
+      address: ['', [Validators.required]],
+      phoneNumber: ['',
+        [Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(10),
+        ]],
+      birthdate: ['', [Validators.required]],
+      eps: [null, [Validators.required]],
       addToFt: [false]
     })
 
@@ -336,7 +350,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         this.formGroup.value.phoneNumber !== '' &&
         this.formGroup.value.birthdate !== '' &&
         this.formGroup.value.eps !== 0 && !this.alreadyExists() && !this.customerInformation() &&
-        !this.formGroup.invalid && !this.alreadyExistsFromEdit()
+        !this.formGroup.invalid && !this.alreadyExistsFromEdit() && this.validateOnlyNumbers() && !this.validateStatus()
     } else {
       return true
     }
@@ -349,21 +363,49 @@ export class CreateOrderDetailFormComponent implements OnInit {
     return true
   }
 
-  customerInformation(): boolean {
+  validateStatus(): boolean {
     if (this.orderProcess[0].action !== 'EditOrderDetail') {
-      if (this.formGroup.value.document >= 8) {
-        this.oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
+      if (!this.alreadyExists()) {
         if (this.oneCustomer !== undefined) {
-          return true
+          const oneRole = this.allRoles.find(r => r.roleId === this.oneCustomer.user.roleId)
+          if (oneRole !== undefined) {
+            if (this.oneCustomer.user.status === 2 && oneRole.name !== 'Beneficiario') {
+              return true
+            }
+          }
         }
       }
     }
     return false
   }
 
+  customerInformation(): boolean {
+    if (this.orderProcess[0].action !== 'EditOrderDetail') {
+      this.oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
+      if (this.formGroup.value.document !== null) {
+        if (this.formGroup.value.document.length >= 8 && !this.validateStatus()) {
+          if (this.oneCustomer !== undefined) {
+            return true
+          }
+        }
+      }
+    }
+    return false
+  }
+
+  validateOnlyNumbers(): boolean {
+    if (this.formGroup.value.document !== null) {
+      if (this.formGroup.value.document.length >= 8) {
+        const regularExpresion = /^[0-9]+$/;
+        return regularExpresion.test(this.formGroup.value.document)
+      }
+    }
+    return true
+  }
+
   alreadyExistsFromEdit(): boolean {
     if (this.orderProcess[0].action === 'EditOrderDetail') {
-      if (this.formGroup.value.document >= 8) {
+      if (this.formGroup.value.document.length >= 8) {
         this.oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
         if (this.oneCustomer !== undefined) {
           if (this.oneCustomer.document === this.orderProcess[0].customer.document) {
@@ -409,7 +451,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
     if (this.beneficiaries.length > 0) {
       this.confirmationService.confirm({
         target: event.target,
-        message: '¿Estás seguro? Perderás toda la información previamente ingresada.',
+        header: '¿Estás seguro de regresar?',
+        message: 'Perderás toda la información previamente ingresada.',
         icon: 'pi pi-exclamation-triangle',
         rejectLabel: 'Sí, regresar',
         rejectButtonStyleClass: 'p-button-outlined',
@@ -521,7 +564,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         order: this.orderProcess[0].order,
         beneficiaries: this.beneficiaries,
       }]
-      
+
       this.modalPrimeNg.close()
       this.store.dispatch(new OpenModalCreatePayment({ ...this.orderProcess }))
     }
