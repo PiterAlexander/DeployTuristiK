@@ -1,42 +1,50 @@
-<ng-container *ngIf="role!=='Cliente'">
-  <a
-    (click)="handleMainMenuAction()"
-    class="nav-link"
-    [ngClass]="{active: isMainActive || isOneOfChildrenActive}"
->
-    <i class="nav-icon {{ menuItem.iconClasses }}"></i>
-    <p>{{ menuItem.name }}
-        <i
-            *ngIf="isExpandable && menuItem.children.length > 0"
-            class="right fas fa-angle-right"
-            [@rotate]="isMenuExtended"
-        ></i>
-    </p>
-</a>
-<ul class="nav nav-treeview" *ngFor="let item of menuItem.children" [@openClose]="isMenuExtended">
-    <li class="nav-item">
-        <a
-            [routerLink]="item.path"
-            [routerLinkActive]="'active'"
-            class="nav-link"
+<ng-container *ngIf="role !== 'Cliente'">
+    <div class="menu-bar">
+        <div class="menu">
+            <ul class="menu-links">
+                <li
+                    (click)="handleMainMenuAction()"
+                    class="nav-link"
+                    [ngClass]="{active: isMainActive || isOneOfChildrenActive}"
+                >
+                    <i class="{{ menuItem.iconClasses }}"></i>
+                    <p class="nav-link">
+                        {{ menuItem.name }}
+                        <i
+                            *ngIf="isExpandable && menuItem.children.length > 0"
+                            class="right fas fa-angle-right"
+                            [@rotate]="isMenuExtended"
+                        ></i>
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="menu">
+        <ul
+            class="menu-links"
+            *ngFor="let item of menuItem.children"
+            [@openClose]="isMenuExtended"
         >
-            <i class="nav-icon {{ item.iconClasses }}"></i>
-            <p>{{ item.name }}</p>
-        </a>
-    </li>
-</ul>
-
+            <li class="nav-link">
+                <a [routerLink]="item.path" [routerLinkActive]="'active'">
+                    <i class="{{ item.iconClasses }}"></i>
+                    <span class="text nav-text">{{ item.name }}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 </ng-container>
 
-<ng-container *ngIf="role==='Cliente'">
-  <a
-    (click)="handleMainMenuAction()"
-    class="nav-link"
-    [ngClass]="{active: isMainActive || isOneOfChildrenActive}"
->
-    <p>{{ menuItem.name }}</p>
-</a>
-<!-- <ul class="nav nav-treeview" *ngFor="let item of menuItem.children" [@openClose]="isMenuExtended">
+<ng-container *ngIf="role === 'Cliente'">
+    <a
+        (click)="handleMainMenuAction()"
+        class="nav-link"
+        [ngClass]="{active: isMainActive || isOneOfChildrenActive}"
+    >
+        <p>{{ menuItem.name }}</p>
+    </a>
+    <!-- <ul class="nav nav-treeview" *ngFor="let item of menuItem.children" [@openClose]="isMenuExtended">
     <li class="nav-item">
         <a
             [routerLink]="item.path"
@@ -48,5 +56,4 @@
         </a>
     </li>
 </ul> -->
-
 </ng-container>

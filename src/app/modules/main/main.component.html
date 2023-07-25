@@ -1,6 +1,6 @@
 <ng-container *ngIf="role!=='Cliente'">
   <app-header></app-header>
-  <app-menu-sidebar class="sidebar-dark-secondary"></app-menu-sidebar>
+  <app-menu-sidebar style="background-color: white;"></app-menu-sidebar>
 
   <div class="content-wrapper">
       <router-outlet></router-outlet>
@@ -8,7 +8,9 @@
 
   <app-footer></app-footer>
   <app-control-sidebar></app-control-sidebar>
-  <div id="sidebar-overlay" (click)="onToggleMenuSidebar()"></div>
+  <div id="sidebar-overlay" (click)="onToggleMenuSidebar()">
+      <i class='bx bx-chevron-right toggle'></i>
+  </div>
 </ng-container>
 
 <ng-container *ngIf="role==='Cliente'">

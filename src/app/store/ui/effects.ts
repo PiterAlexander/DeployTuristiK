@@ -118,17 +118,6 @@ export class PackageEffects {
         })
     ));
 
-    // openModalCreatePackage$ = createEffect(() =>
-    //     this.actions$.pipe(
-    //         ofType(packageActions.OPEN_MODAL_CREATE_PACKAGE),
-    //         tap((action) => {
-    //             this.modalRef = this.modalService.open(CreatePackageFormComponent, {
-    //                 backdrop: false,
-    //                 size: 'xl'
-    //             });
-    //         })
-    //     ), { dispatch: false });
-
     openModalCreatePackage$ = createEffect(() =>
         this.actions$.pipe(
             ofType(packageActions.OPEN_MODAL_CREATE_PACKAGE),
@@ -164,6 +153,7 @@ export class PackageEffects {
             )
         })
     ));
+    
     editPackage$ = createEffect(() => this.actions$.pipe(
         ofType(packageActions.EDIT_PACKAGE_REQUEST),
         map((action: EditPackageRequest) => action.payload),
@@ -371,7 +361,7 @@ export class PackageEffects {
                     return [
                         new CreatePaymentSuccess(paymentResolved),
                         new GetAllOrdersRequest(),
-                        // new OpenModalPayments(paymentResolved.order) 
+                        // new OpenModalPayments(paymentResolved.order)
                     ];
                 }),
                 catchError((err) => of(new CreatePaymentFailure(err)))
