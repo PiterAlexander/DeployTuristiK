@@ -49,24 +49,24 @@
             </td>
             <td class="text-center">
               <span [class]="'role-badge status-' + role.status">{{showStatus(role.status)}}</span>
-                <!-- <div *ngIf="role.status !== 1">
-                  <span [class]="'role-badge status-' + role.status">{{showStatus(role.status)}}</span>
-                    Habilitado
-                </div>
-                <div *ngIf="role.status === 1">
-                    Deshabilitado
-                </div> -->
             </td>
             <td class="text-center p-1">
-                <button pButton type="button" icon="pi pi-pencil"
+                <button pButton type="button" icon="pi pi-pencil" *ngIf="role.name !== 'Administrador'&& role.name !== 'Cliente'"
                     class="p-button-outlined p-button-warning p-button-rounded m-1" (click)="openEditRoleModal(role)" pTooltip="Editar"
                     tooltipPosition="bottom"></button>
-                <button
-                *ngIf="role.name !== 'Administrador' && role.name !== 'Beneficiario' &&
-                                role.name !== 'Cliente' && role.name !== 'Empleado'"
+                <button pButton type="button" icon="pi pi-pencil" *ngIf="role.name === 'Administrador' || role.name === 'Cliente'"
+                    class="p-button-outlined p-button-warning p-button-rounded m-1" (click)="openEditRoleModal(role)" pTooltip="Editar"
+                    tooltipPosition="bottom" disabled></button>
+
+                <button *ngIf="role.name !== 'Administrador'&& role.name !== 'Cliente'"
                 pButton type="button" icon="pi pi-trash"
-                    class="p-button-outlined p-button-rounded m-1 p-button-danger" pTooltip="Ver detalles"  (click)="deleteRole(role)"
+                    class="p-button-outlined p-button-rounded m-1 p-button-danger" pTooltip="Eliminar"  (click)="deleteRole(role)"
                     tooltipPosition="bottom"></button>
+                <button
+                     *ngIf="role.name === 'Administrador' || role.name === 'Cliente'"
+                pButton type="button" icon="pi pi-trash"
+                    class="p-button-outlined p-button-rounded m-1 p-button-danger" pTooltip="Eliminar"  (click)="deleteRole(role)"
+                    tooltipPosition="bottom" disabled></button>
             </td>
 
         </tr>
