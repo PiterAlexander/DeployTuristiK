@@ -11,6 +11,7 @@ import { FrequentTraveler } from '@/models/frequentTraveler';
 import { Payment } from '@/models/payment';
 import { OrderDetail } from '@/models/orderDetail';
 import { Token } from '@/models/token';
+import { recoverPasswordEmail } from '@/models/recoverPasswordEmail';
 
 //<--- TOGGLE ACTIONS --->
 export enum toggleActions {
@@ -794,7 +795,15 @@ export enum loginActions {
 
   GET_USER_INFO_REQUEST = '[LOGIN] GET_USER_INFO_REQUEST',
   GET_USER_INFO_SUCCESS = '[LOGIN] GET_USER_INFO_SUCCESS',
-  GET_USER_INFO_FAILURE = '[LOGIN] GET_USER_INFO_FAILURE'
+  GET_USER_INFO_FAILURE = '[LOGIN] GET_USER_INFO_FAILURE',
+
+  RECOVER_PASSWORD_REQUEST = '[LOGIN] RECOVER_PASSWORD_REQUEST',
+  RECOVER_PASSWORD_SUCCESS = '[LOGIN] RECOVER_PASSWORD_SUCCESS',
+  RECOVER_PASSWORD_FAILURE = '[LOGIN] RECOVER_PASSWORD_FAILURE',
+
+  SAVE_CURRENT_USER_REQUEST = '[LOGIN] SAVE_CURRENT_USER_REQUEST',
+  SAVE_CURRENT_USER_SUCCESS = '[LOGIN] SAVE_CURRENT_USER_SUCCESS',
+  SAVE_CURRENT_USER_FAILURE = '[LOGIN] SAVE_CURRENT_USER_FAILURE'
 }
 
 export class LoginRequest implements Action {
@@ -804,7 +813,6 @@ export class LoginRequest implements Action {
 export class LoginSuccess implements Action {
   readonly type: string = loginActions.LOGIN_SUCCESS;
   constructor(public payload: Token) {
-    //console.log("desde const", payload)
   }
 }
 export class LoginFailure implements Action {
@@ -823,7 +831,36 @@ export class GetUserInfoSuccess implements Action {
 export class GetUserInfoFailure implements Action {
   readonly type: string = loginActions.GET_USER_INFO_FAILURE;
   constructor(public payload: string) { }
+}
 
+export class RecoverPasswordRequest implements Action {
+  readonly type: string = loginActions.RECOVER_PASSWORD_REQUEST;
+  constructor(public payload: any) { }
+}
+
+export class RecoverPasswordSuccess implements Action {
+  readonly type: string = loginActions.RECOVER_PASSWORD_SUCCESS;
+  constructor(public payload: recoverPasswordEmail) { }
+}
+
+export class RecoverPasswordFailure implements Action {
+  readonly type: string = loginActions.RECOVER_PASSWORD_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class SaveCurrentUserRequest implements Action {
+  readonly type: string = loginActions.SAVE_CURRENT_USER_REQUEST;
+  constructor(public payload: any) { }
+}
+
+export class SaveCurrentUserSuccess implements Action {
+  readonly type: string = loginActions.SAVE_CURRENT_USER_SUCCESS;
+  constructor(public payload: User) { }
+}
+
+export class SaveCurrentUserFailure implements Action {
+  readonly type: string = loginActions.SAVE_CURRENT_USER_FAILURE;
+  constructor(public payload: string) { }
 }
 
 export type UiAction =
@@ -932,5 +969,11 @@ export type UiAction =
   | LoginFailure
   | GetUserInfoRequest
   | GetUserInfoSuccess
-  | GetUserInfoFailure;
+  | GetUserInfoFailure
+  | RecoverPasswordFailure
+  | RecoverPasswordSuccess
+  | RecoverPasswordFailure
+  | SaveCurrentUserRequest
+  | SaveCurrentUserSuccess
+  | SaveCurrentUserFailure;
   //<-------------------->

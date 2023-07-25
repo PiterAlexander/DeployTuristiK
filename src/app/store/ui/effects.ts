@@ -38,6 +38,12 @@ import {
     DeleteFrequentTravelerFailure,
     GetTopPackagesSuccess,
     GetTopPackagesFailure,
+    RecoverPasswordRequest,
+    RecoverPasswordSuccess,
+    RecoverPasswordFailure,
+    SaveCurrentUserRequest,
+    SaveCurrentUserSuccess,
+    SaveCurrentUserFailure,
     DeleteOrderDetailRequest,
     DeleteOrderDetailSuccess,
     DeleteOrderDetailFailure,
@@ -626,9 +632,9 @@ export class PackageEffects {
                 this.dialogRef = this.dialogService.open(ListFrequentTravelerComponent, {
                     /* Opciones del modal */
                     // header: action['payload'] === undefined ? 'Viajeros frecuentes' : 'Viajeros frecuentes',
+                    width: '60%',
                     contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
                     showHeader: false,
-                    width: '60%',
                 });
 
             })
@@ -695,8 +701,10 @@ export class PackageEffects {
             tap((action) => {
                 this.dialogRef = this.dialogService.open(CreateEmployeeFormComponent, {
                     /* Opciones del modal */
-                    header: action['payload'] === undefined ? 'Registrar empleado' : 'Editar empleado',
+                    // header: action['payload'] === undefined ? 'Registrar empleado' : 'Editar empleado',
                     width: '60%',
+                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
+                    showHeader: false,
                 });
             })
         ), { dispatch: false });
@@ -772,9 +780,11 @@ export class PackageEffects {
             tap((action) => {
                 this.dialogRef = this.dialogService.open(CreateUserFormComponent, {
                     /* Opciones del modal */
-                    header: action['payload'] === undefined ? 'Registrar Usuario' : 'Editar Usuario',
-                    width: '45%',
-                    contentStyle: { overflowY: 'auto' },
+                    /* Opciones del modal */
+                    showHeader: false,
+                    width: '50%',
+                    contentStyle: { padding: '1.50rem 2.25rem 1.50rem 2.25rem', overflowY: 'auto' },
+                    baseZIndex: 10000,
                 })
             })
         ), { dispatch: false });
@@ -845,6 +855,30 @@ export class PackageEffects {
 
         )
     )
+
+    recoverPassword$ = createEffect(() => this.actions$.pipe(
+        ofType(loginActions.RECOVER_PASSWORD_REQUEST),
+        map((action: RecoverPasswordRequest) => action.payload),
+        switchMap((recoverPasswordEmail) => {
+            return this.apiService.recoverPassword(recoverPasswordEmail).pipe(
+                mergeMap((data) => {
+                    return [new RecoverPasswordSuccess(data)]
+
+                }),
+                catchError((error) => of(new RecoverPasswordFailure(error))))
+        })
+    ))
+
+    saveCurrentUser$ = createEffect(() => this.actions$.pipe(
+        ofType(loginActions.SAVE_CURRENT_USER_REQUEST),
+        map((action: SaveCurrentUserRequest) => action.payload),
+        mergeMap((data) => {
+            return [new SaveCurrentUserSuccess(data)]
+
+        }),
+        catchError((error) => of(new SaveCurrentUserFailure(error)))
+    ))
+
     //<----------------------------->
     constructor(
         private actions$: Actions,
