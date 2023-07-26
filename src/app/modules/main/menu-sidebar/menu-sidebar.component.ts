@@ -1,7 +1,7 @@
 import {Permission} from '@/models/permission';
 import {Role} from '@/models/role';
 import {AppState} from '@/store/state';
-import {GetAllPermissionsRequest, GetAllRoleRequest} from '@/store/ui/actions';
+import {GetAllPermissionsRequest, GetAllRoleRequest, ToggleSidebarMenu} from '@/store/ui/actions';
 import {UiState} from '@/store/ui/state';
 import {Component, HostBinding, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
@@ -24,23 +24,7 @@ export class MenuSidebarComponent implements OnInit {
     public menu = MENU;
     public role;
 
-    collapse()
-    {
-      document.addEventListener('DOMContentLoaded', () => {
-        const body = document.querySelector('body') as HTMLElement;
-        const sidebar = body.querySelector('nav') as HTMLElement;
-        const toggle = body.querySelector('.toggle') as HTMLElement;
-        const searchBtn = body.querySelector('.search-box') as HTMLElement;
-
-        toggle.addEventListener('click', () => {
-          sidebar.classList.toggle('close');
-        });
-
-        searchBtn.addEventListener('click', () => {
-          sidebar.classList.remove('close');
-        });
-      });
-    }
+    
     constructor(
         public appService: AppService,
         private store: Store<AppState>
@@ -66,7 +50,13 @@ export class MenuSidebarComponent implements OnInit {
             this.classes = `${this.classes} ${state.sidebarSkin}`;
         });
         this.user = this.appService.user;
+        console.log(this.user);
+        
     }
+    onToggleMenuSidebar() {
+        this.store.dispatch(new ToggleSidebarMenu());
+    }
+
 
     allowMenuItems() {
         const user = JSON.parse(localStorage.getItem('TokenPayload'));
@@ -102,54 +92,49 @@ export class MenuSidebarComponent implements OnInit {
 export const MENU = [
     {
         name: 'Dashboard',
-        iconClasses: 'fas fa-tachometer-alt',
+        iconClasses: 'bx bx-bar-chart-alt-2',
         path: ['/Home/Dashboard'],
         allowed: false
     },
     {
-        name: 'Configuración',
-        iconClasses: 'fas fa-cog',
-        allowed: false
-    },
-    {
         name: 'Roles',
-        iconClasses: 'far fa-circle',
+        iconClasses: 'bx bx-cog',
         path: ['/Home/Roles'],
         allowed: false
     },
     {
         name: 'Usuarios',
-        iconClasses: 'far fa-circle',
+        iconClasses: 'bx bx-lock',
         path: ['/Home/Usuarios'],
         allowed: false
     },
     {
         name: 'Empleados',
-        iconClasses: 'far fas fa-user-alt',
+        iconClasses: 'bx bx-user-circle',
         path: ['/Home/Empleados'],
         allowed: false
     },
     {
         name: 'Clientes',
-        iconClasses: 'far fas fa-user-friends',
+        iconClasses: 'bx bx-group',
         path: ['/Home/Clientes'],
         allowed: false
     },
     {
         name: 'Calendario',
-        iconClasses: 'far fa-calendar-alt',
+        iconClasses: 'bx bx-calendar-event',
         path: ['/Home/Calendario'],
         allowed: false
     },
     {
         name: 'Paquetes',
-        iconClasses: 'far fa-image',
+        iconClasses: 'bx bx-package',
         path: ['/Home/Paquetes'],
         allowed: false
     },
     {
         name: 'Pedidos',
-        iconClasses: 'fas fa-columns',
+        iconClasses: 'bx bx-calendar-week',
         path: ['/Home/Pedidos'],
         allowed: false
     }

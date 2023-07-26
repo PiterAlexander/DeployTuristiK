@@ -1,7 +1,4 @@
 import {AppState} from '@/store/state';
-import {
-    ToggleDarkMode
-} from '@/store/ui/actions';
 import {UiState} from '@/store/ui/state';
 import {
     Option,
@@ -42,8 +39,5 @@ export class ControlSidebarComponent implements OnInit {
         });
     }
 
-    public handleDarkModeChange(event: any) {
-        this.store.dispatch(new ToggleDarkMode());
-    }
 
 }

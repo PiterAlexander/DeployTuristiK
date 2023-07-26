@@ -91,6 +91,7 @@ import { ChartModule } from 'primeng/chart';
 import { TabViewModule } from 'primeng/tabview';
 import {TabMenuModule} from 'primeng/tabmenu';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import {CarouselModule} from 'primeng/carousel';
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
 
@@ -138,6 +139,7 @@ registerLocaleData(localeEn, 'en-EN');
     CalendarComponent
   ],
   imports: [
+    CarouselModule,
     AutoCompleteModule,
     TabViewModule,
     TabMenuModule,

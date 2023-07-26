@@ -1,7 +1,7 @@
 import {AppState} from '@/store/state';
-import {ToggleControlSidebar, ToggleSidebarMenu} from '@/store/ui/actions';
+import { ToggleSidebarMenu} from '@/store/ui/actions';
 import {UiState} from '@/store/ui/state';
-import {Component, HostBinding, OnInit} from '@angular/core';
+import {Component, HostBinding, OnInit, Input} from '@angular/core';
 import {UntypedFormGroup, UntypedFormControl} from '@angular/forms';
 import {Store} from '@ngrx/store';
 import {AppService} from '@services/app.service';
@@ -19,11 +19,14 @@ export class HeaderComponent implements OnInit {
     public ui: Observable<UiState>;
     public searchForm: UntypedFormGroup;
     public role;
-
+    public isStyleActive: boolean
     constructor(
         private appService: AppService,
         private store: Store<AppState>
     ) {}
+
+    
+    
 
     ngOnInit() {
         this.ui = this.store.select('ui');
@@ -34,6 +37,8 @@ export class HeaderComponent implements OnInit {
             if (this.role === 'Cliente') {
               BASE_CLASSES = 'navbar navbar-expand-lg bg-body-tertiary fixed-top mb-5'
             }
+            
+            this.isStyleActive = state.menuSidebarCollapsed
 
             this.classes = `${BASE_CLASSES} ${state.navbarVariant}`;
         });
@@ -50,7 +55,4 @@ export class HeaderComponent implements OnInit {
         this.store.dispatch(new ToggleSidebarMenu());
     }
 
-    onToggleControlSidebar() {
-        this.store.dispatch(new ToggleControlSidebar());
-    }
 }
