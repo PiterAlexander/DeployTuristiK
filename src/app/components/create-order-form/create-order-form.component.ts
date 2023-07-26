@@ -38,10 +38,6 @@ export class CreateOrderFormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (this.orderProcess === undefined) {
-
-    }
-
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
       this.allRoles = state.allRoles.data
@@ -52,9 +48,14 @@ export class CreateOrderFormComponent implements OnInit {
     })
 
     this.formGroup = this.fb.group({
-      document: ['', Validators.required],
-      packageId: [null, Validators.required],
-      beneficiariesAmount: [null, Validators.required],
+      document: ['',
+        [Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(15)]],
+      packageId: [null, [Validators.required]],
+      beneficiariesAmount: [null,
+        [Validators.required,
+        Validators.min(1)]],
       titularAsBeneficiarie: [false]
     })
 
@@ -80,9 +81,10 @@ export class CreateOrderFormComponent implements OnInit {
       if (this.orderProcess[0].beneficiaries.length > 0) {
         this.confirmationService.confirm({
           target: event.target,
-          message: '¿Estás seguro? Perderás toda la información previamente ingresada.',
+          header: '¿Está seguro de regresar?',
+          message: 'Perderá toda la información previamente ingresada.',
           icon: 'pi pi-exclamation-triangle',
-          rejectLabel: 'Sí, salir',
+          rejectLabel: 'Sí, regresar',
           rejectButtonStyleClass: 'p-button-outlined',
           rejectIcon: 'pi pi-times',
           acceptLabel: 'Permanecer',
@@ -105,13 +107,21 @@ export class CreateOrderFormComponent implements OnInit {
     return this.formGroup.valid &&
       this.formGroup.value.document !== '' && this.formGroup.value.PackageId !== 0 &&
       this.formGroup.value.beneficiariesAmount > 0 && !this.validateCustomerId() && !this.validateRole() &&
-      this.validateBeneficiaries() && this.validateBeneficiariesAmount() && this.validateExistingBeneficiariesAmount() && !this.validateStatus()
+      this.validateBeneficiaries() && this.validateExistingBeneficiariesAmount() && !this.validateStatus() && this.validateOnlyNumbersForBeneficiaries()
   }
 
   validateOnlyNumbers(): boolean {
     const regularExpresion = /^[0-9]+$/;
     if (this.formGroup.value.document.length >= 8 && !this.validateRole() && !this.validateStatus() && !this.validateCustomerId()) {
       return regularExpresion.test(this.formGroup.value.document)
+    }
+    return true
+  }
+
+  validateOnlyNumbersForBeneficiaries(): boolean {
+    const regularExpresion = /^[0-9]+$/;
+    if (this.formGroup.value.beneficiariesAmount !== null && this.validateBeneficiaries() && this.validateExistingBeneficiariesAmount()) {
+      return regularExpresion.test(this.formGroup.value.beneficiariesAmount)
     }
     return true
   }
@@ -168,15 +178,6 @@ export class CreateOrderFormComponent implements OnInit {
     return false
   }
 
-  validateBeneficiariesAmount(): boolean {
-    if (this.formGroup.value.beneficiariesAmount === null) {
-      return true
-    } else if (this.formGroup.value.beneficiariesAmount <= 0) {
-      return false
-    }
-    return true
-  }
-
   validateExistingBeneficiariesAmount(): boolean {
     if (this.orderProcess !== undefined) {
       if (this.formGroup.value.beneficiariesAmount === null) {
@@ -209,7 +210,8 @@ export class CreateOrderFormComponent implements OnInit {
           if (this.formGroup.value.document !== this.orderProcess[0].order.customer.document) {
             const exists = beneficiaries.find(b => b.document === this.formGroup.value.document)
             if (exists === undefined) {
-              const index = beneficiaries.indexOf(this.orderProcess[0].order.customer)
+              const currenTitular = beneficiaries.find(b => b.customerId === this.orderProcess[0].order.customer.customerId)
+              const index = beneficiaries.indexOf(currenTitular)
               if (index !== undefined) {
                 beneficiaries.splice(index, 1)
                 beneficiaries.push({
@@ -261,7 +263,7 @@ export class CreateOrderFormComponent implements OnInit {
             order: {
               customer: oneCustomer,
               package: this.onePackage,
-              beneficiaries: this.formGroup.value.beneficiariesAmount
+              beneficiaries: parseInt(this.formGroup.value.beneficiariesAmount)
             },
             beneficiaries: beneficiaries,
           }]
@@ -273,7 +275,7 @@ export class CreateOrderFormComponent implements OnInit {
             order: {
               customer: oneCustomer,
               package: this.onePackage,
-              beneficiaries: this.formGroup.value.beneficiariesAmount
+              beneficiaries: parseInt(this.formGroup.value.beneficiariesAmount)
             },
             beneficiaries: {},
           }]

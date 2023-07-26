@@ -205,16 +205,6 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
 
-        case Actions.orderActions.OPEN_MODAL_LIST_FREQUENTTRAVELERS_TO_ORDERS:
-            return {
-                ...state,
-                orderProcess: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
-                }
-            };
-
         case Actions.orderActions.OPEN_MODAL_ORDERDETAILS:
             return {
                 ...state,

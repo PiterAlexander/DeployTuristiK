@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
-import { exhaustMap } from 'rxjs/operators';
 import {
     CREATE_PACKAGE_REQUEST,
     GET_ALL_PACKAGES_REQUEST,
@@ -47,7 +46,6 @@ import {
     DeleteOrderDetailRequest,
     DeleteOrderDetailSuccess,
     DeleteOrderDetailFailure,
-    LoadDataRequest,
     LoadDataSuccess,
     LoadDataFailure,
     LOAD_DATA_REQUEST,
@@ -71,7 +69,6 @@ import { AuthService } from '@services/auth/auth.service';
 import { ListFrequentTravelerComponent } from '@components/list-frequent-traveler/list-frequent-traveler.component';
 import { EditPaymentFormComponent } from '@components/edit-payment-form/edit-payment-form.component';
 import { CreatecustomerformComponent } from '@components/create-customer-form/create-customer-form.component';
-import { ListFrequentTravelersToOrdersComponent } from '@components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 //<--------PRIMENG----------->
@@ -98,16 +95,16 @@ export class PackageEffects {
     ));
 
     loadIngresos$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(LOAD_DATA_REQUEST),
-      mergeMap(() =>
-        this.apiService.getIngresosMensuales().pipe(
-          map((data: number[]) => new LoadDataSuccess({  data })),
-          catchError((error) => of(new LoadDataFailure({ error })))
+        this.actions$.pipe(
+            ofType(LOAD_DATA_REQUEST),
+            mergeMap(() =>
+                this.apiService.getIngresosMensuales().pipe(
+                    map((data: number[]) => new LoadDataSuccess({ data })),
+                    catchError((error) => of(new LoadDataFailure({ error })))
+                )
+            )
         )
-      )
-    )
-  );
+    );
 
     getTopPackages$ = createEffect(() => this.actions$.pipe(
         ofType(packageActions.GET_TOP_PACKAGES_REQUEST),
@@ -269,17 +266,6 @@ export class PackageEffects {
             )
         })
     ));
-
-    openModalListFrequentTravelersToOrders$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(orderActions.OPEN_MODAL_LIST_FREQUENTTRAVELERS_TO_ORDERS),
-            tap((action) => {
-                this.modalRef = this.modalService.open(ListFrequentTravelersToOrdersComponent, {
-                    backdrop: false,
-                    size: 'xl'
-                });
-            })
-        ), { dispatch: false });
 
     openModalOrderDetails$ = createEffect(() =>
         this.actions$.pipe(
@@ -643,7 +629,7 @@ export class PackageEffects {
                 this.dialogRef = this.dialogService.open(ListFrequentTravelerComponent, {
                     /* Opciones del modal */
                     // header: action['payload'] === undefined ? 'Viajeros frecuentes' : 'Viajeros frecuentes',
-                    width: '60%',
+                    width: '63%',
                     contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
                     showHeader: false,
                 });

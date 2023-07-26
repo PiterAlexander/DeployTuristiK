@@ -19,7 +19,6 @@
                             <button pButton="" pRipple="" label="Registrar empleado" (click)="openModalCreateEmployee()"
                                 class="p-button-outlined"><i class="pi pi-plus"
                                     style="margin-left: 5px; margin-right: 9px;"></i></button>
-
                         </div>
                     </div>
                 </ng-template>
@@ -75,9 +74,8 @@
                                     (click)="openModalEditEmployee(employee)" pTooltip="Editar"
                                     tooltipPosition="bottom"></button></span>
                             <span> <button pButton type="button" icon="pi pi-trash"
-                                    class="p-button-outlined p-button-rounded p-button-danger m-1"
-                                    pTooltip="Eliminar" (click)="deleteEmployee(employee)"
-                                    tooltipPosition="bottom"></button></span>
+                                    class="p-button-outlined p-button-rounded p-button-danger m-1" pTooltip="Eliminar"
+                                    (click)="deleteEmployee(employee)" tooltipPosition="bottom"></button></span>
                         </td>
                     </tr>
                 </ng-template>

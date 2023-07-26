@@ -38,7 +38,7 @@ export class MenuSidebarComponent implements OnInit {
     this.ui.subscribe((state: UiState) => {
       this.roleList = state.allRoles.data;
       this.permissionList = state.allPermissions.data;
-
+      
       this.allowMenuItems()
 
       var user = JSON.parse(localStorage.getItem('TokenPayload'))

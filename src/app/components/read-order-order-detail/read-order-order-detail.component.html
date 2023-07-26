@@ -4,7 +4,7 @@
         <h2 class="text-indigo-500">Beneficiarios</h2>
     </div>
     <div class="mb-4">
-        <p-table *ngIf="visible" #dt [value]="orderDetailCustomers" [paginator]="true" [rows]="3" scrollable="true"
+        <p-table *ngIf="visible" #dt [value]="orderDetailCustomers" [paginator]="true" [rows]="2" scrollable="true"
             [loading]="loading" dataKey="customerId"
             [globalFilterFields]="['name', 'lastName', 'document', 'birthDate', 'phoneNumber', 'address', 'eps', 'unitPrice']">
             <ng-template pTemplate="caption">

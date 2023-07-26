@@ -1,4 +1,3 @@
-<!-- <p-confirmPopup></p-confirmPopup> -->
 <p-confirmDialog></p-confirmDialog>
 <div class="flex justify-content-between">
     <h2 class="m-0 text-indigo-500">Proceso de Reserva</h2>
@@ -28,8 +27,8 @@
                                     'border-red-600': alreadyExistsFromEdit() || alreadyExists() || !validateOnlyNumbers() || validateStatus()}"
                                 onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
                             <button *ngIf="customerInformation() && !alreadyExists()" pButton pRipple type="button"
-                                (click)="fillCustomerInformation()" icon="pi pi-user-plus"
-                                class="p-button-success"></button>
+                                (click)="fillCustomerInformation()" pTooltip="Agregar beneficiario"
+                                tooltipPosition="bottom" icon="pi pi-user-plus" class="p-button-success"></button>
                         </div>
                         <small class="p-error block"
                             *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['required']">
@@ -90,7 +89,7 @@
                     <div class="field">
                         <p-calendar dateFormat="dd/mm/yy" formControlName="birthdate" required="true"
                             placeholder="Fecha de nacimiento" [showIcon]="true" [style]="{ width: '100%' }"
-                            [readonlyInput]="true"></p-calendar>
+                            [readonlyInput]="true" [maxDate]="beneficiariesMaxDate"></p-calendar>
                         <small class="p-error block"
                             *ngIf="formGroup.get('birthdate')?.dirty && formGroup.get('birthdate')?.errors?.['required']">
                             Este campo es obligatorio.
@@ -130,8 +129,9 @@
                         <span class="p-input-icon-left w-full">
                             <i class="pi pi-phone"></i>
                             <input pInputText type="text" formControlName="phoneNumber" minlength="10" maxlength="10"
-                                required="true" placeholder="Ingrese el número" class="w-full"
-                                onkeydown="return /^\d|Backspace|Delete$/.test(event.key)" />
+                                required="true" placeholder="Ingrese el número" class="w-full" [ngClass]="{
+                                    'border-red-600': !validateOnlyNumbersForPhoneNumber()
+                                }" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)" />
                         </span>
                         <small class="p-error block"
                             *ngIf="formGroup.get('phoneNumber')?.dirty && formGroup.get('phoneNumber')?.errors?.['required']">
@@ -140,6 +140,10 @@
                         <small class="p-error block"
                             *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber')?.dirty">
                             Deben ser 10 números.
+                        </small>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('phoneNumber')?.dirty && !validateOnlyNumbersForPhoneNumber()">
+                            Por favor ingrese solo números
                         </small>
                     </div>
                 </div>
@@ -171,8 +175,8 @@
                                     'border-red-600': alreadyExistsFromEdit() || alreadyExists() || !validateOnlyNumbers() || validateStatus()}"
                                 onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
                             <button *ngIf="customerInformation() && !alreadyExists()" pButton pRipple type="button"
-                                (click)="fillCustomerInformation()" icon="pi pi-user-plus"
-                                class="p-button-success"></button>
+                                (click)="fillCustomerInformation()" pTooltip="Agregar beneficiario"
+                                tooltipPosition="bottom" icon="pi pi-user-plus" class="p-button-success"></button>
                         </div>
                         <small class="p-error block"
                             *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['required']">
@@ -191,7 +195,7 @@
                         </small>
                         <small class="block text-green-500"
                             *ngIf="formGroup.get('document')?.dirty && customerInformation() && !alreadyExists()">
-                            !Beneficiario encontrado! Haga click en el botón para añadirlo
+                            !Beneficiario encontrado! Haga click en el botón para agregarlo
                         </small>
                         <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && !validateOnlyNumbers()">
                             Por favor ingrese solo números
@@ -237,7 +241,8 @@
                     <div class="field">
                         <p-calendar dateFormat="dd/mm/yy" formControlName="birthdate" required="true"
                             placeholder="Ingrese la fecha de nacimiento del beneficiario" [showIcon]="true"
-                            [style]="{ width: '100%' }" [readonlyInput]="true"></p-calendar>
+                            [style]="{ width: '100%' }" [maxDate]="beneficiariesMaxDate"
+                            [readonlyInput]="true"></p-calendar>
                         <small class="p-error block"
                             *ngIf="formGroup.get('birthdate')?.dirty && formGroup.get('birthdate')?.errors?.['required']">
                             Este campo es obligatorio.
@@ -277,8 +282,9 @@
                         <span class="p-input-icon-left w-full">
                             <i class="pi pi-phone"></i>
                             <input pInputText type="text" formControlName="phoneNumber" minlength="10" maxlength="10"
-                                required="true" placeholder="Ingrese el número teléfonico del beneficiario"
-                                class="w-full" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)" />
+                                required="true" placeholder="Ingrese el número teléfonico del beneficiario" [ngClass]="{
+                                    'border-red-600': !validateOnlyNumbersForPhoneNumber()
+                                }" class="w-full" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)" />
                         </span>
                         <small class="p-error block"
                             *ngIf="formGroup.get('phoneNumber')?.dirty && formGroup.get('phoneNumber')?.errors?.['required']">
@@ -287,6 +293,10 @@
                         <small class="p-error block"
                             *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber')?.dirty">
                             Este campo debe contener 10 números.
+                        </small>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('phoneNumber')?.dirty && !validateOnlyNumbersForPhoneNumber()">
+                            Por favor ingrese solo números
                         </small>
                     </div>
                 </div>
@@ -414,7 +424,7 @@
 <div class="flex justify-content-between">
     <div>
         <p-button
-            *ngIf="orderProcess[0].action !== 'EditOrderDetail' && onePackage.availableQuotas > this.beneficiaries.length"
+            *ngIf="orderProcess[0].action !== 'EditOrderDetail' && onePackage.availableQuotas > beneficiaries.length && frequentTravelers.length > 0"
             label="Tus Viajeros Frecuentes" icon="pi pi-users" (click)="op.toggle($event)"></p-button>
         <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}">
             <ng-template pTemplate>

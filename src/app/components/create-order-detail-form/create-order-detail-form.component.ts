@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { UiState } from '@/store/ui/state';
 import { Observable } from 'rxjs';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Role } from '@/models/role';
 import { User } from '@/models/user';
 import { Customer } from '@/models/customer';
@@ -21,7 +21,7 @@ import { EditCustomerRequest, OpenModalCreateOrder, OpenModalCreatePayment, Open
 
 export class CreateOrderDetailFormComponent implements OnInit {
   private ui: Observable<UiState>
-  formGroup: FormGroup
+  public formGroup: FormGroup
   public allRoles: Array<Role>
   public oneRole: Role | undefined
   public allCustomers: Array<Customer>
@@ -35,6 +35,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
   public visible: boolean = true
   public frequentTravelers: Array<Customer> = []
   public selectedFrequentTravelers: Array<Customer> = []
+  public beneficiariesMaxDate: Date
   public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS', 'OTRA']
 
   constructor(
@@ -54,6 +55,10 @@ export class CreateOrderDetailFormComponent implements OnInit {
         this.oneRole = this.allRoles.find(r => r.name === 'Beneficiario')
       }
     })
+
+    const currentDate = new Date()
+    this.beneficiariesMaxDate = new Date(currentDate);
+    this.beneficiariesMaxDate.setDate(currentDate.getDate() - 15);
 
     this.formGroup = this.fb.group({
       name: ['',
@@ -137,8 +142,13 @@ export class CreateOrderDetailFormComponent implements OnInit {
         this.orderDetailCustomers.push(customer)
       }
     }
+    if (this.orderProcess[0].beneficiaries.length > 0) {
+      this.fillBeneficiariesArray()
+      this.beneficiariesAmount = this.orderProcess[0].beneficiaries.length
+    } else {
+      this.beneficiariesAmount = 1
+    }
     this.onePackage = this.orderProcess[0].order.package
-    this.beneficiariesAmount = 1
     this.fillFrequentTravelersArray()
   }
 
@@ -350,7 +360,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
         this.formGroup.value.phoneNumber !== '' &&
         this.formGroup.value.birthdate !== '' &&
         this.formGroup.value.eps !== 0 && !this.alreadyExists() && !this.customerInformation() &&
-        !this.formGroup.invalid && !this.alreadyExistsFromEdit() && this.validateOnlyNumbers() && !this.validateStatus()
+        !this.formGroup.invalid && !this.alreadyExistsFromEdit() && this.validateOnlyNumbers() &&
+        this.validateOnlyNumbersForPhoneNumber() && !this.validateStatus()
     } else {
       return true
     }
@@ -398,6 +409,16 @@ export class CreateOrderDetailFormComponent implements OnInit {
       if (this.formGroup.value.document.length >= 8) {
         const regularExpresion = /^[0-9]+$/;
         return regularExpresion.test(this.formGroup.value.document)
+      }
+    }
+    return true
+  }
+
+  validateOnlyNumbersForPhoneNumber(): boolean {
+    if (this.formGroup.value.phoneNumber !== null) {
+      if (this.formGroup.value.phoneNumber.length >= 10) {
+        const regularExpresion = /^[0-9]+$/;
+        return regularExpresion.test(this.formGroup.value.phoneNumber)
       }
     }
     return true
@@ -451,8 +472,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
     if (this.beneficiaries.length > 0) {
       this.confirmationService.confirm({
         target: event.target,
-        header: '¿Estás seguro de regresar?',
-        message: 'Perderás toda la información previamente ingresada.',
+        header: '¿Está seguro de regresar?',
+        message: 'Perderá toda la información previamente ingresada.',
         icon: 'pi pi-exclamation-triangle',
         rejectLabel: 'Sí, regresar',
         rejectButtonStyleClass: 'p-button-outlined',
@@ -474,7 +495,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
     if (this.beneficiaries.length > 0) {
       this.confirmationService.confirm({
         target: event.target,
-        message: '¿Estás seguro? Perderás toda la información previamente ingresada.',
+        message: '¿Está seguro? Perderá toda la información previamente ingresada.',
         icon: 'pi pi-exclamation-triangle',
         rejectLabel: 'Sí, regresar',
         rejectButtonStyleClass: 'p-button-outlined',

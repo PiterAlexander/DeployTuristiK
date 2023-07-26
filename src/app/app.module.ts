@@ -50,7 +50,6 @@ import { ReadOrderOrderDetailComponent } from './components/read-order-order-det
 import { ReadOrderPaymentComponent } from './components/read-order-payment/read-order-payment.component';
 import { ListFrequentTravelerComponent } from './components/list-frequent-traveler/list-frequent-traveler.component';
 import { EditPaymentFormComponent } from './components/edit-payment-form/edit-payment-form.component';
-import { ListFrequentTravelersToOrdersComponent } from './components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
 import { MainPublicComponent } from '@modules/main copy/main.component';
 import { PackagePublicComponent } from '@modules/packages/package-public.component';
 
@@ -135,7 +134,6 @@ registerLocaleData(localeEn, 'en-EN');
     ReadOrderPaymentComponent,
     ListFrequentTravelerComponent,
     EditPaymentFormComponent,
-    ListFrequentTravelersToOrdersComponent,
     CalendarComponent
   ],
   imports: [

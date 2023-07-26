@@ -1,4 +1,4 @@
-<p-confirmPopup></p-confirmPopup>
+<p-confirmDialog></p-confirmDialog>
 <form novalidate [formGroup]="formGroup">
     <h2 class="text-center mx-0 mt-0 mb-4 text-indigo-500">Proceso de Reserva</h2>
     <div class="field mb-4">
@@ -53,8 +53,8 @@
                     <input type="number" *ngIf="formGroup.get('packageId')?.dirty || orderProcess !== undefined"
                         pInputText class="w-full" [ngClass]="
                             {
-                                'border-red-600': formGroup.get('beneficiariesAmount')?.dirty && !validateBeneficiariesAmount() ||
-                                !validateBeneficiaries() || !validateExistingBeneficiariesAmount() 
+                                'border-red-600': formGroup.get('beneficiariesAmount')?.dirty &&
+                                !validateBeneficiaries() || !validateExistingBeneficiariesAmount() || !validateOnlyNumbersForBeneficiaries()
                             }" formControlName="beneficiariesAmount" placeholder="¿Cuántos viajarán?" required="true"
                         onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
                 </span>
@@ -63,7 +63,7 @@
                     Este campo es obligatorio
                 </small>
                 <small class="p-error block"
-                    *ngIf="formGroup.get('beneficiariesAmount')?.dirty && !validateBeneficiariesAmount()">
+                    *ngIf="formGroup.get('beneficiariesAmount')?.dirty && formGroup.get('beneficiariesAmount')?.errors?.['min']">
                     Debe haber al menos un beneficiario
                 </small>
                 <small class="p-error block"
@@ -78,6 +78,10 @@
                 <small class="p-error block"
                     *ngIf="validateBeneficiaries() && !validateExistingBeneficiariesAmount() && formGroup.get('beneficiariesAmount')?.dirty">
                     Capacidad minima de beneficiarios: {{beneficiariesAmount}}
+                </small>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('beneficiariesAmount')?.dirty && !validateOnlyNumbersForBeneficiaries()">
+                    Por favor ingrese solo números
                 </small>
             </div>
         </div>

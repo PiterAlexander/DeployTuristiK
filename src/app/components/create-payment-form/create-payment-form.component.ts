@@ -62,6 +62,8 @@ export class CreatePaymentFormComponent implements OnInit {
       this.beneficiariesAmount = this.orderProcess[0].beneficiaries.length
       this.onePackage = this.orderProcess[0].order.package
       if (this.orderProcess[0].action === 'CreateOrderDetail') {
+        console.log(this.orderProcess[0]);
+
         this.oneOrder = this.allOrders.find(o => o.orderId === this.orderProcess[0].order.orderId)
         this.totalCost = this.orderProcess[0].order.totalCost
         // let addition = 0
@@ -73,6 +75,8 @@ export class CreatePaymentFormComponent implements OnInit {
         // const totalCost = this.oneOrder.totalCost + this.totalCost
         this.remainingAmount = this.totalCost * 20 / 100
       } else {
+        console.log(this.orderProcess[0]);
+
         this.totalCost = this.onePackage.price * this.beneficiariesAmount
         this.remainingAmount = this.totalCost * 20 / 100
       }
@@ -187,7 +191,7 @@ export class CreatePaymentFormComponent implements OnInit {
               document: element.document,
               address: element.address,
               phoneNumber: element.phoneNumber,
-              birthDate: element.birthdate,
+              birthDate: element.birthDate,
               eps: element.eps,
               user: element.user,
             }
@@ -208,20 +212,27 @@ export class CreatePaymentFormComponent implements OnInit {
                 unitPrice: element.price
               };
               this.orderDetail.push(orderDetail)
+              if (element.addToFt) {
+                const frequentTraveler: FrequentTraveler = {
+                  customerId: this.orderProcess[0].order.customerId,
+                  travelerId: data['customerId']
+                }
+                this.store.dispatch(new CreateFrequentTravelerRequest({ ...frequentTraveler }))
+              }
             } else {
               const orderDetail: OrderDetail = {
                 beneficiaryId: data['customerId'],
                 unitPrice: element.price
               };
               this.orderDetail.push(orderDetail);
-            }
-            if (element.addToFt !== null) {
-              if (element.addToFt) {
-                const frequentTraveler: FrequentTraveler = {
-                  customerId: this.orderProcess[0].order.customer.customerId,
-                  travelerId: data['customerId']
+              if (element.addToFt !== null) {
+                if (element.addToFt) {
+                  const frequentTraveler: FrequentTraveler = {
+                    customerId: this.orderProcess[0].order.customer.customerId,
+                    travelerId: data['customerId']
+                  }
+                  this.store.dispatch(new CreateFrequentTravelerRequest({ ...frequentTraveler }))
                 }
-                this.store.dispatch(new CreateFrequentTravelerRequest({ ...frequentTraveler }))
               }
             }
           } else {
@@ -353,7 +364,7 @@ export class CreatePaymentFormComponent implements OnInit {
           }
           this.store.dispatch(new EditPackageRequest({ ...updatePackage }))
           this.store.dispatch(new CreateOrderRequest({ ...order }))
-        } {
+        } else {
           const payment: Payment = {
             amount: this.formGroup.value.amount,
             remainingAmount: remainingAmount,
