@@ -1,5 +1,5 @@
 import { AppState } from '@/store/state';
-import {GetAllRoleRequest,GetAllPermissionsRequest, OpenModalCreateRole, GetUsersRequest } from '@/store/ui/actions';
+import { GetAllRoleRequest, GetAllPermissionsRequest, OpenModalCreateRole, GetUsersRequest } from '@/store/ui/actions';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -12,9 +12,9 @@ import { User } from '@/models/user';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ApiService } from '@services/api.service';
 
-interface State{
-  page:number;
-  pageSize:number;
+interface State {
+  page: number;
+  pageSize: number;
 }
 
 @Component({
@@ -22,16 +22,16 @@ interface State{
   templateUrl: './roles.component.html',
   styleUrls: ['./roles.component.scss']
 })
-export class RolesComponent implements OnInit{
+export class RolesComponent implements OnInit {
 
-  public ui:Observable<UiState>
-  public roleList:Array<Role>
+  public ui: Observable<UiState>
+  public roleList: Array<Role>
   public filteredRolesList: Array<Role>
   public userList: Array<User>
   public loading: boolean;
   public search: string
   public total: number
-  public statuses: any[]=[]
+  public statuses: any[] = []
 
   private _state: State = {
     page: 1,
@@ -43,8 +43,8 @@ export class RolesComponent implements OnInit{
     private store: Store<AppState>,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private apiService : ApiService,
-  ){}
+    private apiService: ApiService,
+  ) { }
 
   ngOnInit() {
     this.store.dispatch(new GetAllPermissionsRequest())
@@ -54,14 +54,14 @@ export class RolesComponent implements OnInit{
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
       this.roleList = state.allRoles.data,
-      this.loading = state.allRoles.loading,
-      this.userList = state.allUsers.data
+        this.loading = state.allRoles.loading,
+        this.userList = state.allUsers.data
 
       this.searchByName();
     });
     this.statuses = [
-      {name: 'Activo', code: 1},
-      {name: 'Inactivo', code: 2},
+      { name: 'Activo', code: 1 },
+      { name: 'Inactivo', code: 2 },
     ];
   }
 
@@ -71,11 +71,11 @@ export class RolesComponent implements OnInit{
     );
   }
 
-  openCreateRoleModal(){
+  openCreateRoleModal() {
     this.store.dispatch(new OpenModalCreateRole());
   }
 
-  async openEditRoleModal(role:Role){
+  async openEditRoleModal(role: Role) {
     const ok = await new Promise((resolve, reject) => {
       this.apiService.getRoleById(role.roleId).subscribe({
         next: (data) => {
@@ -86,12 +86,12 @@ export class RolesComponent implements OnInit{
         }
       });
     });
-    
-    const roleEdit: Role ={
+
+    const roleEdit: Role = {
       roleId: ok['roleId'],
       name: ok['name'],
       status: ok['status'],
-      associatedPermission : ok['associatedPermission'],
+      associatedPermission: ok['associatedPermission'],
       user: ok['user'],
     }
 
@@ -101,7 +101,7 @@ export class RolesComponent implements OnInit{
 
   }
 
-  deleteRole(role:Role){
+  deleteRole(role: Role) {
 
     var rolesNoPermitidosbyName = [
       'Administrador',
@@ -111,25 +111,26 @@ export class RolesComponent implements OnInit{
     ]
 
     var ok = true
-    rolesNoPermitidosbyName.forEach(name=>{
-      if (role.name==name) {
+    rolesNoPermitidosbyName.forEach(name => {
+      if (role.name == name) {
         ok = false
       }
     })
 
-    if(ok){
-      const usersAssociated = this.userList.find(u=>u.roleId == role.roleId)
+    if (ok) {
+      const usersAssociated = this.userList.find(u => u.roleId == role.roleId)
 
       if (usersAssociated) {
-        this.messageService.add({key: 'alert-message', severity:'warn', summary: 'Acción denegada', detail: 'El rol tiene usuarios asociados.'});
-      }else{
+        this.messageService.add({ key: 'alert-message', severity: 'warn', summary: '¡Acción denegada!', detail: 'Este rol tiene usuarios asociados.' });
+      } else {
         this.confirmationService.confirm({
-          message: '¿Estás seguro de eliminar a ' + role.name + '?',
           header: 'Confirmación', // Cambia el encabezado del cuadro de confirmación
+          message: '¿Está seguro de eliminar a ' + role.name + '?',
           icon: 'pi pi-exclamation-triangle', // Cambia el icono del cuadro de confirmación
-          acceptLabel: 'Aceptar', // Cambia el texto del botón de aceptar
+          acceptLabel: 'Eliminar', // Cambia el texto del botón de aceptar
+          acceptIcon: 'pi pi-trash',
           rejectLabel: 'Cancelar', // Cambia el texto del botón de rechazar
-          acceptButtonStyleClass: 'p-button-primary p-button-sm', // Agrega una clase CSS al botón de aceptar
+          acceptButtonStyleClass: 'p-button-danger p-button-sm', // Agrega una clase CSS al botón de aceptar
           rejectButtonStyleClass: 'p-button-outlined p-button-sm', // Agrega una clase CSS al botón de rechazar
           accept: () => {
             // Lógica para confirmar
@@ -141,13 +142,13 @@ export class RolesComponent implements OnInit{
         });
 
       }
-    }else{
-      this.messageService.add({key: 'alert-message', severity:'warn', summary: 'Acción denegada', detail: ''});
+    } else {
+      this.messageService.add({ key: 'alert-message', severity: 'warn', summary: '¡Acción denegada!', detail: 'Este rol no puede ser eliminado.' });
     }
 
   }
 
- 
+
   searchByName() {
     if (this.search === undefined || this.search.length <= 0) {
       this.filteredRolesList = this.roleList;
@@ -160,9 +161,9 @@ export class RolesComponent implements OnInit{
     }
   }
 
-  showStatus(roleStatus:any):string{
-    for(let status of this.statuses){
-      if (roleStatus === status.code){
+  showStatus(roleStatus: any): string {
+    for (let status of this.statuses) {
+      if (roleStatus === status.code) {
 
         return status.name
       }

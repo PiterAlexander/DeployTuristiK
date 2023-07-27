@@ -1,28 +1,34 @@
 <ng-container *ngIf="role!=='Cliente'">
-  <app-header></app-header>
-  <app-menu-sidebar class="sidebar-dark-secondary"></app-menu-sidebar>
+  <app-header [ngClass]="{
+    'active-style': !isStyleActive,
+    'inactive-style': isStyleActive
+  }"></app-header>
+  <nav class="sidebar" >
+    <app-menu-sidebar></app-menu-sidebar>
+  </nav>
 
-  <div class="content-wrapper">
-      <router-outlet></router-outlet>
+  <div class="content-wrapper color" [ngClass]="{
+    'active-style': !isStyleActive,
+    'inactive-style': isStyleActive
+  }">
+    <router-outlet></router-outlet>
   </div>
 
   <app-footer></app-footer>
-  <app-control-sidebar></app-control-sidebar>
-  <div id="sidebar-overlay" (click)="onToggleMenuSidebar()"></div>
 </ng-container>
 
 <ng-container *ngIf="role==='Cliente'">
   <!-- <app-menu-sidebar class="sidebar-dark-primary" style="display: none;"></app-menu-sidebar> -->
 
 
-    <app-header></app-header>
-    <div class="container-fluid px-8">
-      <router-outlet class="mt-2"></router-outlet>
-    </div>
-    <app-footer></app-footer>
+  <app-header></app-header>
+  <div class="container mt-5">
+    <router-outlet class="mt-2"></router-outlet>
+  </div>
+  <app-footer></app-footer>
 
 
-    <!-- <app-control-sidebar></app-control-sidebar> -->
-    <!-- <div id="sidebar-overlay" (click)="onToggleMenuSidebar()"></div> -->
+  <!-- <app-control-sidebar></app-control-sidebar> -->
+  <!-- <div id="sidebar-overlay" (click)="onToggleMenuSidebar()"></div> -->
 
 </ng-container>

@@ -5,7 +5,6 @@ import { Permission } from "@/models/permission";
 import { Customer } from "@/models/customer";
 import { User } from "@/models/user";
 import { Employee } from "@/models/employee";
-import { FrequentTraveler } from "@/models/frequentTraveler";
 import { Token, UserLog } from "@/models/token";
 import { Payment } from "@/models/payment";
 
@@ -13,7 +12,7 @@ export default <UiState>{
   //<--- TOGGLER --->
   darkMode: false,
   navbarVariant: 'navbar-light',
-  sidebarSkin: 'sidebar-dark-primary',
+  sideVariant: 'close',
   menuSidebarCollapsed: false,
   controlSidebarCollapsed: true,
   //<--------------->
@@ -137,6 +136,7 @@ export default <UiState>{
 export interface UiState {
   //<--- TOGGLER --->
   darkMode: boolean;
+  sideVariant:string;
   menuSidebarCollapsed: boolean;
   controlSidebarCollapsed: boolean;
   navbarVariant: string;

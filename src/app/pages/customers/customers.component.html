@@ -1,7 +1,7 @@
 <p-toast key="alert-message"></p-toast>
-<div class="p-5">
+<div class="p-4">
     <div class="col-12">
-        <div class="card px-6 py-6 p-4" style="border-radius: 15px;">
+        <div class="card px-6 py-6" style="border-radius: 15px;">
             <p-table #dt [value]="allCustomers" [paginator]="true" [rows]="5" scrollable="true" dataKey="customerId"
                 [globalFilterFields]="['name', 'lastName', 'document', 'birthDate', 'phoneNumber', 'address', 'eps']">
                 <ng-template pTemplate="caption">
@@ -18,20 +18,20 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="max-width: 5rem"></th>
-                        <th style="min-width: 15rem">
+                        <th class="font-medium" style="min-width: 15rem">
                             Nombre completo
                         </th>
-                        <th style="min-width: 12rem">
+                        <th class="font-medium" style="min-width: 12rem">
                             Documento
                         </th>
-                        <th style="min-width: 15rem">
+                        <th class="font-medium" style="min-width: 15rem">
                             Fecha de nacimiento
                         </th>
-                        <th style="min-width: 9rem">
+                        <th class="font-medium" style="min-width: 9rem">
                             Teléfono
                         </th>
-                        <th style="min-width: 7rem" alignFrozen="right" pFrozenColumn
-                            class="flex justify-content-center align-items-center">
+                        <th tyle="min-width: 7rem" alignFrozen="right" pFrozenColumn
+                            class="flex justify-content-center align-items-center font-medium">
                             Acciones
                         </th>
                     </tr>

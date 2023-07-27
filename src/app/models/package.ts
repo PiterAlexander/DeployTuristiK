@@ -13,5 +13,5 @@ export interface Package {
     price: number;
     type: boolean;
     status: boolean;
-
+    aditionalPrice: number
 }

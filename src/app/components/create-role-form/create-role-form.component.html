@@ -1,149 +1,68 @@
-<!-- <div class="modal-header">
-  <div class="container">
-      <h4 class="modal-title padding-extra">{{actionTitle}} Rol</h4>
+<h2 class="mt-0 mb-4 text-indigo-500">{{ validateTitle() }}</h2>
+<form class="formulario" novalidate (submit)="saveChanges()" [formGroup]="formGroup">
+  <div class="grid mb-0">
+    <div class="col" [ngClass]="{'col-6': actionTitle !== 'Editar'}">
+      <div class="field">
+        <input id="role_name" type="text" pInputText placeholder="Ingrese el nombre del rol" class="w-full"
+          formControlName="name" minlength="3" maxlength="30" required="true"
+          onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)" />
+        <small class="p-error block" *ngIf="formGroup.get('name').dirty && formGroup.get('name')?.errors?.['required']">
+          Este campo es obligatorio
+        </small>
+        <small class="p-error block"
+          *ngIf="formGroup.get('name')?.errors?.['minlength'] && formGroup.get('name').dirty">
+          Este campo debe contener al menos 3 letras
+        </small>
+        <small class="p-error block" *ngIf="validateExistingRoleName() && formGroup.get('name').dirty">
+          Este rol ya está registrado
+        </small>
+      </div>
+    </div>
+    <div class="col" *ngIf="actionTitle === 'Editar'">
+      <div class="field">
+        <p-dropdown [options]="statuses" [(ngModel)]="selectedStatusCode" formControlName="status" optionLabel="name"
+          optionValue="code" [style]="{width: '100%'}"></p-dropdown>
+        <small class="p-error block"
+          *ngIf="formGroup.get('status')?.errors?.['required'] && formGroup.get('status').dirty">
+          Este campo es obligatorio
+        </small>
+      </div>
+    </div>
   </div>
-</div> -->
-
-<div class="modal-body p-0">
-  <div class="container-fluid">
-    <form class="needs-validation formulario" novalidate id="form" (submit)="saveChanges()" [formGroup]="formGroup">
-      <div class="card-body d-flex p-0">
-        <div class="w-100 p-2">
-          <div class="grid">
-            <div class="col" [ngClass]="{
-                                'col-6': actionTitle !== 'Editar'
-                            }">
-              <div class="field">
-                <label for="role_name" class="block">Nombre</label>
-                <input id="role_name" type="text" pInputText placeholder="Ingrese el nombre" class="w-full"
-                  formControlName="name" minlength="3" maxlength="30" required="true"
-                  onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)" />
-                <small class="p-error block"
-                  *ngIf="formGroup.get('name').dirty && formGroup.get('name')?.errors?.['required']">
-                  Este campo es obligatorio.
-                </small>
-                <small class="p-error block"
-                  *ngIf="formGroup.get('name')?.errors?.['minlength'] && formGroup.get('name').dirty">
-                  Este campo debe contener al menos 3 letras.
-                </small>
-                <small class="p-error block" *ngIf="
-                                        validateExistingRoleName() &&
-                                        formGroup.get('name').dirty
-                                    ">
-                  *El rol ya está registrado.
-                </small>
-              </div>
-            </div>
-
-            <div class="col" *ngIf="actionTitle === 'Editar'">
-              <!-- <label for="status" class="form-label">Estado</label>
-                      <div class="input-group">
-                          <select class="custom-select border-left-dark form-control formularioCampo" [ngClass]="{'invalid': formGroup.get('status').dirty,'valid': formGroup.get('status').dirty}"
-                              id="status" name="status" formControlName="status" placeholder="Seleccione un estado" >
-                              <option selected disabled value="0">Seleccione un estado</option>
-                              <option value="1">Habilitado</option>
-                              <option value="2">Deshabilitado</option>
-                          </select>
-                          <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="fas fa-user-cog"></i></span>
-                          </div>
-                      </div> -->
-              <div class="field">
-                <label for="eps" class="block">Estado</label>
-                <p-dropdown [options]="statuses" [(ngModel)]="selectedStatusCode" formControlName="status"
-                  optionLabel="name" optionValue="code" [style]="{width: '15.4rem'}"></p-dropdown>
-                <small class="p-error block"
-                  *ngIf="formGroup.get('status')?.errors?.['required'] && formGroup.get('status').dirty">
-                  Este campo es obligatorio.
-                </small>
-              </div>
-
-              <!-- <p-dropdown [options]="statuses" [(ngModel)]="selectedStatusCode" formControlName="status" optionLabel="name" optionValue="code"></p-dropdown>
-                      <div *ngIf="this.formGroup.value.status===0 && formGroup.get('status').dirty" class="invalid-feedback">
-                        *Por favor seleccione una opción.
-                      </div> -->
-            </div>
-          </div>
-
-          <hr />
-          <div class="row">
-            <div class="container mb-2">
-              <span class="text-xl font-bold mb-3" [ngStyle]="{color: 'var(--indigo-500)'}">Permisos</span>
-              <div class="row col-12 d-flex w-100">
-                <div *ngFor="let permiso of permissionList" class="checkbox col-3 m-0 p-0">
-                  <div class="w-100 p-1">
-                    <input type="checkbox" class="custom-control-input" [id]="permiso.module" [checked]="
-                                                isPermissionAssociated(permiso)
-                                            " (click)="
-                                                assignpermissiontolist(permiso)
-                                            " />
-                    <label [for]="permiso.module">
-                      <i class="icon pi pi-check p-1"></i>
-                      {{ permiso.module }}
-                    </label>
-                  </div>
-                </div>
-
-                <!-- <div *ngFor="let permiso of permissionList" class="col-6 mt-3">
-
-                           <div class="p-col-12 p-md-6 d-flex">
-                            <p-inputSwitch (click)="assignpermissiontolist(permiso)" [id]="permiso.module"></p-inputSwitch>
-                            <label [for]="permiso.module" class="role-label">
-                              {{permiso.module}}
-                            </label>
-                          </div>
-                        </div> -->
-              </div>
-
-              <!--MENSAJES DE VALIDACION PERMISOS ASOCIADOS-->
-              <div *ngIf="!validateAssociatedPermissions()" class="invalid-feedback mt-4">
-                *El rol debe tener almenos un permiso asociado.
-              </div>
-              <!--------------------------------------------->
-            </div>
-          </div>
+  <p-divider align="center" [style]="{'margin-top': '0%', 'margin-bottom': '4%'}">
+    <b class="text-indigo-500">Permisos</b>
+  </p-divider>
+  <div class="grid mb-3">
+    <div class="grid col-12">
+      <div *ngFor="let permiso of permissionList" class="checkbox col-3 m-0 p-0">
+        <div class="w-100 p-1">
+          <input type="checkbox" class="custom-control-input" [id]="permiso.module"
+            [checked]="isPermissionAssociated(permiso)" (click)="assignpermissiontolist(permiso)">
+          <label [for]="permiso.module">
+            <i class="icon pi pi-check p-1"></i>
+            {{ permiso.module }}
+          </label>
         </div>
       </div>
+    </div>
 
-      <div class="footer d-flex justify-content-end">
-        <div class="row">
-          <div class="col">
-            <!-- Button to cancel -->
-            <button pbutton="" label="Clear" icon="pi pi-times" (click)="cancel()" id="cancelButton" type="button"
-              class="p-element p-button-outlined mb-2 p-button p-component" ng-reflect-label="Clear"
-              ng-reflect-icon="pi pi-times">
-              <span class="p-button-icon p-button-icon-left pi pi-times" aria-hidden="true"></span><span
-                class="p-button-label">Cancelar</span>
-            </button>
-          </div>
-          <div class="col">
-            <!-- Button to invalid form -->
-            <button pbutton="" pripple="" type="button" *ngIf="!validForm()" type="submit" id="saveButton" label="Save"
-              icon="pi pi-check" ptooltip="Clic para guardar" class="p-element p-ripple p-button p-component"
-              ng-reflect-text="Clic para guardar" ng-reflect-label="Save" ng-reflect-icon="pi pi-check"
-              fdprocessedid="x7i42q">
-              <span class="p-button-icon p-button-icon-left pi pi-check" aria-hidden="true">
-              </span>
-              <span class="p-button-label">Guardar</span>
-              <span class="p-ink"></span>
-            </button>
-
-            <!-- Button to valid form -->
-            <button pbutton="" pripple="" type="button" *ngIf="validForm()" type="submit" id="saveButton" label="Save"
-              icon="pi pi-check" ptooltip="Clic para guardar" class="p-element p-ripple p-button p-component"
-              ng-reflect-text="Clic para guardar" ng-reflect-label="Save" ng-reflect-icon="pi pi-check"
-              fdprocessedid="x7i42q">
-              <span class="p-button-icon p-button-icon-left pi pi-check" aria-hidden="true">
-              </span>
-              <span class="p-button-label">Guardar</span>
-              <span class="p-ink"></span>
-            </button>
-
-            <!-- <button *ngIf="validForm()" type="submit" id="saveButton" class="btn btn-success">Guardar</button> -->
-            <!-- <button *ngIf="!validForm()" type="submit" id="saveButton" class="btn btn-secondary" disabled>Guardar</button> -->
-          </div>
-        </div>
-      </div>
-    </form>
+    <!--MENSAJES DE VALIDACION PERMISOS ASOCIADOS-->
+    <div *ngIf="!validateAssociatedPermissions()" class="p-error block">
+      El rol debe tener al menos un permiso asociado
+    </div>
+    <!--------------------------------------------->
   </div>
-</div>
+
+  <div class="flex justify-content-end">
+
+    <!-- Button to cancel -->
+    <button type="button" pButton pRipple icon="pi pi-times" label="Cancelar" class="p-button p-button-outlined mr-3"
+      (click)="cancel()"></button>
+
+    <!-- Button to invalid form -->
+    <p-button *ngIf="!validForm()" icon="pi pi-check" label="Guardar" disabled="true"></p-button>
+
+    <!-- Button to valid form -->
+    <p-button *ngIf="validForm()" type="submit" icon="pi pi-check" label="Guardar"></p-button>
+  </div>
+</form>

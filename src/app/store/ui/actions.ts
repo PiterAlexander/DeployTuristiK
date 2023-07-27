@@ -16,8 +16,6 @@ import { recoverPasswordEmail } from '@/models/recoverPasswordEmail';
 //<--- TOGGLE ACTIONS --->
 export enum toggleActions {
   TOGGLE_SIDEBAR_MENU = 'TOGGLE_SIDEBAR_MENU',
-  TOGGLE_CONTROL_SIDEBAR = 'TOGGLE_CONTROL_SIDEBAR',
-  TOGGLE_DARK_MODE = 'TOGGLE_DARK_MODE'
 }
 
 export const OPEN_MODAL_CREATE_PACKAGE: string = '[PACKAGE] OPEN_MODAL_CREATE_PACKAGE';
@@ -76,14 +74,6 @@ export const DELETE_ASSOCIATEDPERMISSION_SUCCESS: string = '[ASSOCIATEDPERMISSIO
 export const DELETE_ASSOCIATEDPERMISSION_FAILURE: string = '[ASSOCIATEDPERMISSION] DELETE_ASSOCIATEDPERMISSION_FAILURE';
 export class ToggleSidebarMenu implements Action {
   readonly type: string = toggleActions.TOGGLE_SIDEBAR_MENU;
-  constructor(public payload?: string) { }
-}
-export class ToggleControlSidebar implements Action {
-  readonly type: string = toggleActions.TOGGLE_CONTROL_SIDEBAR;
-  constructor(public payload?: string) { }
-}
-export class ToggleDarkMode implements Action {
-  readonly type: string = toggleActions.TOGGLE_DARK_MODE;
   constructor(public payload?: string) { }
 }
 //<--------------------->
@@ -859,8 +849,6 @@ export class SaveCurrentUserFailure implements Action {
 export type UiAction =
   //<---TOGGLE--->
   | ToggleSidebarMenu
-  | ToggleControlSidebar
-  | ToggleDarkMode
   //<--------------------->
   //<---PACKAGES--->
   | GetAllPackagesSuccess

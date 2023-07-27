@@ -152,7 +152,7 @@
                 <div class="col">
                     <div class="field-checkbox">
                         <p-checkbox formControlName="addToFt" inputId="addToFt" [binary]="true"></p-checkbox>
-                        <label for="addToFt" class="mb-0">Agregar beneficiario a tus Viajeros Frecuentes</label>
+                        <label for="addToFt" class="mb-0">Agregar beneficiario a mis Viajeros Frecuentes</label>
                     </div>
                 </div>
             </div>
@@ -270,7 +270,7 @@
                     <div class="field">
                         <p-dropdown formControlName="eps" required="true" [options]="allEps"
                             placeholder="Seleccione la EPS del beneficiario" [showClear]="true"
-                            [style]="{ width: '100%', 'max-width': '34.6rem'}"></p-dropdown>
+                            [style]="{ width: '100%', 'max-width': '36.6rem'}"></p-dropdown>
                         <small class="p-error block"
                             *ngIf="formGroup.get('eps')?.dirty && formGroup.get('eps')?.errors?.['required']">
                             Este campo es obligatorio.
@@ -305,7 +305,7 @@
                 <div class="col">
                     <div class="field-checkbox">
                         <p-checkbox formControlName="addToFt" inputId="addToFt" [binary]="true"></p-checkbox>
-                        <label for="addToFt" class="mb-0">Agregar beneficiario a tus Viajeros Frecuentes</label>
+                        <label for="addToFt" class="mb-0">Agregar beneficiario a mis Viajeros Frecuentes</label>
                     </div>
                 </div>
             </div>
@@ -425,8 +425,8 @@
     <div>
         <p-button
             *ngIf="orderProcess[0].action !== 'EditOrderDetail' && onePackage.availableQuotas > beneficiaries.length && frequentTravelers.length > 0"
-            label="Tus Viajeros Frecuentes" icon="pi pi-users" (click)="op.toggle($event)"></p-button>
-        <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}">
+            label="Mis Viajeros Frecuentes" icon="pi pi-users" (click)="op.toggle($event)"></p-button>
+        <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '500px'}">
             <ng-template pTemplate>
                 <p-table [value]="frequentTravelers" selectionMode="multiple" [(selection)]="selectedFrequentTravelers"
                     [paginator]="true" [rows]="3" responsiveLayout="scroll">

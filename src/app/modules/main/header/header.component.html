@@ -1,33 +1,18 @@
-<ul class="navbar-nav">
-
+<ul class="navbar-nav p-0">
   <li class="nav-item" *ngIf="role!=='Cliente'">
-      <a class="nav-link" (click)="onToggleMenuSidebar()" role="button"
-          ><i class="fas fa-bars"></i
-      ></a>
+    <i *ngIf="isStyleActive" (click)="onToggleMenuSidebar()" class="bx bx-chevron-right toggle"></i>
   </li>
   <li class="nav-item d-none d-sm-inline-block">
-      <a [routerLink]="['/Dashboard']" class="nav-link" *ngIf="role!=='Cliente'">Home</a>
-      <a [routerLink]="['/Paquetes']" class="nav-link" *ngIf="role==='Cliente'">TuristiK</a>
+    <a [routerLink]="['/Dashboard']" class="nav-link" *ngIf="role!=='Cliente'">Home</a>
+    <a [routerLink]="['/Paquetes']" class="nav-link" *ngIf="role==='Cliente'">TuristiK</a>
+  </li>
+  <li>
+    <app-user></app-user>
   </li>
 </ul>
 
-<form class="form-inline ml-3" [formGroup]="searchForm" *ngIf="false">
-  <div class="input-group input-group-sm">
-      <input
-          class="form-control form-control-navbar"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-      />
-      <div class="input-group-append">
-          <button class="btn btn-navbar" type="submit">
-              <i class="fas fa-search"></i>
-          </button>
-      </div>
-  </div>
-</form>
 
-<ul class="navbar-nav ml-auto">
+<ul class="navbar-nav ml-auto" *ngIf="role==='Cliente'">
   <app-notifications></app-notifications>
 
   <!-- <li class="nav-item">
@@ -35,12 +20,6 @@
           <i class="fas fa-th-large"></i>
       </button>
   </li> -->
-  <app-menu-sidebar style="background-color: #f8f9fa;" *ngIf="role==='Cliente'"></app-menu-sidebar>
+  <app-menu-sidebar style="background-color: #f8f9fa;"></app-menu-sidebar>
   <app-user></app-user>
 </ul>
-
-
-
-
-
-

@@ -1,100 +1,79 @@
-<!-- Brand Logo -->
-<a [routerLink]="['/']" class="brand-link" *ngIf="role !== 'Cliente'">
-    <pf-image
-        src="assets/img/logo.png"
-        alt="PakiTours Logo"
-        class="brand-image"
-        height="33"
-        width="33"
-        rounded
-        style="opacity: 0.8"
-    ></pf-image>
-    <span class="brand-text font-weight-light">TuristiK</span>
-</a>
+<nav class="sidebar" *ngIf="role !== 'Cliente'">
+    <header class="p-2">
+        <div class="image-text">
+            <span class="image">
+                <img src="https://img.freepik.com/vector-gratis/logotipo-viaje-detallado_23-2148616611.jpg?w=2000"
+                    alt="">
+            </span>
 
-<!-- Sidebar -->
-<div class="sidebar" *ngIf="role !== 'Cliente'">
-    <!-- Sidebar user (optional) -->
-    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-            <pf-image
-                [src]="user.picture"
-                fallback-src="assets/img/default-profile.png"
-                class="img-circle"
-                alt="User Image"
-                width="34"
-                height="34"
-                rounded
-            ></pf-image>
+            <div class="text logo-text">
+                <span class="name">TuristiK</span>
+                <span class="profession">{{user.role}}</span>
+            </div>
+            <a class="nav-link" (click)="onToggleMenuSidebar()" role="button"><i class="bx bx-chevron-right toggle"></i></a>
         </div>
-        <div class="info">
-            <a [routerLink]="['/profile']" class="d-block">
-                {{ user.username }}
-            </a>
+    </header>
+
+    <div class="menu-bar">
+        <div class="menu">
+            <ul class="menu-links">
+                <ng-container *ngFor="let item of menu">
+                    <ng-container *ngIf="item.allowed">
+                        <app-menu-item [menuItem]="item"></app-menu-item>
+                    </ng-container>
+                </ng-container>
+            </ul>
         </div>
     </div>
 
-    <div class="form-inline">
-        <app-sidebar-search></app-sidebar-search>
-    </div>
-
-    <!-- Sidebar Menu -->
-    <nav class="mt-2" style="overflow-y: hidden">
-        <ul
-            class="nav nav-pills nav-sidebar flex-column"
-            data-widget="treeview"
-            role="menu"
-            data-accordion="false"
-        >
-            <ng-container *ngFor="let item of menu">
-                <ng-template [ngIf]="item.allowed">
-                    <app-menu-item [menuItem]="item"></app-menu-item>
-                </ng-template>
-            </ng-container>
-        </ul>
-    </nav>
-</div>
-
-<div class="sidebar" *ngIf="role === 'Cliente'">
-    <!-- Sidebar user (optional) -->
-    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-            <pf-image
-                [src]="user.picture"
-                fallback-src="assets/img/default-profile.png"
-                class="img-circle"
-                alt="User Image"
-                width="34"
-                height="34"
-                rounded
-            ></pf-image>
+    <footer>
+        <div class="bottom-content">
+            <li class="nav-link" style="margin-top: 100%;">
+                <a href="#">
+                    <i class='bx bx-log-out icon'></i>
+                    <span class="text nav-text">Logout</span>
+                </a>
+            </li>
         </div>
-        <div class="info">
-            <a [routerLink]="['/profile']" class="d-block">
-                {{ user.username }}
-            </a>
+    </footer>
+</nav>
+
+<nav class="sidebar" *ngIf="role === 'Cliente'">
+    <!-- <header class="p-2">
+        <div class="image-text">
+            <span class="image">
+                <img src="https://img.freepik.com/vector-gratis/logotipo-viaje-detallado_23-2148616611.jpg?w=2000"
+                    alt="">
+            </span>
+
+            <div class="text logo-text">
+                <span class="name">TuristiK</span>
+                <span class="profession">{{user.role}}</span>
+            </div>
+            <a class="nav-link" (click)="onToggleMenuSidebar()" role="button"><i class="bx bx-chevron-right toggle"></i></a>
+        </div>
+    </header> -->
+
+    <div class="menu-bar">
+        <div class="menu">
+            <ul class="menu-links">
+                <ng-container *ngFor="let item of menu">
+                    <ng-container *ngIf="item.allowed">
+                        <app-menu-item [menuItem]="item"></app-menu-item>
+                    </ng-container>
+                </ng-container>
+            </ul>
         </div>
     </div>
 
-    <div class="form-inline">
-        <app-sidebar-search></app-sidebar-search>
-    </div>
-
-    <!-- Sidebar Menu -->
-    <nav class="mt-2" style="overflow-y: hidden">
-        <ul
-            class="nav nav-pills nav-sidebar flex-column"
-            data-widget="treeview"
-            role="menu"
-            data-accordion="false"
-        >
-            <ng-container *ngFor="let item of menu">
-                <ng-template [ngIf]="item.allowed">
-                    <app-menu-item [menuItem]="item"></app-menu-item>
-                </ng-template>
-            </ng-container>
-        </ul>
-    </nav>
-</div>
-
-
+    <!-- <footer>
+        <div class="bottom-content">
+            <li class="nav-link" style="margin-top: 100%;">
+                <a href="#">
+                    <i class='bx bx-log-out icon'></i>
+                    <span class="text nav-text">Logout</span>
+                </a>
+            </li>
+        </div>
+    </footer> -->
+</nav>

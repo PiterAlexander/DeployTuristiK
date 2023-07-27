@@ -1,4 +1,4 @@
-import { CreatePackageRequest, EditPackageRequest} from '@/store/ui/actions';
+import { CreatePackageRequest, EditPackageRequest } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -6,30 +6,23 @@ import { Store } from '@ngrx/store';
 import { Package } from '@/models/package';
 import { UiState } from '@/store/ui/state';
 import { Observable } from 'rxjs';
-import { ApiService } from '@services/api.service';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { MessageService } from 'primeng/api';
-
 
 @Component({
   selector: 'app-create-package-form',
   templateUrl: './create-package-form.component.html',
   styleUrls: ['./create-package-form.component.scss']
 })
+
 export class CreatePackageFormComponent implements OnInit {
-
-
   public ui: Observable<UiState>
-  public ActionTitle: string = "Agregar"
-  formGroup: FormGroup;
-  public packageData
+  public ActionTitle: string = "Registrar"
+  public formGroup: FormGroup
+  public packageData: Package
   public allPackages: Array<any>
-  selectedDestiny: any;
-  transports: any[] = [];
-
-
-  date: Date;
-  showCalendar: boolean = false;
+  public transports: any[] = [];
+  public date: Date;
+  public showCalendar: boolean = false;
 
   // Función para abrir el p-calendar
   openCalendar() {
@@ -37,7 +30,7 @@ export class CreatePackageFormComponent implements OnInit {
   }
 
   // Función para manejar la selección de fecha del p-calendar
-  onDateSelect(event: any) {
+  onDateSelect() {
     // Aquí puedes hacer lo que desees con la fecha seleccionada, por ejemplo, asignarla a un FormControl en tu formulario
     // O realizar cualquier otro procesamiento necesario.
 
@@ -49,38 +42,22 @@ export class CreatePackageFormComponent implements OnInit {
   public departureCalendardate: Date
   public ArrivalCalendardate: Date
 
-  constructor(private fb: FormBuilder, private store: Store<AppState>, private service: ApiService, private messageService: MessageService, private modal: DynamicDialogRef) { }
+  constructor(
+    private fb: FormBuilder,
+    private store: Store<AppState>,
+    private modal: DynamicDialogRef
+  ) { }
 
   ngOnInit(): void {
-    this.transports = [
-      { label: 'Aereo', value: '1' },
-      { label: 'Terrestre', value: '2' },
-  ];
-    this.formGroup = this.fb.group({
-      name: [null, [Validators.required, Validators.minLength(8)]],//
-      destination: [null, [Validators.required, Validators.minLength(8)]],//
-      details: [null, [Validators.required, Validators.minLength(25)]],//
-      transport: [0, [Validators.required]],//
-      hotel: [null, Validators.required],//
-      departureDate: new FormControl('', [Validators.required, this.fechaValida.bind(this)]),//
-      arrivalDate: new FormControl('', [Validators.required, this.fechaValida.bind(this), this.validarFechaRegreso.bind(this)]),//
-      departurePoint: [null, Validators.required],//
-      totalQuotas: [null, [Validators.required, Validators.min(15)]],
-      availableQuotas: [0],
-      price: [null, [Validators.required, Validators.min(100000)]],
-      type: [0, Validators.required],
-      status: [1, Validators.required]
-    })
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
       this.allPackages = state.allPackages.data
       this.packageData = state.onePackage.data
       var date = state.dateCalendarSelected.data
 
-
-      if(date){
+      if (date) {
         //Definir fecha de salida
-        this.departureCalendardate=date
+        this.departureCalendardate = date
         //Definir fecha de llegada (un dia despues de la de salida)
         const fechaAumentada = new Date(date.getTime());
         fechaAumentada.setDate(date.getDate() + 1);
@@ -88,10 +65,32 @@ export class CreatePackageFormComponent implements OnInit {
       }
     })
 
+    this.transports = [
+      { label: 'Aereo', value: 1 },
+      { label: 'Terrestre', value: 2 },
+    ];
+
+    this.formGroup = this.fb.group({
+      name: [null, [Validators.required, Validators.minLength(8)]],
+      destination: [null, [Validators.required, Validators.minLength(8)]],
+      details: [null, [Validators.required, Validators.minLength(25)]],
+      transport: [0, [Validators.required]],
+      hotel: [null, Validators.required],
+      departureDate: new FormControl('', [Validators.required, this.fechaValida.bind(this)]),
+      arrivalDate: new FormControl('', [Validators.required, this.fechaValida.bind(this), this.validarFechaRegreso.bind(this)]),
+      departurePoint: [null, Validators.required],
+      totalQuotas: [null, [Validators.required, Validators.min(15)]],
+      availableQuotas: [0],
+      price: [null, [Validators.required, Validators.min(100000)]],
+      type: [0, Validators.required],
+      status: [1, Validators.required],
+      aditionalPrice: [null, [Validators.required]],
+    })
+
     if (this.packageData != null) {
       this.ActionTitle = "Editar"
 
-      var newDate = this.formatDate(this.packageData.arrivalDate)
+      // var newDate = this.formatDate(this.packageData.arrivalDate)
       //console.log("Aqui la fecha oficiarl de llegada",newDate)
       this.formGroup.setValue({
         name: this.packageData.name,
@@ -107,19 +106,20 @@ export class CreatePackageFormComponent implements OnInit {
         price: this.packageData.price,
         type: this.packageData.type,
         status: this.packageData.status,
+        aditionalPrice: this.packageData.aditionalPrice
       })
     }
 
     if (this.departureCalendardate) {
       this.formGroup = this.fb.group({
-        name: [null, [Validators.required, Validators.minLength(8)]],//
-        destination: [null, [Validators.required, Validators.minLength(8)]],//
-        details: [null, [Validators.required, Validators.minLength(25)]],//
-        transport: [0, [Validators.required]],//
-        hotel: [null, Validators.required],//
-        departureDate: new FormControl(this.departureCalendardate, [Validators.required, this.fechaValida.bind(this)]),//
-        arrivalDate: new FormControl(this.ArrivalCalendardate, [Validators.required, this.fechaValida.bind(this), this.validarFechaRegreso.bind(this)]),//
-        departurePoint: [null, Validators.required],//
+        name: [null, [Validators.required, Validators.minLength(8)]],
+        destination: [null, [Validators.required, Validators.minLength(8)]],
+        details: [null, [Validators.required, Validators.minLength(25)]],
+        transport: [0, [Validators.required]],
+        hotel: [null, Validators.required],
+        departureDate: new FormControl(this.departureCalendardate, [Validators.required, this.fechaValida.bind(this)]),
+        arrivalDate: new FormControl(this.ArrivalCalendardate, [Validators.required, this.fechaValida.bind(this), this.validarFechaRegreso.bind(this)]),
+        departurePoint: [null, Validators.required],
         totalQuotas: [null, [Validators.required, Validators.min(15)]],
         availableQuotas: [0],
         price: [null, [Validators.required, Validators.min(100000)]],
@@ -127,7 +127,6 @@ export class CreatePackageFormComponent implements OnInit {
         status: [1, Validators.required]
       })
     }
-
   };
 
   resetForm() {
@@ -135,14 +134,12 @@ export class CreatePackageFormComponent implements OnInit {
   }
 
   cancel() {
-
     this.modal.close()
   }
+
   savePackage() {
-    if (this.formGroup.invalid) {
-      return;
-    } else {
-      if (this.packageData == null) {
+    if (!this.formGroup.invalid) {
+      if (this.packageData === undefined) {
         const model: Package = {
           name: this.formGroup.value.name,
           destination: this.formGroup.value.destination,
@@ -157,9 +154,10 @@ export class CreatePackageFormComponent implements OnInit {
           price: this.formGroup.value.price,
           type: this.formGroup.value.type,
           status: this.formGroup.value.status,
+          aditionalPrice: this.formGroup.value.aditionalPrice,
         }
-        this.store.dispatch(new CreatePackageRequest({ ...model }));
 
+        this.store.dispatch(new CreatePackageRequest({ ...model }));
       } else {
         const model: Package = {
           packageId: this.packageData.packageId,
@@ -176,11 +174,10 @@ export class CreatePackageFormComponent implements OnInit {
           price: this.formGroup.value.price,
           type: this.formGroup.value.type,
           status: this.formGroup.value.status,
+          aditionalPrice: this.formGroup.value.aditionalPrice,
         }
-
-        this.store.dispatch(new EditPackageRequest({
-          ...model
-        }));
+        
+        this.store.dispatch(new EditPackageRequest({ ...model }));
       }
     }
   }
@@ -188,14 +185,10 @@ export class CreatePackageFormComponent implements OnInit {
   validForm(): boolean {
     if (this.packageData == null) {
       return this.formGroup.valid
-        && this.formGroup.value.status != 0
-        && !this.allPackages.find(item => item.name === this.formGroup.value.name)
+        && this.formGroup.value.status != 0 && !this.validateExistingPackageName()
     } else {
       return this.formGroup.valid
-        && this.formGroup.value.status != 0
-        && !this.allPackages.find(
-          item => item.name === this.formGroup.value.name
-            && item.roleId !== this.packageData.roleId)
+        && this.formGroup.value.status != 0 && !this.validateExistingPackageName()
     }
   }
 
@@ -241,7 +234,7 @@ export class CreatePackageFormComponent implements OnInit {
   }
 
 
-  formatDate(date:any) : Date {
+  formatDate(date: any): Date {
     const opcionesFecha = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' };
 
     date = new Date(date)
@@ -250,5 +243,4 @@ export class CreatePackageFormComponent implements OnInit {
 
     return fechaConvertida;
   }
-
 }

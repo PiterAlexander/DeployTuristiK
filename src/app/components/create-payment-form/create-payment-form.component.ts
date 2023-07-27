@@ -4,15 +4,15 @@ import { OrderDetail } from '@/models/orderDetail';
 import { Package } from '@/models/package';
 import { Payment } from '@/models/payment';
 import { AppState } from '@/store/state';
-import { CreateFrequentTravelerRequest, CreateOrderRequest, CreatePaymentRequest, EditOrderRequest, EditPackageRequest, OpenModalCreateOrderDetail, OpenModalPayments } from '@/store/ui/actions';
+import { CreateOrderRequest, CreatePaymentRequest, EditOrderRequest, EditPackageRequest, GetAllOrdersRequest, OpenModalCreateOrderDetail, OpenModalPayments } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { ApiService } from '@services/api.service';
 import { Observable } from 'rxjs';
-import Swal from 'sweetalert2';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { MessageService } from 'primeng/api';
 import { FrequentTraveler } from '@/models/frequentTraveler';
 
 @Component({
@@ -40,6 +40,7 @@ export class CreatePaymentFormComponent implements OnInit {
     private fb: FormBuilder,
     private store: Store<AppState>,
     private modalPrimeNg: DynamicDialogRef,
+    private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
@@ -146,13 +147,6 @@ export class CreatePaymentFormComponent implements OnInit {
       status: 1
     }
     this.store.dispatch(new CreatePaymentRequest({ ...payment }))
-    // Swal.fire({
-    //   icon: 'success',
-    //   title: '¡Abono agregado exitosamente!',
-    //   timer: 1500,
-    //   timerProgressBar: true,
-    //   showConfirmButton: false
-    // })
   }
 
   saveFromCreatePaymentFromCustomer() {
@@ -165,13 +159,6 @@ export class CreatePaymentFormComponent implements OnInit {
       status: 0
     }
     this.store.dispatch(new CreatePaymentRequest({ ...payment }))
-    // Swal.fire({
-    //   icon: 'success',
-    //   title: '¡Abono agregado exitosamente!',
-    //   timer: 1500,
-    //   timerProgressBar: true,
-    //   showConfirmButton: false
-    // })
   }
 
   async save() {
@@ -217,7 +204,13 @@ export class CreatePaymentFormComponent implements OnInit {
                   customerId: this.orderProcess[0].order.customerId,
                   travelerId: data['customerId']
                 }
-                this.store.dispatch(new CreateFrequentTravelerRequest({ ...frequentTraveler }))
+                this.apiService.addFrequentTraveler(frequentTraveler).subscribe({
+                  next: (data) => {
+                  },
+                  error: (err) => {
+                    console.log("Error while creating: ", err);
+                  }
+                })
               }
             } else {
               const orderDetail: OrderDetail = {
@@ -231,7 +224,13 @@ export class CreatePaymentFormComponent implements OnInit {
                     customerId: this.orderProcess[0].order.customer.customerId,
                     travelerId: data['customerId']
                   }
-                  this.store.dispatch(new CreateFrequentTravelerRequest({ ...frequentTraveler }))
+                  this.apiService.addFrequentTraveler(frequentTraveler).subscribe({
+                    next: (data) => {
+                    },
+                    error: (err) => {
+                      console.log("Error while creating: ", err);
+                    }
+                  })
                 }
               }
             }
@@ -294,10 +293,16 @@ export class CreatePaymentFormComponent implements OnInit {
             availableQuotas: this.oneOrder.package.availableQuotas - this.orderDetail.length,
             price: this.oneOrder.package.price,
             type: this.oneOrder.package.type,
-            status: this.oneOrder.package.status
+            status: this.oneOrder.package.status,
+            aditionalPrice: this.oneOrder.package.aditionalPrice
           }
-
-          this.store.dispatch(new EditPackageRequest(updatePackage))
+          this.apiService.updatePackage(updatePackage.packageId, updatePackage).subscribe({
+            next: (data) => {
+            },
+            error: (err) => {
+              console.log("Error while creating: ", err);
+            }
+          })
 
           for (const element of this.orderDetail) {
             const orderDetail: OrderDetail = element;
@@ -319,15 +324,15 @@ export class CreatePaymentFormComponent implements OnInit {
             status: 1
           }
 
-          this.modalPrimeNg.close()
-          this.store.dispatch(new CreatePaymentRequest({ ...payment }))
-          Swal.fire({
-            icon: 'success',
-            title: '¡Beneficiario(s) agregado(s) exitosamente!',
-            timer: 1500,
-            timerProgressBar: true,
-            showConfirmButton: false
+          this.apiService.addPayment(payment).subscribe({
+            next: (data) => {
+            },
+            error: (err) => {
+              console.log("Error while creating: ", err);
+            }
           })
+          this.modalPrimeNg.close()
+          this.messageService.add({ key: 'alert/-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Beneficiario agregado exitosamente.' });
         } else if (this.orderProcess[0].action === 'CreateOrderFromCustomer') {
           const payment: Payment = {
             amount: this.formGroup.value.amount,
@@ -360,9 +365,16 @@ export class CreatePaymentFormComponent implements OnInit {
             availableQuotas: this.orderProcess[0].order.package.availableQuotas - this.orderDetail.length,
             price: this.orderProcess[0].order.package.price,
             type: this.orderProcess[0].order.package.type,
-            status: this.orderProcess[0].order.package.status
+            status: this.orderProcess[0].order.package.status,
+            aditionalPrice: this.orderProcess[0].order.package.aditionalPrice
           }
-          this.store.dispatch(new EditPackageRequest({ ...updatePackage }))
+          this.apiService.updatePackage(updatePackage.packageId, updatePackage).subscribe({
+            next: (data) => {
+            },
+            error: (err) => {
+              console.log("Error while creating: ", err);
+            }
+          })
           this.store.dispatch(new CreateOrderRequest({ ...order }))
         } else {
           const payment: Payment = {
@@ -403,9 +415,17 @@ export class CreatePaymentFormComponent implements OnInit {
             availableQuotas: this.orderProcess[0].order.package.availableQuotas - this.orderDetail.length,
             price: this.orderProcess[0].order.package.price,
             type: this.orderProcess[0].order.package.type,
-            status: this.orderProcess[0].order.package.status
+            status: this.orderProcess[0].order.package.status,
+            aditionalPrice: this.orderProcess[0].order.package.aditionalPrice
+
           }
-          this.store.dispatch(new EditPackageRequest({ ...updatePackage }))
+          this.apiService.updatePackage(updatePackage.packageId, updatePackage).subscribe({
+            next: (data) => {
+            },
+            error: (err) => {
+              console.log("Error while creating: ", err);
+            }
+          })
           this.store.dispatch(new CreateOrderRequest({ ...order }))
         }
       }

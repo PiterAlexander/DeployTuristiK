@@ -1,10 +1,11 @@
 import { Employee } from '@/models/employee';
-import { DeleteEmployeeRequest, GetAllEmployeeRequest, OpenModalCreateEmployee} from '@/store/ui/actions';
+import { DeleteEmployeeRequest, GetAllCustomerRequest, GetAllEmployeeRequest, GetAllRoleRequest, OpenModalCreateEmployee } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit, PipeTransform } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 interface State {
   page: number;
@@ -29,15 +30,20 @@ export class EmployeesComponent implements OnInit {
     pageSize: 5
   };
 
-  constructor(private store: Store<AppState>) { }
+  constructor(
+    private store: Store<AppState>,
+    private confirmationService: ConfirmationService,
+  ) { }
 
   ngOnInit() {
+    this.store.dispatch(new GetAllCustomerRequest());
+    this.store.dispatch(new GetAllRoleRequest());
     this.store.dispatch(new GetAllEmployeeRequest());
 
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.employeesList = state.allEmployees.data,
-      this.loading = state.allEmployees.loading
+        this.loading = state.allEmployees.loading
       this.searchByName();
     });
   }
@@ -48,16 +54,29 @@ export class EmployeesComponent implements OnInit {
     );
   }
 
-  openModalCreateEmployee(employee?:Employee) {
+  openModalCreateEmployee() {
     this.store.dispatch(new OpenModalCreateEmployee());
   }
 
-  openModalEditEmployee(employee:Employee){
+  openModalEditEmployee(employee: Employee) {
     this.store.dispatch(new OpenModalCreateEmployee(employee));
   }
 
-  deleteEmployee(employee:Employee){
-    this.store.dispatch(new DeleteEmployeeRequest(employee));
+  deleteEmployee(employee: Employee) {
+    this.confirmationService.confirm({
+      header: 'Confirmación', // Cambia el encabezado del cuadro de confirmación
+      message: '¿Está seguro de eliminar a ' + employee.name + '?',
+      icon: 'pi pi-exclamation-triangle', // Cambia el icono del cuadro de confirmación
+      acceptLabel: 'Eliminar', // Cambia el texto del botón de aceptar
+      acceptIcon: 'pi pi-trash',
+      rejectLabel: 'Cancelar', // Cambia el texto del botón de rechazar
+      acceptButtonStyleClass: 'p-button-danger p-button-sm', // Agrega una clase CSS al botón de aceptar
+      rejectButtonStyleClass: 'p-button-outlined p-button-sm', // Agrega una clase CSS al botón de rechazar
+      accept: () => {
+        // Lógica para confirmar
+        this.store.dispatch(new DeleteEmployeeRequest(employee));
+      }
+    });
   }
 
   searchByName() {

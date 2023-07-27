@@ -16,27 +16,6 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 ...state,
                 menuSidebarCollapsed: !state.menuSidebarCollapsed
             };
-        case Actions.toggleActions.TOGGLE_CONTROL_SIDEBAR:
-            return {
-                ...state,
-                controlSidebarCollapsed: !state.controlSidebarCollapsed
-            };
-        case Actions.toggleActions.TOGGLE_DARK_MODE:
-            let variant: string;
-            let skin: string;
-            if (state.darkMode) {
-                variant = NAVBAR_LIGHT_VARIANTS[0].value;
-                skin = SIDEBAR_LIGHT_SKINS[0].value;
-            } else {
-                variant = NAVBAR_DARK_VARIANTS[0].value;
-                skin = SIDEBAR_DARK_SKINS[0].value;
-            }
-            return {
-                ...state,
-                navbarVariant: variant,
-                sidebarSkin: skin,
-                darkMode: !state.darkMode
-            };
         //<---------------->
 
         //<--- PACKAGES --->

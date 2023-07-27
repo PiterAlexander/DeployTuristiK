@@ -3,18 +3,18 @@ import {
     EditRoleRequest,
     GetAllPermissionsRequest
 } from '@/store/ui/actions';
-import {Component, OnInit} from '@angular/core';
-import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
-import {UiState} from '@/store/ui/state';
-import {AppState} from '@/store/state';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Role} from '@/models/role';
-import {AssociatedPermission} from '@/models/associated-permission';
-import {ApiService} from '@services/api.service';
-import {DynamicDialogRef} from 'primeng/dynamicdialog';
-import {User} from '@/models/user';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { UiState } from '@/store/ui/state';
+import { AppState } from '@/store/state';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Role } from '@/models/role';
+import { AssociatedPermission } from '@/models/associated-permission';
+import { ApiService } from '@services/api.service';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { User } from '@/models/user';
 
 interface Status {
     name: string;
@@ -50,8 +50,8 @@ export class CreateRoleFormComponent implements OnInit {
         private apiService: ApiService
     ) {
         this.statuses = [
-            {name: 'Activo', code: 1},
-            {name: 'Inactivo', code: 2}
+            { name: 'Activo', code: 1 },
+            { name: 'Inactivo', code: 2 }
         ];
     }
 
@@ -107,6 +107,13 @@ export class CreateRoleFormComponent implements OnInit {
                 roleNameControl.enable();
             }
         }
+    }
+
+    validateTitle(): string {
+        if (this.roleData !== undefined) {
+            return 'Editar rol'
+        }
+        return 'Registrar rol'
     }
 
     //CREATE UPDATE ROLE AND ASSING PERMISSIONS-----------------------
@@ -168,31 +175,31 @@ export class CreateRoleFormComponent implements OnInit {
                         })
                     );
 
-                    if(model.status == 2){
-                      this.roleData.user.forEach(async (user) => {
-                        console.log(user)
+                    if (model.status == 2) {
+                        this.roleData.user.forEach(async (user) => {
+                            console.log(user)
 
-                          const modelUser: User = {
-                              userId: user.userId,
-                              email: user.email,
-                              password: user.password,
-                              status: model.status,
-                              roleId: model.roleId,
-                          };
+                            const modelUser: User = {
+                                userId: user.userId,
+                                email: user.email,
+                                password: user.password,
+                                status: model.status,
+                                roleId: model.roleId,
+                            };
 
-                          const ok = await new Promise((resolve, reject) => {
-                            this.apiService.updateUser(modelUser.userId,modelUser)
-                                .subscribe({
-                                    next: (data) => {
-                                      console.log(data)
-                                        resolve(data);
-                                    },
-                                    error: (err) => {
-                                        reject(err);
-                                    }
-                                });
-                          });
-                      });
+                            const ok = await new Promise((resolve, reject) => {
+                                this.apiService.updateUser(modelUser.userId, modelUser)
+                                    .subscribe({
+                                        next: (data) => {
+                                            console.log(data)
+                                            resolve(data);
+                                        },
+                                        error: (err) => {
+                                            reject(err);
+                                        }
+                                    });
+                            });
+                        });
                     }
                 } else {
                     const model: Role = {

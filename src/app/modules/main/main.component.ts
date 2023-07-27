@@ -14,14 +14,16 @@ export class MainComponent implements OnInit {
     @HostBinding('class') class = 'wrapper';
     public ui: Observable<UiState>;
     public role;
-
+    public isStyleActive: boolean = true;
+    
     constructor(private renderer: Renderer2, private store: Store<AppState>) {}
 
     ngOnInit() {
         this.ui = this.store.select('ui');
         this.ui.subscribe((state: UiState) => {
-          var user = JSON.parse(localStorage.getItem('TokenPayload'))
-          this.role = user['role']
+            var user = JSON.parse(localStorage.getItem('TokenPayload'));
+            this.role = user['role'];
+            this.isStyleActive = state.menuSidebarCollapsed
         });
         this.renderer.removeClass(
             document.querySelector('app-root'),
@@ -85,7 +87,4 @@ export class MainComponent implements OnInit {
         );
     }
 
-    onToggleMenuSidebar() {
-        this.store.dispatch(new ToggleSidebarMenu());
-    }
 }

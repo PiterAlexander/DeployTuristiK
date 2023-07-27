@@ -1,12 +1,9 @@
 <h2 class="mt-0 mb-4 flex justify-content-center text-indigo-500">{{ validateTitle() }}</h2>
-<h2 class="mt-0 mb-4 flex justify-content-center text-indigo-500">{{ validateTitle() }}</h2>
-<h2 class="mt-0 mb-4 flex justify-content-center text-indigo-500">{{ validateTitle() }}</h2>
-<h2 class="mt-0 mb-4 flex justify-content-center text-indigo-500">{{ validateTitle() }}</h2>
 <form novalidate id="form" (submit)="save()" [formGroup]="formGroup">
     <div class="grid">
         <div class="col">
             <div class="field">
-                <input pInputText placeholder="Ingrese sus nombre" type="text" formControlName="name" required="true"
+                <input pInputText placeholder="Ingrese sus nombres" type="text" formControlName="name" required="true"
                     minlength="3" maxlength="30" class="w-full"
                     onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
                 <!-- validaciones del nombre -->
@@ -47,7 +44,7 @@
                     [style]="{ width: '100%' }" [readonlyInput]="true" [maxDate]="customerMaxDate"></p-calendar>
                 <small class="p-error block"
                     *ngIf="formGroup.get('birthDate')?.dirty && formGroup.get('birthDate')?.errors?.['required']">
-                    Este campo es obligatorio.
+                    Este campo es obligatorio
                 </small>
             </div>
         </div>
@@ -117,7 +114,7 @@
                     [showClear]="true" [style]="{ width: '100%', 'max-width': '20.7rem' }"></p-dropdown>
                 <small class="p-error block"
                     *ngIf="formGroup.get('eps')?.dirty && formGroup.get('eps')?.errors?.['required']">
-                    Este campo es obligatorio.
+                    Este campo es obligatorio
                 </small>
             </div>
         </div>
@@ -125,8 +122,9 @@
             <div class="field">
                 <span class="p-input-icon-left w-full">
                     <i class="pi pi-phone"></i>
-                    <input pInputText placeholder="Ingrese el número" type="text" formControlName="phoneNumber"
-                        required="true" minlength="10" maxlength="10" class="w-full" [ngClass]="{
+                    <input pInputText placeholder="Ingrese su número de teléfono" type="text"
+                        formControlName="phoneNumber" required="true" minlength="10" maxlength="10" class="w-full"
+                        [ngClass]="{
                             'border-red-600': !validateOnlyNumbersForPhoneNumber()
                         }" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
                 </span>
@@ -137,7 +135,7 @@
                 </small>
                 <small class="p-error block"
                     *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber')?.dirty">
-                    Este campo debe contener 10 números.
+                    Este campo debe contener 10 números
                 </small>
                 <small class="p-error block"
                     *ngIf="formGroup.get('phoneNumber')?.dirty && !validateOnlyNumbersForPhoneNumber()">
@@ -151,21 +149,21 @@
             <div class="field">
                 <span class="p-input-icon-left w-full">
                     <i class="pi pi-at"></i>
-                    <input pInputText placeholder="Ingrese su correo electronico" type="text" formControlName="email"
+                    <input pInputText placeholder="Ingrese su correo electrónico" type="text" formControlName="email"
                         required="true" minlength="6" maxlength="40" class="w-full" [ngClass]="{
                             'border-red-600': validateExistingEmail()
                         }">
                 </span>
                 <small class="p-error block"
                     *ngIf="formGroup.get('email')?.errors?.['required'] && formGroup.get('email')?.dirty">
-                    Este campo es obligatorio.
+                    Este campo es obligatorio
                 </small>
                 <small class="p-error block" *ngIf="formGroup.get('email')?.dirty && validateExistingEmail()">
-                    El correo ya existe.
+                    El correo ya existe
                 </small>
                 <small class="p-error block"
                     *ngIf="formGroup.get('email')?.errors?.['pattern'] && formGroup.get('email')?.dirty">
-                    Ingrese un correo valido.
+                    Ingrese un correo valido
                 </small>
             </div>
         </div>
@@ -180,15 +178,15 @@
                 </span>
                 <small class="p-error block"
                     *ngIf="formGroup.get('password')?.errors?.['required'] && formGroup.get('password')?.dirty">
-                    Este campo es obligatorio.
+                    Este campo es obligatorio
                 </small>
                 <small class="p-error block"
                     *ngIf="formGroup.get('password')?.errors?.['minlength'] && formGroup.get('password')?.dirty">
-                    La contraseña debe tener mínimo 8 caracteres.
+                    La contraseña debe tener mínimo 8 caractere.
                 </small>
                 <small class="p-error block"
                     *ngIf="formGroup.get('password')?.errors?.['maxlength'] && formGroup.get('password')?.dirty">
-                    La contraseña no debe exceder los 30 caracteres.
+                    La contraseña no debe exceder los 30 caracteres
                 </small>
             </div>
         </div>
