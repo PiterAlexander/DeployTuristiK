@@ -92,6 +92,8 @@ import { TabViewModule } from 'primeng/tabview';
 import {TabMenuModule} from 'primeng/tabmenu';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import {CarouselModule} from 'primeng/carousel';
+import { SidebarModule } from 'primeng/sidebar';
+
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
 
@@ -195,6 +197,8 @@ registerLocaleData(localeEn, 'en-EN');
     ConfirmPopupModule,
     BadgeModule,
     ChartModule,
+    SidebarModule,
+
 
     //<------------------------->
     ToastrModule.forRoot({

@@ -1,4 +1,4 @@
-<pf-dropdown hide-arrow class="user-menu">
+<!-- <pf-dropdown hide-arrow class="user-menu">
     <div slot="button">
         <a class="nav-link">
             <pf-image
@@ -26,13 +26,9 @@
 
             <p>
                 <span>{{ user.email }}</span>
-                <!-- <small>
-                    <span class="mr-2">Member since</span>
-                    <span>{{ formatDate(user.createdAt) }}</span>
-                </small> -->
+                
             </p>
         </li>
-        <!-- Menu Footer-->
         <li class="user-footer">
             <a [routerLink]="['/profile']" class="btn btn-default btn-flat" >
                 Perfil
@@ -42,4 +38,114 @@
             </a>
         </li>
     </div>
-</pf-dropdown>
+</pf-dropdown> -->
+
+<p-toast></p-toast>
+<p-sidebar
+    [(visible)]="visible"
+    position="right"
+    [transitionOptions]="'.3s cubic-bezier(0, 0, 0.2, 1)'"
+    styleClass="layout-profile-sidebar w-full sm:w-22rem "
+>
+    <div class="flex flex-column mx-auto md:mx-0 w-full">
+        <span class="text-color-secondary text-4xl mb-5"
+            ><i class="pi pi-user text-3xl text-primary mr-3"></i
+            >{{ allInfo.name + ' ' + allInfo.lastName }}</span
+        >
+
+        <ul class="list-none m-0 p-0">
+            <li>
+                <div
+                    class="flex surface-border mb-2 p-2 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150"
+                >
+                    <span>
+                        <i class="pi pi-id-card text-xl text-primary"></i>
+                    </span>
+                    <div class="ml-3">
+                        <span class="mb-2 font-semibold">Documento</span>
+                        <p class="text-color-secondary m-0">
+                            {{ allInfo.document }}
+                        </p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div
+                    class="cursor-pointer flex surface-border mb-2 p-2 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150 overflow-hidden sm:text-overflow-ellipsis "
+                >
+                    <span>
+                        <i class="pi pi-at text-xl text-primary"></i>
+                    </span>
+                    <div class="ml-3">
+                        <span class="mb-2 font-semibold">Correo</span>
+                        <p class="text-color-secondary m-0 ">
+                            {{ allInfo.user.email }}
+                        </p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div
+                    class="flex surface-border mb-2 p-2 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150"
+                >
+                    <span>
+                        <i class="pi pi-phone text-xl text-primary"></i>
+                    </span>
+                    <div class="ml-3">
+                        <span class="mb-2 font-semibold">Teléfono</span>
+                        <p class="text-color-secondary m-0">
+                            {{ allInfo.phoneNumber }}
+                        </p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a
+                    class="flex surface-border mb-2 p-2 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150"
+                >
+                    <span>
+                        <i class="pi pi-users text-xl text-primary"></i>
+                    </span>
+                    <div class="ml-3">
+                        <span class="mb-2 font-semibold">Rol</span>
+                        <p class="text-color-secondary m-0">{{ user.role }}</p>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="flex flex-column mt-5 mx-auto md:mx-0">
+        <div class="flex justify-content-end">
+            <button
+                type="button"
+                label="Editar Perfil"
+                class="p-element p-ripple p-button-outlined p-button-prymary mr-2 mb-2 p-button p-component"
+                ng-reflect-label="Editar"
+                (click)="
+                    user.role == 'Cliente'
+                        ? editCustomer(allInfo)
+                        : editEmployee(allInfo)
+                "
+            >
+                <span class="p-button-label text-xl">
+                    <i class="pi pi-pencil text-primary"></i>
+                    Editar Perfil</span
+                ><span class="p-ink"></span>
+            </button>
+            <button
+                type="button"
+                label="Salir"
+                class="p-element p-ripple p-button-outlined p-button-danger mr-2 mb-2 p-button p-component"
+                ng-reflect-label="Danger"
+                (click)="logoutConfirm($event)"
+            >
+                <span class="p-button-label text-xl">
+                    <i class="pi pi-power-off text-danger"></i>
+                    Salir</span
+                ><span class="p-ink"></span>
+            </button>
+            <p-confirmPopup key="confirm2"></p-confirmPopup>
+        </div>
+    </div>
+</p-sidebar>

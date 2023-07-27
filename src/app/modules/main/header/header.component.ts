@@ -25,7 +25,9 @@ export class HeaderComponent implements OnInit {
         private store: Store<AppState>
     ) {}
 
-    
+    onProfileButtonClick() {
+        this.appService.showProfileSidebar();
+    }
     
 
     ngOnInit() {
