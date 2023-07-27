@@ -92,4 +92,8 @@ export class RecoverPasswordComponent implements OnInit {
             return false;
         }
     }
+
+    validForm(): boolean {
+        return this.formGroup.valid;
+    }
 }

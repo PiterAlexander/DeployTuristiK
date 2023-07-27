@@ -1,29 +1,47 @@
 <ul class="navbar-nav p-0">
-
-  <li class="nav-item" *ngIf="role!=='Cliente'">
-    <i *ngIf="isStyleActive" (click)="onToggleMenuSidebar()" class="bx bx-chevron-right toggle"></i>
-  </li>
-  <li class="nav-item d-none d-sm-inline-block">
-      <a [routerLink]="['/Dashboard']" class="nav-link" *ngIf="role!=='Cliente'">Home</a>
-      <a [routerLink]="['/Paquetes']" class="nav-link" *ngIf="role==='Cliente'">TuristiK</a>
-  </li>
+    <li class="nav-item" *ngIf="role !== 'Cliente'">
+        <i
+            *ngIf="isStyleActive"
+            (click)="onToggleMenuSidebar()"
+            class="bx bx-chevron-right toggle"
+        ></i>
+    </li>
+    <li class="nav-item d-none d-sm-inline-block">
+        <a
+            [routerLink]="['/Dashboard']"
+            class="nav-link"
+            *ngIf="role !== 'Cliente'"
+            >Home</a
+        >
+        <a
+            [routerLink]="['/Paquetes']"
+            class="nav-link"
+            *ngIf="role === 'Cliente'"
+            >TuristiK</a
+        >
+    </li>
 </ul>
 
-
 <ul class="navbar-nav ml-auto">
-  <app-notifications></app-notifications>
+    <app-notifications></app-notifications>
 
-  <!-- <li class="nav-item">
+    <!-- <li class="nav-item">
       <button class="nav-link" (click)="onToggleControlSidebar()">
           <i class="fas fa-th-large"></i>
       </button>
   </li> -->
-  <app-menu-sidebar style="background-color: #f8f9fa;" *ngIf="role==='Cliente'"></app-menu-sidebar>
-  <app-user></app-user>
+    <app-menu-sidebar
+        style="background-color: #f8f9fa"
+        *ngIf="role === 'Cliente'"
+    ></app-menu-sidebar>
+    <button type="button" class="p-link" (click)="onProfileButtonClick()" pTooltip="Mi Perfil" >
+        <img
+            src="assets/img/default-profile.png"
+            class="user-image-small m-1"
+            width="30"
+            height="30"
+            alt="User Image"
+            rounded
+        />
+    </button>
 </ul>
-
-
-
-
-
-
