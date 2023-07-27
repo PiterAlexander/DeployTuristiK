@@ -12,15 +12,6 @@
 @import '~admin-lte/dist/css/adminlte.min.css';
 @import 'typeface-poppins';
 @import 'ngx-toastr/toastr';
-// body {
-//     width: 100vw;
-//     height: 100vh;
-// }
-
-// ::-webkit-scrollbar {
-//     display: none;
-// }
-
 *{
     font-family: 'Poppins', sans-serif;
 }
@@ -35,8 +26,6 @@
 }
 
 :root{
-    /* ===== Colors ===== */
-    --body-color: #E4E9F7;
     --sidebar-color: #FFF;
     --primary-color: #6858ab;
     --primary-color-light: #F6F5FF;
@@ -280,6 +269,7 @@ body.dark .switch::before{
     position: absolute !important;
     width: calc(100% - 78px) !important;
 }
+
 body.dark .home .text{
     color: var(--text-color);
 }
@@ -289,3 +279,10 @@ body.dark .home .text{
 .layout-fixed .wrapper .sidebar {
     height: auto; /* o height: initial; */
 }
+
+@import "assets/layout/styles/layout/layout.scss";
+
+/* PrimeNG */
+@import "../node_modules/primeng/resources/primeng.min.css";
+@import "../node_modules/primeflex/primeflex.scss";
+@import "../node_modules/primeicons/primeicons.css";

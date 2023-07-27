@@ -1,5 +1,5 @@
 <ng-container *ngIf="role !== 'Cliente'">
-    <app-header
+    <app-header style="display: block; border: none !important; background-color: #eff3f8 !important; "
         [ngClass]="{
             'active-style': !isStyleActive,
             'inactive-style': isStyleActive
@@ -15,6 +15,7 @@
             'active-style': !isStyleActive,
             'inactive-style': isStyleActive
         }"
+        style="background-color: #eff3f8;"
     >
         <router-outlet></router-outlet>
     </div>
