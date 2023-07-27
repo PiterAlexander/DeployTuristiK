@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
-import { exhaustMap } from 'rxjs/operators';
 import {
     CREATE_PACKAGE_REQUEST,
     GET_ALL_PACKAGES_REQUEST,
@@ -47,7 +46,6 @@ import {
     DeleteOrderDetailRequest,
     DeleteOrderDetailSuccess,
     DeleteOrderDetailFailure,
-    LoadDataRequest,
     LoadDataSuccess,
     LoadDataFailure,
     LOAD_DATA_REQUEST,
@@ -71,7 +69,6 @@ import { AuthService } from '@services/auth/auth.service';
 import { ListFrequentTravelerComponent } from '@components/list-frequent-traveler/list-frequent-traveler.component';
 import { EditPaymentFormComponent } from '@components/edit-payment-form/edit-payment-form.component';
 import { CreatecustomerformComponent } from '@components/create-customer-form/create-customer-form.component';
-import { ListFrequentTravelersToOrdersComponent } from '@components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 //<--------PRIMENG----------->
@@ -79,7 +76,7 @@ import { MessageService } from 'primeng/api';
 
 @Injectable()
 export class PackageEffects {
-    modalRef: NgbModalRef;
+    // modalRef: NgbModalRef;
     dialogRef: DynamicDialogRef;
 
     //<--- PACKAGES --->
@@ -98,23 +95,22 @@ export class PackageEffects {
     ));
 
     loadIngresos$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(LOAD_DATA_REQUEST),
-      mergeMap(() =>
-        this.apiService.getIngresosMensuales().pipe(
-          map((data: number[]) => new LoadDataSuccess({  data })),
-          catchError((error) => of(new LoadDataFailure({ error })))
+        this.actions$.pipe(
+            ofType(LOAD_DATA_REQUEST),
+            mergeMap(() =>
+                this.apiService.getIngresosMensuales().pipe(
+                    map((data: number[]) => new LoadDataSuccess({ data })),
+                    catchError((error) => of(new LoadDataFailure({ error })))
+                )
+            )
         )
-      )
-    )
-  );
+    );
 
     getTopPackages$ = createEffect(() => this.actions$.pipe(
         ofType(packageActions.GET_TOP_PACKAGES_REQUEST),
         switchMap((action) => {
             return this.apiService.getTopPackage().pipe(
                 mergeMap((packagesResolved) => {
-
                     return [
                         new GetTopPackagesSuccess(packagesResolved)
                     ];
@@ -128,12 +124,12 @@ export class PackageEffects {
         this.actions$.pipe(
             ofType(packageActions.OPEN_MODAL_CREATE_PACKAGE),
             tap((action: OpenModalCreatePackage) => {
-                const ref = this.dialogService.open(CreatePackageFormComponent, {
+                this.dialogService.open(CreatePackageFormComponent, {
+                    /* Opciones del modal */
                     showHeader: false,
-                    width: '50%',
-                    contentStyle: { 'max-height': '900px', overflow: 'auto', padding: '0px 50px 0px 50px' },
+                    width: '55%',
+                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
                     baseZIndex: 10000,
-                    data: action.payload // Pasar datos opcionales a la modal desde la acción
                 });
             })
         ), { dispatch: false }
@@ -145,11 +141,9 @@ export class PackageEffects {
         map((action: CreatePackageRequest) => action.payload),
         switchMap((pack) => {
             return this.apiService.addPackage(pack).pipe(
-
                 mergeMap((packageResolved) => {
                     this.dialogRef.close()
-                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Rol creado exitosamente.' });
-                    window.location.reload()
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Paquete registrado exitosamente.' });
                     return [
                         new CreatePackageSuccess(packageResolved),
                         new GetAllPackagesRequest()
@@ -159,15 +153,15 @@ export class PackageEffects {
             )
         })
     ));
-    
+
     editPackage$ = createEffect(() => this.actions$.pipe(
         ofType(packageActions.EDIT_PACKAGE_REQUEST),
         map((action: EditPackageRequest) => action.payload),
         switchMap((pack) => {
             return this.apiService.updatePackage(pack.packageId, pack).pipe(
                 mergeMap((packResolved) => {
-                    this.modalRef.close();
-                    window.location.reload()
+                    this.dialogRef.close()
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Paquete editado exitosamente.' });
                     return [
                         new EditPackageSuccess(packResolved),
                         new GetAllPackagesRequest(),
@@ -184,7 +178,7 @@ export class PackageEffects {
         switchMap((pack) => {
             return this.apiService.disablePackage(pack).pipe(
                 mergeMap((packResolved) => {
-                    this.modalRef.close();
+                    this.dialogRef.close();
                     return [
                         new ChangeStatusPackageSuccess(packResolved),
                         new GetAllPackagesRequest(),
@@ -232,9 +226,10 @@ export class PackageEffects {
             return this.apiService.addOrder(order).pipe(
                 mergeMap((orderResolved) => {
                     this.dialogRef.close()
-                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Proceso completado', detail: '¡Pedido registrado exitosamente!' });
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Pedido registrado exitosamente.' });
                     return [
                         new CreateOrderSuccess(orderResolved),
+                        new GetAllCustomerRequest(),
                         new GetAllOrdersRequest()
                     ];
                 }),
@@ -259,17 +254,6 @@ export class PackageEffects {
         })
     ));
 
-    openModalListFrequentTravelersToOrders$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(orderActions.OPEN_MODAL_LIST_FREQUENTTRAVELERS_TO_ORDERS),
-            tap((action) => {
-                this.modalRef = this.modalService.open(ListFrequentTravelersToOrdersComponent, {
-                    backdrop: false,
-                    size: 'xl'
-                });
-            })
-        ), { dispatch: false });
-
     openModalOrderDetails$ = createEffect(() =>
         this.actions$.pipe(
             ofType(orderActions.OPEN_MODAL_ORDERDETAILS),
@@ -291,7 +275,7 @@ export class PackageEffects {
                 this.dialogRef = this.dialogService.open(CreateOrderDetailFormComponent, {
                     /* Opciones del modal */
                     showHeader: false,
-                    width: '80%',
+                    width: '85%',
                     contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
                 });
             })
@@ -303,6 +287,8 @@ export class PackageEffects {
         switchMap((orderDetail) => {
             return this.apiService.updateOrderDetail(orderDetail.orderDetailId, orderDetail).pipe(
                 mergeMap((orderDetailResolved) => {
+                    this.dialogRef.close();
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Beneficiario editado exitosamente.' });
                     return [
                         new EditOrderDetailSuccess(orderDetailResolved),
                         new GetAllOrdersRequest()
@@ -320,6 +306,7 @@ export class PackageEffects {
             return this.apiService.deleteOrderDetail(OrderDetail.orderDetailId).pipe(
                 mergeMap((orderDetailResolved) => {
                     this.dialogRef.close();
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Beneficiario eliminado exitosamente.' });
                     return [
                         new DeleteOrderDetailSuccess(orderDetailResolved),
                         new GetAllOrdersRequest(),
@@ -364,6 +351,7 @@ export class PackageEffects {
             return this.apiService.addPayment(payment).pipe(
                 mergeMap((paymentResolved) => {
                     this.dialogRef.close()
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Abono agregado exitosamente.' });
                     return [
                         new CreatePaymentSuccess(paymentResolved),
                         new GetAllOrdersRequest(),
@@ -392,6 +380,8 @@ export class PackageEffects {
         ofType(orderActions.EDIT_PAYMENT_REQUEST),
         map((action: EditPaymentRequest) => action.payload),
         switchMap((payment) => {
+            this.dialogRef.close()
+            this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Abono editado exitosamente.' });
             return this.apiService.updatePayment(payment.paymentId, payment).pipe(
                 mergeMap((paymentResolved) => {
                     return [
@@ -426,9 +416,10 @@ export class PackageEffects {
             tap((action) => {
                 this.dialogRef = this.dialogService.open(CreateRoleFormComponent, {
                     /* Opciones del modal */
-                    header: action['payload'] === undefined ? 'Registrar Rol' : 'Editar Rol',
+                    showHeader: false,
                     width: '45%',
-                    contentStyle: { overflowY: 'auto' },
+                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
+                    baseZIndex: 10000,
                 });
 
             })
@@ -459,7 +450,7 @@ export class PackageEffects {
             return this.apiService.addRole(role).pipe(
                 mergeMap((roleResolved) => {
                     this.dialogRef.close()
-                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Rol creado exitosamente.' });
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Rol registrado exitosamente.' });
                     return [
                         new CreateRoleSuccess(roleResolved),
                         new GetAllRoleRequest()
@@ -478,7 +469,7 @@ export class PackageEffects {
             return this.apiService.updateRole(role.roleId, role).pipe(
                 mergeMap((roleResolved) => {
                     this.dialogRef.close()
-                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Rol editado exitosamente' });
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Rol editado exitosamente.' });
                     return [
                         new EditRoleSuccess(roleResolved),
                         new GetAllRoleRequest(),
@@ -495,7 +486,7 @@ export class PackageEffects {
         switchMap((role) => {
             return this.apiService.deleteRole(role.roleId).pipe(
                 mergeMap((roleResolved) => {
-                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Rol eliminado exitosamente' });
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Rol eliminado exitosamente.' });
                     return [
                         new DeleteRoleSuccess(roleResolved),
                         new GetAllRoleRequest(),
@@ -531,7 +522,7 @@ export class PackageEffects {
         switchMap((asocpermission) => {
             return this.apiService.addAssociatedPermission(asocpermission).pipe(
                 mergeMap((assocPermissionResolved) => {
-                    this.modalRef.close();
+                    this.dialogRef.close();
                     return [
                         new CreateAssociatedPermissionSuccess(assocPermissionResolved),
                     ];
@@ -548,7 +539,7 @@ export class PackageEffects {
         switchMap((asocpermission) => {
             return this.apiService.deleteAssociatedPermission(asocpermission.associatedPermissionId).pipe(
                 mergeMap((assocPermissionResolved) => {
-                    this.modalRef.close();
+                    this.dialogRef.close();
                     return [
                         new DeleteAssociatedPermissionSuccess(assocPermissionResolved),
                     ];
@@ -597,6 +588,7 @@ export class PackageEffects {
             return this.apiService.addCustomer(customer).pipe(
                 mergeMap((customerResolved) => {
                     this.dialogRef.close();
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Cliente registrado exitosamente.' });
                     return [
                         new CreateCustomerSuccess(customerResolved),
                         new GetAllCustomerRequest()
@@ -613,6 +605,7 @@ export class PackageEffects {
             return this.apiService.updateCustomer(customer.customerId, customer).pipe(
                 mergeMap((customerResolved) => {
                     this.dialogRef.close();
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Cliente editado exitosamente.' });
                     return [
                         new EditCustomerSuccess(customerResolved),
                         new GetAllCustomerRequest(),
@@ -632,7 +625,7 @@ export class PackageEffects {
                 this.dialogRef = this.dialogService.open(ListFrequentTravelerComponent, {
                     /* Opciones del modal */
                     // header: action['payload'] === undefined ? 'Viajeros frecuentes' : 'Viajeros frecuentes',
-                    width: '60%',
+                    width: '63%',
                     contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
                     showHeader: false,
                 });
@@ -643,7 +636,6 @@ export class PackageEffects {
             dispatch: false
         });
 
-
     createFrequentTraveler$ = createEffect(() => this.actions$.pipe(
         ofType(FrequentTravelerActions.CREATE_FREQUENTTRAVELER_REQUEST),
         map((action: CreateFrequentTravelerRequest) => action.payload),
@@ -651,6 +643,7 @@ export class PackageEffects {
             return this.apiService.addFrequentTraveler(frequentTraveler).pipe(
                 mergeMap((frequentTravelerResolver) => {
                     this.dialogRef.close();
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Viajero agregado exitosamente.' });
                     return [
                         new CreateFrequentTravelerSuccess(frequentTravelerResolver),
                         new GetAllCustomerRequest()
@@ -668,10 +661,10 @@ export class PackageEffects {
             return this.apiService.deleteFrequentTraveler(FrequentTraveler.frequentTravelerId).pipe(
                 mergeMap((frequentTravelerResolved) => {
                     this.dialogRef.close();
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Viajero eliminado exitosamente.' });
                     return [
                         new DeleteFrequentTravelerSuccess(frequentTravelerResolved),
-                        // new GetAllFrequentTravelerRequest(),
-                        new GetAllCustomerRequest(),
+                        new GetAllCustomerRequest()
                     ];
                 }),
                 catchError((err) => of(new DeleteFrequentTravelerFailure(err)))
@@ -701,11 +694,11 @@ export class PackageEffects {
             tap((action) => {
                 this.dialogRef = this.dialogService.open(CreateEmployeeFormComponent, {
                     /* Opciones del modal */
-                    // header: action['payload'] === undefined ? 'Registrar empleado' : 'Editar empleado',
-                    width: '60%',
-                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
                     showHeader: false,
-                });
+                    width: '50%',
+                    contentStyle: { padding: '1.50rem 2.25rem 1.50rem 2.25rem', overflowY: 'auto' },
+                    baseZIndex: 10000,
+                })
             })
         ), { dispatch: false });
 
@@ -716,6 +709,7 @@ export class PackageEffects {
             return this.apiService.addEmployee(employee).pipe(
                 mergeMap((employeeResolved) => {
                     this.dialogRef.close();
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Empleado registrado exitosamente.' });
                     return [
                         new CreateEmployeeSuccess(employeeResolved),
                         new GetAllEmployeeRequest()
@@ -733,6 +727,7 @@ export class PackageEffects {
             return this.apiService.updateEmployee(employee.employeeId, employee).pipe(
                 mergeMap((employeeResolved) => {
                     this.dialogRef.close();
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Empleado editado exitosamente.' });
                     return [
                         new EditEmployeeSuccess(employeeResolved),
                         new GetAllEmployeeRequest(),
@@ -742,12 +737,14 @@ export class PackageEffects {
             )
         })
     ));
+
     DeleteEmployee$ = createEffect(() => this.actions$.pipe(
         ofType(employeeActions.DELETE_EMPLOYEE_REQUEST),
         map((action: DeleteEmployeeRequest) => action.payload),
         switchMap((employee) => {
             return this.apiService.deleteEmployee(employee.employeeId).pipe(
                 mergeMap((employeeResolved) => {
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Empleado eliminado exitosamente.' });
                     return [
                         new DeleteEmployeeSuccess(employeeResolved),
                         new GetAllEmployeeRequest(),
@@ -780,7 +777,6 @@ export class PackageEffects {
             tap((action) => {
                 this.dialogRef = this.dialogService.open(CreateUserFormComponent, {
                     /* Opciones del modal */
-                    /* Opciones del modal */
                     showHeader: false,
                     width: '50%',
                     contentStyle: { padding: '1.50rem 2.25rem 1.50rem 2.25rem', overflowY: 'auto' },
@@ -796,7 +792,7 @@ export class PackageEffects {
             return this.apiService.createUser(user).pipe(
                 mergeMap((userResolved) => {
                     this.dialogRef.close()
-                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Usuario registrado exitosamente' });
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Usuario registrado exitosamente.' });
                     return [
                         new CreateUserSuccess(userResolved),
                         new GetUsersRequest()
@@ -814,7 +810,7 @@ export class PackageEffects {
             return this.apiService.updateUser(user.userId, user).pipe(
                 mergeMap((userResolved) => {
                     this.dialogRef.close();
-                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'Exito', detail: 'Usuario editado exitosamente' });
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Usuario editado exitosamente.' });
                     return [
                         new UpdateUserSuccess(userResolved),
                         new GetUsersRequest(),

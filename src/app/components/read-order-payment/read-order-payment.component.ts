@@ -16,6 +16,8 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
 export class ReadOrderPaymentComponent {
 
   public ui: Observable<UiState>
+  public role: any
+  public user: any
   public order: Order
   public payments: Array<Payment> = []
   public statuses: any[] = [];
@@ -31,6 +33,8 @@ export class ReadOrderPaymentComponent {
   ngOnInit(): void {
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
+      this.user = JSON.parse(localStorage.getItem('TokenPayload'))
+      this.role = this.user['role']
       this.order = state.oneOrder.data
       this.pushPayments()
     })
@@ -99,12 +103,21 @@ export class ReadOrderPaymentComponent {
 
   addPayment() {
     if (this.remainingAmount > 0) {
-      this.closeModal()
-      const orderProcess = [{
-        action: 'CreatePayment',
-        order: this.order
-      }]
-      this.store.dispatch(new OpenModalCreatePayment(orderProcess))
+      if (this.user['role'] === 'Cliente') {
+        const orderProcess = [{
+          action: 'CreatePaymentFromCustomer',
+          order: this.order
+        }]
+        this.closeModal()
+        this.store.dispatch(new OpenModalCreatePayment(orderProcess))
+      } else {
+        const orderProcess = [{
+          action: 'CreatePayment',
+          order: this.order
+        }]
+        this.closeModal()
+        this.store.dispatch(new OpenModalCreatePayment(orderProcess))
+      }
     }
   }
 }

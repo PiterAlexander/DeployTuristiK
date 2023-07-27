@@ -1,22 +1,16 @@
 <ng-container *ngIf="role !== 'Cliente'">
-    <app-header style="display: block; border: none !important; background-color: #eff3f8 !important; "
-        [ngClass]="{
+    <app-header style="display: block; border: none !important; background-color: #eff3f8 !important; " [ngClass]="{
             'active-style': !isStyleActive,
             'inactive-style': isStyleActive
-        }"
-    ></app-header>
+        }"></app-header>
     <nav class="sidebar">
         <app-menu-sidebar></app-menu-sidebar>
     </nav>
 
-    <div
-        class="content-wrapper"
-        [ngClass]="{
+    <div class="content-wrapper" [ngClass]="{
             'active-style': !isStyleActive,
             'inactive-style': isStyleActive
-        }"
-        style="background-color: #eff3f8;"
-    >
+        }" style="background-color: #eff3f8;">
         <router-outlet></router-outlet>
     </div>
     <app-profilemenu></app-profilemenu>

@@ -1,12 +1,11 @@
 <p-confirmDialog icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <div class="col-12">
     <div class="flex align-items-center mb-3">
-        <h2 class="text-blue-500">Viajeros frecuentes</h2>
+        <h2 class="text-indigo-500">Viajeros frecuentes</h2>
     </div>
     <div style="border-radius: 15px;">
-        <p-table *ngIf="visible" #dt [value]="frequentTravelersList" [paginator]="true" [rows]="3"
-            [showCurrentPageReport]="true" scrollable="true" [loading]="loading"
-            currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} viajeros frecuentes."
+        <p-table *ngIf="visible" #dt [value]="frequentTravelersList" [paginator]="true" [rows]="2" scrollable="true"
+            [loading]="loading" dataKey="customerId"
             [globalFilterFields]="['name', 'lastName', 'document', 'birthDate', 'phoneNumber', 'address', 'eps']">
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between">
@@ -21,6 +20,7 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
+                    <th style="max-width: 5rem"></th>
                     <th pSortableColumn="name" style="min-width: 14rem">
                         Nombre completo <p-sortIcon field="name"></p-sortIcon>
                     </th>
@@ -30,23 +30,19 @@
                     <th pSortableColumn="birthDate" style="min-width: 15rem">
                         Fecha de nacimiento <p-sortIcon field="birthDate"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="phoneNumber" style="width: 8rem">
-                        Teléfono <p-sortIcon field="phoneNumber"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="address" style="min-width: 15rem">
-                        Dirección <p-sortIcon field="address"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="eps" style="min-width: 10rem">
-                        EPS <p-sortIcon field="eps"></p-sortIcon>
-                    </th>
-                    <th style="min-width: 10rem" alignFrozen="right" pFrozenColumn
+                    <th style="min-width: 6rem" alignFrozen="right" pFrozenColumn
                         class="flex justify-content-center align-items-center">
                         Acciones
                     </th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-frequentTraveler>
+            <ng-template pTemplate="body" let-frequentTraveler let-expanded="expanded">
                 <tr>
+                    <td style="max-width: 5rem">
+                        <button type="button" pButton pRipple [pRowToggler]="frequentTraveler"
+                            class="p-button-text p-button-rounded p-button-plain"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                    </td>
                     <td style="min-width: 14rem">
                         {{ frequentTraveler.name + ' ' + frequentTraveler.lastName }}
                     </td>
@@ -54,24 +50,17 @@
                         {{ frequentTraveler.document }}
                     </td>
                     <td style="min-width: 15rem">
-                        {{ frequentTraveler.birthDate | date: 'MM/dd/yyyy' }}
+                        {{ frequentTraveler.birthDate | date: 'dd/MM/yyyy' }}
                     </td>
-                    <td style="min-width: 8rem">
-                        {{ frequentTraveler.phoneNumber }}
-                    </td>
-                    <td style="min-width: 15rem">
-                        {{ frequentTraveler.address }}
-                    </td>
-                    <td style="min-width: 10rem">
-                        {{ frequentTraveler.eps }}
-                    </td>
-                    <td alignFrozen="right" pFrozenColumn style="min-width: 10rem"
+                    <td alignFrozen="right" pFrozenColumn style="min-width: 6rem"
                         class="flex justify-content-around align-items-center">
-                        <span *ngIf="validateEditAllowing(frequentTraveler)">
-                            <button pButton pRipple type="button" icon="pi pi-pencil"
-                                class="p-button-outlined p-button-warning p-button-rounded"
+                        <span>
+                            <button *ngIf="validateEditAllowing(frequentTraveler)" pButton pRipple type="button"
+                                icon="pi pi-pencil" class="p-button-outlined p-button-warning p-button-rounded"
                                 (click)="editFrequentTraveler(frequentTraveler)" pTooltip="Editar"
                                 tooltipPosition="bottom"></button>
+                            <button *ngIf="!validateEditAllowing(frequentTraveler)" pButton pRipple icon="pi pi-pencil"
+                                class="p-button-outlined p-button-warning p-button-rounded" disabled="true"></button>
                         </span>
                         <span>
                             <button pButton pRipple type="button" icon="pi pi-trash"
@@ -82,6 +71,34 @@
                     </td>
                 </tr>
             </ng-template>
+            <ng-template pTemplate="rowexpansion" let-frequentTraveler>
+                <div class="mx-6 p-3">
+                    <div class="grid py-2 px-3 bg-indigo-50 border-round">
+                        <div class="col-2">
+                            <div>
+                                <span class="text-900 font-bold mb-1">EPS:</span>
+                            </div>
+                            <div>
+                                <span class="text-900 font-bold mb-1">Teléfono:</span>
+                            </div>
+                            <div>
+                                <span class="text-900 font-bold">Dirección:</span>
+                            </div>
+                        </div>
+                        <div class="col-10">
+                            <div>
+                                <span class="text-900 mb-1">{{ frequentTraveler.eps }}</span>
+                            </div>
+                            <div>
+                                <span class="text-900 mb-1">{{ frequentTraveler.phoneNumber }}</span>
+                            </div>
+                            <div>
+                                <span class="text-900 mb-1">{{ frequentTraveler.address }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>
                     <td colspan="9">No se encontraron viajeros frecuentes.</td>
@@ -90,7 +107,7 @@
         </p-table>
     </div>
     <div class="card-footer d-flex justify-content-end surface-0">
-        <button pButton pRipple type="button" label="Regresar" icon="pi pi-undo" class="p-button-outlined"
+        <button pButton pRipple type="button" label="Regresar" icon="pi pi-angle-left" class="p-button-outlined"
             (click)="close()"></button>
     </div>
 </div>

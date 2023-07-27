@@ -34,12 +34,10 @@ export class ApiService {
     }
 
     updatePackage(idPackage: string, modelo: Package): Observable<Package> {
-        console.log(`${this.endpoint}${idPackage}`);
         return this.http.put<Package>(`${this.endpoint}api/package/${idPackage}`, modelo)
     }
 
     disablePackage(pack: Package): Observable<Package> {
-        console.log(`${this.endpoint}api/package/${pack.packageId}/changeStatus`);
         return this.http.post<Package>(`${this.endpoint}api/package/${pack.packageId}/changeStatus`, null)
     }
 
@@ -92,7 +90,6 @@ export class ApiService {
     }
 
     addCustomer(modelo: Customer): Observable<Customer> {
-        console.log(modelo)
         return this.http.post<Customer>(`${this.endpoint}api/Customer`, modelo)
     }
 
@@ -146,7 +143,6 @@ export class ApiService {
     }
 
     addFrequentTraveler(modelo: FrequentTraveler): Observable<FrequentTraveler> {
-        console.log(modelo, "desde servicio")
         return this.http.post<FrequentTraveler>(`${this.endpoint}api/FrequentTraveler`, modelo)
     }
 
@@ -206,5 +202,5 @@ export class ApiService {
 
     getIngresosMensuales(): Observable<number[]> {
         return this.http.get<number[]>(`${this.endpoint}api/Ingresos/Mensuales`);
-      }
+    }
 }

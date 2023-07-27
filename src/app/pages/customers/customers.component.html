@@ -1,10 +1,8 @@
 <p-toast key="alert-message"></p-toast>
-<div class="p-5">
+<div class="p-4">
     <div class="col-12">
-        <div class="card px-6 py-6 p-4" style="border-radius: 15px;">
-            <p-table #dt [value]="allCustomers" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10]"
-                [showCurrentPageReport]="true" scrollable="true"
-                currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} clientes."
+        <div class="card px-6 py-6" style="border-radius: 15px;">
+            <p-table #dt [value]="allCustomers" [paginator]="true" [rows]="5" scrollable="true" dataKey="customerId"
                 [globalFilterFields]="['name', 'lastName', 'document', 'birthDate', 'phoneNumber', 'address', 'eps']">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between">
@@ -19,40 +17,45 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="min-width: 12rem">Nombre completo</th>
-                        <th style="min-width: 9rem">Documento</th>
-                        <th style="min-width: 13rem">Fecha de nacimiento</th>
-                        <th style="width: 7rem">Teléfono</th>
-                        <th style="min-width: 15rem">Dirección</th>
-                        <th style="min-width: 9rem">EPS</th>
-                        <th style="min-width: 10rem" alignFrozen="right" pFrozenColumn
-                            class="flex justify-content-center align-items-center">
+                        <th style="max-width: 5rem"></th>
+                        <th class="font-medium" style="min-width: 15rem">
+                            Nombre completo
+                        </th>
+                        <th class="font-medium" style="min-width: 12rem">
+                            Documento
+                        </th>
+                        <th class="font-medium" style="min-width: 15rem">
+                            Fecha de nacimiento
+                        </th>
+                        <th class="font-medium" style="min-width: 9rem">
+                            Teléfono
+                        </th>
+                        <th tyle="min-width: 7rem" alignFrozen="right" pFrozenColumn
+                            class="flex justify-content-center align-items-center font-medium">
                             Acciones
                         </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-customer>
+                <ng-template pTemplate="body" let-customer let-expanded="expanded">
                     <tr>
-                        <td style="min-width: 12rem">
+                        <td style="max-width: 5rem">
+                            <button type="button" pButton pRipple [pRowToggler]="customer"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
+                        <td style="min-width: 15rem">
                             {{ customer.name + ' ' + customer.lastName }}
                         </td>
-                        <td style="min-width: 9rem">
+                        <td style="min-width: 12rem">
                             {{ customer.document }}
                         </td>
-                        <td style="min-width: 13rem">
-                            {{ customer.birthDate | date: 'MM/dd/yyyy' }}
-                        </td>
-                        <td style="min-width: 7rem">
-                            {{ customer.phoneNumber }}
-                        </td>
                         <td style="min-width: 15rem">
-                        <td style="min-width: 15rem">
-                            {{ customer.address }}
+                            {{ customer.birthDate | date: 'dd/MM/yyyy' }}
                         </td>
                         <td style="min-width: 9rem">
-                            {{ customer.eps }}
+                            {{ customer.phoneNumber }}
                         </td>
-                        <td alignFrozen="right" pFrozenColumn style="min-width: 10rem"
+                        <td alignFrozen="right" pFrozenColumn style="min-width: 7rem"
                             class="flex justify-content-around align-items-center">
                             <span>
                                 <button pButton pRipple type="button" icon="pi pi-pencil"
@@ -60,14 +63,39 @@
                                     (click)="editCustomer(customer)" pTooltip="Editar"
                                     tooltipPosition="bottom"></button>
                             </span>
-                            <span *ngIf="validateListFrequentTravelersAllowing(customer)">
-                                <button pButton pRipple type="button"
-                                    icon="pi pi-users" class="p-button-outlined p-button-rounded"
+                            <span>
+                                <button *ngIf="validateListFrequentTravelersAllowing(customer)" pButton pRipple type="
+                                    button" icon="pi pi-users" class="p-button-outlined p-button-rounded"
                                     (click)="listFrequentTravelers(customer)" pTooltip="Viajeros frecuentes"
                                     tooltipPosition="bottom"></button>
+                                <button *ngIf="!validateListFrequentTravelersAllowing(customer)" pButton pRipple
+                                    icon="pi pi-users" class="p-button-outlined p-button-rounded"
+                                    disabled="true"></button>
                             </span>
                         </td>
                     </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-customer>
+                    <div class="mx-6 p-3">
+                        <div class="grid py-2 px-3 bg-indigo-50 border-round">
+                            <div class="col-2">
+                                <div>
+                                    <span class="text-900 font-bold mb-1">EPS:</span>
+                                </div>
+                                <div>
+                                    <span class="text-900 font-bold">Dirección:</span>
+                                </div>
+                            </div>
+                            <div class="col-10">
+                                <div>
+                                    <span class="text-900 mb-1">{{ customer.eps }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-900 mb-1">{{ customer.address }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>

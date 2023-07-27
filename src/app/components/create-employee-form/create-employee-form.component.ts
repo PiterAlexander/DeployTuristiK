@@ -1,14 +1,10 @@
 import {
     CreateEmployeeRequest,
     EditEmployeeRequest,
-    GetAllCustomerRequest,
-    GetAllEmployeeRequest,
-    GetAllRoleRequest
 } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from '@/models/user';
 import { Employee } from '@/models/employee';
 import { Store } from '@ngrx/store';
@@ -22,10 +18,11 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
     templateUrl: './create-employee-form.component.html',
     styleUrls: ['./create-employee-form.component.scss']
 })
+
 export class CreateEmployeeFormComponent implements OnInit {
     formGroup: FormGroup;
     public ui: Observable<UiState>;
-    public ActionTitle: string = 'Agregar';
+    public ActionTitle: string = 'Registrar';
     Visible: boolean = false;
     password: String = '';
     EmployeeList: Array<any>;
@@ -33,18 +30,14 @@ export class CreateEmployeeFormComponent implements OnInit {
     User: Array<any>;
     Roles: Array<Role>;
     public employeeData;
+
     constructor(
         private fb: FormBuilder,
-        private modalService: NgbModal,
         private store: Store<AppState>,
         private modalPrimeNg: DynamicDialogRef,
-
     ) { }
 
     ngOnInit(): void {
-        this.store.dispatch(new GetAllCustomerRequest());
-        this.store.dispatch(new GetAllRoleRequest());
-
         this.ui = this.store.select('ui');
         this.ui.subscribe((state: UiState) => {
             this.EmployeeList = state.allEmployees.data;

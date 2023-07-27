@@ -1,11 +1,8 @@
 <p-toast key="alert-message"></p-toast>
-
-<div *ngIf="role!=='Cliente'" class="p-3">
+<div *ngIf="role!=='Cliente'" class="p-4">
     <div class="col-12">
         <div class="card px-6 py-6" style="border-radius: 15px;">
-            <p-table #dt [value]="ordersList" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
-                scrollable="true" [rowsPerPageOptions]="[5, 10]" [loading]="loading"
-                currentPageReportTemplate="Mostrando desde {first} hasta {last} filas de {totalRecords} pedidos."
+            <p-table #dt [value]="ordersList" [paginator]="true" [rows]="5" scrollable="true" [loading]="loading"
                 [globalFilterFields]="['customer.name', 'customer.lastName', 'customer.document', 'package.name', 'totalCost', 'status']">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between">
@@ -20,26 +17,26 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="min-width: 15rem">Titular</th>
-                        <th style="min-width: 13rem">Paquete</th>
-                        <th style="min-width: 10rem">Beneficiarios</th>
-                        <th style="width: 10rem">Costo total</th>
-                        <th style="min-width: 10rem">Abonos</th>
-                        <th style="min-width: 10rem">Estado</th>
+                        <th class="font-medium" style="min-width: 16rem">Titular</th>
+                        <th class="font-medium" style="min-width: 14rem">Paquete</th>
+                        <th class="font-medium" style="min-width: 7rem">Beneficiarios</th>
+                        <th class="font-medium" style="min-width: 9rem">Costo total</th>
+                        <th class="font-medium" style="min-width: 5rem">Abonos</th>
+                        <th class="font-medium" style="min-width: 10rem">Estado</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-order>
                     <tr>
-                        <td style="min-width: 15rem">{{ order.customer.name + ' ' + order.customer.lastName + ' - ' +
+                        <td style="min-width: 16rem">{{ order.customer.name + ' ' + order.customer.lastName + ' - ' +
                             order.customer.document }}</td>
-                        <td style="min-width: 13rem">{{ order.package.name }}</td>
-                        <td style="min-width: 10rem">
+                        <td style="min-width: 14rem">{{ order.package.name }}</td>
+                        <td style="min-width: 7rem" class="flex justify-content-center">
                             <button pButton pRipple type="button" icon="pi pi-eye"
                                 class="p-button-outlined p-button-rounded" pTooltip="Ver beneficiarios"
                                 (click)="sendToOrderDetails(order)" tooltipPosition="bottom"></button>
                         </td>
-                        <td style="min-width: 10rem">{{ order.totalCost | currency: 'USD':'symbol' }}</td>
-                        <td style="min-width: 10rem">
+                        <td style="min-width: 9rem">{{ order.totalCost | currency: 'USD':'symbol' }}</td>
+                        <td style="min-width: 5rem" class="flex justify-content-center">
                             <button pButton pRipple type="button" icon="pi pi-eye"
                                 class="p-button-outlined p-button-rounded" pTooltip="Ver abonos"
                                 (click)="sendToPayments(order)" tooltipPosition="bottom"></button>
@@ -59,63 +56,111 @@
     </div>
 </div>
 
-<div *ngIf="user['role'] === 'Cliente'" class="content-header">
-    <div class="container-fluid mt-5">
-        <div *ngFor="let order of ordersList">
-            <div class="card w-100 mb-5">
-                <div class="card-header text-left">
-                    <div class="row">
-                        <div class="col d-flex align-items-center">
-                            <h2 class="m-0 font-weight-bold text-dark"> {{order.package.name}} </h2>
-                        </div>
-                        <div class="col">
-                            <div class="d-flex justify-content-end">
-                                <div>
-                                    <h3 class="m-0 font-weight-bold text-dark">${{ order.totalCost}} COP</h3>
-                                    <p class="m-0 d-flex justify-content-end text-muted">Costo total</p>
-                                </div>
-                            </div>
+<div *ngIf="user['role'] === 'Cliente'" style="margin-top: 8%;">
+    <div class="surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border" style="border-radius: 15px;">
+        <div class="flex flex-column md:flex-row justify-content-between align-items-center mb-4">
+            <div class="flex flex-column text-center md:text-left">
+                <span class="text-900 text-2xl mb-2">Mis pedidos</span>
+                <span class="text-700 text-lg">Donde todas sus aventuras se encuentran.</span>
+            </div>
+            <span class="p-input-icon-right mt-5 mb-2 md:mt-0 md:mb-0 w-full lg:w-25rem">
+                <i class="pi pi-search text-gray-400"></i>
+                <input type="text" class="p-inputtext w-full lg:w-25rem surface-50" placeholder="Buscar por nombre" />
+            </span>
+        </div>
+        <div class="surface-card grid grid-nogutter border-round shadow-2 mb-6" *ngFor="let order of ordersList">
+            <div class="col-12 flex p-2 surface-100 border-round-top">
+                <div class="p-2 flex-auto text-center md:text-left">
+                    <span class="text-700 block">Destino</span>
+                    <span class="text-900 font-medium block mt-2">{{order.package.destination}}</span>
+                </div>
+                <p-divider align="center" layout="vertical"
+                    styleClass="h-full  mx-0 lg:mx-3 surface-border"></p-divider>
+                <div class="p-2 flex-auto text-center md:text-left">
+                    <span class="text-700 block">Fechas del viaje</span>
+                    <span class="text-900 font-medium block mt-2">Desde {{ order.package.departureDate | date }} hasta
+                        {{ order.package.arrivalDate | date }}</span>
+                </div>
+                <p-divider align="center" layout="vertical"
+                    styleClass="h-full  mx-0 lg:mx-3 surface-border"></p-divider>
+                <div class="p-2 flex-auto text-center md:text-left">
+                    <span class="text-700 block">Costo Total</span>
+                    <span class="text-900 font-medium block mt-2">{{order.totalCost | currency: 'USD':'symbol'}}</span>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="p-2 my-4 flex flex-column lg:flex-row justify-content-between align-items-center">
+                    <div class="flex flex-column lg:flex-row justify-content-center align-items-center px-2">
+                        <img src="https://agenciamahaltour.com.co/wp-content/uploads/2022/04/20181207_1fd2be85c4be4528640e7905bc4779b1.jpeg"
+                            alt="package" class="w-8rem h-8rem mr-3 flex-shrink-0" />
+                        <div class="flex flex-column my-auto mb-auto text-center md:text-left">
+                            <span class="text-900 mb-2 mt-3 lg:mt-0 font-semibold">{{order.package.name}}</span>
+                            <span class="text-700 text-sm mb-2"> <span class="text-900 font-medium">Salida
+                                    en: </span>
+                                {{
+                                order.package.departurePoint }} a las {{
+                                order.package.departureDate | date : 'HH:mm'}} </span>
+                            <span class="text-700 text-sm mb-2"> <span class="text-900 font-medium">Hotel: </span>{{
+                                order.package.hotel }}</span>
+                            <span *ngIf="order.package.transport === '1'" class="text-700 text-sm"> <span
+                                    class="text-900 font-medium">Transporte:
+                                </span>Áereo</span>
+                            <span *ngIf="order.package.transport === '2'" class="text-700 text-sm"><span
+                                    class="text-900 font-medium">Transporte: </span>Terrestre</span>
                         </div>
                     </div>
-                </div>
-                <div class="card-body pt-1 pb-0">
-                    <div class="row">
-                        <div class="col-6 pl-3 pr-2 pt-2 pb-2  mt-auto mb-auto">
-                            <div class="ml-auto mr-auto p-2">
-                                <img src="https://cdn.colombia.com/images/v2/turismo/sitios-turisticos/cartagena/ciudad-cartagena-800.jpg"
-                                    class="card-img-top" alt="Imagen del paquete">
-                            </div>
-                        </div>
-                        <div class="col-6 pt-2 pb-2">
-                            <div class="ml-auto mr-auto p-2 pr-3">
-                                <h3 class="card-title font-weight-bold"> Información del pedido: </h3>
-                                <p class="card-text mb-1"><b>Destino: </b>{{ order.package.destination }} </p>
-                                <p class="card-text "><b>Detalles: </b>{{ order.package.details }} </p>
-                                <p class="card-text mb-0"><b>Fecha de salida:</b> {{ order.package.departureDate }} COP
-                                </p>
-                                <p class="card-text"><b>Fecha de regreso: </b>{{ order.package.departureDate }} COP</p>
-                                <p class="card-text mb-0"><b>Transporte:</b> {{ order.package.transport }}</p>
-                                <p class="card-text mb-0"><b>Hotel: </b>{{ order.package.hotel }}</p>
-                                <p class="card-text"><b>Lugar de encuentro: </b>{{ order.package.departurePoint }}</p>
-                            </div>
-                        </div>
+                    <div *ngIf="order.status === 0"
+                        class="bg-yellow-100 mr-0 lg:mr-3 mt-4 lg:mt-0 p-2 flex align-items-center"
+                        [style.border-radius]="'2.5rem'">
+                        <span
+                            class="bg-yellow-500 text-white flex align-items-center justify-content-center border-circle mr-2"
+                            style="min-width:2rem; min-height: 2rem">
+                            <i class="pi pi-stopwatch"></i>
+                        </span>
+                        <span class="text-yellow-500">¡Su pedido está en revision!</span>
+                    </div>
+                    <div *ngIf="order.status === 1"
+                        class="bg-cyan-50 mr-0 lg:mr-3 mt-4 lg:mt-0 p-2 flex align-items-center"
+                        [style.border-radius]="'2.5rem'">
+                        <span
+                            class="bg-cyan-500 text-white flex align-items-center justify-content-center border-circle mr-2"
+                            style="min-width:2rem; min-height: 2rem">
+                            <i class="pi pi-spin pi-spinner"></i>
+                        </span>
+                        <span class="text-cyan-500">¡Su pedido está en curso!</span>
+                    </div>
+                    <div *ngIf="order.status === 2"
+                        class="bg-green-50 mr-0 lg:mr-3 mt-4 lg:mt-0 p-2 flex align-items-center"
+                        [style.border-radius]="'2.5rem'">
+                        <span
+                            class="bg-green-500 text-white flex align-items-center justify-content-center border-circle mr-2"
+                            style="min-width:2rem; min-height: 2rem">
+                            <i class="pi pi-check"></i>
+                        </span>
+                        <span class="text-green-500">¡Su pedido ya está pago!</span>
+                    </div>
+                    <div *ngIf="order.status === 3"
+                        class="bg-red-50 mr-0 lg:mr-3 mt-4 lg:mt-0 p-2 flex align-items-center"
+                        [style.border-radius]="'2.5rem'">
+                        <span
+                            class="bg-red-500 text-white flex align-items-center justify-content-center border-circle mr-2"
+                            style="min-width:2rem; min-height: 2rem">
+                            <i class="pi pi-times"></i>
+                        </span>
+                        <span class="text-red-500">¡Su pedido fue cancelado!</span>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col">
-                            <button *ngIf="order.status === 0" class="btn btn-warning">Pendiente</button>
-                            <button *ngIf="order.status === 1" class="btn btn-primary">En curso</button>
-                            <button *ngIf="order.status === 2" class="btn btn-success">Cancelado</button>
-                        </div>
-                        <div class="col d-flex justify-content-end">
-                            <button type="button" (click)="sendToOrderDetails(order)" class=" btn btn-primary">Ver
-                                beneficiarios</button>
-                            <button type="button" (click)="sendToPayments(order)" class=" btn btn-primary ml-3">Ver
-                                Abonos</button>
-                        </div>
-                    </div>
-                </div>
+            </div>
+            <div class="col-12 p-0 flex border-top-1 surface-border">
+                <a (click)="sendToOrderDetails(order)" tabindex="0"
+                    class="cursor-pointer py-4 flex flex-column md:flex-row text-center justify-content-center align-items-center text-indigo-500 hover:bg-primary hover:text-0 transition-duration-150 w-full"><i
+                        class="pi pi-info-circle mr-2"></i>Ver detalles</a>
+                <a (click)="sendToOrderDetails(order)" tabindex="0"
+                    class="cursor-pointer py-4 flex flex-column md:flex-row text-center justify-content-center align-items-center text-indigo-500 hover:bg-primary hover:text-0 transition-duration-150 w-full"><i
+                        class="pi pi-users mr-2"></i>Ver mis Beneficiarios</a>
+                <a (click)="sendToPayments(order)" tabindex="0"
+                    class="cursor-pointer py-4 flex flex-column md:flex-row text-center justify-content-center align-items-center text-indigo-500 hover:bg-primary hover:text-0 transition-duration-150 w-full"><i
+                        class="pi pi-dollar mr-2"></i>Ver mis Abonos</a>
             </div>
         </div>
     </div>

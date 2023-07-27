@@ -1,11 +1,12 @@
 import { Order } from '@/models/order';
-import { GetAllCustomerRequest, GetAllOrdersRequest, OpenModalCreateOrder, OpenModalOrderDetails, OpenModalPayments } from '@/store/ui/actions';
+import { GetAllCustomerRequest, GetAllOrdersRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, OpenModalCreateOrder, OpenModalOrderDetails, OpenModalPayments } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { Customer } from '@/models/customer';
+import { Package } from '@/models/package';
 
 @Component({
   selector: 'app-orders',
@@ -29,8 +30,11 @@ export class OrdersComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.store.dispatch(new GetAllOrdersRequest)
+    this.store.dispatch(new GetAllRoleRequest)
+    this.store.dispatch(new GetUsersRequest)
     this.store.dispatch(new GetAllCustomerRequest)
+    this.store.dispatch(new GetAllPackagesRequest)
+    this.store.dispatch(new GetAllOrdersRequest)
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.user = JSON.parse(localStorage.getItem('TokenPayload'))
@@ -67,9 +71,9 @@ export class OrdersComponent implements OnInit {
     }
   }
 
-  showStatus(OrderStatus: any): string {
+  showStatus(orderStatus: any): string {
     for (let status of this.statuses) {
-      if (OrderStatus === status.code) {
+      if (orderStatus === status.code) {
         return status.label
       }
     }
@@ -85,5 +89,12 @@ export class OrdersComponent implements OnInit {
 
   sendToPayments(order: Order) {
     this.store.dispatch(new OpenModalPayments({ ...order }))
+  }
+
+  //CUSTOMER
+
+
+  onFilter(event: Event) {
+    // dv.filter((event.target as HTMLInputElement).value);
   }
 }

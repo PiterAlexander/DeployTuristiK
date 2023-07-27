@@ -230,8 +230,6 @@ export enum orderActions {
   CREATE_ORDER_SUCCESS = '[ORDER] CREATE_ORDER_SUCCESS',
   CREATE_ORDER_FAILURE = '[ORDER] CREATE_ORDER_FAILURE',
 
-  OPEN_MODAL_LIST_FREQUENTTRAVELERS_TO_ORDERS = '[ORDER] OPEN_MODAL_LIST_FREQUENTTRAVELERS_TO_ORDERS',
-
   EDIT_ORDER_REQUEST = '[ORDER] EDIT_ORDER_REQUEST',
   EDIT_ORDER_SUCCESS = '[ORDER] EDIT_ORDER_SUCCESS',
   EDIT_ORDER_FAILURE = '[ORDER] EDIT_ORDER_FAILURE',
@@ -292,11 +290,6 @@ export class CreateOrderSuccess implements Action {
 export class CreateOrderFailure implements Action {
   readonly type: string = orderActions.CREATE_ORDER_FAILURE;
   constructor(public payload: string) { }
-}
-
-export class OpenModalListFrequentTravelersToOrders implements Action {
-  readonly type: string = orderActions.OPEN_MODAL_LIST_FREQUENTTRAVELERS_TO_ORDERS;
-  constructor(public payload: Array<any>) { }
 }
 
 export class EditOrderRequest implements Action {

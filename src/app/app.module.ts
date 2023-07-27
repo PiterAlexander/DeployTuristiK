@@ -50,7 +50,6 @@ import { ReadOrderOrderDetailComponent } from './components/read-order-order-det
 import { ReadOrderPaymentComponent } from './components/read-order-payment/read-order-payment.component';
 import { ListFrequentTravelerComponent } from './components/list-frequent-traveler/list-frequent-traveler.component';
 import { EditPaymentFormComponent } from './components/edit-payment-form/edit-payment-form.component';
-import { ListFrequentTravelersToOrdersComponent } from './components/list-frequent-travelers-to-orders/list-frequent-travelers-to-orders.component';
 import { MainPublicComponent } from '@modules/main copy/main.component';
 import { PackagePublicComponent } from '@modules/packages/package-public.component';
 
@@ -88,10 +87,11 @@ import { CalendarComponent } from './pages/calendar/calendar.component';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { BadgeModule } from 'primeng/badge';
 import { ChartModule } from 'primeng/chart';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { TabViewModule } from 'primeng/tabview';
-import {TabMenuModule} from 'primeng/tabmenu';
+import { TabMenuModule } from 'primeng/tabmenu';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import {CarouselModule} from 'primeng/carousel';
+import { CarouselModule } from 'primeng/carousel';
 import { SidebarModule } from 'primeng/sidebar';
 
 defineCustomElements();
@@ -137,7 +137,6 @@ registerLocaleData(localeEn, 'en-EN');
     ReadOrderPaymentComponent,
     ListFrequentTravelerComponent,
     EditPaymentFormComponent,
-    ListFrequentTravelersToOrdersComponent,
     CalendarComponent
   ],
   imports: [
@@ -166,7 +165,6 @@ registerLocaleData(localeEn, 'en-EN');
     FileUploadModule,
     ButtonModule,
     CardModule,
-    DataViewModule,
     BrowserModule,
     StoreModule.forRoot({ auth: authReducer, ui: uiReducer }),
     EffectsModule.forRoot([PackageEffects]),
@@ -197,6 +195,8 @@ registerLocaleData(localeEn, 'en-EN');
     ConfirmPopupModule,
     BadgeModule,
     ChartModule,
+    DataViewModule,
+    OverlayPanelModule,
     SidebarModule,
 
 

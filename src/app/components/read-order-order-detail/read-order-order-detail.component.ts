@@ -1,7 +1,7 @@
 import { Customer } from '@/models/customer';
 import { Order } from '@/models/order';
 import { AppState } from '@/store/state';
-import { DeleteOrderDetailRequest, GetAllCustomerRequest, OpenModalCreateOrderDetail } from '@/store/ui/actions';
+import { DeleteOrderDetailRequest, OpenModalCreateOrderDetail } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -33,7 +33,6 @@ export class ReadOrderOrderDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.store.dispatch(new GetAllCustomerRequest)
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
       this.allRoles = state.allRoles.data
@@ -121,14 +120,14 @@ export class ReadOrderOrderDetailComponent implements OnInit {
 
   deleteOrderDetail(customer: Customer) {
     this.confirmationService.confirm({
-      header: '¿Estás seguro de eliminar a ' + customer.name + ' ' + customer.lastName + '?',
-      message: 'Ten en cuenta que el precio del pedido no cambiará y no se hará un reembolso por el beneficiario.',
-      icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Aceptar',
+      header: '¿Está seguro de eliminar a ' + customer.name + '?',
+      message: 'Tenga en cuenta que:<br><br>- El precio del pedido no cambiará.<br>- No se hará un reembolso por el beneficiario.<br>- Deberá volver a realizar un pago si desea agregar a ' + customer.name + ' de nuevo.',
+      icon: 'pi pi-exclamation-triangle text-red-500',
+      acceptLabel: 'Eliminar',
       rejectLabel: 'Cancelar',
       rejectIcon: 'pi pi-times',
-      acceptIcon: 'pi pi-check',
-      acceptButtonStyleClass: 'p-button-primary p-button-sm',
+      acceptIcon: 'pi pi-trash',
+      acceptButtonStyleClass: 'p-button-danger p-button-sm',
       rejectButtonStyleClass: 'p-button-outlined p-button-sm',
       accept: () => {
         const orderDetail: OrderDetail = this.order.orderDetail.find(od => od.beneficiaryId === customer.customerId)

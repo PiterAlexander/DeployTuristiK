@@ -93,12 +93,12 @@ export class ListFrequentTravelerComponent implements OnInit {
   deleteFrequentTraveler(customer: Customer) {
     this.confirmationService.confirm({
       header: 'Confirmación',
-      message: '¿Estás seguro de eliminar a ' + customer.name + ' ' + customer.lastName + ' de tus viajeros frecuentes?',
-      acceptLabel: 'Aceptar',
+      message: '¿Está seguro de eliminar a ' + customer.name + ' ' + customer.lastName + ' ?',
+      acceptLabel: 'Eliminar',
       rejectLabel: 'Cancelar',
       rejectIcon: 'pi pi-times',
-      acceptIcon: 'pi pi-check',
-      acceptButtonStyleClass: 'p-button-primary p-button-sm',
+      acceptIcon: 'pi pi-trash',
+      acceptButtonStyleClass: 'p-button-danger p-button-sm',
       rejectButtonStyleClass: 'p-button-outlined p-button-sm',
       accept: () => {
         const frequentTraveler: FrequentTraveler = this.oneCustomer.frequentTraveler.find(ft => ft.travelerId === customer.customerId)

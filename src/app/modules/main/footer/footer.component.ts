@@ -1,5 +1,5 @@
-import {Component, HostBinding} from '@angular/core';
-import {DateTime} from 'luxon';
+import { Component, HostBinding } from '@angular/core';
+import { DateTime } from 'luxon';
 import packageInfo from './../../../../../package.json';
 
 @Component({

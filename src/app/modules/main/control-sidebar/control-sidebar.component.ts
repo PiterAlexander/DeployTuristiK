@@ -1,5 +1,5 @@
-import {AppState} from '@/store/state';
-import {UiState} from '@/store/ui/state';
+import { AppState } from '@/store/state';
+import { UiState } from '@/store/ui/state';
 import {
     Option,
     NAVBAR_LIGHT_VARIANTS,
@@ -7,9 +7,9 @@ import {
     SIDEBAR_DARK_SKINS,
     SIDEBAR_LIGHT_SKINS
 } from '@/utils/themes';
-import {Component, HostBinding, OnInit} from '@angular/core';
-import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
+import { Component, HostBinding, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-control-sidebar',
@@ -28,7 +28,7 @@ export class ControlSidebarComponent implements OnInit {
     public darkMode: boolean;
     public sidebarSkin: string;
 
-    constructor(private store: Store<AppState>) {}
+    constructor(private store: Store<AppState>) { }
 
     ngOnInit(): void {
         this.ui = this.store.select('ui');

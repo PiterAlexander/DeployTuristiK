@@ -24,6 +24,7 @@ export class UserComponent implements OnInit {
     public customersList: Array<any>;
     public employeesList: Array<any>;
     public ui: Observable<UiState>;
+    public loading: boolean = true;
 
 
     constructor(private appService: AppService, private confirmationService: ConfirmationService, private messageService: MessageService, private store: Store<AppState>, private toastr: ToastrService) { }
@@ -63,6 +64,7 @@ export class UserComponent implements OnInit {
                 this.allInfo = this.employeesList.find(e => e.user.userId == this.user.id)
                 console.log(this.allInfo)
             }
+            this.loading = false;
 
         }, 2000)
     }

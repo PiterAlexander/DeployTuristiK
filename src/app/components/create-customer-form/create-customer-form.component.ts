@@ -32,6 +32,7 @@ export class CreatecustomerformComponent implements OnInit {
   public isCustomerInformation: Customer
   public frequentTravelersList: Array<Customer> = []
   public hasInformation: boolean = false
+  public customerMaxDate: Date
 
   constructor(
     private fb: FormBuilder,
@@ -47,6 +48,8 @@ export class CreatecustomerformComponent implements OnInit {
       this.allCustomers = state.allCustomers.data
       this.oneCustomer = state.oneCustomer.data
     })
+
+    this.birthDateValidator()
 
     this.formGroup = this.fb.group({
       email: new FormControl('', [Validators.required, Validators.email, Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')]),
@@ -87,6 +90,21 @@ export class CreatecustomerformComponent implements OnInit {
     }
   }
 
+  //<--- VALIDATIONS --->
+
+  validForm(): boolean {
+    return !this.formGroup.invalid && !this.validateExistingDocument() && !this.validateExistingEmail() &&
+      this.validateOnlyNumbers() && this.validateOnlyNumbersForPhoneNumber() && !this.validateOwnDocument() &&
+      !this.validateSaveButtonIfCustomerInformation()
+  }
+
+  validateSaveButtonIfCustomerInformation(): boolean {
+    if (this.customerInformation() && !this.hasInformation) {
+      return true
+    }
+    return false
+  }
+
   validateTitle(): string {
     if (this.oneCustomer !== undefined) {
       if (this.oneCustomer.action === 'createFrequentTraveler') {
@@ -98,6 +116,26 @@ export class CreatecustomerformComponent implements OnInit {
       }
     }
     return 'Registrar cliente'
+  }
+
+  validateOnlyNumbers(): boolean {
+    if (this.formGroup.value.document !== null) {
+      if (this.formGroup.value.document.length >= 8) {
+        const regularExpresion = /^[0-9]+$/;
+        return regularExpresion.test(this.formGroup.value.document)
+      }
+    }
+    return true
+  }
+
+  validateOnlyNumbersForPhoneNumber(): boolean {
+    if (this.formGroup.value.phoneNumber !== null) {
+      if (this.formGroup.value.phoneNumber.length >= 10) {
+        const regularExpresion = /^[0-9]+$/;
+        return regularExpresion.test(this.formGroup.value.phoneNumber)
+      }
+    }
+    return true
   }
 
   validateExistingOneCustomer(): boolean {
@@ -152,140 +190,34 @@ export class CreatecustomerformComponent implements OnInit {
     })
   }
 
-  save() {
-    // if (!this.formGroup.invalid) {
-
-    const role: Role = this.allRoles.find(r => r.name === 'Cliente')
-    if (this.oneCustomer !== undefined) {
-      if (this.oneCustomer.action === 'editCustomer' || this.oneCustomer.action === "editCustomerFromFrequentTraveler") {
-        const user: User = {
-          email: this.formGroup.value.email,
-          password: this.formGroup.value.password,
-          status: 1,
-          roleId: role.roleId,
-        }
-        const customer: Customer = {
-          customerId: this.customerFromAction.customerId,
-          name: this.formGroup.value.name,
-          lastName: this.formGroup.value.lastName,
-          document: this.formGroup.value.document,
-          birthDate: this.formGroup.value.birthDate,
-          phoneNumber: this.formGroup.value.phoneNumber,
-          address: this.formGroup.value.address,
-          eps: this.formGroup.value.eps,
-          userId: this.customerFromAction.userId,
-          user: user
-        }
-        this.store.dispatch(new EditCustomerRequest({ ...customer }))
-      } else if (this.oneCustomer.action === 'createFrequentTraveler') {
-        const beneficiarieRole: Role = this.allRoles.find((r) => r.name == 'Beneficiario');
-        const user: User = {
-          email: 'pakitours@pakitours.com',
-          password: 'pakitours',
-          status: 2,
-          roleId: beneficiarieRole.roleId,
-        }
-
-        let customer: Customer
-
-        if (this.hasInformation) {
-          customer = {
-            name: this.isCustomerInformation.name,
-            lastName: this.isCustomerInformation.lastName,
-            document: this.isCustomerInformation.document,
-            birthDate: this.isCustomerInformation.birthDate,
-            phoneNumber: this.isCustomerInformation.phoneNumber,
-            address: this.isCustomerInformation.address,
-            eps: this.isCustomerInformation.eps,
-            user: this.isCustomerInformation.user
-          }
-
-          const frequentTraveler: FrequentTraveler = {
-            customerId: this.customerFromAction.customerId,
-            travelerId: this.isCustomerInformation.customerId
-          }
-
-          this.store.dispatch(new CreateFrequentTravelerRequest({ ...frequentTraveler }))
-        } else {
-          customer = {
-            name: this.formGroup.value.name,
-            lastName: this.formGroup.value.lastName,
-            document: this.formGroup.value.document,
-            birthDate: this.formGroup.value.birthDate,
-            phoneNumber: this.formGroup.value.phoneNumber,
-            address: this.formGroup.value.address,
-            eps: this.formGroup.value.eps,
-            user: user
-          }
-
-          this.apiService.addCustomer(customer).subscribe({
-            next: (data) => {
-              const frequentTraveler: FrequentTraveler = {
-                customerId: this.customerFromAction.customerId,
-                travelerId: data.customerId
-              }
-              this.store.dispatch(new CreateFrequentTravelerRequest({ ...frequentTraveler }))
-            },
-            error: (err) => {
-              console.log('Error while creating: ', err)
-            }
-          })
-        }
-
-
-      }
-    } else {
-      const user: User = {
-        email: this.formGroup.value.email,
-        password: this.formGroup.value.password,
-        status: 1,
-        roleId: role.roleId,
-      }
-
-      const customer: Customer = {
-        name: this.formGroup.value.name,
-        lastName: this.formGroup.value.lastName,
-        document: this.formGroup.value.document,
-        birthDate: this.formGroup.value.birthDate,
-        phoneNumber: this.formGroup.value.phoneNumber,
-        address: this.formGroup.value.address,
-        eps: this.formGroup.value.eps,
-        user: user
-      }
-      this.store.dispatch(new CreateCustomerRequest({ ...customer }))
-    }
-    // }
-  }
-
-  addForm() {
-    if (this.formGroup.value.eps == 'OTRA') {
-      this.otraEps = true
-    } else {
-      this.otraEps = false
-    }
-  }
-
-  saveEps(): string {
-    if (this.otraEps) {
-      return this.formGroup.value.otherEps
-    } else {
-      return this.formGroup.value.eps
-    }
-  }
-
   displayPassword() {
     this.Visible = !this.Visible
   }
 
+  comesFromCft(): boolean {
+    if (this.oneCustomer !== undefined) {
+      if (this.oneCustomer.action === 'createFrequentTraveler') {
+        return true
+      }
+    }
+    return false
+  }
+
   validateExistingDocument(): boolean {
     if (this.oneCustomer !== undefined) {
-      if (this.oneCustomer.action !== 'createFrequentTraveler') {
+      if (this.oneCustomer.action === 'editCustomer') {
         const customer: Customer = this.allCustomers.find(c => c.document == this.formGroup.value.document)
-        if (customer !== undefined) {
+        if (customer !== undefined && customer.document !== this.oneCustomer.customer.document) {
+          console.log('que')
+          return true
+        }
+      } else if (this.oneCustomer.action === 'createFrequentTraveler') {
+        const customer: Customer = this.frequentTravelersList.find(ft => ft.document == this.formGroup.value.document)
+        if (customer !== undefined && this.oneCustomer.customer.document !== customer.document) {
           return true
         }
       } else {
-        const customer: Customer = this.frequentTravelersList.find(ft => ft.document == this.formGroup.value.document)
+        const customer: Customer = this.allCustomers.find(c => c.document == this.formGroup.value.document)
         if (customer !== undefined) {
           return true
         }
@@ -299,10 +231,33 @@ export class CreatecustomerformComponent implements OnInit {
     return false
   }
 
+  validateOwnDocument(): boolean {
+    if (this.oneCustomer !== undefined) {
+      if (this.oneCustomer.action === 'createFrequentTraveler') {
+        const customer: Customer = this.allCustomers.find(ft => ft.document == this.formGroup.value.document)
+        if (customer !== undefined && this.oneCustomer.customer.document === customer.document) {
+          return true
+        }
+      }
+    }
+    return false
+  }
+
   validateExistingEmail(): boolean {
-    const customer: Customer = this.allCustomers.find(c => c.user.email == this.formGroup.value.email)
-    if (customer !== undefined) {
-      return true
+    if (this.oneCustomer !== undefined) {
+      if (this.oneCustomer.action === 'editCustomer') {
+        const customer: Customer = this.allCustomers.find(c => c.user.email == this.formGroup.value.email)
+        if (customer !== undefined && customer.user.email !== this.oneCustomer.customer.user.email) {
+          return true
+        }
+      } else if (this.oneCustomer.action === 'createFrequentTraveler' && this.customerInformation()) {
+        return false
+      } else {
+        const customer: Customer = this.allCustomers.find(c => c.user.email == this.formGroup.value.email)
+        if (customer !== undefined) {
+          return true
+        }
+      }
     }
     return false
   }
@@ -317,30 +272,11 @@ export class CreatecustomerformComponent implements OnInit {
     return fechaConvertida
   }
 
-  birthDateValidator(control: FormControl): { [key: string]: any } | null {
-    if (control.value) {
-      const birthDate = new Date(control.value)
-      const currentDate = new Date()
-      const diffTime = currentDate.getTime() - birthDate.getTime()
-      const diffYears = diffTime / (1000 * 60 * 60 * 24 * 365.25)
+  birthDateValidator() {
+    const currentDate = new Date();
 
-      // Comprueba si el usuario tiene al menos 18 años (18 años completos)
-      if (diffYears < 18) {
-        return { 'invalidAge': true }
-      }
-    }
-
-    return null
-  }
-
-  // ... Resto del código del componente ...
-
-
-
-
-
-  validForm(): boolean {
-    return true
+    this.customerMaxDate = new Date(currentDate);
+    this.customerMaxDate.setFullYear(currentDate.getFullYear() - 18);
   }
 
   validateBackButton(): boolean {
@@ -350,6 +286,116 @@ export class CreatecustomerformComponent implements OnInit {
       }
     }
     return false
+  }
+
+  //<------------>
+
+
+  //<--- SAVE AND CANCEL ACTIONS --->
+
+  save() {
+    if (!this.formGroup.invalid) {
+      const role: Role = this.allRoles.find(r => r.name === 'Cliente')
+      if (this.oneCustomer !== undefined) {
+        if (this.oneCustomer.action === 'editCustomer' || this.oneCustomer.action === "editCustomerFromFrequentTraveler") {
+          const user: User = {
+            email: this.formGroup.value.email,
+            password: this.formGroup.value.password,
+            status: 1,
+            roleId: role.roleId,
+          }
+          const customer: Customer = {
+            customerId: this.customerFromAction.customerId,
+            name: this.formGroup.value.name,
+            lastName: this.formGroup.value.lastName,
+            document: this.formGroup.value.document,
+            birthDate: this.formGroup.value.birthDate,
+            phoneNumber: this.formGroup.value.phoneNumber,
+            address: this.formGroup.value.address,
+            eps: this.formGroup.value.eps,
+            userId: this.customerFromAction.userId,
+            user: user
+          }
+          this.store.dispatch(new EditCustomerRequest({ ...customer }))
+        } else if (this.oneCustomer.action === 'createFrequentTraveler') {
+          const beneficiarieRole: Role = this.allRoles.find((r) => r.name == 'Beneficiario');
+          const user: User = {
+            email: 'pakitours@pakitours.com',
+            password: 'pakitours',
+            status: 2,
+            roleId: beneficiarieRole.roleId,
+          }
+
+          let customer: Customer
+
+          if (this.hasInformation) {
+            customer = {
+              name: this.isCustomerInformation.name,
+              lastName: this.isCustomerInformation.lastName,
+              document: this.isCustomerInformation.document,
+              birthDate: this.isCustomerInformation.birthDate,
+              phoneNumber: this.isCustomerInformation.phoneNumber,
+              address: this.isCustomerInformation.address,
+              eps: this.isCustomerInformation.eps,
+              user: this.isCustomerInformation.user
+            }
+
+            const frequentTraveler: FrequentTraveler = {
+              customerId: this.customerFromAction.customerId,
+              travelerId: this.isCustomerInformation.customerId
+            }
+
+            this.store.dispatch(new CreateFrequentTravelerRequest({ ...frequentTraveler }))
+          } else {
+            customer = {
+              name: this.formGroup.value.name,
+              lastName: this.formGroup.value.lastName,
+              document: this.formGroup.value.document,
+              birthDate: this.formGroup.value.birthDate,
+              phoneNumber: this.formGroup.value.phoneNumber,
+              address: this.formGroup.value.address,
+              eps: this.formGroup.value.eps,
+              user: user
+            }
+
+            this.apiService.addCustomer(customer).subscribe({
+              next: (data) => {
+                const frequentTraveler: FrequentTraveler = {
+                  customerId: this.customerFromAction.customerId,
+                  travelerId: data.customerId
+                }
+                this.store.dispatch(new CreateFrequentTravelerRequest({ ...frequentTraveler }))
+              },
+              error: (err) => {
+                console.log('Error while creating: ', err)
+              }
+            })
+          }
+
+
+        }
+      } else {
+        const user: User = {
+          email: this.formGroup.value.email,
+          password: this.formGroup.value.password,
+          status: 1,
+          roleId: role.roleId,
+        }
+
+        const customer: Customer = {
+          name: this.formGroup.value.name,
+          lastName: this.formGroup.value.lastName,
+          document: this.formGroup.value.document,
+          birthDate: this.formGroup.value.birthDate,
+          phoneNumber: this.formGroup.value.phoneNumber,
+          address: this.formGroup.value.address,
+          eps: this.formGroup.value.eps,
+          user: user
+        }
+        this.store.dispatch(new CreateCustomerRequest({ ...customer }))
+      }
+      // }
+    }
   }
 
   cancel() {

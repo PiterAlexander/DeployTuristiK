@@ -1,11 +1,11 @@
-import {AppState} from '@/store/state';
-import { ToggleSidebarMenu} from '@/store/ui/actions';
-import {UiState} from '@/store/ui/state';
-import {Component, HostBinding, OnInit, Input} from '@angular/core';
-import {UntypedFormGroup, UntypedFormControl} from '@angular/forms';
-import {Store} from '@ngrx/store';
-import {AppService} from '@services/app.service';
-import {Observable} from 'rxjs';
+import { AppState } from '@/store/state';
+import { ToggleSidebarMenu } from '@/store/ui/actions';
+import { UiState } from '@/store/ui/state';
+import { Component, HostBinding, OnInit, Input } from '@angular/core';
+import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { AppService } from '@services/app.service';
+import { Observable } from 'rxjs';
 
 var BASE_CLASSES = 'main-header navbar navbar-expand';
 
@@ -23,12 +23,12 @@ export class HeaderComponent implements OnInit {
     constructor(
         private appService: AppService,
         private store: Store<AppState>
-    ) {}
+    ) { }
 
     onProfileButtonClick() {
         this.appService.showProfileSidebar();
     }
-    
+
 
     ngOnInit() {
         this.ui = this.store.select('ui');
@@ -37,9 +37,9 @@ export class HeaderComponent implements OnInit {
             this.role = user['role']
 
             if (this.role === 'Cliente') {
-              BASE_CLASSES = 'navbar navbar-expand-lg bg-body-tertiary fixed-top mb-5'
+                BASE_CLASSES = 'navbar navbar-expand-lg bg-body-tertiary fixed-top mb-5'
             }
-            
+
             this.isStyleActive = state.menuSidebarCollapsed
 
             this.classes = `${BASE_CLASSES} ${state.navbarVariant}`;
