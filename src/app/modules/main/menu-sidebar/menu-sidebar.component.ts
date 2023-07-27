@@ -1,13 +1,13 @@
-import {Permission} from '@/models/permission';
-import {Role} from '@/models/role';
-import {AppState} from '@/store/state';
-import {GetAllPermissionsRequest, GetAllRoleRequest, ToggleSidebarMenu} from '@/store/ui/actions';
-import {UiState} from '@/store/ui/state';
-import {Component, HostBinding, OnInit} from '@angular/core';
-import {Store} from '@ngrx/store';
-import {AppService} from '@services/app.service';
-import {Observable} from 'rxjs';
-import {RouterModule} from '@angular/router';
+import { Permission } from '@/models/permission';
+import { Role } from '@/models/role';
+import { AppState } from '@/store/state';
+import { GetAllPermissionsRequest, GetAllRoleRequest, ToggleSidebarMenu } from '@/store/ui/actions';
+import { UiState } from '@/store/ui/state';
+import { Component, HostBinding, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppService } from '@services/app.service';
+import { Observable } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 var BASE_CLASSES = 'main-sidebar elevation-4 sidebar-light';
 @Component({
@@ -24,11 +24,11 @@ export class MenuSidebarComponent implements OnInit {
     public menu = MENU;
     public role;
 
-    
+
     constructor(
         public appService: AppService,
         private store: Store<AppState>
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.store.dispatch(new GetAllRoleRequest());
@@ -51,7 +51,7 @@ export class MenuSidebarComponent implements OnInit {
         });
         this.user = this.appService.user;
         console.log(this.user);
-        
+
     }
     onToggleMenuSidebar() {
         this.store.dispatch(new ToggleSidebarMenu());

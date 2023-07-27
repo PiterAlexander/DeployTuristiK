@@ -89,9 +89,11 @@ import { BadgeModule } from 'primeng/badge';
 import { ChartModule } from 'primeng/chart';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { TabViewModule } from 'primeng/tabview';
-import {TabMenuModule} from 'primeng/tabmenu';
+import { TabMenuModule } from 'primeng/tabmenu';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import {CarouselModule} from 'primeng/carousel';
+import { CarouselModule } from 'primeng/carousel';
+import { SidebarModule } from 'primeng/sidebar';
+
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
 
@@ -195,6 +197,8 @@ registerLocaleData(localeEn, 'en-EN');
     ChartModule,
     DataViewModule,
     OverlayPanelModule,
+    SidebarModule,
+
 
     //<------------------------->
     ToastrModule.forRoot({

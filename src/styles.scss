@@ -13,17 +13,15 @@
 @import 'typeface-poppins';
 @import 'ngx-toastr/toastr';
 
-* {
-  font-weight: 400;
-  font-family: 'Poppins', sans-serif;
+@import "assets/layout/styles/layout/layout.scss";
 
-  ::placeholder {
-    font-weight: 400;
-    font-family: "Poppins" !important;
-    font-size: 14px !important;
-  }
-}
+/* PrimeNG */
+@import "../node_modules/primeng/resources/primeng.min.css";
+@import "../node_modules/primeflex/primeflex.scss";
+@import "../node_modules/primeicons/primeicons.css";
 
+
+/* Google Font Import - Poppins */
 * {
   margin: 0;
   padding: 0;
@@ -47,16 +45,78 @@ body {
   transition: var(--tran-05);
 }
 
-//* {
-//   margin: 0;
-//   padding: 0;
-//   box-sizing: border-box;
-//   font-family: 'Poppins', sans-serif;
-// }
+button .p-button-rounded {
+  scale: 0.9;
+}
 
-// body{
-//   min-height: 100vh;
-// }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 1.5rem 0 1rem 0;
+  font-family: inherit;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--surface-900);
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.75rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+mark {
+  background: #FFF8E1;
+  padding: .25rem .4rem;
+  border-radius: var(--border-radius);
+  font-family: monospace;
+}
+
+blockquote {
+  margin: 1rem 0;
+  padding: 0 2rem;
+  border-left: 4px solid #90A4AE;
+}
+
+hr {
+  border-top: solid var(--surface-border);
+  border-width: 1px 0 0 0;
+  margin: 1rem 0;
+}
+
+p {
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
 
 .p-dropdown .p-dropdown-label.p-placeholder {
   font-weight: 400;
@@ -64,13 +124,7 @@ body {
   font-size: 15px !important;
 }
 
-button.p-button-rounded {
-  transform: scale(0.8);
-}
-
 :root {
-  /* ===== Colors ===== */
-  --body-color: #E4E9F7;
   --sidebar-color: #FFF;
   --primary-color: #6858ab;
   --primary-color-light: #F6F5FF;
@@ -90,7 +144,6 @@ button.p-button-rounded {
 }
 
 /* ===== Sidebar ===== */
-
 .sidebar {
   top: 0;
   left: 0;
@@ -321,83 +374,7 @@ body.dark .home .text {
   color: var(--text-color);
 }
 
-/* Importing Bootstrap SCSS file. */
-// @import 'bootstrap/scss/bootstrap';
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 1.5rem 0 1rem 0;
-  font-family: inherit;
-  font-weight: 600;
-  line-height: 1.2;
-  color: var(--surface-900);
-
-  &:first-child {
-    margin-top: 0;
-  }
-}
-
-h1 {
-  font-size: 2.5rem;
-}
-
-h2 {
-  font-size: 2rem;
-}
-
-h3 {
-  font-size: 1.75rem;
-}
-
-h4 {
-  font-size: 1.5rem;
-}
-
-h5 {
-  font-size: 1.25rem;
-}
-
-h6 {
-  font-size: 1rem;
-}
-
-mark {
-  background: #FFF8E1;
-  padding: .25rem .4rem;
-  border-radius: var(--border-radius);
-  font-family: monospace;
-}
-
-blockquote {
-  margin: 1rem 0;
-  padding: 0 2rem;
-  border-left: 4px solid #90A4AE;
-}
-
-hr {
-  border-top: solid var(--surface-border);
-  border-width: 1px 0 0 0;
-  margin: 1rem 0;
-}
-
-p {
-  margin: 0 0 1rem 0;
-  line-height: 1.5;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
 .layout-fixed .wrapper .sidebar {
   height: auto;
   /* o height: initial; */
-}
-
-.p-datepicker {
-  transform: scale(0.8);
 }

@@ -1,4 +1,4 @@
-<nav class="sidebar" *ngIf="role !== 'Cliente'">
+<nav class="sidebar vh-100" *ngIf="role !== 'Cliente'">
     <header class="p-2">
         <div class="image-text">
             <span class="image">
@@ -10,7 +10,6 @@
                 <span class="name">TuristiK</span>
                 <span class="profession">{{user.role}}</span>
             </div>
-            <a class="nav-link" (click)="onToggleMenuSidebar()" role="button"><i class="bx bx-chevron-right toggle"></i></a>
         </div>
     </header>
 
@@ -26,54 +25,4 @@
         </div>
     </div>
 
-    <footer>
-        <div class="bottom-content">
-            <li class="nav-link" style="margin-top: 100%;">
-                <a href="#">
-                    <i class='bx bx-log-out icon'></i>
-                    <span class="text nav-text">Logout</span>
-                </a>
-            </li>
-        </div>
-    </footer>
-</nav>
-
-<nav class="sidebar" *ngIf="role === 'Cliente'">
-    <!-- <header class="p-2">
-        <div class="image-text">
-            <span class="image">
-                <img src="https://img.freepik.com/vector-gratis/logotipo-viaje-detallado_23-2148616611.jpg?w=2000"
-                    alt="">
-            </span>
-
-            <div class="text logo-text">
-                <span class="name">TuristiK</span>
-                <span class="profession">{{user.role}}</span>
-            </div>
-            <a class="nav-link" (click)="onToggleMenuSidebar()" role="button"><i class="bx bx-chevron-right toggle"></i></a>
-        </div>
-    </header> -->
-
-    <div class="menu-bar">
-        <div class="menu">
-            <ul class="menu-links">
-                <ng-container *ngFor="let item of menu">
-                    <ng-container *ngIf="item.allowed">
-                        <app-menu-item [menuItem]="item"></app-menu-item>
-                    </ng-container>
-                </ng-container>
-            </ul>
-        </div>
-    </div>
-
-    <!-- <footer>
-        <div class="bottom-content">
-            <li class="nav-link" style="margin-top: 100%;">
-                <a href="#">
-                    <i class='bx bx-log-out icon'></i>
-                    <span class="text nav-text">Logout</span>
-                </a>
-            </li>
-        </div>
-    </footer> -->
 </nav>

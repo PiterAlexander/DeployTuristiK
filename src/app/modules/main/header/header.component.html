@@ -1,25 +1,32 @@
-<ul class="navbar-nav p-0">
-  <li class="nav-item" *ngIf="role!=='Cliente'">
-    <i *ngIf="isStyleActive" (click)="onToggleMenuSidebar()" class="bx bx-chevron-right toggle"></i>
-  </li>
-  <li class="nav-item d-none d-sm-inline-block">
-    <a [routerLink]="['/Dashboard']" class="nav-link" *ngIf="role!=='Cliente'">Home</a>
-    <a [routerLink]="['/Paquetes']" class="nav-link" *ngIf="role==='Cliente'">TuristiK</a>
-  </li>
-  <li>
-    <app-user></app-user>
-  </li>
-</ul>
+<div class="layout-topbar">
+    <div class="topbar-start p-3">
+        <button #menubutton type="button" (click)="onToggleMenuSidebar()" class="topbar-menubutton p-link p-trigger">
+            <i class="pi pi-bars"></i>
+        </button>
+        <nav class="layout-breadcrumb">
+            <ol>
+                <li>Paquetes</li>
+            </ol>
+        </nav>
+    </div>
 
-
-<ul class="navbar-nav ml-auto" *ngIf="role==='Cliente'">
-  <app-notifications></app-notifications>
-
-  <!-- <li class="nav-item">
-      <button class="nav-link" (click)="onToggleControlSidebar()">
-          <i class="fas fa-th-large"></i>
-      </button>
-  </li> -->
-  <app-menu-sidebar style="background-color: #f8f9fa;"></app-menu-sidebar>
-  <app-user></app-user>
-</ul>
+    <div class="topbar-end">
+        <ul class="topbar-menu">
+            <li class="topbar-search">
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input type="text" pInputText placeholder="Search" class="w-12rem sm:w-full">
+                </span>
+            </li>
+            <li class="ml-3">
+                <button pButton type="button" icon="pi pi-cog"
+                    class="p-button-text p-button-secondary p-button-rounded flex-shrink-0"></button>
+            </li>
+            <li class="topbar-profile">
+                <button type="button" class="p-link">
+                    <img src="assets/layout/images/avatar.png" (click)="onProfileButtonClick()" alt="Profile" />
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>

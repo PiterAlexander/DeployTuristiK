@@ -5,14 +5,28 @@ import { Gatekeeper } from 'gatekeeper-client-sdk';
 import { GetUserInfoRequest } from '@/store/ui/actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '@/store/state';
+import { MessageService } from 'primeng/api';
+
+interface LayoutState {
+    profileSidebarVisible: boolean;
+}
+
 
 @Injectable({
     providedIn: 'root'
 })
 export class AppService {
+
+    state: LayoutState = {
+        profileSidebarVisible: false
+    }
     public user: any = null;
 
-    constructor(private router: Router, private toastr: ToastrService, private store: Store<AppState>) { }
+    constructor(private router: Router, private toastr: ToastrService, private store: Store<AppState>, private messageService: MessageService) { }
+
+    showProfileSidebar() {
+        this.state.profileSidebarVisible = true;
+    }
 
     getProfile() {
         try {
@@ -35,5 +49,7 @@ export class AppService {
         this.store.dispatch(new GetUserInfoRequest(this.user));
 
         this.router.navigate(['/login']);
+        this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Sesión cerrada' });
+
     }
 }

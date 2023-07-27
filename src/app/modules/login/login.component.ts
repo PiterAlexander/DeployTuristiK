@@ -1,17 +1,17 @@
-import {Token, UserLog} from '@/models/token';
-import {AppState} from '@/store/state';
-import {GetUserInfoRequest, LoginRequest} from '@/store/ui/actions';
-import {UiState} from '@/store/ui/state';
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
+import { Token, UserLog } from '@/models/token';
+import { AppState } from '@/store/state';
+import { GetUserInfoRequest, LoginRequest } from '@/store/ui/actions';
+import { UiState } from '@/store/ui/state';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 // import * as jwt from 'jsonwebtoken'
 import jwt_decode from 'jwt-decode';
-import {AuthService} from '@services/auth/auth.service';
-import {Router} from '@angular/router';
-import {ToastrService} from 'ngx-toastr';
-import {User} from '@/models/user';
+import { AuthService } from '@services/auth/auth.service';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { User } from '@/models/user';
 import { ofType } from '@ngrx/effects';
 
 @Component({
@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit {
     public isAuthLoading = false;
     static payload: Observable<UserLog>;
     public userLogin: any;
+    Visible: boolean = false;
 
     constructor(
         private fb: FormBuilder,
@@ -33,7 +34,7 @@ export class LoginComponent implements OnInit {
         private authService: AuthService,
         private router: Router,
         private toastr: ToastrService
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.ui = this.store.select('ui');
@@ -66,10 +67,14 @@ export class LoginComponent implements OnInit {
         };
 
         await this.store.dispatch(
-            new LoginRequest({email: Model.email, password: Model.password})
+            new LoginRequest({ email: Model.email, password: Model.password })
         );
 
         this.isAuthLoading = false;
+    }
+    
+    displayPassword() {
+        this.Visible = !this.Visible;
     }
 
     validForm(): boolean {
@@ -102,12 +107,12 @@ export class LoginComponent implements OnInit {
 
                 var log = JSON.parse(localStorage.getItem('TokenPayload'));
                 if (log) {
-                  if (log['role'] == 'Administrador') {
-                    this.router.navigate(['/Home/Dashboard']);
-                  }
-                  if (log['role'] == 'Cliente') {
-                      this.router.navigate(['/Home/Paquetes']);
-                  }
+                    if (log['role'] == 'Administrador') {
+                        this.router.navigate(['/Home/Dashboard']);
+                    }
+                    if (log['role'] == 'Cliente') {
+                        this.router.navigate(['/Home/Paquetes']);
+                    }
                 }
 
 
