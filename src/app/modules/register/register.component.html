@@ -356,46 +356,15 @@
                                 </div>
                                 <div class="col-2">
                                     <button
-                                        *ngIf="validForm()"
                                         type="submit"
                                         id="saveButton"
-                                        pbutton=""
-                                        pripple=""
-                                        label="Registarme"
-                                        icon="pi pi-user-plus"
-                                        class="p-element p-ripple mr-2 p-button p-button-primary p-component"
-                                        ng-reflect-label="Registarme"
-                                        ng-reflect-icon="pi pi-user-plus"
-                                    >
-                                        <span
-                                            class="p-button-icon p-button-icon-left pi pi-user-plus"
-                                            aria-hidden="true"
-                                        ></span
-                                        ><span class="p-button-label"
-                                            >Registrarme</span
-                                        ><span class="p-ink"></span>
-                                    </button>
-                                    <button
-                                        *ngIf="!validForm()"
-                                        type="submit"
-                                        id="saveButton"
-                                        pbutton=""
-                                        pripple=""
+                                        pButton
+                                        pRipple
                                         label="Registrarme"
-                                        icon="pi pi-user-plus"
-                                        class="p-element p-ripple mr-2 p-button p-button-primary p-component"
+                                        class="w-full"
                                         ng-reflect-label="Registrarme"
-                                        ng-reflect-icon="pi pi-user-plus"
-                                        disabled
-                                    >
-                                        <span
-                                            class="p-button-icon p-button-icon-left pi pi-user-plus"
-                                            aria-hidden="true"
-                                        ></span
-                                        ><span class="p-button-label"
-                                            >Registrarme</span
-                                        ><span class="p-ink"></span>
-                                    </button>
+                                        [disabled]="!validForm()"
+                                    ></button>
                                 </div>
                             </div>
                         </div>
