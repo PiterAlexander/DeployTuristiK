@@ -1,7 +1,7 @@
 <p-toast key="alert-message"></p-toast>
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <ng-container *ngIf="role === 'Cliente' || role === undefined">
-    <div style="width: 90%; margin-left: auto; margin-right: auto;" class="grid">
+    <div class="grid content">
         <div class="col-12">
             <div>
                 <p-dataView #dv [value]="arrayPackagesClient" [paginator]="true" [rows]="6" filterBy="name"
@@ -194,11 +194,11 @@
                             {{ package.price | currency: 'USD':'symbol' }}
                         </td>
                         <td class="text-center">
-                            <div *ngIf="package.status == true">
+                            <div *ngIf="package.status === true">
                                 <p-inputSwitch (click)="disablePackage(package)" [(ngModel)]="checked2"
                                     pTooltip="Activo" tooltipPosition="bottom"></p-inputSwitch>
                             </div>
-                            <div *ngIf="package.status == false">
+                            <div *ngIf="package.status === false">
                                 <p-inputSwitch (click)="disablePackage(package)" pTooltip="Inactivo"
                                     tooltipPosition="bottom"></p-inputSwitch>
                             </div>
@@ -210,7 +210,7 @@
                                 tooltipPosition="bottom"></button>
                             <button pButton type="button" icon="pi pi-info-circle"
                                 class="p-button-outlined p-button-rounded m-1" pTooltip="Ver detalles"
-                                (click)="modalShowDetailsPackage(package)" tooltipPosition="bottom"></button>
+                               tooltipPosition="bottom"></button>
                         </td>
                     </tr>
                 </ng-template>
@@ -223,3 +223,4 @@
         </div>
     </div>
 </div>
+

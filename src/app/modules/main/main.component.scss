@@ -12,6 +12,12 @@
   height: 100vh;
 }
 
+.center{
+  width: 80% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
 .active-style {
   transition: margin-left .3s ease-in-out !important;
   margin-left: 250px !important;

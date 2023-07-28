@@ -1,16 +1,22 @@
 <p-toast></p-toast>
-<p-sidebar [(visible)]="visible" position="right" [transitionOptions]="'.3s cubic-bezier(0, 0, 0.2, 1)'"
-    styleClass="layout-profile-sidebar w-full sm:w-22rem ">
-    <div class="flex flex-column mx-auto md:mx-0 w-full" *ngIf="loading">
-    </div>
+<p-sidebar
+    [(visible)]="visible"
+    position="right"
+    [transitionOptions]="'.3s cubic-bezier(0, 0, 0.2, 1)'"
+    styleClass="layout-profile-sidebar w-full sm:w-22rem "
+>
+    <div class="flex flex-column mx-auto md:mx-0 w-full" *ngIf="loading"></div>
     <div class="flex flex-column mx-auto md:mx-0 w-full" *ngIf="!loading">
-        <span class="text-color-secondary text-4xl mb-5"><i class="pi pi-user text-3xl text-primary mr-3"></i>{{
-            allInfo.name + ' ' + allInfo.lastName }}</span>
+        <span class="text-color-secondary text-4xl mb-5"
+            ><i class="pi pi-user text-3xl text-primary mr-3"></i
+            >{{ allInfo.name + ' ' + allInfo.lastName }}</span
+        >
 
         <ul class="list-none m-0 p-0">
             <li>
                 <div
-                    class="flex surface-border mb-2 p-2 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150">
+                    class="flex surface-border mb-2 p-2 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150"
+                >
                     <span>
                         <i class="pi pi-id-card text-xl text-primary"></i>
                     </span>
@@ -24,13 +30,14 @@
             </li>
             <li>
                 <div
-                    class="cursor-pointer flex surface-border mb-2 p-2 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150 overflow-hidden sm:text-overflow-ellipsis ">
+                    class="cursor-pointer flex surface-border mb-2 p-2 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150 overflow-hidden sm:text-overflow-ellipsis"
+                >
                     <span>
                         <i class="pi pi-at text-xl text-primary"></i>
                     </span>
                     <div class="ml-3">
                         <span class="mb-2 font-semibold">Correo</span>
-                        <p class="text-color-secondary m-0 ">
+                        <p class="text-color-secondary m-0">
                             {{ allInfo.user.email }}
                         </p>
                     </div>
@@ -38,7 +45,8 @@
             </li>
             <li>
                 <div
-                    class="flex surface-border mb-2 p-2 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150">
+                    class="flex surface-border mb-2 p-2 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150"
+                >
                     <span>
                         <i class="pi pi-phone text-xl text-primary"></i>
                     </span>
@@ -52,7 +60,8 @@
             </li>
             <li>
                 <a
-                    class="flex surface-border mb-2 p-2 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150">
+                    class="flex surface-border mb-2 p-2 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150"
+                >
                     <span>
                         <i class="pi pi-users text-xl text-primary"></i>
                     </span>
@@ -67,7 +76,7 @@
             <button type="button" label="Editar Perfil"
                 class="p-element p-ripple p-button-outlined p-button-prymary mr-2 mb-2 p-button p-component"
                 ng-reflect-label="Editar" (click)="
-                    user.role == 'Cliente'
+                    user.role === 'Cliente'
                         ? editCustomer(allInfo)
                         : editEmployee(allInfo)
                 ">

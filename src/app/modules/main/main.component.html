@@ -1,34 +1,52 @@
-<ng-container *ngIf="role !== 'Cliente'">
-    <app-header style="display: block; border: none !important; background-color: #eff3f8 !important; " [ngClass]="{
+<ng-container *ngIf="role !== 'Cliente'"  style="margin: 0;
+padding: 0;
+min-height: 100vh;
+display: flex;
+flex-direction: column;">
+  <app-header style="height: 100%; display: block; border: none !important; background-color: #eff3f8 !important; " [ngClass]="{
             'active-style': !isStyleActive,
             'inactive-style': isStyleActive
         }"></app-header>
-    <nav class="sidebar">
-        <app-menu-sidebar></app-menu-sidebar>
-    </nav>
+  <nav class="sidebar">
+    <app-menu-sidebar></app-menu-sidebar>
+  </nav>
 
-    <div class="content-wrapper" [ngClass]="{
+  <div class="content-wrapper" [ngClass]="{
             'active-style': !isStyleActive,
             'inactive-style': isStyleActive
         }" style="background-color: #eff3f8;">
-        <router-outlet></router-outlet>
-    </div>
-    <app-profilemenu></app-profilemenu>
+    <router-outlet></router-outlet>
+  </div>
+  <app-profilemenu></app-profilemenu>
 
-    <app-footer></app-footer>
+  <app-footer style="background-color: #eff3f8; border-top: none; left: 0; right: 0; position: fixed; bottom: 0;" [ngClass]="{
+            'active-style': !isStyleActive,
+            'inactive-style': isStyleActive
+        }" ></app-footer>
 </ng-container>
 
-<ng-container *ngIf="role === 'Cliente'">
-    <!-- <app-menu-sidebar class="sidebar-dark-primary" style="display: none;"></app-menu-sidebar> -->
 
-    <app-header></app-header>
-    <div class="container mt-5">
-        <router-outlet class="mt-2"></router-outlet>
-    </div>
-    <app-profilemenu></app-profilemenu>
 
-    <app-footer></app-footer>
+<ng-container *ngIf="role === 'Cliente'" style="margin: 0;
+padding: 0;
+min-height: 100vh;
+display: flex;
+flex-direction: column;">
+  <!-- <app-menu-sidebar class="sidebar-dark-primary" style="display: none;"></app-menu-sidebar> -->
 
-    <!-- <app-control-sidebar></app-control-sidebar> -->
-    <!-- <div id="sidebar-overlay" (click)="onToggleMenuSidebar()"></div> -->
+  <app-header></app-header>
+  <div class="mt-5 center" style="flex: 1;">
+    <router-outlet class="mt-2"></router-outlet>
+  </div>
+  <app-profilemenu></app-profilemenu>
+
+  <app-footer style="
+  background-color: #eff3f8;
+  margin-left: 0px;
+  border-top: none;
+  padding: 20px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;"></app-footer>
 </ng-container>
