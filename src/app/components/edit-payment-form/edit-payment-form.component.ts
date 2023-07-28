@@ -5,7 +5,6 @@ import { EditOrderRequest, EditPaymentRequest, OpenModalPayments } from '@/store
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';

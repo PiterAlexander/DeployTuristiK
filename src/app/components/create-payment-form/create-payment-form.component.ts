@@ -4,7 +4,7 @@ import { OrderDetail } from '@/models/orderDetail';
 import { Package } from '@/models/package';
 import { Payment } from '@/models/payment';
 import { AppState } from '@/store/state';
-import { CreateOrderRequest, CreatePaymentRequest, EditOrderRequest, EditPackageRequest, GetAllOrdersRequest, OpenModalCreateOrderDetail, OpenModalPayments } from '@/store/ui/actions';
+import { CreateOrderRequest, CreatePaymentRequest, EditOrderRequest, OpenModalCreateOrderDetail, OpenModalPayments } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -49,22 +49,19 @@ export class CreatePaymentFormComponent implements OnInit {
       this.orderProcess = state.orderProcess.data
       this.allOrders = state.allOrders.data
     })
-
     if (this.orderProcess[0].action === 'CreatePayment' || this.orderProcess[0].action === 'CreatePaymentFromCustomer') {
       this.totalCost = this.orderProcess[0].order.totalCost
       let addition = 0
-      this.orderProcess[0].order.payment.forEach(element => {
-        if (element != undefined) {
+      for (const element of this.orderProcess[0].order.payment) {
+        if (element != undefined && element.status === 1) {
           addition += element.amount
         }
-      })
+      }
       this.remainingAmount = this.totalCost - addition
     } else {
       this.beneficiariesAmount = this.orderProcess[0].beneficiaries.length
       this.onePackage = this.orderProcess[0].order.package
-      if (this.orderProcess[0].action === 'CreateOrderDetail') {
-        console.log(this.orderProcess[0]);
-
+      if (this.orderProcess[0].action === 'CreateOrderDetail' || this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
         this.oneOrder = this.allOrders.find(o => o.orderId === this.orderProcess[0].order.orderId)
         this.totalCost = this.orderProcess[0].order.totalCost
         // let addition = 0
@@ -93,10 +90,11 @@ export class CreatePaymentFormComponent implements OnInit {
     if (this.orderProcess[0].action === 'CreatePayment' || this.orderProcess[0].action === 'CreatePaymentFromCustomer') {
       this.modalPrimeNg.close()
       this.store.dispatch(new OpenModalPayments(this.orderProcess[0].order))
-    } else if (this.orderProcess[0].action === 'CreateOrderDetail') {
+    } else if (this.orderProcess[0].action === 'CreateOrderDetail' || this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
       const order = this.allOrders.find(o => o.orderId === this.orderProcess[0].order.orderId)
+      const action: string = this.orderProcess[0].action
       this.orderProcess = [{
-        action: 'CreateOrderDetail',
+        action: action,
         order: order,
         beneficiaries: this.orderProcess[0].beneficiaries
       }]
@@ -120,6 +118,34 @@ export class CreatePaymentFormComponent implements OnInit {
     return this.formGroup.value.amount !== null
   }
 
+
+  editPackage(onePackage: Package) {
+    const updatePackage: Package = {
+      packageId: onePackage.packageId,
+      name: onePackage.name,
+      destination: onePackage.destination,
+      details: onePackage.details,
+      transport: onePackage.transport,
+      hotel: onePackage.hotel,
+      arrivalDate: onePackage.arrivalDate,
+      departureDate: onePackage.departureDate,
+      departurePoint: onePackage.departurePoint,
+      totalQuotas: onePackage.totalQuotas,
+      availableQuotas: onePackage.availableQuotas - this.orderDetail.length,
+      price: onePackage.price,
+      type: onePackage.type,
+      status: onePackage.status,
+      aditionalPrice: onePackage.aditionalPrice
+    }
+
+    this.apiService.updatePackage(updatePackage.packageId, updatePackage).subscribe({
+      next: (data) => {
+      },
+      error: (err) => {
+        console.log("Error while creating: ", err);
+      }
+    })
+  }
 
   saveFromCreatePayment() {
     let status: number
@@ -192,7 +218,7 @@ export class CreatePaymentFormComponent implements OnInit {
                 }
               });
             });
-            if (this.orderProcess[0].action === 'CreateOrderDetail') {
+            if (this.orderProcess[0].action === 'CreateOrderDetail' || this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
               const orderDetail: OrderDetail = {
                 orderId: this.orderProcess[0].order.orderId,
                 beneficiaryId: data['customerId'],
@@ -235,7 +261,7 @@ export class CreatePaymentFormComponent implements OnInit {
               }
             }
           } else {
-            if (this.orderProcess[0].action === 'CreateOrderDetail') {
+            if (this.orderProcess[0].action === 'CreateOrderDetail' || this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
               const orderDetail: OrderDetail = {
                 orderId: this.orderProcess[0].order.orderId,
                 beneficiaryId: element.customerId,
@@ -251,58 +277,51 @@ export class CreatePaymentFormComponent implements OnInit {
             }
           }
         }
-        if (this.orderProcess[0].action === 'CreateOrderDetail') {
-          let status: number
-          let addition = 0
-          this.oneOrder.payment.forEach(element => {
-            if (element != undefined) {
+        if (this.orderProcess[0].action === 'CreateOrderDetail' || this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
+          let addition: number = 0
+          let paymentStatus: number
+          let orderStatus: number
+          for (const element of this.oneOrder.payment) {
+            if (element !== undefined && element.status === 1) {
               addition += element.amount
             }
-          })
-          if (this.oneOrder.totalCost === addition) {
-            if (this.formGroup.value.amount === this.totalCost) {
-              status = 2
-            } else {
-              status = 1
+          }
+          const orderDetailRemainingAmount = this.oneOrder.totalCost + this.totalCost - addition - this.formGroup.value.amount
+
+          if (this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
+            paymentStatus = 0
+            if (this.oneOrder.status === 0) {
+              orderStatus = 0
+            } else if (this.oneOrder.status === 1) {
+              orderStatus = 1
+            } else if (this.oneOrder.status === 2) {
+              orderStatus = 1
             }
-          } else {
-            status = 1
+          } else if (this.orderProcess[0].action === 'CreateOrderDetail') {
+            paymentStatus = 1
+            if (orderDetailRemainingAmount === 0) {
+              orderStatus = 2
+            }
+            else if (orderDetailRemainingAmount > 0) {
+              orderStatus = 1
+            }
+            else {
+              orderStatus = 3
+            }
           }
           const order: Order = {
             orderId: this.oneOrder.orderId,
             customerId: this.oneOrder.customerId,
             packageId: this.oneOrder.packageId,
             totalCost: this.oneOrder.totalCost + this.totalCost,
-            status: status,
+            status: orderStatus,
             payment: this.oneOrder.payment,
             orderDetail: this.oneOrder.orderDetail
           }
-          this.store.dispatch(new EditOrderRequest(order))
+          this.store.dispatch(new EditOrderRequest({ ...order }))
 
-          const updatePackage: Package = {
-            packageId: this.oneOrder.package.packageId,
-            name: this.oneOrder.package.name,
-            destination: this.oneOrder.package.destination,
-            details: this.oneOrder.package.details,
-            transport: this.oneOrder.package.transport,
-            hotel: this.oneOrder.package.hotel,
-            arrivalDate: this.oneOrder.package.arrivalDate,
-            departureDate: this.oneOrder.package.departureDate,
-            departurePoint: this.oneOrder.package.departurePoint,
-            totalQuotas: this.oneOrder.package.totalQuotas,
-            availableQuotas: this.oneOrder.package.availableQuotas - this.orderDetail.length,
-            price: this.oneOrder.package.price,
-            type: this.oneOrder.package.type,
-            status: this.oneOrder.package.status,
-            aditionalPrice: this.oneOrder.package.aditionalPrice
-          }
-          this.apiService.updatePackage(updatePackage.packageId, updatePackage).subscribe({
-            next: (data) => {
-            },
-            error: (err) => {
-              console.log("Error while creating: ", err);
-            }
-          })
+          // UPDATE PACAKGE
+          this.editPackage(this.oneOrder.package)
 
           for (const element of this.orderDetail) {
             const orderDetail: OrderDetail = element;
@@ -318,10 +337,10 @@ export class CreatePaymentFormComponent implements OnInit {
           const payment: Payment = {
             orderId: this.orderProcess[0].order.orderId,
             amount: this.formGroup.value.amount,
-            remainingAmount: this.remainingAmount - this.formGroup.value.amount,
+            remainingAmount: orderDetailRemainingAmount,
             date: new Date(),
             image: "url",
-            status: 1
+            status: paymentStatus
           }
 
           this.apiService.addPayment(payment).subscribe({
@@ -331,8 +350,9 @@ export class CreatePaymentFormComponent implements OnInit {
               console.log("Error while creating: ", err);
             }
           })
+
           this.modalPrimeNg.close()
-          this.messageService.add({ key: 'alert/-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Beneficiario agregado exitosamente.' });
+          this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Beneficiario agregado exitosamente.' });
         } else if (this.orderProcess[0].action === 'CreateOrderFromCustomer') {
           const payment: Payment = {
             amount: this.formGroup.value.amount,
@@ -351,30 +371,9 @@ export class CreatePaymentFormComponent implements OnInit {
             orderDetail: this.orderDetail
           }
 
-          const updatePackage: Package = {
-            packageId: this.orderProcess[0].order.package.packageId,
-            name: this.orderProcess[0].order.package.name,
-            destination: this.orderProcess[0].order.package.destination,
-            details: this.orderProcess[0].order.package.details,
-            transport: this.orderProcess[0].order.package.transport,
-            hotel: this.orderProcess[0].order.package.hotel,
-            arrivalDate: this.orderProcess[0].order.package.arrivalDate,
-            departureDate: this.orderProcess[0].order.package.departureDate,
-            departurePoint: this.orderProcess[0].order.package.departurePoint,
-            totalQuotas: this.orderProcess[0].order.package.totalQuotas,
-            availableQuotas: this.orderProcess[0].order.package.availableQuotas - this.orderDetail.length,
-            price: this.orderProcess[0].order.package.price,
-            type: this.orderProcess[0].order.package.type,
-            status: this.orderProcess[0].order.package.status,
-            aditionalPrice: this.orderProcess[0].order.package.aditionalPrice
-          }
-          this.apiService.updatePackage(updatePackage.packageId, updatePackage).subscribe({
-            next: (data) => {
-            },
-            error: (err) => {
-              console.log("Error while creating: ", err);
-            }
-          })
+          //UPDATE PACKAGE
+          this.editPackage(this.orderProcess[0].order.package)
+
           this.store.dispatch(new CreateOrderRequest({ ...order }))
         } else {
           const payment: Payment = {
@@ -401,31 +400,9 @@ export class CreatePaymentFormComponent implements OnInit {
             orderDetail: this.orderDetail
           }
 
-          const updatePackage: Package = {
-            packageId: this.orderProcess[0].order.package.packageId,
-            name: this.orderProcess[0].order.package.name,
-            destination: this.orderProcess[0].order.package.destination,
-            details: this.orderProcess[0].order.package.details,
-            transport: this.orderProcess[0].order.package.transport,
-            hotel: this.orderProcess[0].order.package.hotel,
-            arrivalDate: this.orderProcess[0].order.package.arrivalDate,
-            departureDate: this.orderProcess[0].order.package.departureDate,
-            departurePoint: this.orderProcess[0].order.package.departurePoint,
-            totalQuotas: this.orderProcess[0].order.package.totalQuotas,
-            availableQuotas: this.orderProcess[0].order.package.availableQuotas - this.orderDetail.length,
-            price: this.orderProcess[0].order.package.price,
-            type: this.orderProcess[0].order.package.type,
-            status: this.orderProcess[0].order.package.status,
-            aditionalPrice: this.orderProcess[0].order.package.aditionalPrice
+          //UPDATE PACKAGE
+          this.editPackage(this.orderProcess[0].order.package)
 
-          }
-          this.apiService.updatePackage(updatePackage.packageId, updatePackage).subscribe({
-            next: (data) => {
-            },
-            error: (err) => {
-              console.log("Error while creating: ", err);
-            }
-          })
           this.store.dispatch(new CreateOrderRequest({ ...order }))
         }
       }

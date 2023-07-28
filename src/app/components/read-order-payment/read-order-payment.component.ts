@@ -87,13 +87,13 @@ export class ReadOrderPaymentComponent {
 
   existingRemainingAmount(): boolean {
     let addition = 0
-    this.order.payment.forEach(element => {
-      if (element != undefined) {
+    for (const element of this.order.payment) {
+      if (element !== undefined) {
         if (element.status === 1) {
           addition += element.amount
         }
       }
-    })
+    }
     this.remainingAmount = this.order.totalCost - addition
     if (this.remainingAmount > 0) {
       return true

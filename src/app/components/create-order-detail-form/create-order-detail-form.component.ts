@@ -86,7 +86,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
     })
 
     if (this.orderProcess !== undefined) {
-      if (this.orderProcess[0].action === 'CreateOrderDetail') {
+      if (this.orderProcess[0].action === 'CreateOrderDetail' || this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
         this.onInitFromCreateOrderDetail()
       } else if ((this.orderProcess[0].action === 'EditOrderDetail')) {
         this.onInitFromEditOrderDetail()
@@ -441,7 +441,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
 
   alreadyExists(): boolean {
     if (this.orderProcess[0].action !== 'EditOrderDetail') {
-      if (this.orderProcess[0].action === 'CreateOrderDetail') {
+      if (this.orderProcess[0].action === 'CreateOrderDetail' || this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
         const oneCustomer = this.orderDetailCustomers.find(b => b.document === this.formGroup.value.document)
         const anotherCustomer = this.beneficiaries.find(b => b.document === this.formGroup.value.document)
         if (anotherCustomer === undefined && oneCustomer === undefined) {
@@ -512,7 +512,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
   }
 
   back(event: Event) {
-    if (this.orderProcess[0].action === 'CreateOrderDetail') {
+    if (this.orderProcess[0].action === 'CreateOrderDetail' || this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
       this.backFromCreateOrderDetail(event)
     } else if (this.orderProcess[0].action === 'EditOrderDetail') {
       this.modalPrimeNg.close()
@@ -531,8 +531,9 @@ export class CreateOrderDetailFormComponent implements OnInit {
   }
 
   nextFromCreateOrderDetail() {
+    const action: string = this.orderProcess[0].action
     this.orderProcess = [{
-      action: 'CreateOrderDetail',
+      action: action,
       order: {
         orderId: this.orderProcess[0].order.orderId,
         package: this.orderProcess[0].order.package,
@@ -572,7 +573,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
   }
 
   next() {
-    if (this.orderProcess[0].action === 'CreateOrderDetail') {
+    if (this.orderProcess[0].action === 'CreateOrderDetail' || this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
       this.nextFromCreateOrderDetail()
     } else if (this.orderProcess[0].action === 'EditOrderDetail') {
       this.nextFromEditOrderDetail()

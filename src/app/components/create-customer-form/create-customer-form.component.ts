@@ -208,7 +208,6 @@ export class CreatecustomerformComponent implements OnInit {
       if (this.oneCustomer.action === 'editCustomer') {
         const customer: Customer = this.allCustomers.find(c => c.document == this.formGroup.value.document)
         if (customer !== undefined && customer.document !== this.oneCustomer.customer.document) {
-          console.log('que')
           return true
         }
       } else if (this.oneCustomer.action === 'createFrequentTraveler') {

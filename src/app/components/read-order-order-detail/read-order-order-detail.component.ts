@@ -25,6 +25,8 @@ export class ReadOrderOrderDetailComponent implements OnInit {
   public orderDetailCustomers: Array<any> = []
   public loading: boolean = true
   public visible: boolean = true
+  public role: any
+  public user: any
 
   constructor(
     private store: Store<AppState>,
@@ -35,6 +37,8 @@ export class ReadOrderOrderDetailComponent implements OnInit {
   ngOnInit(): void {
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
+      this.user = JSON.parse(localStorage.getItem('TokenPayload'))
+      this.role = this.user['role']
       this.allRoles = state.allRoles.data
       this.order = state.oneOrder.data
       this.allCustomers = state.allCustomers.data
@@ -85,12 +89,31 @@ export class ReadOrderOrderDetailComponent implements OnInit {
   addOrderDetail() {
     if (this.order.package.availableQuotas >= 1) {
       this.closeModal()
-      const orderProcess = [{
-        action: 'CreateOrderDetail',
-        order: this.order,
-        beneficiaries: {}
-      }]
-      this.store.dispatch(new OpenModalCreateOrderDetail({ ...orderProcess }))
+      if (this.user['role'] === 'Cliente') {
+        // const orderProcess = [{
+        //   action: 'CreateOrderFromCustomer',
+        //   order: {
+        //     customer: this.order.customer,
+        //     package: this.order.package,
+        //   },
+        //   beneficiaries: {}
+        // }]
+        const orderProcess = [{
+          action: 'CreateOrderDetailFromCustomer',
+          order: this.order,
+          beneficiaries: {}
+        }]
+        this.closeModal()
+        this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess))
+      } else {
+        const orderProcess = [{
+          action: 'CreateOrderDetail',
+          order: this.order,
+          beneficiaries: {}
+        }]
+        this.closeModal()
+        this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess))
+      }
     }
   }
 

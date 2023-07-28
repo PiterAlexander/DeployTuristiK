@@ -13,12 +13,12 @@
         </p-dropdown>
         <small class="p-error block"
             *ngIf="formGroup.get('status')?.dirty && formGroup.get('status')?.errors?.['required']">
-            Este campo es obligatorio.
+            Este campo es obligatorio
         </small>
     </div>
     <div class="flex justify-content-end">
         <div class="flex align-items-end">
-            <button pButton pRipple type="button" (click)="back()" label="Regresar" icon="pi pi-undo"
+            <button pButton pRipple type="button" (click)="back()" label="Regresar" icon="pi pi-angle-left"
                 class="p-button-outlined mr-3"></button>
             <p-button *ngIf="validForm()" (click)="confirmation()" label="Guardar" icon="pi pi-check"></p-button>
             <p-button *ngIf="!validForm()" label="Guardar" icon="pi pi-check" disabled="true"></p-button>

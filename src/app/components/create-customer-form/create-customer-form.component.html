@@ -39,6 +39,58 @@
     <div class="grid">
         <div class="col">
             <div class="field">
+                <p-dropdown [options]="allEps" placeholder="Seleccione su EPS" required="true" formControlName="eps"
+                    [showClear]="true" [style]="{ width: '100%', 'max-width': '24rem' }"></p-dropdown>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('eps')?.dirty && formGroup.get('eps')?.errors?.['required']">
+                    Este campo es obligatorio
+                </small>
+            </div>
+        </div>
+        <div class="col">
+            <div class="field">
+                <span class="p-input-icon-left w-full">
+                    <i class="pi pi-phone"></i>
+                    <input pInputText placeholder="Ingrese su número de teléfono" type="text"
+                        formControlName="phoneNumber" required="true" minlength="10" maxlength="10" class="w-full"
+                        [ngClass]="{
+                            'border-red-600': !validateOnlyNumbersForPhoneNumber()
+                        }" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
+                </span>
+                <!-- validaciones de número -->
+                <small class="p-error block"
+                    *ngIf="formGroup.get('phoneNumber')?.errors?.['required'] && formGroup.get('phoneNumber')?.dirty">
+                    Este campo es obligatorio
+                </small>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber')?.dirty">
+                    Este campo debe contener 10 números
+                </small>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('phoneNumber')?.dirty && !validateOnlyNumbersForPhoneNumber()">
+                    Por favor ingrese solo números
+                </small>
+            </div>
+        </div>
+    </div>
+    <div class="grid">
+        <div class="col-12">
+            <div class="field">
+                <div class="p-input-icon-left w-full">
+                    <i class="pi pi-map-marker"></i>
+                    <input pInputText placeholder="Ingrese su dirección residencial" type="text"
+                        formControlName="address" required="true" class="w-full">
+                </div>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('address')?.errors?.['required'] && formGroup.get('address')?.dirty">
+                    Este campo es obligatorio
+                </small>
+            </div>
+        </div>
+    </div>
+    <div class="grid">
+        <div class="col">
+            <div class="field">
                 <p-calendar dateFormat="dd/mm/yy" formControlName="birthDate"
                     placeholder="Ingrese su fecha de nacimiento" showIcon="true" required="true"
                     [style]="{ width: '100%' }" [readonlyInput]="true" [maxDate]="customerMaxDate"></p-calendar>
@@ -87,58 +139,6 @@
                     !Cliente encontrado!
                 </small>
                 <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && !validateOnlyNumbers()">
-                    Por favor ingrese solo números
-                </small>
-            </div>
-        </div>
-    </div>
-    <div class="grid">
-        <div class="col-12">
-            <div class="field">
-                <div class="p-input-icon-left w-full">
-                    <i class="pi pi-map-marker"></i>
-                    <input pInputText placeholder="Ingrese su dirección residencial" type="text"
-                        formControlName="address" required="true" class="w-full">
-                </div>
-                <small class="p-error block"
-                    *ngIf="formGroup.get('address')?.errors?.['required'] && formGroup.get('address')?.dirty">
-                    Este campo es obligatorio
-                </small>
-            </div>
-        </div>
-    </div>
-    <div class="grid">
-        <div class="col">
-            <div class="field">
-                <p-dropdown [options]="allEps" placeholder="Seleccione su EPS" required="true" formControlName="eps"
-                    [showClear]="true" [style]="{ width: '100%', 'max-width': '20.7rem' }"></p-dropdown>
-                <small class="p-error block"
-                    *ngIf="formGroup.get('eps')?.dirty && formGroup.get('eps')?.errors?.['required']">
-                    Este campo es obligatorio
-                </small>
-            </div>
-        </div>
-        <div class="col">
-            <div class="field">
-                <span class="p-input-icon-left w-full">
-                    <i class="pi pi-phone"></i>
-                    <input pInputText placeholder="Ingrese su número de teléfono" type="text"
-                        formControlName="phoneNumber" required="true" minlength="10" maxlength="10" class="w-full"
-                        [ngClass]="{
-                            'border-red-600': !validateOnlyNumbersForPhoneNumber()
-                        }" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
-                </span>
-                <!-- validaciones de número -->
-                <small class="p-error block"
-                    *ngIf="formGroup.get('phoneNumber')?.errors?.['required'] && formGroup.get('phoneNumber')?.dirty">
-                    Este campo es obligatorio
-                </small>
-                <small class="p-error block"
-                    *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber')?.dirty">
-                    Este campo debe contener 10 números
-                </small>
-                <small class="p-error block"
-                    *ngIf="formGroup.get('phoneNumber')?.dirty && !validateOnlyNumbersForPhoneNumber()">
                     Por favor ingrese solo números
                 </small>
             </div>

@@ -78,55 +78,37 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="rowexpansion" let-beneficiarie>
-                <div class="mx-6 p-3">
-                    <div class="grid py-2 px-3 bg-indigo-50 border-round">
-                        <div class="col-2">
-                            <div>
-                                <span class="text-900 font-bold mb-1">EPS:</span>
-                            </div>
-                            <div>
-                                <span class="text-900 font-bold mb-1">Teléfono:</span>
-                            </div>
-                            <div>
-                                <span class="text-900 font-bold">Dirección:</span>
-                            </div>
-                        </div>
-                        <div class="col-10">
-                            <div>
-                                <span class="text-900 mb-1">{{ beneficiarie.eps }}</span>
-                            </div>
-                            <div>
-                                <span class="text-900 mb-1">{{ beneficiarie.phoneNumber }}</span>
-                            </div>
-                            <div>
-                                <span class="text-900 mb-1">{{ beneficiarie.address }}</span>
-                            </div>
-                        </div>
+                <tr>
+                    <td colspan="7">
+                        <div class="mx-6 p-1">
+                            <div class="grid py-2 px-3 bg-indigo-50 border-round">
+                                <div class="col-2">
+                                    <div>
+                                        <span class="text-900 font-bold mb-1">EPS:</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-900 font-bold mb-1">Teléfono:</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-900 font-bold">Dirección:</span>
+                                    </div>
+                                </div>
+                                <div class="col-10">
+                                    <div>
+                                        <span class="text-900 mb-1">{{ beneficiarie.eps }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-900 mb-1">{{ beneficiarie.phoneNumber }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-900 mb-1">{{ beneficiarie.address }}</span>
+                                    </div>
+                                </div>
 
-                    </div>
-                    <!-- <p-table [value]="oneBeneficiarie">
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th style="min-width: 33rem">Dirección residencial</th>
-                                <th style="min-width: 7rem">Teléfono</th>
-                                <th style="min-width: 13rem">EPS</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body">
-                            <tr>
-                                <td style="min-width: 33rem">
-                                    {{ beneficiarie.address }}
-                                </td>
-                                <td style="min-width: 7rem">
-                                    {{ beneficiarie.phoneNumber }}
-                                </td>
-                                <td style="min-width: 13rem">
-                                    {{ beneficiarie.eps }}
-                                </td>
-                            </tr>
-                        </ng-template>
-                    </p-table> -->
-                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>

@@ -46,7 +46,11 @@ body {
 }
 
 button .p-button-rounded {
-  scale: 0.9;
+  transform: scale(0.8);
+}
+
+.p-datepicker {
+  transform: scale(0.7);
 }
 
 h1,

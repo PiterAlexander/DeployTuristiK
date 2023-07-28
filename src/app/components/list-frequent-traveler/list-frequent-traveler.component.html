@@ -72,32 +72,36 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="rowexpansion" let-frequentTraveler>
-                <div class="mx-6 p-3">
-                    <div class="grid py-2 px-3 bg-indigo-50 border-round">
-                        <div class="col-2">
-                            <div>
-                                <span class="text-900 font-bold mb-1">EPS:</span>
-                            </div>
-                            <div>
-                                <span class="text-900 font-bold mb-1">Teléfono:</span>
-                            </div>
-                            <div>
-                                <span class="text-900 font-bold">Dirección:</span>
+                <tr>
+                    <td colspan="7">
+                        <div class="mx-6 p-1">
+                            <div class="grid py-2 px-3 bg-indigo-50 border-round">
+                                <div class="col-2">
+                                    <div>
+                                        <span class="text-900 font-bold mb-1">EPS:</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-900 font-bold mb-1">Teléfono:</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-900 font-bold">Dirección:</span>
+                                    </div>
+                                </div>
+                                <div class="col-10">
+                                    <div>
+                                        <span class="text-900 mb-1">{{ frequentTraveler.eps }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-900 mb-1">{{ frequentTraveler.phoneNumber }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-900 mb-1">{{ frequentTraveler.address }}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-10">
-                            <div>
-                                <span class="text-900 mb-1">{{ frequentTraveler.eps }}</span>
-                            </div>
-                            <div>
-                                <span class="text-900 mb-1">{{ frequentTraveler.phoneNumber }}</span>
-                            </div>
-                            <div>
-                                <span class="text-900 mb-1">{{ frequentTraveler.address }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    </td>
+                </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>
