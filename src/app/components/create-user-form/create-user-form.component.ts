@@ -1,3 +1,5 @@
+import { Customer } from '@/models/customer';
+import { Employee } from '@/models/employee';
 import { Role } from '@/models/role';
 import { User } from '@/models/user';
 import { AppState } from '@/store/state';
@@ -20,16 +22,18 @@ export class CreateUserFormComponent implements OnInit {
   public ui: Observable<UiState>
   public rolesList: Array<Role>
   public allRoles: Array<Role>
-
   public allUsers: Array<User>
+  public allEmployees: Array<Employee>
+  public allCustomers: Array<Customer>
   public model: User
   public userData: User
   public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS', 'OTRA']
   public admin: number = null
   public otraEps: boolean = false
   Visible: boolean = false;
-  roles: any[] = [];
   public statuses: any[] = [];
+  public customerMaxDate: Date
+
 
   constructor(
     private fb: FormBuilder,
@@ -43,19 +47,14 @@ export class CreateUserFormComponent implements OnInit {
       this.allUsers = state.allUsers.data
       this.userData = state.currentUser.data
       this.allRoles = state.allRoles.data
+      this.allCustomers = state.allCustomers.data
+      this.allEmployees = state.allEmployees.data
       this.rolesList = this.allRoles.filter(role => role.name !== "Beneficiario")
       if (this.userData) {
         this.rolesList = this.allRoles
       }
-      console.log(this.userData);
 
     })
-    this.roles = [
-      { label: 'Administrador', value: '1' },
-      { label: 'Cliente', value: '2' },
-      { label: 'Empleado', value: '3' },
-      { label: 'Beneficiario', value: '4' },
-    ];
 
     this.statuses = [
       { 'label': 'Activo', 'value': 1 },
@@ -74,7 +73,7 @@ export class CreateUserFormComponent implements OnInit {
         [Validators.required,
         Validators.minLength(8)]
       ],
-      status: [null, Validators.required],
+      status: [1, Validators.required],
       name: [null, Validators.required],
       lastName: [null, Validators.required],
       document: [null, Validators.required],
@@ -103,6 +102,8 @@ export class CreateUserFormComponent implements OnInit {
         otherEps: " "
       })
     }
+
+    this.birthDateValidator()
   }
 
   saveChanges() {
@@ -158,31 +159,22 @@ export class CreateUserFormComponent implements OnInit {
   }
 
   validForm(): boolean {
-    if (this.userData == null) {
+    if (this.userData == undefined) {
       if (this.admin == 1) {
-        return this.formGroup.valid
-          && !this.allUsers.find(u => u.email === this.formGroup.value.email || u.email === this.formGroup.value.email)
-          && this.rolesList.find(r => r.roleId === this.formGroup.value.role) != null
-      } else if (this.otraEps) {
-        return this.formGroup.valid && this.formGroup.value.birthDate != null
-          && this.formGroup.value.address != null
-          && this.formGroup.value.eps != null
-          && this.formGroup.value.otherEps != null
-          && !this.allUsers.find(u => u.email === this.formGroup.value.email || u.email === this.formGroup.value.email)
-          && this.rolesList.find(r => r.roleId === this.formGroup.value.role) != null
+        return this.formGroup.valid && !this.validateExistingEmail() &&
+          this.validateOnlyNumbersForPhoneNumber() && this.validateOnlyNumbers()
+          && !this.validateExistingDocument()
       } else {
-        return this.formGroup.valid && this.formGroup.value.birthDate != null
-          && this.formGroup.value.address != null
-          && this.formGroup.value.eps != null
-          && !this.allUsers.find(u => u.email === this.formGroup.value.email || u.email === this.formGroup.value.email)
-          && this.rolesList.find(r => r.roleId === this.formGroup.value.role) != null
+        return this.formGroup.valid && this.formGroup.value.birthDate !== null
+          && this.formGroup.value.address !== null
+          && this.formGroup.value.eps !== null &&
+          !this.validateExistingEmail() && !this.validateExistingDocument() &&
+          this.validateOnlyNumbersForPhoneNumber() && this.validateOnlyNumbers()
       }
-
     } else {
-      return this.formGroup.valid
-        && this.formGroup.value.status != "0"
-        && !this.allUsers.find(u => u.email === this.formGroup.value.email && u.userId != this.formGroup.value.userId)
-        && !this.allUsers.find(u => u.email === this.formGroup.value.email && u.userId != this.formGroup.value.userId)
+      return this.formGroup.valid && this.formGroup.value.status != "0" &&
+        this.validateOnlyNumbersForPhoneNumber() && this.validateOnlyNumbers()
+        && !this.validateExistingEmail() && !this.validateExistingDocument()
     }
   }
 
@@ -193,11 +185,11 @@ export class CreateUserFormComponent implements OnInit {
 
   addForm() {
     var role = this.rolesList.find(r => r.roleId == this.formGroup.value.role)
-    if (role?.name != "Cliente") {
+    if (role?.name != "Cliente" && this.formGroup.value.role) {
       this.admin = 1
-    } else (
+    } else if (this.formGroup.value.role) {
       this.admin = 2
-    )
+    }
     if (this.formGroup.value.eps == 'OTRA') {
       this.otraEps = true
     } else {
@@ -214,6 +206,78 @@ export class CreateUserFormComponent implements OnInit {
   }
   displayPassword() {
     this.Visible = !this.Visible;
+  }
+
+  validateExistingDocument(): boolean {
+    if (this.admin == 1) {
+      if (this.userData !== undefined) {
+        const employee: Employee = this.allEmployees.find(e => e.document === this.formGroup.value.document)
+        if (employee !== undefined && employee.document !== this.userData.employee.document) {
+          return true
+        }
+      } else {
+        const employee: Employee = this.allEmployees.find(e => e.document === this.formGroup.value.document)
+        if (employee !== undefined) {
+          return true
+        }
+      }
+    } else {
+      if (this.userData !== undefined) {
+        const customer: Customer = this.allCustomers.find(e => e.document === this.formGroup.value.document)
+        if (customer !== undefined && customer.document !== this.userData.customer.document) {
+          return true
+        }
+      } else {
+        const customer: Customer = this.allCustomers.find(e => e.document === this.formGroup.value.document)
+        if (customer !== undefined) {
+          return true
+        }
+      }
+    }
+
+    return false
+  }
+
+  validateExistingEmail(): boolean {
+    if (this.userData !== undefined) {
+      const user: User = this.allUsers.find(u => u.email === this.formGroup.value.email)
+      if (user !== undefined && user.email !== this.userData.email) {
+        return true
+      }
+    } else {
+      const user: User = this.allUsers.find(u => u.email === this.formGroup.value.email)
+      if (user !== undefined) {
+        return true
+      }
+    }
+    return false
+  }
+
+  validateOnlyNumbersForPhoneNumber(): boolean {
+    if (this.formGroup.value.phoneNumber !== null) {
+      if (this.formGroup.value.phoneNumber.length >= 10) {
+        const regularExpresion = /^[0-9]+$/
+        return regularExpresion.test(this.formGroup.value.phoneNumber)
+      }
+    }
+    return true
+  }
+
+  validateOnlyNumbers(): boolean {
+    if (this.formGroup.value.document !== null) {
+      if (this.formGroup.value.document.length >= 8) {
+        const regularExpresion = /^[0-9]+$/
+        return regularExpresion.test(this.formGroup.value.document)
+      }
+    }
+    return true
+  }
+
+  birthDateValidator() {
+    const currentDate = new Date();
+
+    this.customerMaxDate = new Date(currentDate);
+    this.customerMaxDate.setFullYear(currentDate.getFullYear() - 18);
   }
 
 }
