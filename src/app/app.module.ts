@@ -53,9 +53,7 @@ import { EditPaymentFormComponent } from './components/edit-payment-form/edit-pa
 import { MainPublicComponent } from '@modules/main copy/main.component';
 import { PackagePublicComponent } from '@modules/packages/package-public.component';
 
-
 //<-----------PRIMENG--------------->
-import { DataViewModule } from 'primeng/dataview';
 import { CommonModule } from '@angular/common';
 import { ToolbarModule } from 'primeng/toolbar';
 import { FileUploadModule } from 'primeng/fileupload';
@@ -93,7 +91,11 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
 import { SidebarModule } from 'primeng/sidebar';
-
+import { DataViewModule } from 'primeng/dataview';
+import { PublicHomeComponent } from './pages/public-home/public-home.component';
+import { AboutUsComponent } from './pages/about-us/about-us.component';
+import { ContactUsComponent } from './pages/contact-us/contact-us.component';
+import {GalleriaModule} from 'primeng/galleria';
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
 
@@ -137,9 +139,13 @@ registerLocaleData(localeEn, 'en-EN');
     ReadOrderPaymentComponent,
     ListFrequentTravelerComponent,
     EditPaymentFormComponent,
-    CalendarComponent
+    CalendarComponent,
+    PublicHomeComponent,
+    AboutUsComponent,
+    ContactUsComponent,
   ],
   imports: [
+    GalleriaModule,
     CarouselModule,
     AutoCompleteModule,
     TabViewModule,
@@ -195,10 +201,9 @@ registerLocaleData(localeEn, 'en-EN');
     ConfirmPopupModule,
     BadgeModule,
     ChartModule,
-    DataViewModule,
     OverlayPanelModule,
     SidebarModule,
-
+    DataViewModule,
 
     //<------------------------->
     ToastrModule.forRoot({

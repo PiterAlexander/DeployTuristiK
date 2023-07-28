@@ -72,40 +72,26 @@
                 </a>
             </li>
         </ul>
-        <div class="flex flex-column my-5">
-            <div class="grid flex justify-content-end ">
-                <button
-                    type="button"
-                    label="Editar Perfil"
-                    class="p-element p-ripple p-button-outlined p-button-warning mr-2 mb-2 p-button p-component col-12 lg:col-7"
-                    ng-reflect-label="Editar"
-                    (click)="
-                        user.role == 'Cliente'
-                            ? editCustomer(allInfo)
-                            : editEmployee(allInfo)
-                    "
-                >
-                    <span class="p-button-label text-lg">
-                        <i class="pi pi-pencil text-warning mr-3"></i>
-                        Editar Perfil</span
-                    ><span class="p-ink"></span>
-                </button>
-            </div>
-            <div class="grid flex justify-content-end my-2">
-                <button
-                    type="button"
-                    label="Cerrar Sesión"
-                    class="p-element p-ripple p-button-outlined p-button-danger mr-2 mb-2 p-button p-component col-12 lg:col-7"
-                    ng-reflect-label="Danger"
-                    (click)="logoutConfirm($event)"
-                >
-                    <span class="p-button-label text-lg">
-                        <i class="pi pi-sign-out text-danger"></i>
-                        Cerrar Sesión</span
-                    ><span class="p-ink"></span>
-                </button>
-                <p-confirmPopup key="confirm2"></p-confirmPopup>
-            </div>
+        <div class="flex justify-content-end">
+            <button type="button" label="Editar Perfil"
+                class="p-element p-ripple p-button-outlined p-button-prymary mr-2 mb-2 p-button p-component"
+                ng-reflect-label="Editar" (click)="
+                    user.role === 'Cliente'
+                        ? editCustomer(allInfo)
+                        : editEmployee(allInfo)
+                ">
+                <span class="p-button-label text-xl">
+                    <i class="pi pi-pencil text-primary"></i>
+                    Editar Perfil</span><span class="p-ink"></span>
+            </button>
+            <button type="button" label="Salir"
+                class="p-element p-ripple p-button-outlined p-button-danger mr-2 mb-2 p-button p-component"
+                ng-reflect-label="Danger" (click)="logoutConfirm($event)">
+                <span class="p-button-label text-xl">
+                    <i class="pi pi-power-off text-danger"></i>
+                    Salir</span><span class="p-ink"></span>
+            </button>
+            <p-confirmPopup key="confirm2"></p-confirmPopup>
         </div>
     </div>
 </p-sidebar>

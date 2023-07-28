@@ -1,0 +1,29 @@
+.bg-circle {
+  width: 1000px !important;
+  height: 1000px !important;
+  border-radius: 50% !important;
+  background-image: linear-gradient(140deg,var(--primary-color),var(--surface-ground) 80%) !important;
+  position: absolute !important;
+  opacity: 0.25 !important;
+  z-index: -1 !important;
+}
+
+.visibility-hidden {
+  visibility: hidden !important;
+}
+
+.moveinright {
+  animation: moveinright .15s linear !important;
+}
+
+@keyframes moveinright {
+  0% {
+    opacity: 0 !important;
+    transform: translateX(50px) !important;
+    transition: transform .12s cubic-bezier(0, 0, 0.2, 1), opacity .12s cubic-bezier(0, 0, 0.2, 1) !important;
+  }
+  100% {
+    opacity: 1 !important;
+    transform: translateX(0%) !important;
+  }
+}

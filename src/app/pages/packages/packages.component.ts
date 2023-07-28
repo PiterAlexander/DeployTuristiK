@@ -47,10 +47,13 @@ export class PackagesComponent implements OnInit {
     this.ui.subscribe((state: UiState) => {
       this.allCustomers = state.allCustomers.data
       this.packagesList = state.allPackages.data
-      this.arrayPackagesClient = state.allPackages.data.filter(element => element.availableQuotas > 0);
+      this.arrayPackagesClient = state.allPackages.data;
       this.loading = state.allPackages.loading
       this.user = JSON.parse(localStorage.getItem('TokenPayload'))
       this.role = this.user['role']
+      console.log("cliente"+this.arrayPackagesClient);
+      console.log(this.packagesList);
+
     });
 
     this.sortOptions = [
@@ -64,7 +67,13 @@ export class PackagesComponent implements OnInit {
   }
 
   verDetalles(elementoId: string) {
+
+    if (this.user !== null ) {
+      this.router.navigate(['detailsPackage/' + elementoId]);
+        console.log("hello bro", this.router.config)
+    }
     this.router.navigate(['detailsPackage/' + elementoId]);
+    console.log("hello nigga", this.router.config)
   }
 
   quotas(cant: number) {
@@ -81,10 +90,6 @@ export class PackagesComponent implements OnInit {
 
   openEditPackageModal(pack: Package) {
     this.store.dispatch(new OpenModalCreatePackage({ ...pack }));
-  }
-
-  modalShowDetailsPackage(pack: Package) {
-    this.store.dispatch(new OpenModalDetailsPackage({ ...pack }));
   }
 
   disablePackage(pack: Package) {
