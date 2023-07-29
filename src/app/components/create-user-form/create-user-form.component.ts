@@ -33,6 +33,7 @@ export class CreateUserFormComponent implements OnInit {
   Visible: boolean = false;
   public statuses: any[] = [];
   public customerMaxDate: Date
+  public isCustomer: boolean = false
 
 
   constructor(
@@ -49,11 +50,18 @@ export class CreateUserFormComponent implements OnInit {
       this.allRoles = state.allRoles.data
       this.allCustomers = state.allCustomers.data
       this.allEmployees = state.allEmployees.data
-      this.rolesList = this.allRoles.filter(role => role.name !== "Beneficiario")
-      if (this.userData) {
-        this.rolesList = this.allRoles
-      }
 
+
+
+      this.rolesList = this.allRoles.filter(role => role.name !== "Beneficiario")
+      if (this.userData != null) {
+        var role = this.rolesList.find(r => r.name == 'Cliente')
+        if (this.userData.roleId == role.roleId) {
+          this.rolesList = this.rolesList.filter(r => r.name === 'Cliente')
+        } else {
+          this.rolesList = this.rolesList.filter(r => r.name !== 'Cliente')
+        }
+      }
     })
 
     this.statuses = [
@@ -85,7 +93,6 @@ export class CreateUserFormComponent implements OnInit {
     })
 
     if (this.userData != null) {
-
       this.formGroup.setValue({
         userId: this.userData.userId,
         role: this.userData.roleId,
@@ -185,9 +192,9 @@ export class CreateUserFormComponent implements OnInit {
 
   addForm() {
     var role = this.rolesList.find(r => r.roleId == this.formGroup.value.role)
-    if (role?.name != "Cliente" && this.formGroup.value.role) {
+    if (role?.name != "Cliente") {
       this.admin = 1
-    } else if (this.formGroup.value.role) {
+    } else {
       this.admin = 2
     }
     if (this.formGroup.value.eps == 'OTRA') {

@@ -31,7 +31,6 @@ export class UserComponent implements OnInit {
 
     ngOnInit(): void {
         this.user = this.appService.user;
-        console.log(typeof (this.user));
         this.store.dispatch(new GetAllCustomerRequest());
         this.store.dispatch(new GetAllEmployeeRequest());
         this.ui = this.store.select('ui');
@@ -53,16 +52,15 @@ export class UserComponent implements OnInit {
 
     info() {
         this.appService.getProfile();
-        console.log("infoo: ", this.user)
 
         setTimeout(() => {
             if (this.user.role === 'Cliente') {
                 this.allInfo = this.customersList.find(c => c.user.userId == this.user.id)
-                console.log(this.allInfo)
+
 
             } else {
                 this.allInfo = this.employeesList.find(e => e.user.userId == this.user.id)
-                console.log(this.allInfo)
+
             }
             this.loading = false;
 
@@ -77,12 +75,11 @@ export class UserComponent implements OnInit {
             icon: 'pi pi-exclamation-triangle',
             acceptLabel: "Sí",
             rejectLabel: "No",
+            acceptButtonStyleClass: 'p-button-danger p-button-sm',
+            rejectButtonStyleClass: 'p-button-outlined p-button-sm',
             accept: () => {
                 this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Sesión cerrada' });
                 this.appService.logout();
-            },
-            reject: () => {
-                this.messageService.add({ severity: 'info', summary: 'Cancelado', detail: 'Sesión activa' });
             }
         });
     }

@@ -130,21 +130,21 @@
         </p-tabView>
         <div
             class="grid flex justify-content-center mb-5"
-            style="position: fixed; bottom: 0; width: 21%"
+            style="position: fixed; bottom: 0; margin-left: 80px; "
         >
             <button
                 type="button"
                 label="Cerrar Sesión"
-                class="p-element p-ripple p-button-outlined p-button-danger mr-2 mb-2 p-button p-component col-12 lg:col-12"
+                class="p-element p-ripple p-button-outlined p-button-danger mr-2 mb-2 p-button p-component col-12 lg:col-12 w-full"
                 ng-reflect-label="Danger"
                 (click)="logoutConfirm($event)"
             >
                 <span class="p-button-label text-lg">
-                    <i class="pi pi-sign-out text-danger"></i>
+                    <i class="pi pi-sign-out text-danger mr-2"></i>
                     Cerrar Sesión</span
                 ><span class="p-ink"></span>
             </button>
-            <p-confirmPopup key="confirm2"></p-confirmPopup>
+            <p-confirmDialog key="confirm2"></p-confirmDialog>
         </div>
     </div>
 </p-sidebar>
