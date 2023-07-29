@@ -96,6 +96,7 @@ import { PublicHomeComponent } from './pages/public-home/public-home.component';
 import { AboutUsComponent } from './pages/about-us/about-us.component';
 import { ContactUsComponent } from './pages/contact-us/contact-us.component';
 import {GalleriaModule} from 'primeng/galleria';
+import { ChangePasswordComponent } from './modules/change-password/change-password.component';
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
 
@@ -143,6 +144,7 @@ registerLocaleData(localeEn, 'en-EN');
     PublicHomeComponent,
     AboutUsComponent,
     ContactUsComponent,
+    ChangePasswordComponent,
   ],
   imports: [
     GalleriaModule,

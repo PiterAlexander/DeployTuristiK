@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { User } from '@/models/user';
 import { UpdateUserRequest, SaveCurrentUserRequest } from '@/store/ui/actions';
+import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-recover-password',
@@ -31,7 +32,8 @@ export class RecoverPasswordComponent implements OnInit {
         private fb: FormBuilder,
         private store: Store<AppState>,
         private router: Router,
-        private toastr: ToastrService
+        private toastr: ToastrService,
+        private messageService: MessageService
     ) { }
 
     ngOnInit(): void {
@@ -52,7 +54,7 @@ export class RecoverPasswordComponent implements OnInit {
 
     recoverPassword() {
 
-        if (this.formGroup.value.codePassword == this.currentUser.password) {
+        if (this.formGroup.value.codePassword == this.currentUser!.password) {
             this.modelUser = {
                 userId: this.currentUser.userId,
                 email: this.currentUser.email,
@@ -70,8 +72,8 @@ export class RecoverPasswordComponent implements OnInit {
             this.router.navigate(['/login'])
 
         } else {
-            this.toastr.error('Hello world!', 'Toastr fun!');
-            console.log(this.currentUser)
+            this.messageService.add({ key: 'alert-message', severity: 'error', summary: 'Lo sentimos!', detail: 'El código ingresado, no es válido' });
+
         }
     }
 
