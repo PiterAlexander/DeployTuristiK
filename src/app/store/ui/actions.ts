@@ -316,7 +316,7 @@ export class OpenModalCreateOrderDetail implements Action {
 }
 export class CreateOrderDetailRequest implements Action {
   readonly type: string = orderActions.CREATE_ORDERDETAIL_REQUEST;
-  constructor(public payload: OrderDetail) { }
+  constructor(public payload: Payment) { }
 }
 export class CreateOrderDetailSuccess implements Action {
   readonly type: string = orderActions.CREATE_ORDERDETAIL_SUCCESS;
@@ -331,7 +331,7 @@ export class CreateOrderDetailFailure implements Action {
 export class EditOrderDetailRequest implements Action {
   readonly type: string = orderActions.EDIT_ORDERDETAIL_REQUEST;
   readonly string = orderActions.OPEN_MODAL_CREATE_ORDERDETAIL;
-  constructor(public payload: OrderDetail) { }
+  constructor(public payload: Customer) { }
 }
 export class EditOrderDetailSuccess implements Action {
   readonly type: string = orderActions.EDIT_ORDERDETAIL_SUCCESS;

@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { Customer } from '@/models/customer';
 import { Package } from '@/models/package';
+import { ApiService } from '@services/api.service';
 
 @Component({
   selector: 'app-orders',
@@ -22,11 +23,13 @@ export class OrdersComponent implements OnInit {
   public oneCustomer: Customer
   public allOrders: Array<Order>
   public ordersList: Array<Order> = []
+  public allPackages: Array<Package>
   public statuses: any[] = [];
   public loading: boolean = true
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private apiService: ApiService
   ) { }
 
   ngOnInit() {
@@ -41,6 +44,7 @@ export class OrdersComponent implements OnInit {
       this.role = this.user['role']
       this.allCustomers = state.allCustomers.data
       this.allOrders = state.allOrders.data
+      this.allPackages = state.allPackages.data
       this.compareCustomer()
     })
 
@@ -60,10 +64,28 @@ export class OrdersComponent implements OnInit {
           if (this.oneCustomer.customerId === element.customerId) {
             const exists = this.ordersList.find(o => o.orderId === element.orderId)
             if (exists === undefined) {
-              this.ordersList.push(element)
+              const onePackage: Package = this.allPackages.find(p => p.packageId === element.packageId)
+              if (onePackage !== undefined) {
+                console.log(onePackage);
+                const order: Order = {
+                  orderId: element.orderId,
+                  customerId: element.customerId,
+                  packageId: element.packageId,
+                  package: onePackage,
+                  totalCost: element.totalCost,
+                  status: element.status,
+                  payment: element.payment,
+                }
+                const alreadyExists: Order = this.ordersList.find(o => o.orderId === element.orderId)
+                if (alreadyExists === undefined) {
+                  this.ordersList.push(order)
+                }
+              }
             }
           }
         }
+        console.log(this.ordersList);
+        
       } else if (this.user['role'] !== 'Cliente') {
         this.ordersList = this.allOrders
         this.loading = false
@@ -79,16 +101,62 @@ export class OrdersComponent implements OnInit {
     }
   }
 
+  getCustomerName(order: Order): string {
+    const customer: Customer = this.allCustomers.find(c => c.customerId === order.customerId)
+    if (customer !== undefined) {
+      return customer.name
+    }
+  }
+
+  getCustomerLastName(order: Order): string {
+    const customer: Customer = this.allCustomers.find(c => c.customerId === order.customerId)
+    if (customer !== undefined) {
+      return customer.lastName
+    }
+  }
+
+  getCustomerDocument(order: Order): string {
+    const customer: Customer = this.allCustomers.find(c => c.customerId === order.customerId)
+    if (customer !== undefined) {
+      return customer.document
+    }
+  }
+
+  getPackageName(order: Order): string {
+    const onePackage: Package = this.allPackages.find(p => p.packageId === order.packageId)
+    if (onePackage !== undefined) {
+      return onePackage.name
+    }
+  }
+
   create() {
     this.store.dispatch(new OpenModalCreateOrder());
   }
 
-  sendToOrderDetails(order: Order) {
-    this.store.dispatch(new OpenModalOrderDetails({ ...order }))
-  }
-
-  sendToPayments(order: Order) {
-    this.store.dispatch(new OpenModalPayments({ ...order }))
+  async sendToPayments(order: Order) {
+    const orderPromise = await new Promise((resolve, reject) => {
+      this.apiService.getOrderById(order.orderId).subscribe({
+        next: (data) => {
+          resolve(data)
+        },
+        error: (err) => {
+          reject(err)
+        }
+      })
+    })
+    if (orderPromise) {
+      const oneOrder: any = {
+        orderId: orderPromise['orderId'],
+        customerId: orderPromise['customerId'],
+        customer: orderPromise['customer'],
+        packageId: orderPromise['packageId'],
+        package: orderPromise['package'],
+        totalCost: orderPromise['totalCost'],
+        status: orderPromise['status'],
+        payment: orderPromise['payment']
+      }
+      this.store.dispatch(new OpenModalPayments({ ...oneOrder }))
+    }
   }
 
   //CUSTOMER
