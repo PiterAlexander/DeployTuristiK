@@ -55,7 +55,6 @@ export class UsersComponent {
   }
 
   openUpdateUserModal(user: User) {
-    console.log(user)
     this.store.dispatch(new OpenModalUser(user))
   }
 

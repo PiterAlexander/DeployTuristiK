@@ -72,7 +72,7 @@ export class RecoverPasswordComponent implements OnInit {
             this.router.navigate(['/login'])
 
         } else {
-            this.messageService.add({ key: 'alert-message', severity: 'error', summary: 'Lo sentimos!', detail: 'El código ingresado, no es válido' });
+            this.messageService.add({ key: 'alert-message-recover-password', severity: 'error', summary: 'Lo sentimos!', detail: 'El código ingresado, no es válido' });
 
         }
     }
