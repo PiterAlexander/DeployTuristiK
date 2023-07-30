@@ -191,13 +191,33 @@ export class CreateOrderFormComponent implements OnInit {
     return true
   }
 
+  adjustPriceAccordingToAge(date: Date): number {
+    const currenDate = new Date();
+    const birthdate = new Date(date);
+    const milisecondsAge = currenDate.getTime() - birthdate.getTime();
+    const yearAge = milisecondsAge / (1000 * 60 * 60 * 24 * 365.25);
+
+    if (yearAge < 5) {
+      return this.onePackage.aditionalPrice
+    } else if (yearAge >= 5 && yearAge < 10) {
+      return this.onePackage.price * 0.70
+    } else {
+      return this.onePackage.price
+    }
+  }
+
   //<------------------->
 
   next() {
     if (!this.formGroup.invalid) {
       if (this.orderProcess !== undefined) {
+        let wasChanged: boolean = false
+        if (this.formGroup.value.packageId !== this.orderProcess[0].order.package.packageId) {
+          wasChanged = true
+        }
         const oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
-        const beneficiaries: Array<any> = []
+        const beneficiariesPriceConverted: Array<any> = []
+        let beneficiaries: Array<any> = []
         for (const element of this.orderProcess[0].beneficiaries) {
           if (element !== undefined) {
             const exists = beneficiaries.find(b => b.document === element.document)
@@ -212,9 +232,9 @@ export class CreateOrderFormComponent implements OnInit {
             if (exists === undefined) {
               const currenTitular = beneficiaries.find(b => b.customerId === this.orderProcess[0].order.customer.customerId)
               const index = beneficiaries.indexOf(currenTitular)
+              beneficiaries.splice(index, 1)
               if (index !== undefined) {
-                beneficiaries.splice(index, 1)
-                beneficiaries.push({
+                const titular: any = {
                   customerId: oneCustomer.customerId,
                   name: oneCustomer.name,
                   lastName: oneCustomer.lastName,
@@ -224,11 +244,51 @@ export class CreateOrderFormComponent implements OnInit {
                   address: oneCustomer.address,
                   eps: oneCustomer.eps,
                   user: oneCustomer.user,
-                  price: this.onePackage.price,
+                  price: this.adjustPriceAccordingToAge(oneCustomer.birthDate),
                   addToFt: false
-                })
+                }
+                if (wasChanged) {
+                  beneficiariesPriceConverted.push(titular)
+                } else {
+                  beneficiaries.push(titular)
+                }
               }
             }
+          }
+          if (wasChanged) {
+            for (const element of beneficiaries) {
+              if (element.customerId !== undefined) {
+                const oneBeneficiarie: any = {
+                  customerId: element.customerId,
+                  name: element.name,
+                  lastName: element.lastName,
+                  document: element.document,
+                  birthDate: element.birthDate,
+                  phoneNumber: element.phoneNumber,
+                  address: element.address,
+                  eps: element.eps,
+                  user: element.user,
+                  price: this.adjustPriceAccordingToAge(element.birthDate),
+                  addToFt: element.addToFt
+                }
+                beneficiariesPriceConverted.push(oneBeneficiarie)
+              } else {
+                const oneBeneficiarie: any = {
+                  name: element.name,
+                  lastName: element.lastName,
+                  document: element.document,
+                  birthDate: element.birthDate,
+                  phoneNumber: element.phoneNumber,
+                  address: element.address,
+                  eps: element.eps,
+                  user: element.user,
+                  price: this.adjustPriceAccordingToAge(element.birthDate),
+                  addToFt: element.addToFt
+                }
+                beneficiariesPriceConverted.push(oneBeneficiarie)
+              }
+            }
+            beneficiaries = beneficiariesPriceConverted
           }
         }
         const orderProcess = ([{

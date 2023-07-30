@@ -55,6 +55,10 @@ export class ApiService {
         return this.http.get<Order[]>(`${this.endpoint}api/Order`)
     }
 
+    getOrderById(orderId: string): Observable<Order> {
+        return this.http.get<Order>(`${this.endpoint}api/Order/${orderId}`);
+    }
+
     addOrder(modelo: Order): Observable<Order> {
         return this.http.post<Order>(`${this.endpoint}api/Order`, modelo)
     }

@@ -1,13 +1,12 @@
 <p-confirmDialog icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <form novalidate [formGroup]="formGroup">
     <div>
-        <h2 class="mx-0 mt-0 mb-4 text-blue-500">Editar abono</h2>
+        <h2 class="mx-0 mt-0 mb-4 text-indigo-500">Editar abono</h2>
     </div>
     <div class="mb-5">
     </div>
     <p-divider></p-divider>
     <div class="field mb-7">
-        <label for="amount" class="block">Estado</label>
         <p-dropdown [options]="statuses" showClear="true" placeholder="Seleccione el estado" formControlName="status"
             [style]="{ width: '100%' }">
         </p-dropdown>
