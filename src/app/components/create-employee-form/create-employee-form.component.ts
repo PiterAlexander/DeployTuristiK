@@ -9,6 +9,7 @@ import { Observable } from 'rxjs'
 import { Role } from '../../models/role'
 import { DynamicDialogRef } from 'primeng/dynamicdialog'
 import { CreateEmployeeRequest, EditEmployeeRequest } from '@/store/ui/actions'
+import { AppService } from '@services/app.service'
 
 @Component({
     selector: 'app-create-employee-form',
@@ -22,12 +23,13 @@ export class CreateEmployeeFormComponent implements OnInit {
     public allRoles: Array<Role>
     public allEmployees: Array<Employee>
     public oneEmployee: Employee
-    public ActionTitle: string = 'Registrar'
+    public ActionTitle: string = 'Registrar empleado'
     public Visible: boolean = false
     public password: String = ''
     public allUsers: Array<User>
 
     constructor(
+        private appService: AppService,
         private fb: FormBuilder,
         private store: Store<AppState>,
         private modalPrimeNg: DynamicDialogRef,
@@ -75,7 +77,12 @@ export class CreateEmployeeFormComponent implements OnInit {
         })
 
         if (this.oneEmployee !== undefined) {
-            this.ActionTitle = 'Editar'
+            if (this.oneEmployee.user.userId == this.appService.user.id) {
+                this.ActionTitle = 'Editar información';
+            } else {
+                this.ActionTitle = 'Editar empleado'
+            }
+
             this.formGroup.setValue({
                 email: this.oneEmployee.user.email,
                 password: this.oneEmployee.user.password,

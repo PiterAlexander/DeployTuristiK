@@ -15,6 +15,7 @@ import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { GetUsersRequest, RecoverPasswordRequest, SaveCurrentUserRequest, UpdateUserRequest } from '@/store/ui/actions';
 import { recoverPasswordEmail } from '@/models/recoverPasswordEmail';
+import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-forgot-password',
@@ -32,7 +33,9 @@ export class ForgotPasswordComponent implements OnInit {
         private fb: FormBuilder,
         private store: Store<AppState>,
         private router: Router,
-        private toastr: ToastrService
+        private toastr: ToastrService,
+        private messageService: MessageService
+
     ) { }
 
     ngOnInit(): void {
@@ -86,12 +89,14 @@ export class ForgotPasswordComponent implements OnInit {
             this.store.dispatch(new RecoverPasswordRequest({
                 ...this.modelEmail,
             }))
+            this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'bien', detail: 'Corrreo enviado' });
 
             this.router.navigate(['/recover-password'])
-            this.toastr.success("Correo Enviado");
+            // this.toastr.success("Correo Enviado");
 
         } else {
-            this.toastr.error('Intenta con otro!', 'Correo no Registrado!');
+            this.messageService.add({ key: 'alert-message', severity: 'error', summary: 'Lo sentimos!', detail: 'Corrreo no registrado' });
+
         }
     }
 
