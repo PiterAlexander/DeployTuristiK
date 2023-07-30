@@ -1,3 +1,5 @@
+<p-toast key="alert-message-register"></p-toast>
+
 <div class="d-flex justify-content-center align-items-center">
     <div class="card border-0 shadow-lg my-1 w-75">
         <div class="card-body p-1">
@@ -49,7 +51,7 @@
                                         type="text"
                                         formControlName="lastName"
                                         required="true"
-                                        minlength="5"
+                                        minlength="3"
                                         maxlength="15"
                                         onkeydown="return /[a-z A-Z]/i.test(event.key)"
                                         [style]="{width: '15rem'}"
@@ -64,45 +66,45 @@
                                         class="p-error block"
                                         *ngIf="formGroup.get('lastName').dirty && formGroup.get('lastName')?.errors?.['minlength']"
                                     >
-                                        Este campo debe tener mínimo 5 letras
+                                        Este campo debe tener mínimo 3 letras
                                     </small>
                                 </div>
-
                                 <div class="field col-12 md:col-4">
-                                    <span class="p-input-icon-left">
-                                        <i class="pi pi-id-card"></i>
+                                    <div class="p-inputgroup">
                                         <input
                                             pInputText
-                                            placeholder="Ingrese el número de documento"
-                                            class="w-full"
+                                            placeholder="Ingrese su número de documento"
                                             type="text"
                                             formControlName="document"
                                             required="true"
                                             minlength="8"
                                             maxlength="15"
-                                            pattern="[0-9]"
+                                            class="w-full"
+                                            onkeydown="return /^\d|Backspace|Delete$/.test(event.key)"
                                         />
-                                    </span>
-                                    <small
-                                        class="p-error block"
-                                        *ngIf="formGroup.get('document').dirty && formGroup.get('document')?.errors?.['required']"
-                                    >
-                                        Este campo es obligatorio.
-                                    </small>
-                                    <small
-                                        class="p-error block"
-                                        *ngIf="formGroup.get('document').dirty && formGroup.get('document')?.errors?.['minlength']"
-                                    >
-                                        Este campo debe tener mínimo 8 números.
-                                    </small>
+                                    </div>
+                                    <!-- validacion de documento -->
                                     <small
                                         class="p-error block"
                                         *ngIf="
-                                            formGroup.get('document').dirty &&
+                                            formGroup.get('document')?.dirty &&
                                             validateExistingDocument()
                                         "
                                     >
-                                        Este documento está registrado
+                                        El documento ya existe
+                                    </small>
+                                    <small
+                                        class="p-error block"
+                                        *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['required']"
+                                    >
+                                        Este campo es obligatorio
+                                    </small>
+                                    <small
+                                        class="p-error block"
+                                        *ngIf="formGroup.get('document')?.errors?.['minlength'] && formGroup.get('document')?.dirty"
+                                    >
+                                        El documento debe tener mínimo 8
+                                        caracteres
                                     </small>
                                 </div>
                             </div>
@@ -137,32 +139,32 @@
                                 </div>
 
                                 <div class="field col-12 md:col-4">
-                                    <span class="p-input-icon-left">
+                                    <span class="p-input-icon-left w-full">
                                         <i class="pi pi-phone"></i>
                                         <input
                                             pInputText
-                                            placeholder="Ingrese el número de teléfono"
-                                            class="w-full"
+                                            placeholder="Ingrese su número de teléfono"
                                             type="text"
                                             formControlName="phoneNumber"
                                             required="true"
                                             minlength="10"
-                                            maxlength="15"
-                                            onkeydown="return /[0-9 +]/i.test(event.key)"
-                                            [style]="{width: '15rem'}"
+                                            maxlength="10"
+                                            class="w-full"
+                                            onkeydown="return /^\d|Backspace|Delete$/.test(event.key)"
                                         />
                                     </span>
+                                    <!-- validaciones de número -->
                                     <small
                                         class="p-error block"
-                                        *ngIf="formGroup.get('phoneNumber').dirty && formGroup.get('phoneNumber')?.errors?.['required']"
+                                        *ngIf="formGroup.get('phoneNumber')?.errors?.['required'] && formGroup.get('phoneNumber')?.dirty"
                                     >
-                                        Este campo es obligatorio.
+                                        Este campo es obligatorio
                                     </small>
                                     <small
                                         class="p-error block"
-                                        *ngIf="formGroup.get('phoneNumber').dirty && formGroup.get('phoneNumber')?.errors?.['minlength']"
+                                        *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber')?.dirty"
                                     >
-                                        Este campo debe tener mínimo 10 dígitos
+                                        Este campo debe contener 10 números
                                     </small>
                                 </div>
 
