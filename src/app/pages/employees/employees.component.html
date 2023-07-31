@@ -4,7 +4,7 @@
     <div class="col-12">
         <div class="card px-6 py-6" style="border-radius: 15px;">
             <p-table #dt [value]="employeesList" [rows]="5" [loading]="loading" [paginator]="true"
-                [globalFilterFields]="['name', 'lastName', 'document', 'phoneNumber']">
+                [globalFilterFields]="['name', 'document', 'phoneNumber']">
                 <ng-template pTemplate="caption" class="p-grid">
                     <div class="flex justify-content-between">
                         <span class="mt-2 md:mt-0 p-input-icon-right">
@@ -48,9 +48,14 @@
                                 class="p-button-outlined p-button-warning p-button-rounded m-1"
                                 (click)="openModalEditEmployee(employee)" pTooltip="Editar"
                                 tooltipPosition="bottom"></button>
-                            <button pButton type="button" icon="pi pi-trash"
+
+                            <button pButton type="button" icon="pi pi-trash" *ngIf="employee.user.userId !== user.id"
                                 class="p-button-outlined p-button-rounded p-button-danger m-1" pTooltip="Eliminar"
                                 (click)="deleteEmployee(employee)" tooltipPosition="bottom"></button>
+                            <button pButton type="button" icon="pi pi-trash" *ngIf="employee.user.userId === user.id"
+                                class="p-button-outlined p-button-rounded p-button-danger m-1" pTooltip="Eliminar"
+                                (click)="deleteEmployee(employee)" tooltipPosition="bottom" disabled></button>
+
                         </td>
                     </tr>
                 </ng-template>

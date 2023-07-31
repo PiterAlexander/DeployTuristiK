@@ -80,7 +80,8 @@
                         maxlength="15"
                         class="w-full"
                         onkeydown="return /^\d|Backspace|Delete$/.test(event.key)"
-                        [readonly]="oneEmployee"
+                        [style.pointer-events]="oneEmployee ? 'none' : 'auto'" 
+                        [style.opacity]="oneEmployee ? 0.5 : 1"
                     />
                 </div>
                 <!-- validacion de documento -->
@@ -116,7 +117,7 @@
                 </small>
             </div>
         </div>
-        <div class="col">
+        <div class="col" >
             <div class="field">
                 <span class="p-input-icon-left w-full">
                     <i class="pi pi-phone"></i>
@@ -161,7 +162,7 @@
             </div>
         </div>
     </div>
-    <div class="grid">
+    <div class="grid"  [hidden]="oneEmployee">
         <div class="col">
             <div class="field">
                 <span class="p-input-icon-left w-full">
@@ -178,7 +179,6 @@
                         [ngClass]="{
                             'border-red-600': validateExistingEmail()
                         }"
-                        [readonly]="oneEmployee"
                     />
                 </span>
                 <small
@@ -204,7 +204,7 @@
             </div>
         </div>
         <div class="col">
-            <div class="field" [hidden]="oneEmployee">
+            <div class="field">
                 <span class="p-input-icon-right w-full">
                     <i
                         (click)="displayPassword()"
