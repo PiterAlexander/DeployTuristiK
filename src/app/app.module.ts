@@ -96,12 +96,9 @@ import { PublicHomeComponent } from './pages/public-home/public-home.component';
 import { AboutUsComponent } from './pages/about-us/about-us.component';
 import { ContactUsComponent } from './pages/contact-us/contact-us.component';
 import {GalleriaModule} from 'primeng/galleria';
-<<<<<<< HEAD
 import { AnimateEnterDirective } from '@pages/public-home/animateenter.directive';
 import { StyleClassModule } from 'primeng/styleclass';
-=======
 import { ChangePasswordComponent } from './modules/change-password/change-password.component';
->>>>>>> f71e95db248cfafb33c1e21f0007fe1d5880b169
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
 
