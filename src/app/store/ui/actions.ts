@@ -109,7 +109,7 @@ export const LOAD_DATA_FAILURE = '[DASHBOARD] LOAD_DATA_FAILURE';
 
 export class LoadDataRequest implements Action {
   readonly type: string = LOAD_DATA_REQUEST;
-  constructor() {}
+  constructor() { }
 }
 
 export class LoadDataSuccess implements Action {
@@ -786,7 +786,13 @@ export enum loginActions {
 
   SAVE_CURRENT_USER_REQUEST = '[LOGIN] SAVE_CURRENT_USER_REQUEST',
   SAVE_CURRENT_USER_SUCCESS = '[LOGIN] SAVE_CURRENT_USER_SUCCESS',
-  SAVE_CURRENT_USER_FAILURE = '[LOGIN] SAVE_CURRENT_USER_FAILURE'
+  SAVE_CURRENT_USER_FAILURE = '[LOGIN] SAVE_CURRENT_USER_FAILURE',
+
+  OPEN_MODAL_CHANGE_PASSWORD = '[LOGIN] OPEN_MODAL_CHANGE_PASSWORD',
+  CHANGE_PASSWORD_REQUEST = '[LOGIN] CHANGE_PASSWORD_REQUEST',
+  CHANGE_PASSWORD_SUCCESS = '[LOGIN] CHANGE_PASSWORD_SUCCESS',
+  CHANGE_PASSWORD_FAILURE = '[LOGIN] CHANGE_PASSWORD_FAILURE',
+
 }
 
 export class LoginRequest implements Action {
@@ -843,6 +849,23 @@ export class SaveCurrentUserSuccess implements Action {
 
 export class SaveCurrentUserFailure implements Action {
   readonly type: string = loginActions.SAVE_CURRENT_USER_FAILURE;
+  constructor(public payload: string) { }
+}
+export class OpenModalChangePassword implements Action {
+  readonly type: string = loginActions.OPEN_MODAL_CHANGE_PASSWORD;
+  constructor(public payload: User) { }
+}
+
+export class ChangePasswordRequest implements Action {
+  readonly type: string = loginActions.CHANGE_PASSWORD_REQUEST;
+  constructor(public payload: User) { }
+}
+export class ChangePasswordSuccess implements Action {
+  readonly type: string = loginActions.CHANGE_PASSWORD_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class ChangePasswordFailure implements Action {
+  readonly type: string = loginActions.CHANGE_PASSWORD_FAILURE;;
   constructor(public payload: string) { }
 }
 
@@ -956,5 +979,8 @@ export type UiAction =
   | RecoverPasswordFailure
   | SaveCurrentUserRequest
   | SaveCurrentUserSuccess
-  | SaveCurrentUserFailure;
+  | SaveCurrentUserFailure
+  | ChangePasswordRequest
+  | ChangePasswordSuccess
+  | ChangePasswordFailure;
   //<-------------------->
