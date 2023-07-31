@@ -53,33 +53,22 @@ export class CreatecustomerformComponent implements OnInit {
 
     this.birthDateValidator()
 
-    this.formGroup = this.fb.group({
-      email: new FormControl('', [Validators.required, Validators.email, Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')]),
-      password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
-      name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
-      lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
-      document: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]),
-      birthDate: [null, [Validators.required, this.birthDateValidator.bind(this)]],
-      phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
-      address: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
-      eps: new FormControl(null, [Validators.required]),
-    })
+
 
     if (this.oneCustomer !== undefined) {
-      this.customerFromAction = this.oneCustomer.customer
-      if (this.oneCustomer.action === "editCustomer" || this.oneCustomer.action === "editCustomerFromFrequentTraveler") {
-        this.formGroup.setValue({
-          name: this.customerFromAction.name,
-          lastName: this.customerFromAction.lastName,
-          document: this.customerFromAction.document,
-          birthDate: this.formatDate(this.customerFromAction.birthDate),
-          phoneNumber: this.customerFromAction.phoneNumber,
-          address: this.customerFromAction.address,
-          eps: this.customerFromAction.eps,
-          email: this.customerFromAction.user.email,
-          password: this.customerFromAction.user.password,
+      if (this.oneCustomer.action === "createFrequentTraveler") {
+        this.customerFromAction = this.oneCustomer.customer
+        this.formGroup = this.fb.group({
+          email: new FormControl('paki555tours@pakitours.com'),
+          password: new FormControl('pakitours123456789'),
+          name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
+          lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
+          document: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]),
+          birthDate: [null, [Validators.required, this.birthDateValidator.bind(this)]],
+          phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
+          address: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
+          eps: new FormControl(null, [Validators.required]),
         })
-      } else if (this.oneCustomer.action === "createFrequentTraveler") {
         if (this.oneCustomer.customer.frequentTraveler !== undefined) {
           for (const element of this.oneCustomer.customer.frequentTraveler) {
             const customer = this.allCustomers.find(c => c.customerId === element.travelerId)
@@ -88,7 +77,45 @@ export class CreatecustomerformComponent implements OnInit {
             }
           }
         }
+      } else {
+        this.formGroup = this.fb.group({
+          email: new FormControl('', [Validators.required, Validators.email, Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')]),
+          password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
+          name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
+          lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
+          document: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]),
+          birthDate: [null, [Validators.required, this.birthDateValidator.bind(this)]],
+          phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
+          address: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
+          eps: new FormControl(null, [Validators.required]),
+        })
+        this.customerFromAction = this.oneCustomer.customer
+        if (this.oneCustomer.action === "editCustomer" || this.oneCustomer.action === "editCustomerFromFrequentTraveler") {
+          this.formGroup.setValue({
+            name: this.customerFromAction.name,
+            lastName: this.customerFromAction.lastName,
+            document: this.customerFromAction.document,
+            birthDate: this.formatDate(this.customerFromAction.birthDate),
+            phoneNumber: this.customerFromAction.phoneNumber,
+            address: this.customerFromAction.address,
+            eps: this.customerFromAction.eps,
+            email: this.customerFromAction.user.email,
+            password: this.customerFromAction.user.password,
+          })
+        }
       }
+    } else {
+      this.formGroup = this.fb.group({
+        email: new FormControl('', [Validators.required, Validators.email, Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')]),
+        password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
+        name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
+        lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
+        document: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]),
+        birthDate: [null, [Validators.required, this.birthDateValidator.bind(this)]],
+        phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
+        address: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
+        eps: new FormControl(null, [Validators.required]),
+      })
     }
   }
 
