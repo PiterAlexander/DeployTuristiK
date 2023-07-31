@@ -6,10 +6,11 @@ import { AppService } from '@services/app.service';
 import { DateTime } from 'luxon';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
-import { GetAllCustomerRequest, GetAllEmployeeRequest, GetUserInfoRequest, OpenModalCreateCustomer, OpenModalCreateEmployee } from '@/store/ui/actions';
+import { GetAllCustomerRequest, GetAllEmployeeRequest, GetUserInfoRequest, OpenModalCreateCustomer, OpenModalCreateEmployee, OpenModalChangePassword, SaveCurrentUserRequest } from '@/store/ui/actions';
 import { ToastrService } from 'ngx-toastr';
 import { Customer } from '@/models/customer';
 import { Employee } from '@/models/employee';
+import { User } from '@/models/user';
 
 
 
@@ -37,7 +38,6 @@ export class UserComponent implements OnInit {
         this.ui.subscribe((state: UiState) => {
             this.customersList = state.allCustomers.data
             this.employeesList = state.allEmployees.data
-
         });
         this.info();
     }
@@ -62,7 +62,10 @@ export class UserComponent implements OnInit {
                 this.allInfo = this.employeesList.find(e => e.user.userId == this.user.id)
 
             }
+            this.store.dispatch(new SaveCurrentUserRequest(this.allInfo.user))
+
             this.loading = false;
+
 
         }, 2000)
     }
@@ -84,9 +87,7 @@ export class UserComponent implements OnInit {
         });
     }
 
-    formatDate(date) {
-        return DateTime.fromISO(date).toFormat('dd LLL yyyy');
-    }
+
 
     editCustomer(customer: Customer) {
         const oneCustomer = {
@@ -98,5 +99,9 @@ export class UserComponent implements OnInit {
 
     editEmployee(employee: Employee) {
         this.store.dispatch(new OpenModalCreateEmployee(employee));
+    }
+
+    changePassword(user: User) {
+        this.store.dispatch(new OpenModalChangePassword(user))
     }
 }
