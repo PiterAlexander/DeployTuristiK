@@ -1,5 +1,5 @@
 import { Package } from '@/models/package';
-import { ChangeStatusPackageRequest, GetAllCustomerRequest, GetAllPackagesRequest, OpenModalCreatePackage, OpenModalDetailsPackage } from '@/store/ui/actions';
+import { ChangeStatusPackageRequest, GetAllCustomerRequest, GetAllPackagesRequest, OpenModalCreateOrderDetail, OpenModalCreatePackage, OpenModalDetailsPackage } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -51,9 +51,8 @@ export class PackagesComponent implements OnInit {
       this.loading = state.allPackages.loading
       this.user = JSON.parse(localStorage.getItem('TokenPayload'))
       this.role = this.user['role']
-      console.log("cliente"+this.arrayPackagesClient);
+      console.log("cliente" + this.arrayPackagesClient);
       console.log(this.packagesList);
-
     });
 
     this.sortOptions = [
@@ -68,9 +67,9 @@ export class PackagesComponent implements OnInit {
 
   verDetalles(elementoId: string) {
 
-    if (this.user !== null ) {
+    if (this.user !== null) {
       this.router.navigate(['detailsPackage/' + elementoId]);
-        console.log("hello bro", this.router.config)
+      console.log("hello bro", this.router.config)
     }
     this.router.navigate(['detailsPackage/' + elementoId]);
     console.log("hello nigga", this.router.config)
@@ -141,5 +140,23 @@ export class PackagesComponent implements OnInit {
     const diferenciaDias = Math.floor(diferenciaMilisegundos / unDiaEnMilisegundos);
 
     return diferenciaDias
+  }
+
+  createOrder(onePackage: Package) {
+    const oneCustomer = this.allCustomers.find(c => c.userId === this.user['id'])
+    if (oneCustomer !== undefined) {
+      const orderProcess = [
+        {
+          action: 'CreateOrderFromCustomer',
+          order: {
+            customer: oneCustomer,
+            package: onePackage
+          },
+          beneficiaries: {}
+        }
+      ]
+      console.log(orderProcess);
+      this.store.dispatch(new OpenModalCreateOrderDetail({ ...orderProcess }))
+    }
   }
 }
