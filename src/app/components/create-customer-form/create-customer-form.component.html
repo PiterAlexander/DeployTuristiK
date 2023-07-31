@@ -39,11 +39,44 @@
     <div class="grid">
         <div class="col">
             <div class="field">
-                <p-dropdown [options]="allEps" placeholder="Seleccione su EPS" required="true" formControlName="eps"
-                    [showClear]="true" [style]="{ width: '100%', 'max-width': '24rem' }"></p-dropdown>
+                <div class="p-inputgroup">
+                    <input pInputText placeholder="Ingrese su número de documento" (keyup)="isCustomerChanges()"
+                        type="text" formControlName="document"
+                        [ngClass]="{ 
+                            'border-green-500': customerInformation() && !validateExistingDocument() && !validateOwnDocument(),
+                        'border-red-600': validateExistingDocument() || !validateOnlyNumbers() || validateOwnDocument()}" required="true" minlength="8"
+                        maxlength="15" class="w-full" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
+                    <button *ngIf="customerInformation() && !validateExistingDocument() &&  !validateOwnDocument()"
+                        pButton pRipple type="button" pTooltip="Rellenar información" tooltipPosition="bottom"
+                        (click)="fillCustomerInformation()" icon="pi pi-user-plus" class="p-button-success"></button>
+                </div>
+                <!-- validacion de documento -->
                 <small class="p-error block"
-                    *ngIf="formGroup.get('eps')?.dirty && formGroup.get('eps')?.errors?.['required']">
+                    *ngIf="formGroup.get('document')?.dirty && validateExistingDocument() && !comesFromCft()">
+                    El documento ya existe
+                </small>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('document')?.dirty && validateExistingDocument() && comesFromCft()">
+                    Ya existe un viajero con este documento
+                </small>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('document')?.dirty && validateOwnDocument() && comesFromCft()">
+                    Por favor ingrese un documento diferente al suyo
+                </small>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['required']">
                     Este campo es obligatorio
+                </small>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('document')?.errors?.['minlength'] && formGroup.get('document')?.dirty">
+                    El documento debe tener mínimo 8 caracteres
+                </small>
+                <small class="block text-green-500" *ngIf="formGroup.get('document')?.dirty && customerInformation() && !validateExistingDocument()
+                     && !validateOwnDocument()">
+                    !Cliente encontrado!
+                </small>
+                <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && !validateOnlyNumbers()">
+                    Por favor ingrese solo números
                 </small>
             </div>
         </div>
@@ -102,49 +135,16 @@
         </div>
         <div class="col">
             <div class="field">
-                <div class="p-inputgroup">
-                    <input pInputText placeholder="Ingrese su número de documento" (keyup)="isCustomerChanges()"
-                        type="text" formControlName="document"
-                        [ngClass]="{ 
-                            'border-green-500': customerInformation() && !validateExistingDocument() && !validateOwnDocument(),
-                        'border-red-600': validateExistingDocument() || !validateOnlyNumbers() || validateOwnDocument()}" required="true" minlength="8"
-                        maxlength="15" class="w-full" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
-                    <button *ngIf="customerInformation() && !validateExistingDocument() &&  !validateOwnDocument()"
-                        pButton pRipple type="button" pTooltip="Rellenar información" tooltipPosition="bottom"
-                        (click)="fillCustomerInformation()" icon="pi pi-user-plus" class="p-button-success"></button>
-                </div>
-                <!-- validacion de documento -->
+                <p-dropdown [options]="allEps" placeholder="Seleccione su EPS" required="true" formControlName="eps"
+                    [showClear]="true" [style]="{ width: '100%', 'max-width': '24rem' }"></p-dropdown>
                 <small class="p-error block"
-                    *ngIf="formGroup.get('document')?.dirty && validateExistingDocument() && !comesFromCft()">
-                    El documento ya existe
-                </small>
-                <small class="p-error block"
-                    *ngIf="formGroup.get('document')?.dirty && validateExistingDocument() && comesFromCft()">
-                    Ya existe un viajero con este documento
-                </small>
-                <small class="p-error block"
-                    *ngIf="formGroup.get('document')?.dirty && validateOwnDocument() && comesFromCft()">
-                    Por favor ingrese un documento diferente al suyo
-                </small>
-                <small class="p-error block"
-                    *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['required']">
+                    *ngIf="formGroup.get('eps')?.dirty && formGroup.get('eps')?.errors?.['required']">
                     Este campo es obligatorio
-                </small>
-                <small class="p-error block"
-                    *ngIf="formGroup.get('document')?.errors?.['minlength'] && formGroup.get('document')?.dirty">
-                    El documento debe tener mínimo 8 caracteres
-                </small>
-                <small class="block text-green-500" *ngIf="formGroup.get('document')?.dirty && customerInformation() && !validateExistingDocument()
-                     && !validateOwnDocument()">
-                    !Cliente encontrado!
-                </small>
-                <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && !validateOnlyNumbers()">
-                    Por favor ingrese solo números
                 </small>
             </div>
         </div>
     </div>
-    <div *ngIf="!validateExistingOneCustomer()" class="grid">
+    <div class="grid" [hidden]="oneCustomer">
         <div class="col">
             <div class="field">
                 <span class="p-input-icon-left w-full">
