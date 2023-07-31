@@ -6,10 +6,11 @@ import { AppService } from '@services/app.service';
 import { DateTime } from 'luxon';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
-import { GetAllCustomerRequest, GetAllEmployeeRequest, GetUserInfoRequest, OpenModalCreateCustomer, OpenModalCreateEmployee } from '@/store/ui/actions';
+import { GetAllCustomerRequest, GetAllEmployeeRequest, GetUserInfoRequest, OpenModalCreateCustomer, OpenModalCreateEmployee, OpenModalChangePassword, SaveCurrentUserRequest } from '@/store/ui/actions';
 import { ToastrService } from 'ngx-toastr';
 import { Customer } from '@/models/customer';
 import { Employee } from '@/models/employee';
+import { User } from '@/models/user';
 
 
 
@@ -31,14 +32,12 @@ export class UserComponent implements OnInit {
 
     ngOnInit(): void {
         this.user = this.appService.user;
-        console.log(typeof (this.user));
         this.store.dispatch(new GetAllCustomerRequest());
         this.store.dispatch(new GetAllEmployeeRequest());
         this.ui = this.store.select('ui');
         this.ui.subscribe((state: UiState) => {
             this.customersList = state.allCustomers.data
             this.employeesList = state.allEmployees.data
-
         });
         this.info();
     }
@@ -53,18 +52,20 @@ export class UserComponent implements OnInit {
 
     info() {
         this.appService.getProfile();
-        console.log("infoo: ", this.user)
 
         setTimeout(() => {
             if (this.user.role === 'Cliente') {
                 this.allInfo = this.customersList.find(c => c.user.userId == this.user.id)
-                console.log(this.allInfo)
+
 
             } else {
                 this.allInfo = this.employeesList.find(e => e.user.userId == this.user.id)
-                console.log(this.allInfo)
+
             }
+            this.store.dispatch(new SaveCurrentUserRequest(this.allInfo.user))
+
             this.loading = false;
+
 
         }, 2000)
     }
@@ -77,19 +78,16 @@ export class UserComponent implements OnInit {
             icon: 'pi pi-exclamation-triangle',
             acceptLabel: "Sí",
             rejectLabel: "No",
+            acceptButtonStyleClass: 'p-button-danger p-button-sm',
+            rejectButtonStyleClass: 'p-button-outlined p-button-sm',
             accept: () => {
                 this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Sesión cerrada' });
                 this.appService.logout();
-            },
-            reject: () => {
-                this.messageService.add({ severity: 'info', summary: 'Cancelado', detail: 'Sesión activa' });
             }
         });
     }
 
-    formatDate(date) {
-        return DateTime.fromISO(date).toFormat('dd LLL yyyy');
-    }
+
 
     editCustomer(customer: Customer) {
         const oneCustomer = {
@@ -101,5 +99,9 @@ export class UserComponent implements OnInit {
 
     editEmployee(employee: Employee) {
         this.store.dispatch(new OpenModalCreateEmployee(employee));
+    }
+
+    changePassword(user: User) {
+        this.store.dispatch(new OpenModalChangePassword(user))
     }
 }

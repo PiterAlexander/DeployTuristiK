@@ -21,6 +21,9 @@ export class DashboardComponent implements OnInit {
   pieOptions: any;
   public packagesList: Array<Package>;
   public ordersList: Array<Order> = []
+  public porCupSep: number = 45;
+  public porAbo: number = 70;
+
 
   
   public lineChartData: any = {};

@@ -49,6 +49,9 @@ import {
     LoadDataSuccess,
     LoadDataFailure,
     LOAD_DATA_REQUEST,
+    CreateOrderDetailRequest,
+    CreateOrderDetailSuccess,
+    CreateOrderDetailFailure,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -73,6 +76,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 //<--------PRIMENG----------->
 import { MessageService } from 'primeng/api';
+import { ChangePasswordComponent } from '@modules/change-password/change-password.component';
 
 @Injectable()
 export class PackageEffects {
@@ -246,7 +250,7 @@ export class PackageEffects {
                 mergeMap((orderResolved) => {
                     return [
                         new EditOrderSuccess(orderResolved),
-                        new GetAllOrdersRequest()
+                        // new GetAllOrdersRequest()
                     ];
                 }),
                 catchError((err) => of(new EditOrderFailure(err)))
@@ -281,17 +285,36 @@ export class PackageEffects {
             })
         ), { dispatch: false });
 
+    createOrderDetail$ = createEffect(() => this.actions$.pipe(
+        ofType(orderActions.CREATE_ORDERDETAIL_REQUEST),
+        map((action: CreateOrderDetailRequest) => action.payload),
+        switchMap((payment) => {
+            return this.apiService.addPayment(payment).pipe(
+                mergeMap((paymentResolved) => {
+                    this.dialogRef.close()
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Beneficiario/s agregado/s exitosamente.' });
+                    return [
+                        new CreateOrderDetailSuccess(paymentResolved),
+                        new GetAllCustomerRequest(),
+                        new GetAllOrdersRequest()
+                    ];
+                }),
+                catchError((err) => of(new CreateOrderDetailFailure(err)))
+            )
+        })
+    ));
+
     editOrderDetail$ = createEffect(() => this.actions$.pipe(
         ofType(orderActions.EDIT_ORDERDETAIL_REQUEST),
         map((action: EditOrderDetailRequest) => action.payload),
-        switchMap((orderDetail) => {
-            return this.apiService.updateOrderDetail(orderDetail.orderDetailId, orderDetail).pipe(
-                mergeMap((orderDetailResolved) => {
+        switchMap((customer) => {
+            return this.apiService.updateCustomer(customer.customerId, customer).pipe(
+                mergeMap((customerResolved) => {
                     this.dialogRef.close();
                     this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Beneficiario editado exitosamente.' });
                     return [
-                        new EditOrderDetailSuccess(orderDetailResolved),
-                        new GetAllOrdersRequest()
+                        new EditOrderDetailSuccess(customerResolved),
+                        new GetAllCustomerRequest(),
                     ];
                 }),
                 catchError((err) => of(new EditOrderDetailFailure(err)))
@@ -874,6 +897,22 @@ export class PackageEffects {
         }),
         catchError((error) => of(new SaveCurrentUserFailure(error)))
     ))
+
+    openModalChangePassword$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(loginActions.OPEN_MODAL_CHANGE_PASSWORD),
+            tap((action) => {
+                this.dialogRef = this.dialogService.open(ChangePasswordComponent, {
+                    /* Opciones del modal */
+                    showHeader: false,
+                    width: '50%',
+                    contentStyle: { padding: '1.50rem 2.25rem 1.50rem 2.25rem', overflowY: 'auto' },
+                });
+            })
+        ),
+        {
+            dispatch: false
+        });
 
     //<----------------------------->
     constructor(
