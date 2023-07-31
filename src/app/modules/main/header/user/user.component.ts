@@ -84,9 +84,7 @@ export class UserComponent implements OnInit {
         });
     }
 
-    formatDate(date) {
-        return DateTime.fromISO(date).toFormat('dd LLL yyyy');
-    }
+   
 
     editCustomer(customer: Customer) {
         const oneCustomer = {

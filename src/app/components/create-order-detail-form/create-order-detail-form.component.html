@@ -163,8 +163,8 @@
             <b>Formulario de Beneficiarios</b>
         </p-divider>
         <form novalidate [formGroup]="formGroup">
-            <div class="grid">
-                <div class="col">
+            <div class="grid"> <!--DOCUMENT Y NAME-->
+                <div *ngIf="!comesFromEdit()" class="col">
                     <div class="field">
                         <div class="p-inputgroup">
                             <input pInputText type="text" formControlName="document" required="true" minlength="8"
@@ -220,8 +220,23 @@
                         </small>
                     </div>
                 </div>
+                <div *ngIf="comesFromEdit()" class="col">
+                    <div class="field">
+                        <input pInputText type="text" formControlName="lastName" required="true" minlength="3"
+                            maxlength="30" placeholder="Ingrese los apellidos del beneficiario" class="w-full"
+                            onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('lastName')?.dirty && formGroup.get('lastName')?.errors?.['required']">
+                            Este campo es obligatorio.
+                        </small>
+                        <small class="p-error block"
+                            *ngIf="formGroup.get('lastName')?.errors?.['minlength'] && formGroup.get('lastName')?.dirty">
+                            Este campo debe contener al menos 3 letras.
+                        </small>
+                    </div>
+                </div>
             </div>
-            <div class="grid">
+            <div *ngIf="!comesFromEdit()" class="grid"> <!--LASTNAME Y BIRTHDATE-->
                 <div class="col">
                     <div class="field">
                         <input pInputText type="text" formControlName="lastName" required="true" minlength="3"

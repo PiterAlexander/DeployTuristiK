@@ -89,13 +89,13 @@ export class ForgotPasswordComponent implements OnInit {
             this.store.dispatch(new RecoverPasswordRequest({
                 ...this.modelEmail,
             }))
-            this.messageService.add({ key: 'alert-message', severity: 'success', summary: 'bien', detail: 'Corrreo enviado' });
+            this.messageService.add({ key: 'alert-message-forgot-password', severity: 'success', summary: 'bien', detail: 'Corrreo enviado' });
 
             this.router.navigate(['/recover-password'])
             // this.toastr.success("Correo Enviado");
 
         } else {
-            this.messageService.add({ key: 'alert-message', severity: 'error', summary: 'Lo sentimos!', detail: 'Corrreo no registrado' });
+            this.messageService.add({ key: 'alert-message-forgot-password', severity: 'error', summary: 'Lo sentimos!', detail: 'Corrreo no registrado' });
 
         }
     }
