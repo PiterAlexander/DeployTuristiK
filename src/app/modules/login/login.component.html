@@ -1,111 +1,57 @@
 <div class="height-edit px-5 flex justify-content-center align-items-center">
-    <div
-        class="border-1 surface-border surface-card border-round py-5 px-4 md:px-7 z-1"
-        style="width: 30%"
-    >
+    <div class="border-1 surface-border surface-card border-round py-5 px-4 md:px-7 z-1" style="width: 30%; height: 60%;">
         <div class="mb-4 text-center">
             <div class="text-900 text-xl font-bold mb-2">Ingresar</div>
-            <span class="text-600 font-medium"
-                >Por favor ingrese sus datos</span
-            >
+            <span class="text-600 font-medium">Por favor ingrese sus datos</span>
         </div>
         <div class="flex flex-column">
-            <form
-                class="needs-validation"
-                novalidate
-                id="form"
-                (submit)="saveChanges()"
-                [formGroup]="formGroup"
-            >
+            <form class="needs-validation" novalidate id="form" (submit)="saveChanges()" [formGroup]="formGroup">
                 <div class="field">
                     <span class="p-input-icon-left w-full">
                         <i class="pi pi-envelope"></i>
-                        <input
-                            id="email"
-                            type="text"
-                            pInputText
-                            class="w-full"
-                            placeholder="Correo"
-                            formControlName="email"
-                            required
-                        />
+                        <input id="email" type="text" pInputText class="w-full" placeholder="Correo"
+                            formControlName="email" required />
                     </span>
-                    <small
-                        class="p-error block"
-                        *ngIf="formGroup.get('email').dirty && formGroup.get('email')?.errors?.['required']"
-                    >
+                    <small class="p-error block"
+                        *ngIf="formGroup.get('email').dirty && formGroup.get('email')?.errors?.['required']">
                         Este campo es obligatorio.
                     </small>
-                    <small
-                        class="p-error block"
-                        *ngIf="
+                    <small class="p-error block" *ngIf="
                             formGroup.get('email').dirty &&
                             formGroup.get('email')?.errors?.pattern
-                        "
-                    >
+                        ">
                         Coreo no válido
                     </small>
                 </div>
                 <div class="field">
-                    <span class="p-input-icon-right w-full" >
+                    <span class="p-input-icon-right w-full">
                         <!-- <i class="pi pi-lock"></i> -->
-                        <input
-                            id="password"
-                            [type]="Visible ? 'text' : 'password'"
-                            pInputText
-                            class="w-full"
-                            placeholder="Contraseña"
-                            formControlName="password"
-                            required
-                        />
-                        <i
-                            (click)="displayPassword()"
-                            class="pi cursor-pointer"
-                            [ngClass]="{
+                        <input id="password" [type]="Visible ? 'text' : 'password'" pInputText class="w-full"
+                            placeholder="Contraseña" formControlName="password" required />
+                        <i (click)="displayPassword()" class="pi cursor-pointer" [ngClass]="{
                                 'pi-eye': Visible,
                                 'pi-eye-slash': !Visible
-                            }"
-                        ></i>
+                            }"></i>
                     </span>
-                    <small
-                        class="p-error block"
-                        *ngIf="formGroup.get('password').dirty && formGroup.get('password')?.errors?.['required']"
-                    >
+                    <small class="p-error block"
+                        *ngIf="formGroup.get('password').dirty && formGroup.get('password')?.errors?.['required']">
                         Este campo es obligatorio.
                     </small>
-                    <small
-                        class="p-error block"
-                        *ngIf="formGroup.get('password').dirty && formGroup.get('password')?.errors?.['minlength']"
-                    >
+                    <small class="p-error block"
+                        *ngIf="formGroup.get('password').dirty && formGroup.get('password')?.errors?.['minlength']">
                         Este campo debe tener mínimo 8 caracteres
                     </small>
                 </div>
-                <div class="d-block flex-wrap gap-3">
-                    <p class="my-4 h6">
-                        <a [routerLink]="['/forgot-password']"
-                            >¿Olvidé mi contraseña?</a
-                        >
-                    </p>
-                </div>
-                <button
-                    type="submit"
-                    id="saveButton"
-                    pButton
-                    pRipple
-                    label="Ingresar"
-                    class="w-full"
-                    ng-reflect-label="Ingresar"
-                    [disabled]="!validForm()"
-                ></button>
-                <div class="d-block flex-wrap gap-3">
-                    <p class="my-4 h6">
-                        Aún no tengo una cuenta
-                        <a [routerLink]="['/register']" class="text-center"
-                            >Registrarme</a
-                        >
-                    </p>
-                </div>
+
+                <button type="submit" id="saveButton" pButton pRipple label="Ingresar" class="w-full"
+                    ng-reflect-label="Ingresar" [disabled]="!validForm()"></button>
+
             </form>
+            <div class="d-block flex-wrap gap-3">
+                <p class="my-4 h6">
+                    <a [routerLink]="['/forgot-password']">¿Olvidé mi contraseña?</a>
+                </p>
+            </div>
         </div>
     </div>
 </div>

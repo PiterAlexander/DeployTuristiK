@@ -98,7 +98,7 @@
                     <div class="flex align-items-center flex-1 mt-3 sm:mt-0 ml-0 sm:ml-5">
                         <!-- Si el usuario tiene una sesión iniciada, mostrar el botón de reserva -->
                         <button *ngIf="isLoggedIn" pButton label="Reservar" class="flex-1 mr-5"
-                            (click)="reserve(pack)"></button>
+                            (click)="reserve(pack, quantity)"></button>
 
                         <!-- Si el usuario NO tiene una sesión iniciada, mostrar el botón de login -->
                         <button *ngIf="!isLoggedIn" pButton label="Reservar" class="flex-1 mr-5"
