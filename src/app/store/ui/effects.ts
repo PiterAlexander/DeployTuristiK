@@ -76,6 +76,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 //<--------PRIMENG----------->
 import { MessageService } from 'primeng/api';
+import { ChangePasswordComponent } from '@modules/change-password/change-password.component';
 
 @Injectable()
 export class PackageEffects {
@@ -896,6 +897,22 @@ export class PackageEffects {
         }),
         catchError((error) => of(new SaveCurrentUserFailure(error)))
     ))
+
+    openModalChangePassword$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(loginActions.OPEN_MODAL_CHANGE_PASSWORD),
+            tap((action) => {
+                this.dialogRef = this.dialogService.open(ChangePasswordComponent, {
+                    /* Opciones del modal */
+                    showHeader: false,
+                    width: '50%',
+                    contentStyle: { padding: '1.50rem 2.25rem 1.50rem 2.25rem', overflowY: 'auto' },
+                });
+            })
+        ),
+        {
+            dispatch: false
+        });
 
     //<----------------------------->
     constructor(
