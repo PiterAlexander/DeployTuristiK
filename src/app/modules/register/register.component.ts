@@ -20,6 +20,7 @@ import { Store } from '@ngrx/store';
 import { AppService } from '@services/app.service';
 import { AuthService } from '@services/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -50,7 +51,9 @@ export class RegisterComponent implements OnInit {
         private store: Store<AppState>,
         private authService: AuthService,
         private router: Router,
-        private toastr: ToastrService
+        private toastr: ToastrService,
+        private messageService: MessageService
+
     ) { }
 
 
@@ -73,7 +76,7 @@ export class RegisterComponent implements OnInit {
             password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
             name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
             lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
-            document: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
+            document: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15)]),
             birthDate: [0, Validators.required,],
             phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
             address: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
@@ -83,7 +86,7 @@ export class RegisterComponent implements OnInit {
 
     }
 
-    async saveCustomer() {
+    saveCustomer() {
         var idRole: Role = this.Roles.find((r) => r.name == 'Cliente');
 
         const user: User = {
@@ -104,13 +107,13 @@ export class RegisterComponent implements OnInit {
             user: user
         }
 
-        await this.store.dispatch(new CreateCustomerRequest({
+        this.store.dispatch(new CreateCustomerRequest({
             ...customer
         }));
 
 
 
-        await setTimeout(() => this.login(user), 1000)
+        setTimeout(() => this.login(user), 1000)
         this.getToken();
     }
 
@@ -121,11 +124,25 @@ export class RegisterComponent implements OnInit {
         this.Visible2 = !this.Visible2;
     }
     validateExistingDocument(): boolean {
-        return this.CustomerList.find(item => item.document == this.formGroup.value.document)
+        var document = this.CustomerList.find(item => item.document == this.formGroup.value.document)
+        if (document) {
+            return true
+        }
+        return false
     }
 
     validateExistingEmail(): boolean {
         return this.UserList.find(item => item.email == this.formGroup.value.email)
+    }
+
+    validateOnlyNumbersForPhoneNumber(): boolean {
+        if (this.formGroup.value.phoneNumber !== null) {
+            if (this.formGroup.value.phoneNumber.length >= 10) {
+                const regularExpresion = /^[0-9]+$/;
+                return regularExpresion.test(this.formGroup.value.phoneNumber)
+            }
+        }
+        return true
     }
 
     validateDate() {
@@ -155,7 +172,8 @@ export class RegisterComponent implements OnInit {
             !this.validateExistingDocument() &&
             !this.validateExistingEmail() &&
             this.validateDate() &&
-            this.validatePassword()
+            this.validatePassword() &&
+            this.validateOnlyNumbersForPhoneNumber()
     }
 
     cancel() {
@@ -163,11 +181,11 @@ export class RegisterComponent implements OnInit {
     }
 
 
-    async getToken() {
+    getToken() {
         if (this.token != null) {
             if (this.token.success == true) {
                 window.location.reload();
-                globalThis.payload = await this.authService.getUserInfo(
+                globalThis.payload = this.authService.getUserInfo(
                     this.token.result
                 );
                 this.authService.setToken(this.token.result);
@@ -180,13 +198,11 @@ export class RegisterComponent implements OnInit {
                 }
 
                 this.toastr.success(this.token.message);
-            } else {
-                this.toastr.error(this.token.message);
             }
         }
     }
 
-    async login(user: User) {
+    login(user: User) {
         this.store.dispatch(
             new LoginRequest({ email: user.email, password: user.password })
         );

@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { AppService } from '@services/app.service';
 
 interface State {
   page: number;
@@ -18,6 +19,7 @@ interface State {
   styleUrls: ['./employees.component.scss']
 })
 export class EmployeesComponent implements OnInit {
+  public user
   public ui: Observable<UiState>;
   public employeesList: Array<Employee>;
   public filteredEmployeesList: Array<Employee>;
@@ -33,9 +35,11 @@ export class EmployeesComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private confirmationService: ConfirmationService,
+    private appService : AppService
   ) { }
 
   ngOnInit() {
+    this.user= this.appService.user
     this.store.dispatch(new GetAllCustomerRequest());
     this.store.dispatch(new GetAllRoleRequest());
     this.store.dispatch(new GetAllEmployeeRequest());

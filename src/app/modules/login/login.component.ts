@@ -1,18 +1,15 @@
 import { Token, UserLog } from '@/models/token';
 import { AppState } from '@/store/state';
-import { GetUserInfoRequest, LoginRequest } from '@/store/ui/actions';
+import { LoginRequest } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-// import * as jwt from 'jsonwebtoken'
-import jwt_decode from 'jwt-decode';
 import { AuthService } from '@services/auth/auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { User } from '@/models/user';
-import { ofType } from '@ngrx/effects';
+import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-login2',
@@ -33,7 +30,7 @@ export class LoginComponent implements OnInit {
         private store: Store<AppState>,
         private authService: AuthService,
         private router: Router,
-        private toastr: ToastrService
+        private messageService: MessageService
     ) { }
 
     ngOnInit() {
@@ -72,7 +69,7 @@ export class LoginComponent implements OnInit {
 
         this.isAuthLoading = false;
     }
-    
+
     displayPassword() {
         this.Visible = !this.Visible;
     }
@@ -80,17 +77,6 @@ export class LoginComponent implements OnInit {
     validForm(): boolean {
         return this.formGroup.valid;
     }
-
-    // ShowPasswordLogin() {
-    //     var cambio = document.getElementById('passwordLogin');
-    //     if (cambio. == 'password') {
-    //         cambio.type = 'text';
-    //         $('.icon3').removeClass('fa fa-eye-slash').addClass('fa fa-eye');
-    //     } else {
-    //         cambio.type = 'password';
-    //         $('.icon3').removeClass('fa fa-eye').addClass('fa fa-eye-slash');
-    //     }
-    // }
 
     async getToken() {
         if (this.token == null) {
@@ -114,11 +100,12 @@ export class LoginComponent implements OnInit {
                         this.router.navigate(['/Home/Paquetes']);
                     }
                 }
+                this.messageService.add({ key: 'alert-message-login', severity: 'success', summary: 'Bienvenid@', detail: this.token.message });
 
 
-                this.toastr.success(this.token.message);
+                // this.toastr.success(this.token.message);
             } else {
-                this.toastr.error(this.token.message);
+                this.messageService.add({ key: 'alert-message-login', severity: 'error', summary: 'Lo sentimos!', detail: this.token.message });
             }
 
         }

@@ -11,12 +11,14 @@ import { Package } from '@/models/package';
 import { OrderDetail } from '@/models/orderDetail';
 import { ConfirmationService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { EditCustomerRequest, OpenModalCreateOrder, OpenModalCreatePayment, OpenModalOrderDetails } from '@/store/ui/actions';
+import { EditOrderDetailRequest, OpenModalCreateOrder, OpenModalCreatePayment, OpenModalPayments } from '@/store/ui/actions';
+import { ApiService } from '@services/api.service';
 
 @Component({
   selector: 'app-create-order-detail-form',
   templateUrl: './create-order-detail-form.component.html',
-  styleUrls: ['./create-order-detail-form.component.scss']
+  styleUrls: ['./create-order-detail-form.component.scss'],
+  providers: [ConfirmationService]
 })
 
 export class CreateOrderDetailFormComponent implements OnInit {
@@ -39,6 +41,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
   public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS', 'OTRA']
 
   constructor(
+    public apiService: ApiService,
     private fb: FormBuilder,
     private store: Store<AppState>,
     private modalPrimeNg: DynamicDialogRef,
@@ -119,7 +122,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
 
   //<------------------->
 
-  //<--- DATE FORMAT FOR BIRTHDATE --->
+  //<--- BIRTHDATE SECTION --->
 
   dateFormat(date: any): Date {
     const dateOptions = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' }
@@ -130,16 +133,34 @@ export class CreateOrderDetailFormComponent implements OnInit {
     return convertedDate
   }
 
+  adjustPriceAccordingToAge(date: Date): number {
+    const currenDate = new Date();
+    const birthdate = new Date(date);
+    const milisecondsAge = currenDate.getTime() - birthdate.getTime();
+    const yearAge = milisecondsAge / (1000 * 60 * 60 * 24 * 365.25);
+
+    if (yearAge < 5) {
+      return this.onePackage.aditionalPrice
+    } else if (yearAge >= 5 && yearAge < 10) {
+      return this.onePackage.price * 0.70
+    } else {
+      return this.onePackage.price
+    }
+  }
+
   //<------------------->
 
   //<--- ON INIT FROM DIFFERENT ENTRIES --->
 
   onInitFromCreateOrderDetail() {
-    this.orderDetails = this.orderProcess[0].order.orderDetail
-    for (const element of this.orderDetails) {
-      const customer = this.allCustomers.find(c => c.customerId === element.beneficiaryId)
-      if (customer !== undefined) {
-        this.orderDetailCustomers.push(customer)
+    for (const element of this.orderProcess[0].order.payment) {
+      if (element != undefined) {
+        for (const anotherElement of element.orderDetail) {
+          const customer: Customer = this.allCustomers.find(c => c.customerId === anotherElement.beneficiaryId)
+          if (customer !== undefined) {
+            this.orderDetailCustomers.push(customer)
+          }
+        }
       }
     }
     if (this.orderProcess[0].beneficiaries.length > 0) {
@@ -241,7 +262,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
       address: this.oneCustomer.address,
       eps: this.oneCustomer.eps,
       user: this.oneCustomer.user,
-      price: this.onePackage.price,
+      price: this.adjustPriceAccordingToAge(this.oneCustomer.birthDate),
       addToFt: false
     })
     this.formGroup.reset()
@@ -276,7 +297,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
               address: element.address,
               eps: element.eps,
               user: element.user,
-              price: this.onePackage.price,
+              price: this.adjustPriceAccordingToAge(element.birthDate),
               addToFt: false
             })
 
@@ -342,7 +363,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         birthDate: this.formGroup.value.birthdate,
         eps: this.formGroup.value.eps,
         user: user,
-        price: this.onePackage.price,
+        price: this.adjustPriceAccordingToAge(this.formGroup.value.birthdate),
         addToFt: this.formGroup.value.addToFt
       })
       this.formGroup.reset()
@@ -353,6 +374,15 @@ export class CreateOrderDetailFormComponent implements OnInit {
   //<------------------->
 
   //<--- VALIDATIONS --->
+
+  comesFromEdit(): boolean {
+    if (this.orderProcess !== undefined) {
+      if (this.orderProcess[0].action === 'EditOrderDetail') {
+        return true
+      }
+    }
+    return false
+  }
 
   validForm(): boolean {
     if (this.beneficiariesForm()) {
@@ -482,12 +512,12 @@ export class CreateOrderDetailFormComponent implements OnInit {
         acceptIcon: 'pi pi-check',
         reject: () => {
           this.modalPrimeNg.close()
-          this.store.dispatch(new OpenModalOrderDetails({ ...this.orderProcess[0].order }))
+          this.store.dispatch(new OpenModalPayments({ ...this.orderProcess[0].order }))
         }
       })
     } else {
       this.modalPrimeNg.close()
-      this.store.dispatch(new OpenModalOrderDetails({ ...this.orderProcess[0].order }))
+      this.store.dispatch(new OpenModalPayments({ ...this.orderProcess[0].order }))
     }
   }
 
@@ -495,7 +525,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
     if (this.beneficiaries.length > 0) {
       this.confirmationService.confirm({
         target: event.target,
-        message: '¿Está seguro? Perderá toda la información previamente ingresada.',
+        header: '¿Está seguro de regresar?',
+        message: 'Perderá toda la información previamente ingresada.',
         icon: 'pi pi-exclamation-triangle',
         rejectLabel: 'Sí, regresar',
         rejectButtonStyleClass: 'p-button-outlined',
@@ -516,7 +547,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
       this.backFromCreateOrderDetail(event)
     } else if (this.orderProcess[0].action === 'EditOrderDetail') {
       this.modalPrimeNg.close()
-      this.store.dispatch(new OpenModalOrderDetails({ ...this.orderProcess[0].order }))
+      this.store.dispatch(new OpenModalPayments({ ...this.orderProcess[0].order }))
     } else if (this.orderProcess[0].action === 'CreateOrderFromCustomer') {
       this.backFromCreateOrderFromCustomer(event)
     } else {
@@ -531,6 +562,12 @@ export class CreateOrderDetailFormComponent implements OnInit {
   }
 
   nextFromCreateOrderDetail() {
+    let totalCost: number = 0
+    for (const element of this.beneficiaries) {
+      if (element !== undefined) {
+        totalCost += element.price
+      }
+    }
     const action: string = this.orderProcess[0].action
     this.orderProcess = [{
       action: action,
@@ -538,7 +575,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         orderId: this.orderProcess[0].order.orderId,
         package: this.orderProcess[0].order.package,
         customerId: this.orderProcess[0].order.customerId,
-        totalCost: this.orderProcess[0].order.package.price * this.beneficiaries.length
+        totalCost: totalCost
       },
       beneficiaries: this.beneficiaries,
     }]
@@ -558,8 +595,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
       eps: this.formGroup.value.eps,
       userId: this.orderProcess[0].customer.userId
     }
-    this.modalPrimeNg.close()
-    this.store.dispatch(new EditCustomerRequest({ ...customer }))
+    this.store.dispatch(new EditOrderDetailRequest({ ...customer }))
   }
 
   nextFromCreateOrderFromCustomer() {

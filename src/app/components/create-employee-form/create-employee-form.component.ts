@@ -9,6 +9,7 @@ import { Observable } from 'rxjs'
 import { Role } from '../../models/role'
 import { DynamicDialogRef } from 'primeng/dynamicdialog'
 import { CreateEmployeeRequest, EditEmployeeRequest } from '@/store/ui/actions'
+import { AppService } from '@services/app.service'
 
 @Component({
     selector: 'app-create-employee-form',
@@ -22,12 +23,13 @@ export class CreateEmployeeFormComponent implements OnInit {
     public allRoles: Array<Role>
     public allEmployees: Array<Employee>
     public oneEmployee: Employee
-    public ActionTitle: string = 'Registrar'
+    public ActionTitle: string = 'Registrar empleado'
     public Visible: boolean = false
     public password: String = ''
     public allUsers: Array<User>
 
     constructor(
+        private appService: AppService,
         private fb: FormBuilder,
         private store: Store<AppState>,
         private modalPrimeNg: DynamicDialogRef,
@@ -39,6 +41,7 @@ export class CreateEmployeeFormComponent implements OnInit {
             this.allRoles = state.allRoles.data
             this.allEmployees = state.allEmployees.data
             this.oneEmployee = state.oneEmployee.data
+            this.allUsers = state.allUsers.data
         })
 
         this.formGroup = this.fb.group({
@@ -72,10 +75,17 @@ export class CreateEmployeeFormComponent implements OnInit {
                 Validators.minLength(10),
                 Validators.maxLength(20)
             ]),
+
+
         })
 
         if (this.oneEmployee !== undefined) {
-            this.ActionTitle = 'Editar'
+            if (this.oneEmployee.user.userId == this.appService.user.id) {
+                this.ActionTitle = 'Editar información';
+            } else {
+                this.ActionTitle = 'Editar empleado'
+            }
+
             this.formGroup.setValue({
                 email: this.oneEmployee.user.email,
                 password: this.oneEmployee.user.password,
@@ -110,18 +120,19 @@ export class CreateEmployeeFormComponent implements OnInit {
                 return true
             }
         }
+
         return false
     }
 
     validateExistingEmail(): boolean {
         if (this.oneEmployee !== undefined) {
-            const employee: Employee = this.allEmployees.find(e => e.user.email === this.formGroup.value.email)
-            if (employee !== undefined && employee.user.email !== this.oneEmployee.user.email) {
+            const user: User = this.allUsers.find(u => u.email === this.formGroup.value.email)
+            if (user !== undefined && user.email !== this.oneEmployee.user.email) {
                 return true
             }
         } else {
-            const employee: Employee = this.allEmployees.find(e => e.user.email === this.formGroup.value.email)
-            if (employee !== undefined) {
+            const user: User = this.allUsers.find(u => u.email === this.formGroup.value.email)
+            if (user !== undefined) {
                 return true
             }
         }

@@ -8,8 +8,10 @@
             <span class="text-black-alpha-90 font-medium">Información relacionada con el pago</span>
         </div>
         <div class="flex justify-content-between align-items-center mb-2">
-            <span *ngIf="!fromCreatePayment()" class="text-900">Monto inicial - (20%)</span>
-            <span *ngIf="fromCreatePayment()" class="text-900">Restante</span>
+            <span *ngIf="!fromCreatePayment() && !higherRemainingAmountFromRetryPayment" class="text-900">Monto inicial
+                - (20%)</span>
+            <span *ngIf="fromCreatePayment() && !higherRemainingAmountFromRetryPayment" class="text-900">Restante</span>
+            <span *ngIf="!fromCreatePayment() && higherRemainingAmountFromRetryPayment" class="text-900">Restante</span>
             <span class="text-900">{{ remainingAmount | currency:'USD':'symbol' }} COP</span>
         </div>
         <div class="flex justify-content-between align-items-center">
@@ -21,13 +23,29 @@
     <div class="grid mt-1 mb-2">
         <div class="col-7">
             <div class="field">
-                <p-inputNumber *ngIf="!fromCreatePayment()" inputId="minmax" formControlName="amount" required="true"
-                    placeholder="Ingrese el monto del abono" [style]="{ width: '19rem' }" mode="currency" currency="USD"
-                    locale="en-US" [min]="remainingAmount" [max]="totalCost">
+                <p-inputNumber
+                    *ngIf="!fromCreatePayment() && !higherRemainingAmountFromRetryPayment && !orderRemainingAmountsZero"
+                    inputId="minmax" formControlName="amount" required="true" placeholder="Ingrese el monto del abono"
+                    [style]="{ width: '19rem' }" mode="currency" currency="USD" locale="en-US" [min]="remainingAmount"
+                    [max]="totalCost">
                 </p-inputNumber>
-                <p-inputNumber *ngIf="fromCreatePayment()" inputId="minmax" formControlName="amount" required="true"
-                    placeholder="Ingrese el monto del abono" [style]="{ width: '19rem' }" mode="currency" currency="USD"
-                    locale="en-US" [min]="1" [max]="remainingAmount">
+                <p-inputNumber
+                    *ngIf="!fromCreatePayment() && higherRemainingAmountFromRetryPayment && !orderRemainingAmountsZero"
+                    inputId="minmax" formControlName="amount" required="true" placeholder="Ingrese el monto del abono"
+                    [style]="{ width: '19rem' }" mode="currency" currency="USD" locale="en-US" [min]="1"
+                    [max]="remainingAmount">
+                </p-inputNumber>
+                <p-inputNumber
+                    *ngIf="!fromCreatePayment() && higherRemainingAmountFromRetryPayment && orderRemainingAmountsZero"
+                    inputId="minmax" formControlName="amount" required="true" placeholder="Ingrese el monto del abono"
+                    [style]="{ width: '19rem' }" mode="currency" currency="USD" locale="en-US" [min]="0"
+                    [max]="remainingAmount">
+                </p-inputNumber>
+                <p-inputNumber
+                    *ngIf="fromCreatePayment() && !higherRemainingAmountFromRetryPayment && !orderRemainingAmountsZero"
+                    inputId="minmax" formControlName="amount" required="true" placeholder="Ingrese el monto del abono"
+                    [style]="{ width: '19rem' }" mode="currency" currency="USD" locale="en-US" [min]="1"
+                    [max]="remainingAmount">
                 </p-inputNumber>
                 <small class="p-error block"
                     *ngIf="formGroup.get('amount')?.dirty && formGroup.get('amount')?.errors?.['required']">

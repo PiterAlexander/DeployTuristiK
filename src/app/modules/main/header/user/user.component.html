@@ -1,11 +1,19 @@
 <p-toast></p-toast>
+<p-toast key="alert-message-change-password"></p-toast>
+
 <p-sidebar
     [(visible)]="visible"
     position="right"
     [transitionOptions]="'.3s cubic-bezier(0, 0, 0.2, 1)'"
     styleClass="layout-profile-sidebar w-full sm:w-25rem "
 >
-    <div class="flex flex-column mx-auto md:mx-0 w-full" *ngIf="loading"></div>
+    <div
+        class="flex flex-column mx-auto md:mx-0 w-full vh-full justify-content-center align-items-center"
+        *ngIf="loading"
+    >
+        <i class="pi pi-spin pi-spinner" style="font-size: 5rem"></i>
+        <span class="h3"> Cargando ...</span>
+    </div>
     <div class="flex flex-column mx-auto md:mx-0 w-full" *ngIf="!loading">
         <span class="mb-2 font-semibold text-xl">Bienvenid@</span>
         <span class="text-color-secondary font-medium mb-5 text-lg">{{
@@ -21,7 +29,7 @@
                 <ul class="list-none m-0 p-0">
                     <li>
                         <div
-                            class="flex surface-border mb-3 p-2 align-items-center border-1 surface-border border-round "
+                            class="flex surface-border mb-3 p-2 align-items-center border-1 surface-border border-round"
                         >
                             <span>
                                 <i
@@ -40,7 +48,7 @@
                     </li>
                     <li>
                         <div
-                            class="flex surface-border mb-3 p-2 align-items-center border-1 surface-border border-round  overflow-hidden sm:text-overflow-ellipsis"
+                            class="flex surface-border mb-3 p-2 align-items-center border-1 surface-border border-round overflow-hidden sm:text-overflow-ellipsis"
                         >
                             <span>
                                 <i class="pi pi-at text-xl text-primary"></i>
@@ -55,7 +63,7 @@
                     </li>
                     <li>
                         <div
-                            class="flex surface-border mb-3 p-2 align-items-center border-1 surface-border border-round "
+                            class="flex surface-border mb-3 p-2 align-items-center border-1 surface-border border-round"
                         >
                             <span>
                                 <i class="pi pi-phone text-xl text-primary"></i>
@@ -70,7 +78,7 @@
                     </li>
                     <li>
                         <a
-                            class="flex surface-border mb-3 p-2 align-items-center border-1 surface-border border-round "
+                            class="flex surface-border mb-3 p-2 align-items-center border-1 surface-border border-round"
                         >
                             <span>
                                 <i class="pi pi-users text-xl text-primary"></i>
@@ -85,7 +93,7 @@
                     </li>
                 </ul>
             </p-tabPanel>
-            <p-tabPanel >
+            <p-tabPanel>
                 <ng-template pTemplate="header">
                     <i class="pi pi-cog mr-2"></i>
                     <span>Configuración</span>
@@ -111,14 +119,10 @@
                 <div class="grid flex justify-content-center mt-2">
                     <button
                         type="button"
-                        label="Editar Perfil"
+                        label="Cambiar Contraseña"
                         class="p-element p-ripple p-button-outlined p-button-warning mr-2 mb-2 p-button p-component col-12 lg:col-10"
                         ng-reflect-label="Editar"
-                        (click)="
-                            user.role == 'Cliente'
-                                ? editCustomer(allInfo)
-                                : editEmployee(allInfo)
-                        "
+                        (click)="changePassword(allInfo.user)"
                     >
                         <span class="p-button-label text-lg">
                             <i class="pi pi-pencil text-warning mr-3"></i>
@@ -130,21 +134,21 @@
         </p-tabView>
         <div
             class="grid flex justify-content-center mb-5"
-            style="position: fixed; bottom: 0; width: 21%"
+            style="position: fixed; bottom: 0; margin-left: 80px"
         >
             <button
                 type="button"
                 label="Cerrar Sesión"
-                class="p-element p-ripple p-button-outlined p-button-danger mr-2 mb-2 p-button p-component col-12 lg:col-12"
+                class="p-element p-ripple p-button-outlined p-button-danger mr-2 mb-2 p-button p-component col-12 lg:col-12 w-full"
                 ng-reflect-label="Danger"
                 (click)="logoutConfirm($event)"
             >
                 <span class="p-button-label text-lg">
-                    <i class="pi pi-sign-out text-danger"></i>
+                    <i class="pi pi-sign-out text-danger mr-2"></i>
                     Cerrar Sesión</span
                 ><span class="p-ink"></span>
             </button>
-            <p-confirmPopup key="confirm2"></p-confirmPopup>
+            <p-confirmDialog key="confirm2"></p-confirmDialog>
         </div>
     </div>
 </p-sidebar>
