@@ -280,7 +280,8 @@
 }
 
 .input-design {
-  width: 90% !important;
+  width: 100% !important;
+  border-bottom: 1px solid rgb(138, 138, 138) !important;
 }
 
 .control {
@@ -290,4 +291,19 @@
 .small-input {
   height: 93%;
   border: none;
+}
+
+::ng-deep p-dataview{
+  div{
+    :first-child{
+      background-color:  #ffffff !important;
+      border: none !important;
+    }
+  }
+}
+
+.card-shadow{
+  border: 1px solid rgb(219, 219, 219) !important;
+  border-radius: 20px !important;
+  box-shadow: 0px 4px 30px rgba(221, 224, 255, .54);
 }

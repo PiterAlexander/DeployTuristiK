@@ -14,14 +14,19 @@ export class MainPublicComponent implements OnInit {
     @HostBinding('class') class = 'wrapper';
     public ui: Observable<UiState>;
     public role;
+    public user : any;
 
     constructor(private renderer: Renderer2, private store: Store<AppState>) {}
 
     ngOnInit() {
         this.ui = this.store.select('ui');
         this.ui.subscribe((state: UiState) => {
-          var user = JSON.parse(localStorage.getItem('TokenPayload'))
-          this.role = user['role']
+          this.user = JSON.parse(localStorage.getItem('TokenPayload'))
+          if (this.user && this.user.role) {
+            this.role = this.user['role']
+            } else {
+              this.role = undefined
+            }
         });
         
     }

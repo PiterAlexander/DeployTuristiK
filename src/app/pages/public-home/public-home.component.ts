@@ -1,12 +1,26 @@
 import { Component } from '@angular/core';
-
+import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+import { LayoutService } from '@services/app.layout.service';
 @Component({
   selector: 'app-public-home',
   templateUrl: './public-home.component.html',
   styleUrls: ['./public-home.component.scss']
 })
 export class PublicHomeComponent {
+    subscription: Subscription;
 
+    darkMode: boolean = false;
+
+    constructor(public router: Router, private layoutService: LayoutService) {
+        this.subscription = this.layoutService.configUpdate$.subscribe(config => {
+            this.darkMode = config.colorScheme === 'dark' || config.colorScheme === 'dim' ? true : false;
+        });
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
   fotos = [
     {
       "data":[
