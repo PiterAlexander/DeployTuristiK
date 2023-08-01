@@ -480,7 +480,7 @@ export class CreatePaymentFormComponent implements OnInit {
           let paymentStatus: number
           let orderStatus: number
           for (const element of this.oneOrder.payment) {
-            if (element !== undefined && element.status === 1) {
+            if (element !== undefined && element.status === 1 || element.status === 0) {
               addition += element.amount
             }
           }

@@ -35,7 +35,7 @@ const routes: Routes = [
                 component: DashboardComponent
             },
             {
-                path: 'profile',
+                path: 'profile',                
                 component: ProfileComponent
             },
             {
@@ -54,9 +54,8 @@ const routes: Routes = [
                 component: OrdersComponent
             },
             {
-                path: 'detailsPackage/:id',
+                path: 'DetallesPaquete/:id',
                 component: DetailsPackageComponent,
-                canActivate: [AuthGuard]
             },
             {
                 path: 'Clientes',

@@ -1,139 +1,162 @@
 <p-toast key="alert-message"></p-toast>
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
-<ng-container *ngIf="role === 'Cliente' || role === undefined">
-    <div class="grid content">
-        <div class="col-12">
-            <div>
-                <p-dataView #dv [value]="arrayPackagesClient" [paginator]="true" [rows]="6" filterBy="name"
-                    [sortField]="sortField" [sortOrder]="sortOrder" layout="grid" class="first">
-                    <ng-template pTemplate="header">
-                        <div class="flex flex-column md:flex-row md:justify-content-between gap-2">
+<div *ngIf="role === 'Cliente' || role === undefined">
+    <div class="surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border" style="border-radius: 15px;">
+        <p-dataView id="myDv" #dv [value]="arrayPackagesClient" [paginator]="true" [rows]="3" filterBy="name"
+            layout="grid">
+            <ng-template pTemplate="header">
+                <div class="flex flex-column md:flex-row justify-content-between align-items-center">
+                    <div class="flex flex-column text-center md:text-left">
+                        <span class="text-900 text-2xl mb-2">Paquetes</span>
+                        <span class="text-700 text-lg">Donde todas sus próximas aventuras esperan por usted.</span>
+                    </div>
+                    <div class="col-5">
+                        <div class="flex flex-column gap-2">
                             <span class="p-input-icon-left input-design">
                                 <i class="pi pi-search"></i>
                                 <input class="w-full small-input" type="search" pInputText
-                                    placeholder="Busca por el nombre..." (input)="onFilter(dv, $event)">
+                                    placeholder="Buscar paquete por nombre" (input)="onFilter(dv, $event)">
                             </span>
-                            <p-dataViewLayoutOptions style="display: contents;"></p-dataViewLayoutOptions>
-                        </div>
-                    </ng-template>
-                    <ng-template let-package pTemplate="listItem">
-                        <div class="col-12">
-                            <div class="flex flex-column md:flex-row align-items-center p-3 w-full ">
-                                <img src="https://img.freepik.com/vector-gratis/ilustracion-arte-linea-dibujada-mano_23-2149279750.jpg"
-                                    class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5" />
-                                <div class="flex-1 flex flex-column align-items-center text-center md:text-left">
-                                    <div class="font-bold text-2xl p-2">{{package.name}}</div>
-                                    <div class="mb-2"><i class="pi pi-map-marker m-1"></i>{{package.destination}}</div>
-                                    <div class="mb-2"><i class="pi pi-building m-1"></i>{{package.hotel}}</div>
-                                    <div class="flex align-items-center mt-2">
-                                        <small class="font-semibold m-2" pTooltip="Fecha de salida"
-                                            tooltipPosition="bottom">{{package.departureDate |
-                                            date}}</small><span>-</span>
-                                        <small class="font-semibold m-2" pTooltip="Fecha de regreso"
-                                            tooltipPosition="bottom">{{package.arrivalDate | date}}</small>
-                                    </div>
-                                </div>
-                                <div
-                                    class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
-                                    <small [class]="'package-badge quotas-' + quotas(package.availableQuotas)"
-                                        class="mb-3">{{package.availableQuotas > 10 ? "Con cupos" :
-                                        "Agotandose"}}</small>
-                                    <span
-                                        class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">{{package.price
-                                        | currency: 'USD':'symbol' }}</span>
-                                    <button icon="pi pi-eye" pButton type="button"
-                                        (click)="verDetalles(package.packageId)" label="Ver informacion"
-                                        class="p-button-outlined  p-button-sm"></button>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-template>
-
-                    <ng-template let-package pTemplate="gridItem">
-                        <div class="col-12 md:col-4 ">
-                            <div class="card m-3 layout-light p-3 hoverCard" (click)="verDetalles(package.packageId)">
-                                <div class="flex flex-wrap gap-2 align-items-center justify-content-between mb-2">
-                                    <div class="flex align-items-center">
-                                        <i class="pi pi-map-marker mr-2"></i>
-                                        <span class="font-semibold">{{package.destination}}</span>
-                                    </div>
-                                    <small
-                                        [class]="'package-badge quotas-' + quotas(package.availableQuotas)">{{package.availableQuotas
-                                        > 10 ? "Disponible" : "Pocos cupos"}}</small>
-                                </div>
-                                <div class="flex flex-column align-items-center text-center mb-3">
-                                    <img src="https://img.freepik.com/vector-gratis/ilustracion-arte-linea-dibujada-mano_23-2149279750.jpg"
-                                        class="w-6 shadow-2 my-3 mx-0" />
-                                    <div class="text-2xl font-bold">{{package.name}}</div>
-                                    <div class="flex align-items-center mt-2">
-                                        <small class="font-semibold m-2" pTooltip="Fecha de salida"
-                                            tooltipPosition="bottom" style="cursor: pointer;">{{package.departureDate |
-                                            date}}</small><span>-</span>
-                                        <small class="font-semibold m-2" pTooltip="Fecha de regreso"
-                                            tooltipPosition="bottom" style="cursor: pointer;">{{package.arrivalDate |
-                                            date}}</small>
-                                    </div>
-                                </div>
-                                <div class="flex align-items-center justify-content-center">
-                                    <span class="text-2xl font-semibold">{{package.price | currency: 'USD':'symbol' }}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-template>
-                </p-dataView>
-            </div>
-        </div>
-        <!-- <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-3 row-cols-xl-3 justify-content-center">
-                <div class="col-4 p-3 mb-2" *ngFor="let pack of filteredPackagesList">
-                    <div class="card h-100 hoverCard" style="cursor: pointer;">
-                        <div class="card-header p-0">
-                            <div class="d-flex">
-                                <img class="card-img-top"
-                                    src="https://st2.depositphotos.com/3725083/5485/i/600/depositphotos_54856347-stock-photo-travel-the-world-monument-concept.jpg"
-                                    alt="..." />
-                                <span
-                                    class="position-absolute style-edit translate-middle bg-primary border border-light rounded-circle">
-                                    <span class="visually-hidden">{{calculateDays(pack.departureDate,
-                                        pack.arrivalDate)}}
-                                        dias / {{calculateDays(pack.departureDate, pack.arrivalDate)-1}} noches</span>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="card-body pl-4 pr-4 pb-1">
-                            <div class="text-left small mb-1">
-                                <h5 class="fw-bolder">{{pack.name}}</h5>
-                                <p class="text-card">Desde {{pack.departureDate | date}} hasta {{pack.arrivalDate |
-                                    date}}
-                                </p>
-                                <i *ngIf="pack.transport=== 1" class="p-1 fa fa-plane"></i> <i
-                                    *ngIf="pack.transport=== 2" class="p-1 fa fa-bus"></i>
-                                <span class="m-1" *ngIf="pack.transport=== 1">Aereo</span>
-                                <span class="m-1" *ngIf="pack.transport=== 2">Terrestre</span>
-                                <i class="p-1 fas fa-hotel"></i>
-                                <span class="m-1">{{pack.hotel}}</span>
-                            </div>
-                            <div class="text-left small">
-                                <i class="p-1 	fas fa-plane-departure"></i>
-                                <span class="m-1">Partiendo desde {{pack.departurePoint}}</span>
-                            </div>
-                            <hr class="solid">
-                            <div class="text-left small">
-                                <span class="m-1">Precio por persona</span>
-                                <p class="price-text p-1 m-0">{{pack.price | currency:'COP '}}</p>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-end card-footer pt-0 mb-1 border-top-0 bg-transparent">
-                            <button type="button" (click)="reserve(pack)"
-                                class="btn btn-primary col-6">Reservar</button>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div> -->
+            </ng-template>
+            <ng-template let-package pTemplate="gridItem">
+                <div class="col-12 md:col-4 p-4">
+                    <div class="p-4 surface-card surface-border card-shadow">
+                        <div class="relative mb-3">
+                            <span class="surface-card text-900 shadow-2 px-3 py-2 absolute"
+                                style="border-radius: 1.5rem; left: 1rem; top: 1rem">{{package.availableQuotas}}
+                                cupos</span>
+                            <img src="https://chipviajero.com/wp-content/uploads/2018/05/Como-Llegar-a-Tol%C3%BA-Y-Cove%C3%B1as-Chip-Viajero-7.jpg"
+                                class="w-full" />
+                        </div>
+                        <div class="flex flex-column align-items-center text-center mb-3">
+                            <div class="flex justify-content-between align-items-center mb-3">
+                                <span class="text-900 font-medium text-xl">{{package.name}}</span>
+                                <span>
+                                    <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                                    <span class="font-medium">5.0</span>
+                                </span>
+                            </div>
+                            <p class="mt-0 mb-3 text-700 line-height-3">
+                                <span pTooltip="Fecha de salida" style="cursor: pointer;" tooltipPosition="bottom">
+                                    <i class="pi pi-calendar p-1"></i>
+                                    {{package.departureDate | date}}
+                                </span> -
+                                <span style="cursor: pointer;" pTooltip="Fecha de regreso" tooltipPosition="bottom">
+                                    <i class="pi pi-calendar p-1"></i>
+                                    {{package.arrivalDate | date}}
+                                </span>
+                            </p>
+                            <p class="mt-0 mb-3 text-700 line-height-3">
+                                <span pTooltip="Hotel" style="cursor: pointer;" tooltipPosition="bottom">
+                                    <i class='bx bx-buildings p-1'></i>
+                                    {{package.hotel}}
+                                </span>
+                            </p>
+                        </div>
+
+                        <div class="flex justify-content-between">
+                            <span class="flex align-items-end text-primary text-2xl font-medium">{{package.price |
+                                currency:
+                                'USD'}}</span>
+                            <button pButton pRipple type="button" label="Ver detalles"
+                                (click)="verDetalles(package.packageId)" class="p-button-outlined p-button-sm"></button>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </p-dataView>
     </div>
-</ng-container>
+    <!-- <div class="grid content">
+        <div class="col-12">
+            <div>
+                <div class="card">
+
+                    <p-dataView #dv [value]="arrayPackagesClient" [paginator]="true" [rows]="3" filterBy="name"
+                        [sortField]="sortField" [sortOrder]="sortOrder" layout="grid">
+
+                        <ng-template pTemplate="header" style="background-color : #ffffff !important; border: none;">
+                            <div class="grid">
+                                <div class="col-7">
+                                    <div class="text-900 font-medium text-4xl mb-3">
+                                        Paquetes
+                                    </div>
+                                    <p class="mt-0 p-0 text-700 text-2xl">
+                                        Seleccion exclusiva
+                                    </p>
+
+                                </div>
+                                <div class="col-5">
+                                    <div class="flex flex-column gap-2">
+                                        <span class="p-input-icon-left input-design">
+                                            <i class="pi pi-search"></i>
+                                            <input class="w-full small-input" type="search" pInputText
+                                                placeholder="Busca por el nombre..." (input)="onFilter(dv, $event)">
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+
+                        <ng-template let-package pTemplate="gridItem">
+                            <div class="col-12 md:col-4 p-3">
+                                <div class="p-4 surface-card surface-border card-shadow">
+                                    <div class="relative mb-3">
+                                        <span class="surface-card text-900 shadow-2 px-3 py-2 absolute"
+                                            style="border-radius: 1.5rem; left: 1rem; top: 1rem">{{package.availableQuotas}}
+                                            cupos</span>
+                                        <img src="https://chipviajero.com/wp-content/uploads/2018/05/Como-Llegar-a-Tol%C3%BA-Y-Cove%C3%B1as-Chip-Viajero-7.jpg"
+                                            class="w-full" />
+                                    </div>
+                                    <div class="flex flex-column align-items-center text-center mb-3">
+                                        <div class="flex justify-content-between align-items-center mb-3">
+                                            <span class="text-900 font-medium text-xl">{{package.name}}</span>
+                                            <span>
+                                                <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                                                <span class="font-medium">5.0</span>
+                                            </span>
+                                        </div>
+                                        <p class="mt-0 mb-3 text-700 line-height-3">
+                                            <span pTooltip="Fecha de salida" style="cursor: pointer;"
+                                                tooltipPosition="bottom">
+                                                <i class="pi pi-calendar p-1"></i>
+                                                {{package.departureDate | date}}
+                                            </span> -
+                                            <span style="cursor: pointer;" pTooltip="Fecha de regreso"
+                                                tooltipPosition="bottom">
+                                                <i class="pi pi-calendar p-1"></i>
+                                                {{package.arrivalDate | date}}
+                                            </span>
+                                        </p>
+                                        <p class="mt-0 mb-3 text-700 line-height-3">
+                                            <span pTooltip="Hotel" style="cursor: pointer;" tooltipPosition="bottom">
+                                                <i class='bx bx-buildings p-1'></i>
+                                                {{package.hotel}}
+                                            </span>
+                                        </p>
+                                    </div>
+
+                                    <div class="grid">
+                                        <div class="col-8 px-4">
+                                            <span class="text-primary text-xl font-medium">{{package.price | currency: 'USD'}}</span>
+                                        </div>
+                                        <div class="col-4">
+                                            <button pButton type="button" label="Ver detalles" (click)="verDetalles(package.packageId)"
+                                                style="color: var(--primary-color); border: 1px solid var(--primary-color) !important;"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </p-dataView>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <br>
+</div>
 
 <div *ngIf="role !== 'Cliente' && role !== undefined" class="p-4">
     <div class="col-12">
@@ -165,9 +188,6 @@
                         <th class="font-medium" style="width: 10rem">
                             Precio
                         </th>
-                        <th class="font-medium" style="min-width: 10rem">
-                            Estado
-                        </th>
                         <th class="font-medium text-center" style="width: 10rem">
                             Acciones
                         </th>
@@ -193,16 +213,6 @@
                         <td>
                             {{ package.price | currency: 'USD':'symbol' }}
                         </td>
-                        <td class="text-center">
-                            <div *ngIf="package.status === true">
-                                <p-inputSwitch (click)="disablePackage(package)" [(ngModel)]="checked2"
-                                    pTooltip="Activo" tooltipPosition="bottom"></p-inputSwitch>
-                            </div>
-                            <div *ngIf="package.status === false">
-                                <p-inputSwitch (click)="disablePackage(package)" pTooltip="Inactivo"
-                                    tooltipPosition="bottom"></p-inputSwitch>
-                            </div>
-                        </td>
                         <td class="flex justify-content-around">
                             <button pButton type="button" icon="pi pi-pencil"
                                 class="p-button-outlined p-button-warning p-button-rounded m-1"
@@ -210,7 +220,7 @@
                                 tooltipPosition="bottom"></button>
                             <button pButton type="button" icon="pi pi-info-circle"
                                 class="p-button-outlined p-button-rounded m-1" pTooltip="Ver detalles"
-                               tooltipPosition="bottom"></button>
+                                tooltipPosition="bottom"></button>
                         </td>
                     </tr>
                 </ng-template>
@@ -223,4 +233,3 @@
         </div>
     </div>
 </div>
-

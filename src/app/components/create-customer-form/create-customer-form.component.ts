@@ -53,20 +53,18 @@ export class CreatecustomerformComponent implements OnInit {
 
     this.birthDateValidator()
 
-
-
     if (this.oneCustomer !== undefined) {
       if (this.oneCustomer.action === "createFrequentTraveler") {
         this.customerFromAction = this.oneCustomer.customer
         this.formGroup = this.fb.group({
-          email: new FormControl('paki555tours@pakitours.com'),
-          password: new FormControl('pakitours123456789'),
+          email: new FormControl(null),
+          password: new FormControl(null),
           name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
           lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
           document: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]),
           birthDate: [null, [Validators.required, this.birthDateValidator.bind(this)]],
           phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
-          address: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
+          address: new FormControl('', [Validators.required]),
           eps: new FormControl(null, [Validators.required]),
         })
         if (this.oneCustomer.customer.frequentTraveler !== undefined) {
@@ -86,7 +84,7 @@ export class CreatecustomerformComponent implements OnInit {
           document: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]),
           birthDate: [null, [Validators.required, this.birthDateValidator.bind(this)]],
           phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
-          address: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
+          address: new FormControl('', [Validators.required]),
           eps: new FormControl(null, [Validators.required]),
         })
         this.customerFromAction = this.oneCustomer.customer
@@ -113,7 +111,7 @@ export class CreatecustomerformComponent implements OnInit {
         document: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]),
         birthDate: [null, [Validators.required, this.birthDateValidator.bind(this)]],
         phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
-        address: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
+        address: new FormControl('', [Validators.required]),
         eps: new FormControl(null, [Validators.required]),
       })
     }
@@ -127,6 +125,15 @@ export class CreatecustomerformComponent implements OnInit {
       !this.validateSaveButtonIfCustomerInformation()
   }
 
+  showUserInputs(): boolean {
+    if (this.oneCustomer !== undefined) {
+      if (this.oneCustomer.action === 'createFrequentTraveler' || this.oneCustomer.action === 'editCustomerFromFrequentTraveler') {
+        return false
+      }
+    }
+    return true
+  }
+
   validateSaveButtonIfCustomerInformation(): boolean {
     if (this.customerInformation() && !this.hasInformation) {
       return true
@@ -136,7 +143,6 @@ export class CreatecustomerformComponent implements OnInit {
 
   validateTitle(): string {
     if (this.oneCustomer !== undefined) {
-
       if (this.oneCustomer.action === 'createFrequentTraveler') {
         return 'Agregar viajero frecuente'
       } else if (this.oneCustomer.customer.user.userId == this.appService.user.id) {
@@ -240,7 +246,7 @@ export class CreatecustomerformComponent implements OnInit {
 
   validateExistingDocument(): boolean {
     if (this.oneCustomer !== undefined) {
-      if (this.oneCustomer.action === 'editCustomer') {
+      if (this.oneCustomer.action === 'editCustomer' || this.oneCustomer.action === 'editCustomerFromFrequentTraveler') {
         const customer: Customer = this.allCustomers.find(c => c.document == this.formGroup.value.document)
         if (customer !== undefined && customer.document !== this.oneCustomer.customer.document) {
           return true
@@ -279,18 +285,23 @@ export class CreatecustomerformComponent implements OnInit {
 
   validateExistingEmail(): boolean {
     if (this.oneCustomer !== undefined) {
-      if (this.oneCustomer.action === 'editCustomer') {
-        const customer: Customer = this.allCustomers.find(c => c.user.email == this.formGroup.value.email)
-        if (customer !== undefined && customer.user.email !== this.oneCustomer.customer.user.email) {
-          return true
+      if (this.oneCustomer.action !== 'createFrequentTraveler' && this.oneCustomer.action !== 'editCustomerFromFrequentTraveler') {
+        if (this.oneCustomer.action === 'editCustomer') {
+          const customer: Customer = this.allCustomers.find(c => c.user.email == this.formGroup.value.email)
+          if (customer !== undefined && customer.user.email !== this.oneCustomer.customer.user.email) {
+            return true
+          }
+        } else {
+          const customer: Customer = this.allCustomers.find(c => c.user.email == this.formGroup.value.email)
+          if (customer !== undefined) {
+            return true
+          }
         }
-      } else if (this.oneCustomer.action === 'createFrequentTraveler' && this.customerInformation()) {
-        return false
-      } else {
-        const customer: Customer = this.allCustomers.find(c => c.user.email == this.formGroup.value.email)
-        if (customer !== undefined) {
-          return true
-        }
+      }
+    } else {
+      const customer: Customer = this.allCustomers.find(c => c.user.email == this.formGroup.value.email)
+      if (customer !== undefined) {
+        return true
       }
     }
     return false

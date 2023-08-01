@@ -144,7 +144,7 @@
             </div>
         </div>
     </div>
-    <div class="grid" [hidden]="oneCustomer">
+    <div class="grid" *ngIf="showUserInputs()">
         <div class="col">
             <div class="field">
                 <span class="p-input-icon-left w-full">
