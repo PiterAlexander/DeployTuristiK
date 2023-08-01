@@ -105,7 +105,7 @@ export class LoginComponent implements OnInit {
 
                 // this.toastr.success(this.token.message);
             } else {
-                this.messageService.add({ key: 'alert-message-login', severity: 'error', summary: 'Lo sentimos!', detail: this.token.message });
+                this.messageService.add({ key: 'alert-message-login', severity: 'error', summary: '¡Lo sentimos!', detail: this.token.message });
             }
 
         }
