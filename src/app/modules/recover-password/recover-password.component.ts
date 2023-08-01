@@ -68,11 +68,11 @@ export class RecoverPasswordComponent implements OnInit {
             console.log(this.modelUser)
 
 
-            this.toastr.success('Ya puedes acceder nuevamente al sistema', 'Contraseña Cambiada Correctamente!');
+            this.toastr.success('Ya puedes acceder nuevamente al sistema', '¡Contraseña Cambiada Correctamente!');
             this.router.navigate(['/login'])
 
         } else {
-            this.messageService.add({ key: 'alert-message-recover-password', severity: 'error', summary: 'Lo sentimos!', detail: 'El código ingresado, no es válido' });
+            this.messageService.add({ key: 'alert-message-recover-password', severity: 'error', summary: '¡Lo sentimos!', detail: 'El código ingresado no es válido' });
 
         }
     }

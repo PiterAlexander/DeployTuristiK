@@ -95,7 +95,7 @@ export class ForgotPasswordComponent implements OnInit {
             // this.toastr.success("Correo Enviado");
 
         } else {
-            this.messageService.add({ key: 'alert-message-forgot-password', severity: 'error', summary: 'Lo sentimos!', detail: 'Corrreo no registrado' });
+            this.messageService.add({ key: 'alert-message-forgot-password', severity: 'error', summary: '¡Lo sentimos!', detail: 'Corrreo no registrado' });
 
         }
     }

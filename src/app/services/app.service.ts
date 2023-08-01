@@ -48,7 +48,7 @@ export class AppService {
         this.user = null;
         this.store.dispatch(new GetUserInfoRequest(this.user));
 
-        this.router.navigate(['/login']);
+        this.router.navigate(['/']);
         this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Sesión cerrada' });
 
     }
