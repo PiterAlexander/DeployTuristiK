@@ -51,8 +51,6 @@ export class CreateUserFormComponent implements OnInit {
       this.allCustomers = state.allCustomers.data
       this.allEmployees = state.allEmployees.data
 
-
-
       this.rolesList = this.allRoles.filter(role => role.name !== "Beneficiario")
       if (this.userData != null) {
         var role = this.rolesList.find(r => r.name == 'Cliente')

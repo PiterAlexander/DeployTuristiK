@@ -15,7 +15,7 @@
         <span class="h3"> Cargando ...</span>
     </div>
     <div class="flex flex-column mx-auto md:mx-0 w-full" *ngIf="!loading">
-        <span class="mb-2 font-semibold text-xl">Bienvenid@</span>
+        <span class="mb-2 font-semibold text-xl">{{ saludo }}</span>
         <span class="text-color-secondary font-medium mb-5 text-lg">{{
             allInfo.name + ' ' + allInfo.lastName
         }}</span>
@@ -29,13 +29,13 @@
                 <ul class="list-none m-0 p-0">
                     <li>
                         <div
-                            class="flex surface-border mb-3 p-2 align-items-center border-1 surface-border border-round"
+                            class="flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round"
                         >
-                            <span>
-                                <i
+                            <span
+                                ><i
                                     class="pi pi-id-card text-xl text-primary"
-                                ></i>
-                            </span>
+                                ></i
+                            ></span>
                             <div class="ml-3">
                                 <span class="mb-2 font-semibold"
                                     >Documento</span
@@ -48,7 +48,7 @@
                     </li>
                     <li>
                         <div
-                            class="flex surface-border mb-3 p-2 align-items-center border-1 surface-border border-round overflow-hidden sm:text-overflow-ellipsis"
+                            class="flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round overflow-hidden sm:text-overflow-ellipsis"
                         >
                             <span>
                                 <i class="pi pi-at text-xl text-primary"></i>
@@ -63,7 +63,7 @@
                     </li>
                     <li>
                         <div
-                            class="flex surface-border mb-3 p-2 align-items-center border-1 surface-border border-round"
+                            class="flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round"
                         >
                             <span>
                                 <i class="pi pi-phone text-xl text-primary"></i>
@@ -77,8 +77,8 @@
                         </div>
                     </li>
                     <li>
-                        <a
-                            class="flex surface-border mb-3 p-2 align-items-center border-1 surface-border border-round"
+                        <div
+                            class="flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round"
                         >
                             <span>
                                 <i class="pi pi-users text-xl text-primary"></i>
@@ -89,7 +89,7 @@
                                     {{ allInfo.phoneNumber }}
                                 </p>
                             </div>
-                        </a>
+                        </div>
                     </li>
                 </ul>
             </p-tabPanel>
@@ -98,56 +98,72 @@
                     <i class="pi pi-cog mr-2"></i>
                     <span>Configuración</span>
                 </ng-template>
-                <div class="grid flex justify-content-center">
-                    <button
-                        type="button"
-                        label="Editar Perfil"
-                        class="p-element p-ripple p-button-outlined p-button-warning mr-2 my-2 p-button p-component col-12 lg:col-10"
-                        ng-reflect-label="Editar"
-                        (click)="
-                            user.role == 'Cliente'
-                                ? editCustomer(allInfo)
-                                : editEmployee(allInfo)
-                        "
-                    >
-                        <span class="p-button-label text-lg">
-                            <i class="pi pi-pencil text-warning mr-3"></i>
-                            Editar Información</span
-                        ><span class="p-ink"></span>
-                    </button>
-                </div>
-                <div class="grid flex justify-content-center mt-2">
-                    <button
-                        type="button"
-                        label="Cambiar Contraseña"
-                        class="p-element p-ripple p-button-outlined p-button-warning mr-2 mb-2 p-button p-component col-12 lg:col-10"
-                        ng-reflect-label="Editar"
-                        (click)="changePassword(allInfo.user)"
-                    >
-                        <span class="p-button-label text-lg">
-                            <i class="pi pi-pencil text-warning mr-3"></i>
-                            Cambiar Contraseña</span
-                        ><span class="p-ink"></span>
-                    </button>
-                </div>
+                <ul class="list-none m-0 p-0">
+                    <li>
+                        <div
+                            class="cursor-pointer flex mb-3 p-3 align-items-center border-1 border-round col-12 lg:col-9 border-yellow-500 col-12 lg:col-12"
+                            (click)="
+                                user.role == 'Cliente'
+                                    ? editCustomer(allInfo)
+                                    : editEmployee(allInfo)
+                            "
+                        >
+                            <span>
+                                <i
+                                    class="pi pi-pencil text-xl text-warning"
+                                ></i>
+                            </span>
+                            <div class="ml-3">
+                                <span class="mb-2 font-semibold"
+                                    >Editar Perfil</span
+                                >
+                                <p class="text-color-secondary m-0">
+                                    Click para editar
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div
+                            class="cursor-pointer flex mb-3 p-3 align-items-center border-1 border-round col-12 lg:col-9 border-yellow-500 col-12 lg:col-12"
+                            (click)="changePassword(allInfo.user)"
+                        >
+                            <span>
+                                <i
+                                    class="pi pi-pencil text-xl text-warning"
+                                ></i>
+                            </span>
+                            <div class="ml-3">
+                                <span class="mb-2 font-semibold"
+                                    >Cambiar Contraseña</span
+                                >
+                                <p class="text-color-secondary m-0">
+                                    Click para Cambiar
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </p-tabPanel>
         </p-tabView>
         <div
-            class="grid flex justify-content-center mb-5"
-            style="position: fixed; bottom: 0; margin-left: 80px"
+            class="grid flex justify-content-center mb-3 mr-1 sm:w-25rem"
+            style="position: fixed; bottom: 0; right: 0"
         >
-            <button
-                type="button"
-                label="Cerrar Sesión"
-                class="p-element p-ripple p-button-outlined p-button-danger mr-2 mb-2 p-button p-component col-12 lg:col-12 w-full"
-                ng-reflect-label="Danger"
+            <a
+                class="cursor-pointer flex mb-3 p-3 align-items-center border-1 border-round col-12 lg:col-9 border-red-300"
                 (click)="logoutConfirm($event)"
             >
-                <span class="p-button-label text-lg">
-                    <i class="pi pi-sign-out text-danger mr-2"></i>
-                    Cerrar Sesión</span
-                ><span class="p-ink"></span>
-            </button>
+                <span>
+                    <i class="pi pi-sign-out text-xl text-red-400"></i>
+                </span>
+                <div class="ml-3">
+                    <span class="mb-2 font-semibold text-red-400"
+                        >Cerrar Sesión</span
+                    >
+                    <p class="text-color-secondary m-0">¡Vuelva pronto!</p>
+                </div>
+            </a>
             <p-confirmDialog key="confirm2"></p-confirmDialog>
         </div>
     </div>
