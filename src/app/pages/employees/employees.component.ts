@@ -1,5 +1,5 @@
 import { Employee } from '@/models/employee';
-import { DeleteEmployeeRequest, GetAllCustomerRequest, GetAllEmployeeRequest, GetAllRoleRequest, OpenModalCreateEmployee } from '@/store/ui/actions';
+import { DeleteEmployeeRequest, GetAllCustomerRequest, GetAllEmployeeRequest, GetAllRoleRequest, GetUsersRequest, OpenModalCreateEmployee } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit, PipeTransform } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -35,14 +35,15 @@ export class EmployeesComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private confirmationService: ConfirmationService,
-    private appService : AppService
+    private appService: AppService
   ) { }
 
   ngOnInit() {
-    this.user= this.appService.user
+    this.user = this.appService.user
     this.store.dispatch(new GetAllCustomerRequest());
     this.store.dispatch(new GetAllRoleRequest());
     this.store.dispatch(new GetAllEmployeeRequest());
+    this.store.dispatch(new GetUsersRequest())
 
     this.ui = this.store.select('ui');
     this.ui.subscribe((state: UiState) => {
