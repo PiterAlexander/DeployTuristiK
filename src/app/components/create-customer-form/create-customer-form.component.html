@@ -37,7 +37,7 @@
         </div>
     </div>
     <div class="grid">
-        <div class="col">
+        <div class="col" *ngIf="role === 'Cliente'">
             <div class="field">
                 <div class="p-inputgroup">
                     <input pInputText placeholder="Ingrese su número de documento" (keyup)="isCustomerChanges()"
@@ -45,7 +45,52 @@
                         [ngClass]="{ 
                             'border-green-500': customerInformation() && !validateExistingDocument() && !validateOwnDocument(),
                         'border-red-600': validateExistingDocument() || !validateOnlyNumbers() || validateOwnDocument()}" required="true" minlength="8"
-                        maxlength="15" class="w-full" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
+                        maxlength="15" class="w-full" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)"
+                        [style.pointer-events]="oneCustomer ? 'none' : 'auto'"
+                        [style.opacity]="oneCustomer ? 0.5 : 1" />
+                    <button *ngIf="customerInformation() && !validateExistingDocument() &&  !validateOwnDocument()"
+                        pButton pRipple type="button" pTooltip="Rellenar información" tooltipPosition="bottom"
+                        (click)="fillCustomerInformation()" icon="pi pi-user-plus" class="p-button-success"></button>
+                </div>
+                <!-- validacion de documento -->
+                <small class="p-error block"
+                    *ngIf="formGroup.get('document')?.dirty && validateExistingDocument() && !comesFromCft()">
+                    El documento ya existe
+                </small>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('document')?.dirty && validateExistingDocument() && comesFromCft()">
+                    Ya existe un viajero con este documento
+                </small>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('document')?.dirty && validateOwnDocument() && comesFromCft()">
+                    Por favor ingrese un documento diferente al suyo
+                </small>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['required']">
+                    Este campo es obligatorio
+                </small>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('document')?.errors?.['minlength'] && formGroup.get('document')?.dirty">
+                    El documento debe tener mínimo 8 caracteres
+                </small>
+                <small class="block text-green-500" *ngIf="formGroup.get('document')?.dirty && customerInformation() && !validateExistingDocument()
+                     && !validateOwnDocument()">
+                    !Cliente encontrado!
+                </small>
+                <small class="p-error block" *ngIf="formGroup.get('document')?.dirty && !validateOnlyNumbers()">
+                    Por favor ingrese solo números
+                </small>
+            </div>
+        </div>
+        <div class="col" *ngIf="role !== 'Cliente'">
+            <div class="field">
+                <div class="p-inputgroup">
+                    <input pInputText placeholder="Ingrese su número de documento" (keyup)="isCustomerChanges()"
+                        type="text" formControlName="document"
+                        [ngClass]="{ 
+                            'border-green-500': customerInformation() && !validateExistingDocument() && !validateOwnDocument(),
+                        'border-red-600': validateExistingDocument() || !validateOnlyNumbers() || validateOwnDocument()}" required="true" minlength="8"
+                        maxlength="15" class="w-full" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)" />
                     <button *ngIf="customerInformation() && !validateExistingDocument() &&  !validateOwnDocument()"
                         pButton pRipple type="button" pTooltip="Rellenar información" tooltipPosition="bottom"
                         (click)="fillCustomerInformation()" icon="pi pi-user-plus" class="p-button-success"></button>
@@ -122,11 +167,23 @@
         </div>
     </div>
     <div class="grid">
-        <div class="col">
+        <div class="col" *ngIf="role === 'Cliente'">
             <div class="field">
                 <p-calendar dateFormat="dd/mm/yy" formControlName="birthDate"
                     placeholder="Ingrese su fecha de nacimiento" showIcon="true" required="true"
-                    [style]="{ width: '100%' }" [readonlyInput]="true" [maxDate]="customerMaxDate"></p-calendar>
+                    [style]="{ width: '100%' }" [readonlyInput]="true" [maxDate]="customerMaxDate" [style.pointer-events]="oneCustomer ? 'none' : 'auto'"
+                    [style.opacity]="oneCustomer ? 0.5 : 1"></p-calendar>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('birthDate')?.dirty && formGroup.get('birthDate')?.errors?.['required']">
+                    Este campo es obligatorio
+                </small>
+            </div>
+        </div>
+        <div class="col" *ngIf="role !== 'Cliente'">
+            <div class="field">
+                <p-calendar dateFormat="dd/mm/yy" formControlName="birthDate"
+                    placeholder="Ingrese su fecha de nacimiento" showIcon="true" required="true"
+                    [style]="{ width: '100%' }" [readonlyInput]="true" [maxDate]="customerMaxDate" ></p-calendar>
                 <small class="p-error block"
                     *ngIf="formGroup.get('birthDate')?.dirty && formGroup.get('birthDate')?.errors?.['required']">
                     Este campo es obligatorio
