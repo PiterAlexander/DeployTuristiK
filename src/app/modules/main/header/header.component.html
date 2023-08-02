@@ -1,5 +1,5 @@
 <div>
-  <ng-container *ngIf="role === 'Administrador'">
+  <ng-container *ngIf="role !== 'Cliente'">
     <div class="layout-topbar mr-5">
       <div class="topbar-start p-3">
         <button #menubutton type="button" (click)="onToggleMenuSidebar()" class="topbar-menubutton p-link p-trigger">
