@@ -1,22 +1,20 @@
-import {Package} from '@/models/package';
+import { Package } from '@/models/package';
 import {
     ChangeStatusPackageRequest,
     GetAllCustomerRequest,
     GetAllPackagesRequest,
     OpenModalCreatePackage,
-    OpenModalDetailsPackage
 } from '@/store/ui/actions';
-import {AppState} from '@/store/state';
-import {Component, OnInit, ViewChild } from '@angular/core';
-import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
-import {UiState} from '@/store/ui/state';
-import {Customer} from '@/models/customer';
-import {SelectItem} from 'primeng/api';
-import {DataView} from 'primeng/dataview';
-import {Router} from '@angular/router';
-import {ConfirmationService, MessageService} from 'primeng/api';
-import { DetailsPackageComponent } from '@components/details-package/details-package.component';
+import { AppState } from '@/store/state';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { UiState } from '@/store/ui/state';
+import { Customer } from '@/models/customer';
+import { SelectItem } from 'primeng/api';
+import { DataView } from 'primeng/dataview';
+import { Router } from '@angular/router';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-packages',
@@ -44,7 +42,7 @@ export class PackagesComponent implements OnInit {
         private router: Router,
         private confirmationService: ConfirmationService,
         private messageService: MessageService
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.store.dispatch(new GetAllPackagesRequest());
@@ -66,8 +64,8 @@ export class PackagesComponent implements OnInit {
         });
 
         this.sortOptions = [
-            {label: 'Del mayor al menor', value: '!price'},
-            {label: 'Del menor al mayor', value: 'price'}
+            { label: 'Del mayor al menor', value: '!price' },
+            { label: 'Del menor al mayor', value: 'price' }
         ];
     }
 
@@ -99,7 +97,7 @@ export class PackagesComponent implements OnInit {
     }
 
     openEditPackageModal(pack: Package) {
-        this.store.dispatch(new OpenModalCreatePackage({...pack}));
+        this.store.dispatch(new OpenModalCreatePackage({ ...pack }));
     }
 
     disablePackage(pack: Package) {
@@ -131,7 +129,7 @@ export class PackagesComponent implements OnInit {
                     detail: 'Estado editado exitosamente.'
                 });
             },
-            reject: () => {}
+            reject: () => { }
         });
     }
 

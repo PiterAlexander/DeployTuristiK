@@ -211,8 +211,8 @@
                         currency:'USD':'symbol'}} - Con abonos pendientes</td>
                     <td *ngIf="existingRemainingAmount() && !pendingPayments" colspan="12">Restante: {{ remainingAmount |
                         currency:'USD':'symbol'}}</td>
-                    <td *ngIf="!existingRemainingAmount() && !pendingPayments" colspan="12">¡Ya pagaste la totalidad del pedido!</td>
-                    <td *ngIf="!existingRemainingAmount() && pendingPayments" colspan="12">¡Ya pagaste la totalidad del pedido! - 
+                    <td *ngIf="!existingRemainingAmount() && !pendingPayments" colspan="12">¡La totalidad del pedido ya fue pagada!</td>
+                    <td *ngIf="!existingRemainingAmount() && pendingPayments" colspan="12">¡La totalidad del pedido ya fue pagada! - 
                         Con abonos pendientes</td>
                 </tr>
             </ng-template>
