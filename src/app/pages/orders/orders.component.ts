@@ -8,6 +8,7 @@ import { UiState } from '@/store/ui/state';
 import { Customer } from '@/models/customer';
 import { Package } from '@/models/package';
 import { ApiService } from '@services/api.service';
+import { DataView } from 'primeng/dataview';
 
 @Component({
   selector: 'app-orders',
@@ -26,6 +27,7 @@ export class OrdersComponent implements OnInit {
   public allPackages: Array<Package>
   public statuses: any[] = [];
   public loading: boolean = true
+  public visible: boolean = true
 
   constructor(
     private store: Store<AppState>,
@@ -56,6 +58,10 @@ export class OrdersComponent implements OnInit {
     ]
   }
 
+  onFilter(dv: DataView, event: Event) {
+    dv.filter((event.target as HTMLInputElement).value);
+  }
+
   compareCustomer() {
     if (this.allCustomers !== undefined) {
       this.oneCustomer = this.allCustomers.find(c => c.userId === this.user['id'])
@@ -84,13 +90,18 @@ export class OrdersComponent implements OnInit {
             }
           }
         }
-        console.log(this.ordersList);
-        
       } else if (this.user['role'] !== 'Cliente') {
         this.ordersList = this.allOrders
         this.loading = false
       }
     }
+    this.updateVisibility()
+  }
+
+  updateVisibility(): void {
+    this.loading = false
+    this.visible = false;
+    setTimeout(() => this.visible = true, 0);
   }
 
   showStatus(orderStatus: any): string {
@@ -159,10 +170,4 @@ export class OrdersComponent implements OnInit {
     }
   }
 
-  //CUSTOMER
-
-
-  onFilter(event: Event) {
-    // dv.filter((event.target as HTMLInputElement).value);
-  }
 }

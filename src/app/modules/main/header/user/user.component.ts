@@ -26,6 +26,8 @@ export class UserComponent implements OnInit {
     public employeesList: Array<any>;
     public ui: Observable<UiState>;
     public loading: boolean = true;
+    public hora: any
+    public saludo: string
 
 
     constructor(private appService: AppService, private confirmationService: ConfirmationService, private messageService: MessageService, private store: Store<AppState>, private toastr: ToastrService) { }
@@ -39,6 +41,8 @@ export class UserComponent implements OnInit {
             this.customersList = state.allCustomers.data
             this.employeesList = state.allEmployees.data
         });
+        this.hora = new Date().getHours();
+
         this.info();
     }
 
@@ -68,16 +72,26 @@ export class UserComponent implements OnInit {
 
 
         }, 2000)
+
+        if (this.hora > 2 && this.hora <= 11) {
+            this.saludo = "Buenos días,"
+        } else if (this.hora > 11 && this.hora <= 18) {
+            this.saludo = "Buenas tardes,"
+        } else {
+            this.saludo = "Buenas noches,"
+        }
     }
 
     logoutConfirm(event: Event) {
         this.confirmationService.confirm({
             key: 'confirm2',
+            header: 'Cerrar Sesión',
             target: event.target || new EventTarget,
-            message: '¿Seguro quieres cerrar sesión?',
+            message: '¿Seguro quiere cerrar sesión?',
             icon: 'pi pi-exclamation-triangle',
-            acceptLabel: "Sí",
+            acceptLabel: "Cerrar Sesión",
             rejectLabel: "No",
+            acceptIcon: 'pi pi-sign-out',
             acceptButtonStyleClass: 'p-button-danger p-button-sm',
             rejectButtonStyleClass: 'p-button-outlined p-button-sm',
             accept: () => {

@@ -25,7 +25,7 @@
                         <div
                             class="flex justify-content-between align-items-start mt-3"
                         >
-                            <div class="w-9">
+                            <div class="w-12">
                                 <span class="text-4xl font-bold text-900"
                                     ><i
                                         class="pi pi-money-bill text-green text-3xl mb-4 mr-2"
@@ -33,18 +33,16 @@
                                     >200000</span
                                 >
                             </div>
-                            <div
-                                class="w-3 mt-2"
-                                [ngClass]="{
-                                    'text-green-500': porAbo >= 60,
-                                    'text-yellow-500':
-                                        porAbo < 60 && porAbo >= 40,
-                                    'text-red-500': porAbo < 39
-                                }"
-                            >
-                                <span class="text-xl">{{ porAbo }}%</span>
-                                <i class="pi pi-arrow-up text-lg ml-2"></i>
-                            </div>
+                        </div>
+                        <div
+                            [ngClass]="{
+                                'text-green-500': porAbo >= 60,
+                                'text-yellow-500': porAbo < 60 && porAbo >= 40,
+                                'text-red-500': porAbo < 39
+                            }"
+                        >
+                            <span class="text-xl">{{ porAbo }}%</span>
+                            <i class="pi pi-arrow-up text-lg ml-2"></i>
                         </div>
                     </div>
                 </div>
@@ -73,7 +71,7 @@
                         <div
                             class="flex justify-content-between align-items-start mt-3"
                         >
-                            <div class="w-9">
+                            <div class="w-12">
                                 <span class="text-4xl font-bold text-900"
                                     ><i
                                         class="pi pi-briefcase text-primary text-3xl mb-4 mr-2"
@@ -81,18 +79,17 @@
                                     >200</span
                                 >
                             </div>
-                            <div
-                                class="w-3 mt-2"
-                                [ngClass]="{
-                                    'text-green-500': porCupSep >= 60,
-                                    'text-yellow-500':
-                                        porCupSep < 60 && porCupSep >= 40,
-                                    'text-red-500': porCupSep < 39
-                                }"
-                            >
-                                <span class="text-xl">{{ porCupSep }}%</span>
-                                <i class="pi pi-arrow-up text-lg ml-2"></i>
-                            </div>
+                        </div>
+                        <div
+                            [ngClass]="{
+                                'text-green-500': porCupSep >= 60,
+                                'text-yellow-500':
+                                    porCupSep < 60 && porCupSep >= 40,
+                                'text-red-500': porCupSep < 39
+                            }"
+                        >
+                            <span class="text-xl">{{ porCupSep }}%</span>
+                            <i class="pi pi-arrow-up text-lg ml-2"></i>
                         </div>
                     </div>
                 </div>

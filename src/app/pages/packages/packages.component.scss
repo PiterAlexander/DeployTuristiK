@@ -293,12 +293,14 @@
   border: none;
 }
 
-::ng-deep p-dataview{
-  div{
-    :first-child{
-      background-color:  #ffffff !important;
-      border: none !important;
-    }
+:host ::ng-deep {
+  #myDv {
+      .p-dataview-header {
+          // background-color: red;
+          background-color: #ffffff;
+          border: none;
+          padding: 0%;
+      }
   }
 }
 

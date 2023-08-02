@@ -1,7 +1,75 @@
 <p-toast key="alert-message"></p-toast>
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
-<ng-container *ngIf="role === 'Cliente' || role === undefined">
-    <div class="grid content">
+<div *ngIf="role === 'Cliente' || role === undefined">
+    <div class="surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border" style="border-radius: 15px;">
+        <p-dataView id="myDv" #dv [value]="arrayPackagesClient" [paginator]="true" [rows]="3" filterBy="name"
+            layout="grid">
+            <ng-template pTemplate="header">
+                <div class="flex flex-column md:flex-row justify-content-between align-items-center">
+                    <div class="flex flex-column text-center md:text-left">
+                        <span class="text-900 text-2xl mb-2">Paquetes</span>
+                        <span class="text-700 text-lg">Donde todas sus próximas aventuras esperan por usted.</span>
+                    </div>
+                    <div class="col-5">
+                        <div class="flex flex-column gap-2">
+                            <span class="p-input-icon-left input-design">
+                                <i class="pi pi-search"></i>
+                                <input class="w-full small-input" type="search" pInputText
+                                    placeholder="Buscar paquete por nombre" (input)="onFilter(dv, $event)">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template let-package pTemplate="gridItem">
+                <div class="col-12 md:col-4 p-4">
+                    <div class="p-4 surface-card surface-border card-shadow">
+                        <div class="relative mb-3">
+                            <span class="surface-card text-900 shadow-2 px-3 py-2 absolute"
+                                style="border-radius: 1.5rem; left: 1rem; top: 1rem">{{package.availableQuotas}}
+                                cupos</span>
+                            <img src="https://chipviajero.com/wp-content/uploads/2018/05/Como-Llegar-a-Tol%C3%BA-Y-Cove%C3%B1as-Chip-Viajero-7.jpg"
+                                class="w-full" />
+                        </div>
+                        <div class="flex flex-column align-items-center text-center mb-3">
+                            <div class="flex justify-content-between align-items-center mb-3">
+                                <span class="text-900 font-medium text-xl">{{package.name}}</span>
+                                <span>
+                                    <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                                    <span class="font-medium">5.0</span>
+                                </span>
+                            </div>
+                            <p class="mt-0 mb-3 text-700 line-height-3">
+                                <span pTooltip="Fecha de salida" style="cursor: pointer;" tooltipPosition="bottom">
+                                    <i class="pi pi-calendar p-1"></i>
+                                    {{package.departureDate | date}}
+                                </span> -
+                                <span style="cursor: pointer;" pTooltip="Fecha de regreso" tooltipPosition="bottom">
+                                    <i class="pi pi-calendar p-1"></i>
+                                    {{package.arrivalDate | date}}
+                                </span>
+                            </p>
+                            <p class="mt-0 mb-3 text-700 line-height-3">
+                                <span pTooltip="Hotel" style="cursor: pointer;" tooltipPosition="bottom">
+                                    <i class='bx bx-buildings p-1'></i>
+                                    {{package.hotel}}
+                                </span>
+                            </p>
+                        </div>
+
+                        <div class="flex justify-content-between">
+                            <span class="flex align-items-end text-primary text-2xl font-medium">{{package.price |
+                                currency:
+                                'USD'}}</span>
+                            <button pButton pRipple type="button" label="Ver detalles"
+                                (click)="verDetalles(package.packageId)" class="p-button-outlined p-button-sm"></button>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </p-dataView>
+    </div>
+    <!-- <div class="grid content">
         <div class="col-12">
             <div>
                 <div class="card">
@@ -86,9 +154,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <br>
-</ng-container>
+</div>
 
 <div *ngIf="role !== 'Cliente' && role !== undefined" class="p-4">
     <div class="col-12">
@@ -120,9 +188,6 @@
                         <th class="font-medium" style="width: 10rem">
                             Precio
                         </th>
-                        <th class="font-medium" style="min-width: 10rem">
-                            Estado
-                        </th>
                         <th class="font-medium text-center" style="width: 10rem">
                             Acciones
                         </th>
@@ -147,16 +212,6 @@
                         </td>
                         <td>
                             {{ package.price | currency: 'USD':'symbol' }}
-                        </td>
-                        <td class="text-center">
-                            <div *ngIf="package.status === true">
-                                <p-inputSwitch (click)="disablePackage(package)" [(ngModel)]="checked2"
-                                    pTooltip="Activo" tooltipPosition="bottom"></p-inputSwitch>
-                            </div>
-                            <div *ngIf="package.status === false">
-                                <p-inputSwitch (click)="disablePackage(package)" pTooltip="Inactivo"
-                                    tooltipPosition="bottom"></p-inputSwitch>
-                            </div>
                         </td>
                         <td class="flex justify-content-around">
                             <button pButton type="button" icon="pi pi-pencil"
