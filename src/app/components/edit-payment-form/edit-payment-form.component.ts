@@ -1,7 +1,7 @@
 import { Order } from '@/models/order';
 import { Payment } from '@/models/payment';
 import { AppState } from '@/store/state';
-import { EditOrderRequest, EditPaymentRequest, OpenModalPayments } from '@/store/ui/actions';
+import { EditOrderRequest, OpenModalPayments } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ConfirmationService } from 'primeng/api';
 import { ApiService } from '@services/api.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-edit-payment-form',
@@ -32,7 +33,8 @@ export class EditPaymentFormComponent implements OnInit {
     private fb: FormBuilder,
     private modalPrimeNg: DynamicDialogRef,
     private confirmationService: ConfirmationService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
@@ -170,6 +172,8 @@ export class EditPaymentFormComponent implements OnInit {
       } else {
         status = 2
       }
+
+      const date = new Date(this.payment.image)
       const payment: Payment = {
         paymentId: this.payment.paymentId,
         orderId: this.order.orderId,
@@ -179,7 +183,30 @@ export class EditPaymentFormComponent implements OnInit {
         image: this.payment.image,
         status: status
       }
-      this.store.dispatch(new EditPaymentRequest({ ...payment }))
+      const formData = new FormData();
+      formData.append('paymentId', payment.paymentId)
+      formData.append('orderId', payment.orderId)
+      formData.append('amount', String(payment.amount))
+      formData.append('remainingAmount', String(payment.remainingAmount))
+      formData.append('date', payment.date.toISOString())
+      formData.append('image', String(payment.image))
+      formData.append('status', String(payment.status))
+
+      if (payment.imageFile instanceof File) {
+        formData.append('imageFile', payment.imageFile, payment.imageFile.name)
+      } else {
+        formData.append('imageFile', payment.imageFile)
+      }
+
+      // this.store.dispatch(new EditPaymentRequest({ ...payment }))
+      this.apiService.updatePayment(formData.get('paymentId'), formData).subscribe({
+        next: (data) => { },
+        error: (err) => {
+          console.log('Error occured while updating: ', err);
+        }
+      })
+      this.modalPrimeNg.close()
+      this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Abono editado exitosamente.' });
     }
   }
 }

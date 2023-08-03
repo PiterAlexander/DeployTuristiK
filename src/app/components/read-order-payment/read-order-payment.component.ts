@@ -11,14 +11,15 @@ import { OrderDetail } from '@/models/orderDetail';
 import { ConfirmationService } from 'primeng/api';
 import { Role } from '@/models/role';
 import { Order } from '@/models/order';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-read-order-payment',
   templateUrl: './read-order-payment.component.html',
   styleUrls: ['./read-order-payment.component.scss']
 })
-export class ReadOrderPaymentComponent {
 
+export class ReadOrderPaymentComponent {
   public ui: Observable<UiState>
   public role: any
   public user: any
@@ -33,6 +34,7 @@ export class ReadOrderPaymentComponent {
   public orderDetailCustomers: Array<OrderDetail> = []
   public orderDetails: Array<OrderDetail> = []
   public pendingPayments: boolean = false
+  public baseUrl: string = environment.endPoint + 'resources/payments/'
 
   constructor(
     private store: Store<AppState>,
@@ -50,6 +52,8 @@ export class ReadOrderPaymentComponent {
       this.order = state.oneOrder.data
       this.pushPayments()
     })
+
+    console.log(this.baseUrl);
 
     this.statuses = [
       { 'label': 'Pendiente', 'code': 0 },

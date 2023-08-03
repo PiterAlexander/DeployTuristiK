@@ -10,5 +10,5 @@ export interface Order {
     package?: Package
     totalCost: number
     status: number
-    payment: Payment[]
+    payment?: any[]
 }

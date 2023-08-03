@@ -250,7 +250,7 @@ export class PackageEffects {
                 mergeMap((orderResolved) => {
                     return [
                         new EditOrderSuccess(orderResolved),
-                        // new GetAllOrdersRequest()
+                        new GetAllOrdersRequest()
                     ];
                 }),
                 catchError((err) => of(new EditOrderFailure(err)))

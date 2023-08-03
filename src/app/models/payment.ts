@@ -8,7 +8,8 @@ export interface Payment {
     amount: number
     remainingAmount: number
     date: Date
-    image: string
+    image?: string
+    imageFile?: File
     status: number
     orderDetail?: OrderDetail[]
 }

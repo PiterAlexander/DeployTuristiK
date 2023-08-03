@@ -55,9 +55,10 @@
         </div>
         <div class="col-5">
             <div class="field">
-                <p-fileUpload name="payments[]" mode="basic" formControlName="img" url="./src/assets/img"
-                    chooseLabel="Comprobante" [style]="{ width: '100%'}" pTooltip="Subir comprobante de pago"
-                    tooltipPosition="bottom"></p-fileUpload>
+                <input type="file" (change)="onUploadFile($event)">
+                <!-- <p-fileUpload name="img" (change)="onUploadFile($event)" chooseLabel="Comprobante"
+                    [style]="{ width: '100%'}" pTooltip="Subir comprobante de pago"
+                    tooltipPosition="bottom"></p-fileUpload> -->
             </div>
         </div>
     </div>

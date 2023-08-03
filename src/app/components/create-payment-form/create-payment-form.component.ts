@@ -4,7 +4,7 @@ import { OrderDetail } from '@/models/orderDetail';
 import { Package } from '@/models/package';
 import { Payment } from '@/models/payment';
 import { AppState } from '@/store/state';
-import { CreateOrderDetailRequest, CreateOrderRequest, CreatePaymentRequest, EditOrderRequest, EditPaymentRequest, OpenModalCreateOrderDetail, OpenModalPayments } from '@/store/ui/actions';
+import { EditOrderRequest, GetAllCustomerRequest, GetAllOrdersRequest, OpenModalCreateOrderDetail, OpenModalPayments } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -13,7 +13,7 @@ import { ApiService } from '@services/api.service';
 import { Observable } from 'rxjs';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FrequentTraveler } from '@/models/frequentTraveler';
-
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-create-payment-form',
@@ -22,7 +22,7 @@ import { FrequentTraveler } from '@/models/frequentTraveler';
 })
 
 export class CreatePaymentFormComponent implements OnInit {
-  formGroup: FormGroup;
+  public formGroup: FormGroup;
   private ui: Observable<UiState>
   public orderProcess: Array<any>
   public orderDetail: Array<OrderDetail> = []
@@ -35,12 +35,14 @@ export class CreatePaymentFormComponent implements OnInit {
   public file: any
   public higherRemainingAmountFromRetryPayment: boolean = false
   public orderRemainingAmountsZero: boolean = false
+  public imageFile: File
 
   constructor(
     public apiService: ApiService,
     private fb: FormBuilder,
     private store: Store<AppState>,
-    private modalPrimeNg: DynamicDialogRef
+    private modalPrimeNg: DynamicDialogRef,
+    private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
@@ -49,6 +51,11 @@ export class CreatePaymentFormComponent implements OnInit {
       this.orderProcess = state.orderProcess.data
       this.allOrders = state.allOrders.data
     })
+
+    this.formGroup = this.fb.group({
+      amount: [null, Validators.required],
+      img: [],
+    });
 
     if (this.orderProcess[0].action === 'CreatePayment' || this.orderProcess[0].action === 'CreatePaymentFromCustomer') {
       this.totalCost = this.orderProcess[0].order.totalCost
@@ -68,8 +75,6 @@ export class CreatePaymentFormComponent implements OnInit {
           orderAddition += element.amount
         }
       }
-      console.log(orderAddition);
-
       const orderRemainingAmount: number = orderTotalCost - orderAddition
       console.log(orderRemainingAmount);
       let totalCost: number = 0
@@ -82,8 +87,6 @@ export class CreatePaymentFormComponent implements OnInit {
       } else {
         totalCost = orderTotalCost
       }
-
-      console.log(totalCost);
 
       this.totalCost = totalCost
       if (totalCost > orderRemainingAmount) {
@@ -113,11 +116,6 @@ export class CreatePaymentFormComponent implements OnInit {
         this.remainingAmount = this.totalCost * 20 / 100
       }
     }
-
-    this.formGroup = this.fb.group({
-      amount: [null, Validators.required],
-      img: [null],
-    });
   }
 
   async getOneOrderById(orderId: string) {
@@ -164,6 +162,11 @@ export class CreatePaymentFormComponent implements OnInit {
       this.store.dispatch(new OpenModalCreateOrderDetail(this.orderProcess))
     }
   }
+
+  onUploadFile(event: any) {
+    this.imageFile = event.target.files[0]
+  }
+
   //<--- VALIDATIONS --->
 
   fromCreatePayment(): boolean {
@@ -221,16 +224,38 @@ export class CreatePaymentFormComponent implements OnInit {
       status: status,
       payment: this.orderProcess[0].order.payment,
     }
-    this.store.dispatch(new EditOrderRequest(order))
+    this.store.dispatch(new EditOrderRequest({ ...order }))
+
     const payment: Payment = {
       orderId: this.orderProcess[0].order.orderId,
       amount: this.formGroup.value.amount,
       remainingAmount: this.remainingAmount - this.formGroup.value.amount,
       date: new Date(),
-      image: 'url',
+      imageFile: this.imageFile,
       status: 1
     }
-    this.store.dispatch(new CreatePaymentRequest({ ...payment }))
+
+    const formData = new FormData();
+    formData.append('orderId', payment.orderId)
+    formData.append('amount', String(payment.amount))
+    formData.append('remainingAmount', String(payment.remainingAmount))
+    formData.append('date', payment.date.toISOString())
+    formData.append('status', String(payment.status))
+
+    if (payment.imageFile instanceof File) {
+      formData.append('imageFile', payment.imageFile, payment.imageFile.name)
+    } else {
+      formData.append('imageFile', payment.imageFile)
+    }
+
+    this.apiService.addPayment(formData).subscribe({
+      next: (data) => { },
+      error: (err) => {
+        console.log('Error occured while creating: ', err);
+      }
+    })
+    this.modalPrimeNg.close()
+    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Abono agregado exitosamente.' });
   }
 
   saveFromCreatePaymentFromCustomer() {
@@ -239,10 +264,31 @@ export class CreatePaymentFormComponent implements OnInit {
       amount: this.formGroup.value.amount,
       remainingAmount: this.remainingAmount - this.formGroup.value.amount,
       date: new Date(),
-      image: 'url',
+      imageFile: this.imageFile,
       status: 0
     }
-    this.store.dispatch(new CreatePaymentRequest({ ...payment }))
+
+    const formData = new FormData();
+    formData.append('orderId', payment.orderId)
+    formData.append('amount', String(payment.amount))
+    formData.append('remainingAmount', String(payment.remainingAmount))
+    formData.append('date', payment.date.toISOString())
+    formData.append('status', String(payment.status))
+
+    if (payment.imageFile instanceof File) {
+      formData.append('imageFile', payment.imageFile, payment.imageFile.name)
+    } else {
+      formData.append('imageFile', payment.imageFile)
+    }
+
+    this.apiService.addPayment(formData).subscribe({
+      next: (data) => { },
+      error: (err) => {
+        console.log('Error occured while creating: ', err);
+      }
+    })
+    this.modalPrimeNg.close()
+    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Abono agregado exitosamente.' });
   }
 
   saveFromRetryPayment() {
@@ -280,7 +326,7 @@ export class CreatePaymentFormComponent implements OnInit {
         status: status,
         payment: this.orderProcess[0].order.payment,
       }
-      this.store.dispatch(new EditOrderRequest(order))
+      this.store.dispatch(new EditOrderRequest({ ...order }))
 
       const payment: Payment = {
         paymentId: this.orderProcess[0].payment.paymentId,
@@ -288,11 +334,35 @@ export class CreatePaymentFormComponent implements OnInit {
         amount: this.formGroup.value.amount,
         remainingAmount: remainingAmount,
         date: new Date(),
-        image: 'url',
+        image: this.orderProcess[0].payment.image,
+        imageFile: this.imageFile,
         status: 0,
-        orderDetail: this.orderProcess[0].payment.orderDetail
       }
-      this.store.dispatch(new EditPaymentRequest({ ...payment }))
+
+      const formData = new FormData();
+      formData.append('paymentId', payment.paymentId)
+      formData.append('orderId', payment.orderId)
+      formData.append('amount', String(payment.amount))
+      formData.append('remainingAmount', String(payment.remainingAmount))
+      formData.append('date', payment.date.toISOString())
+      formData.append('image', String(payment.image))
+      formData.append('status', String(payment.status))
+
+      if (payment.imageFile instanceof File) {
+        formData.append('imageFile', payment.imageFile, payment.imageFile.name)
+      } else {
+        formData.append('imageFile', payment.imageFile)
+      }
+
+      // this.store.dispatch(new EditPaymentRequest({ ...payment }))
+      this.apiService.updatePayment(formData.get('paymentId'), formData).subscribe({
+        next: (data) => { },
+        error: (err) => {
+          console.log('Error occured while updating: ', err);
+        }
+      })
+      this.modalPrimeNg.close()
+      this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Reintento exitoso.' });
     } else {
       if (this.orderRemainingAmountsZero) {
         let acepted: boolean = false
@@ -332,11 +402,35 @@ export class CreatePaymentFormComponent implements OnInit {
           amount: 0,
           remainingAmount: 0,
           date: new Date(),
-          image: 'url',
-          status: 1,
-          orderDetail: this.orderProcess[0].payment.orderDetail
+          image: this.orderProcess[0].payment.image,
+          imageFile: this.imageFile,
+          status: 1
         }
-        this.store.dispatch(new EditPaymentRequest({ ...payment }))
+
+        const formData = new FormData();
+        formData.append('paymentId', payment.paymentId)
+        formData.append('orderId', payment.orderId)
+        formData.append('amount', String(payment.amount))
+        formData.append('remainingAmount', String(payment.remainingAmount))
+        formData.append('date', payment.date.toISOString())
+        formData.append('image', String(payment.image))
+        formData.append('status', String(payment.status))
+
+        if (payment.imageFile instanceof File) {
+          formData.append('imageFile', payment.imageFile, payment.imageFile.name)
+        } else {
+          formData.append('imageFile', payment.imageFile)
+        }
+
+        // this.store.dispatch(new EditPaymentRequest({ ...payment }))
+        this.apiService.updatePayment(formData.get('paymentId'), formData).subscribe({
+          next: (data) => { },
+          error: (err) => {
+            console.log('Error occured while updating: ', err);
+          }
+        })
+        this.modalPrimeNg.close()
+        this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Reintento exitoso.' });
       } else {
         let acepted: boolean = false
         let pending: boolean = false
@@ -376,27 +470,148 @@ export class CreatePaymentFormComponent implements OnInit {
           amount: this.formGroup.value.amount,
           remainingAmount: remainingAmount,
           date: new Date(),
-          image: 'url',
+          image: this.orderProcess[0].payment.image,
+          imageFile: this.imageFile,
           status: 0,
-          orderDetail: this.orderProcess[0].payment.orderDetail
         }
-        this.store.dispatch(new EditPaymentRequest({ ...payment }))
+
+        const formData = new FormData();
+        formData.append('paymentId', payment.paymentId)
+        formData.append('orderId', payment.orderId)
+        formData.append('amount', String(payment.amount))
+        formData.append('remainingAmount', String(payment.remainingAmount))
+        formData.append('date', payment.date.toISOString())
+        formData.append('image', String(payment.image))
+        formData.append('status', String(payment.status))
+
+        if (payment.imageFile instanceof File) {
+          formData.append('imageFile', payment.imageFile, payment.imageFile.name)
+        } else {
+          formData.append('imageFile', payment.imageFile)
+        }
+
+        // this.store.dispatch(new EditPaymentRequest({ ...payment }))
+        this.apiService.updatePayment(formData.get('paymentId'), formData).subscribe({
+          next: (data) => { },
+          error: (err) => {
+            console.log('Error occured while updating: ', err);
+          }
+        })
+        this.modalPrimeNg.close()
+        this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Reintento exitoso.' });
       }
     }
   }
 
   async save() {
-    if (this.validForm()) {
-      if (this.orderProcess[0].action === 'CreatePayment') {
+    if (this.formGroup.valid) {
+      if (this.orderProcess[0].action === 'CreatePayment') { // IF THE PROCESS COMES FROM CREATE PAYMENT FROM ADMIN/EMPLOYEE
         this.saveFromCreatePayment()
-      } else if (this.orderProcess[0].action === 'CreatePaymentFromCustomer') {
+      } else if (this.orderProcess[0].action === 'CreatePaymentFromCustomer') { // IF THE PROCESS COMES FROM CREATE PAYMENT FROM CUSTOMER
         this.saveFromCreatePaymentFromCustomer()
-      } else if (this.orderProcess[0].action === 'RetryPayment') {
+      } else if (this.orderProcess[0].action === 'RetryPayment') { // IF THE PROCESS COMES FROM RETRY PAYMENT
         this.saveFromRetryPayment()
-      } else {
+      } else if (this.orderProcess[0].action === 'CreateOrderDetail' || this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') { // IF THE PROCESS COMES FROM CREATE ORDER DETAIL FROM ADMIN/EMPLOYEE OR CREATE ORDER DETAIL FROM CUSTOMER
+
+        // WE´RE DEFINYING SOME VARIABLES TO SET ORDER AND PAYMENT STATUS
+        let addition: number = 0
+        let paymentStatus: number
+        let orderStatus: number
+
+        // FOR EACH ELEMENT OF ORDER'S PAYMENTS (this.oneOrder WAS DEFINED ABOVE IN THE FUNCTION getOrderById())
+        for (const element of this.oneOrder.payment) {
+
+          // IF THE PAYMENT IS NOT UNDEFINED AND ITS STATUS IS ACCEPTED OR PENDING
+          if (element !== undefined && element.status === 1 || element.status === 0) {
+
+            // THE ADDITION VARIABLE WILL ACOMULATE THE PAYMENT'S AMOUNT THAT CUMPLIES THE ABOVE CONDITION
+            addition += element.amount
+          }
+        }
+
+        // THIS CONST WILL BE A FORMULA OF THE ORDER'S TOTAL COST PLUS THE TOTAL COST OF THE BENEFICIARIES MINUS -
+        // - THE ALREADY ACOMULATED ADDITION MINUS THE PAYMENT AMOUNT GIVEN IN THE FORM
+        const orderDetailRemainingAmount = this.oneOrder.totalCost + this.totalCost - addition - this.formGroup.value.amount
+
+        if (this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') { // IF THE PROCESS COMES FROM CREATE ORDER DETAIL FROM CUSTOMER
+          paymentStatus = 0 // THE PAYMENT STATUS WILL BE PENDING BY DEFAULT
+          if (this.oneOrder.status === 0) {
+            orderStatus = 0 // IF THE ORDER STATUS WAS ALREADY PENDING, IT'S STATUS WILL STAY AS PENDING
+          } else if (this.oneOrder.status === 1) {
+            orderStatus = 1 // IF THE ORDER STATUS WAS IN PROGRESS, IT'S STATUS WILL STAY AS IN PROGRESS
+          } else if (this.oneOrder.status === 2) {
+            orderStatus = 1 // IF THE ORDER STATUS WAS PAID, IT'S STATUS WILL BE SET AS IN PROGRESS
+          }
+        } else if (this.orderProcess[0].action === 'CreateOrderDetail') { // IF THE PROCESS COMES FROM CREATE ORDER DETAIL FROM ADMIN/EMPLOYEE
+          paymentStatus = 1 // THE PAYMENT STATUS WILL BE ACCEPTED BY DEFAULT
+          if (orderDetailRemainingAmount === 0) {
+            orderStatus = 2 // IF THE ABOVE CALCUTATION OF THE REMAINING AMOUNT RESULTED IN 0 THE ORDER STATUS WILL BE SET AS PAID
+          }
+          else if (orderDetailRemainingAmount > 0) {
+            orderStatus = 1 // IF THE ABOVE CALCUTATION OF THE REMAINING AMOUNT RESULTED GREATER THAN 0 THE ORDER STATUS WILL BE SET AS IN PROGRESS
+          }
+          else {
+            orderStatus = 3 // ANY OTHER WAY THE ORDER STATUS WILL BE SET AS CANCELED
+          }
+        }
+
+        // WE'RE DEFINYING THE ORDER MODEL WITH ITS NEW STATUS
+        const order: Order = {
+          orderId: this.oneOrder.orderId,
+          customerId: this.oneOrder.customerId,
+          packageId: this.oneOrder.packageId,
+          totalCost: this.oneOrder.totalCost + this.totalCost,
+          status: orderStatus,
+          payment: this.oneOrder.payment
+        }
+
+        // WE'RE CALLING THE PUT ACTION OF ORDER
+        this.store.dispatch(new EditOrderRequest({ ...order }))
+
+        // WE'RE DEFINYING THE PAYMENT MODEL WITH ITS CORRESPONDING VALUES
+        const payment: Payment = {
+          orderId: this.orderProcess[0].order.orderId,
+          amount: this.formGroup.value.amount,
+          remainingAmount: orderDetailRemainingAmount,
+          date: new Date(),
+          imageFile: this.imageFile,
+          status: paymentStatus,
+        }
+
+        // WE'RE CREATING A FORMDATA OBJETC, THIS IS NECESSARY TO CREATE THE PAYMENT WITH ITS IMAGE
+        const formData = new FormData();
+        formData.append('orderId', String(payment.orderId))
+        formData.append('amount', String(payment.amount))
+        formData.append('remainingAmount', String(payment.remainingAmount))
+        formData.append('date', payment.date.toISOString())
+        formData.append('status', String(payment.status))
+
+        // WE'RE VALIDATING THAT THE ATRIBUTTE IMAGEFILE HAS AN INSTANCFE OF TYPE FILE
+        if (payment.imageFile instanceof File) {
+          formData.append('imageFile', payment.imageFile, payment.imageFile.name) // IF SO, WE'RE APPENDING TO THE FORMDATA OBJECT THE IMAGEFILE & ITS NAME
+        } else {
+          formData.append('imageFile', payment.imageFile) // IF NOT, WE'RE APPENDING TO THE FORMDATA OBJECT ONLY THE IMAGEFILE
+        }
+
+        // WE'RE CALLING THE POST PETITION FOR PAYMENT
+        const paymentResolved = await new Promise((resolve, reject) => {
+          this.apiService.addPayment(formData).subscribe({
+            next: (data) => {
+              resolve(data)
+            },
+            error: (err) => {
+              reject(err)
+            }
+          })
+        });
+
+        // WE'RE ADDING THE BENEFICIARIES ARRAY TO A CONST
         const beneficiaries = this.orderProcess[0].beneficiaries
-        const remainingAmount = this.totalCost - this.formGroup.value.amount
+
+        // FOR EACH ELEMENT OF BENEFICIARIES' ARRAY
         for (const element of beneficiaries) {
+
+          // HERE WE'RE VALIDATING IF THE BENEFICIARIE ALREADY HAS A CUSTOMERID. IF SO, THERE'S NO NEED TO CREATE A CUSTOMER
           if (element.customerId === undefined) {
             const customerModel: Customer = {
               name: element.name,
@@ -408,6 +623,8 @@ export class CreatePaymentFormComponent implements OnInit {
               eps: element.eps,
               user: element.user,
             }
+
+            // CONST (PROMISE) THAT CONTAINS THE CREATED CUSTOMER INFORMATION
             const data = await new Promise((resolve, reject) => {
               this.apiService.addCustomer(customerModel).subscribe({
                 next: (data) => {
@@ -418,17 +635,31 @@ export class CreatePaymentFormComponent implements OnInit {
                 }
               });
             });
-            if (this.orderProcess[0].action === 'CreateOrderDetail' || this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
-              const orderDetail: OrderDetail = {
-                beneficiaryId: data['customerId'],
-                unitPrice: element.price
-              };
-              this.orderDetail.push(orderDetail)
+
+            // DEFINYING CUSTOMERID (TITULARID) FOR FREQUENT TRAVELERS
+            const customerId: string = this.orderProcess[0].order.customerId
+
+            //DEFINYING ORDER DETAIL WITH THE CURRENT CUSTOMER INFORMATION
+            const orderDetail: OrderDetail = {
+              paymentId: paymentResolved['paymentId'],
+              beneficiaryId: data['customerId'],
+              unitPrice: element.price
+            };
+
+            // PUSHING THAT ORDER DETAIL INTO AN ARRAY OF ORDER DETAILS
+            this.orderDetail.push(orderDetail)
+
+            // HERE WE'RE DOING SOME VALIDATIONS TO KNOW IF THE BENEFICIARIE MUST GO TO THE CUSTOMER FREQUENT TRAVELERS OR NOT
+            if (element.addToFt !== null) {
               if (element.addToFt) {
+
+                //DEFINYING FREQUENT TRAVELER WITH THE CURRENT CUSTOMER INFORMATION
                 const frequentTraveler: FrequentTraveler = {
-                  customerId: this.orderProcess[0].order.customerId,
+                  customerId: customerId,
                   travelerId: data['customerId']
                 }
+
+                // ADDING THE FREQUENT TRAVELER TO THE CUSTOMER FREQUENT TRAVELERS
                 this.apiService.addFrequentTraveler(frequentTraveler).subscribe({
                   next: (data) => {
                   },
@@ -437,152 +668,397 @@ export class CreatePaymentFormComponent implements OnInit {
                   }
                 })
               }
-            } else {
-              const orderDetail: OrderDetail = {
-                beneficiaryId: data['customerId'],
-                unitPrice: element.price
-              };
-              this.orderDetail.push(orderDetail);
-              if (element.addToFt !== null) {
-                if (element.addToFt) {
-                  const frequentTraveler: FrequentTraveler = {
-                    customerId: this.orderProcess[0].order.customer.customerId,
-                    travelerId: data['customerId']
-                  }
-                  this.apiService.addFrequentTraveler(frequentTraveler).subscribe({
-                    next: (data) => {
-                    },
-                    error: (err) => {
-                      console.log("Error while creating: ", err);
-                    }
-                  })
-                }
-              }
             }
           } else {
-            if (this.orderProcess[0].action === 'CreateOrderDetail' || this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
-              const orderDetail: OrderDetail = {
-                beneficiaryId: element.customerId,
-                unitPrice: element.price
-              }
-              this.orderDetail.push(orderDetail);
-            } else {
-              const orderDetail: OrderDetail = {
-                beneficiaryId: element.customerId,
-                unitPrice: element.price
-              }
-              this.orderDetail.push(orderDetail);
+            // THE BENEFICIARIE ALREADY HAS A CUSTOMERID. SO THERE'S NO NEED TO CREATE A NEW CUSTOMER
+
+            //DEFINYING ORDER DETAIL WITH THE ALREADY EXISTED CUSTOMER INFORMATION
+            const orderDetail: OrderDetail = {
+              paymentId: paymentResolved['paymentId'],
+              beneficiaryId: element.customerId,
+              unitPrice: element.price
             }
+
+            // PUSHING THAT ORDER DETAIL INTO AN ARRAY OF ORDER DETAILS
+            this.orderDetail.push(orderDetail)
           }
         }
-        if (this.orderProcess[0].action === 'CreateOrderDetail' || this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
-          let addition: number = 0
-          let paymentStatus: number
-          let orderStatus: number
-          for (const element of this.oneOrder.payment) {
-            if (element !== undefined && element.status === 1 || element.status === 0) {
-              addition += element.amount
+        // END OF FOR
+
+        // WE'RE UPDATING THE ORDER'S PACKAGE AVAILABLE QUOTES
+        this.editPackage(this.oneOrder.package)
+
+        // FOR EACH ELEMENT OF ORDERDETAIL'S ARRAY
+        for (const element of this.orderDetail) {
+          const orderDetailModel: OrderDetail = {
+            paymentId: element.paymentId,
+            beneficiaryId: element.beneficiaryId,
+            unitPrice: element.unitPrice
+          }
+
+          this.apiService.addOrderDetail(orderDetailModel).subscribe({
+            next: () => {
+            },
+            error: (err) => {
+              console.log('Error while creating: ', err);
             }
-          }
-          const orderDetailRemainingAmount = this.oneOrder.totalCost + this.totalCost - addition - this.formGroup.value.amount
+          })
+        }
+        // END OF FOR
 
-          if (this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
-            paymentStatus = 0
-            if (this.oneOrder.status === 0) {
-              orderStatus = 0
-            } else if (this.oneOrder.status === 1) {
-              orderStatus = 1
-            } else if (this.oneOrder.status === 2) {
-              orderStatus = 1
+        // SOME NECESSARY ACTIONS TO END THE PROCESS
+        this.modalPrimeNg.close()
+        this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Beneficiario/s agregado/s exitosamente.' });
+        this.store.dispatch(new GetAllCustomerRequest())
+        this.store.dispatch(new GetAllOrdersRequest())
+
+        // IF THE PROCESS COMES FROM CREATE ORDER FROM CUSTOMER THE NEXT CODE WILL EXECUTE
+      } else if (this.orderProcess[0].action === 'CreateOrderFromCustomer') { // IF THE PROCESS COMES FROM CREATE ORDER FROM CUSTOMER
+
+        // WE'RE DEFINYING THE ORDER MODEL WITH ITS NEW STATUS
+        const order: Order = {
+          customerId: this.orderProcess[0].order.customer.customerId,
+          packageId: this.orderProcess[0].order.package.packageId,
+          totalCost: this.totalCost,
+          status: 0,
+        }
+
+        // WE'RE CALLING THE POST ACTION OF ORDER
+        const orderResolved = await new Promise((resolve, reject) => {
+          this.apiService.addOrder(order).subscribe({
+            next: (data) => {
+              resolve(data)
+            },
+            error: (err) => {
+              reject(err)
             }
-          } else if (this.orderProcess[0].action === 'CreateOrderDetail') {
-            paymentStatus = 1
-            if (orderDetailRemainingAmount === 0) {
-              orderStatus = 2
-            }
-            else if (orderDetailRemainingAmount > 0) {
-              orderStatus = 1
-            }
-            else {
-              orderStatus = 3
-            }
-          }
-          const order: Order = {
-            orderId: this.oneOrder.orderId,
-            customerId: this.oneOrder.customerId,
-            packageId: this.oneOrder.packageId,
-            totalCost: this.oneOrder.totalCost + this.totalCost,
-            status: orderStatus,
-            payment: this.oneOrder.payment
-          }
-          this.store.dispatch(new EditOrderRequest({ ...order }))
+          })
+        })
 
-          // UPDATE PACAKGE
-          this.editPackage(this.oneOrder.package)
+        // DEFINYING REMAINING AMOUNT
+        const remainingAmount = this.totalCost - this.formGroup.value.amount
 
-          const payment: Payment = {
-            orderId: this.orderProcess[0].order.orderId,
-            amount: this.formGroup.value.amount,
-            remainingAmount: orderDetailRemainingAmount,
-            date: new Date(),
-            image: "url",
-            status: paymentStatus,
-            orderDetail: this.orderDetail
-          }
+        // WE'RE DEFINYING THE PAYMENT MODEL WITH ITS CORRESPONDING VALUES
+        const payment: Payment = {
+          orderId: orderResolved['orderId'],
+          amount: this.formGroup.value.amount,
+          remainingAmount: remainingAmount,
+          date: new Date(),
+          imageFile: this.imageFile,
+          status: 0
+        }
 
-          this.store.dispatch(new CreateOrderDetailRequest({ ...payment }))
-        } else if (this.orderProcess[0].action === 'CreateOrderFromCustomer') {
-          const payment: Payment = {
-            amount: this.formGroup.value.amount,
-            remainingAmount: remainingAmount,
-            date: new Date(),
-            image: "url",
-            status: 0,
-            orderDetail: this.orderDetail
-          }
+        // WE'RE CREATING A FORMDATA OBJETC, THIS IS NECESSARY TO CREATE THE PAYMENT WITH ITS IMAGE
+        const formData = new FormData();
+        formData.append('orderId', String(payment.orderId))
+        formData.append('amount', String(payment.amount))
+        formData.append('remainingAmount', String(payment.remainingAmount))
+        formData.append('date', payment.date.toISOString())
+        formData.append('status', String(payment.status))
 
-          const order: Order = {
-            customerId: this.orderProcess[0].order.customer.customerId,
-            packageId: this.orderProcess[0].order.package.packageId,
-            totalCost: this.totalCost,
-            status: 0,
-            payment: [payment]
-          }
-
-          //UPDATE PACKAGE
-          this.editPackage(this.orderProcess[0].order.package)
-
-          this.store.dispatch(new CreateOrderRequest({ ...order }))
+        // WE'RE VALIDATING THAT THE ATRIBUTTE IMAGEFILE HAS AN INSTANCFE OF TYPE FILE
+        if (payment.imageFile instanceof File) {
+          formData.append('imageFile', payment.imageFile, payment.imageFile.name) // IF SO, WE'RE APPENDING TO THE FORMDATA OBJECT THE IMAGEFILE & ITS NAME
         } else {
-          const payment: Payment = {
-            amount: this.formGroup.value.amount,
-            remainingAmount: remainingAmount,
-            date: new Date(),
-            image: "url",
-            status: 1,
-            orderDetail: this.orderDetail
-          }
-
-          let status: number
-          if (this.formGroup.value.amount === this.totalCost) {
-            status = 2
-          } else {
-            status = 1
-          }
-
-          const order: Order = {
-            customerId: this.orderProcess[0].order.customer.customerId,
-            packageId: this.orderProcess[0].order.package.packageId,
-            totalCost: this.totalCost,
-            status: status,
-            payment: [payment]
-          }
-
-          //UPDATE PACKAGE
-          this.editPackage(this.orderProcess[0].order.package)
-
-          this.store.dispatch(new CreateOrderRequest({ ...order }))
+          formData.append('imageFile', payment.imageFile) // IF NOT, WE'RE APPENDING TO THE FORMDATA OBJECT ONLY THE IMAGEFILE
         }
+
+        // WE'RE CALLING THE POST PETITION FOR PAYMENT
+        const paymentResolved = await new Promise((resolve, reject) => {
+          this.apiService.addPayment(formData).subscribe({
+            next: (data) => {
+              resolve(data)
+            },
+            error: (err) => {
+              reject(err)
+            }
+          })
+        });
+
+        // WE'RE ADDING THE BENEFICIARIES ARRAY TO A CONST
+        const beneficiaries = this.orderProcess[0].beneficiaries
+
+        // FOR EACH ELEMENT OF BENEFICIARIES' ARRAY
+        for (const element of beneficiaries) {
+
+          // HERE WE'RE VALIDATING IF THE BENEFICIARIE ALREADY HAS A CUSTOMERID. IF SO, THERE'S NO NEED TO CREATE A CUSTOMER
+          if (element.customerId === undefined) {
+            const customerModel: Customer = {
+              name: element.name,
+              lastName: element.lastName,
+              document: element.document,
+              address: element.address,
+              phoneNumber: element.phoneNumber,
+              birthDate: element.birthDate,
+              eps: element.eps,
+              user: element.user,
+            }
+
+            // CONST (PROMISE) THAT CONTAINS THE CREATED CUSTOMER INFORMATION
+            const data = await new Promise((resolve, reject) => {
+              this.apiService.addCustomer(customerModel).subscribe({
+                next: (data) => {
+                  resolve(data);
+                },
+                error: (err) => {
+                  reject(err);
+                }
+              });
+            });
+
+            // DEFINYING CUSTOMERID (TITULARID) FOR FREQUENT TRAVELERS
+            const customerId: string = this.orderProcess[0].order.customer.customerId
+
+            //DEFINYING ORDER DETAIL WITH THE CURRENT CUSTOMER INFORMATION
+            const orderDetail: OrderDetail = {
+              paymentId: paymentResolved['paymentId'],
+              beneficiaryId: data['customerId'],
+              unitPrice: element.price
+            };
+
+            // PUSHING THAT ORDER DETAIL INTO AN ARRAY OF ORDER DETAILS
+            this.orderDetail.push(orderDetail)
+
+            // HERE WE'RE DOING SOME VALIDATIONS TO KNOW IF THE BENEFICIARIE MUST GO TO THE CUSTOMER FREQUENT TRAVELERS OR NOT
+            if (element.addToFt !== null) {
+              if (element.addToFt) {
+
+                //DEFINYING FREQUENT TRAVELER WITH THE CURRENT CUSTOMER INFORMATION
+                const frequentTraveler: FrequentTraveler = {
+                  customerId: customerId,
+                  travelerId: data['customerId']
+                }
+
+                // ADDING THE FREQUENT TRAVELER TO THE CUSTOMER FREQUENT TRAVELERS
+                this.apiService.addFrequentTraveler(frequentTraveler).subscribe({
+                  next: (data) => {
+                  },
+                  error: (err) => {
+                    console.log("Error while creating: ", err);
+                  }
+                })
+              }
+            }
+          } else {
+            // THE BENEFICIARIE ALREADY HAS A CUSTOMERID. SO THERE'S NO NEED TO CREATE A NEW CUSTOMER
+
+            //DEFINYING ORDER DETAIL WITH THE ALREADY EXISTED CUSTOMER INFORMATION
+            const orderDetail: OrderDetail = {
+              paymentId: paymentResolved['paymentId'],
+              beneficiaryId: element.customerId,
+              unitPrice: element.price
+            }
+
+            // PUSHING THAT ORDER DETAIL INTO AN ARRAY OF ORDER DETAILS
+            this.orderDetail.push(orderDetail)
+          }
+        }
+        // END OF FOR
+
+        // WE'RE UPDATING THE ORDER'S PACKAGE AVAILABLE QUOTES
+        this.editPackage(this.orderProcess[0].order.package)
+
+        // FOR EACH ELEMENT OF ORDERDETAIL'S ARRAY
+        for (const element of this.orderDetail) {
+          const orderDetailModel: OrderDetail = {
+            paymentId: element.paymentId,
+            beneficiaryId: element.beneficiaryId,
+            unitPrice: element.unitPrice
+          }
+
+          this.apiService.addOrderDetail(orderDetailModel).subscribe({
+            next: () => {
+            },
+            error: (err) => {
+              console.log('Error while creating: ', err);
+            }
+          })
+        }
+        // END OF FOR
+
+        // SOME NECESSARY ACTIONS TO END THE PROCESS
+        this.modalPrimeNg.close()
+        this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Pedido registrado exitosamente.' });
+        this.store.dispatch(new GetAllCustomerRequest())
+        this.store.dispatch(new GetAllOrdersRequest())
+
+        // IF THE PROCESS COMES FROM CREATE ORDER FROM ADMIN/EMPLOYEE THE NEXT CODE WILL EXECUTE
+      } else { // IF THE PROCESS COMES FROM CREATE ORDER FROM ADMIN/EMPLOYEE
+
+        // HERE WE'RE DEFINYING THE ORDER STATUS
+        let status: number
+        if (this.formGroup.value.amount === this.totalCost) { // IF THE PAYMENT AMOUNT GIVEN EQUALS TO THE ORDER'S TOTAL COST
+          status = 2 // THE ORDER STATUS WILL BE SETTED AS PAID
+        } else { // IF THE PAYMENT AMOUNT GIVEN IS LOWER TO THE ORDER'S TOTAL COST
+          status = 1 // THE ORDER STATUS WILL BE SETTED AS IN PROGRESS
+        }
+
+        // WE'RE DEFINYING THE ORDER MODEL WITH ITS NEW STATUS
+        const order: Order = {
+          customerId: this.orderProcess[0].order.customer.customerId,
+          packageId: this.orderProcess[0].order.package.packageId,
+          totalCost: this.totalCost,
+          status: status,
+        }
+
+        // WE'RE CALLING THE POST ACTION OF ORDER
+        const orderResolved = await new Promise((resolve, reject) => {
+          this.apiService.addOrder(order).subscribe({
+            next: (data) => {
+              resolve(data)
+            },
+            error: (err) => {
+              reject(err)
+            }
+          })
+        })
+
+        // DEFINYING REMAINING AMOUNT
+        const remainingAmount = this.totalCost - this.formGroup.value.amount
+
+        // WE'RE DEFINYING THE PAYMENT MODEL WITH ITS CORRESPONDING VALUES
+        const payment: Payment = {
+          orderId: orderResolved['orderId'],
+          amount: this.formGroup.value.amount,
+          remainingAmount: remainingAmount,
+          date: new Date(),
+          imageFile: this.imageFile,
+          status: 1,
+        }
+
+        // WE'RE CREATING A FORMDATA OBJETC, THIS IS NECESSARY TO CREATE THE PAYMENT WITH ITS IMAGE
+        const formData = new FormData();
+        formData.append('orderId', String(payment.orderId))
+        formData.append('amount', String(payment.amount))
+        formData.append('remainingAmount', String(payment.remainingAmount))
+        formData.append('date', payment.date.toISOString())
+        formData.append('status', String(payment.status))
+
+        // WE'RE VALIDATING THAT THE ATRIBUTTE IMAGEFILE HAS AN INSTANCFE OF TYPE FILE
+        if (payment.imageFile instanceof File) {
+          formData.append('imageFile', payment.imageFile, payment.imageFile.name) // IF SO, WE'RE APPENDING TO THE FORMDATA OBJECT THE IMAGEFILE & ITS NAME
+        } else {
+          formData.append('imageFile', payment.imageFile) // IF NOT, WE'RE APPENDING TO THE FORMDATA OBJECT ONLY THE IMAGEFILE
+        }
+
+        // WE'RE CALLING THE POST PETITION FOR PAYMENT
+        const paymentResolved = await new Promise((resolve, reject) => {
+          this.apiService.addPayment(formData).subscribe({
+            next: (data) => {
+              resolve(data)
+            },
+            error: (err) => {
+              reject(err)
+            }
+          })
+        });
+
+        // WE'RE ADDING THE BENEFICIARIES ARRAY TO A CONST
+        const beneficiaries = this.orderProcess[0].beneficiaries
+
+        // FOR EACH ELEMENT OF BENEFICIARIES' ARRAY
+        for (const element of beneficiaries) {
+
+          // HERE WE'RE VALIDATING IF THE BENEFICIARIE ALREADY HAS A CUSTOMERID. IF SO, THERE'S NO NEED TO CREATE A CUSTOMER
+          if (element.customerId === undefined) {
+            const customerModel: Customer = {
+              name: element.name,
+              lastName: element.lastName,
+              document: element.document,
+              address: element.address,
+              phoneNumber: element.phoneNumber,
+              birthDate: element.birthDate,
+              eps: element.eps,
+              user: element.user,
+            }
+
+            // CONST (PROMISE) THAT CONTAINS THE CREATED CUSTOMER INFORMATION
+            const data = await new Promise((resolve, reject) => {
+              this.apiService.addCustomer(customerModel).subscribe({
+                next: (data) => {
+                  resolve(data);
+                },
+                error: (err) => {
+                  reject(err);
+                }
+              });
+            });
+
+            // DEFINYING CUSTOMERID (TITULARID) FOR FREQUENT TRAVELERS
+            const customerId: string = this.orderProcess[0].order.customer.customerId
+
+            //DEFINYING ORDER DETAIL WITH THE CURRENT CUSTOMER INFORMATION
+            const orderDetail: OrderDetail = {
+              paymentId: paymentResolved['paymentId'],
+              beneficiaryId: data['customerId'],
+              unitPrice: element.price
+            };
+
+            // PUSHING THAT ORDER DETAIL INTO AN ARRAY OF ORDER DETAILS
+            this.orderDetail.push(orderDetail)
+
+            // HERE WE'RE DOING SOME VALIDATIONS TO KNOW IF THE BENEFICIARIE MUST GO TO THE CUSTOMER FREQUENT TRAVELERS OR NOT
+            if (element.addToFt !== null) {
+              if (element.addToFt) {
+
+                //DEFINYING FREQUENT TRAVELER WITH THE CURRENT CUSTOMER INFORMATION
+                const frequentTraveler: FrequentTraveler = {
+                  customerId: customerId,
+                  travelerId: data['customerId']
+                }
+
+                // ADDING THE FREQUENT TRAVELER TO THE CUSTOMER FREQUENT TRAVELERS
+                this.apiService.addFrequentTraveler(frequentTraveler).subscribe({
+                  next: (data) => {
+                  },
+                  error: (err) => {
+                    console.log("Error while creating: ", err);
+                  }
+                })
+              }
+            }
+          } else {
+            // THE BENEFICIARIE ALREADY HAS A CUSTOMERID. SO THERE'S NO NEED TO CREATE A NEW CUSTOMER
+
+            //DEFINYING ORDER DETAIL WITH THE ALREADY EXISTED CUSTOMER INFORMATION
+            const orderDetail: OrderDetail = {
+              paymentId: paymentResolved['paymentId'],
+              beneficiaryId: element.customerId,
+              unitPrice: element.price
+            }
+
+            // PUSHING THAT ORDER DETAIL INTO AN ARRAY OF ORDER DETAILS
+            this.orderDetail.push(orderDetail)
+          }
+        }
+        // END OF FOR
+
+        // WE'RE UPDATING THE ORDER'S PACKAGE AVAILABLE QUOTES
+        this.editPackage(this.orderProcess[0].order.package)
+
+        // FOR EACH ELEMENT OF ORDERDETAIL'S ARRAY
+        for (const element of this.orderDetail) {
+          const orderDetailModel: OrderDetail = {
+            paymentId: element.paymentId,
+            beneficiaryId: element.beneficiaryId,
+            unitPrice: element.unitPrice
+          }
+
+          this.apiService.addOrderDetail(orderDetailModel).subscribe({
+            next: () => {
+            },
+            error: (err) => {
+              console.log('Error while creating: ', err);
+            }
+          })
+        }
+        // END OF FOR
+
+        // SOME NECESSARY ACTIONS TO END THE PROCESS
+        this.modalPrimeNg.close()
+        this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Pedido registrado exitosamente.' });
+        this.store.dispatch(new GetAllCustomerRequest())
+        this.store.dispatch(new GetAllOrdersRequest())
       }
     }
   }

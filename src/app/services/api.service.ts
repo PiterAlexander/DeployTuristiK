@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, } from 'rxjs';
 import { Package } from '@/models/package';
 import { Order } from '@/models/order';
 import { Customer } from '@/models/customer';
@@ -67,7 +67,7 @@ export class ApiService {
         return this.http.put<Order>(`${this.endpoint}api/Order/${orderId}`, modelo)
     }
 
-    addPayment(modelo: Payment): Observable<Payment> {
+    addPayment(modelo: any): Observable<Payment> {
         return this.http.post<Payment>(`${this.endpoint}api/Payment`, modelo)
     }
 
@@ -79,7 +79,7 @@ export class ApiService {
         return this.http.put<OrderDetail>(`${this.endpoint}api/OrderDetail/${orderDetailId}`, modelo)
     }
 
-    updatePayment(paymentId: string, modelo: Payment): Observable<Payment> {
+    updatePayment(paymentId: any, modelo: any): Observable<Payment> {
         return this.http.put<Payment>(`${this.endpoint}api/Payment/${paymentId}`, modelo)
     }
 

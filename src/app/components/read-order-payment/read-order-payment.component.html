@@ -70,7 +70,10 @@
                         <span>
                             <button pButton pRipple type="button" icon="pi pi-eye"
                                 class="p-button-outlined p-button-rounded" pTooltip="Ver comprobante"
-                                tooltipPosition="bottom"></button>
+                                tooltipPosition="bottom" (click)="op1.toggle($event)"></button>
+                            <p-overlayPanel #op1 [style]="{width: '450px'}">
+                                <img src="{{ baseUrl + payment.image }}" alt="Comprobante de Pago" style="width:100%" />
+                            </p-overlayPanel>
                         </span>
                     </td>
                     <td style="min-width: 8rem">
