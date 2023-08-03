@@ -22,6 +22,7 @@ import {DetailsPackageComponent} from '@components/details-package/details-packa
 import {PublicHomeComponent} from '@pages/public-home/public-home.component';
 import { AboutUsComponent } from '@pages/about-us/about-us.component';
 import { ContactUsComponent } from '@pages/contact-us/contact-us.component';
+import { ListFrequentTravelerComponent } from '@components/list-frequent-traveler/list-frequent-traveler.component';
 
 const routes: Routes = [
     {
@@ -76,7 +77,11 @@ const routes: Routes = [
                 path: 'Calendario',
                 canActivate: [AuthGuard],
                 component: CalendarComponent
-            }
+            },
+            {
+                path: 'MisBeneficiarios',
+                component: ListFrequentTravelerComponent,
+            },
         ]
     },
     {

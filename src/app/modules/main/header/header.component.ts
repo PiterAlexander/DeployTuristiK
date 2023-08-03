@@ -24,7 +24,6 @@ export class HeaderComponent implements OnInit {
     public isStyleActive: boolean
     public user;
     public menu = MENU;
-ç
     public roleList: Array<Role>;
     public permissionList: Array<Permission>;
     constructor(

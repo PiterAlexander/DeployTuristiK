@@ -188,7 +188,7 @@ export class EditPaymentFormComponent implements OnInit {
       formData.append('orderId', payment.orderId)
       formData.append('amount', String(payment.amount))
       formData.append('remainingAmount', String(payment.remainingAmount))
-      formData.append('date', payment.date.toISOString())
+      formData.append('date', String(payment.date))
       formData.append('image', String(payment.image))
       formData.append('status', String(payment.status))
 

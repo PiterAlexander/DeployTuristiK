@@ -64,7 +64,7 @@ import { OrderListModule } from 'primeng/orderlist';
 import { TooltipModule } from 'primeng/tooltip';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { InputSwitchModule } from 'primeng/inputswitch';
-import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogModule, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -227,6 +227,7 @@ registerLocaleData(localeEn, 'en-EN');
     ToastModule,
     MessageService,
     ConfirmationService,
+    DynamicDialogRef,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

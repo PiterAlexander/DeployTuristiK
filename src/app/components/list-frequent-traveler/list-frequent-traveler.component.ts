@@ -9,6 +9,7 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Role } from '@/models/role';
 import { ConfirmationService } from 'primeng/api';
 import { FrequentTraveler } from '@/models/frequentTraveler';
+import { DataView } from 'primeng/dataview';
 
 @Component({
   selector: 'app-list-frequent-traveler',
@@ -18,6 +19,8 @@ import { FrequentTraveler } from '@/models/frequentTraveler';
 
 export class ListFrequentTravelerComponent implements OnInit {
   public ui: Observable<UiState>
+  public role: any
+  public user: any
   public allRoles: Array<Role>
   public allCustomers: Array<Customer>
   public oneCustomer: Customer
@@ -34,6 +37,8 @@ export class ListFrequentTravelerComponent implements OnInit {
   ngOnInit(): void {
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
+      this.user = JSON.parse(localStorage.getItem('TokenPayload'))
+      this.role = this.user['role']
       this.allRoles = state.allRoles.data
       this.allCustomers = state.allCustomers.data
       this.oneCustomer = state.oneCustomer.data
@@ -42,15 +47,34 @@ export class ListFrequentTravelerComponent implements OnInit {
   }
 
   compareCustomerId() {
-    if (this.oneCustomer.frequentTraveler !== undefined) {
-      for (const element of this.oneCustomer.frequentTraveler) {
-        const customer = this.allCustomers.find(c => c.customerId === element.travelerId)
-        if (customer !== undefined) {
-          this.frequentTravelersList.push(customer)
+    if (this.user['role'] === 'Cliente') {
+      const oneCustomer: Customer = this.allCustomers.find(c => c.userId === this.user['id'])
+      if (oneCustomer !== undefined) {
+        if (oneCustomer.frequentTraveler !== undefined) {
+          for (const element of oneCustomer.frequentTraveler) {
+            const customer = this.allCustomers.find(c => c.customerId === element.travelerId)
+            if (customer !== undefined) {
+              this.frequentTravelersList.push(customer)
+            }
+          }
+          this.updateVisibility()
         }
       }
-      this.updateVisibility()
+    } else {
+      if (this.oneCustomer.frequentTraveler !== undefined) {
+        for (const element of this.oneCustomer.frequentTraveler) {
+          const customer = this.allCustomers.find(c => c.customerId === element.travelerId)
+          if (customer !== undefined) {
+            this.frequentTravelersList.push(customer)
+          }
+        }
+        this.updateVisibility()
+      }
     }
+  }
+
+  onFilter(dv: DataView, event: Event) {
+    dv.filter((event.target as HTMLInputElement).value);
   }
 
   updateVisibility(): void {

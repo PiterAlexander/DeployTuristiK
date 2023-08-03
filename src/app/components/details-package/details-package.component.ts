@@ -23,7 +23,6 @@ import {AuthService} from '@services/auth/auth.service';
 export class DetailsPackageComponent implements OnInit {
     constructor(
         private store: Store<AppState>,
-        private service: ApiService,
         private route: ActivatedRoute,
         private router: Router,
         private authService: AuthService
@@ -102,7 +101,6 @@ export class DetailsPackageComponent implements OnInit {
     }
 
     goToLogin() {
-        // Redirigir al usuario a la página de inicio de sesión
         this.router.navigate(['/login']);
     }
 }

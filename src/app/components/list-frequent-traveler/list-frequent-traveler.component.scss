@@ -1,0 +1,20 @@
+.input-design {
+    width: 100% !important;
+    border-bottom: 1px solid rgb(138, 138, 138) !important;
+}
+
+.small-input {
+    height: 93%;
+    border: none;
+}
+
+:host ::ng-deep {
+    #myDv {
+        .p-dataview-header {
+            // background-color: red;
+            background-color: #ffffff;
+            border: none;
+            padding: 0%;
+        }
+    }
+}
