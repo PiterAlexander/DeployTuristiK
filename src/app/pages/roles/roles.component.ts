@@ -102,14 +102,12 @@ export class RolesComponent implements OnInit {
   }
 
   deleteRole(role: Role) {
-
     var rolesNoPermitidosbyName = [
       'Administrador',
       'Empleado',
       'Beneficiario',
       'Cliente'
     ]
-
     var ok = true
     rolesNoPermitidosbyName.forEach(name => {
       if (role.name == name) {
@@ -140,7 +138,6 @@ export class RolesComponent implements OnInit {
             // Lógica para rechazar
           }
         });
-
       }
     } else {
       this.messageService.add({ key: 'alert-message', severity: 'warn', summary: '¡Acción denegada!', detail: 'Este rol no puede ser eliminado.' });

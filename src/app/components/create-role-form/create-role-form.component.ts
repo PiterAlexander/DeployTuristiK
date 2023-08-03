@@ -3,18 +3,18 @@ import {
     EditRoleRequest,
     GetAllPermissionsRequest
 } from '@/store/ui/actions';
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { UiState } from '@/store/ui/state';
-import { AppState } from '@/store/state';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Role } from '@/models/role';
-import { AssociatedPermission } from '@/models/associated-permission';
-import { ApiService } from '@services/api.service';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { User } from '@/models/user';
+import {Component, OnInit} from '@angular/core';
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs';
+import {UiState} from '@/store/ui/state';
+import {AppState} from '@/store/state';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {Role} from '@/models/role';
+import {AssociatedPermission} from '@/models/associated-permission';
+import {ApiService} from '@services/api.service';
+import {DynamicDialogRef} from 'primeng/dynamicdialog';
+import {User} from '@/models/user';
 
 interface Status {
     name: string;
@@ -50,8 +50,8 @@ export class CreateRoleFormComponent implements OnInit {
         private apiService: ApiService
     ) {
         this.statuses = [
-            { name: 'Activo', code: 1 },
-            { name: 'Inactivo', code: 2 }
+            {name: 'Activo', code: 1},
+            {name: 'Inactivo', code: 2}
         ];
     }
 
@@ -63,7 +63,6 @@ export class CreateRoleFormComponent implements OnInit {
             this.allRoles = state.allRoles.data;
             this.roleData = state.oneRole.data;
         });
-
         this.formGroup = this.fb.group({
             name: new FormControl('', [
                 Validators.required,
@@ -76,7 +75,6 @@ export class CreateRoleFormComponent implements OnInit {
                 Validators.minLength(1)
             )
         });
-
         if (this.roleData != null) {
             this.roleData.associatedPermission.forEach((rolpermiso) => {
                 this.assignpermissiontolist(rolpermiso.permission);
@@ -92,10 +90,8 @@ export class CreateRoleFormComponent implements OnInit {
                     Validators.required
                 ]
             });
-
             const roleNameControl = this.formGroup.get('name');
             const roleName = roleNameControl.value;
-
             if (
                 roleName === 'Administrador' ||
                 roleName === 'Empleado' ||
@@ -111,9 +107,9 @@ export class CreateRoleFormComponent implements OnInit {
 
     validateTitle(): string {
         if (this.roleData !== undefined) {
-            return 'Editar rol'
+            return 'Editar rol';
         }
-        return 'Registrar rol'
+        return 'Registrar rol';
     }
 
     //CREATE UPDATE ROLE AND ASSING PERMISSIONS-----------------------
@@ -143,14 +139,12 @@ export class CreateRoleFormComponent implements OnInit {
                     status: 1,
                     associatedPermission: this.selectedPermissions
                 };
-
                 this.store.dispatch(
                     new CreateRoleRequest({
                         ...model
                     })
                 );
             } else {
-
                 if (
                     this.roleData.name != 'Administrador' ||
                     this.roleData.name != 'Cliente' ||
@@ -158,17 +152,13 @@ export class CreateRoleFormComponent implements OnInit {
                     this.roleData.name != 'Beneficiario'
                 ) {
                     //acá voy a recorrer los usuarios y cambiarle los status
-
                     const model: Role = {
                         roleId: this.roleData.roleId,
                         name: this.roleData.name,
-                        status: this.formGroup.value.status,
+                        status: this.formGroup.value.status
                     };
-
                     this.selectedStatusCode = this.formGroup.value.status;
-
                     this.updatingPermissionRoleAssignment();
-
                     this.store.dispatch(
                         new EditRoleRequest({
                             ...model
@@ -177,21 +167,19 @@ export class CreateRoleFormComponent implements OnInit {
 
                     if (model.status == 2) {
                         this.roleData.user.forEach(async (user) => {
-                            console.log(user)
-
                             const modelUser: User = {
                                 userId: user.userId,
                                 email: user.email,
                                 password: user.password,
                                 status: model.status,
-                                roleId: model.roleId,
+                                roleId: model.roleId
                             };
-
                             const ok = await new Promise((resolve, reject) => {
-                                this.apiService.updateUser(modelUser.userId, modelUser)
+                                this.apiService
+                                    .updateUser(modelUser.userId, modelUser)
                                     .subscribe({
                                         next: (data) => {
-                                            console.log(data)
+                                            console.log(data);
                                             resolve(data);
                                         },
                                         error: (err) => {
@@ -208,7 +196,6 @@ export class CreateRoleFormComponent implements OnInit {
                         status: this.formGroup.value.status
                     };
                     this.updatingPermissionRoleAssignment();
-
                     this.store.dispatch(
                         new EditRoleRequest({
                             ...model
@@ -234,7 +221,6 @@ export class CreateRoleFormComponent implements OnInit {
                     });
                 }
             });
-
             //ADD ASSOCIATED PERMISSION TO CREATE
             const selectedPermission = this.selectedPermissions;
             selectedPermission.forEach((sp) => {
@@ -250,16 +236,17 @@ export class CreateRoleFormComponent implements OnInit {
                     });
                 }
             });
-
             //UPDATE
             this.selectedUpdatePermissions.forEach(async (updateItem) => {
                 //Eliminar permiso asociado-------
-                if (updateItem.status === false) {
+                if (updateItem.status) {
+                    const assocPerModelCreate: AssociatedPermission = {
+                        roleId: updateItem.roleId,
+                        permissionId: updateItem.permissionId
+                    };
                     const ok = await new Promise((resolve, reject) => {
                         this.apiService
-                            .deleteAssociatedPermission(
-                                updateItem.associatedPermissionId
-                            )
+                            .addAssociatedPermission(assocPerModelCreate)
                             .subscribe({
                                 next: (data) => {
                                     resolve(data);
@@ -272,14 +259,11 @@ export class CreateRoleFormComponent implements OnInit {
                 }
                 //Crear permiso asociado
                 else {
-                    const assocPerModelCreate: AssociatedPermission = {
-                        roleId: updateItem.roleId,
-                        permissionId: updateItem.permissionId
-                    };
-
                     const ok = await new Promise((resolve, reject) => {
                         this.apiService
-                            .addAssociatedPermission(assocPerModelCreate)
+                            .deleteAssociatedPermission(
+                                updateItem.associatedPermissionId
+                            )
                             .subscribe({
                                 next: (data) => {
                                     resolve(data);

@@ -91,6 +91,7 @@ export class UserComponent implements OnInit {
             icon: 'pi pi-exclamation-triangle',
             acceptLabel: "Cerrar Sesión",
             rejectLabel: "No",
+            acceptIcon: 'pi pi-sign-out',
             acceptButtonStyleClass: 'p-button-danger p-button-sm',
             rejectButtonStyleClass: 'p-button-outlined p-button-sm',
             accept: () => {

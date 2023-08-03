@@ -11,7 +11,6 @@ import { Role } from '@/models/role';
 import { ApiService } from '@services/api.service';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FrequentTraveler } from '@/models/frequentTraveler';
-import { AppService } from '@services/app.service';
 
 @Component({
   selector: 'app-createcustomerform',
@@ -25,6 +24,8 @@ export class CreatecustomerformComponent implements OnInit {
   public allRoles: Array<Role>
   public allCustomers: Array<Customer>
   public oneCustomer: any
+  public role: any
+  public user: any
   public customerFromAction: Customer
   public Visible: boolean = false
   public password: string = ''
@@ -40,12 +41,13 @@ export class CreatecustomerformComponent implements OnInit {
     private store: Store<AppState>,
     private modalPrimeNg: DynamicDialogRef,
     public apiService: ApiService,
-    public appService: AppService
   ) { }
 
   ngOnInit(): void {
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
+      this.user = JSON.parse(localStorage.getItem('TokenPayload'))
+      this.role = this.user['role']
       this.allRoles = state.allRoles.data
       this.allCustomers = state.allCustomers.data
       this.oneCustomer = state.oneCustomer.data
@@ -145,16 +147,11 @@ export class CreatecustomerformComponent implements OnInit {
     if (this.oneCustomer !== undefined) {
       if (this.oneCustomer.action === 'createFrequentTraveler') {
         return 'Agregar viajero frecuente'
-      } else if (this.oneCustomer.customer.user.userId == this.appService.user.id) {
-        return 'Editar Información'
-
       } else if (this.oneCustomer.action === 'editCustomer') {
         return 'Editar cliente'
-
       } else {
         return 'Editar viajero frecuente'
       }
-
     }
     return 'Registrar cliente'
   }
