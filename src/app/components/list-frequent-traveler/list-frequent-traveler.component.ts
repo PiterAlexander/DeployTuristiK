@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { DeleteFrequentTravelerRequest, OpenModalCreateCustomer } from '@/store/ui/actions';
+import { DeleteFrequentTravelerRequest, GetAllRoleRequest, OpenModalCreateCustomer } from '@/store/ui/actions';
 import { Customer } from '@/models/customer';
 import { AppState } from '@/store/state';
 import { UiState } from '@/store/ui/state';
@@ -27,6 +27,14 @@ export class ListFrequentTravelerComponent implements OnInit {
   public frequentTravelersList: Array<Customer> = []
   public loading: boolean = true
   public visible: boolean = true
+  avatars: string[] = [
+    'https://i.pinimg.com/236x/45/1c/1f/451c1fd9de0d5c1ebc813444f99aa44c.jpg',
+    'https://i.pinimg.com/236x/a7/ed/12/a7ed12a602d817b5c4ef8a9aa52bd703.jpg',
+    'https://i.pinimg.com/236x/70/21/39/702139884f3fb43b1e4722df7ee85a30.jpg',
+    'https://i.pinimg.com/236x/c6/9a/70/c69a70f740a1ea3939021fa05c1d7f17.jpg',
+    'https://i.pinimg.com/236x/53/49/1c/53491c7a972e8c4df667ef2b511ba334.jpg',
+    'https://i.pinimg.com/236x/88/74/c9/8874c94b8691b64c4fb19723449e5844.jpg',
+  ];
 
   constructor(
     private store: Store<AppState>,
@@ -35,6 +43,7 @@ export class ListFrequentTravelerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.store.dispatch(new GetAllRoleRequest())
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
       this.user = JSON.parse(localStorage.getItem('TokenPayload'))
@@ -47,34 +56,65 @@ export class ListFrequentTravelerComponent implements OnInit {
   }
 
   compareCustomerId() {
-    if (this.user['role'] === 'Cliente') {
-      const oneCustomer: Customer = this.allCustomers.find(c => c.userId === this.user['id'])
-      if (oneCustomer !== undefined) {
-        if (oneCustomer.frequentTraveler !== undefined) {
-          for (const element of oneCustomer.frequentTraveler) {
-            const customer = this.allCustomers.find(c => c.customerId === element.travelerId)
-            if (customer !== undefined) {
-              this.frequentTravelersList.push(customer)
+    if (this.allCustomers !== undefined) {
+      if (this.user['role'] === 'Cliente') {
+        const oneCustomer: Customer = this.allCustomers.find(c => c.userId === this.user['id'])
+        if (oneCustomer !== undefined) {
+          if (oneCustomer.frequentTraveler.length > 0) {
+            let index: number = 0
+            for (const element of oneCustomer.frequentTraveler) {
+              const customer = this.allCustomers.find(c => c.customerId === element.travelerId)
+              if (customer !== undefined) {
+                const frequentTraveler: any = {
+                  customerId: customer.customerId,
+                  name: customer.name,
+                  lastName: customer.lastName,
+                  document: customer.document,
+                  birthDate: customer.birthDate,
+                  phoneNumber: customer.phoneNumber,
+                  address: customer.address,
+                  eps: customer.eps,
+                  userId: customer.userId,
+                  user: customer.user,
+                  img: this.avatars[index]
+                }
+                const alreadyExists: Customer = this.frequentTravelersList.find(o => o.customerId === element.travelerId)
+                if (alreadyExists === undefined) {
+                  this.frequentTravelersList.push(frequentTraveler)
+                  if (index === 5) {
+                    index = 0
+                  } else {
+                    index++
+                  }
+                }
+              }
             }
           }
-          this.updateVisibility()
         }
-      }
-    } else {
-      if (this.oneCustomer.frequentTraveler !== undefined) {
-        for (const element of this.oneCustomer.frequentTraveler) {
-          const customer = this.allCustomers.find(c => c.customerId === element.travelerId)
-          if (customer !== undefined) {
-            this.frequentTravelersList.push(customer)
+      } else {
+        if (this.oneCustomer.frequentTraveler !== undefined) {
+          for (const element of this.oneCustomer.frequentTraveler) {
+            const customer = this.allCustomers.find(c => c.customerId === element.travelerId)
+            if (customer !== undefined) {
+              const alreadyExists: Customer = this.frequentTravelersList.find(o => o.customerId === element.travelerId)
+              if (alreadyExists === undefined) {
+                this.frequentTravelersList.push(customer)
+              }
+            }
           }
         }
-        this.updateVisibility()
       }
+      this.updateVisibility()
     }
   }
 
   onFilter(dv: DataView, event: Event) {
     dv.filter((event.target as HTMLInputElement).value);
+  }
+
+  getRandomAvatarUrl() {
+    const randomIndex = Math.floor(Math.random() * this.avatars.length);
+    return this.avatars[randomIndex];
   }
 
   updateVisibility(): void {

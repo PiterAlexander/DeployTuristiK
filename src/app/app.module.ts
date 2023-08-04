@@ -95,10 +95,13 @@ import { DataViewModule } from 'primeng/dataview';
 import { PublicHomeComponent } from './pages/public-home/public-home.component';
 import { AboutUsComponent } from './pages/about-us/about-us.component';
 import { ContactUsComponent } from './pages/contact-us/contact-us.component';
-import {GalleriaModule} from 'primeng/galleria';
+import { GalleriaModule } from 'primeng/galleria';
 import { AnimateEnterDirective } from '@pages/public-home/animateenter.directive';
 import { StyleClassModule } from 'primeng/styleclass';
 import { ChangePasswordComponent } from './modules/change-password/change-password.component';
+import { PanelModule } from 'primeng/panel';
+import { SkeletonModule } from 'primeng/skeleton';
+
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
 
@@ -210,6 +213,8 @@ registerLocaleData(localeEn, 'en-EN');
     OverlayPanelModule,
     SidebarModule,
     DataViewModule,
+    PanelModule,
+    SkeletonModule,
 
     //<------------------------->
     ToastrModule.forRoot({

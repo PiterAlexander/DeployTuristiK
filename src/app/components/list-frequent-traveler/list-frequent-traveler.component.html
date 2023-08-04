@@ -121,10 +121,10 @@
 
 <div *ngIf="user['role'] === 'Cliente'">
     <div class="surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border" style="border-radius: 15px;">
-        <p-dataView id="myDv" #dv *ngIf="visible" [value]="frequentTravelersList" filterBy="totalCost"
-            [paginator]="true" [rows]="2" layout="grid" [loading]="loading">
+        <p-dataView id="myDv" #dv *ngIf="visible" [value]="frequentTravelersList" filterBy="name" [paginator]="true"
+            [rows]="4" layout="grid">
             <ng-template pTemplate="header">
-                <div class="flex flex-column md:flex-row justify-content-between align-items-center">
+                <div class="flex flex-column md:flex-row justify-content-between align-items-center mb-2">
                     <div class="flex flex-column text-center md:text-left">
                         <span class="text-900 text-2xl mb-2">Mis viajeros frecuentes</span>
                         <span class="text-700 text-lg">La mejor compañia para cada uno de mis viajes</span>
@@ -140,9 +140,78 @@
                     </div>
                 </div>
             </ng-template>
-            
-            <ng-template pTemplate="emptymessage">
+            <ng-template pTemplate="gridItem" let-frequentTraveler>
+                <div class="col-12 md:col-6 p-3">
+                    <div class="p-3 surface-card card-shadow">
+                        <div class="flex mb-3">
+                            <img [src]="frequentTraveler.img" class="w-4rem h-4rem mr-3"
+                                style="bottom: -1.5rem; right: 1.5rem">
+                            <div>
+                                <div class="text-900 font-semibold text-xl">{{frequentTraveler.name + ' '+
+                                    frequentTraveler.lastName}}</div>
+                                <div class="text-700">{{frequentTraveler.document}}</div>
+                            </div>
+                        </div>
+                        <p-panel header="Información personal" [toggleable]="true" collapsed="true"
+                            class="line-height-3 m-0">
+                            <div class="flex mb-1">
+                                <!-- <i class="text-900 font-medium pi pi-phone mr-2 mb-0"></i> -->
+                                <span class="text-900"><span class="font-bold">Teléfono: </span>
+                                    {{frequentTraveler.phoneNumber}}</span>
+                            </div>
+                            <div class="flex mb-1">
+                                <!-- <i class="text-900 font-medium pi pi-map-marker mr-2 mb-0"></i> -->
+                                <span class="text-900"><span class="font-bold">EPS: </span>
+                                    {{frequentTraveler.eps}}</span>
+                            </div>
+                            <div class="flex mb-1">
+                                <!-- <i class="text-900 font-medium pi pi-calendar mr-2 mb-0"></i> -->
+                                <span class="text-900"><span class="font-bold">Fecha de Nacimiento: </span>
+                                    {{frequentTraveler.birthDate | date: 'dd/MM/yy' }}</span>
+                            </div>
+                            <div class="flex mb-0">
+                                <!-- <i class="text-900 font-medium pi pi-map-marker mr-2 mb-0"></i> -->
+                                <span class="text-900"><span class="font-bold">Dirección: </span>
+                                    {{frequentTraveler.address}}</span>
+                            </div>
+                        </p-panel>
+                        <div class="flex justify-content-between mt-3">
+                            <span>
+                                <button *ngIf="validateEditAllowing(frequentTraveler)" pButton pRipple type="button"
+                                    label="Editar información" icon="pi pi-pencil"
+                                    class="p-button p-button-raised p-button-text p-button-warning"
+                                    (click)="editFrequentTraveler(frequentTraveler)"></button>
+                                <button *ngIf="!validateEditAllowing(frequentTraveler)" label="Editar información"
+                                    pButton pRipple icon="pi pi-pencil"
+                                    class="p-button p-button-raised p-button-text p-button-warning"
+                                    disabled="true"></button>
+                            </span>
+                            <span>
+                                <button pButton pRipple type="button" icon="pi pi-trash" label="Descartar"
+                                    class="p-button p-button-raised p-button-text p-button-danger"
+                                    (click)="deleteFrequentTraveler(frequentTraveler)"></button>
+                            </span>
+                        </div>
+                    </div>
 
+                </div>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <div *ngIf="loading" class="p-3 surface-card card-shadow">
+                    <div class="flex mb-3">
+                        <p-skeleton shape="circle" size="4rem" styleClass="mr-2"></p-skeleton>
+                        <div>
+                            <p-skeleton width="10rem" styleClass="mb-2"></p-skeleton>
+                            <p-skeleton width="5rem" styleClass="mb-2"></p-skeleton>
+                            <p-skeleton height=".5rem"></p-skeleton>
+                        </div>
+                    </div>
+                    <p-skeleton width="100%" height="150px"></p-skeleton>
+                    <div class="flex justify-content-between mt-3">
+                        <p-skeleton width="4rem" height="2rem"></p-skeleton>
+                        <p-skeleton width="4rem" height="2rem"></p-skeleton>
+                    </div>
+                </div>
             </ng-template>
         </p-dataView>
     </div>

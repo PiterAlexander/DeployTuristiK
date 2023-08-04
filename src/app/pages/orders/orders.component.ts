@@ -66,31 +66,8 @@ export class OrdersComponent implements OnInit {
     if (this.allCustomers !== undefined) {
       this.oneCustomer = this.allCustomers.find(c => c.userId === this.user['id'])
       if (this.oneCustomer !== undefined && this.user['role'] === 'Cliente') {
-        for (const element of this.allOrders) {
-          if (this.oneCustomer.customerId === element.customerId) {
-            const exists = this.ordersList.find(o => o.orderId === element.orderId)
-            if (exists === undefined) {
-              const onePackage: Package = this.allPackages.find(p => p.packageId === element.packageId)
-              if (onePackage !== undefined) {
-                console.log(onePackage);
-                const order: Order = {
-                  orderId: element.orderId,
-                  customerId: element.customerId,
-                  packageId: element.packageId,
-                  package: onePackage,
-                  totalCost: element.totalCost,
-                  status: element.status,
-                  payment: element.payment,
-                }
-                const alreadyExists: Order = this.ordersList.find(o => o.orderId === element.orderId)
-                if (alreadyExists === undefined) {
-                  this.ordersList.push(order)
-                }
-              }
-            }
-          }
-        }
-      } else if (this.user['role'] !== 'Cliente') {
+        this.fillOrdersListArray()
+      } else if (this.oneCustomer !== undefined && this.user['role'] !== 'Cliente') {
         this.ordersList = this.allOrders
         this.loading = false
       }
@@ -102,6 +79,32 @@ export class OrdersComponent implements OnInit {
     this.loading = false
     this.visible = false;
     setTimeout(() => this.visible = true, 0);
+  }
+
+  fillOrdersListArray() {
+    for (const element of this.allOrders) {
+      if (this.oneCustomer.customerId === element.customerId) {
+        const exists = this.ordersList.find(o => o.orderId === element.orderId)
+        if (exists === undefined) {
+          const onePackage: Package = this.allPackages.find(p => p.packageId === element.packageId)
+          if (onePackage !== undefined) {
+            const order: Order = {
+              orderId: element.orderId,
+              customerId: element.customerId,
+              packageId: element.packageId,
+              package: onePackage,
+              totalCost: element.totalCost,
+              status: element.status,
+              payment: element.payment,
+            }
+            const alreadyExists: Order = this.ordersList.find(o => o.orderId === element.orderId)
+            if (alreadyExists === undefined) {
+              this.ordersList.push(order)
+            }
+          }
+        }
+      }
+    }
   }
 
   showStatus(orderStatus: any): string {
