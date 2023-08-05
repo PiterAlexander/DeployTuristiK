@@ -11,7 +11,7 @@
 
 
   <li class="flex align-items-center">
-    <a (click)="handleMainMenuAction()" pRipple pStyleClass="@grandparent" enterClass="ng-hidden" enterActiveClass="px-fadein" leaveToClass="ng-hidden" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 cursor-pointer"
+    <a (click)="handleMainMenuAction()"  [routerLinkActive]="'active'" pRipple pStyleClass="@grandparent" enterClass="ng-hidden" enterActiveClass="px-fadein" leaveToClass="ng-hidden" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 cursor-pointer"
       [ngClass]="{active: isMainActive || isOneOfChildrenActive}">
       <span>{{ menuItem.name }}</span>
     </a>

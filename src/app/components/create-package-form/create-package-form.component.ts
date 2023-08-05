@@ -24,17 +24,11 @@ export class CreatePackageFormComponent implements OnInit {
   public date: Date;
   public showCalendar: boolean = false;
 
-  // Función para abrir el p-calendar
   openCalendar() {
     this.showCalendar = true;
   }
 
-  // Función para manejar la selección de fecha del p-calendar
   onDateSelect() {
-    // Aquí puedes hacer lo que desees con la fecha seleccionada, por ejemplo, asignarla a un FormControl en tu formulario
-    // O realizar cualquier otro procesamiento necesario.
-
-    // Luego, cierra el p-calendar
     this.showCalendar = false;
   }
 
@@ -56,7 +50,6 @@ export class CreatePackageFormComponent implements OnInit {
       var date = state.dateCalendarSelected.data
 
       if (date) {
-        //Definir fecha de salida
         this.departureCalendardate = date
         //Definir fecha de llegada (un dia despues de la de salida)
         const fechaAumentada = new Date(date.getTime());

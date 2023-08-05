@@ -25,6 +25,8 @@ export class MainComponent implements OnInit {
             this.role = user['role'];
             this.isStyleActive = state.menuSidebarCollapsed
         });
+        console.log(this.role);
+        
         this.renderer.removeClass(
             document.querySelector('app-root'),
             'login-page'
