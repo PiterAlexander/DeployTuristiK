@@ -101,6 +101,7 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { ChangePasswordComponent } from './modules/change-password/change-password.component';
 import { PanelModule } from 'primeng/panel';
 import { SkeletonModule } from 'primeng/skeleton';
+import { ImageModule } from 'primeng/image';
 
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
@@ -215,6 +216,7 @@ registerLocaleData(localeEn, 'en-EN');
     DataViewModule,
     PanelModule,
     SkeletonModule,
+    ImageModule,
 
     //<------------------------->
     ToastrModule.forRoot({

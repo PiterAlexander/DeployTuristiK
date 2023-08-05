@@ -53,8 +53,6 @@ export class ReadOrderPaymentComponent {
       this.pushPayments()
     })
 
-    console.log(this.baseUrl);
-
     this.statuses = [
       { 'label': 'Pendiente', 'code': 0 },
       { 'label': 'Aceptado', 'code': 1 },
@@ -113,7 +111,10 @@ export class ReadOrderPaymentComponent {
           status: element.status,
           orderDetail: orderDetailCustomersPerPayment
         }
-        this.payments.push(payment)
+        const onePayment: any = this.payments.find(p => p.paymentId === element.paymentId)
+        if (onePayment === undefined) {
+          this.payments.push(payment)
+        }
       }
     }
     this.updateVisibility()
@@ -194,11 +195,9 @@ export class ReadOrderPaymentComponent {
   }
 
   editOrderDetail(customer: Customer) {
-    const orderDetail: OrderDetail = this.orderDetailCustomers.find(od => od.beneficiaryId === customer.customerId)
     const orderProcess = [{
       action: 'EditOrderDetail',
       customer: customer,
-      orderDetail: orderDetail,
       order: this.order
     }]
     this.modalPrimeNg.close()
