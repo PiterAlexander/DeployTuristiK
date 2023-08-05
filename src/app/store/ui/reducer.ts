@@ -1,9 +1,4 @@
-import {
-    NAVBAR_DARK_VARIANTS,
-    NAVBAR_LIGHT_VARIANTS,
-    SIDEBAR_DARK_SKINS,
-    SIDEBAR_LIGHT_SKINS
-} from '@/utils/themes';
+
 import * as Actions from './actions';
 import {UiAction} from './actions';
 import initialState, {UiState} from './state';

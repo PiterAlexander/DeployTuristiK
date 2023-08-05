@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
     templateUrl: './control-sidebar.component.html',
     styleUrls: ['./control-sidebar.component.scss']
 })
-export class ControlSidebarComponent implements OnInit {
+export class ControlSidebarComponent{
     @HostBinding('class') classes: string =
         'control-sidebar control-sidebar-dark';
     public navbarLightVariants: Array<Option> = NAVBAR_LIGHT_VARIANTS;
@@ -30,14 +30,6 @@ export class ControlSidebarComponent implements OnInit {
 
     constructor(private store: Store<AppState>) { }
 
-    ngOnInit(): void {
-        this.ui = this.store.select('ui');
-        this.ui.subscribe((state: UiState) => {
-            this.navbarVariant = state.navbarVariant;
-            this.darkMode = state.darkMode;
-            this.sidebarSkin = state.sidebarSkin;
-        });
-    }
 
 
 }

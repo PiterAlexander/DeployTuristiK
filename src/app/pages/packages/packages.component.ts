@@ -3,11 +3,12 @@ import {
     ChangeStatusPackageRequest,
     GetAllCustomerRequest,
     GetAllPackagesRequest,
+    GetTopPackagesRequest,
     OpenModalCreatePackage,
     OpenModalDetailsPackage,
 } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
@@ -23,6 +24,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     styleUrls: ['./packages.component.scss']
 })
 export class PackagesComponent implements OnInit {
+    @ViewChild('packagesSection') packagesSection: ElementRef;
     public ui: Observable<UiState>;
     public role: any;
     public user: any;
@@ -37,7 +39,7 @@ export class PackagesComponent implements OnInit {
     public arrayPackagesClient: Array<Package>;
     public allCustomers: Array<Customer>;
     public checked2: boolean = true;
-
+    public top;
     constructor(
         private store: Store<AppState>,
         private router: Router,
@@ -46,6 +48,8 @@ export class PackagesComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.store.dispatch(new GetTopPackagesRequest());
+        
         this.store.dispatch(new GetAllPackagesRequest());
         this.store.dispatch(new GetAllCustomerRequest());
         this.ui = this.store.select('ui');
@@ -56,6 +60,8 @@ export class PackagesComponent implements OnInit {
             } else {
                 this.role = undefined;
             }
+            this.top = state.allTopPackages.data
+            console.log(this.top);
             this.allCustomers = state.allCustomers.data;
             this.packagesList = state.allPackages.data;
             this.arrayPackagesClient = state.allPackages.data.filter(
@@ -69,7 +75,9 @@ export class PackagesComponent implements OnInit {
             { label: 'Del menor al mayor', value: 'price' }
         ];
     }
-
+    scrollToSelector(): void {
+        this.packagesSection.nativeElement.scrollIntoView({ behavior: 'smooth' });
+      }
     onFilter(dv: DataView, event: Event) {
         dv.filter((event.target as HTMLInputElement).value);
     }
