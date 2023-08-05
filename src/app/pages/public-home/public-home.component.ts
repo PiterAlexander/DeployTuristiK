@@ -11,7 +11,9 @@ export class PublicHomeComponent {
     subscription: Subscription;
 
     darkMode: boolean = false;
-
+    get dark(): boolean {
+		return this.layoutService.config.colorScheme !== 'light';
+	}
     constructor(public router: Router, private layoutService: LayoutService) {
         this.subscription = this.layoutService.configUpdate$.subscribe(config => {
             this.darkMode = config.colorScheme === 'dark' || config.colorScheme === 'dim' ? true : false;

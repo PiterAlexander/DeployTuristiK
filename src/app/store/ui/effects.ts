@@ -98,6 +98,19 @@ export class PackageEffects {
         })
     ));
 
+openModalDetailsPackage$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(OPEN_MODAL_DETAILS_PACKAGE),
+            tap((action) => {
+                this.dialogRef = this.dialogService.open(DetailsPackageComponent, {
+                    showHeader: false,
+                    width: '55%',
+                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
+                    baseZIndex: 10000,
+                });
+            })
+        ), { dispatch: false });
+
     loadIngresos$ = createEffect(() =>
         this.actions$.pipe(
             ofType(LOAD_DATA_REQUEST),

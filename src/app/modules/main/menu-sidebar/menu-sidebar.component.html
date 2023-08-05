@@ -1,14 +1,19 @@
 <nav class="sidebar vh-100" *ngIf="role !== 'Cliente'">
-    <header class="px-2 pt-1">
+    <header class="px-2 pt-1" style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 15px;
+        margin-bottom: 5px;
+    ">
         <div class="image-text">
-            <span class="image">
+            <span class="image" style="display: block !important;">
                 <img src="https://img.freepik.com/vector-gratis/logotipo-viaje-detallado_23-2148616611.jpg?w=2000"
                     alt="">
             </span>
 
-            <div class="text logo-text">
+            <div class="text logo-text" style="display: block !important;">
                 <span class="name">TuristiK</span>
-                <span class="profession">{{user.role}}</span>
             </div>
         </div>
     </header>

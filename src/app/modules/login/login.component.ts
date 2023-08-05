@@ -10,6 +10,7 @@ import { AuthService } from '@services/auth/auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MessageService } from 'primeng/api';
+import { LayoutService } from '@services/app.layout.service';
 
 @Component({
     selector: 'app-login2',
@@ -24,13 +25,16 @@ export class LoginComponent implements OnInit {
     static payload: Observable<UserLog>;
     public userLogin: any;
     Visible: boolean = false;
-
+    get dark(): boolean {
+        return this.layoutService.config.colorScheme !== 'light';
+    }
     constructor(
         private fb: FormBuilder,
         private store: Store<AppState>,
         private authService: AuthService,
         private router: Router,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private layoutService: LayoutService
     ) { }
 
     ngOnInit() {
@@ -40,7 +44,7 @@ export class LoginComponent implements OnInit {
             this.userLogin = state.userLoged.data;
             this.getToken();
         });
-
+        
         this.formGroup = this.fb.group({
             email: [
                 null,
@@ -90,14 +94,13 @@ export class LoginComponent implements OnInit {
 
                 this.authService.setToken(this.token.result);
 
-
                 var log = JSON.parse(localStorage.getItem('TokenPayload'));
+                console.log(log)
                 if (log) {
                     if (log['role'] == 'Administrador') {
                         this.router.navigate(['/Home/Dashboard']);
                     }
                     if (log['role'] == 'Cliente') {
-                        this.router.navigate(['/Home/Paquetes']);
                     }
                 }
                 this.messageService.add({ key: 'alert-message-login', severity: 'success', summary: 'Bienvenid@', detail: this.token.message });

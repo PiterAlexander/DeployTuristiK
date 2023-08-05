@@ -1,0 +1,9 @@
+.active {
+    a{
+        background-color: var(--primary-color);
+    }
+    a .icon,
+    a .text {
+    color: var(--sidebar-color);
+}
+}

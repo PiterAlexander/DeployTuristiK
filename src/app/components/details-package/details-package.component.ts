@@ -5,6 +5,7 @@ import {OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {ApiService} from '@services/api.service';
+import { Location } from '@angular/common';
 import {
     GetAllCustomerRequest,
     GetAllPackagesRequest,
@@ -25,7 +26,8 @@ export class DetailsPackageComponent implements OnInit {
         private store: Store<AppState>,
         private route: ActivatedRoute,
         private router: Router,
-        private authService: AuthService
+        private authService: AuthService,
+        private location: Location
     ) {}
     public ui: Observable<UiState>;
     public packagesList: Array<Package>;
@@ -79,6 +81,10 @@ export class DetailsPackageComponent implements OnInit {
             'https://img.freepik.com/vector-gratis/ilustracion-arte-linea-dibujada-mano_23-2149279746.jpg?w=2000'
         ];
         this.isLoggedIn = this.authService.isAuthenticated();
+    }
+
+    goBack() {
+        this.location.back();
     }
 
     reserve(onePackage: Package, cant: number) {

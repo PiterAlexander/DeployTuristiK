@@ -1,6 +1,9 @@
 <p-toast key="alert-message"></p-toast>
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <div *ngIf="role === 'Cliente' || role === undefined">
+    
+    <div class="bg-circle opacity-50" style="top: -200px; left: -700px;"></div>
+<div class="bg-circle hidden lg:flex" style="top: 50px; right:-800px; transform: rotate(60deg)"></div>
     <div class="surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border" style="border-radius: 15px;">
         <p-dataView id="myDv" #dv [value]="arrayPackagesClient" [paginator]="true" [rows]="3" filterBy="name"
             layout="grid">
@@ -220,7 +223,7 @@
                                 tooltipPosition="bottom"></button>
                             <button pButton type="button" icon="pi pi-info-circle"
                                 class="p-button-outlined p-button-rounded m-1" pTooltip="Ver detalles"
-                                tooltipPosition="bottom"></button>
+                                tooltipPosition="bottom" (click)="verDetalles(package.packageId)"></button>
                         </td>
                     </tr>
                 </ng-template>

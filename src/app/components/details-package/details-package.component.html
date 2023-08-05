@@ -21,28 +21,28 @@
                 <div class="flex align-items-center text-xl justify-content-between  text-900 mb-4">
                     <h1>{{pack.name}}</h1>
                 </div>
-                <span class="text-900 font-medium text-3xl block"></span><span class="ml-0 mr-2 text-lg">Con destino a
-                </span>
-                <span class="text-lg"><b class="text-900 mr-1">{{pack.destination}}</b><span
-                        class="text-500"></span></span>
+
+
                 <div class="flex align-items-center justify-content-between mb-2 mt-4">
                     <div>
-                        <div><small class="text-lg"><b class="text-900 mr-1 text-500">Desde</b></small></div>
+                        <span class="text-900 font-medium text-3xl block"></span><span class="ml-0 mr-2 text-lg">Con
+                            destino a
+                        </span>
+                        <span class="text-lg"><b class="text-900 mr-1">{{pack.destination}}</b><span
+                                class="text-500"></span></span>
                     </div>
                     <div class="flex align-items-center">
-                        <span class="mr-3">
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star text-600 mr-1"></i>
-                        </span>
                         <span class="text-sm"><b class="text-900 mr-1">{{pack.availableQuotas}}</b><span
                                 class="text-500"></span>cupos</span>
                     </div>
                 </div>
+
+                <div class="flex align-items-center justify-content-between mb-2 mt-4">
+                    <div><small class="text-xl"><b class="text-900 mr-1 text-500">Desde</b></small>
+                    </div>
+                </div>
                 <div class="flex align-items-center text-xl font-medium text-900 mb-4">
-                    <span class="text-900 font-medium text-3xl block">{{pack.price | currency: 'USD':
+                    <span class="text-900 font-medium text-3xl block">{{pack.price +pack.aditionalPrice | currency: 'USD':
                         'symbol'}}</span><span class="ml-2  text-lg">por persona</span>
                 </div>
 
@@ -89,28 +89,25 @@
                         </div>
                     </p-tabPanel>
                 </p-tabView>
-                <div class="font-bold text-900 mb-3">Cantidad de viajeros</div>
-                <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between">
-                    <p-inputNumber [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" [min]="0"
-                        inputStyleClass="w-3rem text-center" [(ngModel)]="quantity" decrementButtonClass="p-button-text"
-                        incrementButtonClass="p-button-text" incrementButtonIcon="pi pi-plus"
-                        decrementButtonIcon="pi pi-minus"></p-inputNumber>
-                    <div class="flex align-items-center flex-1 mt-3 sm:mt-0 ml-0 sm:ml-5">
-                        <!-- Si el usuario tiene una sesión iniciada, mostrar el botón de reserva -->
-                        <button *ngIf="isLoggedIn" pButton label="Reservar" class="flex-1 mr-5"
-                            (click)="reserve(pack, quantity)"></button>
+                <div *ngIf="role !== 'Administrador'">
+                    <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between">
+                        <div class="flex align-items-center flex-1 mt-3 sm:mt-0 ml-0 sm:ml-5">
+                            <!-- Si el usuario tiene una sesión iniciada, mostrar el botón de reserva -->
+                            <button *ngIf="isLoggedIn" pButton label="Reservar" class="flex-1 mr-5"
+                                (click)="reserve(pack, quantity)"></button>
 
-                        <!-- Si el usuario NO tiene una sesión iniciada, mostrar el botón de login -->
-                        <button *ngIf="!isLoggedIn" pButton label="Reservar" class="flex-1 mr-5"
-                            (click)="goToLogin()"></button>
-
-                        <i class="pi text-2xl cursor-pointer"
-                            [ngClass]="{'pi-heart text-600': !liked, 'pi-heart-fill text-orange-500': liked}"
-                            (click)="liked = !liked"></i>
+                            <!-- Si el usuario NO tiene una sesión iniciada, mostrar el botón de login -->
+                            <button *ngIf="!isLoggedIn" pButton label="Reservar" class="flex-1 mr-5"
+                                (click)="goToLogin()"></button>
+                        </div>
                     </div>
                 </div>
+
                 <div class="p-4 font-medium">No esperes más para vivir una aventura increíble. ¡Reserva ahora y
                     comienza a explorar los tesoros que el mundo tiene para ofrecerte!</div>
+                <div class="col-12" *ngIf="role === 'Administrador'">
+                    <button pButton label="Regresar" class="flex-1 mr-5 w-full" (click)="goBack()"></button>
+                </div>
             </div>
         </div>
 

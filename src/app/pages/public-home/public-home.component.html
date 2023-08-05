@@ -1,6 +1,7 @@
+<div class="bg-circle opacity-50" style="top: -200px; left: -700px;"></div>
+<div class="bg-circle hidden lg:flex" style="top: 50px; right:-800px; transform: rotate(60deg)"></div>
 <div class="relative overflow-hidden flex flex-column justify-content-center">
-  <div class="bg-circle opacity-50" style="top: -200px; left: -700px;"></div>
-  <div class="bg-circle hidden lg:flex" style="top: 50px; right:-800px; transform: rotate(60deg)"></div>
+
   <div class="landing-wrapper">
     <div class="py-4 px-4 mx-0 md:mx-6 z-2">
       <div id="home" class="grid grid-nogutter justify-content-between align-items-center mb-6 py-6 md:mb-8 md:py-8">
@@ -12,20 +13,16 @@
 
           <ul class="flex flex-wrap gap-5 list-none p-0">
 
-            <li class="flex align-items-center">
+            <li class="flex align-items-center"  routerLinkActive="active">
               <div class="p-1 border-circle bg-green-400 inline-block mr-2"></div>
               <span class="text-900 font-semibold">Viajes</span>
-            </li>
-            <li class="flex align-items-center">
-              <div class="p-1 border-circle bg-green-400 inline-block mr-2"></div>
-              <span class="text-900 font-semibold">Hoteleria</span>
             </li>
             <li class="flex align-items-center">
               <div class="p-1 border-circle bg-green-400 inline-block mr-2"></div>
               <span class="text-900 font-semibold">Turismo</span>
             </li>
           </ul>
-          <button pButton pRipple type="button" label="Empezar a explorar" icon="pi pi-arrow-right" iconPos="right"
+          <button pButton pRipple type="button" [routerLink]="'Paquetes'" label="Empezar a explorar" icon="pi pi-arrow-right" iconPos="right"
             class="w-15rem p-button-outlined"></button>
         </div>
 

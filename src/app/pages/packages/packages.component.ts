@@ -4,6 +4,7 @@ import {
     GetAllCustomerRequest,
     GetAllPackagesRequest,
     OpenModalCreatePackage,
+    OpenModalDetailsPackage,
 } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
@@ -74,6 +75,10 @@ export class PackagesComponent implements OnInit {
     }
 
     verDetalles(elementoId: string) {
+        if (this.role == 'Administrador') {
+            this.router.navigate(['Home/DetallesPaquete/' + elementoId]);
+            console.log('hello bro', this.router.config);
+        }
         if (this.role == 'Cliente') {
             this.router.navigate(['Home/DetallesPaquete/' + elementoId]);
             console.log('hello bro', this.router.config);
@@ -132,7 +137,7 @@ export class PackagesComponent implements OnInit {
             reject: () => { }
         });
     }
-
+    
     //PARA LA VISTA DEL CLIENTE-----------------------------------------------
     calculateDays(departureDate: Date, returnDate: Date): number {
         if (!(departureDate instanceof Date) || !(returnDate instanceof Date)) {
