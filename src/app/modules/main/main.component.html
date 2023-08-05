@@ -1,9 +1,10 @@
-<ng-container *ngIf="role !== 'Cliente'"  style="margin: 0;
+<ng-container *ngIf="role !== 'Cliente'" style="margin: 0;
 padding: 0;
 min-height: 100vh;
 display: flex;
 flex-direction: column;">
-  <app-header style="height: 100%; display: block; border: none !important; background-color: #eff3f8 !important; " [ngClass]="{
+  <app-header style="height: 100%; display: block; border: none !important; background-color: #eff3f8 !important; "
+    [ngClass]="{
             'active-style': !isStyleActive,
             'inactive-style': isStyleActive
         }"></app-header>
@@ -31,11 +32,13 @@ flex-direction: column;">
   <!-- <app-menu-sidebar class="sidebar-dark-primary" style="display: none;"></app-menu-sidebar> -->
 
   <app-header></app-header>
+  <div class="bg-circle opacity-50" style="top: -200px; left: -700px;"></div>
+  <div class="bg-circle hidden flex" style="top: 50px; right:-800px; transform: rotate(60deg)"></div>
   <div class="mt-5 center" style="flex: 1;">
     <router-outlet class="mt-2"></router-outlet>
   </div>
   <app-profilemenu></app-profilemenu>
-<br><br>
+  <br><br>
   <app-footer style="
   background-color: #eff3f8;
   margin-left: 0px;

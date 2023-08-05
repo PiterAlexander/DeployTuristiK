@@ -1,41 +1,44 @@
 <p-toast key="alert-message-login"></p-toast>
-
-
 <div class="px-5 flex justify-content-center align-items-center">
-    <div class="border-1 surface-border surface-card border-round py-7 px-4 md:px-7 z-1" style="margin-top: 8%; border-radius: 25px !important;">
+    <div class="border-1 surface-border surface-card border-round py-7 px-4 md:px-7 z-1"
+        style="margin-top: 8%; border-radius: 25px !important;">
         <div class="mb-4">
             <div class="text-900 text-xl font-bold mb-2">Ingresar</div>
             <span class="text-600 font-medium">Por favor ingrese sus datos</span>
         </div>
         <form class="flex flex-column" novalidate id="form" (submit)="saveChanges()" [formGroup]="formGroup">
-            <span class="p-input-icon-left w-full mb-4">
-                <i class="pi pi-envelope"></i>
-                <input id="email" type="text" pInputText class="w-full md:w-25rem" id="email" type="text" pInputText
-                    placeholder="Correo" formControlName="email" required>
 
+            <div class="field mb-4">
+                <span class="p-input-icon-left w-full">
+                    <i class="pi pi-envelope"></i>
+                    <input id="email" type="text" pInputText class="w-full md:w-25rem" id="email" type="text" pInputText
+                        placeholder="Correo" formControlName="email" required>
+                </span>
                 <small class="p-error block"
                     *ngIf="formGroup.get('email').dirty && formGroup.get('email')?.errors?.['required']">
                     Este campo es obligatorio.
                 </small>
                 <small class="p-error block" *ngIf="
-                                formGroup.get('email').dirty &&
-                                formGroup.get('email')?.errors?.pattern
-                            ">
+                    formGroup.get('email').dirty &&
+                    formGroup.get('email')?.errors?.pattern
+                ">
                     Coreo no válido
                 </small>
-            </span>
-            <span class="p-input-icon-left w-full mb-4">
-                <i class="pi pi-lock"></i>
-                <input type="password" pInputText class="w-full md:w-25rem" id="password"
-                    [type]="Visible ? 'text' : 'password'" pInputText placeholder="Contraseña"
-                    formControlName="password" required>
-                <i (click)="displayPassword()" class="pi cursor-pointer" style="
-                    display: flex;
-                    margin-left: 93%;
-                " [ngClass]="{
-                    'pi-eye': Visible,
-                    'pi-eye-slash': !Visible
-                }"></i>
+            </div>
+            <div class="field">
+                <span class="p-input-icon-left w-full">
+                    <i class="pi pi-lock"></i>
+                    <input type="password" pInputText class="w-full md:w-25rem" id="password"
+                        [type]="Visible ? 'text' : 'password'" pInputText placeholder="Contraseña"
+                        formControlName="password" required>
+                    <i (click)="displayPassword()" class="pi cursor-pointer" style="
+        display: flex;
+        margin-left: 93%;
+    " [ngClass]="{
+        'pi-eye': Visible,
+        'pi-eye-slash': !Visible
+    }"></i>
+                </span>
                 <small class="p-error block"
                     *ngIf="formGroup.get('password').dirty && formGroup.get('password')?.errors?.['required']">
                     Este campo es obligatorio.
@@ -44,7 +47,7 @@
                     *ngIf="formGroup.get('password').dirty && formGroup.get('password')?.errors?.['minlength']">
                     Este campo debe tener mínimo 8 caracteres
                 </small>
-            </span>
+            </div>
             <div class="mb-4 flex flex-wrap gap-3">
                 <a [routerLink]="['/forgot-password']"
                     class="text-600 cursor-pointer hover:text-primary cursor-pointer transition-colors transition-duration-300">Reestablecer

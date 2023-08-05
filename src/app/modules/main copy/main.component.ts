@@ -38,13 +38,11 @@ export class MainPublicComponent implements OnInit {
           if (event instanceof NavigationEnd) {
               const currentRoute = this.getCurrentRoute(event.url);
               this.route = event.url;
-              if (event.url == '/login') {
+              if (event.url == '/login' || event.url == '/register' || event.url == '/forgot-password' || event.url == '/recover-password') {
                   this.log = true
               } else{
                 this.log= false
               }
-          
-              console.log(this.log)
             }
       });
       
