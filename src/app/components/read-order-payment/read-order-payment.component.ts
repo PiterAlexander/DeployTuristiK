@@ -208,7 +208,7 @@ export class ReadOrderPaymentComponent {
     this.confirmationService.confirm({
       header: '¿Está seguro de eliminar a ' + customer.name + '?',
       message: 'Tenga en cuenta que:<br><br>- El precio del pedido no cambiará.<br>- No se hará un reembolso por el beneficiario.<br>- Deberá volver a realizar un pago si desea agregar a ' + customer.name + ' de nuevo.',
-      icon: 'pi pi-exclamation-triangle text-red-500',
+      icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Eliminar',
       rejectLabel: 'Cancelar',
       rejectIcon: 'pi pi-times',
