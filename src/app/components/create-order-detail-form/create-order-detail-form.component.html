@@ -87,7 +87,7 @@
                 </div>
                 <div class="col">
                     <div class="field">
-                        <p-calendar dateFormat="dd/mm/yy" formControlName="birthdate" required="true"
+                        <p-calendar dateFormat="dd/mm/yy" appendTo="body" formControlName="birthdate" required="true"
                             placeholder="Fecha de nacimiento" [showIcon]="true" [style]="{ width: '100%' }"
                             [readonlyInput]="true" [maxDate]="beneficiariesMaxDate"></p-calendar>
                         <small class="p-error block"
@@ -115,7 +115,7 @@
             <div class="grid">
                 <div class="col">
                     <div class="field">
-                        <p-dropdown formControlName="eps" required="true" [options]="allEps"
+                        <p-dropdown formControlName="eps" appendTo="body" required="true" [options]="allEps"
                             placeholder="Seleccione la EPS" [showClear]="true"
                             [style]="{ width: '100%', 'max-width': '13.7rem'}"></p-dropdown>
                         <small class="p-error block"
@@ -254,7 +254,7 @@
                 </div>
                 <div class="col">
                     <div class="field">
-                        <p-calendar dateFormat="dd/mm/yy" formControlName="birthdate" required="true"
+                        <p-calendar dateFormat="dd/mm/yy" appendTo="body" formControlName="birthdate" required="true"
                             placeholder="Ingrese la fecha de nacimiento del beneficiario" [showIcon]="true"
                             [style]="{ width: '100%' }" [maxDate]="beneficiariesMaxDate"
                             [readonlyInput]="true"></p-calendar>
@@ -283,7 +283,7 @@
             <div class="grid">
                 <div class="col">
                     <div class="field">
-                        <p-dropdown formControlName="eps" required="true" [options]="allEps"
+                        <p-dropdown formControlName="eps" appendTo="body" required="true" [options]="allEps"
                             placeholder="Seleccione la EPS del beneficiario" [showClear]="true"
                             [style]="{ width: '100%', 'max-width': '36.6rem'}"></p-dropdown>
                         <small class="p-error block"

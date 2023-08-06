@@ -11,6 +11,7 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ConfirmationService } from 'primeng/api';
 import { ApiService } from '@services/api.service';
 import { MessageService } from 'primeng/api';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-edit-payment-form',
@@ -27,6 +28,7 @@ export class EditPaymentFormComponent implements OnInit {
   public user: any
   public role: any
   public statuses: any[] = []
+  public baseUrl: string = environment.endPoint + 'resources/payments/'
 
   constructor(
     private store: Store<AppState>,
@@ -40,15 +42,16 @@ export class EditPaymentFormComponent implements OnInit {
   ngOnInit(): void {
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
-      this.payment = state.onePayment.data
-      this.allOrders = state.allOrders.data
-      this.getOrderById(this.payment.orderId)
       this.user = JSON.parse(localStorage.getItem('TokenPayload'))
       this.role = this.user['role']
+      this.allOrders = state.allOrders.data
+      this.payment = state.onePayment.data
+      this.getOrderById(this.payment.orderId)
     })
 
     this.formGroup = this.fb.group({
       status: [null, Validators.required],
+      details: [null]
     })
 
     this.statuses = [
@@ -84,7 +87,11 @@ export class EditPaymentFormComponent implements OnInit {
   }
 
   validForm(): boolean {
-    return this.formGroup.value.status !== null
+    if (this.formGroup.value.status === 2) {
+      return this.formGroup.valid && this.formGroup.value.details !== null
+    } else {
+      return this.formGroup.value.status !== null
+    }
   }
 
   back() {
@@ -119,7 +126,7 @@ export class EditPaymentFormComponent implements OnInit {
   }
 
   save() {
-    if (!this.formGroup.invalid) {
+    if (this.formGroup.value.status !== null) {
       let addition: number = 0
       let orderStatus: number
       let pending: boolean = false
@@ -173,8 +180,7 @@ export class EditPaymentFormComponent implements OnInit {
         status = 2
       }
 
-      const date = new Date(this.payment.image)
-      const payment: Payment = {
+      const payment: any = {
         paymentId: this.payment.paymentId,
         orderId: this.order.orderId,
         amount: this.payment.amount,

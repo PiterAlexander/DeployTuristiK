@@ -63,14 +63,16 @@ export class OrdersComponent implements OnInit {
   }
 
   compareCustomer() {
-    if (this.allCustomers !== undefined) {
-      this.oneCustomer = this.allCustomers.find(c => c.userId === this.user['id'])
-      if (this.oneCustomer !== undefined && this.user['role'] === 'Cliente') {
-        this.fillOrdersListArray()
-      } else if (this.oneCustomer !== undefined && this.user['role'] !== 'Cliente') {
-        this.ordersList = this.allOrders
-        this.loading = false
+    if (this.user['role'] === 'Cliente') {
+      if (this.allCustomers !== undefined) {
+        this.oneCustomer = this.allCustomers.find(c => c.userId === this.user['id'])
+        if (this.oneCustomer !== undefined) {
+          this.fillOrdersListArray()
+        }
       }
+    } else {
+      this.ordersList = this.allOrders
+      this.loading = false
     }
     this.updateVisibility()
   }

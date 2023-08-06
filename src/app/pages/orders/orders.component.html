@@ -52,8 +52,8 @@
 
 <div *ngIf="user['role'] === 'Cliente'">
     <div class="surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border" style="border-radius: 15px;">
-        <p-dataView id="myDv" #dv *ngIf="visible" [value]="ordersList" filterBy="totalCost" [paginator]="true" [rows]="2"
-            layout="list" [loading]="loading">
+        <p-dataView id="myDv" #dv *ngIf="visible" [value]="ordersList" filterBy="totalCost" [paginator]="true"
+            [rows]="2" layout="list" [loading]="loading">
             <ng-template pTemplate="header">
                 <div class="flex flex-column md:flex-row justify-content-between align-items-center">
                     <div class="flex flex-column text-center md:text-left">
@@ -179,7 +179,7 @@
                 </div>
             </ng-template>
             <ng-template pTemplate="emptymessage">
-                
+
             </ng-template>
         </p-dataView>
     </div>
