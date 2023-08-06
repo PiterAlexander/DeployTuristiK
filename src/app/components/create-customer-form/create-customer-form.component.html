@@ -169,7 +169,7 @@
     <div class="grid">
         <div class="col" *ngIf="role === 'Cliente'">
             <div class="field">
-                <p-calendar dateFormat="dd/mm/yy" formControlName="birthDate"
+                <p-calendar dateFormat="dd/mm/yy" appendTo="body" formControlName="birthDate"
                     placeholder="Ingrese su fecha de nacimiento" showIcon="true" required="true"
                     [style]="{ width: '100%' }" [readonlyInput]="true" [maxDate]="customerMaxDate" [style.pointer-events]="oneCustomer ? 'none' : 'auto'"
                     [style.opacity]="oneCustomer ? 0.5 : 1"></p-calendar>
@@ -181,7 +181,7 @@
         </div>
         <div class="col" *ngIf="role !== 'Cliente'">
             <div class="field">
-                <p-calendar dateFormat="dd/mm/yy" formControlName="birthDate"
+                <p-calendar dateFormat="dd/mm/yy" appendTo="body" formControlName="birthDate"
                     placeholder="Ingrese su fecha de nacimiento" showIcon="true" required="true"
                     [style]="{ width: '100%' }" [readonlyInput]="true" [maxDate]="customerMaxDate" ></p-calendar>
                 <small class="p-error block"

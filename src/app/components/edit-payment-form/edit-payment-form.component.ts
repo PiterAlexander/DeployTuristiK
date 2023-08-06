@@ -126,7 +126,7 @@ export class EditPaymentFormComponent implements OnInit {
   }
 
   save() {
-    if (!this.formGroup.invalid) {
+    if (this.formGroup.value.status !== null) {
       let addition: number = 0
       let orderStatus: number
       let pending: boolean = false
