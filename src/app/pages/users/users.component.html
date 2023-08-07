@@ -45,7 +45,7 @@
                             <span [class]="'user-badge status-' + user.status">{{showStatus(user.status)}}</span>
                         </td>
                         <td class="text-center p-1">
-                            <button pButton type="button" icon="pi pi-pencil"
+                            <button pButton type="button" icon="pi pi-pencil" [disabled]="user.userId === userLog.id"
                                 class="p-button-outlined p-button-warning p-button-rounded m-1"
                                 (click)="openUpdateUserModal(user)" pTooltip="Editar" tooltipPosition="bottom"></button>
                         </td>

@@ -79,8 +79,8 @@ export class CreatecustomerformComponent implements OnInit {
         }
       } else {
         this.formGroup = this.fb.group({
-          email: new FormControl('', [Validators.required, Validators.email, Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')]),
-          password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
+          email: new FormControl(null, [Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')]),
+          password: new FormControl(null),
           name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
           lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
           document: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]),
@@ -99,8 +99,8 @@ export class CreatecustomerformComponent implements OnInit {
             phoneNumber: this.customerFromAction.phoneNumber,
             address: this.customerFromAction.address,
             eps: this.customerFromAction.eps,
-            email: this.customerFromAction.user.email,
-            password: this.customerFromAction.user.password,
+            email: '',
+            password: '',
           })
         }
       }
@@ -344,12 +344,7 @@ export class CreatecustomerformComponent implements OnInit {
       const role: Role = this.allRoles.find(r => r.name === 'Cliente')
       if (this.oneCustomer !== undefined) {
         if (this.oneCustomer.action === 'editCustomer' || this.oneCustomer.action === "editCustomerFromFrequentTraveler") {
-          const user: User = {
-            email: this.formGroup.value.email,
-            password: this.formGroup.value.password,
-            status: 1,
-            roleId: role.roleId,
-          }
+
           const customer: Customer = {
             customerId: this.customerFromAction.customerId,
             name: this.formGroup.value.name,
@@ -360,7 +355,6 @@ export class CreatecustomerformComponent implements OnInit {
             address: this.formGroup.value.address,
             eps: this.formGroup.value.eps,
             userId: this.customerFromAction.userId,
-            user: user
           }
           this.store.dispatch(new EditCustomerRequest({ ...customer }))
         } else if (this.oneCustomer.action === 'createFrequentTraveler') {
