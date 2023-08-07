@@ -46,6 +46,7 @@
     "@popperjs/core": "^2.11.6",
     "@profabric/angular-components": "0.1.2",
     "angular-jwt": "^0.1.11",
+    "bcryptjs": "^2.4.3",
     "chart.js": "^4.3.0",
     "core-js": "3.25.0",
     "gatekeeper-client-sdk": "0.4.2",

@@ -132,6 +132,7 @@ export class CreatecustomerformComponent implements OnInit {
       if (this.oneCustomer.action === 'createFrequentTraveler' || this.oneCustomer.action === 'editCustomerFromFrequentTraveler') {
         return false
       }
+      return false
     }
     return true
   }
@@ -147,6 +148,9 @@ export class CreatecustomerformComponent implements OnInit {
     if (this.oneCustomer !== undefined) {
       if (this.oneCustomer.action === 'createFrequentTraveler') {
         return 'Agregar viajero frecuente'
+      }
+      else if (this.user.role === 'Cliente') {
+        return 'Editar Información'
       } else if (this.oneCustomer.action === 'editCustomer') {
         return 'Editar cliente'
       } else {
