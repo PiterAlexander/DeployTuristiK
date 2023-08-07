@@ -68,7 +68,7 @@ export class ReadOrderPaymentComponent {
   }
 
   validateEditAllowing(payment: Payment): boolean {
-    if (this.user['role'] !== 'Cliente') {
+    if (this.role !== 'Cliente') {
       if (payment.status === 0) {
         return true
       }
@@ -164,21 +164,12 @@ export class ReadOrderPaymentComponent {
 
   addPayment() {
     if (this.remainingAmount > 0) {
-      if (this.user['role'] === 'Cliente') {
-        const orderProcess = [{
-          action: 'CreatePaymentFromCustomer',
-          order: this.order
-        }]
-        this.closeModal()
-        this.store.dispatch(new OpenModalCreatePayment(orderProcess))
-      } else {
-        const orderProcess = [{
-          action: 'CreatePayment',
-          order: this.order
-        }]
-        this.closeModal()
-        this.store.dispatch(new OpenModalCreatePayment(orderProcess))
-      }
+      const orderProcess = [{
+        action: 'CreatePayment',
+        order: this.order
+      }]
+      this.closeModal()
+      this.store.dispatch(new OpenModalCreatePayment(orderProcess))
     }
   }
 
@@ -256,23 +247,13 @@ export class ReadOrderPaymentComponent {
   addOrderDetail() {
     if (this.order.package.availableQuotas >= 1) {
       this.closeModal()
-      if (this.user['role'] === 'Cliente') {
-        const orderProcess = [{
-          action: 'CreateOrderDetailFromCustomer',
-          order: this.order,
-          beneficiaries: {}
-        }]
-        this.closeModal()
-        this.store.dispatch(new OpenModalCreateOrderDetail({ ...orderProcess }))
-      } else {
-        const orderProcess = [{
-          action: 'CreateOrderDetail',
-          order: this.order,
-          beneficiaries: {}
-        }]
-        this.closeModal()
-        this.store.dispatch(new OpenModalCreateOrderDetail({ ...orderProcess }))
-      }
+      const orderProcess = [{
+        action: 'CreateOrderDetail',
+        order: this.order,
+        beneficiaries: {}
+      }]
+      this.closeModal()
+      this.store.dispatch(new OpenModalCreateOrderDetail({ ...orderProcess }))
     }
   }
 }

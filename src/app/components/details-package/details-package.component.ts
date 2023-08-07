@@ -95,7 +95,7 @@ export class DetailsPackageComponent implements OnInit {
         
         const orderProcess = [
             {
-                action: 'CreateOrderFromCustomer',
+                action: 'CreateOrder',
                 order: {
                     customer: customer,
                     package: onePackage
