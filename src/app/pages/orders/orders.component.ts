@@ -63,16 +63,36 @@ export class OrdersComponent implements OnInit {
   }
 
   compareCustomer() {
-    if (this.user['role'] === 'Cliente') {
-      if (this.allCustomers !== undefined) {
-        this.oneCustomer = this.allCustomers.find(c => c.userId === this.user['id'])
-        if (this.oneCustomer !== undefined) {
-          this.fillOrdersListArray()
+    if (this.role !== undefined) {
+      if (this.role === 'Cliente') {
+        if (this.allCustomers !== undefined) {
+          this.oneCustomer = this.allCustomers.find(c => c.userId === this.user['id'])
+          if (this.oneCustomer !== undefined) {
+            this.fillOrdersListArray()
+          }
+        }
+      } else {
+        for (const element of this.allOrders) {
+          const exists: Order = this.ordersList.find(o => o.orderId === element.orderId)
+          if (exists === undefined) {
+            const onePackage: Package = this.allPackages.find(p => p.packageId === element.packageId)
+            const oneCustomer: Customer = this.allCustomers.find(p => p.customerId === element.customerId)
+            if (onePackage !== undefined && oneCustomer !== undefined) {
+              const order: Order = {
+                orderId: element.orderId,
+                customerId: element.customerId,
+                customer: oneCustomer,
+                packageId: element.packageId,
+                package: onePackage,
+                totalCost: element.totalCost,
+                status: element.status,
+                payment: element.payment,
+              }
+              this.ordersList.push(order)
+            }
+          }
         }
       }
-    } else {
-      this.ordersList = this.allOrders
-      this.loading = false
     }
     this.updateVisibility()
   }
@@ -99,10 +119,7 @@ export class OrdersComponent implements OnInit {
               status: element.status,
               payment: element.payment,
             }
-            const alreadyExists: Order = this.ordersList.find(o => o.orderId === element.orderId)
-            if (alreadyExists === undefined) {
-              this.ordersList.push(order)
-            }
+            this.ordersList.push(order)
           }
         }
       }
@@ -114,34 +131,6 @@ export class OrdersComponent implements OnInit {
       if (orderStatus === status.code) {
         return status.label
       }
-    }
-  }
-
-  getCustomerName(order: Order): string {
-    const customer: Customer = this.allCustomers.find(c => c.customerId === order.customerId)
-    if (customer !== undefined) {
-      return customer.name
-    }
-  }
-
-  getCustomerLastName(order: Order): string {
-    const customer: Customer = this.allCustomers.find(c => c.customerId === order.customerId)
-    if (customer !== undefined) {
-      return customer.lastName
-    }
-  }
-
-  getCustomerDocument(order: Order): string {
-    const customer: Customer = this.allCustomers.find(c => c.customerId === order.customerId)
-    if (customer !== undefined) {
-      return customer.document
-    }
-  }
-
-  getPackageName(order: Order): string {
-    const onePackage: Package = this.allPackages.find(p => p.packageId === order.packageId)
-    if (onePackage !== undefined) {
-      return onePackage.name
     }
   }
 
@@ -174,5 +163,4 @@ export class OrdersComponent implements OnInit {
       this.store.dispatch(new OpenModalPayments({ ...oneOrder }))
     }
   }
-
 }

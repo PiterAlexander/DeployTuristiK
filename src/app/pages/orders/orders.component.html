@@ -2,7 +2,7 @@
 <div *ngIf="role !== 'Cliente'" class="p-4">
     <div class="col-12">
         <div class="card px-6 py-6" style="border-radius: 15px;">
-            <p-table #dt [value]="ordersList" [paginator]="true" [rows]="5" scrollable="true" [loading]="loading"
+            <p-table *ngIf="visible" #dt [value]="ordersList" [paginator]="true" [rows]="5" scrollable="true" [loading]="loading"
                 [globalFilterFields]="['customer.name', 'customer.lastName', 'customer.document', 'package.name', 'totalCost', 'status']">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between">
@@ -26,9 +26,9 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-order>
                     <tr>
-                        <td style="min-width: 16rem">{{ getCustomerName(order) + ' ' +
-                            getCustomerLastName(order) + ' - ' + getCustomerDocument(order) }}</td>
-                        <td style="min-width: 14rem">{{ getPackageName(order) }}</td>
+                        <td style="min-width: 16rem">{{ order.customer.name + ' ' +
+                            order.customer.lastName + ' - ' + order.customer.document }}</td>
+                        <td style="min-width: 14rem">{{ order.package.name }}</td>
                         <td style="min-width: 9rem">{{ order.totalCost | currency: 'USD':'symbol' }}</td>
                         <td style="min-width: 5rem" class="flex justify-content-center">
                             <button pButton pRipple type="button" icon="pi pi-eye"
@@ -50,7 +50,7 @@
     </div>
 </div>
 
-<div *ngIf="user['role'] === 'Cliente'">
+<div *ngIf="role === 'Cliente'">
     <div class="surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border" style="border-radius: 15px;">
         <p-dataView id="myDv" #dv *ngIf="visible" [value]="ordersList" filterBy="totalCost" [paginator]="true"
             [rows]="2" layout="list" [loading]="loading">

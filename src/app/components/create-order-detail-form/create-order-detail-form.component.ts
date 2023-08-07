@@ -24,6 +24,8 @@ import { ApiService } from '@services/api.service';
 export class CreateOrderDetailFormComponent implements OnInit {
   private ui: Observable<UiState>
   public formGroup: FormGroup
+  public role: any
+  public user: any
   public allRoles: Array<Role>
   public oneRole: Role | undefined
   public allCustomers: Array<Customer>
@@ -51,6 +53,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
   ngOnInit(): void {
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
+      this.user = JSON.parse(localStorage.getItem('TokenPayload'))
+      this.role = this.user['role']
       this.allRoles = state.allRoles.data
       this.allCustomers = state.allCustomers.data
       this.orderProcess = state.orderProcess.data
@@ -89,66 +93,34 @@ export class CreateOrderDetailFormComponent implements OnInit {
     })
 
     if (this.orderProcess !== undefined) {
-      if (this.orderProcess[0].action === 'CreateOrderDetail' || this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
+      if (this.orderProcess[0].action === 'CreateOrderDetail') {
         this.onInitFromCreateOrderDetail()
       } else if ((this.orderProcess[0].action === 'EditOrderDetail')) {
         this.onInitFromEditOrderDetail()
-      } else if (this.orderProcess[0].action === 'CreateOrderFromCustomer') {
-        this.onInitFromCreateOrderFromCustomer()
-      } else {
-        // onInitFromCreateOrderFromAdmin
+      } else if (this.orderProcess[0].action === 'CreateOrder') {
         this.onePackage = this.orderProcess[0].order.package
         if (this.orderProcess[0].beneficiaries.length > 0) {
           this.fillBeneficiariesArray()
-          if (this.orderProcess[0].order.beneficiaries > this.orderProcess[0].beneficiaries.length) {
-            this.beneficiariesAmount = this.orderProcess[0].order.beneficiaries
-          } else {
+          if (this.role === 'Cliente') {
             this.beneficiariesAmount = this.orderProcess[0].beneficiaries.length
+          } else {
+            if (this.orderProcess[0].order.beneficiaries > this.orderProcess[0].beneficiaries.length) {
+              this.beneficiariesAmount = this.orderProcess[0].order.beneficiaries
+            } else {
+              this.beneficiariesAmount = this.orderProcess[0].beneficiaries.length
+            }
           }
         } else {
-          this.beneficiariesAmount = this.orderProcess[0].order.beneficiaries
+          if (this.role === 'Cliente') {
+            this.beneficiariesAmount = 1
+          } else {
+            this.beneficiariesAmount = this.orderProcess[0].order.beneficiaries
+          }
         }
         this.fillFrequentTravelersArray()
       }
     }
   }
-
-  //<--- TABLE UPDATE PROCESS --->
-
-  updateVisibility(): void {
-    this.visible = false
-    setTimeout(() => this.visible = true, 0)
-  }
-
-  //<------------------->
-
-  //<--- BIRTHDATE SECTION --->
-
-  dateFormat(date: any): Date {
-    const dateOptions = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' }
-    date = new Date(date)
-    let convertedDate = date.toLocaleString('en-ES', dateOptions).replace(/,/g, '')
-    convertedDate = new Date(convertedDate.replace(/PM GMT-5/g, 'GMT-0500 (Colombia Standard Time)'))
-
-    return convertedDate
-  }
-
-  adjustPriceAccordingToAge(date: Date): number {
-    const currenDate = new Date();
-    const birthdate = new Date(date);
-    const milisecondsAge = currenDate.getTime() - birthdate.getTime();
-    const yearAge = milisecondsAge / (1000 * 60 * 60 * 24 * 365.25);
-
-    if (yearAge < 5) {
-      return this.onePackage.aditionalPrice
-    } else if (yearAge >= 5 && yearAge < 10) {
-      return this.onePackage.price * 0.70
-    } else {
-      return this.onePackage.price
-    }
-  }
-
-  //<------------------->
 
   //<--- ON INIT FROM DIFFERENT ENTRIES --->
 
@@ -187,15 +159,41 @@ export class CreateOrderDetailFormComponent implements OnInit {
     })
   }
 
-  onInitFromCreateOrderFromCustomer() {
-    this.onePackage = this.orderProcess[0].order.package
-    if (this.orderProcess[0].beneficiaries.length > 0) {
-      this.fillBeneficiariesArray()
-      this.beneficiariesAmount = this.orderProcess[0].beneficiaries.length
+  //<------------------->
+
+  //<--- TABLE UPDATE PROCESS --->
+
+  updateVisibility(): void {
+    this.visible = false
+    setTimeout(() => this.visible = true, 0)
+  }
+
+  //<------------------->
+
+  //<--- BIRTHDATE SECTION --->
+
+  dateFormat(date: any): Date {
+    const dateOptions = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' }
+    date = new Date(date)
+    let convertedDate = date.toLocaleString('en-ES', dateOptions).replace(/,/g, '')
+    convertedDate = new Date(convertedDate.replace(/PM GMT-5/g, 'GMT-0500 (Colombia Standard Time)'))
+
+    return convertedDate
+  }
+
+  adjustPriceAccordingToAge(date: Date): number {
+    const currenDate = new Date();
+    const birthdate = new Date(date);
+    const milisecondsAge = currenDate.getTime() - birthdate.getTime();
+    const yearAge = milisecondsAge / (1000 * 60 * 60 * 24 * 365.25);
+
+    if (yearAge < 5) {
+      return this.onePackage.aditionalPrice
+    } else if (yearAge >= 5 && yearAge < 10) {
+      return this.onePackage.price * 0.70
     } else {
-      this.beneficiariesAmount = 1
+      return this.onePackage.price
     }
-    this.fillFrequentTravelersArray()
   }
 
   //<------------------->
@@ -471,13 +469,13 @@ export class CreateOrderDetailFormComponent implements OnInit {
 
   alreadyExists(): boolean {
     if (this.orderProcess[0].action !== 'EditOrderDetail') {
-      if (this.orderProcess[0].action === 'CreateOrderDetail' || this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
+      if (this.orderProcess[0].action === 'CreateOrderDetail') {
         const oneCustomer = this.orderDetailCustomers.find(b => b.document === this.formGroup.value.document)
         const anotherCustomer = this.beneficiaries.find(b => b.document === this.formGroup.value.document)
         if (anotherCustomer === undefined && oneCustomer === undefined) {
           return false
         }
-      } else {
+      } else if (this.orderProcess[0].action === 'CreateOrder') {
         const oneCustomer = this.beneficiaries.find(b => b.document === this.formGroup.value.document)
         if (oneCustomer === undefined) {
           return false
@@ -521,43 +519,44 @@ export class CreateOrderDetailFormComponent implements OnInit {
     }
   }
 
-  backFromCreateOrderFromCustomer(event: Event) {
-    if (this.beneficiaries.length > 0) {
-      this.confirmationService.confirm({
-        target: event.target,
-        header: '¿Está seguro de regresar?',
-        message: 'Perderá toda la información previamente ingresada.',
-        icon: 'pi pi-exclamation-triangle',
-        rejectLabel: 'Sí, regresar',
-        rejectButtonStyleClass: 'p-button-outlined',
-        rejectIcon: 'pi pi-times',
-        acceptLabel: 'Permanecer',
-        acceptIcon: 'pi pi-check',
-        reject: () => {
-          this.modalPrimeNg.close()
-        }
-      })
+  backFromCreateOrder(event: Event) {
+    if (this.role === 'Cliente') {
+      if (this.beneficiaries.length > 0) {
+        this.confirmationService.confirm({
+          target: event.target,
+          header: '¿Está seguro de regresar?',
+          message: 'Perderá toda la información previamente ingresada.',
+          icon: 'pi pi-exclamation-triangle',
+          rejectLabel: 'Sí, regresar',
+          rejectButtonStyleClass: 'p-button-outlined',
+          rejectIcon: 'pi pi-times',
+          acceptLabel: 'Permanecer',
+          acceptIcon: 'pi pi-check',
+          reject: () => {
+            this.modalPrimeNg.close()
+          }
+        })
+      } else {
+        this.modalPrimeNg.close()
+      }
     } else {
-      this.modalPrimeNg.close()
-    }
-  }
-
-  back(event: Event) {
-    if (this.orderProcess[0].action === 'CreateOrderDetail' || this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
-      this.backFromCreateOrderDetail(event)
-    } else if (this.orderProcess[0].action === 'EditOrderDetail') {
-      this.modalPrimeNg.close()
-      this.store.dispatch(new OpenModalPayments({ ...this.orderProcess[0].order }))
-    } else if (this.orderProcess[0].action === 'CreateOrderFromCustomer') {
-      this.backFromCreateOrderFromCustomer(event)
-    } else {
-      // BACK FROM createOrderFromAdmin
       this.orderProcess = [{
         order: this.orderProcess[0].order,
         beneficiaries: this.beneficiaries,
       }]
       this.modalPrimeNg.close()
       this.store.dispatch(new OpenModalCreateOrder({ ...this.orderProcess }))
+    }
+  }
+
+  back(event: Event) {
+    if (this.orderProcess[0].action === 'CreateOrderDetail') {
+      this.backFromCreateOrderDetail(event)
+    } else if (this.orderProcess[0].action === 'EditOrderDetail') {
+      this.modalPrimeNg.close()
+      this.store.dispatch(new OpenModalPayments({ ...this.orderProcess[0].order }))
+    } else if (this.orderProcess[0].action === 'CreateOrder') {
+      this.backFromCreateOrder(event)
     }
   }
 
@@ -598,9 +597,9 @@ export class CreateOrderDetailFormComponent implements OnInit {
     this.store.dispatch(new EditOrderDetailRequest({ ...customer }))
   }
 
-  nextFromCreateOrderFromCustomer() {
+  nextFromCreateOrder() {
     this.orderProcess = [{
-      action: 'CreateOrderFromCustomer',
+      action: 'CreateOrder',
       order: this.orderProcess[0].order,
       beneficiaries: this.beneficiaries,
     }]
@@ -609,22 +608,12 @@ export class CreateOrderDetailFormComponent implements OnInit {
   }
 
   next() {
-    if (this.orderProcess[0].action === 'CreateOrderDetail' || this.orderProcess[0].action === 'CreateOrderDetailFromCustomer') {
+    if (this.orderProcess[0].action === 'CreateOrderDetail') {
       this.nextFromCreateOrderDetail()
     } else if (this.orderProcess[0].action === 'EditOrderDetail') {
       this.nextFromEditOrderDetail()
-    } else if (this.orderProcess[0].action === 'CreateOrderFromCustomer') {
-      this.nextFromCreateOrderFromCustomer()
-    } else {
-      // NEXT FROM CreateOrderFromAdmin
-      this.orderProcess = [{
-        action: 'CreateOrder',
-        order: this.orderProcess[0].order,
-        beneficiaries: this.beneficiaries,
-      }]
-
-      this.modalPrimeNg.close()
-      this.store.dispatch(new OpenModalCreatePayment({ ...this.orderProcess }))
+    } else if (this.orderProcess[0].action === 'CreateOrder') {
+      this.nextFromCreateOrder()
     }
   }
 }

@@ -77,10 +77,9 @@ export class CreateOrderFormComponent implements OnInit {
   }
 
   cancel(event: Event) {
-    const ejemploDeNodo: string = 'primer nodo' // NODO 1 DESPLIEGA NODO 2Q
-    if (this.orderProcess !== undefined) { // NODO 2 (SI SE CUMPLE LA CONDICIÓN DESPLIEGA NODO 3, SINO DESPLIEGA NODO 7)
-      if (this.orderProcess[0].beneficiaries.length > 0) { // NODO 3 (SI SE CUMPLE LA CONDICIÓN DESPLIEGA NODO 4, SINO DESPLIEGA NODO 5)
-        this.confirmationService.confirm({ // NODO 4 DESPLIEGA NODO 9
+    if (this.orderProcess !== undefined) {
+      if (this.orderProcess[0].beneficiaries.length > 0) {
+        this.confirmationService.confirm({
           target: event.target,
           header: '¿Está seguro de regresar?',
           message: 'Perderá toda la información previamente ingresada.',
@@ -94,14 +93,12 @@ export class CreateOrderFormComponent implements OnInit {
             this.modalPrimeNg.close()
           }
         })
-      } else { // NODO 5, DESPLIEGA NODO 6
-        this.modalPrimeNg.close() // NODO 6, DESPLIEGA NODO 9
+      } else {
+        this.modalPrimeNg.close()
       }
-    } else { // NODO 7, DESPLIEGA NODO 8
-      this.modalPrimeNg.close() // NODO 8, DESPLIEGA NODO 9
+    } else {
+      this.modalPrimeNg.close()
     }
-
-    // NODO 9 (SERÍA EL FINAL DEL MÉTODO)
   }
 
   //<--- VALIDATIONS --->
