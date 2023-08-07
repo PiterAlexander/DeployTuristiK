@@ -75,9 +75,7 @@ export class CreateUserFormComponent implements OnInit {
         Validators.email,
         Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]
       ],
-      password: [null,
-        [Validators.required,
-        Validators.minLength(8)]
+      password: [null
       ],
       status: [1, Validators.required],
       name: [null, Validators.required],
@@ -95,7 +93,7 @@ export class CreateUserFormComponent implements OnInit {
         userId: this.userData.userId,
         role: this.userData.roleId,
         email: this.userData.email,
-        password: this.userData.password,
+        password: '',
         status: this.userData.status,
         name: " ",
         lastName: " ",
@@ -152,7 +150,7 @@ export class CreateUserFormComponent implements OnInit {
       this.model = {
         userId: this.formGroup.value.userId,
         email: this.formGroup.value.email,
-        password: this.formGroup.value.password,
+        password:this.userData.password,
         status: this.formGroup.value.status,
         roleId: this.formGroup.value.role
       }

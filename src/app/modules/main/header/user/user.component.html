@@ -76,7 +76,7 @@
                             </div>
                         </div>
                     </li>
-                    <li>
+                    <li *ngIf="user.role == 'Cliente'">
                         <div
                             class="flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round"
                         >
@@ -84,9 +84,9 @@
                                 <i class="pi pi-users text-xl text-primary"></i>
                             </span>
                             <div class="ml-3">
-                                <span class="mb-2 font-semibold text-color-secondary">Rol</span>
+                                <span class="mb-2 font-semibold">EPS</span>
                                 <p class="text-color-secondary m-0">
-                                    {{ allInfo.phoneNumber }}
+                                    {{ allInfo.eps }}
                                 </p>
                             </div>
                         </div>

@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MessageService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Observable } from 'rxjs';
+import { compare } from 'bcryptjs';
 
 @Component({
   selector: 'app-change-password',
@@ -54,7 +55,7 @@ export class ChangePasswordComponent implements OnInit {
 
   changePassword() {
 
-    if (this.formGroup.value.currentPassword == this.currentUser!.password) {
+    if (compare(this.formGroup.value.currentPassword, this.currentUser!.password)) {
       this.modelUser = {
         userId: this.currentUser.userId,
         email: this.currentUser.email,
@@ -102,7 +103,7 @@ export class ChangePasswordComponent implements OnInit {
     return this.formGroup.valid && this.validatePassword();
   }
 
-  cancel(){
+  cancel() {
     this.modalPrimeNg.close()
   }
 }

@@ -45,16 +45,9 @@ export class CreateEmployeeFormComponent implements OnInit {
         })
 
         this.formGroup = this.fb.group({
-            email: new FormControl('', [
-                Validators.required,
-                Validators.email,
-                Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')
+            email: new FormControl('', [Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')
             ]),
-            password: new FormControl('', [
-                Validators.required,
-                Validators.minLength(5),
-                Validators.maxLength(30)
-            ]),
+            password: new FormControl(null),
             name: new FormControl('', [
                 Validators.required,
                 Validators.minLength(3),
@@ -87,13 +80,15 @@ export class CreateEmployeeFormComponent implements OnInit {
             }
 
             this.formGroup.setValue({
-                email: this.oneEmployee.user.email,
-                password: this.oneEmployee.user.password,
+                email: '',
+                password: '',
                 name: this.oneEmployee.name,
                 lastName: this.oneEmployee.lastName,
                 document: this.oneEmployee.document,
                 phoneNumber: this.oneEmployee.phoneNumber,
             })
+            console.log(this.formGroup.value)
+            console.log(this.formGroup.valid)
         }
     }
 
@@ -173,7 +168,6 @@ export class CreateEmployeeFormComponent implements OnInit {
                 status: 1,
                 roleId: oneRole.roleId
             }
-
             const employee: Employee = {
                 name: this.formGroup.value.name,
                 lastName: this.formGroup.value.lastName,
@@ -184,20 +178,12 @@ export class CreateEmployeeFormComponent implements OnInit {
 
             this.store.dispatch(new CreateEmployeeRequest({ ...employee }))
         } else {
-            const user: User = {
-                email: this.formGroup.value.email,
-                password: this.formGroup.value.password,
-                status: 1,
-                roleId: oneRole.roleId
-            }
-
             const employee: Employee = {
                 employeeId: this.oneEmployee.employeeId,
                 name: this.formGroup.value.name,
                 lastName: this.formGroup.value.lastName,
                 document: this.formGroup.value.document,
                 phoneNumber: this.formGroup.value.phoneNumber,
-                user: user,
                 userId: this.oneEmployee.userId
             }
             this.store.dispatch(new EditEmployeeRequest({ ...employee }))

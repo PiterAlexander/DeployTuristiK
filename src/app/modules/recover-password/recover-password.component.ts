@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { User } from '@/models/user';
 import { UpdateUserRequest, SaveCurrentUserRequest } from '@/store/ui/actions';
 import { MessageService } from 'primeng/api';
+import { compare } from 'bcryptjs';
 
 @Component({
     selector: 'app-recover-password',
@@ -54,7 +55,7 @@ export class RecoverPasswordComponent implements OnInit {
 
     recoverPassword() {
 
-        if (this.formGroup.value.codePassword == this.currentUser!.password) {
+        if (compare(this.formGroup.value.codePassword, this.currentUser!.password)) {
             this.modelUser = {
                 userId: this.currentUser.userId,
                 email: this.currentUser.email,
