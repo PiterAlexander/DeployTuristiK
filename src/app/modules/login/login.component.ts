@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
             this.userLogin = state.userLoged.data;
             this.getToken();
         });
-        
+
         this.formGroup = this.fb.group({
             email: [
                 null,
@@ -97,10 +97,11 @@ export class LoginComponent implements OnInit {
                 var log = JSON.parse(localStorage.getItem('TokenPayload'));
                 console.log(log)
                 if (log) {
-                    if (log['role'] == 'Administrador') {
-                        this.router.navigate(['/Home/Dashboard']);
+                    if (log['role'] == 'Administrador' || log['role'] != 'Cliente') {
+                      this.router.navigate(['/Home/Dashboard']);
                     }
                     if (log['role'] == 'Cliente') {
+                      this.router.navigate(['/Home/Paquetes']);
                     }
                 }
                 this.messageService.add({ key: 'alert-message-login', severity: 'success', summary: 'Bienvenid@', detail: this.token.message });

@@ -1,18 +1,22 @@
+import {Component, OnInit} from '@angular/core';
 import {
-    Component,
-    OnInit
-} from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
-import { Store } from '@ngrx/store';
-import { AppState } from '@/store/state';
-import { UiState } from '@/store/ui/state';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { User } from '@/models/user';
-import { UpdateUserRequest, SaveCurrentUserRequest } from '@/store/ui/actions';
-import { MessageService } from 'primeng/api';
-import { compare } from 'bcryptjs';
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    UntypedFormControl,
+    UntypedFormGroup,
+    Validators
+} from '@angular/forms';
+import {ToastrService} from 'ngx-toastr';
+import {Store} from '@ngrx/store';
+import {AppState} from '@/store/state';
+import {UiState} from '@/store/ui/state';
+import {Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {User} from '@/models/user';
+import {UpdateUserRequest, SaveCurrentUserRequest} from '@/store/ui/actions';
+import {MessageService} from 'primeng/api';
+import {compare, hash} from 'bcryptjs';
 
 @Component({
     selector: 'app-recover-password',
@@ -22,12 +26,11 @@ import { compare } from 'bcryptjs';
 export class RecoverPasswordComponent implements OnInit {
     public formGroup: FormGroup;
     public ui: Observable<UiState>;
-    public currentUser: User
+    public currentUser: User;
     public modelUser: User;
 
     Visible: boolean = false;
     Visible2: boolean = false;
-
 
     constructor(
         private fb: FormBuilder,
@@ -35,46 +38,68 @@ export class RecoverPasswordComponent implements OnInit {
         private router: Router,
         private toastr: ToastrService,
         private messageService: MessageService
-    ) { }
+    ) {}
 
     ngOnInit(): void {
         this.ui = this.store.select('ui');
         this.ui.subscribe((state: UiState) => {
-            this.currentUser = state.currentUser.data
-
+            this.currentUser = state.currentUser.data;
         });
 
         this.formGroup = this.fb.group({
-            codePassword: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(10)]),
-            password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
-            confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
-
+            codePassword: new FormControl('', [
+                Validators.required,
+                Validators.minLength(8),
+                Validators.maxLength(10)
+            ]),
+            password: new FormControl('', [
+                Validators.required,
+                Validators.minLength(8),
+                Validators.maxLength(30)
+            ]),
+            confirmPassword: new FormControl('', [
+                Validators.required,
+                Validators.minLength(8),
+                Validators.maxLength(30)
+            ])
         });
-
     }
 
-    recoverPassword() {
+    async recoverPassword() {
+        if (
+            compare(
+                this.formGroup.value.codePassword,
+                this.currentUser!.password
+            )
+        ) {
+            let password = await hash(this.formGroup.value.password, 10);
 
-        if (compare(this.formGroup.value.codePassword, this.currentUser!.password)) {
             this.modelUser = {
                 userId: this.currentUser.userId,
                 email: this.currentUser.email,
-                password: this.formGroup.value.password,
+                password: password,
                 status: this.currentUser.status,
                 roleId: this.currentUser.roleId
-            }
-            this.store.dispatch(new UpdateUserRequest({
-                ...this.modelUser,
-            }))
-            console.log(this.modelUser)
+            };
+            this.store.dispatch(
+                new UpdateUserRequest({
+                    ...this.modelUser
+                })
+            );
+            console.log(this.modelUser);
 
-
-            this.toastr.success('Ya puedes acceder nuevamente al sistema', '¡Contraseña Cambiada Correctamente!');
-            this.router.navigate(['/login'])
-
+            this.toastr.success(
+                'Ya puedes acceder nuevamente al sistema',
+                '¡Contraseña Cambiada Correctamente!'
+            );
+            this.router.navigate(['/login']);
         } else {
-            this.messageService.add({ key: 'alert-message-recover-password', severity: 'error', summary: '¡Lo sentimos!', detail: 'El código ingresado no es válido' });
-
+            this.messageService.add({
+                key: 'alert-message-recover-password',
+                severity: 'error',
+                summary: '¡Lo sentimos!',
+                detail: 'El código ingresado no es válido'
+            });
         }
     }
 
@@ -86,8 +111,8 @@ export class RecoverPasswordComponent implements OnInit {
     }
 
     validatePassword(): boolean {
-        const password1 = this.formGroup.value.password
-        const password2 = this.formGroup.value.confirmPassword
+        const password1 = this.formGroup.value.password;
+        const password2 = this.formGroup.value.confirmPassword;
 
         if (password1 === password2) {
             return true;
