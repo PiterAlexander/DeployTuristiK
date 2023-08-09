@@ -14,7 +14,7 @@ import { Token } from '@/models/token';
 import { Role } from '@/models/role';
 import { Permission } from '@/models/permission';
 import { AssociatedPermission } from '@/models/associated-permission';
-import { recoverPasswordEmail } from '@/models/recoverPasswordEmail';
+import { recoverPasswordEmail, sendPQRS } from '@/models/recoverPasswordEmail';
 @Injectable({
     providedIn: 'root'
 })
@@ -164,7 +164,7 @@ export class ApiService {
     }
 
     recoverPassword(model: recoverPasswordEmail) {
-        return this.http.post<any>(`${this.endpoint}api/ResetPassword`, model)
+        return this.http.post<any>(`${this.endpoint}api/Email/ResetPassword`, model)
     }
 
     changePassword(model: any) {
@@ -210,5 +210,10 @@ export class ApiService {
 
     getIngresosMensuales(): Observable<number[]> {
         return this.http.get<number[]>(`${this.endpoint}api/Ingresos/Mensuales`);
+    }
+
+    //<------ CONTACT US-------->
+    sendPQRS(model: sendPQRS) {
+        return this.http.post<any>(`${this.endpoint}api/Email/SendPQRS`, model)
     }
 }
