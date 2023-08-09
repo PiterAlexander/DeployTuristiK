@@ -16,6 +16,8 @@ import { UiState } from '@/store/ui/state';
 import { GetUsersRequest, RecoverPasswordRequest, SaveCurrentUserRequest, UpdateUserRequest } from '@/store/ui/actions';
 import { recoverPasswordEmail } from '@/models/recoverPasswordEmail';
 import { MessageService } from 'primeng/api';
+import { hash } from 'bcryptjs';
+
 
 @Component({
     selector: 'app-forgot-password',
@@ -61,16 +63,18 @@ export class ForgotPasswordComponent implements OnInit {
 
     }
 
-    forgotPassword() {
+    async forgotPassword() {
         let user = this.userList.find(u => u.email == this.formGroup.value.email);
         if (user) {
 
             let newPassword = this.autoCreate()
 
+            let password = await hash(newPassword, 10)
+
             this.modelUser = {
                 userId: user.userId,
                 email: user.email,
-                password: newPassword,
+                password: password,
                 status: user.status,
                 roleId: user.roleId
             }
@@ -118,3 +122,5 @@ export class ForgotPasswordComponent implements OnInit {
     }
 
 }
+
+
