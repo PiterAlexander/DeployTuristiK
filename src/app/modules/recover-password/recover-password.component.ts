@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
     FormBuilder,
     FormControl,
@@ -7,16 +7,17 @@ import {
     UntypedFormGroup,
     Validators
 } from '@angular/forms';
-import {ToastrService} from 'ngx-toastr';
-import {Store} from '@ngrx/store';
-import {AppState} from '@/store/state';
-import {UiState} from '@/store/ui/state';
-import {Router} from '@angular/router';
-import {Observable} from 'rxjs';
-import {User} from '@/models/user';
-import {UpdateUserRequest, SaveCurrentUserRequest} from '@/store/ui/actions';
-import {MessageService} from 'primeng/api';
-import {compare, hash} from 'bcryptjs';
+import { ToastrService } from 'ngx-toastr';
+import { Store } from '@ngrx/store';
+import { AppState } from '@/store/state';
+import { UiState } from '@/store/ui/state';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { User } from '@/models/user';
+import { UpdateUserRequest, SaveCurrentUserRequest, ChangePasswordRequest } from '@/store/ui/actions';
+import { MessageService } from 'primeng/api';
+import { compare, hash } from 'bcryptjs';
+import { Token } from '@/models/token';
 
 @Component({
     selector: 'app-recover-password',
@@ -27,7 +28,7 @@ export class RecoverPasswordComponent implements OnInit {
     public formGroup: FormGroup;
     public ui: Observable<UiState>;
     public currentUser: User;
-    public modelUser: User;
+    public menssage: Token;
 
     Visible: boolean = false;
     Visible2: boolean = false;
@@ -38,7 +39,7 @@ export class RecoverPasswordComponent implements OnInit {
         private router: Router,
         private toastr: ToastrService,
         private messageService: MessageService
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.ui = this.store.select('ui');
@@ -66,41 +67,24 @@ export class RecoverPasswordComponent implements OnInit {
     }
 
     async recoverPassword() {
-        if (
-            compare(
-                this.formGroup.value.codePassword,
-                this.currentUser!.password
-            )
-        ) {
-            let password = await hash(this.formGroup.value.password, 10);
 
-            this.modelUser = {
-                userId: this.currentUser.userId,
-                email: this.currentUser.email,
-                password: password,
-                status: this.currentUser.status,
-                roleId: this.currentUser.roleId
-            };
-            this.store.dispatch(
-                new UpdateUserRequest({
-                    ...this.modelUser
-                })
-            );
-            console.log(this.modelUser);
-
-            this.toastr.success(
-                'Ya puedes acceder nuevamente al sistema',
-                '¡Contraseña Cambiada Correctamente!'
-            );
-            this.router.navigate(['/login']);
-        } else {
-            this.messageService.add({
-                key: 'alert-message-recover-password',
-                severity: 'error',
-                summary: '¡Lo sentimos!',
-                detail: 'El código ingresado no es válido'
-            });
+        let model = {
+            "Id": this.currentUser.userId,
+            "currentPassword": this.formGroup.value.codePassword,
+            "newPassword": this.formGroup.value.password,
+            "type": "Recovered"
         }
+        this.store.dispatch(
+            new ChangePasswordRequest({
+                ...model
+            })
+        );
+
+        this.ui.subscribe((state: UiState) => {
+            this.menssage = state.passwordChanged.data;
+            this.mensajeApi()
+        });
+
     }
 
     displayPassword() {
@@ -123,5 +107,22 @@ export class RecoverPasswordComponent implements OnInit {
 
     validForm(): boolean {
         return this.formGroup.valid && this.validatePassword();
+    }
+
+    mensajeApi() {
+        if (this.menssage.success) {
+            this.toastr.success(
+                'Ya puedes acceder nuevamente al sistema',
+                '¡' + this.menssage.message + '!'
+            );
+            this.router.navigate(['/login']);
+        } else {
+            this.messageService.add({
+                key: 'alert-message-recover-password',
+                severity: 'error',
+                summary: '¡Lo sentimos!',
+                detail: this.menssage.message
+            });
+        }
     }
 }

@@ -1,16 +1,17 @@
-import {User} from '@/models/user';
-import {AppState} from '@/store/state';
-import {UpdateUserRequest} from '@/store/ui/actions';
-import {UiState} from '@/store/ui/state';
-import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {Store} from '@ngrx/store';
-import {ToastrService} from 'ngx-toastr';
-import {MessageService} from 'primeng/api';
-import {DynamicDialogRef} from 'primeng/dynamicdialog';
-import {Observable} from 'rxjs';
-import {compare, hash} from 'bcryptjs';
+import { User } from '@/models/user';
+import { AppState } from '@/store/state';
+import { ChangePasswordRequest, UpdateUserRequest } from '@/store/ui/actions';
+import { UiState } from '@/store/ui/state';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { ToastrService } from 'ngx-toastr';
+import { MessageService } from 'primeng/api';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Observable } from 'rxjs';
+import { compare, hash } from 'bcryptjs';
+import { Token } from '@/models/token';
 
 @Component({
     selector: 'app-change-password',
@@ -22,6 +23,8 @@ export class ChangePasswordComponent implements OnInit {
     public ui: Observable<UiState>;
     public currentUser: User;
     public modelUser: User;
+    public menssage: Token;
+
 
     Visible: boolean = false;
     Visible2: boolean = false;
@@ -32,7 +35,7 @@ export class ChangePasswordComponent implements OnInit {
         private store: Store<AppState>,
         private messageService: MessageService,
         private modalPrimeNg: DynamicDialogRef
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.ui = this.store.select('ui');
@@ -60,41 +63,28 @@ export class ChangePasswordComponent implements OnInit {
     }
 
     async changePassword() {
-        if (
-            compare(
-                this.formGroup.value.currentPassword,
-                this.currentUser!.password
-            )
-        ) {
-          let password= await hash(this.formGroup.value.newPassword,10 )
-            this.modelUser = {
-                userId: this.currentUser.userId,
-                email: this.currentUser.email,
-                password: password,
-                status: this.currentUser.status,
-                roleId: this.currentUser.roleId
-            };
-            this.store.dispatch(
-                new UpdateUserRequest({
-                    ...this.modelUser
-                })
-            );
-            console.log(this.modelUser);
 
-            this.messageService.add({
-                key: 'alert-message-change-password',
-                severity: 'success',
-                summary: '¡Éxito!',
-                detail: 'Contraseña Cambiada Correctamente!'
-            });
-        } else {
-            this.messageService.add({
-                key: 'alert-message-change-password',
-                severity: 'error',
-                summary: 'Lo sentimos!',
-                detail: 'La contraseña actual es diferente a la ingresada'
-            });
+        let model = {
+            "Id": this.currentUser.userId,
+            "currentPassword": this.formGroup.value.currentPassword,
+            "newPassword": this.formGroup.value.newPassword,
+            "type": "Change"
         }
+        console.log(model);
+        this.store.dispatch(
+            new ChangePasswordRequest({
+                ...model
+            })
+        );
+
+        this.ui.subscribe((state: UiState) => {
+            this.currentUser = state.currentUser.data
+            this.menssage = state.passwordChanged.data;
+            if (this.menssage) {
+                this.mensajeApi()
+            }
+
+        });
     }
 
     displayPassword() {
@@ -124,5 +114,25 @@ export class ChangePasswordComponent implements OnInit {
 
     cancel() {
         this.modalPrimeNg.close();
+    }
+
+    mensajeApi() {
+        if (this.menssage.success) {
+            // this.messageService.add({
+            //     key: 'alert-message-change-password',
+            //     severity: 'success',
+            //     summary: '¡Éxito!',
+            //     detail: this.menssage.message
+            // });
+        this.modalPrimeNg.close();
+
+        } else {
+            // this.messageService.add({
+            //     key: 'alert-message-change-password',
+            //     severity: 'error',
+            //     summary: '¡Lo sentimos!',
+            //     detail: this.menssage.message
+            // });
+        }
     }
 }

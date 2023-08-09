@@ -247,6 +247,11 @@ export interface UiState {
     error: string,
     loading: boolean
   }
+  passwordChanged: {
+    data: Token,
+    error: string,
+    loading: boolean
+  }
   //<-------------->
 
   //<--SAVE DATE CALENDAR SELECTE-------->

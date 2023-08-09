@@ -167,6 +167,10 @@ export class ApiService {
         return this.http.post<any>(`${this.endpoint}api/ResetPassword`, model)
     }
 
+    changePassword(model: any) {
+        return this.http.post<Token>(`${this.endpoint}api/ChangePassword`, model)
+    }
+
 
     //<------ROLES-------->
     getRoles(): Observable<Role[]> {
