@@ -549,6 +549,36 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                         loading: false
                     }
                 };
+
+                case Actions.loginActions.CHANGE_PASSWORD_REQUEST:
+                    return {
+                        ...state,
+                        passwordChanged: {
+                            data: undefined,
+                            error: undefined,
+                            loading: true
+                        }
+                    };
+        
+                case Actions.loginActions.CHANGE_PASSWORD_SUCCESS:
+                    return {
+                        ...state,
+                        passwordChanged: {
+                            data: action.payload,
+                            error: undefined,
+                            loading: false
+                        }
+                    };
+        
+                case Actions.loginActions.CHANGE_PASSWORD_FAILURE:
+                    return {
+                        ...state,
+                        passwordChanged: {
+                            data: undefined,
+                            error: action.payload,
+                            loading: false
+                        }
+                    };
         //<------------>
         default:
             return state;

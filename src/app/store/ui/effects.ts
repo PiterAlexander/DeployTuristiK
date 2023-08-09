@@ -52,6 +52,9 @@ import {
     CreateOrderDetailRequest,
     CreateOrderDetailSuccess,
     CreateOrderDetailFailure,
+    ChangePasswordRequest,
+    ChangePasswordSuccess,
+    ChangePasswordFailure,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -98,7 +101,7 @@ export class PackageEffects {
         })
     ));
 
-openModalDetailsPackage$ = createEffect(() =>
+    openModalDetailsPackage$ = createEffect(() =>
         this.actions$.pipe(
             ofType(OPEN_MODAL_DETAILS_PACKAGE),
             tap((action) => {
@@ -141,7 +144,7 @@ openModalDetailsPackage$ = createEffect(() =>
         this.actions$.pipe(
             ofType(packageActions.OPEN_MODAL_CREATE_PACKAGE),
             tap((action: OpenModalCreatePackage) => {
-                this.dialogRef =this.dialogService.open(CreatePackageFormComponent, {
+                this.dialogRef = this.dialogService.open(CreatePackageFormComponent, {
                     /* Opciones del modal */
                     showHeader: false,
                     width: '55%',
@@ -179,7 +182,7 @@ openModalDetailsPackage$ = createEffect(() =>
 
                 mergeMap((packResolved) => {
 
-                  //this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Paquete editado exitosamente.' });
+                    //this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Paquete editado exitosamente.' });
                     this.dialogRef.close()
 
                     return [
@@ -928,7 +931,23 @@ openModalDetailsPackage$ = createEffect(() =>
         ),
         {
             dispatch: false
-        });
+        }
+    )
+
+    changePassword$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(loginActions.CHANGE_PASSWORD_REQUEST),
+            map((action: ChangePasswordRequest) => action.payload),
+            switchMap((response) => {
+                return this.apiService.changePassword(response).pipe(
+                    mergeMap((data) => {
+                        return [new ChangePasswordSuccess(data), new SaveCurrentUserRequest(data.result)];
+                    }),
+                    catchError((error) => of(new ChangePasswordFailure(error))))
+            })
+        ))
+
+
 
     //<----------------------------->
     constructor(

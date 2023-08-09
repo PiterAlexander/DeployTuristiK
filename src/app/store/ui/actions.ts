@@ -858,11 +858,11 @@ export class OpenModalChangePassword implements Action {
 
 export class ChangePasswordRequest implements Action {
   readonly type: string = loginActions.CHANGE_PASSWORD_REQUEST;
-  constructor(public payload: User) { }
+  constructor(public payload: any) { }
 }
 export class ChangePasswordSuccess implements Action {
   readonly type: string = loginActions.CHANGE_PASSWORD_SUCCESS;
-  constructor(public payload: any) { }
+  constructor(public payload: Token) { }
 }
 export class ChangePasswordFailure implements Action {
   readonly type: string = loginActions.CHANGE_PASSWORD_FAILURE;;
