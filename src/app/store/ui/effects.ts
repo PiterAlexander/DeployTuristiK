@@ -55,6 +55,10 @@ import {
     ChangePasswordRequest,
     ChangePasswordSuccess,
     ChangePasswordFailure,
+    contactUsActions,
+    ContactUsRequest,
+    ContactUsFailure,
+    ContactUsSuccess,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -945,8 +949,23 @@ export class PackageEffects {
                     }),
                     catchError((error) => of(new ChangePasswordFailure(error))))
             })
-        ))
+        )
+    )
+    //<--------------->
 
+    //<--- Contact Us --->
+
+    contactUs$ = createEffect(() => this.actions$.pipe(
+        ofType(contactUsActions.CONTACTUS_REQUEST),
+        map((action: ContactUsRequest) => action.payload),
+        switchMap((PQRSEmail) => {
+            return this.apiService.sendPQRS(PQRSEmail).pipe(
+                mergeMap((data) => {
+                    return [new ContactUsSuccess(data)]
+                }),
+                catchError((error) => of(new ContactUsFailure(error))))
+        })
+    ))
 
 
     //<----------------------------->

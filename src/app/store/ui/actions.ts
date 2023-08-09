@@ -11,7 +11,7 @@ import { FrequentTraveler } from '@/models/frequentTraveler';
 import { Payment } from '@/models/payment';
 import { OrderDetail } from '@/models/orderDetail';
 import { Token } from '@/models/token';
-import { recoverPasswordEmail } from '@/models/recoverPasswordEmail';
+import { recoverPasswordEmail, sendPQRS } from '@/models/recoverPasswordEmail';
 
 //<--- TOGGLE ACTIONS --->
 export enum toggleActions {
@@ -824,12 +824,12 @@ export class GetUserInfoFailure implements Action {
 
 export class RecoverPasswordRequest implements Action {
   readonly type: string = loginActions.RECOVER_PASSWORD_REQUEST;
-  constructor(public payload: any) { }
+  constructor(public payload: recoverPasswordEmail) { }
 }
 
 export class RecoverPasswordSuccess implements Action {
   readonly type: string = loginActions.RECOVER_PASSWORD_SUCCESS;
-  constructor(public payload: recoverPasswordEmail) { }
+  constructor(public payload: any) { }
 }
 
 export class RecoverPasswordFailure implements Action {
@@ -865,7 +865,28 @@ export class ChangePasswordSuccess implements Action {
   constructor(public payload: Token) { }
 }
 export class ChangePasswordFailure implements Action {
-  readonly type: string = loginActions.CHANGE_PASSWORD_FAILURE;;
+  readonly type: string = loginActions.CHANGE_PASSWORD_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export enum contactUsActions {
+  CONTACTUS_REQUEST = '[CONTACTUS] CONTACTUS_REQUEST',
+  CONTACTUS_SUCCESS = '[CONTACTUS] CONTACTUS_SUCCESS',
+  CONTACTUS_FAILURE = '[CONTACTUS] CONTACTUS_FAILURE',
+}
+
+export class ContactUsRequest implements Action {
+  readonly type: string = contactUsActions.CONTACTUS_REQUEST;
+  constructor(public payload: sendPQRS) { }
+}
+
+export class ContactUsSuccess implements Action {
+  readonly type: string = contactUsActions.CONTACTUS_SUCCESS;
+  constructor(public payload: any) { }
+}
+
+export class ContactUsFailure implements Action {
+  readonly type: string = contactUsActions.CONTACTUS_FAILURE;
   constructor(public payload: string) { }
 }
 
@@ -982,5 +1003,8 @@ export type UiAction =
   | SaveCurrentUserFailure
   | ChangePasswordRequest
   | ChangePasswordSuccess
-  | ChangePasswordFailure;
+  | ChangePasswordFailure
+  | ContactUsRequest
+  | ContactUsSuccess
+  | ContactUsFailure;
   //<-------------------->
