@@ -1,6 +1,6 @@
 <div class="bg-circle opacity-50" style="top: -200px; left: -700px;"></div>
 <div class="bg-circle hidden lg:flex" style="top: 50px; right:-800px; transform: rotate(60deg)"></div>
-<div class="mt-4" style="width: 90%; margin-left: auto; margin-right: auto;">
+<div class="mt-4">
 
     <div class="card p-5" style="box-shadow: 0px 4px 30px rgba(221, 224, 255, .54); border-radius: 25px;">
         <div class="grid mb-3">
@@ -43,14 +43,17 @@
                     <div><small class="text-xl"><b class="text-900 mr-1 text-500">Desde</b></small>
                     </div>
                 </div>
+                <div class="flex align-items-center text-xl font-medium text-900">
+                    <span class="text-900 font-medium text-3xl block">{{pack.price + pack.aditionalPrice | currency: 'USD':
+                        'symbol':'3.0'}}</span><span class="ml-2  text-lg">por persona</span>
+                </div>
                 <div class="flex align-items-center text-xl font-medium text-900 mb-4">
-                    <span class="text-900 font-medium text-3xl block">{{pack.price +pack.aditionalPrice | currency: 'USD':
-                        'symbol'}}</span><span class="ml-2  text-lg">por persona</span>
+                    <span class="block" style="font-size: 12px !important;">Incluye asistencia medica y seguro hotelero</span>
                 </div>
 
 
 
-                <div class="flex align-items-center mb-5">
+                <div class="flex align-items-center mb-2">
                     <span class="text-lg"><b class="text-900 mr-1">Desde</b><span
                             class="text-500"></span>{{pack.departureDate | date}}</span>
                     <span class="text-lg"><b class="text-900 mr-1 ml-2">Hasta</b>
@@ -58,28 +61,34 @@
                 </div>
 
                 <p-tabView class="first">
-                    <p-tabPanel header="Especificaciones">
-                        <div class="grid grid-nogutter align-items-center mb-5">
-                            <div tooltipPosition="bottom" pTooltip="Transporte"
+                    <p-tabPanel header="Precios por edad">
+                        <div class="md:grid grid-details grid-nogutter align-items-center mb-5">
+                            <div tooltipPosition="bottom" pTooltip="{{pack.aditionalPrice| currency: 'USD':'symbol':'3.0'}}"
                                 class="col h-3rem border-1 border-300 text-900 inline-flex justify-content-center align-items-center flex-shrink-0 border-round mr-3 cursor-pointer hover:surface-100 transition-duration-150 transition-colors">
-                                <i *ngIf="pack.transport=== '1'" class="p-1 fa fa-plane"></i> <i
-                                    *ngIf="pack.transport=== '2'" class="p-1 fa fa-bus"></i>
-                                <span class="m-1" *ngIf="pack.transport=== 1">Aereo</span>
-                                <span class="m-1" *ngIf="pack.transport=== 2">Terrestre</span>
+                                <i class="p-1 fa fa-plane"></i>
+                                <span class="m-1 flex"><i class='bx bxs-baby-carriage p-1 pr-2'></i>De 0 a 5 años</span>
                             </div>
-                            <div tooltipPosition="bottom" pTooltip="Alojamiento"
+                            <div tooltipPosition="bottom" pTooltip="{{((pack.price + pack.aditionalPrice) * .70) | currency: 'USD':'symbol':'3.0'}}"
                                 class="col h-3rem border-1 border-300 text-900 inline-flex justify-content-center align-items-center flex-shrink-0 border-round mr-3 cursor-pointer hover:surface-100 transition-duration-150 transition-colors">
                                 <i class="p-1 fas fa-hotel"></i>
-                                <span class="m-1">{{pack.hotel}}</span>
+                                <span class="m-1 flex"><i class='pi pi-user-minus p-1 pr-2' ></i>De 5 a 10 años</span>
                             </div>
-                            <div tooltipPosition="bottom" pTooltip="Lugar de salida"
+                            <div tooltipPosition="bottom" pTooltip="{{pack.price + pack.aditionalPrice| currency: 'USD':'symbol':'3.0'}}"
                                 class="col h-3rem border-1 border-300 text-900 inline-flex justify-content-center align-items-center flex-shrink-0 border-round mr-3 cursor-pointer hover:surface-100 transition-duration-150 transition-colors">
-                                <i class="fas fa-plane-departure"></i>
-                                <span class="m-1">{{pack.departurePoint}}</span>
+                                <i class="p-1 fas fa-hotel"></i>
+                                <span class="m-1 flex"><i class='pi pi-user-plus p-1 pr-2' ></i>Mayores de 10</span>
                             </div>
                         </div>
                     </p-tabPanel>
-                    <p-tabPanel leftIcon="pi pi-angle-right">
+                    <p-tabPanel header="Especificaciones">
+                        <div class="grid grid-nogutter align-items-center mb-5 flex justify-content-center">
+                            <p-chip style="cursor: pointer;" tooltipPosition="bottom"  *ngIf="pack.transport == '1'" pTooltip="Tipo de transporte"  label="Aereo" icon="bx bxs-plane-alt" class="chip-edit"></p-chip>
+                            <p-chip  style="cursor: pointer;" tooltipPosition="bottom" *ngIf="pack.transport == '2'" pTooltip="Tipo de transporte" label="Terrestre" icon="bx bxs-bus" class="chip-edit"></p-chip>
+                            <p-chip  style="cursor: pointer;" tooltipPosition="bottom" pTooltip="Lugar de alojamiento"  label="{{pack.hotel}}" icon="bx bxs-hotel" class="chip-edit"></p-chip>
+                            <p-chip  style="cursor: pointer;" tooltipPosition="bottom" pTooltip="Lugar de salida"  label="{{pack.departurePoint}}" icon="bx bx-current-location" class="chip-edit"></p-chip>
+                        </div>
+                    </p-tabPanel>
+                    <p-tabPanel rightIcon="pi pi-angle-right">
                         <div>
                             <p class="text-lg fw-bold">
                                 Disfruta de una habitación única en el hotel {{pack.hotel}}, hospedándote al mejor
@@ -104,8 +113,7 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="p-4 font-medium">No esperes más para vivir una aventura increíble. ¡Reserva ahora y
+                <div class="p-4 font-medium text-info-details">No esperes más para vivir una aventura increíble. ¡Reserva ahora y
                     comienza a explorar los tesoros que el mundo tiene para ofrecerte!</div>
                 <div class="col-12" *ngIf="role === 'Administrador'">
                     <button pButton label="Regresar" class="flex-1 mr-5 w-full" (click)="goBack()"></button>
