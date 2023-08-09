@@ -15,3 +15,10 @@
     cursor: pointer;
     transition: var(--tran-05);
 }
+
+@media (max-width: 1400px) {
+    .responsive-margin {
+        margin-left: 2.5% !important;
+        margin-right: 2.5% !important;
+    }
+}

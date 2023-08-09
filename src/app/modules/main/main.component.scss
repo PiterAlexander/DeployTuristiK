@@ -18,6 +18,12 @@
   margin-right: auto !important;
 }
 
+@media (min-width: 1400px) {
+  .center {
+    width: 95% !important;
+  }
+}
+
 .active-style {
   transition: margin-left .3s ease-in-out !important;
   margin-left: 250px !important;

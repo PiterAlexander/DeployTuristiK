@@ -1,10 +1,7 @@
 <p-toast key="alert-message"></p-toast>
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <div *ngIf="role === 'Cliente' || role === undefined">
-
-    <div class="bg-circle opacity-50" style="top: -200px; left: -700px;"></div>
-    <div class="bg-circle hidden lg:flex" style="top: 50px; right:-800px; transform: rotate(60deg)"></div>
-    <div style="height: 90vh;">
+    <div>
         <div class="pl-5 pr-5 pb-2">
             <div class="banner">
                 <h1 style="color:white;font-weight: bold;">¡Elige el paquete que mas se ajuste a lo que deseas!</h1>
@@ -25,11 +22,11 @@
                             class="w-full" />
                     </div>
                     <div class="row w-full ">
-                        <div class="col-8 w-full">
+                        <div class="col-9 w-full">
                             <span class="text-xl text-900 font-medium mb-3">{{item.name}}</span><br>
                             <span class="text-xl text-900 mb-3">{{item.price | currency: 'USD'}}</span>
                         </div>
-                        <div class="col-4" style="display: contents;">
+                        <div class="col-3">
                             <div class="col p-1" style="display: flex;
                             justify-content: center;
                             align-items: center;">
@@ -102,8 +99,7 @@
                     <div class="col-12 md:col-4 p-4">
                         <div class="p-4 surface-card surface-border card-shadow">
                             <div class="relative mb-5">
-                                <span class="surface-card text-900 shadow-2 px-3 py-2 absolute"
-                                    style="border-radius: 1.5rem; left: 70%; top: 1rem;">{{package.availableQuotas}}
+                                <span class="surface-card text-900 shadow-2 px-3 py-2 absolute card-span">{{package.availableQuotas}}
                                     cupos</span>
                                 <img style="max-height: 300px;"
                                     src="https://b3172043.smushcdn.com/3172043/wp-content/uploads/2022/09/Ciudades-turisticas-del-Caribe-Colombiano.jpg?lossy=1&strip=1&webp=1"
