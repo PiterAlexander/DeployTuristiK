@@ -1,20 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import {
-    CREATE_PACKAGE_REQUEST,
-    GET_ALL_PACKAGES_REQUEST,
     GET_ALL_PERMISSIONS_REQUEST,
-    OPEN_MODAL_CREATE_PACKAGE,
-    OPEN_MODAL_CREATE_ROLE,
-    CREATE_ROLE_REQUEST,
-    GET_ALL_ROLE_REQUEST,
-    EDIT_ROLE_REQUEST,
     CREATE_ASSOCIATEDPERMISSION_REQUEST,
     DELETE_ASSOCIATEDPERMISSION_REQUEST,
-    OpenModalCreateRole,
-    EDIT_PACKAGE_REQUEST,
     OPEN_MODAL_DETAILS_PACKAGE,
-    GET_ONE_PACKAGES_REQUEST,
     loginActions,
     LoginRequest,
     LoginSuccess,
@@ -971,7 +961,6 @@ export class PackageEffects {
     //<----------------------------->
     constructor(
         private actions$: Actions,
-        private modalService: NgbModal,
         private apiService: ApiService,
         private authService: AuthService,
         private dialogService: DialogService,
