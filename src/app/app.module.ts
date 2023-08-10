@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from '@/app-routing.module';
 import { AppComponent } from './app.component';
@@ -105,7 +105,11 @@ import { ImageModule } from 'primeng/image';
 import {ScrollTopModule} from 'primeng/scrolltop';
 import { ChipModule } from 'primeng/chip';
 defineCustomElements();
-registerLocaleData(localeEn, 'en-EN');
+
+
+//IDIOMA
+import localeEs from '@angular/common/locales/es';
+registerLocaleData(localeEs);
 
 @NgModule({
   declarations: [
@@ -233,6 +237,7 @@ registerLocaleData(localeEn, 'en-EN');
     ChartModule
   ],
   providers: [
+    { provide: LOCALE_ID, useValue: 'es' },
     DialogService,
     ToastModule,
     MessageService,
