@@ -92,7 +92,7 @@ export class UserComponent implements OnInit {
             acceptLabel: "Cerrar Sesión",
             rejectLabel: "No",
             acceptIcon: 'pi pi-sign-out',
-            acceptButtonStyleClass: 'p-button-danger p-button-sm',
+            acceptButtonStyleClass: 'p-button p-button-sm',
             rejectButtonStyleClass: 'p-button-outlined p-button-sm',
             accept: () => {
                 this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Sesión cerrada' });
