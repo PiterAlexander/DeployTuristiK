@@ -243,7 +243,7 @@
 }
 .banner {
   width: 100%;
-  height: 150px;
+  height: 170px;
   background-image: url('/assets/img/img-banner.jpg');
   background-repeat: no-repeat;
   background-size: cover;
@@ -255,7 +255,6 @@
   border-bottom-right-radius: 25px !important;
 }
 
-/* Estilos para el enlace dentro del banner */
 .banner a {
   color: #FFFFFF; /* Color del enlace dentro del banner */
   text-decoration: none;
@@ -283,17 +282,6 @@
   scale: 2;
 }
 
-// .card {
-//   background: var(--surface-card);
-//   border: 1px solid var(--surface-border);
-//   padding: 2rem;
-//   margin-bottom: 2rem;
-//   border-radius: 12px;
-
-//   &:last-child {
-//       margin-bottom: 0;
-//   }
-// }
 :host ::ng-deep {
   .first div {
     background-color: #eff3f8;
@@ -348,7 +336,7 @@
 @media (max-width: 1400px) {
   .card-span{
     border-radius: 1.5rem;
-    left: 60%;
+    left: 65%;
     top: 1rem;
   }
 }

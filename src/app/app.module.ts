@@ -102,7 +102,8 @@ import { ChangePasswordComponent } from './modules/change-password/change-passwo
 import { PanelModule } from 'primeng/panel';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ImageModule } from 'primeng/image';
-
+import {ScrollTopModule} from 'primeng/scrolltop';
+import { ChipModule } from 'primeng/chip';
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
 
@@ -154,6 +155,8 @@ registerLocaleData(localeEn, 'en-EN');
     ChangePasswordComponent,
   ],
   imports: [
+    ChipModule,
+    ScrollTopModule,
     StyleClassModule,
     GalleriaModule,
     CarouselModule,
