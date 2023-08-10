@@ -75,10 +75,12 @@ export class DetailsPackageComponent implements OnInit {
             
         });
         this.images = [
-            'https://img.freepik.com/vector-gratis/ilustracion-arte-linea-dibujada-mano_23-2149279750.jpg',
-            'https://img.freepik.com/vector-premium/flor-minimalista-dibujada-mano-arte-lineal_278222-309.jpg',
-            'https://img.freepik.com/vector-premium/moderno-moderno-arte-linea-dibujado-mano-ilustracion-flores-botanicas-poster-arte-pared_402533-916.jpg',
-            'https://img.freepik.com/vector-gratis/ilustracion-arte-linea-dibujada-mano_23-2149279746.jpg?w=2000'
+            'https://cdn.colombia.com/images/v2/turismo/sitios-turisticos/tolu/Mar-Caribe-en-tolu-Covenas-en-Colombia-800.jpg',
+            'https://chipviajero.com/wp-content/uploads/2018/05/Como-Llegar-a-Tol%C3%BA-Y-Cove%C3%B1as-Chip-Viajero-5.jpg',
+            'https://i0.wp.com/fushoots.com/wp-content/uploads/2020/06/covenas-y-tolu.jpg?fit=1000%2C563&ssl=1',
+            'https://cf.bstatic.com/xdata/images/hotel/max1024x768/227337583.jpg?k=1420126e344632715bd61aa55ba85d173ff554526f2d36d6137aa95b0fac1cfe&o=&hp=1',
+            'https://cdn.colombia.com/images/v2/turismo/sitios-turisticos/tolu/Mar-Caribe-en-tolu-Covenas-en-Colombia-800.jpg',
+            'https://chipviajero.com/wp-content/uploads/2018/05/Como-Llegar-a-Tol%C3%BA-Y-Cove%C3%B1as-Chip-Viajero-5.jpg'
         ];
         this.isLoggedIn = this.authService.isAuthenticated();
     }

@@ -1,12 +1,13 @@
 <p-toast key="alert-message"></p-toast>
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <div *ngIf="role === 'Cliente' || role === undefined">
+    <p-scrollTop></p-scrollTop>
     <div>
         <div class="pl-5 pr-5 pb-2">
             <div class="banner">
                 <h1 style="color:white;font-weight: bold;">¡Elige el paquete que mas se ajuste a lo que deseas!</h1>
                 <p style="font-weight: bold; color: white;">No esperes más para vivir una aventura increíble. ¡Reserva ahora y comienza a explorar los tesoros que el mundo tiene para ofrecerte!</p>
-                <a (click)="scrollToSelector()" class="p-button mt-3">Ver más</a>
+                <a (click)="scrollToSelector()" class="p-button">Ver más</a>
             </div>
         </div>
 
@@ -21,12 +22,12 @@
                         <img src="https://ciudadperdidatezhuna.com/wp-content/uploads/2023/05/region-caribe.webp"
                             class="w-full" />
                     </div>
-                    <div class="row w-full ">
-                        <div class="col-9 w-full">
+                    <div class="row w-full">
+                        <div class="col-8 w-ful">
                             <span class="text-xl text-900 font-medium mb-3">{{item.name}}</span><br>
-                            <span class="text-xl text-900 mb-3">{{item.price | currency: 'USD'}}</span>
+                            <span class="text-xl text-900 mb-3">{{item.price|currency:'USD':'symbol':'3.0'}}</span>
                         </div>
-                        <div class="col-3">
+                        <div class="col-4 flex">
                             <div class="col p-1" style="display: flex;
                             justify-content: center;
                             align-items: center;">
@@ -137,10 +138,7 @@
                             <div class="flex justify-content-between">
                                 <div>
                                     <span class="small">Precio por persona</span>
-                                    <span class="flex align-items-end text-primary text-2xl font-medium">{{package.price
-                                        |
-                                        currency:
-                                        'USD'}}</span>
+                                    <span class="flex align-items-end text-primary text-2xl font-medium">{{package.price|currency:'USD':'symbol':'3.0'}}</span>
                                 </div>
                                 <div>
                                     <button pButton pRipple type="button" label="Ver detalles"

@@ -9,6 +9,7 @@ import { Customer } from '@/models/customer';
 import { Package } from '@/models/package';
 import { ApiService } from '@services/api.service';
 import { DataView } from 'primeng/dataview';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-orders',
@@ -28,11 +29,31 @@ export class OrdersComponent implements OnInit {
   public statuses: any[] = [];
   public loading: boolean = true
   public visible: boolean = true
-
+  public packagesClients : Array<Package>
+  public responsiveOptions;
   constructor(
     private store: Store<AppState>,
-    private apiService: ApiService
-  ) { }
+        private router: Router,
+        private apiService: ApiService
+  ) {
+    this.responsiveOptions = [
+      {
+          breakpoint: '1024px',
+          numVisible: 3,
+          numScroll: 3
+      },
+      {
+          breakpoint: '768px',
+          numVisible: 2,
+          numScroll: 2
+      },
+      {
+          breakpoint: '560px',
+          numVisible: 1,
+          numScroll: 1
+      }
+  ];
+   }
 
   ngOnInit() {
     this.store.dispatch(new GetAllRoleRequest)
@@ -47,6 +68,9 @@ export class OrdersComponent implements OnInit {
       this.allCustomers = state.allCustomers.data
       this.allOrders = state.allOrders.data
       this.allPackages = state.allPackages.data
+      this.packagesClients = state.allPackages.data.filter(
+        (pkg) => pkg.availableQuotas > 0
+    );
       this.compareCustomer()
     })
 
@@ -163,4 +187,36 @@ export class OrdersComponent implements OnInit {
       this.store.dispatch(new OpenModalPayments({ ...oneOrder }))
     }
   }
+
+  verDetalles(elementoId: string) {
+    if (this.role == 'Administrador') {
+        this.router.navigate(['Home/DetallesPaquete/' + elementoId]);
+        console.log('hello bro', this.router.config);
+    }
+    if (this.role == 'Cliente') {
+        this.router.navigate(['Home/DetallesPaquete/' + elementoId]);
+        console.log('hello bro', this.router.config);
+    }
+    if (this.role == undefined) {
+        this.router.navigate(['detailsPackage/' + elementoId]);
+        console.log('hello nigga', this.router.config);
+    }
+}
+
+  calculateDays(departureDate: Date, returnDate: Date): number {
+    if (!(departureDate instanceof Date) || !(returnDate instanceof Date)) {
+        departureDate = new Date(departureDate);
+        returnDate = new Date(returnDate);
+    }
+    const fechaSalida = departureDate;
+    const fechaRegreso = returnDate;
+    const diferenciaMilisegundos =
+        fechaRegreso.getTime() - fechaSalida.getTime();
+    const unDiaEnMilisegundos = 1000 * 60 * 60 * 24;
+    const diferenciaDias = Math.floor(
+        diferenciaMilisegundos / unDiaEnMilisegundos
+    );
+
+    return diferenciaDias;
+}
 }

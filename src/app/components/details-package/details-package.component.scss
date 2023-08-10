@@ -4,9 +4,6 @@
         :first-child{
             display: flex;
             justify-content: space-between;
-            div ul{
-                border: none;
-            }
         }
     }
 }
@@ -21,3 +18,45 @@
     z-index: -1;
   }
   
+
+  :host ::ng-deep {
+    .first div {
+        width: 100%;
+        :first-child{
+            div ul{
+                li:nth-child(2){
+                    margin-left: auto;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1400px) {
+    .mb-4{
+        margin-bottom: .5rem;
+    }
+}
+
+.chip-edit{
+    scale: 1.2; 
+    margin-left: auto; 
+    margin-right: auto;
+}
+
+@media (max-width: 1400px) {
+    .chip-edit{
+        scale: 1.1; 
+        margin-left: auto; 
+        margin-right: auto;
+    }
+    .text-info-details{
+        display: none !important;
+    }
+    .grid-details{
+        display: block !important;
+        div{
+            margin-top: 5px !important;
+        }
+    }
+}
