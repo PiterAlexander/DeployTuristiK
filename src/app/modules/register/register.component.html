@@ -66,11 +66,8 @@
                     </div>
                     <div class="p-fluid p-formgrid grid">
                         <div class="field col-12 md:col-4">
-                            <span class="p-input-icon-left">
-                                <p-calendar formControlName="birthDate" placeholder="Fecha de Nacimiento"
-                                    showIcon="true" dateFormat="dd/mm/yy" [showTime]="false" [required]="true"
-                                    class="calendar w-full"></p-calendar>
-                            </span>
+                            <p-calendar formControlName="birthDate" appendTo="body" placeholder="Fecha de Nacimiento"
+                                showIcon="true" dateFormat="dd/mm/yy" [showTime]="false" required="true"></p-calendar>
                             <small class="p-error block"
                                 *ngIf="formGroup.get('birthDate').dirty && formGroup.get('birthDate')?.errors?.['required']">
                                 Este campo es obligatorio.

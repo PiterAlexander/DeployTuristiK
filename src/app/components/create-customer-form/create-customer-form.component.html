@@ -167,11 +167,23 @@
         </div>
     </div>
     <div class="grid">
+        <div class="col">
+            <div class="field">
+                <p-dropdown [options]="allEps" appendTo="body" placeholder="Seleccione su EPS" required="true"
+                    formControlName="eps" [showClear]="true"
+                    [style]="{ width: '100%', 'max-width': '24rem' }"></p-dropdown>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('eps')?.dirty && formGroup.get('eps')?.errors?.['required']">
+                    Este campo es obligatorio
+                </small>
+            </div>
+        </div>
         <div class="col" *ngIf="role === 'Cliente'">
             <div class="field">
                 <p-calendar dateFormat="dd/mm/yy" appendTo="body" formControlName="birthDate"
                     placeholder="Ingrese su fecha de nacimiento" showIcon="true" required="true"
-                    [style]="{ width: '100%' }" [readonlyInput]="true" [maxDate]="customerMaxDate" [style.pointer-events]="oneCustomer ? 'none' : 'auto'"
+                    [style]="{ width: '100%' }" [readonlyInput]="true" [maxDate]="customerMaxDate"
+                    [style.pointer-events]="oneCustomer ? 'none' : 'auto'"
                     [style.opacity]="oneCustomer ? 0.5 : 1"></p-calendar>
                 <small class="p-error block"
                     *ngIf="formGroup.get('birthDate')?.dirty && formGroup.get('birthDate')?.errors?.['required']">
@@ -183,19 +195,9 @@
             <div class="field">
                 <p-calendar dateFormat="dd/mm/yy" appendTo="body" formControlName="birthDate"
                     placeholder="Ingrese su fecha de nacimiento" showIcon="true" required="true"
-                    [style]="{ width: '100%' }" [readonlyInput]="true" [maxDate]="customerMaxDate" ></p-calendar>
+                    [style]="{ width: '100%' }" [readonlyInput]="true" [maxDate]="customerMaxDate"></p-calendar>
                 <small class="p-error block"
                     *ngIf="formGroup.get('birthDate')?.dirty && formGroup.get('birthDate')?.errors?.['required']">
-                    Este campo es obligatorio
-                </small>
-            </div>
-        </div>
-        <div class="col">
-            <div class="field">
-                <p-dropdown [options]="allEps" placeholder="Seleccione su EPS" required="true" formControlName="eps"
-                    [showClear]="true" [style]="{ width: '100%', 'max-width': '24rem' }"></p-dropdown>
-                <small class="p-error block"
-                    *ngIf="formGroup.get('eps')?.dirty && formGroup.get('eps')?.errors?.['required']">
                     Este campo es obligatorio
                 </small>
             </div>
