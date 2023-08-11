@@ -37,7 +37,6 @@ export class RecoverPasswordComponent implements OnInit {
         private fb: FormBuilder,
         private store: Store<AppState>,
         private router: Router,
-        private toastr: ToastrService,
         private messageService: MessageService
     ) { }
 
@@ -110,13 +109,20 @@ export class RecoverPasswordComponent implements OnInit {
     }
 
     mensajeApi() {
+
         if (this.menssage.success) {
-            this.toastr.success(
-                'Ya puedes acceder nuevamente al sistema',
-                '¡' + this.menssage.message + '!'
-            );
+            // this.toastr.success(
+            //     'Ya puedes acceder nuevamente al sistema',
+            //     '¡' + this.menssage.message + '!'
+            // );
+
+            this.messageService.add({ key: 'alert-message-recover-password', severity: 'success', summary: '¡Proceso completado!', detail: 'Ya puedes acceder nuevamente al sistema.' });
+            setTimeout(() => {
             this.router.navigate(['/login']);
+            }, 2000);
+
         } else {
+
             this.messageService.add({
                 key: 'alert-message-recover-password',
                 severity: 'error',
