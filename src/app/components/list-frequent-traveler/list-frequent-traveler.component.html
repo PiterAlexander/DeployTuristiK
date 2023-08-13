@@ -120,7 +120,7 @@
 </div>
 
 <div *ngIf="user['role'] === 'Cliente'">
-    
+
     <div class="surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border" style="border-radius: 15px;">
         <p-dataView id="myDv" #dv *ngIf="visible" [value]="frequentTravelersList" filterBy="name" [paginator]="true"
             [rows]="4" layout="grid">
@@ -142,6 +142,16 @@
                 </div>
             </ng-template>
             <ng-template pTemplate="gridItem" let-frequentTraveler>
+                <div class="col-12 md:col-6 p-3">
+                    <div
+                        class="p-3 surface-card card-shadow h-15rem d-flex flex-column align-items-center justify-content-center">
+                        <button pButton type="button" icon="pi pi-plus" class="p-button-lg p-button-rounded"
+                            (click)="createFrequentTraveler()"></button>
+                        <div class="p-divider custom-divider mt-3"></div>
+                        <p style="font-size: 20px;" class="mb-0">Añadir</p>
+                        <p>Viajeros Frecuentes</p>
+                    </div>
+                </div>
                 <div class="col-12 md:col-6 p-3">
                     <div class="p-3 surface-card card-shadow">
                         <div class="flex mb-3">

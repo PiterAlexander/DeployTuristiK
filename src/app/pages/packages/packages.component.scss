@@ -333,7 +333,11 @@
   border-radius: 1.5rem; left: 70%; top: 1rem;
 }
 
-@media (max-width: 1500px) {
+.card-custom{
+  min-height: 600px !important;
+}
+
+@media (max-width: 1400px) {
   .card-span{
     border-radius: 1.5rem;
     left: 65%;
