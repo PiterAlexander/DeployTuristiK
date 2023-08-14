@@ -62,8 +62,7 @@ export class PackagesComponent implements OnInit {
             this.top = state.allTopPackages.data
             this.allCustomers = state.allCustomers.data;
             this.packagesList = state.allPackages.data;
-            console.log(this.top);
-            
+
             this.arrayPackagesClient = state.allPackages.data.filter(
                 (pkg) => pkg.availableQuotas > 0
             );
@@ -145,7 +144,7 @@ export class PackagesComponent implements OnInit {
             reject: () => { }
         });
     }
-    
+
     //PARA LA VISTA DEL CLIENTE-----------------------------------------------
     calculateDays(departureDate: Date, returnDate: Date): number {
         if (!(departureDate instanceof Date) || !(returnDate instanceof Date)) {
