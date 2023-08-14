@@ -201,7 +201,8 @@ export class CreatePaymentFormComponent implements OnInit {
       price: onePackage.price,
       type: onePackage.type,
       status: onePackage.status,
-      aditionalPrice: onePackage.aditionalPrice
+      aditionalPrice: onePackage.aditionalPrice,
+      photos: onePackage.photos
     }
 
     this.apiService.updatePackage(updatePackage.packageId, updatePackage).subscribe({

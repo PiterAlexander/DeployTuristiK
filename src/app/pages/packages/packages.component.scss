@@ -344,3 +344,10 @@
     top: 1rem;
   }
 }
+
+::ng-deep {
+  .pac-container {
+      z-index: 12000 !important;
+      display: block !important;
+  }
+}

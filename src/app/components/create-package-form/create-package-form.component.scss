@@ -1,5 +1,5 @@
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
@@ -11,5 +11,16 @@ label {
 ::ng-deep {
     .p-tooltip {
         max-width: fit-content;
+    }
+}
+::ng-deep {
+    .pac-container {
+        z-index: 12000 !important;
+        box-shadow: none;
+        border-left: 1px solid rgba(0,0,0,.3);
+        border-right: 1px solid rgba(0,0,0,.3);
+        .pac-item {
+            padding: 5px;
+        }
     }
 }

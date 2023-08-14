@@ -163,6 +163,10 @@ p {
   z-index: 100;
 }
 
+.sidebar::-webkit-scrollbar{
+  display: none;
+}
+
 .sidebar.close {
   width: 88px;
 }
@@ -301,7 +305,11 @@ body.dark .sidebar li a:hover .text {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow-y: scroll;
+  //
+}
+
+body:not(.layout-fixed) .main-sidebar .sidebar{
+  overflow-y: hidden !important;
 }
 
 .menu-bar::-webkit-scrollbar {
@@ -381,4 +389,11 @@ body.dark .home .text {
 .layout-fixed .wrapper .sidebar {
   height: auto;
   /* o height: initial; */
+}
+
+::ng-deep {
+  .pac-container {
+      z-index: 40000 !important;
+      display: block !important;
+  }
 }

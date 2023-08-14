@@ -5,7 +5,7 @@ import {OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {ApiService} from '@services/api.service';
-import { Location } from '@angular/common';
+import {Location} from '@angular/common';
 import {
     GetAllCustomerRequest,
     GetAllPackagesRequest,
@@ -44,7 +44,7 @@ export class DetailsPackageComponent implements OnInit {
     liked: boolean = false;
 
     images: string[] = [];
-
+    visibleMember: number = -1;
     selectedImageIndex: number = 0;
     isLoggedIn: boolean = false;
     quantity: number = 1;
@@ -64,24 +64,22 @@ export class DetailsPackageComponent implements OnInit {
                 this.pack = this.packagesList.find(
                     (e) => e.packageId === this.elementId
                 );
+                const photosString = this.pack?.photos || ''; 
+                const photosArray = photosString.split(',').map(photo => photo.trim());
+
+                this.images = photosArray;
+                // this.images = photosArray.slice(0, 7);
+                console.log(this.images);
             });
-            this.allCustomers = state.allCustomers.data
+            this.allCustomers = state.allCustomers.data;
             this.arrayPackagesClient = state.allPackages.data.filter(
                 (element) => element.availableQuotas > 0
             );
             this.loading = state.allPackages.loading;
             this.user = JSON.parse(localStorage.getItem('TokenPayload'));
             this.role = this.user['role'];
-            
         });
-        this.images = [
-            'https://cdn.colombia.com/images/v2/turismo/sitios-turisticos/tolu/Mar-Caribe-en-tolu-Covenas-en-Colombia-800.jpg',
-            'https://chipviajero.com/wp-content/uploads/2018/05/Como-Llegar-a-Tol%C3%BA-Y-Cove%C3%B1as-Chip-Viajero-5.jpg',
-            'https://i0.wp.com/fushoots.com/wp-content/uploads/2020/06/covenas-y-tolu.jpg?fit=1000%2C563&ssl=1',
-            'https://cf.bstatic.com/xdata/images/hotel/max1024x768/227337583.jpg?k=1420126e344632715bd61aa55ba85d173ff554526f2d36d6137aa95b0fac1cfe&o=&hp=1',
-            'https://cdn.colombia.com/images/v2/turismo/sitios-turisticos/tolu/Mar-Caribe-en-tolu-Covenas-en-Colombia-800.jpg',
-            'https://chipviajero.com/wp-content/uploads/2018/05/Como-Llegar-a-Tol%C3%BA-Y-Cove%C3%B1as-Chip-Viajero-5.jpg'
-        ];
+
         this.isLoggedIn = this.authService.isAuthenticated();
     }
 
@@ -94,7 +92,7 @@ export class DetailsPackageComponent implements OnInit {
             (c) => c.userId === this.user['id']
         );
         console.log(cant);
-        
+
         const orderProcess = [
             {
                 action: 'CreateOrder',

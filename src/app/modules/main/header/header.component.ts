@@ -100,6 +100,9 @@ export class HeaderComponent implements OnInit {
                 if (p.module === mutableItem.name) {
                     mutableItem.allowed = true;
                 }
+                if(this.role === 'Cliente' && mutableItem.name === 'Mis Beneficiarios' ){
+                  mutableItem.allowed = true;
+                }
                 if (p.module === 'Usuarios' || p.module === 'Roles') {
                     if (mutableItem.name === 'Configuración') {
                         mutableItem.allowed = true;
@@ -162,5 +165,11 @@ export const MENU = [
         iconClasses: 'bx bx-calendar-week',
         path: ['/Home/Pedidos'],
         allowed: false
+    },
+    {
+      name: 'Mis Beneficiarios',
+      iconClasses: 'bx bx-calendar-week',
+      path: ['/Home/MisBeneficiarios'],
+      allowed: false
     }
 ];

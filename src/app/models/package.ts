@@ -13,5 +13,6 @@ export interface Package {
     price: number;
     type: boolean;
     status: boolean;
-    aditionalPrice: number
+    aditionalPrice: number;
+    photos: string;
 }

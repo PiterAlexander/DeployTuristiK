@@ -42,7 +42,6 @@ export class MenuSidebarComponent implements OnInit {
         this.ui.subscribe((state: UiState) => {
             this.roleList = state.allRoles.data;
             this.permissionList = state.allPermissions.data;
-
             this.allowMenuItems();
 
             var user = JSON.parse(localStorage.getItem('TokenPayload'));
@@ -77,9 +76,11 @@ export class MenuSidebarComponent implements OnInit {
 
         this.menu.forEach((item) => {
             permissions.forEach((p) => {
+              console.log(item.name)
                 if (p.module == item.name) {
                     item.allowed = true;
                 }
+
                 if (p.module == 'Usuarios' || p.module == 'Roles') {
                     if (item.name == 'Configuración') {
                         item.allowed = true;
@@ -138,5 +139,5 @@ export const MENU = [
         iconClasses: 'bx bx-calendar-week',
         path: ['/Home/Pedidos'],
         allowed: false
-    }
+    },
 ];

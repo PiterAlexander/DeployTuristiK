@@ -159,7 +159,10 @@ export class CreatecustomerformComponent implements OnInit {
     }
     return 'Registrar cliente'
   }
+  isEditingFrequentTraveler(): boolean {
+    return this.validateTitle() === 'Editar Información';
 
+  }
   validateOnlyNumbers(): boolean {
     if (this.formGroup.value.document !== null) {
       if (this.formGroup.value.document.length >= 8) {
@@ -439,7 +442,7 @@ export class CreatecustomerformComponent implements OnInit {
   }
 
   cancel() {
-    if (this.oneCustomer !== undefined) {
+    if (this.oneCustomer !== undefined && this.user['role']!== 'Cliente') {
       if (this.oneCustomer.action === 'createFrequentTraveler') {
         this.modalPrimeNg.close()
         this.store.dispatch(new OpenModalListFrequentTraveler({ ...this.oneCustomer.customer }))

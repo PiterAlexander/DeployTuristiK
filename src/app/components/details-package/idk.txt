@@ -1,0 +1,114 @@
+<p-tabPanel header="Información sobre los paquetes">
+
+                <ul class="list-none p-0 m-0">
+                    <li class="p-3 border-bottom-1 m-1 surface-border">
+
+                        <div class="text-900 font-bold text-xl my-3">Descubre el Mundo con Nuestros Paquetes Turísticos
+                        </div>
+                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">¡Bienvenido a una emocionante aventura de
+                            descubrimiento! Nuestros paquetes turísticos te invitan a explorar algunos de los destinos
+                            más increíbles del mundo. Sumérgete en la rica cultura, historia y belleza natural de
+                            diversos lugares mientras creas recuerdos invaluables.</p>
+                    </li>
+                    <li class="p-3 border-bottom-1 m-1 surface-border">
+
+                        <div class="text-900 font-bold text-xl my-3">Experiencias Únicas:</div>
+                        <span>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500"></i>
+                        </span>
+                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Cada uno de nuestros paquetes turísticos ofrece
+                            experiencias únicas y emocionantes. Desde explorar ciudades vibrantes hasta adentrarte en
+                            paisajes naturales impresionantes, cada destino tiene algo especial para ofrecer.</p>
+                    </li>
+                    <li class="p-3 border-bottom-1 m-1 surface-border">
+
+                        <div class="text-900 font-bold text-xl my-3">Cultura y Tradiciones:</div>
+                        <span>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500"></i>
+                        </span>
+                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Descubre la fascinante cultura y tradiciones de
+                            cada lugar que visitas. Desde festivales coloridos hasta arte y música local, tendrás la
+                            oportunidad de sumergirte en las auténticas expresiones culturales de cada destino.</p>
+                    </li>
+                    <li class="p-3 border-bottom-1 m-1 surface-border">
+
+                        <div class="text-900 font-bold text-xl my-3">Aventura y Naturaleza:</div>
+                        <span>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500"></i>
+                        </span>
+                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Si te apasiona la aventura y la naturaleza,
+                            nuestros paquetes te brindan la oportunidad de explorar majestuosos paisajes, realizar
+                            emocionantes actividades al aire libre y conectar con la belleza natural de nuestro planeta.
+                        </p>
+                    </li>
+                    <li class="p-3 border-bottom-1 m-1 surface-border">
+
+                        <div class="text-900 font-bold text-xl my-3">Gastronomía Deliciosa:</div>
+                        <span>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500"></i>
+                        </span>
+                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Disfruta de la diversidad culinaria de cada
+                            región. Nuestros paquetes te llevarán a degustar sabores auténticos y platos tradicionales
+                            que deleitarán tus sentidos.</p>
+                    </li>
+                    <li class="p-3 border-bottom-1 m-1 surface-border">
+
+                        <div class="text-900 font-bold text-xl my-3">Descanso y Bienestar:</div>
+                        <span>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500"></i>
+                        </span>
+                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Después de días llenos de emociones, también
+                            encontrarás momentos de relajación y bienestar. Descansa en cómodos alojamientos y, si lo
+                            deseas, disfruta de spas y tratamientos revitalizantes.</p>
+                    </li>
+                    <li class="p-3 border-bottom-1 m-1 surface-border">
+
+                        <div class="text-900 font-bold text-xl my-3">Grupos Pequeños y Guías Expertos:</div>
+                        <span>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500"></i>
+                        </span>
+                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Viajarás en grupos pequeños, lo que garantiza
+                            una experiencia más personalizada y auténtica. Nuestros guías expertos estarán contigo en
+                            cada paso del camino para asegurarse de que vivas una experiencia inolvidable.</p>
+                    </li>
+                    <li class="p-3 border-bottom-1 m-1 surface-border">
+
+                        <div class="text-900 font-bold text-xl my-3">El Viaje de tus Sueños:</div>
+                        <span>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i class="pi pi-star-fill text-yellow-500"></i>
+                        </span>
+                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">No importa cuál de nuestros paquetes elijas,
+                            cada uno promete ser un viaje de ensueño. Nuestro objetivo es proporcionarte momentos
+                            inolvidables y la oportunidad de descubrir el mundo desde una perspectiva única.</p>
+                    </li>
+
+                </ul>
+            </p-tabPanel>

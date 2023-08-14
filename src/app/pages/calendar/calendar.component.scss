@@ -8,3 +8,17 @@
   font-weight: 700;
   margin-bottom: 45px;
 }
+
+.style-edit {
+  border-radius: 10px !important;
+  padding: 4px !important;
+  font-size: small;
+}
+
+.card-span{
+  border-radius: 1.5rem; left: 80%; top: 1rem;
+}
+
+::ng-deep .p-dialog-header{
+  display: none !important;
+}

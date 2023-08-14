@@ -49,7 +49,6 @@ export class PackagesComponent implements OnInit {
 
     ngOnInit() {
         this.store.dispatch(new GetTopPackagesRequest());
-        
         this.store.dispatch(new GetAllPackagesRequest());
         this.store.dispatch(new GetAllCustomerRequest());
         this.ui = this.store.select('ui');
@@ -61,9 +60,10 @@ export class PackagesComponent implements OnInit {
                 this.role = undefined;
             }
             this.top = state.allTopPackages.data
-            console.log(this.top);
             this.allCustomers = state.allCustomers.data;
             this.packagesList = state.allPackages.data;
+            console.log(this.top);
+            
             this.arrayPackagesClient = state.allPackages.data.filter(
                 (pkg) => pkg.availableQuotas > 0
             );
