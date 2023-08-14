@@ -93,21 +93,8 @@ export class LoginComponent implements OnInit {
                 );
 
                 this.authService.setToken(this.token.result);
-
-                var log = JSON.parse(localStorage.getItem('TokenPayload'));
-                console.log(log)
-                if (log) {
-                    if (log['role'] == 'Administrador' || log['role'] != 'Cliente') {
-                      this.router.navigate(['/Home/Dashboard']);
-                    }
-                    if (log['role'] == 'Cliente') {
-                      this.router.navigate(['/Home/Paquetes']);
-                    }
-                }
                 this.messageService.add({ key: 'alert-message-login', severity: 'success', summary: 'Bienvenid@', detail: this.token.message });
 
-
-                // this.toastr.success(this.token.message);
             } else {
                 this.messageService.add({ key: 'alert-message-login', severity: 'error', summary: '¡Lo sentimos!', detail: this.token.message });
             }

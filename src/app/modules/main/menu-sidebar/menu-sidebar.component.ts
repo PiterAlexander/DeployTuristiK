@@ -53,7 +53,6 @@ export class MenuSidebarComponent implements OnInit {
             this.classes = `${this.classes} ${state.sidebarSkin}`;
         });
         this.user = this.appService.user;
-        console.log(this.user);
     }
     onToggleMenuSidebar() {
         this.store.dispatch(new ToggleSidebarMenu());
@@ -61,7 +60,6 @@ export class MenuSidebarComponent implements OnInit {
     allowMenuItems() {
         const user = JSON.parse(localStorage.getItem('TokenPayload'));
         var role = this.roleList.find((r) => r.name === user.role);
-
         const permissions = [];
         if (role) {
             for (const item of this.permissionList) {
@@ -76,15 +74,8 @@ export class MenuSidebarComponent implements OnInit {
 
         this.menu.forEach((item) => {
             permissions.forEach((p) => {
-              console.log(item.name)
                 if (p.module == item.name) {
                     item.allowed = true;
-                }
-
-                if (p.module == 'Usuarios' || p.module == 'Roles') {
-                    if (item.name == 'Configuración') {
-                        item.allowed = true;
-                    }
                 }
             });
         });

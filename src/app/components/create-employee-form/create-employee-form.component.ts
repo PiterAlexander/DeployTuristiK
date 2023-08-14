@@ -160,7 +160,7 @@ export class CreateEmployeeFormComponent implements OnInit {
 
 
     saveEmployee() {
-        const oneRole: Role = this.allRoles.find(r => r.name === 'Administrador')
+        const oneRole: Role = this.allRoles.find(r => r.name === 'Empleado')
         if (this.oneEmployee === undefined) {
             const user: User = {
                 email: this.formGroup.value.email,
