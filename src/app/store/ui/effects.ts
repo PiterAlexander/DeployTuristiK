@@ -139,7 +139,6 @@ export class PackageEffects {
             ofType(packageActions.OPEN_MODAL_CREATE_PACKAGE),
             tap((action: OpenModalCreatePackage) => {
                 this.dialogRef = this.dialogService.open(CreatePackageFormComponent, {
-                    /* Opciones del modal */
                     showHeader: false,
                     width: '55%',
                     contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
@@ -156,6 +155,7 @@ export class PackageEffects {
         switchMap((pack) => {
             return this.apiService.addPackage(pack).pipe(
                 mergeMap((packageResolved) => {
+                    console.log(packageResolved)
                     this.dialogRef.close()
                     this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Paquete registrado exitosamente.' });
                     return [

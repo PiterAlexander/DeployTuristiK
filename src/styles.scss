@@ -382,3 +382,10 @@ body.dark .home .text {
   height: auto;
   /* o height: initial; */
 }
+
+::ng-deep {
+  .pac-container {
+      z-index: 40000 !important;
+      display: block !important;
+  }
+}

@@ -51,17 +51,16 @@
             <div class="field">
                 <span class="p-input-icon-left w-full">
                     <i class="pi pi-map-marker "></i>
-                    <input type="text" class="w-full" pInputText placeholder="Ingrese el lugar de destino"
-                        formControlName="destination" required="true" minlength="8"
-                        onkeydown="return /^[A-Za-z0-9\u00C0-\u00FF\s]+$/i.test(event.key)">
+                    <input class="w-full" pInputText type="text" formControlName="destination"
+                        tooltipStyleClass="tooltip" tooltipPosition="top" placeholder="Ingrese el lugar destino" required="true"
+                        ngx-google-places-autocomplete [options]="{
+                            types: [],
+                            componentRestrictions: null
+                        }" #placesRef="ngx-places" autocomplete="on" (onAddressChange)="onAddressChangeDestination($event)" onchange="onAddressChangeDestination($event)" />
                 </span>
                 <small *ngIf="formGroup.get('destination').errors?.['required'] && formGroup.get('destination')?.dirty"
                     class="p-error block">
                     Este campo es obligatorio
-                </small>
-                <small *ngIf="formGroup.get('destination').errors?.['minlength'] && formGroup.get('destination')?.dirty"
-                    class="p-error block">
-                    El destino del paquete debe tener mínimo 8 caracteres
                 </small>
             </div>
         </div>
@@ -69,19 +68,18 @@
             <div class="field">
                 <span class="p-input-icon-left w-full">
                     <i class="pi pi-map-marker"></i>
-                    <input type="text" pInputText placeholder="Ingrese el lugar de partida" required="true"
-                        minlength="8" class="w-full" formControlName="departurePoint"
-                        onkeydown="return /^[A-Za-z0-9\u00C0-\u00FF\s]+$/i.test(event.key)">
+                    <input class="w-full" pInputText type="text" formControlName="departurePoint"
+                        tooltipStyleClass="tooltip" tooltipPosition="top" placeholder="Ingrese el lugar de partida"
+                        required="true" onkeydown="return /^[A-Za-z0-9\u00C0-\u00FF\s]+$/i.test(event.key)"
+                        ngx-google-places-autocomplete [options]="{
+                        types: [],
+                        componentRestrictions: null
+                    }" #placesRef="ngx-places" autocomplete="on"  (onAddressChange)="onAddressChange($event)" />
                 </span>
                 <small
                     *ngIf="formGroup.get('departurePoint').errors?.['required'] && formGroup.get('departurePoint')?.dirty"
                     class="p-error block">
                     Este campo es obligatorio
-                </small>
-                <small
-                    *ngIf="formGroup.get('departurePoint').errors?.['minlength'] && formGroup.get('departurePoint')?.dirty"
-                    class="p-error block">
-                    El destino del paquete debe tener mínimo 8 caracteres
                 </small>
             </div>
         </div>
@@ -122,9 +120,16 @@
     <div class="grid">
         <div class="col">
             <div class="field">
-                <input type="text" pInputText class="input-design w-full" formControlName="hotel" required
-                    onkeydown="return /^[A-Za-z0-9\u00C0-\u00FF\s]+$/i.test(event.key)"
-                    placeholder="Ingrese el nombre del hotel">
+                <span class="p-input-icon-left w-full">
+                    <i class="pi pi-home"></i>
+                    <input class="w-full" pInputText type="text" formControlName="hotel" required
+                        onkeydown="return /^[A-Za-z0-9\u00C0-\u00FF\s]+$/i.test(event.key)"
+                        ngx-google-places-autocomplete [options]="{
+                            types: ['establishment'],
+                            componentRestrictions: null
+                        }" #hotelPlacesRef="ngx-places" autocomplete="on"  (onAddressChange)="onHotelAddressChange($event)" 
+                        placeholder="Ingrese el nombre del hotel">
+                </span>
             </div>
         </div>
         <div class="col">
@@ -173,15 +178,12 @@
                 </small>
             </div>
         </div>
-    </div>
-    <div class="field-checkbox">
-        <p-checkbox [binary]="true" formControlName="type" inputId="packageType"></p-checkbox>
-        <label class="mb-0" for="packageType">Marque esta opción si el paquete será privado</label>
+        <input formControlName="photos" hidden>
     </div>
     <div class="flex justify-content-end">
         <button pButton pRipple type="button" label="Cancelar" icon="pi pi-times" class="p-button-outlined mr-3"
             (click)="cancel()"></button>
-        <p-button *ngIf="!validForm()" label="Guardar" icon="pi pi-check" disabled="true"></p-button>
+        <p-button *ngIf="!validForm()" label="Guardar" disabled="true" icon="pi pi-check"></p-button>
         <p-button *ngIf="validForm()" type="submit" label="Guardar" icon="pi pi-check"></p-button>
     </div>
 </form>

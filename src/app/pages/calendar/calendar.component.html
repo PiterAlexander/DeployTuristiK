@@ -3,69 +3,60 @@
     <div class="card p-3">
       <full-calendar [options]="calendarOptions"></full-calendar>
       <p-dialog #dd [(visible)]="showDialog" [breakpoints]="{'960px': '75vw', '640px': '90vw'}"
-        [style]="{width: '50rem'}" [modal]="true" [closable]="true" (onHide)="view = ''">
-        <ng-template pTemplate="header">
-          <span [ngStyle]="{color:'var(--indigo-500)'}" class="text-900 font-semibold text-xl">
-            {{view === 'display' ? changedEvent.title :
-            view === 'new' ? 'Nuevo Evento' : 'Editar Evento'}}
-          </span>
-        </ng-template>
+        [style]="{width: '50rem'}" [modal]="true" [closable]="true" (onHide)="view = ''" showHeader="false">
         <ng-template pTemplate="content">
           <div *ngIf="view === 'display'">
             <!-- CREATE  -->
-            <div class="grid">
-              <div class="col-12 mb-3">
-                <div class="subtitles mb-2">Descripción</div>
-                <p class="flex align-items-justify text-justify">
-                  <span class="mb-3">{{changedEvent.description}}</span>
-                </p>
-              </div>
-              <div class="d-flex flex-wrap p-0 mb-3">
-                <div class="col-4">
-                  <div class="subtitles mb-2">Fecha de salida</div>
-                  <p class="flex align-items-center m-0">
-                    <i class="pi pi-fw pi-calendar text-700"></i>
-                    <span>{{changedEvent.start.toISOString().slice(0,10)}}</span>
-                  </p>
-                </div>
-                <div class="col-4">
-                  <div class="subtitles mb-2">Fecha de regreso</div>
-                  <p class="flex align-items-center m-0">
-                    <i class="pi pi-fw pi-calendar text-700"></i>
-                    <span>{{changedEvent.end.toISOString().slice(0,10)}}</span>
-                  </p>
-                </div>
-                <div class="col-4">
-                  <div class="subtitles mb-2">Lugar de salida</div>
-                  <p class="flex align-items-center m-0">
-                    <i class="pi pi-map-marker text-700"></i>
-                    <span>{{changedEvent.location}}</span>
-                  </p>
-                </div>
-              </div>
-              <div class="d-flex flex-wrap p-0 mb-3">
-                <div class="col-4">
-                  <div class="subtitles mb-2">Cupos disponibles</div>
-                  <p class="flex align-items-center m-0">
-                    <i class="pi pi-users text-900 mr-1"></i>
-                    <span>{{changedEvent.availableQuotas}}</span>
-                  </p>
-                </div>
-                <div class="col-4">
-                  <div class="subtitles mb-2">Precio</div>
-                  <p class="flex align-items-center m-0">
-                    <i class="pi pi-dollar text-700"></i>
-                    <span>{{changedEvent.price}}</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ng-template>
+            <div class="col-12">
+              <div class="p-4 surface-card surface-border card-shadow">
+                  <div class="relative mt-5 mb-5">
+                      <span class="surface-card text-900 shadow-2 px-3 py-2 absolute card-span">{{changedEvent.availableQuotas}}
+                          cupos</span>
+                      <img style="max-height: 300px;"
+                          src="https://i.blogs.es/ceda9c/dalle/450_1000.jpg"
+                          class="w-full" />
+                      <span
+                          class="position-absolute style-edit translate-middle bg-primary border border-light rounded-circle flex"
+                          style="top: 95%; left: 1rem;">
+                          <span class="visually-hidden">
+                              <span>{{calculateDays(changedEvent.departureDate, changedEvent.arrivalDate)}}</span>
+                              dias /
+                              <span>{{calculateDays(changedEvent.departureDate, changedEvent.arrivalDate)-1}}</span>
+                              noches
+                          </span>
+                      </span>
+                  </div>
+                  <div class="flex flex-column align-items-start text-start mb-3 pl-1">
+                      <div class="flex justify-content-between align-items-start mb-1">
+                          <span class="text-900 font-medium text-xl">{{changedEvent.title}}</span>
+                      </div>
+                      <p class="mt-0 mb-1 text-700 line-height-3">
+                          <span>
+                              <i class='bx bx-buildings p-1'></i>
+                              <span>Hotel </span><strong>{{changedEvent.hotel}}</strong>
+                          </span>
+                      </p>
+                      <p class="mt-0 mb-1 text-700 line-height-3">
+                          <span>
+                              <i class='bx bx-buildings p-1'></i>
+                              <span>Fecha de salida </span><strong>{{changedEvent.departureDate | date: 'd MMMM'
+                                  }}</strong>
+                          </span>
+                      </p>
+                  </div>
+                  <hr>
+                  <div class="flex justify-content-between">
+                      <div>
+                          <span class="small">Precio por persona</span>
+                          <span class="flex align-items-end text-primary text-2xl font-medium">{{changedEvent.price|currency:'USD':'symbol':'3.0'}}</span>
+                      </div>
+                  </div>
+                  <span class="small" style="font-size: 70%;">Incluye impuestos, tasas y servicio de
+                      hoteleria</span>
 
-        <ng-template pTemplate="footer">
-          <button pButton *ngIf="view === 'display'" label="Edit" icon="pi pi-pencil" (click)="onEditClick()"></button>
-          <!-- <button pButton *ngIf="view === 'new' || view === 'edit'" label="Save" icon="pi pi-check" (click)="handleSave()" [disabled]="!changedEvent.start || !changedEvent.end"></button> -->
+              </div>
+          </div>
+          </div>
         </ng-template>
       </p-dialog>
     </div>

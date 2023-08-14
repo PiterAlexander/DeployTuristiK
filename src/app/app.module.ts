@@ -104,6 +104,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { ImageModule } from 'primeng/image';
 import {ScrollTopModule} from 'primeng/scrolltop';
 import { ChipModule } from 'primeng/chip';
+import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 defineCustomElements();
 registerLocaleData(localeEn, 'en-EN');
 
@@ -155,6 +156,7 @@ registerLocaleData(localeEn, 'en-EN');
     ChangePasswordComponent,
   ],
   imports: [
+    GooglePlaceModule,
     ChipModule,
     ScrollTopModule,
     StyleClassModule,
@@ -230,7 +232,8 @@ registerLocaleData(localeEn, 'en-EN');
     ProfabricComponentsModule,
     NgbModule,
     FormsModule,
-    ChartModule
+    ChartModule,
+
   ],
   providers: [
     DialogService,

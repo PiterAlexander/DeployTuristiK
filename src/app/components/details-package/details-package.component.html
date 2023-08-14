@@ -1,20 +1,23 @@
 <div class="bg-circle opacity-50" style="top: -200px; left: -700px;"></div>
 <div class="bg-circle hidden lg:flex" style="top: 50px; right:-800px; transform: rotate(60deg)"></div>
+
+<p-scrollTop [threshold]="200"></p-scrollTop>
 <div class="mt-4">
 
     <div class="card p-5" style="box-shadow: 0px 4px 30px rgba(221, 224, 255, .54); border-radius: 25px;">
         <div class="grid mb-3">
-            <div class="col-12 lg:col-7">
-                <div class="flex">
-                    <div class="flex flex-column w-2 justify-content-between" style="row-gap: 1rem;">
-                        <img *ngFor="let image of images; let i = index"
+            <div class="col-12 lg:col-7" style="max-height: 550px;">
+                <div class="flex h-full">
+                    <div class="h-full flex flex-column w-2 justify-content-between style-scroll-bar">
+                        <img *ngFor="let image of images; let i = index" style="max-height: 100px !important;"
                             [ngClass]="{'border-primary': selectedImageIndex === i}" src="{{image}}"
                             class="w-full cursor-pointer border-2 border-transparent transition-colors transition-duration-150 border-round"
                             (click)="selectedImageIndex = i" />
                     </div>
-                    <div class="pl-3 w-10 flex">
-                        <img src="{{images[selectedImageIndex]}}"
-                            class="w-full border-2 border-transparent border-round" />
+                    <div class="pl-3 w-10 flex h-full">
+                        <p-image style="object-fit: unset;"
+                            class="h-full w-full max-w-full border-2 border-transparent border-round"
+                            src="{{images[selectedImageIndex]}}" alt="Image" [preview]="true"></p-image>
                     </div>
                 </div>
             </div>
@@ -44,11 +47,13 @@
                     </div>
                 </div>
                 <div class="flex align-items-center text-xl font-medium text-900">
-                    <span class="text-900 font-medium text-3xl block">{{pack.price + pack.aditionalPrice | currency: 'USD':
+                    <span class="text-900 font-medium text-3xl block">{{pack.price + pack.aditionalPrice | currency:
+                        'USD':
                         'symbol':'3.0'}}</span><span class="ml-2  text-lg">por persona</span>
                 </div>
                 <div class="flex align-items-center text-xl font-medium text-900 mb-4">
-                    <span class="block" style="font-size: 12px !important;">Incluye asistencia medica y seguro hotelero</span>
+                    <span class="block" style="font-size: 12px !important;">Incluye asistencia medica y seguro
+                        hotelero</span>
                 </div>
 
 
@@ -60,37 +65,10 @@
                         <span class="text-500"></span>{{pack.arrivalDate | date}}</span>
                 </div>
 
-                <p-tabView class="first">
-                    <p-tabPanel header="Precios por edad">
-                        <div class="md:grid grid-details grid-nogutter align-items-center mb-5">
-                            <div tooltipPosition="bottom" pTooltip="{{pack.aditionalPrice| currency: 'USD':'symbol':'3.0'}}"
-                                class="col h-3rem border-1 border-300 text-900 inline-flex justify-content-center align-items-center flex-shrink-0 border-round mr-3 cursor-pointer hover:surface-100 transition-duration-150 transition-colors">
-                                <i class="p-1 fa fa-plane"></i>
-                                <span class="m-1 flex"><i class='bx bxs-baby-carriage p-1 pr-2'></i>De 0 a 5 años</span>
-                            </div>
-                            <div tooltipPosition="bottom" pTooltip="{{((pack.price + pack.aditionalPrice) * .70) | currency: 'USD':'symbol':'3.0'}}"
-                                class="col h-3rem border-1 border-300 text-900 inline-flex justify-content-center align-items-center flex-shrink-0 border-round mr-3 cursor-pointer hover:surface-100 transition-duration-150 transition-colors">
-                                <i class="p-1 fas fa-hotel"></i>
-                                <span class="m-1 flex"><i class='pi pi-user-minus p-1 pr-2' ></i>De 5 a 10 años</span>
-                            </div>
-                            <div tooltipPosition="bottom" pTooltip="{{pack.price + pack.aditionalPrice| currency: 'USD':'symbol':'3.0'}}"
-                                class="col h-3rem border-1 border-300 text-900 inline-flex justify-content-center align-items-center flex-shrink-0 border-round mr-3 cursor-pointer hover:surface-100 transition-duration-150 transition-colors">
-                                <i class="p-1 fas fa-hotel"></i>
-                                <span class="m-1 flex"><i class='pi pi-user-plus p-1 pr-2' ></i>Mayores de 10</span>
-                            </div>
-                        </div>
-                    </p-tabPanel>
-                    <p-tabPanel header="Especificaciones">
-                        <div class="grid grid-nogutter align-items-center mb-5 flex justify-content-center">
-                            <p-chip style="cursor: pointer;" tooltipPosition="bottom"  *ngIf="pack.transport == '1'" pTooltip="Tipo de transporte"  label="Aereo" icon="bx bxs-plane-alt" class="chip-edit"></p-chip>
-                            <p-chip  style="cursor: pointer;" tooltipPosition="bottom" *ngIf="pack.transport == '2'" pTooltip="Tipo de transporte" label="Terrestre" icon="bx bxs-bus" class="chip-edit"></p-chip>
-                            <p-chip  style="cursor: pointer;" tooltipPosition="bottom" pTooltip="Lugar de alojamiento"  label="{{pack.hotel}}" icon="bx bxs-hotel" class="chip-edit"></p-chip>
-                            <p-chip  style="cursor: pointer;" tooltipPosition="bottom" pTooltip="Lugar de salida"  label="{{pack.departurePoint}}" icon="bx bx-current-location" class="chip-edit"></p-chip>
-                        </div>
-                    </p-tabPanel>
-                    <p-tabPanel rightIcon="pi pi-angle-right">
+                <p-tabView>
+                    <p-tabPanel header="Descripcion basica">
                         <div>
-                            <p class="text-lg fw-bold">
+                            <p class="text-md    fw-bold">
                                 Disfruta de una habitación única en el hotel {{pack.hotel}}, hospedándote al mejor
                                 estilo, nuestras carretas inmensas en el hermoso embalse de {{pack.destination}} te
                                 permitirán deleitarte de esta experiencia, ya
@@ -99,6 +77,7 @@
                             </p>
                         </div>
                     </p-tabPanel>
+
                 </p-tabView>
                 <div *ngIf="role !== 'Administrador'">
                     <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between">
@@ -113,8 +92,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="p-4 font-medium text-info-details">No esperes más para vivir una aventura increíble. ¡Reserva ahora y
-                    comienza a explorar los tesoros que el mundo tiene para ofrecerte!</div>
                 <div class="col-12" *ngIf="role === 'Administrador'">
                     <button pButton label="Regresar" class="flex-1 mr-5 w-full" (click)="goBack()"></button>
                 </div>
@@ -122,120 +99,110 @@
         </div>
 
         <p-tabView>
-            <p-tabPanel header="Detalles">
-                <div class="text-900 font-bold text-3xl mb-4 mt-2">Detalles del paquete</div>
+            <p-tabPanel header="Descripcion">
+                <div class="text-900 font-bold text-3xl mb-4 mt-2">Descripcion del paquete</div>
                 <p class="line-height-3 text-600 p-0 mx-0 mt-0 mb-4">{{pack.details}}</p>
             </p-tabPanel>
-            <p-tabPanel header="Información sobre los paquetes">
+            <p-tabPanel header="Detalles del paquete">
+
+
 
                 <ul class="list-none p-0 m-0">
                     <li class="p-3 border-bottom-1 m-1 surface-border">
+                        
+                        <div class="grid">
+                            
+                            <div class="col-8">
+                                <div class="text-900 font-bold text-xl my-3 flex justify-content-center">Precios por edades
+                                </div>
+                                <div class="grid">
+                                    
+                                    <div class="col">
+                                        <div class=" cursor-pointer relative overflow-hidden  border-round" style="box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.03), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.12) !important;
+                                        " (mouseenter)="visibleMember = 3" (mouseleave)="visibleMember = -1">
+                                            <img src="assets/img/babyIcon.png" class="w-full block" />
+                                            <div class="absolute top-0 left-0 h-full w-full border-round fadein animation-duration-300 select-none"
+                                                style="background-color: rgba(0,0,0,0.7)" *ngIf="visibleMember === 3">
+                                                <div class="flex flex-column p-3 h-full">
+                                                    <span class="block font-medium text-white text-xl mb-3">Menores de 5
+                                                        años</span>
+                                                    <span class="font-medium text-400">Los bebes menores a 5 años deberan
+                                                        pagar
+                                                        unicamente la asistencia medica y seguro hotelero.</span>
+    
+                                                    <span
+                                                        class="block font-medium text-white text-xl mb-3">{{pack.aditionalPrice|
+                                                        currency: 'USD':'symbol':'3.0'}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="cursor-pointer relative overflow-hidden  border-round" style="box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.03), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.12) !important;
+                                        " (mouseenter)="visibleMember = 2" (mouseleave)="visibleMember = -1">
+                                            <img src="assets/img/kidIcon.png" class="w-full block" />
+                                            <div class="absolute top-0 left-0 h-full w-full border-round fadein animation-duration-300 select-none"
+                                                style="background-color: rgba(0,0,0,0.7)" *ngIf="visibleMember === 2">
+                                                <div class="flex flex-column p-3 h-full">
+                                                    <span class="block font-medium text-white text-xl mb-3">Desde 5 hasta 10
+                                                        años</span>
+                                                    <span class="font-medium text-400">Los niños mayores de 5 menores de 10
+                                                        años
+                                                        deberan pagar el 70% de la totalidad del precio del paquete</span>
+    
+                                                    <span class="block font-medium text-white text-xl mb-3">{{((pack.price +
+                                                        pack.aditionalPrice) * .70) | currency:
+                                                        'USD':'symbol':'3.0'}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="cursor-pointer relative overflow-hidden  border-round" style="box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.03), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.12) !important;
+                                        " (mouseenter)="visibleMember = 1" (mouseleave)="visibleMember = -1">
+                                            <img src="assets/img/adultIcon.png" class="w-full block" />
+                                            <div class="absolute top-0 left-0 h-full w-full border-round fadein animation-duration-300 select-none"
+                                                style="background-color: rgba(0,0,0,0.7)" *ngIf="visibleMember === 1">
+                                                <div class="flex flex-column p-3 h-full">
+                                                    <span class="block font-medium text-white text-xl mb-3">Mayores de 10
+                                                        años</span>
+                                                    <span class="font-medium text-400">Las personas que sobrepasen los 10
+                                                        años
+                                                        deberan pagar el 100% de la totalidad del precio del paquete</span>
+    
+                                                    <span class="block font-medium text-white text-xl mb-3">{{pack.price +
+                                                        pack.aditionalPrice|
+                                                        currency: 'USD':'symbol':'3.0'}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p-divider layout="vertical"></p-divider>
+                            <div class="col">
+                                <div class="text-900 font-bold text-xl my-3 flex justify-content-center">Especificaciones
+                                </div>
+                            <div class="grid">
+                                <div class="col-6">
+                                    <p-card header="Alojamiento">
+                                        {{pack.hotel}}
+                                    </p-card>
+                                </div>
+                                <div class="col-6">
+                                    <p-card header="Transporte">
+                                        {{pack.transport == 1 ? "Terrestre"  : "Aereo"}}
+                                    </p-card>
+                                </div>
 
-                        <div class="text-900 font-bold text-xl my-3">Descubre el Mundo con Nuestros Paquetes Turísticos
+                                <div class="col">
+                                    <p-card header="Lugar de encuentro">
+                                        {{pack.departurePoint}}
+                                    </p-card>
+                                </div>
+                            </div>
+                            </div>
                         </div>
-                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">¡Bienvenido a una emocionante aventura de
-                            descubrimiento! Nuestros paquetes turísticos te invitan a explorar algunos de los destinos
-                            más increíbles del mundo. Sumérgete en la rica cultura, historia y belleza natural de
-                            diversos lugares mientras creas recuerdos invaluables.</p>
-                    </li>
-                    <li class="p-3 border-bottom-1 m-1 surface-border">
-
-                        <div class="text-900 font-bold text-xl my-3">Experiencias Únicas:</div>
-                        <span>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500"></i>
-                        </span>
-                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Cada uno de nuestros paquetes turísticos ofrece
-                            experiencias únicas y emocionantes. Desde explorar ciudades vibrantes hasta adentrarte en
-                            paisajes naturales impresionantes, cada destino tiene algo especial para ofrecer.</p>
-                    </li>
-                    <li class="p-3 border-bottom-1 m-1 surface-border">
-
-                        <div class="text-900 font-bold text-xl my-3">Cultura y Tradiciones:</div>
-                        <span>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500"></i>
-                        </span>
-                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Descubre la fascinante cultura y tradiciones de
-                            cada lugar que visitas. Desde festivales coloridos hasta arte y música local, tendrás la
-                            oportunidad de sumergirte en las auténticas expresiones culturales de cada destino.</p>
-                    </li>
-                    <li class="p-3 border-bottom-1 m-1 surface-border">
-
-                        <div class="text-900 font-bold text-xl my-3">Aventura y Naturaleza:</div>
-                        <span>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500"></i>
-                        </span>
-                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Si te apasiona la aventura y la naturaleza,
-                            nuestros paquetes te brindan la oportunidad de explorar majestuosos paisajes, realizar
-                            emocionantes actividades al aire libre y conectar con la belleza natural de nuestro planeta.
-                        </p>
-                    </li>
-                    <li class="p-3 border-bottom-1 m-1 surface-border">
-
-                        <div class="text-900 font-bold text-xl my-3">Gastronomía Deliciosa:</div>
-                        <span>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500"></i>
-                        </span>
-                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Disfruta de la diversidad culinaria de cada
-                            región. Nuestros paquetes te llevarán a degustar sabores auténticos y platos tradicionales
-                            que deleitarán tus sentidos.</p>
-                    </li>
-                    <li class="p-3 border-bottom-1 m-1 surface-border">
-
-                        <div class="text-900 font-bold text-xl my-3">Descanso y Bienestar:</div>
-                        <span>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500"></i>
-                        </span>
-                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Después de días llenos de emociones, también
-                            encontrarás momentos de relajación y bienestar. Descansa en cómodos alojamientos y, si lo
-                            deseas, disfruta de spas y tratamientos revitalizantes.</p>
-                    </li>
-                    <li class="p-3 border-bottom-1 m-1 surface-border">
-
-                        <div class="text-900 font-bold text-xl my-3">Grupos Pequeños y Guías Expertos:</div>
-                        <span>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500"></i>
-                        </span>
-                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">Viajarás en grupos pequeños, lo que garantiza
-                            una experiencia más personalizada y auténtica. Nuestros guías expertos estarán contigo en
-                            cada paso del camino para asegurarse de que vivas una experiencia inolvidable.</p>
-                    </li>
-                    <li class="p-3 border-bottom-1 m-1 surface-border">
-
-                        <div class="text-900 font-bold text-xl my-3">El Viaje de tus Sueños:</div>
-                        <span>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-                            <i class="pi pi-star-fill text-yellow-500"></i>
-                        </span>
-                        <p class="mx-0 mt-0 mb-3 text-600 line-height-3">No importa cuál de nuestros paquetes elijas,
-                            cada uno promete ser un viaje de ensueño. Nuestro objetivo es proporcionarte momentos
-                            inolvidables y la oportunidad de descubrir el mundo desde una perspectiva única.</p>
                     </li>
 
                 </ul>
