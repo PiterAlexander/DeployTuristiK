@@ -76,16 +76,20 @@
                 </span>
             </div>
             <div class="field col-2 w-100">
-                <label for="email" class="block text-indigo-300 font-bold"
+                <label for="type" class="block text-indigo-300 font-bold"
                     >Tipo de comunicacion</label
                 >
                 <span class="p-input-icon-left w-full">
                     <i class="pi pi-envelope" style="left: 1.5rem"></i>
-                    <p-dropdown [style]="{ width: '100%' }"
+
+                    <p-dropdown
                         [options]="types"
+                        placeholder="Seleccione Tipo de comunicacion"
                         [(ngModel)]="selectedType"
                         optionLabel="name"
                         appendTo="body"
+                        required="true"
+                        [style]="{width: '100%', height: '3.5rem'}"
                     ></p-dropdown>
                 </span>
             </div>
@@ -105,12 +109,13 @@
                     maxlength="150"
                 ></textarea>
 
-                <div class="grid">
+                <div class="grid flex justify-content-end">
                     <div class="col-1">
                         <button
+                            icon="pi pi-send"
                             (click)="sendEmail()"
                             pButton
-                            class="p-button-primary ml-auto mt-3 border-round"
+                            class="p-button ml-auto mt-3 border-round"
                             label="Enviar"
                         ></button>
                     </div>

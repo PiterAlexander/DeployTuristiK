@@ -4,6 +4,7 @@ import { UiState } from '@/store/ui/state';
 import { Component, HostBinding, OnInit, Renderer2 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
     selector: 'app-main',
@@ -16,9 +17,11 @@ export class MainComponent implements OnInit {
     public role;
     public isStyleActive: boolean = true;
 
-    constructor(private renderer: Renderer2, private store: Store<AppState>) { }
+    constructor(private renderer: Renderer2, private store: Store<AppState>,
+      private primengConfig: PrimeNGConfig) { }
 
     ngOnInit() {
+        this.dataPickerLanguaje()
         this.ui = this.store.select('ui');
         this.ui.subscribe((state: UiState) => {
             var user = JSON.parse(localStorage.getItem('TokenPayload'));
@@ -26,7 +29,7 @@ export class MainComponent implements OnInit {
             this.isStyleActive = state.menuSidebarCollapsed
         });
         console.log(this.role);
-        
+
         this.renderer.removeClass(
             document.querySelector('app-root'),
             'login-page'
@@ -87,6 +90,25 @@ export class MainComponent implements OnInit {
                 }
             }
         );
+    }
+
+    dataPickerLanguaje(){
+      this.primengConfig.setTranslation({
+        firstDayOfWeek: 0,
+        dayNames: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
+        dayNamesShort: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'],
+        dayNamesMin: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
+        monthNames: [
+          'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+          'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+        ],
+        monthNamesShort: [
+          'ene', 'feb', 'mar', 'abr', 'may', 'jun',
+          'jul', 'ago', 'sep', 'oct', 'nov', 'dic'
+        ],
+        today: 'Hoy',
+        clear: 'Limpiar'
+      });
     }
 
 }

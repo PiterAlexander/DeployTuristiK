@@ -37,7 +37,7 @@
         </div>
     </div>
     <div class="grid">
-        <div class="col" *ngIf="role === 'Cliente'">
+        <div class="col" *ngIf="role === 'Cliente' && isEditingFrequentTraveler()">
             <div class="field">
                 <div class="p-inputgroup">
                     <input pInputText placeholder="Ingrese su número de documento" (keyup)="isCustomerChanges()"
@@ -48,6 +48,21 @@
                         maxlength="15" class="w-full" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)"
                         [style.pointer-events]="oneCustomer ? 'none' : 'auto'"
                         [style.opacity]="oneCustomer ? 0.5 : 1" />
+                    <button *ngIf="customerInformation() && !validateExistingDocument() &&  !validateOwnDocument()"
+                        pButton pRipple type="button" pTooltip="Rellenar información" tooltipPosition="bottom"
+                        (click)="fillCustomerInformation()" icon="pi pi-user-plus" class="p-button-success"></button>
+                </div>
+            </div>
+        </div>
+        <div class="col" *ngIf="role === 'Cliente' && !isEditingFrequentTraveler()">
+            <div class="field">
+                <div class="p-inputgroup">
+                    <input pInputText placeholder="Ingrese su número de documento" (keyup)="isCustomerChanges()"
+                        type="text" formControlName="document"
+                        [ngClass]="{ 
+                            'border-green-500': customerInformation() && !validateExistingDocument() && !validateOwnDocument(),
+                        'border-red-600': validateExistingDocument() || !validateOnlyNumbers() || validateOwnDocument()}" required="true" minlength="8"
+                        maxlength="15" class="w-full" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)" />
                     <button *ngIf="customerInformation() && !validateExistingDocument() &&  !validateOwnDocument()"
                         pButton pRipple type="button" pTooltip="Rellenar información" tooltipPosition="bottom"
                         (click)="fillCustomerInformation()" icon="pi pi-user-plus" class="p-button-success"></button>
@@ -167,11 +182,12 @@
         </div>
     </div>
     <div class="grid">
-        <div class="col" *ngIf="role === 'Cliente'">
+        <div class="col" *ngIf="role === 'Cliente' && isEditingFrequentTraveler()">
             <div class="field">
                 <p-calendar dateFormat="dd/mm/yy" appendTo="body" formControlName="birthDate"
                     placeholder="Ingrese su fecha de nacimiento" showIcon="true" required="true"
-                    [style]="{ width: '100%' }" [readonlyInput]="true" [maxDate]="customerMaxDate" [style.pointer-events]="oneCustomer ? 'none' : 'auto'"
+                    [style]="{ width: '100%' }" [readonlyInput]="true" [maxDate]="customerMaxDate"
+                    [style.pointer-events]="oneCustomer ? 'none' : 'auto'"
                     [style.opacity]="oneCustomer ? 0.5 : 1"></p-calendar>
                 <small class="p-error block"
                     *ngIf="formGroup.get('birthDate')?.dirty && formGroup.get('birthDate')?.errors?.['required']">
@@ -179,7 +195,7 @@
                 </small>
             </div>
         </div>
-        <div class="col" *ngIf="role !== 'Cliente'">
+        <div class="col" *ngIf="role === 'Cliente' && !isEditingFrequentTraveler()">
             <div class="field">
                 <p-calendar dateFormat="dd/mm/yy" appendTo="body" formControlName="birthDate"
                     placeholder="Ingrese su fecha de nacimiento" showIcon="true" required="true"
@@ -190,10 +206,21 @@
                 </small>
             </div>
         </div>
+        <div class="col" *ngIf="role !== 'Cliente'">
+            <div class="field">
+                <p-calendar dateFormat="dd/mm/yy" appendTo="body" formControlName="birthDate"
+                    placeholder="Ingrese su fecha de nacimiento" showIcon="true" required="true"
+                    [style]="{ width: '100%' }" [readonlyInput]="true" [maxDate]="customerMaxDate"></p-calendar>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('birthDate')?.dirty && formGroup.get('birthDate')?.errors?.['required']">
+                    Este campo es obligatorio
+                </small>
+            </div>
+        </div>
         <div class="col">
             <div class="field">
-                <p-dropdown [options]="allEps" placeholder="Seleccione su EPS" required="true" formControlName="eps"
-                    [showClear]="true" [style]="{ width: '100%', 'max-width': '24rem' }"></p-dropdown>
+                <p-dropdown [options]="allEps" appendTo="body" placeholder="Seleccione su EPS" required="true" formControlName="eps"
+                    [showClear]="true" [style]="{ width: '100%', 'max-width': '25rem' }"></p-dropdown>
                 <small class="p-error block"
                     *ngIf="formGroup.get('eps')?.dirty && formGroup.get('eps')?.errors?.['required']">
                     Este campo es obligatorio

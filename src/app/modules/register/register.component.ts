@@ -32,18 +32,19 @@ export class RegisterComponent implements OnInit {
     // @HostBinding('class') class = 'register-box';
 
     public ui: Observable<UiState>
-    formGroup: FormGroup;
-    Visible: boolean = false;
-    Visible2: boolean = false;
+    public formGroup: FormGroup;
+    public Visible: boolean = false;
+    public Visible2: boolean = false;
 
-    password: string = '';
+
     public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS']
 
     public CustomerList: Array<any>
     public UserList: Array<any>
-    public customerData
-    Roles: Array<Role>;
+    public Roles: Array<Role>;
     public token: Token;
+    public userMaxDate: Date
+    public loadingButton: boolean = false
 
 
     constructor(
@@ -71,50 +72,70 @@ export class RegisterComponent implements OnInit {
             this.getToken();
         })
 
+
+        this.birthDateValidator()
+
+
         this.formGroup = this.fb.group({
-            email: new FormControl('', [Validators.required, Validators.email, Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')]),
-            password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
-            name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
-            lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
-            document: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15)]),
-            birthDate: [0, Validators.required,],
-            phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
-            address: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
-            eps: new FormControl('', [Validators.required]),
-            confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
+            email: new FormControl(null, [Validators.required, Validators.email, Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')]),
+            password: new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
+            name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
+            lastName: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
+            document: new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(15)]),
+            birthDate: [null, [Validators.required, this.birthDateValidator.bind(this)]],
+            phoneNumber: new FormControl(null, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]),
+            address: new FormControl(null, [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
+            eps: new FormControl(null, [Validators.required]),
+            confirmPassword: new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
         });
 
     }
 
     saveCustomer() {
-        var idRole: Role = this.Roles.find((r) => r.name == 'Cliente');
 
-        const user: User = {
-            email: this.formGroup.value.email,
-            password: this.formGroup.value.password,
-            status: 1,
-            roleId: idRole.roleId,
+        var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        if (!this.validForm()) {
+            this.messageService.add({ key: 'alert-message-register', severity: 'error', summary: '¡Espera!', detail: 'Todos los campos deben estar diligenciados correctamente' });
+
+        } else if (regex.test(this.formGroup.value.email)) {
+
+            this.loadingButton = true;
+            var idRole: Role = this.Roles.find((r) => r.name == 'Cliente');
+
+            const user: User = {
+                email: this.formGroup.value.email,
+                password: this.formGroup.value.password,
+                status: 1,
+                roleId: idRole.roleId,
+            }
+
+            const customer: Customer = {
+                name: this.formGroup.value.name,
+                lastName: this.formGroup.value.lastName,
+                document: this.formGroup.value.document,
+                birthDate: this.formGroup.value.birthDate,
+                phoneNumber: this.formGroup.value.phoneNumber,
+                address: this.formGroup.value.address,
+                eps: this.formGroup.value.eps,
+                user: user
+            }
+
+            this.store.dispatch(new CreateCustomerRequest({
+                ...customer
+            }));
+
+            this.messageService.add({ key: 'alert-message-register', severity: 'success', summary: '¡Usuario registrado éxitosamente!', detail: "En un momento ingresará al sistema" });
+
+
+            setTimeout(() => this.login(user), 5000)
+            this.getToken();
+
+
+        } else {
+            this.messageService.add({ key: 'alert-message-register', severity: 'error', summary: '¡Lo sentimos!', detail: 'Correo no válido' });
+
         }
 
-        const customer: Customer = {
-            name: this.formGroup.value.name,
-            lastName: this.formGroup.value.lastName,
-            document: this.formGroup.value.document,
-            birthDate: this.formGroup.value.birthDate,
-            phoneNumber: this.formGroup.value.phoneNumber,
-            address: this.formGroup.value.address,
-            eps: this.formGroup.value.eps,
-            user: user
-        }
-
-        this.store.dispatch(new CreateCustomerRequest({
-            ...customer
-        }));
-
-
-
-        setTimeout(() => this.login(user), 1000)
-        this.getToken();
     }
 
     displayPassword() {
@@ -145,15 +166,14 @@ export class RegisterComponent implements OnInit {
         return true
     }
 
-    validateDate() {
-        const fechaIngresada = new Date(this.formGroup.value.birthDate);
-        const fechaHoy = new Date();
 
-        if (fechaIngresada < fechaHoy) {
-            return true;
-        } else {
-            return false;
-        }
+
+    birthDateValidator() {
+        const currentDate = new Date();
+
+        this.userMaxDate = new Date(currentDate);
+        this.userMaxDate.setFullYear(currentDate.getFullYear() - 18);
+        console.log(this.userMaxDate)
     }
 
     validatePassword(): boolean {
@@ -171,7 +191,6 @@ export class RegisterComponent implements OnInit {
         return this.formGroup.valid &&
             !this.validateExistingDocument() &&
             !this.validateExistingEmail() &&
-            this.validateDate() &&
             this.validatePassword() &&
             this.validateOnlyNumbersForPhoneNumber()
     }
@@ -184,6 +203,8 @@ export class RegisterComponent implements OnInit {
     getToken() {
         if (this.token != null) {
             if (this.token.success == true) {
+
+                this.loadingButton = false;
                 window.location.reload();
                 globalThis.payload = this.authService.getUserInfo(
                     this.token.result
@@ -191,16 +212,20 @@ export class RegisterComponent implements OnInit {
                 this.authService.setToken(this.token.result);
 
                 var log = JSON.parse(localStorage.getItem('TokenPayload'));
-                if (log['role'] == 'Administrador') {
-                    this.router.navigate(['/']);
-                } else if (log['role'] == 'Cliente') {
-                    this.router.navigate(['/Clientes']);
+                if (log) {
+                    if (log['role'] == 'Administrador' || log['role'] != 'Cliente') {
+                        this.router.navigate(['/Home/Dashboard']);
+                    }
+                    if (log['role'] == 'Cliente') {
+                        this.router.navigate(['/Home/Paquetes']);
+                    }
                 }
 
-                this.toastr.success(this.token.message);
+
             }
         }
     }
+
 
     login(user: User) {
         this.store.dispatch(
