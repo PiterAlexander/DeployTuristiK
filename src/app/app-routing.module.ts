@@ -20,15 +20,16 @@ import {MainPublicComponent} from '@modules/main copy/main.component';
 import {PackagePublicComponent} from '@modules/packages/package-public.component';
 import {DetailsPackageComponent} from '@components/details-package/details-package.component';
 import {PublicHomeComponent} from '@pages/public-home/public-home.component';
-import { AboutUsComponent } from '@pages/about-us/about-us.component';
-import { ContactUsComponent } from '@pages/contact-us/contact-us.component';
-import { ListFrequentTravelerComponent } from '@components/list-frequent-traveler/list-frequent-traveler.component';
+import {AboutUsComponent} from '@pages/about-us/about-us.component';
+import {ContactUsComponent} from '@pages/contact-us/contact-us.component';
+import {ListFrequentTravelerComponent} from '@components/list-frequent-traveler/list-frequent-traveler.component';
 
 const routes: Routes = [
     {
         path: 'Home',
         component: MainComponent,
         canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
         children: [
             {
                 path: 'Dashboard',
@@ -36,7 +37,8 @@ const routes: Routes = [
                 component: DashboardComponent
             },
             {
-                path: 'profile',                
+                path: 'profile',
+                canActivate: [AuthGuard],
                 component: ProfileComponent
             },
             {
@@ -56,7 +58,8 @@ const routes: Routes = [
             },
             {
                 path: 'DetallesPaquete/:id',
-                component: DetailsPackageComponent,
+                canActivate: [AuthGuard],
+                component: DetailsPackageComponent
             },
             {
                 path: 'Clientes',
@@ -80,8 +83,9 @@ const routes: Routes = [
             },
             {
                 path: 'MisBeneficiarios',
-                component: ListFrequentTravelerComponent,
-            },
+                canActivate: [AuthGuard],
+                component: ListFrequentTravelerComponent
+            }
         ]
     },
     {
@@ -101,10 +105,10 @@ const routes: Routes = [
                 canActivate: [NonAuthGuard]
             },
             {
-              path: 'aboutUs',
-              component: AboutUsComponent,
-              canActivate: [NonAuthGuard]
-          },
+                path: 'aboutUs',
+                component: AboutUsComponent,
+                canActivate: [NonAuthGuard]
+            },
             {
                 path: 'Paquetes',
                 component: PackagesComponent,
