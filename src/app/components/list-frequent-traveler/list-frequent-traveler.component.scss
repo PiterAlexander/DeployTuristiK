@@ -31,3 +31,8 @@
     background-color: indigo; /* Cambia el color de la línea */
 }
 
+@media (max-width: 900px) {
+    .col-4{
+        width: 50% !important;
+    }
+}

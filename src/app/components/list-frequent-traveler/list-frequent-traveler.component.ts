@@ -60,6 +60,7 @@ export class ListFrequentTravelerComponent implements OnInit {
       if (this.user['role'] === 'Cliente') {
         const oneCustomer: Customer = this.allCustomers.find(c => c.userId === this.user['id'])
         if (oneCustomer !== undefined) {
+          this.oneCustomer = oneCustomer
           if (oneCustomer.frequentTraveler.length > 0) {
             let index: number = 0
             for (const element of oneCustomer.frequentTraveler) {
