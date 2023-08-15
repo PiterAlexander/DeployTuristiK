@@ -127,7 +127,7 @@ export class RegisterComponent implements OnInit {
             this.messageService.add({ key: 'alert-message-register', severity: 'success', summary: '¡Usuario registrado éxitosamente!', detail: "En un momento ingresará al sistema" });
 
 
-            setTimeout(() => this.login(user), 5000)
+            setTimeout(() => this.login(user), 3000)
             this.getToken();
 
 
