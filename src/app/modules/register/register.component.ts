@@ -37,7 +37,7 @@ export class RegisterComponent implements OnInit {
     public Visible2: boolean = false;
 
 
-    public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS']
+    public allEps: Array<string>
 
     public CustomerList: Array<any>
     public UserList: Array<any>
@@ -45,6 +45,7 @@ export class RegisterComponent implements OnInit {
     public token: Token;
     public userMaxDate: Date
     public loadingButton: boolean = false
+    public results: string[];
 
 
     constructor(
@@ -55,7 +56,9 @@ export class RegisterComponent implements OnInit {
         private toastr: ToastrService,
         private messageService: MessageService
 
-    ) { }
+    ) {
+        this.allEps = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS']
+    }
 
 
 
@@ -88,6 +91,23 @@ export class RegisterComponent implements OnInit {
             eps: new FormControl(null, [Validators.required]),
             confirmPassword: new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
         });
+
+    }
+
+
+    searchEps(event: any) {
+        console.log(event.query);
+        const filtered: any[] = [];
+        const query = event.query.toLowerCase();
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < this.allEps.length; i++) {
+            const Eps = this.allEps[i].toLowerCase();
+            if (Eps.includes(query)) {
+                filtered.push(this.allEps[i]);
+            }
+        }
+
+        this.results = filtered;
 
     }
 

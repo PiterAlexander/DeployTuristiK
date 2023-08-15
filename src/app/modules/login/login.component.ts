@@ -25,6 +25,8 @@ export class LoginComponent implements OnInit {
     static payload: Observable<UserLog>;
     public userLogin: any;
     Visible: boolean = false;
+    public loadingButton: boolean = false
+
     get dark(): boolean {
         return this.layoutService.config.colorScheme !== 'light';
     }
@@ -61,17 +63,32 @@ export class LoginComponent implements OnInit {
     }
 
     async saveChanges() {
-        this.isAuthLoading = true;
-        const Model = {
-            email: this.formGroup.value.email,
-            password: this.formGroup.value.password
-        };
+        var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        if (!this.validForm()) {
+            this.messageService.add({ key: 'alert-message-login', severity: 'error', summary: '¡Espera!', detail: 'Todos los campos deben estar diligenciados correctamente' });
 
-        await this.store.dispatch(
-            new LoginRequest({ email: Model.email, password: Model.password })
-        );
+        } else if (regex.test(this.formGroup.value.email)) {
+            this.loadingButton = true;
+            const Model = {
+                email: this.formGroup.value.email,
+                password: this.formGroup.value.password
+            };
 
-        this.isAuthLoading = false;
+            this.messageService.add({ key: 'alert-message-login', severity: 'warn', summary: '¡Validando información!', detail: "Espere un momento" });
+
+            this.store.dispatch(
+                new LoginRequest({ email: Model.email, password: Model.password })
+            );
+            this.loadingButton = false;
+
+
+        }
+        else {
+            this.messageService.add({ key: 'alert-message-login', severity: 'error', summary: '¡Lo sentimos!', detail: 'Correo no válido' });
+
+        }
+
+
     }
 
     displayPassword() {

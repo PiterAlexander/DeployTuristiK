@@ -6,10 +6,10 @@
     style="top: 50px; right: -800px; transform: rotate(60deg)"
 ></div>
 
-<div class="px-3 flex justify-content-center align-items-center mt-2">
+<div class="px-3 flex justify-content-center align-items-center mt-5">
     <div
-        class="border-1 surface-border surface-card border-round py-7 px-4 md:px-7 z-1"
-        style="border-radius: 25px !important"
+        class="border-1 surface-border surface-card border-round py-4 px-6 md:px-6 md:pt-6 z-1"
+        style="border-radius: 25px !important; width: 80% !important"
     >
         <div class="mb-4 ml-2">
             <div class="text-900 text-xl font-bold mb-2">Crear cuenta</div>
@@ -26,64 +26,12 @@
             <div class="col-12 w-full">
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-4">
-                        <input
-                            pInputText
-                            placeholder="Ingrese su nombre"
-                            class="w-full"
-                            type="text"
-                            formControlName="name"
-                            required="true"
-                            minlength="3"
-                            maxlength="30"
-                            onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)"
-                            [style]="{width: '15rem'}"
-                        />
-                        <small
-                            class="p-error block"
-                            *ngIf="formGroup.get('name').dirty && formGroup.get('name')?.errors?.['required']"
-                        >
-                            Este campo es obligatorio.
-                        </small>
-                        <small
-                            class="p-error block"
-                            *ngIf="formGroup.get('name').dirty && formGroup.get('name')?.errors?.['minlength']"
-                        >
-                            Este campo debe tener mínimo 3 letras
-                        </small>
-                    </div>
-                    <div class="field col-12 md:col-4">
-                        <input
-                            pInputText
-                            placeholder="Ingrese sus apellidos"
-                            class="w-full"
-                            type="text"
-                            formControlName="lastName"
-                            required="true"
-                            minlength="3"
-                            maxlength="30"
-                            onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)"
-                            [style]="{width: '15rem'}"
-                        />
-                        <small
-                            class="p-error block"
-                            *ngIf="formGroup.get('lastName').dirty && formGroup.get('lastName')?.errors?.['required']"
-                        >
-                            Este campo es obligatorio.
-                        </small>
-                        <small
-                            class="p-error block"
-                            *ngIf="formGroup.get('lastName').dirty && formGroup.get('lastName')?.errors?.['minlength']"
-                        >
-                            Este campo debe tener mínimo 3 letras
-                        </small>
-                    </div>
-                    <div class="field col-12 md:col-4">
                         <div class="p-inputgroup">
                             <span class="p-input-icon-left w-full">
                                 <i class="pi pi-id-card"></i>
                                 <input
                                     pInputText
-                                    placeholder="Ingrese su número de documento"
+                                    placeholder="Número de documento"
                                     type="text"
                                     formControlName="document"
                                     required="true"
@@ -117,36 +65,67 @@
                             El documento debe tener mínimo 8 caracteres
                         </small>
                     </div>
-                </div>
-                <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-4">
-                        <span class="p-input-icon-left">
-                            <p-calendar
-                                dateFormat="dd/mm/yy"
-                                appendTo="body"
-                                formControlName="birthDate"
-                                placeholder="Seleccione su fecha de nacimiento"
-                                showIcon="true"
-                                required="true"
-                                [style]="{width: '100%'}"
-                                [readonlyInput]="true"
-                                [maxDate]="userMaxDate"
-                            ></p-calendar>
-                        </span>
+                        <input
+                            pInputText
+                            placeholder="Nombre"
+                            class="w-full"
+                            type="text"
+                            formControlName="name"
+                            required="true"
+                            minlength="3"
+                            maxlength="30"
+                            onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)"
+                            [style]="{width: '15rem'}"
+                        />
                         <small
                             class="p-error block"
-                            *ngIf="formGroup.get('birthDate').dirty && formGroup.get('birthDate')?.errors?.['required']"
+                            *ngIf="formGroup.get('name').dirty && formGroup.get('name')?.errors?.['required']"
                         >
                             Este campo es obligatorio.
                         </small>
+                        <small
+                            class="p-error block"
+                            *ngIf="formGroup.get('name').dirty && formGroup.get('name')?.errors?.['minlength']"
+                        >
+                            Este campo debe tener mínimo 3 letras
+                        </small>
                     </div>
+                    <div class="field col-12 md:col-4">
+                        <input
+                            pInputText
+                            placeholder="Apellidos"
+                            class="w-full"
+                            type="text"
+                            formControlName="lastName"
+                            required="true"
+                            minlength="3"
+                            maxlength="30"
+                            onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)"
+                            [style]="{width: '15rem'}"
+                        />
+                        <small
+                            class="p-error block"
+                            *ngIf="formGroup.get('lastName').dirty && formGroup.get('lastName')?.errors?.['required']"
+                        >
+                            Este campo es obligatorio.
+                        </small>
+                        <small
+                            class="p-error block"
+                            *ngIf="formGroup.get('lastName').dirty && formGroup.get('lastName')?.errors?.['minlength']"
+                        >
+                            Este campo debe tener mínimo 3 letras
+                        </small>
+                    </div>
+                </div>
 
+                <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-4">
                         <span class="p-input-icon-left w-full">
                             <i class="pi pi-phone"></i>
                             <input
                                 pInputText
-                                placeholder="Ingrese su número de teléfono"
+                                placeholder="Número de teléfono"
                                 type="text"
                                 formControlName="phoneNumber"
                                 required="true"
@@ -170,15 +149,51 @@
                             Este campo debe contener 10 números
                         </small>
                     </div>
+                    <div class="field col-12 md:col-4">
+                        <p-calendar
+                            dateFormat="dd/mm/yy"
+                            appendTo="body"
+                            formControlName="birthDate"
+                            placeholder="Fecha de nacimiento"
+                            showIcon="true"
+                            required="true"
+                            [style]="{width: '100%'}"
+                            [readonlyInput]="true"
+                            [maxDate]="userMaxDate"
+                        ></p-calendar>
+
+                        <small
+                            class="p-error block"
+                            *ngIf="formGroup.get('birthDate').dirty && formGroup.get('birthDate')?.errors?.['required']"
+                        >
+                            Este campo es obligatorio.
+                        </small>
+                    </div>
 
                     <div class="field col-12 md:col-4">
-                        <p-dropdown
-                            [options]="allEps"
-                            placeholder="Seleccione la EPS a la que se encuentra afiliado"
-                            required="true"
+                        <p-autoComplete
                             formControlName="eps"
-                            [style]="{width: '15rem'}"
-                        ></p-dropdown>
+                            [suggestions]="results"
+                            (completeMethod)="searchEps($event)"
+                            class="w-full"
+                            placeholder="EPS"
+                            minlength="3"
+                            maxlength="100"
+                        ></p-autoComplete>
+
+                        <!-- validaciones de número -->
+                        <small
+                            class="p-error block"
+                            *ngIf="formGroup.get('eps')?.errors?.['required'] && formGroup.get('eps')?.dirty"
+                        >
+                            Este campo es obligatorio
+                        </small>
+                        <small
+                            class="p-error block"
+                            *ngIf="formGroup.get('eps')?.errors?.['minlength'] && formGroup.get('eps')?.dirty"
+                        >
+                            Este campo debe tener mínimo 3 letras
+                        </small>
                     </div>
                 </div>
 
@@ -188,7 +203,7 @@
                             <i class="pi pi-building"></i>
                             <input
                                 pInputText
-                                placeholder="Ingrese la dirección de residencia"
+                                placeholder="Dirección de residencia"
                                 class="w-full"
                                 type="text"
                                 formControlName="address"
@@ -217,7 +232,7 @@
                             <i class="pi pi-envelope"></i>
                             <input
                                 pInputText
-                                placeholder="Ingrese su correo electronico"
+                                placeholder="Correo electrónico"
                                 class="w-full"
                                 type="text"
                                 formControlName="email"
@@ -266,7 +281,7 @@
                             ></i>
                             <input
                                 pInputText
-                                placeholder="Ingrese una contraseña"
+                                placeholder="Contraseña"
                                 class="w-full"
                                 [type]="Visible ? 'text' : 'password'"
                                 formControlName="password"
@@ -304,7 +319,7 @@
                             ></i>
                             <input
                                 pInputText
-                                placeholder="Ingrese de nuevo la contraseña"
+                                placeholder="Confirmación de contraseña"
                                 class="w-full"
                                 [type]="Visible2 ? 'text' : 'password'"
                                 formControlName="confirmPassword"
