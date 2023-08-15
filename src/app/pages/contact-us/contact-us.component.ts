@@ -70,7 +70,7 @@ export class ContactUsComponent {
     sendEmail() {
 
         var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-        if (this.name == "" || this.email == "" || this.message == "") {
+        if (this.name == "" || this.email == "" || this.message == "" || !this.selectedType) {
             this.messageService.add({ key: 'alert-message', severity: 'error', summary: '¡Espera!', detail: 'Todos los campos deben estar completos' });
 
         } else if (regex.test(this.email)) {
