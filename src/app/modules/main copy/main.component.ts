@@ -5,6 +5,7 @@ import {Component, HostBinding, OnInit, Renderer2} from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {Store} from '@ngrx/store';
 import { LayoutService } from '@services/app.layout.service';
+import { PrimeNGConfig } from 'primeng/api';
 import {Observable} from 'rxjs';
 
 @Component({
@@ -17,14 +18,17 @@ export class MainPublicComponent implements OnInit {
     public ui: Observable<UiState>;
     public role;
     public user : any;
-    public route;
-    public log;
+    public route = '/login';
+    public log = true;
     get dark(): boolean {
       return this.layoutService.config.colorScheme !== 'light';
     }
-    constructor(private renderer: Renderer2, private store: Store<AppState>,private layoutService: LayoutService, private router: Router) {}
+    constructor(
+      private primengConfig: PrimeNGConfig,
+      private renderer: Renderer2, private store: Store<AppState>,private layoutService: LayoutService, private router: Router) {}
 
     ngOnInit() {
+      this.dataPickerLanguaje()
         this.ui = this.store.select('ui');
         this.ui.subscribe((state: UiState) => {
           this.user = JSON.parse(localStorage.getItem('TokenPayload'))
@@ -53,5 +57,23 @@ export class MainPublicComponent implements OnInit {
           return 'Home';
       }
       return routeParts[1];
+  }
+  dataPickerLanguaje(){
+    this.primengConfig.setTranslation({
+      firstDayOfWeek: 0,
+      dayNames: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
+      dayNamesShort: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'],
+      dayNamesMin: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
+      monthNames: [
+        'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+        'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+      ],
+      monthNamesShort: [
+        'ene', 'feb', 'mar', 'abr', 'may', 'jun',
+        'jul', 'ago', 'sep', 'oct', 'nov', 'dic'
+      ],
+      today: 'Hoy',
+      clear: 'Limpiar'
+    });
   }
 }

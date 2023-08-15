@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
     CanActivate,
     CanActivateChild,
@@ -7,16 +7,16 @@ import {
     UrlTree,
     Router
 } from '@angular/router';
-import {Observable, filter, map} from 'rxjs';
-import {UiState} from '@/store/ui/state';
-import {Store} from '@ngrx/store';
-import {AppState} from '@/store/state';
-import {User} from '@/models/user';
-import {Role} from '@/models/role';
-import {UserLog} from '@/models/token';
-import {GetAllRoleRequest} from '@/store/ui/actions';
-import {ApiService} from '../services/api.service';
-import {AppService} from '../services/app.service';
+import { Observable, filter, map } from 'rxjs';
+import { UiState } from '@/store/ui/state';
+import { Store } from '@ngrx/store';
+import { AppState } from '@/store/state';
+import { User } from '@/models/user';
+import { Role } from '@/models/role';
+import { UserLog } from '@/models/token';
+import { GetAllRoleRequest } from '@/store/ui/actions';
+import { ApiService } from '../services/api.service';
+import { AppService } from '../services/app.service';
 
 @Injectable({
     providedIn: 'root'
@@ -33,7 +33,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         private appService: AppService,
         private apiService: ApiService,
         private store: Store<AppState>
-    ) {}
+    ) { }
 
     canActivate(
         next: ActivatedRouteSnapshot,
@@ -43,11 +43,16 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         | Promise<boolean | UrlTree>
         | boolean
         | UrlTree {
+
+
         if (!localStorage.getItem('token')) {
             this.router.navigate(['/']);
             return false;
         }
+  
         return this.getProfile(next);
+        
+   
     }
 
     canActivateChild(
@@ -62,10 +67,12 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     }
 
     async getProfile(route?: ActivatedRouteSnapshot) {
+
         const fullPath = route.pathFromRoot
             .map((r) => r.routeConfig?.path || '')
             .join('/');
         const lastSegment = fullPath.split('/').pop();
+
 
         if (this.userLogin) {
 
@@ -83,9 +90,11 @@ export class AuthGuard implements CanActivate, CanActivateChild {
             });
 
             if (response && lastSegment !== 'Home') {
+
                 const allowedModules = response['associatedPermission'].map(
                     (ap) => ap.permission.module
                 );
+
                 const currentModule = lastSegment;
 
                 if (allowedModules) {
@@ -93,15 +102,16 @@ export class AuthGuard implements CanActivate, CanActivateChild {
                         allowedModules.includes(currentModule) ||
                         currentModule == 'Login' ||
                         currentModule == 'profile' ||
-                        currentModule == 'Turistik'
+                        currentModule == 'Turistik' ||
+                        currentModule == ':id'
                     ) {
                         return true;
-                    }else if (
+                    } else if (
                         currentModule == 'MisBeneficiarios' &&
                         user['role'] == 'Cliente'
                     ) {
                         return true;
-                    }else {
+                    } else {
                         if (user['role'] == 'Administrador') {
                             this.router.navigate(['/Home/Dashboard']);
                             return false;
