@@ -8,9 +8,11 @@ import { DeleteOrderDetailRequest, OpenModalCreateOrderDetail, OpenModalCreatePa
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Customer } from '@/models/customer';
 import { OrderDetail } from '@/models/orderDetail';
+import { ApiService } from '@services/api.service';
 import { ConfirmationService } from 'primeng/api';
 import { Role } from '@/models/role';
 import { Order } from '@/models/order';
+import { ActivatedRoute } from '@angular/router';
 import { environment } from 'environments/environment';
 
 @Component({
@@ -35,11 +37,14 @@ export class ReadOrderPaymentComponent {
   public orderDetails: Array<OrderDetail> = []
   public pendingPayments: boolean = false
   public baseUrl: string = environment.endPoint + 'resources/payments/'
+  public orderId: string
 
   constructor(
     private store: Store<AppState>,
     private modalPrimeNg: DynamicDialogRef,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private route: ActivatedRoute,
+    private apiService: ApiService
   ) { }
 
   ngOnInit(): void {
@@ -49,8 +54,15 @@ export class ReadOrderPaymentComponent {
       this.role = this.user['role']
       this.allRoles = state.allRoles.data
       this.allCustomers = state.allCustomers.data
-      this.order = state.oneOrder.data
-      this.pushPayments()
+      if (this.role === 'Cliente') {
+        this.route.paramMap.subscribe((params) => {
+          this.orderId = params.get('id');
+          this.getOrderById()
+        });
+      } else {
+        this.order = state.oneOrder.data
+        this.pushPayments()
+      }
     })
 
     this.statuses = [
@@ -58,6 +70,32 @@ export class ReadOrderPaymentComponent {
       { 'label': 'Aceptado', 'code': 1 },
       { 'label': 'Rechazado', 'code': 2 },
     ]
+  }
+
+  async getOrderById() {
+    const orderPromise = await new Promise((resolve, reject) => {
+      this.apiService.getOrderById(this.orderId).subscribe({
+        next: (data) => {
+          resolve(data)
+        },
+        error: (err) => {
+          reject(err)
+        }
+      })
+    })
+    if (orderPromise) {
+      this.order = {
+        orderId: orderPromise['orderId'],
+        customerId: orderPromise['customerId'],
+        customer: orderPromise['customer'],
+        packageId: orderPromise['packageId'],
+        package: orderPromise['package'],
+        totalCost: orderPromise['totalCost'],
+        status: orderPromise['status'],
+        payment: orderPromise['payment']
+      }
+      this.pushPayments()
+    }
   }
 
   validateExtendibleAllowing(payment: any) {
@@ -77,6 +115,7 @@ export class ReadOrderPaymentComponent {
   }
 
   pushPayments() {
+    console.log(this.order);
     for (const element of this.order.payment) {
       if (element != undefined) {
         const orderDetailCustomersPerPayment: Array<any> = []
@@ -145,21 +184,23 @@ export class ReadOrderPaymentComponent {
 
   existingRemainingAmount(): boolean {
     let addition = 0
-    for (const element of this.order.payment) {
-      if (element !== undefined) {
-        if (element.status === 1 || element.status === 0) {
-          addition += element.amount
-          if (element.status === 0) {
-            this.pendingPayments = true
+    if (this.order !== undefined) {
+      for (const element of this.order.payment) {
+        if (element !== undefined) {
+          if (element.status === 1 || element.status === 0) {
+            addition += element.amount
+            if (element.status === 0) {
+              this.pendingPayments = true
+            }
           }
         }
       }
+      this.remainingAmount = this.order.totalCost - addition
+      if (this.remainingAmount > 0) {
+        return true
+      }
+      return false
     }
-    this.remainingAmount = this.order.totalCost - addition
-    if (this.remainingAmount > 0) {
-      return true
-    }
-    return false
   }
 
   addPayment() {
@@ -238,10 +279,12 @@ export class ReadOrderPaymentComponent {
   }
 
   addOrderDetailButton(): boolean {
-    if (this.order.package.availableQuotas >= 1) {
-      return true
+    if (this.order !== undefined) {
+      if (this.order.package.availableQuotas >= 1) {
+        return true
+      }
+      return false
     }
-    return false
   }
 
   addOrderDetail() {

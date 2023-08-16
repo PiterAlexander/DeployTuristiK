@@ -29,31 +29,31 @@ export class OrdersComponent implements OnInit {
   public statuses: any[] = [];
   public loading: boolean = true
   public visible: boolean = true
-  public packagesClients : Array<Package>
+  public packagesClients: Array<Package>
   public responsiveOptions;
   constructor(
     private store: Store<AppState>,
-        private router: Router,
-        private apiService: ApiService
+    private router: Router,
+    private apiService: ApiService
   ) {
     this.responsiveOptions = [
       {
-          breakpoint: '1024px',
-          numVisible: 3,
-          numScroll: 3
+        breakpoint: '1024px',
+        numVisible: 3,
+        numScroll: 3
       },
       {
-          breakpoint: '768px',
-          numVisible: 2,
-          numScroll: 2
+        breakpoint: '768px',
+        numVisible: 2,
+        numScroll: 2
       },
       {
-          breakpoint: '560px',
-          numVisible: 1,
-          numScroll: 1
+        breakpoint: '560px',
+        numVisible: 1,
+        numScroll: 1
       }
-  ];
-   }
+    ];
+  }
 
   ngOnInit() {
     this.store.dispatch(new GetAllRoleRequest)
@@ -70,7 +70,7 @@ export class OrdersComponent implements OnInit {
       this.allPackages = state.allPackages.data
       this.packagesClients = state.allPackages.data.filter(
         (pkg) => pkg.availableQuotas > 0
-    );
+      );
       this.compareCustomer()
     })
 
@@ -163,60 +163,64 @@ export class OrdersComponent implements OnInit {
   }
 
   async sendToPayments(order: Order) {
-    const orderPromise = await new Promise((resolve, reject) => {
-      this.apiService.getOrderById(order.orderId).subscribe({
-        next: (data) => {
-          resolve(data)
-        },
-        error: (err) => {
-          reject(err)
-        }
-      })
-    })
-    if (orderPromise) {
-      const oneOrder: any = {
-        orderId: orderPromise['orderId'],
-        customerId: orderPromise['customerId'],
-        customer: orderPromise['customer'],
-        packageId: orderPromise['packageId'],
-        package: orderPromise['package'],
-        totalCost: orderPromise['totalCost'],
-        status: orderPromise['status'],
-        payment: orderPromise['payment']
-      }
-      this.store.dispatch(new OpenModalPayments({ ...oneOrder }))
+    if (this.role === 'Cliente') {
+      this.router.navigate(['Home/DetallesPedido/' + order.orderId]);
+      console.log('hello bro', this.router.config);
     }
+    // const orderPromise = await new Promise((resolve, reject) => {
+    //   this.apiService.getOrderById(order.orderId).subscribe({
+    //     next: (data) => {
+    //       resolve(data)
+    //     },
+    //     error: (err) => {
+    //       reject(err)
+    //     }
+    //   })
+    // })
+    // if (orderPromise) {
+    //   const oneOrder: any = {
+    //     orderId: orderPromise['orderId'],
+    //     customerId: orderPromise['customerId'],
+    //     customer: orderPromise['customer'],
+    //     packageId: orderPromise['packageId'],
+    //     package: orderPromise['package'],
+    //     totalCost: orderPromise['totalCost'],
+    //     status: orderPromise['status'],
+    //     payment: orderPromise['payment']
+    //   }
+    //   this.store.dispatch(new OpenModalPayments({ ...oneOrder }))
+    // }
   }
 
   verDetalles(elementoId: string) {
     if (this.role == 'Administrador') {
-        this.router.navigate(['Home/DetallesPaquete/' + elementoId]);
-        console.log('hello bro', this.router.config);
+      this.router.navigate(['Home/DetallesPaquete/' + elementoId]);
+      console.log('hello bro', this.router.config);
     }
     if (this.role == 'Cliente') {
-        this.router.navigate(['Home/DetallesPaquete/' + elementoId]);
-        console.log('hello bro', this.router.config);
+      this.router.navigate(['Home/DetallesPaquete/' + elementoId]);
+      console.log('hello bro', this.router.config);
     }
     if (this.role == undefined) {
-        this.router.navigate(['detailsPackage/' + elementoId]);
-        console.log('hello nigga', this.router.config);
+      this.router.navigate(['detailsPackage/' + elementoId]);
+      console.log('hello nigga', this.router.config);
     }
-}
+  }
 
   calculateDays(departureDate: Date, returnDate: Date): number {
     if (!(departureDate instanceof Date) || !(returnDate instanceof Date)) {
-        departureDate = new Date(departureDate);
-        returnDate = new Date(returnDate);
+      departureDate = new Date(departureDate);
+      returnDate = new Date(returnDate);
     }
     const fechaSalida = departureDate;
     const fechaRegreso = returnDate;
     const diferenciaMilisegundos =
-        fechaRegreso.getTime() - fechaSalida.getTime();
+      fechaRegreso.getTime() - fechaSalida.getTime();
     const unDiaEnMilisegundos = 1000 * 60 * 60 * 24;
     const diferenciaDias = Math.floor(
-        diferenciaMilisegundos / unDiaEnMilisegundos
+      diferenciaMilisegundos / unDiaEnMilisegundos
     );
 
     return diferenciaDias;
-}
+  }
 }
