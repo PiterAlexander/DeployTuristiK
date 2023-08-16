@@ -21,7 +21,6 @@ export class MainPublicComponent implements OnInit {
   public user: any;
   public route;
   public log;
-  public previousUrl: string;
   get dark(): boolean {
     return this.layoutService.config.colorScheme !== 'light';
   }
@@ -38,7 +37,6 @@ export class MainPublicComponent implements OnInit {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         var url = this.router.routerState.snapshot.url
-        this.previousUrl = url
         if (url == '/login' || url == '/register' || url == '/forgot-password' || url == '/recover-password') {
           this.log = true
         } else {
