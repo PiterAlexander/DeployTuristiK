@@ -21,7 +21,6 @@ export class MainPublicComponent implements OnInit {
   public user: any;
   public route;
   public log;
-  public previousUrl: string;
   get dark(): boolean {
     return this.layoutService.config.colorScheme !== 'light';
   }
@@ -35,10 +34,13 @@ export class MainPublicComponent implements OnInit {
   }
 
   ngOnInit() {
+    var navigationBarUrl = window.location.href;
+    if (navigationBarUrl) {
+      this.changeBgByNavigationBar(navigationBarUrl)
+    }
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         var url = this.router.routerState.snapshot.url
-        this.previousUrl = url
         if (url == '/login' || url == '/register' || url == '/forgot-password' || url == '/recover-password') {
           this.log = true
         } else {
@@ -61,6 +63,18 @@ export class MainPublicComponent implements OnInit {
         this.role = undefined
       }
     });
+  }
+
+  changeBgByNavigationBar(navigationBarUrl){
+    const parts = navigationBarUrl.split('/');
+    const url = parts[parts.length - 1];
+    console.log(url)
+    if (url == 'login' || url == 'register' || url == 'forgot-password' || url == 'recover-password') {
+      this.log = true
+    } else {
+      this.log = false
+    }
+    localStorage.setItem('logStatus', this.log.toString());
   }
 
   dataPickerLanguaje() {
