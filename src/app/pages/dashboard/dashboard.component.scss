@@ -1,13 +1,24 @@
-.card-design{
+.xl\:col-3 {
+    flex: 0 0 auto;
+    padding: 1rem;
+    width: 25%;
+    margin-bottom: 1rem;
+}
+
+.cards {
+    flex: 0 0 auto;
+    padding: 1rem;
+}
+
+.card-design {
     border-radius: 20px;
 }
 
-.pie-card{
-  min-height: 380px;
+.pie-card {
+    min-height: 380px;
 }
 
 .custom-icon {
-  font-size: 3.5rem;
-  margin-right: 10px;
+    font-size: 3.5rem;
+    margin-right: 10px;
 }
-

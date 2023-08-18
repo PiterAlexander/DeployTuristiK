@@ -79,7 +79,6 @@ export class LoginComponent implements OnInit {
             this.store.dispatch(
                 new LoginRequest({ email: Model.email, password: Model.password })
             );
-            this.loadingButton = false;
 
 
         }
@@ -114,6 +113,7 @@ export class LoginComponent implements OnInit {
 
             } else {
                 this.messageService.add({ key: 'alert-message-login', severity: 'error', summary: '¡Lo sentimos!', detail: this.token.message });
+                this.loadingButton = false;
             }
 
         }
