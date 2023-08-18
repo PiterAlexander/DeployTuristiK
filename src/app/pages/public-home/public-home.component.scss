@@ -28,3 +28,22 @@
   }
 }
 
+.scale{
+  scale: 1.8;
+}
+
+::ng-deep .p-carousel-indicators{
+  display: none !important;
+  
+}
+
+::ng-deep .p-carousel-next{
+  display: none !important;
+}
+::ng-deep .p-carousel-prev{
+  display: none !important;
+}
+
+::ng-deep .p-carousel-items-content{
+  height: 370px !important;
+}

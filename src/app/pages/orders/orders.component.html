@@ -57,65 +57,9 @@
         <p style="font-weight: bold; color: white;">No esperes más para vivir una aventura increíble. ¡Reserva ahora y
             comienza a explorar los tesoros que el mundo tiene para ofrecerte!</p>
     </div>
-    <p-carousel  [value]="2" [value]="packagesClients" [numVisible]="3" [numScroll]="1" [responsiveOptions]="responsiveOptions">
-        <ng-template let-package pTemplate="item">
-            <div class="p-4 surface-card surface-border card-shadow">
-                <div class="relative mb-5">
-                    <span
-                        class="surface-card text-900 shadow-2 px-3 py-2 absolute card-span">{{package.availableQuotas}}
-                        cupos</span>
-                    <img style="max-height: 300px;"
-                        src="https://b3172043.smushcdn.com/3172043/wp-content/uploads/2022/09/Ciudades-turisticas-del-Caribe-Colombiano.jpg?lossy=1&strip=1&webp=1"
-                        class="w-full" />
-                    <span
-                        class="position-absolute style-edit translate-middle bg-primary border border-light rounded-circle flex"
-                        style="top: 95%; left: 1rem;">
-                        <span class="visually-hidden">
-                            <span>{{calculateDays(package.departureDate, package.arrivalDate)}}</span>
-                            dias /
-                            <span>{{calculateDays(package.departureDate, package.arrivalDate)-1}}</span>
-                            noches
-                        </span>
-                    </span>
-                </div>
-                <div class="flex flex-column align-items-start text-start mb-3 pl-1">
-                    <div class="flex justify-content-between align-items-start mb-1">
-                        <span class="text-900 font-medium text-xl">{{package.name}}</span>
-                    </div>
-                    <p class="mt-0 mb-1 text-700 line-height-3">
-                        <span>
-                            <i class='bx bx-buildings p-1'></i>
-                            <span>Hotel </span><strong>{{package.hotel}}</strong>
-                        </span>
-                    </p>
-                    <p class="mt-0 mb-1 text-700 line-height-3">
-                        <span>
-                            <i class='bx bx-buildings p-1'></i>
-                            <span>Fecha de salida </span><strong>{{package.departureDate | date: 'd MMMM'
-                                }}</strong>
-                        </span>
-                    </p>
-                </div>
-                <hr>
-                <div class="flex justify-content-between">
-                    <div>
-                        <span class="small">Precio por persona</span>
-                        <span
-                            class="flex align-items-end text-primary text-2xl font-medium">{{package.price|currency:'USD':'symbol':'3.0'}}</span>
-                    </div>
-                    <div>
-                        <button pButton pRipple type="button" label="Ver detalles"
-                            (click)="verDetalles(package.packageId)" class="p-button-outlined p-button-sm"></button>
-                    </div>
-                </div>
-                <span class="small" style="font-size: 70%;">Incluye impuestos, tasas y servicio de
-                    hoteleria</span>
+    
 
-            </div>
-        </ng-template>
-    </p-carousel>
-
-    <div class="surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border" style="border-radius: 15px;">
+    <div class="mb-4 surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border" style="border-radius: 15px;">
 
         <p-dataView id="myDv" #dv *ngIf="visible" [value]="ordersList" filterBy="totalCost" [paginator]="true"
             [rows]="2" layout="list" [loading]="loading">
@@ -247,5 +191,64 @@
 
             </ng-template>
         </p-dataView>
+    </div>
+    <div style="border-radius: 15px;">
+        <p-carousel [value]="packagesClients" [numVisible]="3" [numScroll]="3" [responsiveOptions]="responsiveOptions">
+            <ng-template let-package pTemplate="item">
+                <div class="p-4 surface-card surface-border card-shadow">
+                    <div class="relative mb-5">
+                        <span
+                            class="surface-card text-900 shadow-2 px-3 py-2 absolute card-span">{{package.availableQuotas}}
+                            cupos</span>
+                        <img style="max-height: 300px;"
+                            [src]="package.photos"
+                            class="w-full" />
+                        <span
+                            class="position-absolute style-edit translate-middle bg-primary border border-light rounded-circle flex"
+                            style="top: 95%; left: 1rem;">
+                            <span class="visually-hidden">
+                                <span>{{calculateDays(package.departureDate, package.arrivalDate)}}</span>
+                                dias /
+                                <span>{{calculateDays(package.departureDate, package.arrivalDate)-1}}</span>
+                                noches
+                            </span>
+                        </span>
+                    </div>
+                    <div class="flex flex-column align-items-start text-start mb-3 pl-1">
+                        <div class="flex justify-content-between align-items-start mb-1">
+                            <span class="text-900 font-medium text-xl">{{package.name}}</span>
+                        </div>
+                        <p class="mt-0 mb-1 text-700 line-height-3">
+                            <span>
+                                <i class='bx bx-buildings p-1'></i>
+                                <span>Hotel </span><strong>{{package.hotel}}</strong>
+                            </span>
+                        </p>
+                        <p class="mt-0 mb-1 text-700 line-height-3">
+                            <span>
+                                <i class='bx bx-buildings p-1'></i>
+                                <span>Fecha de salida </span><strong>{{package.departureDate | date: 'd MMMM'
+                                    }}</strong>
+                            </span>
+                        </p>
+                    </div>
+                    <hr>
+                    <div class="flex justify-content-between">
+                        <div>
+                            <span class="small">Precio por persona</span>
+                            <span
+                                class="flex align-items-end text-primary text-2xl font-medium">{{package.price|currency:'USD':'symbol':'3.0'}}</span>
+                        </div>
+                        <div>
+                            <button pButton pRipple type="button" label="Ver detalles"
+                                (click)="verDetalles(package.packageId)" class="p-button-outlined p-button-sm"></button>
+                        </div>
+                    </div>
+                    <span class="small" style="font-size: 70%;">Incluye impuestos, tasas y servicio de
+                        hoteleria</span>
+    
+                </div>
+            </ng-template>
+        </p-carousel>
     </div>
 </div>

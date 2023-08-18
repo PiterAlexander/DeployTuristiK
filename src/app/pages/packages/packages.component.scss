@@ -203,8 +203,6 @@
 
 .hoverCard:hover {
   transform: scale(104%);
-  /* Escala al 110% */
-
 }
 
 .shadowContent {
@@ -342,12 +340,5 @@
     border-radius: 1.5rem;
     left: 65%;
     top: 1rem;
-  }
-}
-
-::ng-deep {
-  .pac-container {
-      z-index: 12000 !important;
-      display: block !important;
   }
 }

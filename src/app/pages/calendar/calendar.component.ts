@@ -98,6 +98,7 @@ export class CalendarComponent implements OnInit {
                         status: p.status,
                         departureDate: p.departureDate,
                         arrivalDate: p.arrivalDate,
+                        photos: p.photos,
                         tag: {color: '#FFB6B6', name: 'a'}
                     };
                     packages.push(modeloEvento);
@@ -239,5 +240,8 @@ export class CalendarComponent implements OnInit {
       console.log(departureDate, returnDate);
       
       return diferenciaDias;
+  }
+  closeDialog() {
+    this.showDialog = false;
   }
 }
