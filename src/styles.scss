@@ -27,6 +27,20 @@ body:not(.layout-fixed) .main-sidebar {
   top: 0;
 }
 
+body::-webkit-scrollbar {
+  width: 12px;
+}
+
+body::-webkit-scrollbar-track {
+  background-color: #00000000;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 20px;
+  margin: 10px; 
+}
+
 /* Google Font Import - Poppins */
 * {
   margin: 0;

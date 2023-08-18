@@ -45,6 +45,7 @@ export class AppService {
         localStorage.removeItem('TokenPayload');
         localStorage.removeItem('token');
         localStorage.removeItem('gatekeeper_token');
+        localStorage.removeItem('logStatus');
         this.user = null;
         this.store.dispatch(new GetUserInfoRequest(this.user));
 

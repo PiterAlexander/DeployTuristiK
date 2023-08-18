@@ -94,7 +94,6 @@ import { SidebarModule } from 'primeng/sidebar';
 import { DataViewModule } from 'primeng/dataview';
 import { PublicHomeComponent } from './pages/public-home/public-home.component';
 import { AboutUsComponent } from './pages/about-us/about-us.component';
-import { ContactUsComponent } from './pages/contact-us/contact-us.component';
 import { GalleriaModule } from 'primeng/galleria';
 import { AnimateEnterDirective } from '@pages/public-home/animateenter.directive';
 import { StyleClassModule } from 'primeng/styleclass';
@@ -156,7 +155,6 @@ registerLocaleData(localeEs);
     CalendarComponent,
     PublicHomeComponent,
     AboutUsComponent,
-    ContactUsComponent,
     ChangePasswordComponent,
   ],
   imports: [
