@@ -109,7 +109,7 @@ export class LoginComponent implements OnInit {
                 );
 
                 this.authService.setToken(this.token.result);
-                this.messageService.add({ key: 'alert-message-login', severity: 'success', summary: 'Bienvenid@', detail: this.token.message });
+                this.messageService.add({ key: 'alert-message-login', severity: 'success', summary: 'Bienvenido', detail: this.token.message });
 
             } else {
                 this.messageService.add({ key: 'alert-message-login', severity: 'error', summary: '¡Lo sentimos!', detail: this.token.message });

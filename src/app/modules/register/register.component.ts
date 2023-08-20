@@ -90,6 +90,7 @@ export class RegisterComponent implements OnInit {
             address: new FormControl(null, [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
             eps: new FormControl(null, [Validators.required]),
             confirmPassword: new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
+            termsAndConditions: new FormControl(null, [Validators.required]),
         });
 
     }
@@ -99,7 +100,6 @@ export class RegisterComponent implements OnInit {
         console.log(event.query);
         const filtered: any[] = [];
         const query = event.query.toLowerCase();
-        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.allEps.length; i++) {
             const Eps = this.allEps[i].toLowerCase();
             if (Eps.includes(query)) {
@@ -193,7 +193,6 @@ export class RegisterComponent implements OnInit {
 
         this.userMaxDate = new Date(currentDate);
         this.userMaxDate.setFullYear(currentDate.getFullYear() - 18);
-        console.log(this.userMaxDate)
     }
 
     validatePassword(): boolean {

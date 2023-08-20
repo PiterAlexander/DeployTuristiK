@@ -1,7 +1,7 @@
 
 import * as Actions from './actions';
-import {UiAction} from './actions';
-import initialState, {UiState} from './state';
+import { UiAction } from './actions';
+import initialState, { UiState } from './state';
 
 export function uiReducer(state: UiState = initialState, action: UiAction) {
     switch (action.type) {
@@ -225,6 +225,36 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 onePayment: {
                     data: action.payload,
                     error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.orderActions.GET_ALL_PAYMENTS_REQUEST:
+            return {
+                ...state,
+                allPayments: {
+                    data: [],
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+        case Actions.orderActions.GET_ALL_PAYMENTS_SUCCESS:
+            return {
+                ...state,
+                allPayments: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.orderActions.GET_ALL_PAYMENTS_FAILURE:
+            return {
+                ...state,
+                allPayments: {
+                    data: [],
+                    error: action.payload,
                     loading: false
                 }
             };
@@ -520,65 +550,65 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
             };
 
 
-            case Actions.loginActions.SAVE_CURRENT_USER_REQUEST:
-                return {
-                    ...state,
-                    currentUser: {
-                        data: action.payload,
-                        error: undefined,
-                        loading: true
-                    }
-                };
-    
-            case Actions.loginActions.SAVE_CURRENT_USER_SUCCESS:
-                return {
-                    ...state,
-                    currentUser: {
-                        data: action.payload,
-                        error: undefined,
-                        loading: false
-                    }
-                };
-    
-            case Actions.loginActions.SAVE_CURRENT_USER_FAILURE:
-                return {
-                    ...state,
-                    currentUser: {
-                        data: undefined,
-                        error: action.payload,
-                        loading: false
-                    }
-                };
+        case Actions.loginActions.SAVE_CURRENT_USER_REQUEST:
+            return {
+                ...state,
+                currentUser: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: true
+                }
+            };
 
-                case Actions.loginActions.CHANGE_PASSWORD_REQUEST:
-                    return {
-                        ...state,
-                        passwordChanged: {
-                            data: undefined,
-                            error: undefined,
-                            loading: true
-                        }
-                    };
-        
-                case Actions.loginActions.CHANGE_PASSWORD_SUCCESS:
-                    return {
-                        ...state,
-                        passwordChanged: {
-                            data: action.payload,
-                            error: undefined,
-                            loading: false
-                        }
-                    };
-        
-                case Actions.loginActions.CHANGE_PASSWORD_FAILURE:
-                    return {
-                        ...state,
-                        passwordChanged: {
-                            data: undefined,
-                            error: action.payload,
-                            loading: false
-                        }
-                    };
+        case Actions.loginActions.SAVE_CURRENT_USER_SUCCESS:
+            return {
+                ...state,
+                currentUser: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.loginActions.SAVE_CURRENT_USER_FAILURE:
+            return {
+                ...state,
+                currentUser: {
+                    data: undefined,
+                    error: action.payload,
+                    loading: false
+                }
+            };
+
+        case Actions.loginActions.CHANGE_PASSWORD_REQUEST:
+            return {
+                ...state,
+                passwordChanged: {
+                    data: undefined,
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+        case Actions.loginActions.CHANGE_PASSWORD_SUCCESS:
+            return {
+                ...state,
+                passwordChanged: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.loginActions.CHANGE_PASSWORD_FAILURE:
+            return {
+                ...state,
+                passwordChanged: {
+                    data: undefined,
+                    error: action.payload,
+                    loading: false
+                }
+            };
         //<------------>
         default:
             return state;
