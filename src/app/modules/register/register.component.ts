@@ -164,16 +164,15 @@ export class RegisterComponent implements OnInit {
                     status: 1,
                     roleId: idRole.roleId,
                 }
-                
-                this.store.dispatch(new UpdateUserRequest({ ...updateUser }))
-                this.store.dispatch(new EditCustomerRequest({ ...customer }))
 
+                this.store.dispatch(new EditCustomerRequest({ ...customer }))
+                this.store.dispatch(new UpdateUserRequest({ ...updateUser }))
             }
 
             this.messageService.add({ key: 'alert-message-register', severity: 'success', summary: '¡Usuario registrado éxitosamente!', detail: "En un momento ingresará al sistema" });
 
 
-            setTimeout(() => this.login(user), 3000)
+            setTimeout(() => this.login(user), 2000)
             this.getToken();
 
 
