@@ -49,6 +49,8 @@ import {
     ContactUsRequest,
     ContactUsFailure,
     ContactUsSuccess,
+    GetAllPaymentsSuccess,
+    GetAllPaymentsFailure,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { ApiService } from '@services/api.service';
@@ -425,6 +427,20 @@ export class PackageEffects {
                     ];
                 }),
                 catchError((err) => of(new EditPaymentFailure(err)))
+            )
+        })
+    ));
+
+    getPayments$ = createEffect(() => this.actions$.pipe(
+        ofType(orderActions.GET_ALL_PAYMENTS_REQUEST),
+        switchMap((action) => {
+            return this.apiService.getPayments().pipe(
+                mergeMap((paymentsResolved) => {
+                    return [
+                        new GetAllPaymentsSuccess(paymentsResolved)
+                    ];
+                }),
+                catchError((err) => of(new GetAllPaymentsFailure(err)))
             )
         })
     ));

@@ -1,11 +1,13 @@
-import {Order} from '@/models/order';
-import {Package} from '@/models/package';
-import {AppState} from '@/store/state';
-import {GetAllOrdersRequest, GetTopPackagesRequest} from '@/store/ui/actions';
-import {UiState} from '@/store/ui/state';
-import {Component, OnInit} from '@angular/core';
-import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
+import { Order } from '@/models/order';
+import { Package } from '@/models/package';
+import { Payment } from '@/models/payment';
+import { User } from '@/models/user';
+import { AppState } from '@/store/state';
+import { GetAllOrdersRequest, GetAllPaymentsRequest, GetTopPackagesRequest, GetUsersRequest } from '@/store/ui/actions';
+import { UiState } from '@/store/ui/state';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-dashboard',
@@ -17,10 +19,19 @@ export class DashboardComponent implements OnInit {
 
     pieData: any;
     pieOptions: any;
+    public customers: Array<User>;
+    public payments: Array<Payment>;
     public packagesList: Array<Package>;
     public ordersList: Array<Order> = [];
-    public porCupSep: number = 45;
-    public porAbo: number = 70;
+    public porCupSep: number = 20;
+    public porAbo: number;
+    public porVen: number = 40;
+    public customerCount: number
+    public paymentCurrentMonth: number;
+    public paymentLastMonth: number;
+    public randomPayments: number;
+    public loadingPayments = true;
+
 
     public lineChartData: any = {};
 
@@ -33,16 +44,21 @@ export class DashboardComponent implements OnInit {
 
     public dataLoaded = false;
 
-    constructor(private store: Store<AppState>) {}
+    constructor(private store: Store<AppState>) { }
 
     ngOnInit(): void {
         this.store.dispatch(new GetTopPackagesRequest());
         this.store.dispatch(new GetAllOrdersRequest());
+        this.store.dispatch(new GetUsersRequest())
+        this.store.dispatch(new GetAllPaymentsRequest());
         this.ui = this.store.select('ui');
         this.ui.subscribe((state: UiState) => {
+            this.customers = state.allUsers.data.filter(user => user.role.name == 'Cliente')
             this.packagesList = state.allTopPackages.data;
             this.ordersList = state.allOrders.data;
+            this.payments = state.allPayments.data;
             this.initCharts();
+            this.initValues();
         });
     }
 
@@ -104,4 +120,30 @@ export class DashboardComponent implements OnInit {
             };
         }
     }
+
+    initValues() {
+        this.paymentCurrentMonth = 0
+        this.paymentLastMonth = 0
+        this.porAbo = 0
+
+        this.loadingPayments = true
+
+        const currentDate = new Date();
+        this.customerCount = this.customers.length;
+        for (let i = 0; i < this.payments.length; i++) {
+            this.randomPayments = Math.floor(Math.random() * 100)
+            const date = new Date(this.payments[i].date)
+            if (date.getMonth() == currentDate.getMonth() && date.getFullYear() == currentDate.getFullYear()) {
+                this.paymentCurrentMonth += this.payments[i].amount;
+            } else if (date.getMonth() == currentDate.getMonth() - 1 && date.getFullYear() == currentDate.getFullYear()) {
+                this.paymentLastMonth += this.payments[i].amount;
+            }
+        }
+        this.porAbo = ((this.paymentCurrentMonth - this.paymentLastMonth) / this.paymentCurrentMonth) * 100
+        this.loadingPayments = false
+
+
+    }
+
+
 }

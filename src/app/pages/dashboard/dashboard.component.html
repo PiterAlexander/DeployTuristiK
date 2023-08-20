@@ -1,101 +1,152 @@
 <div class="p-4">
-  <div class="col-12">
-    <div class="content-f-luid">
-      <div class="grid">
-        <div class="col-12 md:col-6 xl:col-3">
-          <div class="card h-full">
-            <span class="font-semibold text-xl">Ventas</span>
-            <div class="flex justify-content-between align-items-start mt-3">
-              <div class="w-12">
-                <span class="text-4xl font-bold text-900"><i
-                    class="pi pi-dollar text-green text-3xl mb-4 mr-2"></i>500000</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 md:col-6 xl:col-3">
-          <div class="card h-full">
-            <span class="font-semibold text-xl">Ingresos</span>
-            <div class="flex justify-content-between align-items-start mt-3">
-              <div class="w-12">
-                <span class="text-4xl font-bold text-900"><i
-                    class="pi pi-money-bill text-green text-3xl mb-4 mr-2"></i>200000</span>
-              </div>
-            </div>
-            <div [ngClass]="{
+    <div class="col-12">
+        <div class="content-f-luid">
+            <div class="grid">
+                <div class="col-12 md:col-6 xl:col-4">
+                    <div class="card h-full">
+                        <span class="font-semibold text-xl">Ventas Esperadas</span>
+                        <div class="flex justify-content-between mt-3">
+                            <div class="w-12">
+                                <span class="text-4xl font-bold text-900"
+                                    >${{
+                                        500000000 | currency: ' ':false:'1.0-0'
+                                    }}</span
+                                >
+                            </div>
+                        </div>
+                        <div
+                            class="mt-3"
+                            [ngClass]="{
+                                'text-green-500': porVen >= 60,
+                                'text-yellow-500': porVen < 60 && porVen >= 40,
+                                'text-red-500': porVen < 39
+                            }"
+                        >
+                            <span class="text-xl">{{ porVen }}%</span>
+                            <i
+                                class="text-lg ml-2 pi"
+                                [ngClass]="{
+                                    'pi-arrow-up': porVen >= 60,
+                                    'pi-arrows-v': porVen < 60 && porVen >= 40,
+                                    'pi-arrow-down': porVen < 39
+                                }"
+                            ></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 md:col-6 xl:col-4">
+                    <div class="card h-full">
+                        <span class="font-semibold text-xl">Ingreso Mensual</span>
+                        <div
+                            class="flex justify-content-between align-items-start mt-3"
+                        >
+                            <div class="w-12">
+                                <span
+                                    class="text-4xl font-bold text-900"
+                                    *ngIf="!loadingPayments"
+                                    >${{
+                                        paymentCurrentMonth
+                                            | currency: ' ':false:'1.0-0'
+                                    }}</span
+                                >
+                                <span
+                                    class="text-4xl font-bold text-900"
+                                    *ngIf="loadingPayments"
+                                    >${{
+                                        randomPayments
+                                            | currency: ' ':false:'1.0-0'
+                                    }}</span
+                                >
+                            </div>
+                        </div>
+                        <div
+                            class="mt-3"
+                            [ngClass]="{
                                 'text-green-500': porAbo >= 60,
                                 'text-yellow-500': porAbo < 60 && porAbo >= 40,
                                 'text-red-500': porAbo < 39
-                            }">
-              <span class="text-xl">{{ porAbo }}%</span>
-              <i class="pi pi-arrow-up text-lg ml-2"></i>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 md:col-6 xl:col-3">
-          <div class="card h-full">
-            <span class="font-semibold text-xl">Clientes</span>
-            <div class="flex justify-content-between align-items-start mt-3">
-              <div class="w-12">
-                <span class="text-4xl font-bold text-900"><i
-                    class="pi pi-users text-primary text-3xl mb-4 mr-2"></i>12</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 md:col-6 xl:col-3">
-          <div class="card h-full">
-            <span class="font-semibold text-xl">
-              Cupos Separados</span>
-            <div class="flex justify-content-between align-items-start mt-3">
-              <div class="w-12">
-                <span class="text-4xl font-bold text-900"><i
-                    class="pi pi-briefcase text-primary text-3xl mb-4 mr-2"></i>200</span>
-              </div>
-            </div>
-            <div [ngClass]="{
-                                'text-green-500': porCupSep >= 60,
-                                'text-yellow-500':
-                                    porCupSep < 60 && porCupSep >= 40,
-                                'text-red-500': porCupSep < 39
-                            }">
-              <span class="text-xl">{{ porCupSep }}%</span>
-              <i class="pi pi-arrow-up text-lg ml-2"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="grid">
-        <div class="col-12 xl:col-4 pie-card">
-          <div class="card h-full">
-            <div class="text-900 text-xl font-semibold mb-6">
-              Paquetes más vendidos
-            </div>
-            <div class="col-12 text-center">
-              <div class="card bg-cyan-100 text-lg py-4 align-content-center justify-content-around"
-                style="min-height: 230px;" *ngIf="packagesList.length < 3">
-                <div class="d-flex flex-column align-content-around">
-                  <i class="pi pi-info-circle custom-icon text-cyan-500 mb-4"></i>
-                  <span class="text-cyan-500">Lo sentimos. No hay suficientes
-                    paquetes para mostrar la
-                    comparativa.</span>
+                            }"
+                        >
+                            <span class="text-xl">{{ porAbo }}%</span>
+                            <i
+                                class="text-lg ml-2 pi"
+                                [ngClass]="{
+                                    'pi-arrow-up': porAbo >= 60,
+                                    'pi-arrows-v': porAbo < 60 && porAbo >= 40,
+                                    'pi-arrow-down': porAbo < 39
+                                }"
+                            ></i>
+                        </div>
+                    </div>
                 </div>
-              </div>
+                <div class="col-12 md:col-6 xl:col-4">
+                    <div class="card h-full">
+                        <span class="font-semibold text-xl">Clientes</span>
+                        <div
+                            class="flex justify-content-between align-items-start mt-3"
+                        >
+                            <div class="w-12">
+                                <span class="text-4xl font-bold text-900"
+                                    ><i
+                                        class="pi pi-users text-primary text-3xl mb-4 mr-2"
+                                    ></i
+                                    >{{ customerCount }}</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
-            <p-chart *ngIf="packagesList.length >= 3" type="pie" [data]="pieData" [options]="pieOptions"></p-chart>
-          </div>
-        </div>
-        <div class="col-8 md:col-8 xl:col-8">
-          <div class="card p-3 card-design">
-            <div class="chart-container">
-              <div class="text-900 text-xl font-semibold mb-3">
-                Paquetes más vendidos
-              </div>
-              <p-chart type="line" [data]="lineChartData" [options]="lineChartOptions"></p-chart>
+            <div class="grid">
+                <div class="col-12 xl:col-4 pie-card cards">
+                    <div class="card h-full">
+                        <div class="text-900 text-xl font-semibold mb-6">
+                            Paquetes más vendidos
+                        </div>
+                        <div class="col-12 text-center">
+                            <div
+                                class="card bg-cyan-100 text-lg py-4 align-content-center justify-content-around"
+                                style="min-height: 230px"
+                                *ngIf="packagesList.length < 3"
+                            >
+                                <div
+                                    class="d-flex flex-column align-content-around"
+                                >
+                                    <i
+                                        class="pi pi-info-circle custom-icon text-cyan-500 mb-4"
+                                    ></i>
+                                    <span class="text-cyan-500"
+                                        >Lo sentimos. No hay suficientes
+                                        paquetes para mostrar la
+                                        comparativa.</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <p-chart
+                            *ngIf="packagesList.length >= 3"
+                            type="pie"
+                            [data]="pieData"
+                            [options]="pieOptions"
+                        ></p-chart>
+                    </div>
+                </div>
+                <div class="col-8 md:col-8 xl:col-8 cards">
+                    <div class="card p-3 card-design">
+                        <div class="chart-container">
+                            <div class="text-900 text-xl font-semibold mb-3">
+                                Paquetes más vendidos
+                            </div>
+                            <p-chart
+                                type="line"
+                                [data]="lineChartData"
+                                [options]="lineChartOptions"
+                            ></p-chart>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>

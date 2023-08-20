@@ -169,7 +169,7 @@ export class OpenModalCreatePackage implements Action {
 }
 export class CreatePackageRequest implements Action {
   readonly type: string = packageActions.CREATE_PACKAGE_REQUEST;
-  constructor(public payload: Package) { 
+  constructor(public payload: Package) {
     console.log(payload)
   }
 }
@@ -262,6 +262,10 @@ export enum orderActions {
   EDIT_PAYMENT_REQUEST = '[PAYMENT] EDIT_PAYMENT_REQUEST',
   EDIT_PAYMENT_SUCCESS = '[PAYMENT] EDIT_PAYMENT_SUCCESS',
   EDIT_PAYMENT_FAILURE = '[PAYMENT] EDIT_PAYMENT_FAILURE',
+
+  GET_ALL_PAYMENTS_REQUEST = '[PAYMENT] GET_ALL_PAYMENTS_REQUEST',
+  GET_ALL_PAYMENTS_SUCCESS = '[PAYMENT] GET_ALL_PAYMENTS_SUCCESS',
+  GET_ALL_PAYMENTS_FAILURE = '[PAYMENT] GET_ALL_PAYMENTS_FAILURE',
 }
 
 
@@ -395,6 +399,18 @@ export class EditPaymentSuccess implements Action {
 }
 export class EditPaymentFailure implements Action {
   readonly type: string = orderActions.EDIT_PAYMENT_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class GetAllPaymentsRequest implements Action {
+  readonly type: string = orderActions.GET_ALL_PAYMENTS_REQUEST;
+}
+export class GetAllPaymentsSuccess implements Action {
+  readonly type: string = orderActions.GET_ALL_PAYMENTS_SUCCESS;
+  constructor(public payload: Array<Payment>) { }
+}
+export class GetAllPaymentsFailure implements Action {
+  readonly type: string = orderActions.GET_ALL_PAYMENTS_FAILURE;
   constructor(public payload: string) { }
 }
 //<--------------------->
@@ -923,6 +939,8 @@ export type UiAction =
   | CreatePaymentRequest
   | CreatePaymentSuccess
   | CreatePaymentFailure
+  | GetAllPaymentsSuccess
+  | GetAllPaymentsFailure
   //<--------------------->
   //<---ROLES--->
   | GetAllRoleSuccess
