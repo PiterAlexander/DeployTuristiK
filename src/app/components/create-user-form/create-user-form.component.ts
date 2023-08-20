@@ -72,7 +72,6 @@ export class CreateUserFormComponent implements OnInit {
     ]
 
     this.formGroup = this.fb.group({
-      userId: [null],
       role: [null, Validators.required],
       email: [null,
         [Validators.required,
@@ -93,7 +92,6 @@ export class CreateUserFormComponent implements OnInit {
 
     if (this.userData != null) {
       this.formGroup.setValue({
-        userId: this.userData.userId,
         role: this.userData.roleId,
         email: this.userData.email,
         password: '',
@@ -150,7 +148,7 @@ export class CreateUserFormComponent implements OnInit {
 
     } else {
       this.model = {
-        userId: this.formGroup.value.userId,
+        userId: this.userData.userId,
         email: this.formGroup.value.email,
         password: this.userData.password,
         status: this.formGroup.value.status,
