@@ -1,11 +1,13 @@
 <div class="bg-circle opacity-50" style="top: -200px; left: -700px;"></div>
 <div class="bg-circle hidden lg:flex" style="top: 50px; right:-800px; transform: rotate(60deg)"></div>
 <br><br>
+<p-scrollTop [threshold]="200"></p-scrollTop>
 <div class="relative overflow-hidden flex flex-column justify-content-center">
 
   <div class="landing-wrapper">
     <div class="py-4 px-4 mx-0 z-2">
-      <div id="home" class="grid grid-nogutter justify-content-between align-items-center mb-6 py-6 md:mb-8 md:py-8">
+      <div id="home" class="grid grid-nogutter justify-content-between align-items-center mb-6 py-6 md:mb-8 md:py-8"
+        style="height: 70vh;">
         <div
           class="col-12 md:col-4 flex flex-column gap-4 flex-order-1 md:flex-order-0 align-items-center md:align-items-start text-center md:text-left">
           <span class="block text-900 font-bold text-4xl">Bienvenido a TuristiK</span>
@@ -39,41 +41,88 @@
             <div class="flex flex-column text-center md:text-left">
               <span class="text-900 text-2xl mb-3 pl-2">Mas vendidos</span>
             </div>
-            <div class="grid grid-nogutter px-2 flex-column md:flex-row" style="column-gap: 2rem; row-gap: 2rem;">
-              <div *ngFor="let item of top"
-                class="col flex flex-column justify-content-center text-start  align-items-start border-1 surface-border py-5 px-4 border-round">
-                <div class="mb-3 relative">
-                  <img src="https://ciudadperdidatezhuna.com/wp-content/uploads/2023/05/region-caribe.webp"
-                    class="w-full" />
-                </div>
-                <div class="row w-full">
-                  <div class="col-8 w-ful">
-                    <span class="text-xl text-900 font-medium mb-3">{{item.name}}</span><br>
-                    <span class="text-xl text-900 mb-3">{{item.price|currency:'USD':'symbol':'3.0'}}</span>
-                  </div>
-                  <div class="col-4">
-                    <div class="col p-1" style="display: flex;
-                          justify-content: center;
-                          align-items: center;">
-                      <a pTooltip="Hotel: {{item.hotel}}" tooltipPosition="bottom" class="p-button-outlined p-button">
-                        <i class='bx bxs-hotel scale'></i>
-                      </a>
-                    </div>
-                    <div class="col p-1" style="display: flex;
-                          justify-content: center;
-                          align-items: center;" *ngIf="item.transport == '1'">
-                      <a pTooltip="Transporte: Terrestre" tooltipPosition="bottom" class="p-button-outlined p-button">
-                        <i class='bx bxs-bus scale'></i>
-                      </a>
-                    </div>
-                    <div class="col p-1" style="display: flex;
-                          justify-content: center;
-                          align-items: center;" *ngIf="item.transport == '2'">
-                      <a class="p-button-outlined p-button" pTooltip="Transporte: Aereo" tooltipPosition="bottom">
+            <div class="grid grid-nogutter px-2 flex-column md:flex-row"
+              [ngClass]="{'single-card-size': top.length === 1}" style="column-gap: 2rem; row-gap: 2rem;">
 
-                        <i class='bx bxs-plane-take-off scale'></i>
-                      </a>
+              <div *ngFor="let item of top"
+                class="col flex flex-column justify-content-center text-start  align-items-start border-1 surface-border py-4 px-3 border-round"
+                [ngClass]="{'single-card': top.length === 1}">
+                <div *ngIf="top.length === 1" style="width: 100% !important; height: 300px !important;">
+                  <div class="flex flex-column md:flex-row p-1 w-full">
+                    <p-image [preview]="true" [src]="item.photos" preview="true" [alt]="item.name"
+                      class="md:my-0 shadow-2 mr-5" width="380" height="300"></p-image>
+                    <div>
+                      <div class="flex-1 flex flex-column align-items-start text-start md:text-left">
+                        <div class="font-semibold text-5xl">{{item.name}}</div>
+                        <div class="mb-2">{{item.description}}</div>
+
+                        <div class="flex align-items-center mt-2">
+                          <span class="font-semibold">{{item.details}}</span>
+                        </div>
+                        <div class="flex align-items-center mt-2">
+                          <span class="font-semibold"><i class="bx bxs-plane-take-off m-2" style="scale: 1.5;"></i>Lugar
+                            de partida: {{item.departurePoint}}</span>
+                        </div>
+                        <div class="justify-content-between flex align-items-end w-full">
+                          <div class="my-5">
+                            <button pButton pRipple icon="bx bxs-hotel" class="mr-2 p-button-rounded p-button-outlined"
+                              pTooltip="{{item.hotel}}" tooltipPosition="bottom"></button>
+                            <button *ngIf="item.transport == 1" pButton icon="bx bxs-bus"
+                              class="p-button-rounded p-button-outlined" pTooltip="Transporte terrestre"
+                              tooltipPosition="bottom"></button>
+                            <button *ngIf="item.transport == 2" pButton icon="bx bxs-plane-take-off"
+                              class="p-button-rounded p-button-outlined" pTooltip="Transporte aereo"
+                              tooltipPosition="bottom"></button>
+                          </div>
+                          <div
+                            class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end md:mt-0 mr-3">
+                            <span
+                              class="text-4xl font-semibold align-self-center md:align-self-end">${{item.price}}</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                  </div>
+                </div>
+
+
+
+                <div *ngIf="top.length > 1">
+                  <div class="mb-3 relative w-100">
+                    <p-image [classList]="'edit-span'" [preview]="true" [src]="item.photos" preview="true"
+                      [alt]="item.name" class="md:my-0 shadow-2 mr-5" height="300"></p-image>
+                  </div>
+                  <div class="row w-full style-content-top ml-2">
+                    <div class="col-8 w-full">
+                      <span class="text-xl text-900 font-medium mb-3">{{item.name}}</span><br>
+                      <span class="text-xl text-900 mb-3">{{item.price|currency:'USD':'symbol':'3.0'}}</span>
+                    </div>
+                    <div class="col-4 d-flex">
+                      <div class="col p-1" style="display: flex;
+                              justify-content: center;
+                              align-items: center;">
+                        <a pTooltip="Hotel: {{item.hotel}}" tooltipPosition="bottom" class="p-button-outlined p-button">
+                          <i class='bx bxs-hotel scale'></i>
+                        </a>
+                      </div>
+                      <div class="col p-1" style="display: flex;
+                              justify-content: center;
+                              align-items: center;" *ngIf="item.transport == '1'">
+                        <a pTooltip="Transporte: Terrestre" tooltipPosition="bottom" class="p-button-outlined p-button">
+                          <i class='bx bxs-bus scale'></i>
+                        </a>
+                      </div>
+                      <div class="col p-1" style="display: flex;
+                              justify-content: center;
+                              align-items: center;" *ngIf="item.transport == '2'">
+                        <a class="p-button-outlined p-button" pTooltip="Transporte: Aereo" tooltipPosition="bottom">
+
+                          <i class='bx bxs-plane-take-off scale'></i>
+                        </a>
+                      </div>
+                    </div>
+
+
                   </div>
                 </div>
               </div>
@@ -109,16 +158,15 @@
           <div class="md:col-4 sm:col-12 p-2">
             <div class="surface-100 cursor-pointer z-index border-round">
               <div class="relative">
-                <img
-                  [src]="'assets/demo/images/blog/blog-1.png'"
-                  class="w-full" />
+                <img [src]="'assets/demo/images/blog/blog-1.png'" class="w-full" />
                 <img [src]="'assets/demo/images/avatar/circle/avatar-f-1.png'" class="flex absolute w-4rem h-4rem"
                   style="bottom: -1.5rem; right: 1.5rem">
               </div>
               <div class="p-3">
                 <div class="text-900 font-semibold text-xl mb-3">Cristina Medrano</div>
-                <p class="text-700 text-lg mt-0 mb-5">Fue un gran viaje y me senti muy agusto con el trato que me ofrecieron, el hotel estuvo genial y la experiencia igual</p>
-  
+                <p class="text-700 text-lg mt-0 mb-5">Fue un gran viaje y me senti muy agusto con el trato que me
+                  ofrecieron, el hotel estuvo genial y la experiencia igual</p>
+
                 <div class="flex flex-wrap gap-2 align-items-center justify-content-between">
                   <span class="flex align-items-center text-900">
                     <i class="pi pi-clock mr-2"></i>
@@ -133,15 +181,14 @@
             <div class="surface-100 cursor-pointer z-index border-round">
 
               <div class="relative">
-                <img
-                  [src]="'assets/demo/images/blog/blog-2.png'"
-                  class="w-full" />
+                <img [src]="'assets/demo/images/blog/blog-2.png'" class="w-full" />
                 <img [src]="'assets/demo/images/avatar/circle/avatar-f-2.png'" class="flex absolute w-4rem h-4rem"
                   style="bottom: -1.5rem; right: 1.5rem">
               </div>
               <div class="p-3">
                 <div class="text-900 font-semibold text-xl mb-3">Carlota Vanegas</div>
-                <p class="text-700 text-lg mt-0 mb-5">Fue un gran viaje y me senti muy agusto con el trato que me ofrecieron, el hotel estuvo genial y la experiencia igual</p>
+                <p class="text-700 text-lg mt-0 mb-5">Fue un gran viaje y me senti muy agusto con el trato que me
+                  ofrecieron, el hotel estuvo genial y la experiencia igual</p>
                 <div class="flex flex-wrap gap-2 align-items-center justify-content-between">
                   <span class="flex align-items-center text-900">
                     <i class="pi pi-clock mr-2"></i>
@@ -155,15 +202,14 @@
           <div class="md:col-4 sm:col-12 p-2">
             <div class="surface-100 cursor-pointer z-index border-round">
               <div class="relative">
-                <img
-                  [src]="'assets/demo/images/blog/blog-3.png'"
-                  class="w-full" />
+                <img [src]="'assets/demo/images/blog/blog-3.png'" class="w-full" />
                 <img [src]="'assets/demo/images/avatar/circle/avatar-f-3.png'" class="flex absolute w-4rem h-4rem"
                   style="bottom: -1.5rem; right: 1.5rem">
               </div>
               <div class="p-3">
                 <div class="text-900 font-semibold text-xl mb-3">Juanita Cardona</div>
-                <p class="text-700 text-lg mt-0 mb-5">Fue un gran viaje y me senti muy agusto con el trato que me ofrecieron, el hotel estuvo genial y la experiencia igual</p>
+                <p class="text-700 text-lg mt-0 mb-5">Fue un gran viaje y me senti muy agusto con el trato que me
+                  ofrecieron, el hotel estuvo genial y la experiencia igual</p>
                 <div class="flex flex-wrap gap-2 align-items-center justify-content-between">
                   <span class="flex align-items-center text-900">
                     <i class="pi pi-clock mr-2"></i>
@@ -173,7 +219,7 @@
                 </div>
               </div>
             </div>
-  
+
           </div>
         </div>
       </div>
