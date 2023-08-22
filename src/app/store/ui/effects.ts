@@ -49,23 +49,99 @@ import {
     ContactUsRequest,
     ContactUsFailure,
     ContactUsSuccess,
+    packageActions,
+    CreateAssociatedPermissionFailure,
+    CreateAssociatedPermissionRequest,
+    CreateAssociatedPermissionSuccess,
+    CreateCustomerFailure,
+    CreateCustomerRequest,
+    CreateCustomerSuccess,
+    CreateEmployeeFailure,
+    CreateEmployeeRequest,
+    CreateEmployeeSuccess,
+    CreateOrderFailure,
+    CreateOrderRequest,
+    CreateOrderSuccess,
+    CreatePackageFailure,
+    CreatePackageRequest,
+    CreatePackageSuccess,
+    CreatePaymentFailure,
+    CreatePaymentRequest,
+    CreatePaymentSuccess,
+    CreateRoleFailure,
+    CreateRoleRequest,
+    CreateRoleSuccess,
+    CreateUserFailure,
+    CreateUserRequest,
+    CreateUserSuccess,
+    DeleteAssociatedPermissionFailure,
+    DeleteAssociatedPermissionRequest,
+    DeleteAssociatedPermissionSuccess,
+    DeleteEmployeeFailure,
+    DeleteEmployeeRequest,
+    DeleteEmployeeSuccess,
+    DeleteRoleFailure,
+    DeleteRoleRequest,
+    DeleteRoleSuccess,
+    EditCustomerFailure,
+    EditCustomerRequest,
+    EditCustomerSuccess,
+    EditEmployeeFailure,
+    EditEmployeeRequest,
+    EditEmployeeSuccess,
+    EditOrderDetailFailure,
+    EditOrderDetailRequest,
+    EditOrderDetailSuccess,
+    EditOrderFailure,
+    EditOrderRequest,
+    EditOrderSuccess,
+    EditPackageFailure,
+    EditPackageRequest,
+    EditPackageSuccess,
+    EditRoleFailure,
+    EditRoleRequest,
+    EditRoleSuccess,
+    GetAllCustomerFailure,
+    GetAllCustomerRequest,
+    GetAllCustomerSuccess,
+    GetAllEmployeeFailure,
+    GetAllEmployeeRequest,
+    GetAllEmployeeSuccess,
+    GetAllOrdersFailure,
+    GetAllOrdersRequest,
+    GetAllOrdersSuccess,
+    GetAllPackagesFailure,
+    GetAllPackagesRequest,
+    GetAllPackagesSuccess,
+    GetAllPermissionsFailure,
+    GetAllPermissionsSuccess,
+    GetAllRoleFailure,
+    GetAllRoleRequest,
+    GetAllRoleSuccess,
+    GetUsersFailure,
+    GetUsersRequest,
+    GetUsersSuccess,
+    UpdateUserFailure,
+    UpdateUserRequest,
+    UpdateUserSuccess,
+    customerActions,
+    employeeActions,
+    orderActions,
+    permissionActions,
+    roleActions,
+    userActions,
     GetAllPaymentsSuccess,
     GetAllPaymentsFailure,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { ApiService } from '@services/api.service';
 import { of } from 'rxjs';
-import { CreateAssociatedPermissionFailure, CreateAssociatedPermissionRequest, CreateAssociatedPermissionSuccess, CreateCustomerFailure, CreateCustomerRequest, CreateCustomerSuccess, CreateEmployeeFailure, CreateEmployeeRequest, CreateEmployeeSuccess, CreateOrderFailure, CreateOrderRequest, CreateOrderSuccess, CreatePackageFailure, CreatePackageRequest, CreatePackageSuccess, CreatePaymentFailure, CreatePaymentRequest, CreatePaymentSuccess, CreateRoleFailure, CreateRoleRequest, CreateRoleSuccess, CreateUserFailure, CreateUserRequest, CreateUserSuccess, DeleteAssociatedPermissionFailure, DeleteAssociatedPermissionRequest, DeleteAssociatedPermissionSuccess, DeleteEmployeeFailure, DeleteEmployeeRequest, DeleteEmployeeSuccess, DeleteRoleFailure, DeleteRoleRequest, DeleteRoleSuccess, EditCustomerFailure, EditCustomerRequest, EditCustomerSuccess, EditEmployeeFailure, EditEmployeeRequest, EditEmployeeSuccess, EditOrderDetailFailure, EditOrderDetailRequest, EditOrderDetailSuccess, EditOrderFailure, EditOrderRequest, EditOrderSuccess, EditPackageFailure, EditPackageRequest, EditPackageSuccess, EditRoleFailure, EditRoleRequest, EditRoleSuccess, GetAllCustomerFailure, GetAllCustomerRequest, GetAllCustomerSuccess, GetAllEmployeeFailure, GetAllEmployeeRequest, GetAllEmployeeSuccess, GetAllOrdersFailure, GetAllOrdersRequest, GetAllOrdersSuccess, GetAllPackagesFailure, GetAllPackagesRequest, GetAllPackagesSuccess, GetAllPermissionsFailure, GetAllPermissionsSuccess, GetAllRoleFailure, GetAllRoleRequest, GetAllRoleSuccess, GetUsersFailure, GetUsersRequest, GetUsersSuccess, OpenModalPayments, UpdateUserFailure, UpdateUserRequest, UpdateUserSuccess, customerActions, employeeActions, orderActions, packageActions, permissionActions, roleActions, userActions } from './actions';
 import { CreatePackageFormComponent } from '@components/create-package-form/create-package-form.component';
 import { CreateOrderFormComponent } from '@components/create-order-form/create-order-form.component';
-import { CreateOrderDetailFormComponent } from '@components/create-order-detail-form/create-order-detail-form.component';
 import { CreateRoleFormComponent } from '@components/create-role-form/create-role-form.component';
 import { DetailsPackageComponent } from '@components/details-package/details-package.component';
 import { CreateEmployeeFormComponent } from '@components/create-employee-form/create-employee-form.component';
 import { CreateUserFormComponent } from '@components/create-user-form/create-user-form.component';
-import { CreatePaymentFormComponent } from '@components/create-payment-form/create-payment-form.component';
-import { ReadOrderOrderDetailComponent } from '@components/read-order-order-detail/read-order-order-detail.component';
-import { ReadOrderPaymentComponent } from '@components/read-order-payment/read-order-payment.component';
 import { AuthService } from '@services/auth/auth.service';
 import { ListFrequentTravelerComponent } from '@components/list-frequent-traveler/list-frequent-traveler.component';
 import { EditPaymentFormComponent } from '@components/edit-payment-form/edit-payment-form.component';
@@ -78,7 +154,6 @@ import { ChangePasswordComponent } from '@modules/change-password/change-passwor
 
 @Injectable()
 export class PackageEffects {
-    // modalRef: NgbModalRef;
     dialogRef: DynamicDialogRef;
 
     //<--- PACKAGES --->
@@ -272,32 +347,32 @@ export class PackageEffects {
         })
     ));
 
-    openModalOrderDetails$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(orderActions.OPEN_MODAL_ORDERDETAILS),
-            tap((action) => {
-                this.dialogRef = this.dialogService.open(ReadOrderOrderDetailComponent, {
-                    /* Opciones del modal */
-                    showHeader: false,
-                    width: '70%',
-                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
-                    baseZIndex: 10000,
-                });
-            })
-        ), { dispatch: false });
+    // openModalOrderDetails$ = createEffect(() =>
+    //     this.actions$.pipe(
+    //         ofType(orderActions.OPEN_MODAL_ORDERDETAILS),
+    //         tap((action) => {
+    //             this.dialogRef = this.dialogService.open(ReadOrderOrderDetailComponent, {
+    //                 /* Opciones del modal */
+    //                 showHeader: false,
+    //                 width: '70%',
+    //                 contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
+    //                 baseZIndex: 10000,
+    //             });
+    //         })
+    //     ), { dispatch: false });
 
-    openModalCreateOrderDetail$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(orderActions.OPEN_MODAL_CREATE_ORDERDETAIL),
-            tap((action) => {
-                this.dialogRef = this.dialogService.open(CreateOrderDetailFormComponent, {
-                    /* Opciones del modal */
-                    showHeader: false,
-                    width: '85%',
-                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
-                });
-            })
-        ), { dispatch: false });
+    // openModalCreateOrderDetail$ = createEffect(() =>
+    //     this.actions$.pipe(
+    //         ofType(orderActions.OPEN_MODAL_CREATE_ORDERDETAIL),
+    //         tap((action) => {
+    //             this.dialogRef = this.dialogService.open(CreateOrderDetailFormComponent, {
+    //                 /* Opciones del modal */
+    //                 showHeader: false,
+    //                 width: '85%',
+    //                 contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
+    //             });
+    //         })
+    //     ), { dispatch: false });
 
     createOrderDetail$ = createEffect(() => this.actions$.pipe(
         ofType(orderActions.CREATE_ORDERDETAIL_REQUEST),
@@ -324,8 +399,6 @@ export class PackageEffects {
         switchMap((customer) => {
             return this.apiService.updateCustomer(customer.customerId, customer).pipe(
                 mergeMap((customerResolved) => {
-                    this.dialogRef.close();
-                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Beneficiario editado exitosamente.' });
                     return [
                         new EditOrderDetailSuccess(customerResolved),
                         new GetAllCustomerRequest(),
@@ -342,11 +415,9 @@ export class PackageEffects {
         switchMap((OrderDetail) => {
             return this.apiService.deleteOrderDetail(OrderDetail.orderDetailId).pipe(
                 mergeMap((orderDetailResolved) => {
-                    this.dialogRef.close();
                     this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Beneficiario eliminado exitosamente.' });
                     return [
                         new DeleteOrderDetailSuccess(orderDetailResolved),
-                        new GetAllOrdersRequest(),
                     ];
                 }),
                 catchError((err) => of(new DeleteOrderDetailFailure(err)))
@@ -354,32 +425,32 @@ export class PackageEffects {
         })
     ));
 
-    openModalPayments$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(orderActions.OPEN_MODAL_PAYMENTS),
-            tap((action) => {
-                this.dialogRef = this.dialogService.open(ReadOrderPaymentComponent, {
-                    /* Opciones del modal */
-                    showHeader: false,
-                    width: '70%',
-                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
-                    baseZIndex: 10000,
-                });
-            })
-        ), { dispatch: false });
+    // openModalPayments$ = createEffect(() =>
+    //     this.actions$.pipe(
+    //         ofType(orderActions.OPEN_MODAL_PAYMENTS),
+    //         tap((action) => {
+    //             this.dialogRef = this.dialogService.open(ReadOrderPaymentComponent, {
+    //                 /* Opciones del modal */
+    //                 showHeader: false,
+    //                 width: '70%',
+    //                 contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
+    //                 baseZIndex: 10000,
+    //             });
+    //         })
+    //     ), { dispatch: false });
 
-    openModalCreatePayment$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(orderActions.OPEN_MODAL_CREATE_PAYMENT),
-            tap((action) => {
-                this.dialogRef = this.dialogService.open(CreatePaymentFormComponent, {
-                    /* Opciones del modal */
-                    showHeader: false,
-                    width: '40%',
-                    contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
-                });
-            })
-        ), { dispatch: false });
+    // openModalCreatePayment$ = createEffect(() =>
+    //     this.actions$.pipe(
+    //         ofType(orderActions.OPEN_MODAL_CREATE_PAYMENT),
+    //         tap((action) => {
+    //             this.dialogRef = this.dialogService.open(CreatePaymentFormComponent, {
+    //                 /* Opciones del modal */
+    //                 showHeader: false,
+    //                 width: '40%',
+    //                 contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
+    //             });
+    //         })
+    //     ), { dispatch: false });
 
     createPayment$ = createEffect(() => this.actions$.pipe(
         ofType(orderActions.CREATE_PAYMENT_REQUEST),

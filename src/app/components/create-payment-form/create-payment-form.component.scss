@@ -3,3 +3,22 @@ input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none; 
   margin: 0; 
 }
+
+.beneficiarie-badge {
+  border-radius: var(--border-radius);
+  padding: .25em .5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: .3px;
+
+  &.role-0 {
+      background: var(--indigo-100);
+      color: var(--indigo-800);
+  }
+
+  &.role-1 {
+      background: var(--green-100);
+      color: var(--green-800);
+  }
+}

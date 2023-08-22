@@ -1,20 +1,20 @@
-import {AppState} from '@/store/state';
-import {UiState} from '@/store/ui/state';
-import {Component} from '@angular/core';
-import {OnInit} from '@angular/core';
-import {Observable} from 'rxjs';
-import {Store} from '@ngrx/store';
-import {ApiService} from '@services/api.service';
-import {Location} from '@angular/common';
+import { AppState } from '@/store/state';
+import { UiState } from '@/store/ui/state';
+import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { ApiService } from '@services/api.service';
+import { Location } from '@angular/common';
 import {
     GetAllCustomerRequest,
     GetAllPackagesRequest,
-    OpenModalCreateOrderDetail
+    SaveOrderProcess,
 } from '@/store/ui/actions';
-import {Package} from '@/models/package';
-import {Customer} from '@/models/customer';
-import {ActivatedRoute, Router} from '@angular/router';
-import {AuthService} from '@services/auth/auth.service';
+import { Package } from '@/models/package';
+import { Customer } from '@/models/customer';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '@services/auth/auth.service';
 
 @Component({
     selector: 'app-details-package',
@@ -28,7 +28,7 @@ export class DetailsPackageComponent implements OnInit {
         private router: Router,
         private authService: AuthService,
         private location: Location
-    ) {}
+    ) { }
     public ui: Observable<UiState>;
     public packagesList: Array<Package>;
     public filteredPackagesList: Array<Package>;
@@ -64,7 +64,7 @@ export class DetailsPackageComponent implements OnInit {
                 this.pack = this.packagesList.find(
                     (e) => e.packageId === this.elementId
                 );
-                const photosString = this.pack?.photos || ''; 
+                const photosString = this.pack?.photos || '';
                 const photosArray = photosString.split(',').map(photo => photo.trim());
 
                 this.images = photosArray;
@@ -93,17 +93,17 @@ export class DetailsPackageComponent implements OnInit {
         );
         console.log(cant);
 
-        const orderProcess = [
-            {
-                action: 'CreateOrder',
-                order: {
-                    customer: customer,
-                    package: onePackage
-                },
-                beneficiaries: {}
-            }
-        ];
-        this.store.dispatch(new OpenModalCreateOrderDetail(orderProcess));
+        const orderProcess =
+        {
+            action: 'CreateOrder',
+            order: {
+                customer: customer,
+                package: onePackage
+            },
+            beneficiaries: {}
+        }
+        this.store.dispatch(new SaveOrderProcess({ ...orderProcess }));
+        this.router.navigate(['Home/CrearBeneficiarios/asas'])
     }
 
     goToLogin() {

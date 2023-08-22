@@ -1,7 +1,7 @@
 import { Order } from '@/models/order';
 import { Payment } from '@/models/payment';
 import { AppState } from '@/store/state';
-import { EditOrderRequest, OpenModalPayments } from '@/store/ui/actions';
+import { EditOrderRequest } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -12,6 +12,7 @@ import { ConfirmationService } from 'primeng/api';
 import { ApiService } from '@services/api.service';
 import { MessageService } from 'primeng/api';
 import { environment } from 'environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-payment-form',
@@ -36,7 +37,8 @@ export class EditPaymentFormComponent implements OnInit {
     private modalPrimeNg: DynamicDialogRef,
     private confirmationService: ConfirmationService,
     private apiService: ApiService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -96,7 +98,7 @@ export class EditPaymentFormComponent implements OnInit {
 
   back() {
     this.modalPrimeNg.close()
-    this.store.dispatch(new OpenModalPayments({ ...this.order }))
+    this.router.navigate(['Home/DetallesPedido/' + this.order.orderId]);
   }
 
   confirmation() {
@@ -169,6 +171,7 @@ export class EditPaymentFormComponent implements OnInit {
         customerId: this.order.customerId,
         packageId: this.order.packageId,
         totalCost: this.order.totalCost,
+        orderDate: this.order.orderDate,
         status: orderStatus,
         payment: this.order.payment
       }

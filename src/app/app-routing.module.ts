@@ -25,6 +25,8 @@ import { ListFrequentTravelerComponent } from '@components/list-frequent-travele
 import { CreateOrderDetailFormComponent } from '@components/create-order-detail-form/create-order-detail-form.component';
 import { CreatePaymentFormComponent } from '@components/create-payment-form/create-payment-form.component';
 import { ReadOrderPaymentComponent } from '@components/read-order-payment/read-order-payment.component';
+import { CreateOrderFormComponent } from '@components/create-order-form/create-order-form.component';
+import { PaymentDetailsComponent } from '@components/payment-details/payment-details.component';
 
 const routes: Routes = [
     {
@@ -99,12 +101,22 @@ const routes: Routes = [
                 component: ReadOrderPaymentComponent
             },
             {
-                path: 'CrearBeneficiarios',
+                path: 'CrearPedido/:id',
                 canActivate: [AuthGuard],
-                component: CreateOrderDetailFormComponent,
+                component: CreateOrderFormComponent
             },
             {
-                path: 'CrearAbono',
+                path: 'CrearBeneficiarios/:id',
+                canActivate: [AuthGuard],
+                component: CreateOrderDetailFormComponent
+            },
+            {
+                path: 'DetallesAbono/:id',
+                canActivate: [AuthGuard],
+                component: PaymentDetailsComponent
+            },
+            {
+                path: 'CrearAbono/:id',
                 canActivate: [AuthGuard],
                 component: CreatePaymentFormComponent,
             },

@@ -9,6 +9,7 @@ export interface Order {
     packageId: string
     package?: Package
     totalCost: number
+    orderDate: Date
     status: number
-    payment?: any[]
+    payment?: Payment[]
 }

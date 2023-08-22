@@ -40,7 +40,7 @@ export default <UiState>{
     loading: false
   },
   orderProcess: {
-    data: [],
+    data: undefined,
     error: undefined,
     loading: false
   },
@@ -167,7 +167,7 @@ export interface UiState {
     loading: boolean
   };
   orderProcess: {
-    data: Array<any>,
+    data: any,
     error: string,
     loading: boolean
   };
