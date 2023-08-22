@@ -29,19 +29,24 @@ export class CreatecustomerformComponent implements OnInit {
   public customerFromAction: Customer
   public Visible: boolean = false
   public password: string = ''
-  public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS', 'OTRA']
+  public allEps: Array<string>
   public otraEps: boolean = false
   public isCustomerInformation: Customer
   public frequentTravelersList: Array<Customer> = []
   public hasInformation: boolean = false
   public customerMaxDate: Date
+  public results: string[];
+
 
   constructor(
     private fb: FormBuilder,
     private store: Store<AppState>,
     private modalPrimeNg: DynamicDialogRef,
     public apiService: ApiService,
-  ) { }
+  ) {
+    this.allEps = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS']
+
+  }
 
   ngOnInit(): void {
     this.ui = this.store.select('ui')
@@ -442,7 +447,7 @@ export class CreatecustomerformComponent implements OnInit {
   }
 
   cancel() {
-    if (this.oneCustomer !== undefined && this.user['role']!== 'Cliente') {
+    if (this.oneCustomer !== undefined && this.user['role'] !== 'Cliente') {
       if (this.oneCustomer.action === 'createFrequentTraveler') {
         this.modalPrimeNg.close()
         this.store.dispatch(new OpenModalListFrequentTraveler({ ...this.oneCustomer.customer }))
@@ -455,5 +460,21 @@ export class CreatecustomerformComponent implements OnInit {
     } else {
       this.modalPrimeNg.close()
     }
+  }
+
+
+  searchEps(event: any) {
+    console.log(event.query);
+    const filtered: any[] = [];
+    const query = event.query.toLowerCase();
+    for (let i = 0; i < this.allEps.length; i++) {
+      const Eps = this.allEps[i].toLowerCase();
+      if (Eps.includes(query)) {
+        filtered.push(this.allEps[i]);
+      }
+    }
+
+    this.results = filtered;
+
   }
 }

@@ -28,3 +28,47 @@
   }
 }
 
+.scale{
+  scale: 1.8;
+}
+
+::ng-deep .p-carousel-indicators{
+  display: none !important;
+  
+}
+
+::ng-deep .p-carousel-next{
+  display: none !important;
+}
+::ng-deep .p-carousel-prev{
+  display: none !important;
+}
+
+::ng-deep .p-carousel-items-content{
+  height: 370px !important;
+}
+
+
+.single-card{
+  display: flex !important;
+  flex-direction: row !important;
+  .style-content-top{
+    display: block;
+  }
+}
+
+
+.single-card-size{
+  flex-direction: column !important;
+}
+
+::ng-deep .p-button-icon{
+  scale: 1.6;
+}
+
+::ng-deep .p-image-preview-container{
+  width: 100% !important;
+  img {
+  width: 100% !important;
+  }
+}

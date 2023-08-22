@@ -3,7 +3,7 @@ import { Role } from '@/models/role';
 import { Token } from '@/models/token';
 import { User } from '@/models/user';
 import { AppState } from '@/store/state';
-import { GetAllCustomerRequest, GetAllRoleRequest, CreateCustomerRequest, LoginRequest, GetUsersRequest } from '@/store/ui/actions';
+import { GetAllCustomerRequest, GetAllRoleRequest, CreateCustomerRequest, LoginRequest, GetUsersRequest, EditCustomerRequest, UpdateUserRequest } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import {
     Component,
@@ -22,6 +22,7 @@ import { AuthService } from '@services/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
+import { hashSync } from 'bcryptjs';
 
 @Component({
     selector: 'app-register',
@@ -46,6 +47,7 @@ export class RegisterComponent implements OnInit {
     public userMaxDate: Date
     public loadingButton: boolean = false
     public results: string[];
+    public isBeneficiary: Customer
 
 
     constructor(
@@ -90,6 +92,7 @@ export class RegisterComponent implements OnInit {
             address: new FormControl(null, [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
             eps: new FormControl(null, [Validators.required]),
             confirmPassword: new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
+            termsAndConditions: new FormControl(null, [Validators.required]),
         });
 
     }
@@ -99,7 +102,6 @@ export class RegisterComponent implements OnInit {
         console.log(event.query);
         const filtered: any[] = [];
         const query = event.query.toLowerCase();
-        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.allEps.length; i++) {
             const Eps = this.allEps[i].toLowerCase();
             if (Eps.includes(query)) {
@@ -128,26 +130,49 @@ export class RegisterComponent implements OnInit {
                 status: 1,
                 roleId: idRole.roleId,
             }
+            if (!this.isBeneficiary) {
+                const customer: Customer = {
+                    name: this.formGroup.value.name,
+                    lastName: this.formGroup.value.lastName,
+                    document: this.formGroup.value.document,
+                    birthDate: this.formGroup.value.birthDate,
+                    phoneNumber: this.formGroup.value.phoneNumber,
+                    address: this.formGroup.value.address,
+                    eps: this.formGroup.value.eps,
+                    user: user
+                }
 
-            const customer: Customer = {
-                name: this.formGroup.value.name,
-                lastName: this.formGroup.value.lastName,
-                document: this.formGroup.value.document,
-                birthDate: this.formGroup.value.birthDate,
-                phoneNumber: this.formGroup.value.phoneNumber,
-                address: this.formGroup.value.address,
-                eps: this.formGroup.value.eps,
-                user: user
+                this.store.dispatch(new CreateCustomerRequest({
+                    ...customer
+                }));
+            } else {
+                const customer: Customer = {
+                    customerId: this.isBeneficiary.customerId,
+                    name: this.formGroup.value.name,
+                    lastName: this.formGroup.value.lastName,
+                    document: this.formGroup.value.document,
+                    birthDate: this.formGroup.value.birthDate,
+                    phoneNumber: this.formGroup.value.phoneNumber,
+                    address: this.formGroup.value.address,
+                    eps: this.formGroup.value.eps,
+                    userId: this.isBeneficiary.userId
+                }
+                const updateUser: User = {
+                    userId: this.isBeneficiary.userId,
+                    email: this.formGroup.value.email,
+                    password: hashSync(this.formGroup.value.password, 10),
+                    status: 1,
+                    roleId: idRole.roleId,
+                }
+
+                this.store.dispatch(new EditCustomerRequest({ ...customer }))
+                this.store.dispatch(new UpdateUserRequest({ ...updateUser }))
             }
-
-            this.store.dispatch(new CreateCustomerRequest({
-                ...customer
-            }));
 
             this.messageService.add({ key: 'alert-message-register', severity: 'success', summary: '¡Usuario registrado éxitosamente!', detail: "En un momento ingresará al sistema" });
 
 
-            setTimeout(() => this.login(user), 3000)
+            setTimeout(() => this.login(user), 2000)
             this.getToken();
 
 
@@ -164,12 +189,22 @@ export class RegisterComponent implements OnInit {
     displayConfirmPassword() {
         this.Visible2 = !this.Visible2;
     }
+
     validateExistingDocument(): boolean {
-        var document = this.CustomerList.find(item => item.document == this.formGroup.value.document)
+        var idRole: Role = this.Roles.find((r) => r.name == 'Beneficiario');
+        var document: Customer = this.CustomerList.find(item => item.document == this.formGroup.value.document)
         if (document) {
-            return true
+
+            if (document.user.roleId == idRole.roleId) {
+                this.isBeneficiary = document
+                return false
+            } else {
+                this.isBeneficiary = undefined
+                return true
+            }
         }
         return false
+
     }
 
     validateExistingEmail(): boolean {
@@ -193,7 +228,6 @@ export class RegisterComponent implements OnInit {
 
         this.userMaxDate = new Date(currentDate);
         this.userMaxDate.setFullYear(currentDate.getFullYear() - 18);
-        console.log(this.userMaxDate)
     }
 
     validatePassword(): boolean {

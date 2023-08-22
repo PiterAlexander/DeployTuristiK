@@ -11,50 +11,6 @@
             </div>
         </div>
 
-        <div class="p-4 surface-card surface-border card-shadow mt-3 mb-3">
-            <div class="flex flex-column text-center md:text-left">
-                <span class="text-900 text-2xl mb-3 pl-2">Mas vendidos</span>
-            </div>
-            <div class="grid grid-nogutter px-2 flex-column md:flex-row" style="column-gap: 2rem; row-gap: 2rem;">
-                <div *ngFor="let item of top"
-                    class="col flex flex-column justify-content-center text-start  align-items-start border-1 surface-border py-5 px-4 border-round">
-                    <div class="mb-3 relative">
-                        <img src="https://ciudadperdidatezhuna.com/wp-content/uploads/2023/05/region-caribe.webp"
-                            class="w-full" />
-                    </div>
-                    <div class="row w-full">
-                        <div class="col-8 w-ful">
-                            <span class="text-xl text-900 font-medium mb-3">{{item.name}}</span><br>
-                            <span class="text-xl text-900 mb-3">{{item.price|currency:'USD':'symbol':'3.0'}}</span>
-                        </div>
-                        <div class="col-4 flex">
-                            <div class="col p-1" style="display: flex;
-                            justify-content: center;
-                            align-items: center;">
-                                <a pTooltip="Hotel: {{item.hotel}}" tooltipPosition="bottom" class="p-button-outlined p-button">
-                                    <i class='bx bxs-hotel scale'></i>
-                                </a>
-                            </div>
-                            <div class="col p-1" style="display: flex;
-                            justify-content: center;
-                            align-items: center;" *ngIf="item.transport == '1'">
-                                <a pTooltip="Transporte: Terrestre" tooltipPosition="bottom" class="p-button-outlined p-button">
-                                    <i class='bx bxs-bus scale'></i>
-                                </a>
-                            </div>
-                            <div class="col p-1" style="display: flex;
-                            justify-content: center;
-                            align-items: center;" *ngIf="item.transport == '2'">
-                                <a class="p-button-outlined p-button" pTooltip="Transporte: Aereo" tooltipPosition="bottom">
-
-                                    <i class='bx bxs-plane-take-off scale'></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="p-4 surface-card surface-border card-shadow mt-3 mb-3">
             Viajar es una de las mejores formas de vivir experiencias inolvidables y crear recuerdos duraderos. Y cuando

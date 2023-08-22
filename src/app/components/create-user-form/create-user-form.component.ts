@@ -27,20 +27,24 @@ export class CreateUserFormComponent implements OnInit {
   public allCustomers: Array<Customer>
   public model: User
   public userData: User
-  public allEps: Array<string> = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS', 'OTRA']
+  public allEps: Array<string>
   public admin: number = null
-  public otraEps: boolean = false
   Visible: boolean = false;
   public statuses: any[] = [];
   public customerMaxDate: Date
   public isCustomer: boolean = false
+  public results: string[];
+
 
 
   constructor(
     private fb: FormBuilder,
     private store: Store<AppState>,
     private modalPrimeNg: DynamicDialogRef,
-  ) { }
+  ) {
+    this.allEps = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS']
+
+  }
 
   ngOnInit() {
     this.ui = this.store.select('ui')
@@ -68,7 +72,6 @@ export class CreateUserFormComponent implements OnInit {
     ]
 
     this.formGroup = this.fb.group({
-      userId: [null],
       role: [null, Validators.required],
       email: [null,
         [Validators.required,
@@ -84,13 +87,11 @@ export class CreateUserFormComponent implements OnInit {
       phoneNumber: [null, Validators.required],
       birthDate: [null],
       address: [null],
-      eps: [null],
-      otherEps: [null]
+      eps: [null]
     })
 
     if (this.userData != null) {
       this.formGroup.setValue({
-        userId: this.userData.userId,
         role: this.userData.roleId,
         email: this.userData.email,
         password: '',
@@ -101,8 +102,7 @@ export class CreateUserFormComponent implements OnInit {
         phoneNumber: " ",
         birthDate: " ",
         address: " ",
-        eps: " ",
-        otherEps: " "
+        eps: " "
       })
     }
 
@@ -137,7 +137,7 @@ export class CreateUserFormComponent implements OnInit {
             birthDate: this.formGroup.value.birthDate,
             phoneNumber: this.formGroup.value.phoneNumber,
             address: this.formGroup.value.address,
-            eps: this.saveEps()
+            eps: this.formGroup.value.eps,
           }
         }
       }
@@ -148,9 +148,9 @@ export class CreateUserFormComponent implements OnInit {
 
     } else {
       this.model = {
-        userId: this.formGroup.value.userId,
+        userId: this.userData.userId,
         email: this.formGroup.value.email,
-        password:this.userData.password,
+        password: this.userData.password,
         status: this.formGroup.value.status,
         roleId: this.formGroup.value.role
       }
@@ -193,20 +193,9 @@ export class CreateUserFormComponent implements OnInit {
     } else {
       this.admin = 2
     }
-    if (this.formGroup.value.eps == 'OTRA') {
-      this.otraEps = true
-    } else {
-      this.otraEps = false
-    }
   }
 
-  saveEps(): string {
-    if (this.otraEps) {
-      return this.formGroup.value.otherEps
-    } else {
-      return this.formGroup.value.eps
-    }
-  }
+
   displayPassword() {
     this.Visible = !this.Visible;
   }
@@ -283,4 +272,18 @@ export class CreateUserFormComponent implements OnInit {
     this.customerMaxDate.setFullYear(currentDate.getFullYear() - 18);
   }
 
+  searchEps(event: any) {
+    console.log(event.query);
+    const filtered: any[] = [];
+    const query = event.query.toLowerCase();
+    for (let i = 0; i < this.allEps.length; i++) {
+      const Eps = this.allEps[i].toLowerCase();
+      if (Eps.includes(query)) {
+        filtered.push(this.allEps[i]);
+      }
+    }
+
+    this.results = filtered;
+
+  }
 }

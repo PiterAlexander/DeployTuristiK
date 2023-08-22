@@ -198,6 +198,36 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                     loading: false
                 }
             };
+
+        case Actions.orderActions.GET_ALL_PAYMENTS_REQUEST:
+            return {
+                ...state,
+                allPayments: {
+                    data: [],
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+        case Actions.orderActions.GET_ALL_PAYMENTS_SUCCESS:
+            return {
+                ...state,
+                allPayments: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.orderActions.GET_ALL_PAYMENTS_FAILURE:
+            return {
+                ...state,
+                allPayments: {
+                    data: [],
+                    error: action.payload,
+                    loading: false
+                }
+            };
         //<----------------------------->
 
         //<--- ROLES AND PERMISSIONS --->

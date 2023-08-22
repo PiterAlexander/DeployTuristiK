@@ -71,6 +71,10 @@ export class ApiService {
         return this.http.post<Payment>(`${this.endpoint}api/Payment`, modelo)
     }
 
+    getPayments(): Observable<Payment[]> {
+        return this.http.get<Payment[]>(`${this.endpoint}api/Payment`)
+    }
+
     addOrderDetail(modelo: OrderDetail): Observable<OrderDetail> {
         return this.http.post<OrderDetail>(`${this.endpoint}api/OrderDetail`, modelo)
     }

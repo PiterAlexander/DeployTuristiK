@@ -6,14 +6,6 @@
 </h2>
 <form novalidate id="form" (submit)="saveChanges()" [formGroup]="formGroup">
     <div class="grid">
-        <input
-            type="text"
-            name="userId"
-            id="userId"
-            hidden
-            class="form-control formularioCampo border-left-dark"
-            formControlName="userId"
-        />
         <div class="col">
             <div class="field">
                 <p-dropdown
@@ -298,8 +290,8 @@
                 </div>
             </div>
         </div>
-        <div class="grid" *ngIf="admin == 2">
-            <div class="col">
+        <div class="grid flex" *ngIf="admin == 2">
+            <div class="col-12 md:col-6">
                 <div class="field">
                     <p-calendar
                         dateFormat="dd/mm/yy"
@@ -318,20 +310,30 @@
                     </small>
                 </div>
             </div>
-            <div class="col">
+            <div class="col-12 md:col-6">
                 <div class="field">
-                    <p-dropdown
-                        [options]="allEps"
-                        placeholder="Seleccione su EPS"
+                    <p-autoComplete
                         formControlName="eps"
-                        [showClear]="true"
-                        [style]="{width: '100%', 'max-width': '24rem'}"
-                    ></p-dropdown>
+                        [suggestions]="results"
+                        (completeMethod)="searchEps($event)"
+                        [dropdown]="true"
+                        class="w-full"
+                        placeholder="EPS"
+                        minlength="3"
+                        maxlength="100"
+                    ></p-autoComplete>
+
                     <small
                         class="p-error block"
-                        *ngIf="formGroup.get('eps')?.dirty && formGroup.get('eps')?.errors?.['required']"
+                        *ngIf="formGroup.get('eps')?.errors?.['required'] && formGroup.get('eps')?.dirty"
                     >
                         Este campo es obligatorio
+                    </small>
+                    <small
+                        class="p-error block"
+                        *ngIf="formGroup.get('eps')?.errors?.['minlength'] && formGroup.get('eps')?.dirty"
+                    >
+                        Este campo debe tener mínimo 3 letras
                     </small>
                 </div>
             </div>
@@ -358,47 +360,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- <div >
-            <div class="grid">
-                <div class="col-12">
-                    <div class="field">
-                        <div class="p-input-icon-left w-full">
-                            <i class="pi pi-map-marker"></i>
-                            <input pInputText placeholder="Ingrese su dirección" type="text" formControlName="address"
-                                required="true" minlength="10" maxlength="30" class="w-full">
-                        </div>
-                        <small class="p-error block"
-                            *ngIf="formGroup.get('address')?.errors?.['required'] && formGroup.get('address').dirty">
-                            Este campo es obligatorio
-                        </small>
-                        <small class="p-error block"
-                            *ngIf="formGroup.get('address')?.errors?.['minlength'] && formGroup.get('address').dirty">
-                            La dirección debe tener mínimo 10 caracteres
-                        </small>
-                    </div>
-                </div>
-            </div>
-            <div class="grid">
-                <div class="col">
-                    <div class="field ">
-                        <p-dropdown [options]="allEps" placeholder="Seleccione la EPS" required="true"
-                            formControlName="eps" [style]="{ width: '100%' }"></p-dropdown>
-                        <small class="p-error block"
-                            *ngIf="formGroup.get('eps').errors?.['required'] && formGroup.get('eps').dirty">
-                            Este campo es obligatorio
-                        </small>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="field">
-                        <p-calendar dateFormat="dd/mm/yy" formControlName="birthDate"
-                            placeholder="ingrese la fecha de nacimiento" showIcon="true" [required]="true"
-                            class="calendar" [style]="{ width: '100%' }"></p-calendar>
-                    </div>
-                </div>
-            </div>
-        </div> -->
     </div>
     <div class="flex justify-content-end">
         <button

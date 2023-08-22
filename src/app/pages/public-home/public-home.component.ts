@@ -1,98 +1,207 @@
-import { Component } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
-import { LayoutService } from '@services/app.layout.service';
-@Component({
-  selector: 'app-public-home',
-  templateUrl: './public-home.component.html',
-  styleUrls: ['./public-home.component.scss']
-})
-export class PublicHomeComponent {
-    subscription: Subscription;
+import {Component, OnInit} from '@angular/core';
+import {Subscription} from 'rxjs';
+import {Router} from '@angular/router';
+import {LayoutService} from '@services/app.layout.service';
+import {Store} from '@ngrx/store';
+import {AppState} from '@/store/state';
+import {UiState} from '@/store/ui/state';
+import {ConfirmationService, MessageService} from 'primeng/api';
+import {ContactUsRequest, GetTopPackagesRequest} from '@/store/ui/actions';
+import {Observable} from 'rxjs';
+import {sendPQRS} from '@/models/recoverPasswordEmail';
 
+@Component({
+    selector: 'app-public-home',
+    templateUrl: './public-home.component.html',
+    styleUrls: ['./public-home.component.scss']
+})
+export class PublicHomeComponent implements OnInit {
+    subscription: Subscription;
     darkMode: boolean = false;
-    get dark(): boolean {
-		return this.layoutService.config.colorScheme !== 'light';
-	}
-    constructor(public router: Router, private layoutService: LayoutService) {
-        this.subscription = this.layoutService.configUpdate$.subscribe(config => {
-            this.darkMode = config.colorScheme === 'dark' || config.colorScheme === 'dim' ? true : false;
+    public top;
+    public ui: Observable<UiState>;
+    public role: any;
+    responsiveOptions;
+    constructor(
+        private store: Store<AppState>,
+        private router: Router,
+        private confirmationService: ConfirmationService,
+        private messageService: MessageService,
+        private layoutService: LayoutService
+    ) {
+        this.responsiveOptions = [
+            {
+                breakpoint: '1024px',
+                numVisible: 3,
+                numScroll: 3
+            },
+            {
+                breakpoint: '768px',
+                numVisible: 2,
+                numScroll: 2
+            },
+            {
+                breakpoint: '560px',
+                numVisible: 1,
+                numScroll: 1
+            }
+        ];
+
+        this.subscription = this.layoutService.configUpdate$.subscribe(
+            (config) => {
+                this.darkMode =
+                    config.colorScheme === 'dark' ||
+                    config.colorScheme === 'dim'
+                        ? true
+                        : false;
+            }
+        );
+        this.types = [
+            {name: 'Pregunta', code: '1'},
+            {name: 'Queja', code: '2'},
+            {name: 'Respuesta', code: '3'},
+            {name: 'Sugerencia', code: '4'},
+            {name: 'Felicitacion', code: '5'}
+        ];
+    }
+
+    options: any;
+
+    overlays: any[] = [];
+
+    dialogVisible: boolean = false;
+
+    markerTitle: string = '';
+
+    selectedPosition: any;
+
+    infoWindow: any;
+
+    draggable: boolean = false;
+
+    name: string = '';
+
+    email: string = '';
+
+    message: string = '';
+
+    content: any[] = [
+        {
+            icon: 'pi pi-fw pi-phone',
+            title: 'Telefono',
+            info: 'aca va el telefono de esa cucha xd'
+        },
+        {
+            icon: 'bx bx-message-dots',
+            title: 'Redes sociales',
+            info: 'Y aca va el wasa o alguna cosa asi'
+        }
+    ];
+    ngOnInit() {
+        this.store.dispatch(new GetTopPackagesRequest());
+        this.ui = this.store.select('ui');
+        this.ui.subscribe((state: UiState) => {
+            this.top = state.allTopPackages.data;
         });
+
+    }
+    experiences: any[] = [
+        {
+            place: 'Acapulco',
+            photo: 'https://content.r9cdn.net/rimg/dimg/c1/ce/f9cd2e90-city-35003-167377d30d0.jpg?width=1366&height=768&xhint=2806&yhint=2135&crop=true',
+            rating: 1
+        },
+        {
+            place: 'Tolu Coveñas',
+            photo: 'https://cdn.colombia.com/images/v2/turismo/sitios-turisticos/tolu/Mar-Caribe-en-tolu-Covenas-en-Colombia-800.jpg',
+            rating: 4
+        },
+        {
+            place: 'Paris',
+            photo: 'https://viajes.nationalgeographic.com.es/medio/2022/07/13/paris_37bc088a_1280x720.jpg',
+            rating: 2
+        },
+        {
+            place: 'Estados Unidos',
+            photo: 'https://img.freepik.com/fotos-premium/estatua-libertad-sobre-escena-lado-rio-paisaje-urbano-nueva-york-cuya-ubicacion-es-mas-baja-manhattan_41418-3385.jpg',
+            rating: 2
+        }
+    ];
+
+    hotels: Array<string> = []
+    types: Type[];
+
+    selectedType: Type;
+
+
+    get mapStyle() {
+        return {
+            'background-image':
+                this.layoutService.config.colorScheme === 'light'
+                    ? "url('assets/demo/images/contact/map-light.svg')"
+                    : "url('assets/demo/images/contact/map-dark.svg')"
+        };
+    }
+
+    sendEmail() {
+        var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        if (
+            this.name == '' ||
+            this.email == '' ||
+            this.message == '' ||
+            !this.selectedType
+        ) {
+            this.messageService.add({
+                key: 'alert-message',
+                severity: 'error',
+                summary: '¡Espera!',
+                detail: 'Todos los campos deben estar completos'
+            });
+        } else if (regex.test(this.email)) {
+            let model: sendPQRS = {
+                EmailAddress: this.email,
+                Subject: this.selectedType.name,
+                Body: this.message,
+                From: this.name
+            };
+            this.store.dispatch(
+                new ContactUsRequest({
+                    ...model
+                })
+            );
+
+            this.name = '';
+            this.message = '';
+            this.email = '';
+            this.selectedType = this.types[0];
+
+            this.messageService.add({
+                key: 'alert-message',
+                severity: 'success',
+                summary: '¡Proceso completado!',
+                detail: this.selectedType.name + ' enviada correctamente'
+            });
+        } else {
+            this.messageService.add({
+                key: 'alert-message',
+                severity: 'error',
+                summary: '¡Lo sentimos!',
+                detail: 'Correo no vàlido'
+            });
+        }
     }
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }
-  fotos = [
-    {
-      "data":[
-          {
-              "previewImageSrc": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0d/b9/ed/93/piedra-del-penol.jpg?w=700&h=500&s=1",
-              "thumbnailImageSrc": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0d/b9/ed/93/piedra-del-penol.jpg?w=700&h=500&s=1",
-              "alt": "Description for Image 1",
-              "title": "Guatape"
-          },
-          {
-              "previewImageSrc": "https://cdn.colombia.com/images/v2/turismo/sitios-turisticos/tolu/Mar-Caribe-en-tolu-Covenas-en-Colombia-800.jpgg",
-              "thumbnailImageSrc": "https://cdn.colombia.com/images/v2/turismo/sitios-turisticos/tolu/Mar-Caribe-en-tolu-Covenas-en-Colombia-800.jpgg",
-              "alt": "Description for Image 2",
-              "title": "Tulu"
-          },
-          {
-              "previewImageSrc": "https://www.eltiempo.com/files/article_main_1200/uploads/2023/04/10/643447832b194.jpeg",
-              "thumbnailImageSrc": "https://www.eltiempo.com/files/article_main_1200/uploads/2023/04/10/643447832b194.jpeg",
-              "alt": "Description for Image 3",
-              "title": "Title 3"
-          },
-          {
-              "previewImageSrc": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0d/b9/ed/93/piedra-del-penol.jpg?w=700&h=500&s=1",
-              "thumbnailImageSrc": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0d/b9/ed/93/piedra-del-penol.jpg?w=700&h=500&s=1",
-              "alt": "Description for Image 4",
-              "title": "Title 4"
-          },
-          {
-              "previewImageSrc": "https://cdn.colombia.com/images/v2/turismo/sitios-turisticos/tolu/Mar-Caribe-en-tolu-Covenas-en-Colombia-800.jpgg",
-              "thumbnailImageSrc": "https://cdn.colombia.com/images/v2/turismo/sitios-turisticos/tolu/Mar-Caribe-en-tolu-Covenas-en-Colombia-800.jpgg",
-              "alt": "Description for Image 5",
-              "title": "Title 5"
-          },
-          {
-              "previewImageSrc": "https://www.eltiempo.com/files/article_main_1200/uploads/2023/04/10/643447832b194.jpeg",
-              "thumbnailImageSrc": "https://www.eltiempo.com/files/article_main_1200/uploads/2023/04/10/643447832b194.jpeg",
-              "alt": "Description for Image 6",
-              "title": "Title 6"
-          },
-          {
-              "previewImageSrc": "https://www.eltiempo.com/files/article_main_1200/uploads/2023/04/10/643447832b194.jpeg",
-              "thumbnailImageSrc": "https://www.eltiempo.com/files/article_main_1200/uploads/2023/04/10/643447832b194.jpeg",
-              "alt": "Description for Image 7",
-              "title": "Title 7"
-          },
-          {
-              "previewImageSrc": "https://cdn.colombia.com/images/v2/turismo/sitios-turisticos/tolu/Mar-Caribe-en-tolu-Covenas-en-Colombia-800.jpgg",
-              "thumbnailImageSrc": "https://cdn.colombia.com/images/v2/turismo/sitios-turisticos/tolu/Mar-Caribe-en-tolu-Covenas-en-Colombia-800.jpgg",
-              "alt": "Description for Image 8",
-              "title": "Title 8"
-          },
-          {
-              "previewImageSrc": "https://www.eltiempo.com/files/article_main_1200/uploads/2023/04/10/643447832b194.jpeg",
-              "thumbnailImageSrc": "https://www.eltiempo.com/files/article_main_1200/uploads/2023/04/10/643447832b194.jpeg",
-              "alt": "Description for Image 9",
-              "title": "Title 9"
-          },
-          {
-              "previewImageSrc": "https://www.eltiempo.com/files/article_main_1200/uploads/2023/04/10/643447832b194.jpeg",
-              "thumbnailImageSrc": "https://www.eltiempo.com/files/article_main_1200/uploads/2023/04/10/643447832b194.jpeg",
-              "alt": "Description for Image 10",
-              "title": "Title 10"
-          },
-          {
-              "previewImageSrc": "https://cdn.colombia.com/images/v2/turismo/sitios-turisticos/tolu/Mar-Caribe-en-tolu-Covenas-en-Colombia-800.jpgg",
-              "thumbnailImageSrc": "https://cdn.colombia.com/images/v2/turismo/sitios-turisticos/tolu/Mar-Caribe-en-tolu-Covenas-en-Colombia-800.jpgg",
-              "alt": "Description for Image 11",
-              "title": "Title 11"
-          }
-      ]
-  }
-  ]
+}
+
+interface Type {
+    name: string;
+    code: string;
+}
+
+interface Experiences {
+    name: string;
+    photo: string;
 }

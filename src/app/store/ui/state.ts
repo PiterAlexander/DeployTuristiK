@@ -181,6 +181,11 @@ export interface UiState {
     error: string,
     loading: boolean
   };
+  allPayments: {
+    data: Array<Payment>,
+    error: string,
+    loading: boolean
+  }
   //<----------------------------->
   //<--- ROLES AND PERMISSIONS --->
   allRoles: {
