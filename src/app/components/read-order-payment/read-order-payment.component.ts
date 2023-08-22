@@ -4,16 +4,13 @@ import { UiState } from '@/store/ui/state';
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { DeleteOrderDetailRequest, OpenModalCreateOrderDetail, OpenModalCreatePayment, OpenModalEditPayment } from '@/store/ui/actions';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { Customer } from '@/models/customer';
-import { OrderDetail } from '@/models/orderDetail';
+import { OpenModalEditPayment, SaveOrderProcess } from '@/store/ui/actions';
 import { ApiService } from '@services/api.service';
-import { ConfirmationService } from 'primeng/api';
 import { Role } from '@/models/role';
 import { Order } from '@/models/order';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from 'environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-read-order-payment',
@@ -26,25 +23,21 @@ export class ReadOrderPaymentComponent {
   public role: any
   public user: any
   public allRoles: Array<Role>
-  public allCustomers: Array<Customer>
   public order: Order
   public payments: Array<any> = []
   public statuses: any[] = [];
   public remainingAmount: number
   public loading: boolean = true
   public visible: boolean = true
-  public orderDetailCustomers: Array<OrderDetail> = []
-  public orderDetails: Array<OrderDetail> = []
   public pendingPayments: boolean = false
   public baseUrl: string = environment.endPoint + 'resources/payments/'
   public orderId: string
 
   constructor(
     private store: Store<AppState>,
-    private modalPrimeNg: DynamicDialogRef,
-    private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -52,17 +45,10 @@ export class ReadOrderPaymentComponent {
     this.ui.subscribe((state: UiState) => {
       this.user = JSON.parse(localStorage.getItem('TokenPayload'))
       this.role = this.user['role']
-      this.allRoles = state.allRoles.data
-      this.allCustomers = state.allCustomers.data
-      if (this.role === 'Cliente') {
-        this.route.paramMap.subscribe((params) => {
-          this.orderId = params.get('id');
-          this.getOrderById()
-        });
-      } else {
-        this.order = state.oneOrder.data
-        this.pushPayments()
-      }
+      this.route.paramMap.subscribe((params) => {
+        this.orderId = params.get('id');
+        this.getOrderById()
+      });
     })
 
     this.statuses = [
@@ -92,17 +78,11 @@ export class ReadOrderPaymentComponent {
         package: orderPromise['package'],
         totalCost: orderPromise['totalCost'],
         status: orderPromise['status'],
+        orderDate: orderPromise['orderDate'],
         payment: orderPromise['payment']
       }
       this.pushPayments()
     }
-  }
-
-  validateExtendibleAllowing(payment: any) {
-    if (payment.orderDetail.length > 0) {
-      return true
-    }
-    return false
   }
 
   validateEditAllowing(payment: Payment): boolean {
@@ -115,31 +95,8 @@ export class ReadOrderPaymentComponent {
   }
 
   pushPayments() {
-    console.log(this.order);
     for (const element of this.order.payment) {
       if (element != undefined) {
-        const orderDetailCustomersPerPayment: Array<any> = []
-        for (const anotherElement of element.orderDetail) {
-          const customer: Customer = this.allCustomers.find(c => c.customerId === anotherElement.beneficiaryId)
-          if (customer !== undefined) {
-            const orderDetailCustomer: any = {
-              customerId: customer.customerId,
-              name: customer.name,
-              lastName: customer.lastName,
-              document: customer.document,
-              birthDate: customer.birthDate,
-              phoneNumber: customer.phoneNumber,
-              address: customer.address,
-              eps: customer.eps,
-              userId: customer.userId,
-              user: customer.user,
-              unitPrice: anotherElement.unitPrice
-            }
-            orderDetailCustomersPerPayment.push(orderDetailCustomer)
-            this.orderDetailCustomers.push(orderDetailCustomer)
-            this.orderDetails.push(anotherElement)
-          }
-        }
         const payment: any = {
           paymentId: element.paymentId,
           orderId: element.orderId,
@@ -148,7 +105,6 @@ export class ReadOrderPaymentComponent {
           date: element.date,
           image: element.image,
           status: element.status,
-          orderDetail: orderDetailCustomersPerPayment
         }
         const onePayment: any = this.payments.find(p => p.paymentId === element.paymentId)
         if (onePayment === undefined) {
@@ -165,13 +121,8 @@ export class ReadOrderPaymentComponent {
     setTimeout(() => this.visible = true, 0);
   }
 
-  closeModal() {
-    this.modalPrimeNg.close()
-  }
-
   editPayment(payment: Payment) {
-    this.closeModal()
-    this.store.dispatch(new OpenModalEditPayment(payment))
+    this.store.dispatch(new OpenModalEditPayment({ ...payment }))
   }
 
   showStatus(status: any): string {
@@ -205,55 +156,13 @@ export class ReadOrderPaymentComponent {
 
   addPayment() {
     if (this.remainingAmount > 0) {
-      const orderProcess = [{
+      const orderProcess = {
         action: 'CreatePayment',
         order: this.order
-      }]
-      this.closeModal()
-      this.store.dispatch(new OpenModalCreatePayment(orderProcess))
-    }
-  }
-
-  validateEditBeneficiarieAllowing(customer: any): boolean {
-    if (this.allRoles !== undefined) {
-      const role = this.allRoles.find(r => r.roleId === customer.user.roleId)
-      if (role !== undefined) {
-        if (role.name === 'Beneficiario') {
-          return true
-        }
       }
+      this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
+      this.router.navigate(['Home/CrearAbono/asas']);
     }
-    return false
-  }
-
-  editOrderDetail(customer: Customer) {
-    const orderProcess = [{
-      action: 'EditOrderDetail',
-      customer: customer,
-      order: this.order
-    }]
-    this.modalPrimeNg.close()
-    this.store.dispatch(new OpenModalCreateOrderDetail({ ...orderProcess }))
-  }
-
-  deleteOrderDetail(customer: Customer) {
-    this.confirmationService.confirm({
-      header: '¿Está seguro de eliminar a ' + customer.name + '?',
-      message: 'Tenga en cuenta que:<br><br>- El precio del pedido no cambiará.<br>- No se hará un reembolso por el beneficiario.<br>- Deberá volver a realizar un pago si desea agregar a ' + customer.name + ' de nuevo.',
-      icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Eliminar',
-      rejectLabel: 'Cancelar',
-      rejectIcon: 'pi pi-times',
-      acceptIcon: 'pi pi-trash',
-      acceptButtonStyleClass: 'p-button-danger p-button-sm',
-      rejectButtonStyleClass: 'p-button-outlined p-button-sm',
-      accept: () => {
-        const orderDetail: OrderDetail = this.orderDetails.find(od => od.beneficiaryId === customer.customerId)
-        if (orderDetail !== undefined) {
-          this.store.dispatch(new DeleteOrderDetailRequest({ ...orderDetail }))
-        }
-      }
-    })
   }
 
   validateRetryPaymentAllowing(payment: Payment): boolean {
@@ -267,13 +176,13 @@ export class ReadOrderPaymentComponent {
     const onePayment: Payment = this.order.payment.find(p => p.paymentId === payment.paymentId)
     if (onePayment !== undefined) {
       if (payment.status === 2) {
-        const orderProcess = [{
+        const orderProcess = {
           action: 'RetryPayment',
           order: this.order,
           payment: onePayment
-        }]
-        this.closeModal()
-        this.store.dispatch(new OpenModalCreatePayment(orderProcess))
+        }
+        this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
+        this.router.navigate(['Home/CrearAbono/asas']);
       }
     }
   }
@@ -289,14 +198,17 @@ export class ReadOrderPaymentComponent {
 
   addOrderDetail() {
     if (this.order.package.availableQuotas >= 1) {
-      this.closeModal()
-      const orderProcess = [{
+      const orderProcess = {
         action: 'CreateOrderDetail',
         order: this.order,
         beneficiaries: {}
-      }]
-      this.closeModal()
-      this.store.dispatch(new OpenModalCreateOrderDetail({ ...orderProcess }))
+      }
+      this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
+      this.router.navigate(['Home/CrearBeneficiarios/asas']);
     }
+  }
+
+  paymentDetails(paymentId: string) {
+    this.router.navigate(['Home/DetallesAbono/' + paymentId]);
   }
 }

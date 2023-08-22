@@ -5,12 +5,12 @@ import { UiState } from '@/store/ui/state';
 import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Role } from '@/models/role';
 import { User } from '@/models/user';
 import { Customer } from '@/models/customer';
 import { Package } from '@/models/package';
-import { OpenModalCreateOrderDetail } from '@/store/ui/actions';
+import { Router } from '@angular/router';
+import { GetAllCustomerRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, SaveOrderProcess } from '@/store/ui/actions';
 
 @Component({
   selector: 'app-create-order-form',
@@ -27,17 +27,23 @@ export class CreateOrderFormComponent implements OnInit {
   public allCustomers: Array<Customer>
   public allPackages: Array<Package>
   public onePackage: Package | undefined
-  public orderProcess: Array<any>
+  public orderProcess: any
   public beneficiariesAmount: number
+  public allDocuments: Array<string> = []
+  public results: string[];
 
   constructor(
     private store: Store<AppState>,
     private fb: FormBuilder,
     private confirmationService: ConfirmationService,
-    private modalPrimeNg: DynamicDialogRef,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
+    this.store.dispatch(new GetAllRoleRequest)
+    this.store.dispatch(new GetUsersRequest)
+    this.store.dispatch(new GetAllCustomerRequest)
+    this.store.dispatch(new GetAllPackagesRequest)
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
       this.allRoles = state.allRoles.data
@@ -45,12 +51,31 @@ export class CreateOrderFormComponent implements OnInit {
       this.allCustomers = state.allCustomers.data
       this.allPackages = state.allPackages.data
       this.orderProcess = state.orderProcess.data
+      if (this.allCustomers !== undefined) {
+        for (const element of this.allCustomers) {
+          if (this.allUsers !== undefined) {
+            const oneUser = this.allUsers.find(u => u.userId === element.userId)
+            if (oneUser !== undefined && oneUser.status === 1) {
+              if (this.allRoles !== undefined) {
+                const oneRole = this.allRoles.find(r => r.roleId === oneUser.roleId)
+                if (oneRole !== undefined && oneRole.name === 'Cliente') {
+                  if (this.allDocuments !== undefined) {
+                    const exists = this.allDocuments.find(d => d === element.document)
+                    if (exists === undefined) {
+                      this.allDocuments.push(element.document)
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     })
 
     this.formGroup = this.fb.group({
-      document: ['',
+      document: [null,
         [Validators.required,
-        Validators.minLength(8),
         Validators.maxLength(15)]],
       packageId: [null, [Validators.required]],
       beneficiariesAmount: [null,
@@ -60,25 +85,37 @@ export class CreateOrderFormComponent implements OnInit {
     })
 
     if (this.orderProcess !== undefined) {
-      if (this.orderProcess[0].beneficiaries.length > 0) {
-        this.beneficiariesAmount = this.orderProcess[0].beneficiaries.length
+      if (this.orderProcess.beneficiaries.length > 0) {
+        this.beneficiariesAmount = this.orderProcess.beneficiaries.length
       } else {
-        if (this.orderProcess[0].order.beneficiaries !== undefined) {
-          this.beneficiariesAmount = this.orderProcess[0].order.beneficiaries
+        if (this.orderProcess.order.beneficiaries !== undefined) {
+          this.beneficiariesAmount = this.orderProcess.order.beneficiaries
         }
       }
       this.formGroup.setValue({
-        document: this.orderProcess[0].order.customer.document,
-        packageId: this.orderProcess[0].order.package.packageId,
+        document: this.orderProcess.order.customer.document,
+        packageId: this.orderProcess.order.package.packageId,
         beneficiariesAmount: this.beneficiariesAmount,
         titularAsBeneficiarie: false
       })
     }
   }
 
+  searchDocument(event: any) {
+    const filtered: any[] = [];
+    const query = event.query.toLowerCase();
+    for (let i = 0; i < this.allDocuments.length; i++) {
+      const Eps = this.allDocuments[i].toLowerCase();
+      if (Eps.includes(query)) {
+        filtered.push(this.allDocuments[i]);
+      }
+    }
+    this.results = filtered
+  }
+
   cancel(event: Event) {
     if (this.orderProcess !== undefined) {
-      if (this.orderProcess[0].beneficiaries.length > 0) {
+      if (this.orderProcess.beneficiaries.length > 0) {
         this.confirmationService.confirm({
           target: event.target,
           header: '¿Está seguro de regresar?',
@@ -90,14 +127,14 @@ export class CreateOrderFormComponent implements OnInit {
           acceptLabel: 'Permanecer',
           acceptIcon: 'pi pi-check',
           reject: () => {
-            this.modalPrimeNg.close()
+            this.router.navigate(['Home/Pedidos']);
           }
         })
       } else {
-        this.modalPrimeNg.close()
+        this.router.navigate(['Home/Pedidos']);
       }
     } else {
-      this.modalPrimeNg.close()
+      this.router.navigate(['Home/Pedidos']);
     }
   }
 
@@ -105,17 +142,9 @@ export class CreateOrderFormComponent implements OnInit {
 
   validForm(): boolean {
     return this.formGroup.valid &&
-      this.formGroup.value.document !== '' && this.formGroup.value.PackageId !== 0 &&
-      this.formGroup.value.beneficiariesAmount > 0 && !this.validateCustomerId() && !this.validateRole() &&
-      this.validateBeneficiaries() && this.validateExistingBeneficiariesAmount() && !this.validateStatus() && this.validateOnlyNumbersForBeneficiaries()
-  }
-
-  validateOnlyNumbers(): boolean {
-    const regularExpresion = /^[0-9]+$/;
-    if (this.formGroup.value.document.length >= 8 && !this.validateRole() && !this.validateStatus() && !this.validateCustomerId()) {
-      return regularExpresion.test(this.formGroup.value.document)
-    }
-    return true
+      this.formGroup.value.document !== null && this.formGroup.value.PackageId !== 0 &&
+      this.formGroup.value.beneficiariesAmount > 0 &&
+      this.validateBeneficiaries() && this.validateExistingBeneficiariesAmount() && this.validateOnlyNumbersForBeneficiaries()
   }
 
   validateOnlyNumbersForBeneficiaries(): boolean {
@@ -124,46 +153,6 @@ export class CreateOrderFormComponent implements OnInit {
       return regularExpresion.test(this.formGroup.value.beneficiariesAmount)
     }
     return true
-  }
-
-  validateCustomerId(): boolean {
-    if (this.formGroup.value.document.length >= 8) {
-      if (this.allCustomers.find(c => c.document === this.formGroup.value.document) === undefined) {
-        return true
-      }
-    }
-    return false
-  }
-
-  validateRole(): boolean {
-    if (this.formGroup.value.document.length >= 8) {
-      const oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
-      if (oneCustomer !== undefined) {
-        this.oneUser = this.allUsers.find(u => u.userId === oneCustomer.userId)
-        if (this.oneUser !== undefined) {
-          const oneRole = this.allRoles.find(r => r.roleId === this.oneUser.roleId)
-          if (oneRole !== undefined) {
-            if (oneRole.name !== 'Cliente') {
-              return true
-            }
-          }
-        }
-      }
-    }
-    return false
-  }
-
-  validateStatus(): boolean {
-    if (this.formGroup.value.document.length >= 8) {
-      if (!this.validateRole() && !this.validateCustomerId()) {
-        if (this.oneUser !== undefined) {
-          if (this.oneUser.status === 2) {
-            return true
-          }
-        }
-      }
-    }
-    return false
   }
 
   validateBeneficiaries(): boolean {
@@ -212,13 +201,13 @@ export class CreateOrderFormComponent implements OnInit {
     if (!this.formGroup.invalid) {
       if (this.orderProcess !== undefined) {
         let wasChanged: boolean = false
-        if (this.formGroup.value.packageId !== this.orderProcess[0].order.package.packageId) {
+        if (this.formGroup.value.packageId !== this.orderProcess.order.package.packageId) {
           wasChanged = true
         }
         const oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
         const beneficiariesPriceConverted: Array<any> = []
         let beneficiaries: Array<any> = []
-        for (const element of this.orderProcess[0].beneficiaries) {
+        for (const element of this.orderProcess.beneficiaries) {
           if (element !== undefined) {
             const exists = beneficiaries.find(b => b.document === element.document)
             if (exists === undefined) {
@@ -227,10 +216,10 @@ export class CreateOrderFormComponent implements OnInit {
           }
         }
         if (beneficiaries.length > 0) {
-          if (this.formGroup.value.document !== this.orderProcess[0].order.customer.document) {
+          if (this.formGroup.value.document !== this.orderProcess.order.customer.document) {
             const exists = beneficiaries.find(b => b.document === this.formGroup.value.document)
             if (exists === undefined) {
-              const currenTitular = beneficiaries.find(b => b.customerId === this.orderProcess[0].order.customer.customerId)
+              const currenTitular = beneficiaries.find(b => b.customerId === this.orderProcess.order.customer.customerId)
               const index = beneficiaries.indexOf(currenTitular)
               beneficiaries.splice(index, 1)
               if (index !== undefined) {
@@ -291,7 +280,7 @@ export class CreateOrderFormComponent implements OnInit {
             beneficiaries = beneficiariesPriceConverted
           }
         }
-        const orderProcess = ([{
+        const orderProcess = ({
           action: 'CreateOrder',
           order: {
             customer: oneCustomer,
@@ -299,9 +288,9 @@ export class CreateOrderFormComponent implements OnInit {
             beneficiaries: this.formGroup.value.beneficiariesAmount
           },
           beneficiaries: beneficiaries
-        }])
-        this.modalPrimeNg.close()
-        this.store.dispatch(new OpenModalCreateOrderDetail({ ...orderProcess }))
+        })
+        this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
+        this.router.navigate(['Home/CrearBeneficiarios/' + orderProcess.order.customer.customerId]);
       } else {
         const oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
         if (this.formGroup.value.titularAsBeneficiarie) {
@@ -318,7 +307,7 @@ export class CreateOrderFormComponent implements OnInit {
             price: this.onePackage.price,
             addToFt: false
           }]
-          const orderProcess = [{
+          const orderProcess = {
             action: 'CreateOrder',
             order: {
               customer: oneCustomer,
@@ -326,11 +315,11 @@ export class CreateOrderFormComponent implements OnInit {
               beneficiaries: parseInt(this.formGroup.value.beneficiariesAmount)
             },
             beneficiaries: beneficiaries,
-          }]
-          this.modalPrimeNg.close()
-          this.store.dispatch(new OpenModalCreateOrderDetail({ ...orderProcess }))
+          }
+          this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
+          this.router.navigate(['Home/CrearBeneficiarios/' + orderProcess.order.customer.customerId]);
         } else {
-          const orderProcess = [{
+          const orderProcess = {
             action: 'CreateOrder',
             order: {
               customer: oneCustomer,
@@ -338,9 +327,9 @@ export class CreateOrderFormComponent implements OnInit {
               beneficiaries: parseInt(this.formGroup.value.beneficiariesAmount)
             },
             beneficiaries: {},
-          }]
-          this.modalPrimeNg.close()
-          this.store.dispatch(new OpenModalCreateOrderDetail({ ...orderProcess }))
+          }
+          this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
+          this.router.navigate(['Home/CrearBeneficiarios/' + orderProcess.order.customer.customerId]);
         }
       }
     }

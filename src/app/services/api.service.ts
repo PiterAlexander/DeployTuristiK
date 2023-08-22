@@ -79,6 +79,10 @@ export class ApiService {
         return this.http.put<OrderDetail>(`${this.endpoint}api/OrderDetail/${orderDetailId}`, modelo)
     }
 
+    getPaymentById(paymentId: string): Observable<Payment> {
+        return this.http.get<Payment>(`${this.endpoint}api/Payment/${paymentId}`);
+    }
+
     updatePayment(paymentId: any, modelo: any): Observable<Payment> {
         return this.http.put<Payment>(`${this.endpoint}api/Payment/${paymentId}`, modelo)
     }

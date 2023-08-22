@@ -169,7 +169,7 @@ export class OpenModalCreatePackage implements Action {
 }
 export class CreatePackageRequest implements Action {
   readonly type: string = packageActions.CREATE_PACKAGE_REQUEST;
-  constructor(public payload: Package) { 
+  constructor(public payload: Package) {
     console.log(payload)
   }
 }
@@ -227,6 +227,8 @@ export enum orderActions {
   GET_ALL_ORDERS_SUCCESS = '[ORDER] GET_ALL_ORDERS_SUCCESS',
   GET_ALL_ORDERS_FAILURE = '[ORDER] GET_ALL_ORDERS_FAILURE',
 
+  SAVE_ORDER_PROCESS = '[ORDER] SAVE_ORDER_PROCESS',
+
   OPEN_MODAL_CREATE_ORDER = '[ORDER] OPEN_MODAL_CREATE_ORDER',
   CREATE_ORDER_REQUEST = '[ORDER] CREATE_ORDER_REQUEST',
   CREATE_ORDER_SUCCESS = '[ORDER] CREATE_ORDER_SUCCESS',
@@ -236,9 +238,6 @@ export enum orderActions {
   EDIT_ORDER_SUCCESS = '[ORDER] EDIT_ORDER_SUCCESS',
   EDIT_ORDER_FAILURE = '[ORDER] EDIT_ORDER_FAILURE',
 
-  OPEN_MODAL_ORDERDETAILS = '[ORDERDETAIL] OPEN_MODAL_ORDERDETAILS',
-
-  OPEN_MODAL_CREATE_ORDERDETAIL = '[ORDERDETAIL] OPEN_MODAL_CREATE_ORDERDETAIL',
   CREATE_ORDERDETAIL_REQUEST = '[ORDERDETAIL] CREATE_ORDERDETAIL_REQUEST',
   CREATE_ORDERDETAIL_SUCCESS = '[ORDERDETAIL] CREATE_ORDERDETAIL_SUCCESS',
   CREATE_ORDERDETAIL_FAILURE = '[ORDERDETAIL] CREATE_ORDERDETAIL_FAILURE',
@@ -251,9 +250,6 @@ export enum orderActions {
   DELETE_ORDERDETAIL_SUCCESS = '[ORDERDETAIL] DELETE_ORDERDETAIL_SUCCESS',
   DELETE_ORDERDETAIL_FAILURE = '[ORDERDETAIL] DELETE_ORDERDETAIL_FAILURE',
 
-  OPEN_MODAL_PAYMENTS = '[PAYMENTS] OPEN_MODAL_PAYMENTS',
-
-  OPEN_MODAL_CREATE_PAYMENT = '[PAYMENT] OPEN_MODAL_CREATE_PAYMENT',
   CREATE_PAYMENT_REQUEST = '[PAYMENT] CREATE_PAYMENT_REQUEST',
   CREATE_PAYMENT_SUCCESS = '[PAYMENT] CREATE_PAYMENT_SUCCESS',
   CREATE_PAYMENT_FAILURE = '[PAYMENT] CREATE_PAYMENT_FAILURE',
@@ -275,6 +271,11 @@ export class GetAllOrdersSuccess implements Action {
 export class GetAllOrdersFailure implements Action {
   readonly type: string = orderActions.GET_ALL_ORDERS_FAILURE;
   constructor(public payload: string) { }
+}
+
+export class SaveOrderProcess implements Action {
+  readonly type: string = orderActions.SAVE_ORDER_PROCESS;
+  constructor(public payload: any) { }
 }
 
 export class OpenModalCreateOrder implements Action {
@@ -307,22 +308,12 @@ export class EditOrderFailure implements Action {
   constructor(public payload: string) { }
 }
 
-export class OpenModalOrderDetails implements Action {
-  readonly type: string = orderActions.OPEN_MODAL_ORDERDETAILS;
-  constructor(public payload: Order) { }
-}
-
-export class OpenModalCreateOrderDetail implements Action {
-  readonly type: string = orderActions.OPEN_MODAL_CREATE_ORDERDETAIL;
-  constructor(public payload: any) { }
-}
 export class CreateOrderDetailRequest implements Action {
   readonly type: string = orderActions.CREATE_ORDERDETAIL_REQUEST;
   constructor(public payload: Payment) { }
 }
 export class CreateOrderDetailSuccess implements Action {
   readonly type: string = orderActions.CREATE_ORDERDETAIL_SUCCESS;
-  readonly string = orderActions.OPEN_MODAL_CREATE_ORDERDETAIL;
   constructor(public payload: any) { }
 }
 export class CreateOrderDetailFailure implements Action {
@@ -332,7 +323,6 @@ export class CreateOrderDetailFailure implements Action {
 
 export class EditOrderDetailRequest implements Action {
   readonly type: string = orderActions.EDIT_ORDERDETAIL_REQUEST;
-  readonly string = orderActions.OPEN_MODAL_CREATE_ORDERDETAIL;
   constructor(public payload: Customer) { }
 }
 export class EditOrderDetailSuccess implements Action {
@@ -357,22 +347,12 @@ export class DeleteOrderDetailFailure implements Action {
   constructor(public payload: string) { }
 }
 
-export class OpenModalPayments implements Action {
-  readonly type: string = orderActions.OPEN_MODAL_PAYMENTS;
-  constructor(public payload: Order) { }
-}
-
-export class OpenModalCreatePayment implements Action {
-  readonly type: string = orderActions.OPEN_MODAL_CREATE_PAYMENT;
-  constructor(public payload?: any) { }
-}
 export class CreatePaymentRequest implements Action {
   readonly type: string = orderActions.CREATE_PAYMENT_REQUEST;
   constructor(public payload: Payment) { }
 }
 export class CreatePaymentSuccess implements Action {
   readonly type: string = orderActions.CREATE_PAYMENT_SUCCESS;
-  readonly string = orderActions.OPEN_MODAL_CREATE_PAYMENT;
   constructor(public payload: any) { }
 }
 export class CreatePaymentFailure implements Action {

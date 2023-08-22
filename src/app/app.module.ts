@@ -16,7 +16,6 @@ import { DashboardComponent } from '@pages/dashboard/dashboard.component';
 import { ToastrModule } from 'ngx-toastr';
 import { NotificationsComponent } from '@modules/main/header/notifications/notifications.component';
 import { registerLocaleData } from '@angular/common';
-import localeEn from '@angular/common/locales/en';
 import { UserComponent } from '@modules/main/header/user/user.component';
 import { ForgotPasswordComponent } from '@modules/forgot-password/forgot-password.component';
 import { RecoverPasswordComponent } from '@modules/recover-password/recover-password.component';
@@ -46,12 +45,12 @@ import { CreateOrderDetailFormComponent } from './components/create-order-detail
 import { UsersComponent } from '@pages/users/users.component';
 import { CreateUserFormComponent } from '@components/create-user-form/create-user-form.component';
 import { CreatePaymentFormComponent } from './components/create-payment-form/create-payment-form.component';
-import { ReadOrderOrderDetailComponent } from './components/read-order-order-detail/read-order-order-detail.component';
 import { ReadOrderPaymentComponent } from './components/read-order-payment/read-order-payment.component';
 import { ListFrequentTravelerComponent } from './components/list-frequent-traveler/list-frequent-traveler.component';
 import { EditPaymentFormComponent } from './components/edit-payment-form/edit-payment-form.component';
 import { MainPublicComponent } from '@modules/main copy/main.component';
 import { PackagePublicComponent } from '@modules/packages/package-public.component';
+import { PaymentDetailsComponent } from './components/payment-details/payment-details.component';
 
 //<-----------PRIMENG--------------->
 import { CommonModule } from '@angular/common';
@@ -102,9 +101,10 @@ import { ChangePasswordComponent } from './modules/change-password/change-passwo
 import { PanelModule } from 'primeng/panel';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ImageModule } from 'primeng/image';
-import {ScrollTopModule} from 'primeng/scrolltop';
+import { ScrollTopModule } from 'primeng/scrolltop';
 import { ChipModule } from 'primeng/chip';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
+import { AccordionModule } from 'primeng/accordion';
 defineCustomElements();
 
 
@@ -149,7 +149,6 @@ registerLocaleData(localeEs);
     UsersComponent,
     CreateUserFormComponent,
     CreatePaymentFormComponent,
-    ReadOrderOrderDetailComponent,
     ReadOrderPaymentComponent,
     ListFrequentTravelerComponent,
     EditPaymentFormComponent,
@@ -158,6 +157,7 @@ registerLocaleData(localeEs);
     AboutUsComponent,
     ContactUsComponent,
     ChangePasswordComponent,
+    PaymentDetailsComponent,
   ],
   imports: [
     GooglePlaceModule,
@@ -226,6 +226,7 @@ registerLocaleData(localeEs);
     PanelModule,
     SkeletonModule,
     ImageModule,
+    AccordionModule,
 
     //<------------------------->
     ToastrModule.forRoot({

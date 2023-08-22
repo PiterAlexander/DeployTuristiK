@@ -1,7 +1,7 @@
 
 import * as Actions from './actions';
-import {UiAction} from './actions';
-import initialState, {UiState} from './state';
+import { UiAction } from './actions';
+import initialState, { UiState } from './state';
 
 export function uiReducer(state: UiState = initialState, action: UiAction) {
     switch (action.type) {
@@ -179,37 +179,7 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
                 }
             };
 
-        case Actions.orderActions.OPEN_MODAL_ORDERDETAILS:
-            return {
-                ...state,
-                oneOrder: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
-                }
-            };
-
-        case Actions.orderActions.OPEN_MODAL_CREATE_ORDERDETAIL:
-            return {
-                ...state,
-                orderProcess: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
-                }
-            };
-
-        case Actions.orderActions.OPEN_MODAL_PAYMENTS:
-            return {
-                ...state,
-                oneOrder: {
-                    data: action.payload,
-                    error: undefined,
-                    loading: false
-                }
-            };
-
-        case Actions.orderActions.OPEN_MODAL_CREATE_PAYMENT:
+        case Actions.orderActions.SAVE_ORDER_PROCESS:
             return {
                 ...state,
                 orderProcess: {
@@ -520,65 +490,65 @@ export function uiReducer(state: UiState = initialState, action: UiAction) {
             };
 
 
-            case Actions.loginActions.SAVE_CURRENT_USER_REQUEST:
-                return {
-                    ...state,
-                    currentUser: {
-                        data: action.payload,
-                        error: undefined,
-                        loading: true
-                    }
-                };
-    
-            case Actions.loginActions.SAVE_CURRENT_USER_SUCCESS:
-                return {
-                    ...state,
-                    currentUser: {
-                        data: action.payload,
-                        error: undefined,
-                        loading: false
-                    }
-                };
-    
-            case Actions.loginActions.SAVE_CURRENT_USER_FAILURE:
-                return {
-                    ...state,
-                    currentUser: {
-                        data: undefined,
-                        error: action.payload,
-                        loading: false
-                    }
-                };
+        case Actions.loginActions.SAVE_CURRENT_USER_REQUEST:
+            return {
+                ...state,
+                currentUser: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: true
+                }
+            };
 
-                case Actions.loginActions.CHANGE_PASSWORD_REQUEST:
-                    return {
-                        ...state,
-                        passwordChanged: {
-                            data: undefined,
-                            error: undefined,
-                            loading: true
-                        }
-                    };
-        
-                case Actions.loginActions.CHANGE_PASSWORD_SUCCESS:
-                    return {
-                        ...state,
-                        passwordChanged: {
-                            data: action.payload,
-                            error: undefined,
-                            loading: false
-                        }
-                    };
-        
-                case Actions.loginActions.CHANGE_PASSWORD_FAILURE:
-                    return {
-                        ...state,
-                        passwordChanged: {
-                            data: undefined,
-                            error: action.payload,
-                            loading: false
-                        }
-                    };
+        case Actions.loginActions.SAVE_CURRENT_USER_SUCCESS:
+            return {
+                ...state,
+                currentUser: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.loginActions.SAVE_CURRENT_USER_FAILURE:
+            return {
+                ...state,
+                currentUser: {
+                    data: undefined,
+                    error: action.payload,
+                    loading: false
+                }
+            };
+
+        case Actions.loginActions.CHANGE_PASSWORD_REQUEST:
+            return {
+                ...state,
+                passwordChanged: {
+                    data: undefined,
+                    error: undefined,
+                    loading: true
+                }
+            };
+
+        case Actions.loginActions.CHANGE_PASSWORD_SUCCESS:
+            return {
+                ...state,
+                passwordChanged: {
+                    data: action.payload,
+                    error: undefined,
+                    loading: false
+                }
+            };
+
+        case Actions.loginActions.CHANGE_PASSWORD_FAILURE:
+            return {
+                ...state,
+                passwordChanged: {
+                    data: undefined,
+                    error: action.payload,
+                    loading: false
+                }
+            };
         //<------------>
         default:
             return state;

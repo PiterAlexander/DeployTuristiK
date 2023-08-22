@@ -1,5 +1,5 @@
 import { Order } from '@/models/order';
-import { GetAllCustomerRequest, GetAllOrdersRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, OpenModalCreateOrder, OpenModalOrderDetails, OpenModalPayments } from '@/store/ui/actions';
+import { GetAllCustomerRequest, GetAllOrdersRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, OpenModalCreateOrder } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { Customer } from '@/models/customer';
 import { Package } from '@/models/package';
-import { ApiService } from '@services/api.service';
 import { DataView } from 'primeng/dataview';
 import { Router } from '@angular/router';
 
@@ -30,11 +29,11 @@ export class OrdersComponent implements OnInit {
   public loading: boolean = true
   public visible: boolean = true
   public packagesClients: Array<Package>
-  public responsiveOptions;
+  public responsiveOptions: any
+
   constructor(
     private store: Store<AppState>,
     private router: Router,
-    private apiService: ApiService
   ) {
     this.responsiveOptions = [
       {
@@ -110,6 +109,7 @@ export class OrdersComponent implements OnInit {
                 package: onePackage,
                 totalCost: element.totalCost,
                 status: element.status,
+                orderDate: element.orderDate,
                 payment: element.payment,
               }
               this.ordersList.push(order)
@@ -141,6 +141,7 @@ export class OrdersComponent implements OnInit {
               package: onePackage,
               totalCost: element.totalCost,
               status: element.status,
+              orderDate: element.orderDate,
               payment: element.payment,
             }
             this.ordersList.push(order)
@@ -159,37 +160,12 @@ export class OrdersComponent implements OnInit {
   }
 
   create() {
-    this.store.dispatch(new OpenModalCreateOrder());
+    this.router.navigate(['Home/CrearPedido/' + 'asasas']);
   }
 
   async sendToPayments(order: Order) {
-    if (this.role === 'Cliente') {
-      this.router.navigate(['Home/DetallesPedido/' + order.orderId]);
-      console.log('hello bro', this.router.config);
-    }
-    // const orderPromise = await new Promise((resolve, reject) => {
-    //   this.apiService.getOrderById(order.orderId).subscribe({
-    //     next: (data) => {
-    //       resolve(data)
-    //     },
-    //     error: (err) => {
-    //       reject(err)
-    //     }
-    //   })
-    // })
-    // if (orderPromise) {
-    //   const oneOrder: any = {
-    //     orderId: orderPromise['orderId'],
-    //     customerId: orderPromise['customerId'],
-    //     customer: orderPromise['customer'],
-    //     packageId: orderPromise['packageId'],
-    //     package: orderPromise['package'],
-    //     totalCost: orderPromise['totalCost'],
-    //     status: orderPromise['status'],
-    //     payment: orderPromise['payment']
-    //   }
-    //   this.store.dispatch(new OpenModalPayments({ ...oneOrder }))
-    // }
+    this.router.navigate(['Home/DetallesPedido/' + order.orderId]);
+    console.log('hello bro', this.router.config);
   }
 
   verDetalles(elementoId: string) {

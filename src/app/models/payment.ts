@@ -10,6 +10,7 @@ export interface Payment {
     date: Date
     image?: string
     imageFile?: File
+    orderDetailJson?: string
     status: number
     orderDetail?: OrderDetail[]
 }
