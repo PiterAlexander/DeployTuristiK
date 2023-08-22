@@ -68,8 +68,8 @@ export class DashboardComponent implements OnInit {
                 (user) => user.role.name == 'Cliente'
             );
             this.packagesList = state.allTopPackages.data;
-            this.ordersList = state.allOrders.data;
-            this.payments = state.allPayments.data.filter(p => p.status == 1);
+            this.ordersList = state.allOrders.data.filter(o => o.status !== 3);
+            this.payments = state.allPayments.data.filter(p => p.status === 1);
             this.allCustomers = state.allCustomers.data;
             this.initCharts();
             this.initValues();
