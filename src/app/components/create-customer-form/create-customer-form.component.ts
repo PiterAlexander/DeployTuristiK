@@ -328,9 +328,14 @@ export class CreatecustomerformComponent implements OnInit {
 
   birthDateValidator() {
     const currentDate = new Date();
+    if (this.oneCustomer && this.oneCustomer.action === "createFrequentTraveler") {
+      this.customerMaxDate = new Date(currentDate);
+      this.customerMaxDate.setDate(currentDate.getDate() - 15);
+    } else {
+      this.customerMaxDate = new Date(currentDate);
+      this.customerMaxDate.setFullYear(currentDate.getFullYear() - 18);
+    }
 
-    this.customerMaxDate = new Date(currentDate);
-    this.customerMaxDate.setFullYear(currentDate.getFullYear() - 18);
   }
 
   validateBackButton(): boolean {
