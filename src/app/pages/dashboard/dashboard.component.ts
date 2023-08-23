@@ -1,9 +1,9 @@
-import {Customer} from '@/models/customer';
-import {Order} from '@/models/order';
-import {Package} from '@/models/package';
-import {Payment} from '@/models/payment';
-import {User} from '@/models/user';
-import {AppState} from '@/store/state';
+import { Customer } from '@/models/customer';
+import { Order } from '@/models/order';
+import { Package } from '@/models/package';
+import { Payment } from '@/models/payment';
+import { User } from '@/models/user';
+import { AppState } from '@/store/state';
 import {
     GetAllCustomerRequest,
     GetAllOrdersRequest,
@@ -11,12 +11,12 @@ import {
     GetTopPackagesRequest,
     GetUsersRequest
 } from '@/store/ui/actions';
-import {UiState} from '@/store/ui/state';
-import {Component, OnInit} from '@angular/core';
-import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
-import {differenceInYears} from 'date-fns';
-import {ChartModule } from 'primeng/chart';
+import { UiState } from '@/store/ui/state';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { differenceInYears } from 'date-fns';
+import { ChartModule } from 'primeng/chart';
 import { MessageService } from 'primeng/api';
 @Component({
     selector: 'app-dashboard',
@@ -33,14 +33,13 @@ export class DashboardComponent implements OnInit {
     public packagesList: Array<Package>;
     public allCustomers: Array<Customer>;
     public ordersList: Array<Order> = [];
-    public porCupSep: number = 20;
     public porAbo: number;
-    public porVen: number = 40;
+    public porVen: number;
     public customerCount: number;
     public paymentCurrentMonth: number;
     public paymentLastMonth: number;
-    public randomPayments: number;
-    public loadingPayments = true;
+    public ordersCurrentMonth: number;
+    public ordersLastMonth: number;
     ageChartData: any;
     chartData: any; // Puedes ajustar el tipo según el formato de datos del gráfico
     chartOptions: any;
@@ -55,7 +54,7 @@ export class DashboardComponent implements OnInit {
 
     public dataLoaded = false;
 
-    constructor(private store: Store<AppState>, private messageService: MessageService) {}
+    constructor(private store: Store<AppState>, private messageService: MessageService) { }
 
     ngOnInit(): void {
         this.store.dispatch(new GetTopPackagesRequest());
@@ -69,8 +68,8 @@ export class DashboardComponent implements OnInit {
                 (user) => user.role.name == 'Cliente'
             );
             this.packagesList = state.allTopPackages.data;
-            this.ordersList = state.allOrders.data;
-            this.payments = state.allPayments.data;
+            this.ordersList = state.allOrders.data.filter(o => o.status !== 3);
+            this.payments = state.allPayments.data.filter(p => p.status === 1);
             this.allCustomers = state.allCustomers.data;
             this.initCharts();
             this.initValues();
@@ -83,24 +82,24 @@ export class DashboardComponent implements OnInit {
         this.ageChartData = {
             labels: ageData.map(range => range.label),
             datasets: [
-            {
-                label: 'En el rango',
-                data: ageData.map(range => range.value),
-                backgroundColor: '#6366F1',
-                borderColor:  '#6366F1',
-                tension: .4
-            },
-            {
-                label: '',
-                data: [6],
-                backgroundColor: 'transparent',
-                borderColor: 'transparent',
-            }
-        ]
-            
+                {
+                    label: 'En el rango',
+                    data: ageData.map(range => range.value),
+                    backgroundColor: '#6366F1',
+                    borderColor: '#6366F1',
+                    tension: .4
+                },
+                {
+                    label: '',
+                    data: [6],
+                    backgroundColor: 'transparent',
+                    borderColor: 'transparent',
+                }
+            ]
+
         };
         console.log(this.ageChartData);
-        
+
     }
 
     initCharts() {
@@ -161,16 +160,42 @@ export class DashboardComponent implements OnInit {
     }
 
     initValues() {
+        const currentDate = new Date();
+
+        this.ordersCurrentMonth = 0
+        this.ordersLastMonth = 0
+        this.porVen = 0
         this.paymentCurrentMonth = 0;
         this.paymentLastMonth = 0;
         this.porAbo = 0;
 
-        this.loadingPayments = true;
 
-        const currentDate = new Date();
-        this.customerCount = this.customers.length;
+
+        for (let i = 0; i < this.ordersList.length; i++) {
+            const date = new Date(this.ordersList[i].orderDate);
+            if (
+                date.getMonth() == currentDate.getMonth() &&
+                date.getFullYear() == currentDate.getFullYear()
+            ) {
+                this.ordersCurrentMonth += this.ordersList[i].totalCost;
+            } else if (
+                currentDate.getMonth() == 0 &&
+                date.getMonth() == 11 &&
+                date.getFullYear() == currentDate.getFullYear() - 1
+            ) {
+                this.ordersLastMonth += this.ordersList[i].totalCost
+            } else if (
+                date.getMonth() == currentDate.getMonth() - 1 &&
+                date.getFullYear() == currentDate.getFullYear()
+            ) {
+                this.ordersLastMonth += this.ordersList[i].totalCost;
+            }
+        }
+        this.porVen = ((this.ordersCurrentMonth - this.ordersLastMonth) / this.ordersCurrentMonth) * 100;
+
+
+
         for (let i = 0; i < this.payments.length; i++) {
-            this.randomPayments = Math.floor(Math.random() * 100);
             const date = new Date(this.payments[i].date);
             if (
                 date.getMonth() == currentDate.getMonth() &&
@@ -178,28 +203,33 @@ export class DashboardComponent implements OnInit {
             ) {
                 this.paymentCurrentMonth += this.payments[i].amount;
             } else if (
+                currentDate.getMonth() == 0 &&
+                date.getMonth() == 11 &&
+                date.getFullYear() == currentDate.getFullYear() - 1
+            ) {
+                this.paymentLastMonth += this.payments[i].amount;
+            } else if (
                 date.getMonth() == currentDate.getMonth() - 1 &&
                 date.getFullYear() == currentDate.getFullYear()
             ) {
                 this.paymentLastMonth += this.payments[i].amount;
             }
         }
-        this.porAbo =
-            ((this.paymentCurrentMonth - this.paymentLastMonth) /
-                this.paymentCurrentMonth) *
-            100;
-        this.loadingPayments = false;
+        this.porAbo = ((this.paymentCurrentMonth - this.paymentLastMonth) / this.paymentCurrentMonth) * 100;
+
+
+        this.customerCount = this.customers.length;
     }
 
     calculateAgeData(
         customers: Array<Customer>
-    ): Array<{label: string; value: number}> {
+    ): Array<{ label: string; value: number }> {
         const ageRanges = [
-            {label: '0-20', minAge: 0, maxAge: 20},
-            {label: '21-40', minAge: 21, maxAge: 40},
-            {label: '41-60', minAge: 41, maxAge: 60},
-            {label: '61-80', minAge: 61, maxAge: 80},
-            {label: '81+', minAge: 81, maxAge: 999}
+            { label: '0-20', minAge: 0, maxAge: 20 },
+            { label: '21-40', minAge: 21, maxAge: 40 },
+            { label: '41-60', minAge: 41, maxAge: 60 },
+            { label: '61-80', minAge: 61, maxAge: 80 },
+            { label: '81+', minAge: 81, maxAge: 999 }
         ];
 
         const ageData = ageRanges.map((range) => {
@@ -210,9 +240,9 @@ export class DashboardComponent implements OnInit {
                 );
                 return age >= range.minAge && age <= range.maxAge;
             });
-            return {label: range.label, value: customersInRange.length};
+            return { label: range.label, value: customersInRange.length };
         });
         return ageData;
-        
+
     }
 }
