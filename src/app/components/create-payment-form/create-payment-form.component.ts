@@ -25,7 +25,7 @@ import { Router } from '@angular/router';
 })
 
 export class CreatePaymentFormComponent implements OnInit {
-  public formGroup: FormGroup;
+  public formGroup: FormGroup
   private ui: Observable<UiState>
   public role: any
   public user: any
@@ -44,10 +44,11 @@ export class CreatePaymentFormComponent implements OnInit {
   public orderRemainingAmountsZero: boolean = false
   public imageFile: File
   public hasBeenSelected: boolean = false
+  public acceptedFiles: string
 
-  public sortOptions: SelectItem[] = [];
-  public sortOrder: number = 0;
-  public sortField: string = '';
+  public sortOptions: SelectItem[] = []
+  public sortOrder: number = 0
+  public sortField: string = ''
   public visible: boolean = true
 
   constructor(
@@ -71,7 +72,9 @@ export class CreatePaymentFormComponent implements OnInit {
 
     this.formGroup = this.fb.group({
       amount: [null, Validators.required],
-    });
+    })
+
+    this.acceptedFiles = ".png, .jpg, .jpeg"
 
     if (this.orderProcess !== undefined) {
       if (this.orderProcess.action === 'CreatePayment') {
@@ -134,7 +137,7 @@ export class CreatePaymentFormComponent implements OnInit {
         this.fillBeneficiariesArray()
       }
     } else {
-      this.router.navigate(['Home/Pedidos']);
+      this.router.navigate(['Home/Pedidos'])
     }
   }
 
@@ -159,19 +162,19 @@ export class CreatePaymentFormComponent implements OnInit {
   }
 
   onSortChange(event: any) {
-    const value = event.value;
+    const value = event.value
 
     if (value.indexOf('!') === 0) {
-      this.sortOrder = -1;
-      this.sortField = value.substring(1, value.length);
+      this.sortOrder = -1
+      this.sortField = value.substring(1, value.length)
     } else {
-      this.sortOrder = 1;
-      this.sortField = value;
+      this.sortOrder = 1
+      this.sortField = value
     }
   }
 
   onFilter(dv: DataView, event: Event) {
-    dv.filter((event.target as HTMLInputElement).value);
+    dv.filter((event.target as HTMLInputElement).value)
   }
 
   showLabel(document: string): string {
@@ -210,9 +213,6 @@ export class CreatePaymentFormComponent implements OnInit {
     }
   }
 
-
-
-
   async getOneOrderById(orderId: string) {
     const orderPromise: Order = await new Promise((resolve, reject) => {
       this.apiService.getOrderById(orderId).subscribe({
@@ -242,7 +242,9 @@ export class CreatePaymentFormComponent implements OnInit {
 
   back() {
     if (this.orderProcess.action === 'CreatePayment' || this.orderProcess.action === 'RetryPayment') {
-      this.router.navigate(['Home/DetallesPedido/' + this.orderProcess.order.orderId])
+      const orderId: string = this.orderProcess.order.orderId
+      this.store.dispatch(new SaveOrderProcess(undefined))
+      this.router.navigate(['Home/DetallesPedido/' + orderId])
     } else if (this.orderProcess.action === 'CreateOrderDetail') {
       const action: string = this.orderProcess.action
       this.orderProcess = {
@@ -254,7 +256,7 @@ export class CreatePaymentFormComponent implements OnInit {
       this.router.navigate(['Home/CrearBeneficiarios/asas'])
     } else if (this.orderProcess.action === 'CreateOrder') {
       this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
-      this.router.navigate(['Home/CrearBeneficiarios/asa']);
+      this.router.navigate(['Home/CrearBeneficiarios/asa'])
     }
   }
 
@@ -272,14 +274,14 @@ export class CreatePaymentFormComponent implements OnInit {
     if (this.imageFile === undefined) {
       this.imageFile = event.files[0]
       if (this.imageFile !== undefined) {
-        this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Comprobante subido correctamente.' });
+        this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Comprobante subido correctamente.' })
         this.hasBeenSelected = true
       }
     } else {
       this.imageFile = undefined
       this.hasBeenSelected = false
       fileUpload.clear()
-      this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Comprobante descartado correctamente.' });
+      this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Comprobante descartado correctamente.' })
     }
   }
 
@@ -321,7 +323,7 @@ export class CreatePaymentFormComponent implements OnInit {
       next: (data) => {
       },
       error: (err) => {
-        console.log("Error while creating: ", err);
+        console.log("Error while creating: ", err)
       }
     })
   }
@@ -362,7 +364,7 @@ export class CreatePaymentFormComponent implements OnInit {
       status: paymentStatus
     }
 
-    const formData = new FormData();
+    const formData = new FormData()
     formData.append('orderId', payment.orderId)
     formData.append('amount', String(payment.amount))
     formData.append('remainingAmount', String(payment.remainingAmount))
@@ -385,7 +387,7 @@ export class CreatePaymentFormComponent implements OnInit {
           reject(err)
         }
       })
-    });
+    })
 
     // SOME NECESSARY ACTIONS TO END THE PROCESS
     const orderProcess: any = {
@@ -393,15 +395,16 @@ export class CreatePaymentFormComponent implements OnInit {
     }
 
     this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
-    this.router.navigate(['Home/DetallesAbono/' + paymentResolved['paymentId']]);
+    this.router.navigate(['Home/DetallesAbono/' + paymentResolved['paymentId']])
   }
 
-  saveFromRetryPayment() {
-    if (!this.higherRemainingAmountFromRetryPayment) {
-      let acepted: boolean = false
-      let pending: boolean = false
-      let addition: number = 0
-      for (const element of this.orderProcess.order.payment) {
+  async saveFromRetryPayment() {
+    // if (!this.higherRemainingAmountFromRetryPayment) {
+    let acepted: boolean = false
+    let pending: boolean = false
+    let addition: number = 0
+    for (const element of this.orderProcess.order.payment) {
+      if (this.higherRemainingAmountFromRetryPayment) {
         if (element !== undefined && element.status === 1 || element.status === 0) {
           addition += element.amount
           if (element.status === 1) {
@@ -410,205 +413,259 @@ export class CreatePaymentFormComponent implements OnInit {
             pending = true
           }
         }
-      }
-      const remainingAmount = this.orderProcess.order.totalCost - addition - this.formGroup.value.amount
-      let status: number
-      if (acepted && !pending) {
-        status = 1
-      } else if (!acepted && pending) {
-        status = 0
-      } else if (!acepted && !pending) {
-        status = 0
-      } else if (acepted && pending) {
-        status = 1
-      }
-
-      const order: Order = {
-        orderId: this.orderProcess.order.orderId,
-        customerId: this.orderProcess.order.customerId,
-        packageId: this.orderProcess.order.packageId,
-        totalCost: this.orderProcess.order.totalCost,
-        orderDate: this.orderProcess.order.orderDate,
-        status: status,
-        payment: this.orderProcess.order.payment,
-      }
-      this.store.dispatch(new EditOrderRequest({ ...order }))
-
-      const payment: Payment = {
-        paymentId: this.orderProcess.payment.paymentId,
-        orderId: this.orderProcess.order.orderId,
-        amount: this.formGroup.value.amount,
-        remainingAmount: remainingAmount,
-        date: new Date(),
-        image: this.orderProcess.payment.image,
-        imageFile: this.imageFile,
-        status: 0,
-      }
-
-      const formData = new FormData();
-      formData.append('paymentId', payment.paymentId)
-      formData.append('orderId', payment.orderId)
-      formData.append('amount', String(payment.amount))
-      formData.append('remainingAmount', String(payment.remainingAmount))
-      formData.append('date', payment.date.toISOString())
-      formData.append('image', String(payment.image))
-      formData.append('status', String(payment.status))
-
-      if (payment.imageFile instanceof File) {
-        formData.append('imageFile', payment.imageFile, payment.imageFile.name)
       } else {
-        formData.append('imageFile', payment.imageFile)
-      }
-
-      // this.store.dispatch(new EditPaymentRequest({ ...payment }))
-      this.apiService.updatePayment(formData.get('paymentId'), formData).subscribe({
-        next: (data) => { },
-        error: (err) => {
-          console.log('Error occured while updating: ', err);
-        }
-      })
-      this.modalPrimeNg.close()
-      this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Reintento exitoso.' });
-    } else {
-      if (this.orderRemainingAmountsZero) {
-        let acepted: boolean = false
-        let pending: boolean = false
-        for (const element of this.orderProcess.order.payment) {
-          if (element !== undefined) {
-            if (element.status === 1) {
-              acepted = true
-            } else if (element.status === 0) {
-              pending = true
-            }
+        if (element !== undefined) {
+          if (element.status === 1) {
+            acepted = true
+          } else if (element.status === 0) {
+            pending = true
           }
         }
-        let status: number
-        if (acepted && !pending) {
-          status = 2
-        } else if (!acepted && pending) {
-          status = 0
-        } else if (!acepted && !pending) {
-          status = 0
-        } else if (acepted && pending) {
-          status = 1
-        }
-        const order: Order = {
-          orderId: this.orderProcess.order.orderId,
-          customerId: this.orderProcess.order.customerId,
-          packageId: this.orderProcess.order.packageId,
-          totalCost: this.orderProcess.order.totalCost,
-          orderDate: this.orderProcess.order.orderDate,
-          status: status,
-          payment: this.orderProcess.order.payment,
-        }
-        this.store.dispatch(new EditOrderRequest(order))
-
-        const payment: Payment = {
-          paymentId: this.orderProcess.payment.paymentId,
-          orderId: this.orderProcess.order.orderId,
-          amount: 0,
-          remainingAmount: 0,
-          date: new Date(),
-          image: this.orderProcess.payment.image,
-          imageFile: this.imageFile,
-          status: 1
-        }
-
-        const formData = new FormData();
-        formData.append('paymentId', payment.paymentId)
-        formData.append('orderId', payment.orderId)
-        formData.append('amount', String(payment.amount))
-        formData.append('remainingAmount', String(payment.remainingAmount))
-        formData.append('date', payment.date.toISOString())
-        formData.append('image', String(payment.image))
-        formData.append('status', String(payment.status))
-
-        if (payment.imageFile instanceof File) {
-          formData.append('imageFile', payment.imageFile, payment.imageFile.name)
-        } else {
-          formData.append('imageFile', payment.imageFile)
-        }
-
-        // this.store.dispatch(new EditPaymentRequest({ ...payment }))
-        this.apiService.updatePayment(formData.get('paymentId'), formData).subscribe({
-          next: (data) => { },
-          error: (err) => {
-            console.log('Error occured while updating: ', err);
-          }
-        })
-        this.modalPrimeNg.close()
-        this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Reintento exitoso.' });
-      } else {
-        let acepted: boolean = false
-        let pending: boolean = false
-        for (const element of this.orderProcess.order.payment) {
-          if (element !== undefined) {
-            if (element.status === 1) {
-              acepted = true
-            } else if (element.status === 0) {
-              pending = true
-            }
-          }
-        }
-        let status: number
-        if (acepted && !pending) {
-          status = 1
-        } else if (!acepted && pending) {
-          status = 0
-        } else if (!acepted && !pending) {
-          status = 0
-        } else if (acepted && pending) {
-          status = 1
-        }
-        const remainingAmount = this.remainingAmount - this.formGroup.value.amount
-        const order: Order = {
-          orderId: this.orderProcess.order.orderId,
-          customerId: this.orderProcess.order.customerId,
-          packageId: this.orderProcess.order.packageId,
-          totalCost: this.orderProcess.order.totalCost,
-          orderDate: this.orderProcess.order.orderDate,
-          status: status,
-          payment: this.orderProcess.order.payment,
-        }
-        this.store.dispatch(new EditOrderRequest(order))
-
-        const payment: Payment = {
-          paymentId: this.orderProcess.payment.paymentId,
-          orderId: this.orderProcess.order.orderId,
-          amount: this.formGroup.value.amount,
-          remainingAmount: remainingAmount,
-          date: new Date(),
-          image: this.orderProcess.payment.image,
-          imageFile: this.imageFile,
-          status: 0,
-        }
-
-        const formData = new FormData();
-        formData.append('paymentId', payment.paymentId)
-        formData.append('orderId', payment.orderId)
-        formData.append('amount', String(payment.amount))
-        formData.append('remainingAmount', String(payment.remainingAmount))
-        formData.append('date', payment.date.toISOString())
-        formData.append('image', String(payment.image))
-        formData.append('status', String(payment.status))
-
-        if (payment.imageFile instanceof File) {
-          formData.append('imageFile', payment.imageFile, payment.imageFile.name)
-        } else {
-          formData.append('imageFile', payment.imageFile)
-        }
-
-        // this.store.dispatch(new EditPaymentRequest({ ...payment }))
-        this.apiService.updatePayment(formData.get('paymentId'), formData).subscribe({
-          next: (data) => { },
-          error: (err) => {
-            console.log('Error occured while updating: ', err);
-          }
-        })
-        this.modalPrimeNg.close()
-        this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Reintento exitoso.' });
       }
     }
+
+    let remainingAmount: number
+    if (!this.higherRemainingAmountFromRetryPayment) {
+      remainingAmount = this.orderProcess.order.totalCost - addition - this.formGroup.value.amount
+    } else {
+      if (this.orderRemainingAmountsZero) {
+        remainingAmount = 0
+      } else {
+        remainingAmount = this.remainingAmount - this.formGroup.value.amount
+      }
+    }
+
+    let orderStatus: number
+    if (acepted && !pending && !this.orderRemainingAmountsZero) {
+      orderStatus = 1
+    } else if (acepted && !pending && this.orderRemainingAmountsZero) {
+      orderStatus = 2
+    } else if (!acepted && pending) {
+      if (this.role === 'Cliente') {
+        orderStatus = 0
+      } else {
+        orderStatus = 1
+      }
+    } else if (!acepted && !pending) {
+      if (this.role === 'Cliente') {
+        orderStatus = 0
+      } else {
+        orderStatus = 1
+      }
+    } else if (acepted && pending) {
+      orderStatus = 1
+    }
+
+    const order: Order = {
+      orderId: this.orderProcess.order.orderId,
+      customerId: this.orderProcess.order.customerId,
+      packageId: this.orderProcess.order.packageId,
+      totalCost: this.orderProcess.order.totalCost,
+      orderDate: this.orderProcess.order.orderDate,
+      status: orderStatus,
+      payment: this.orderProcess.order.payment,
+    }
+
+    this.store.dispatch(new EditOrderRequest({ ...order }))
+
+    let amount: number
+    let status: number
+    if (!this.orderRemainingAmountsZero) {
+      amount = this.formGroup.value.amount
+      if (this.role === 'Cliente') {
+        status = 0
+      } else {
+        status = 1
+      }
+    } else {
+      amount = 0
+      status = 1
+    }
+
+    const payment: Payment = {
+      paymentId: this.orderProcess.payment.paymentId,
+      orderId: this.orderProcess.order.orderId,
+      amount: amount,
+      remainingAmount: remainingAmount,
+      date: new Date(),
+      image: this.orderProcess.payment.image,
+      imageFile: this.imageFile,
+      status: status,
+    }
+
+    console.log(payment)
+
+
+    const formData = new FormData()
+    formData.append('paymentId', payment.paymentId)
+    formData.append('orderId', payment.orderId)
+    formData.append('amount', String(payment.amount))
+    formData.append('remainingAmount', String(payment.remainingAmount))
+    formData.append('date', payment.date.toISOString())
+    formData.append('image', String(payment.image))
+    formData.append('status', String(payment.status))
+
+    if (payment.imageFile instanceof File) {
+      formData.append('imageFile', payment.imageFile, payment.imageFile.name)
+    } else {
+      formData.append('imageFile', payment.imageFile)
+    }
+
+    this.apiService.updatePayment(formData.get('paymentId'), formData).subscribe({
+      next: (data) => {
+      },
+      error: (err) => {
+      }
+    })
+
+    const orderProcess = {
+      action: 'RetryPayment'
+    }
+    const paymentId: string = this.orderProcess.payment.paymentId
+    this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
+    this.router.navigate(['Home/DetallesAbono/' + paymentId])
+    // } else {
+    //   // if (this.orderRemainingAmountsZero) {
+    //   //   let acepted: boolean = false
+    //   //   let pending: boolean = false
+    //   //   for (const element of this.orderProcess.order.payment) {
+    //   //     if (element !== undefined) {
+    //   //       if (element.status === 1) {
+    //   //         acepted = true
+    //   //       } else if (element.status === 0) {
+    //   //         pending = true
+    //   //       }
+    //   //     }
+    //   //   }
+    //   //   let status: number
+    //   //   if (acepted && !pending) {
+    //   //     status = 2
+    //   //   } else if (!acepted && pending) {
+    //   //     status = 0
+    //   //   } else if (!acepted && !pending) {
+    //   //     status = 0
+    //   //   } else if (acepted && pending) {
+    //   //     status = 1
+    //   //   }
+
+
+    //   //   const order: Order = {
+    //   //     orderId: this.orderProcess.order.orderId,
+    //   //     customerId: this.orderProcess.order.customerId,
+    //   //     packageId: this.orderProcess.order.packageId,
+    //   //     totalCost: this.orderProcess.order.totalCost,
+    //   //     orderDate: this.orderProcess.order.orderDate,
+    //   //     status: status,
+    //   //     payment: this.orderProcess.order.payment,
+    //   //   }
+    //   //   this.store.dispatch(new EditOrderRequest(order))
+
+    //   //   const payment: Payment = {
+    //   //     paymentId: this.orderProcess.payment.paymentId,
+    //   //     orderId: this.orderProcess.order.orderId,
+    //   //     amount: 0,
+    //   //     remainingAmount: 0,
+    //   //     date: new Date(),
+    //   //     image: this.orderProcess.payment.image,
+    //   //     imageFile: this.imageFile,
+    //   //     status: 1
+    //   //   }
+
+    //   //   const formData = new FormData()
+    //   //   formData.append('paymentId', payment.paymentId)
+    //   //   formData.append('orderId', payment.orderId)
+    //   //   formData.append('amount', String(payment.amount))
+    //   //   formData.append('remainingAmount', String(payment.remainingAmount))
+    //   //   formData.append('date', payment.date.toISOString())
+    //   //   formData.append('image', String(payment.image))
+    //   //   formData.append('status', String(payment.status))
+
+    //   //   if (payment.imageFile instanceof File) {
+    //   //     formData.append('imageFile', payment.imageFile, payment.imageFile.name)
+    //   //   } else {
+    //   //     formData.append('imageFile', payment.imageFile)
+    //   //   }
+
+    //   //   // this.store.dispatch(new EditPaymentRequest({ ...payment }))
+    //   //   this.apiService.updatePayment(formData.get('paymentId'), formData).subscribe({
+    //   //     next: (data) => { },
+    //   //     error: (err) => {
+    //   //       console.log('Error occured while updating: ', err)
+    //   //     }
+    //   //   })
+    //   //   this.modalPrimeNg.close()
+    //   //   this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Reintento exitoso.' })
+    //   // } else {
+    //   //   let acepted: boolean = false
+    //   //   let pending: boolean = false
+    //   //   for (const element of this.orderProcess.order.payment) {
+    //   //     if (element !== undefined) {
+    //   //       if (element.status === 1) {
+    //   //         acepted = true
+    //   //       } else if (element.status === 0) {
+    //   //         pending = true
+    //   //       }
+    //   //     }
+    //   //   }
+    //   //   let status: number
+    //   //   if (acepted && !pending) {
+    //   //     status = 1
+    //   //   } else if (!acepted && pending) {
+    //   //     status = 0
+    //   //   } else if (!acepted && !pending) {
+    //   //     status = 0
+    //   //   } else if (acepted && pending) {
+    //   //     status = 1
+    //   //   }
+    //   //   const remainingAmount = this.remainingAmount - this.formGroup.value.amount
+    //   //   const order: Order = {
+    //   //     orderId: this.orderProcess.order.orderId,
+    //   //     customerId: this.orderProcess.order.customerId,
+    //   //     packageId: this.orderProcess.order.packageId,
+    //   //     totalCost: this.orderProcess.order.totalCost,
+    //   //     orderDate: this.orderProcess.order.orderDate,
+    //   //     status: status,
+    //   //     payment: this.orderProcess.order.payment,
+    //   //   }
+    //   //   this.store.dispatch(new EditOrderRequest(order))
+
+    //   //   const payment: Payment = {
+    //   //     paymentId: this.orderProcess.payment.paymentId,
+    //   //     orderId: this.orderProcess.order.orderId,
+    //   //     amount: this.formGroup.value.amount,
+    //   //     remainingAmount: remainingAmount,
+    //   //     date: new Date(),
+    //   //     image: this.orderProcess.payment.image,
+    //   //     imageFile: this.imageFile,
+    //   //     status: 0,
+    //   //   }
+
+    //   //   const formData = new FormData()
+    //   //   formData.append('paymentId', payment.paymentId)
+    //   //   formData.append('orderId', payment.orderId)
+    //   //   formData.append('amount', String(payment.amount))
+    //   //   formData.append('remainingAmount', String(payment.remainingAmount))
+    //   //   formData.append('date', payment.date.toISOString())
+    //   //   formData.append('image', String(payment.image))
+    //   //   formData.append('status', String(payment.status))
+
+    //   //   if (payment.imageFile instanceof File) {
+    //   //     formData.append('imageFile', payment.imageFile, payment.imageFile.name)
+    //   //   } else {
+    //   //     formData.append('imageFile', payment.imageFile)
+    //   //   }
+
+    //   //   // this.store.dispatch(new EditPaymentRequest({ ...payment }))
+    //   //   this.apiService.updatePayment(formData.get('paymentId'), formData).subscribe({
+    //   //     next: (data) => { },
+    //   //     error: (err) => {
+    //   //       console.log('Error occured while updating: ', err)
+    //   //     }
+    //   //   })
+    //   //   this.modalPrimeNg.close()
+    //   //   this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Reintento exitoso.' })
+    //   // }
+    // }
   }
 
   async save() {
@@ -649,20 +706,20 @@ export class CreatePaymentFormComponent implements OnInit {
         const data = await new Promise((resolve, reject) => {
           this.apiService.addCustomer(customerModel).subscribe({
             next: (data) => {
-              resolve(data);
+              resolve(data)
             },
             error: (err) => {
-              reject(err);
+              reject(err)
             }
-          });
-        });
+          })
+        })
 
         //DEFINYING ORDER DETAIL WITH THE CURRENT CUSTOMER INFORMATION
         const orderDetail: OrderDetail = {
           // paymentId: paymentId,
           beneficiaryId: data['customerId'],
           unitPrice: element.price
-        };
+        }
 
         // PUSHING THAT ORDER DETAIL INTO AN ARRAY OF ORDER DETAILS
         this.orderDetail.push(orderDetail)
@@ -682,7 +739,7 @@ export class CreatePaymentFormComponent implements OnInit {
               next: (data) => {
               },
               error: (err) => {
-                console.log("Error while creating: ", err);
+                console.log("Error while creating: ", err)
               }
             })
           }
@@ -759,7 +816,7 @@ export class CreatePaymentFormComponent implements OnInit {
       const orderDetailJson = JSON.stringify(this.orderDetail)
 
       // WE'RE CREATING A FORMDATA OBJETC, THIS IS NECESSARY TO CREATE THE PAYMENT WITH ITS IMAGE
-      const formData = new FormData();
+      const formData = new FormData()
       formData.append('orderId', String(payment.orderId))
       formData.append('amount', String(payment.amount))
       formData.append('remainingAmount', String(payment.remainingAmount))
@@ -778,14 +835,13 @@ export class CreatePaymentFormComponent implements OnInit {
       const paymentResolved = await new Promise((resolve, reject) => {
         this.apiService.addPayment(formData).subscribe({
           next: (data) => {
-            console.log(data)
             resolve(data)
           },
           error: (err) => {
             reject(err)
           }
         })
-      });
+      })
 
       // SOME NECESSARY ACTIONS TO END THE PROCESS
       const orderProcess: any = {
@@ -793,7 +849,7 @@ export class CreatePaymentFormComponent implements OnInit {
       }
 
       this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
-      this.router.navigate(['Home/DetallesAbono/' + paymentResolved['paymentId']]);
+      this.router.navigate(['Home/DetallesAbono/' + paymentResolved['paymentId']])
 
       //IF COMES FROM CREATE ORDER DETAIL FROM ADMIN, EMPLOYEE OR CUSTOMER
     } else if (this.orderProcess.action === 'CreateOrderDetail') {
@@ -868,7 +924,7 @@ export class CreatePaymentFormComponent implements OnInit {
       const orderDetailJson = JSON.stringify(this.orderDetail)
 
       // WE'RE CREATING A FORMDATA OBJETC, THIS IS NECESSARY TO CREATE THE PAYMENT WITH ITS IMAGE
-      const formData = new FormData();
+      const formData = new FormData()
       formData.append('orderId', String(payment.orderId))
       formData.append('amount', String(payment.amount))
       formData.append('remainingAmount', String(payment.remainingAmount))
@@ -893,7 +949,7 @@ export class CreatePaymentFormComponent implements OnInit {
             reject(err)
           }
         })
-      });
+      })
 
       // SOME NECESSARY ACTIONS TO END THE PROCESS
       const orderProcess: any = {
@@ -901,7 +957,7 @@ export class CreatePaymentFormComponent implements OnInit {
       }
 
       this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
-      this.router.navigate(['Home/DetallesAbono/' + paymentResolved['paymentId']]);
+      this.router.navigate(['Home/DetallesAbono/' + paymentResolved['paymentId']])
     }
 
     // SENDING TO EDIT PACKAGE

@@ -130,7 +130,7 @@ export class CalendarComponent implements OnInit {
             selectMirror: true,
             dayMaxEvents: true,
             eventClick: (e: MouseEvent) => this.onEventClick(e),
-            select: (e: MouseEvent) => this.onDateSelect(e),
+            // select: (e: MouseEvent) => this.onDateSelect(e),
             locale: esLocale
         };
     }
@@ -152,13 +152,13 @@ export class CalendarComponent implements OnInit {
             : this.clickedEvent.start;
     }
 
-    //<------MOSTRAR DIALOGO PARA NUEVO PAQUETE--------->
-    onDateSelect(e: any) {
-        this.view = 'new';
-        this.showDialog = false;
-        this.store.dispatch(new OpenModalCreatePackage(null, e.start));
-        //this.changedEvent = { ...e, title: null, description: null, location: null, backgroundColor: null, borderColor: null, textColor: null, tag: { color: null, name: null } };
-    }
+    // //<------MOSTRAR DIALOGO PARA NUEVO PAQUETE--------->
+    // onDateSelect(e: any) {
+    //     this.view = 'new';
+    //     this.showDialog = false;
+    //     this.store.dispatch(new OpenModalCreatePackage(null, e.start));
+    //     //this.changedEvent = { ...e, title: null, description: null, location: null, backgroundColor: null, borderColor: null, textColor: null, tag: { color: null, name: null } };
+    // }
 
     handleSave() {
         if (!this.validate()) {

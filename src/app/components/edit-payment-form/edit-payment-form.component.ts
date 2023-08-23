@@ -1,7 +1,7 @@
 import { Order } from '@/models/order';
 import { Payment } from '@/models/payment';
 import { AppState } from '@/store/state';
-import { EditOrderRequest } from '@/store/ui/actions';
+import { EditOrderRequest, EditPaymentRequest } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -82,6 +82,7 @@ export class EditPaymentFormComponent implements OnInit {
         package: orderPromise['package'],
         totalCost: orderPromise['totalCost'],
         status: orderPromise['status'],
+        orderDate: orderPromise['orderDate'],
         payment: orderPromise['payment']
       }
       this.order = oneOrder
@@ -175,6 +176,9 @@ export class EditPaymentFormComponent implements OnInit {
         status: orderStatus,
         payment: this.order.payment
       }
+      console.log(order);
+
+
       this.store.dispatch(new EditOrderRequest({ ...order }))
       let status: number
       if (this.formGroup.value.status === 1) {
@@ -192,6 +196,7 @@ export class EditPaymentFormComponent implements OnInit {
         image: this.payment.image,
         status: status
       }
+      
       const formData = new FormData();
       formData.append('paymentId', payment.paymentId)
       formData.append('orderId', payment.orderId)
@@ -207,7 +212,7 @@ export class EditPaymentFormComponent implements OnInit {
         formData.append('imageFile', payment.imageFile)
       }
 
-      // this.store.dispatch(new EditPaymentRequest({ ...payment }))
+      this.store.dispatch(new EditPaymentRequest({ ...payment }))
       this.apiService.updatePayment(formData.get('paymentId'), formData).subscribe({
         next: (data) => { },
         error: (err) => {

@@ -327,14 +327,17 @@ export class PaymentDetailsComponent implements OnInit {
   back() {
     if (this.orderProcess !== undefined) {
       if (this.orderProcess.action === 'CreateOrder') {
+        this.store.dispatch(new SaveOrderProcess(undefined))
         if (this.role === 'Cliente') {
           this.router.navigate(['Home/Paquetes'])
         } else {
           this.router.navigate(['Home/Pedidos'])
         }
       } else if (this.orderProcess.action === 'CreateOrderDetail' || this.orderProcess.action === 'CreatePayment') {
+        this.store.dispatch(new SaveOrderProcess(undefined))
         this.router.navigate(['Home/DetallesPedido/' + this.onePayment.orderId])
       } else {
+        this.store.dispatch(new SaveOrderProcess(undefined))
         this.router.navigate(['Home/DetallesPedido/' + this.onePayment.orderId])
       }
     } else {
@@ -375,7 +378,7 @@ export class PaymentDetailsComponent implements OnInit {
     if (this.orderProcess !== undefined) {
       if (this.orderProcess.action === 'CreateOrder') {
         return 'Regresar al Inicio'
-      } else if (this.orderProcess.action === 'CreateOrderDetail' || this.orderProcess.action === 'CreatePayment') {
+      } else if (this.orderProcess.action === 'CreateOrderDetail' || this.orderProcess.action === 'CreatePayment' || this.orderProcess.action === 'RetryPayment') {
         return 'Regresar a Detalles'
       } else {
         return 'Regresar'
