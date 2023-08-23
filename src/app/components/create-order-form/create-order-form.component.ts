@@ -51,6 +51,7 @@ export class CreateOrderFormComponent implements OnInit {
       this.allCustomers = state.allCustomers.data
       this.allPackages = state.allPackages.data
       this.orderProcess = state.orderProcess.data
+      console.log(this.orderProcess)
       if (this.allCustomers !== undefined) {
         for (const element of this.allCustomers) {
           if (this.allUsers !== undefined) {
@@ -127,13 +128,16 @@ export class CreateOrderFormComponent implements OnInit {
           acceptLabel: 'Permanecer',
           acceptIcon: 'pi pi-check',
           reject: () => {
+            this.store.dispatch(new SaveOrderProcess(undefined))
             this.router.navigate(['Home/Pedidos']);
           }
         })
       } else {
+        this.store.dispatch(new SaveOrderProcess(undefined))
         this.router.navigate(['Home/Pedidos']);
       }
     } else {
+      this.store.dispatch(new SaveOrderProcess(undefined))
       this.router.navigate(['Home/Pedidos']);
     }
   }

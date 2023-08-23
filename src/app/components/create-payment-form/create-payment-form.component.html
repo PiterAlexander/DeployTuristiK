@@ -1,5 +1,5 @@
 <p-toast key="alert-message"></p-toast>
-<div [ngClass]="{ 'p-4': role !== 'Cliente' }">
+<div *ngIf="orderProcess !== undefined" [ngClass]="{ 'p-4': role !== 'Cliente' }">
     <div class="col-12">
         <div [ngClass]="{ 
         'card p-6': role !== 'Cliente',
@@ -27,7 +27,7 @@
             <div class="flex flex-wrap">
                 <div class="col-12 md:col-7 h-full">
                     <div class="flex flex-wrap-3 pb-3">
-                        <div class="w-full lg:w-6 pl-3">
+                        <div class="w-full lg:w-6 pl-3 pr-2">
                             <form novalidate [formGroup]="formGroup">
                                 <span class="font-medium text-900">Formulario de Abono</span>
                                 <div class="mt-3">
@@ -67,9 +67,12 @@
                                     </div>
                                 </div>
                                 <div class="field">
-                                    <p-fileUpload #fileUpload name="img" required="true" [style]="{ width: '16rem' }"
-                                        customUpload="true" (uploadHandler)="onUploadFile($event, fileUpload)"
-                                        mode="basic" [uploadIcon]="imageFile ? 'pi pi-times' : 'pi pi-upload'"
+                                    <p-fileUpload #fileUpload accept="{{acceptedFiles}}" invalid
+                                        invalidFileTypeMessageSummary="¡Error!"
+                                        invalidFileTypeMessageDetail="Solo se admite {{acceptedFiles}}" name="img"
+                                        required="true" [style]="{ width: '16rem' }" customUpload="true"
+                                        (uploadHandler)="onUploadFile($event, fileUpload)" mode="basic"
+                                        [uploadIcon]="imageFile ? 'pi pi-times' : 'pi pi-upload'"
                                         chooseLabel="Cargar Comprobante" (onSelect)="hasBeenSelected = true"
                                         [pTooltip]="fileTooltip()" tooltipPosition="bottom"></p-fileUpload>
                                 </div>
@@ -164,37 +167,3 @@
         </div>
     </div>
 </div>
-
-<!-- <p-dataView #dv *ngIf="visible" [value]="beneficiaries" [paginator]="true" [rows]="2" filterBy="name"
-[sortField]="sortField" [sortOrder]="sortOrder" layout="list">
-<ng-template let-product pTemplate="listItem">
-    <div class="col-12">
-        <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
-            <img [src]="product.image" [alt]="product.name"
-                class="my-4 md:my-0 w-7 md:w-10rem shadow-2 mr-5" />
-            <div class="flex-1 flex flex-column align-items-center text-center md:text-left">
-                <div class="font-bold text-2xl">{{ product.name + ' ' + product.lastName }}</div>
-                <div><span pTooltip="Documento" tooltipPosition="bottom">{{
-                        product.document
-                        }}</span> - <span pTooltip="Fecha de Nacimiento" tooltipPosition="bottom">{{
-                        product.birthDate | date }}</span></div>
-                <div><span pTooltip="Eps" tooltipPosition="bottom">{{
-                        product.eps
-                        }}</span> - <span pTooltip="Teléfono" tooltipPosition="bottom">{{
-                        product.phoneNumber }}</span></div>
-                <div class="flex align-items-center mt-2">
-                    <i class="pi pi-map-marker mr-2"></i>
-                    <span class="font-semibold">{{ product.address }}</span>
-                </div>
-            </div>
-            <div
-                class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
-                <span [class]="'mb-2 beneficiarie-badge role-' + showBadge(product.document)">{{
-                    showLabel(product.document) }}</span>
-                <span class="text-2xl font-semibold">${{ product.price | currency:
-                    ' ':false:'1.0-0'}}</span>
-            </div>
-        </div>
-    </div>
-</ng-template>
-</p-dataView> -->

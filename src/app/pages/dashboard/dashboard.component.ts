@@ -68,8 +68,8 @@ export class DashboardComponent implements OnInit {
                 (user) => user.role.name == 'Cliente'
             );
             this.packagesList = state.allTopPackages.data;
-            this.ordersList = state.allOrders.data;
-            this.payments = state.allPayments.data.filter(p => p.status == 1);
+            this.ordersList = state.allOrders.data.filter(o => o.status !== 3);
+            this.payments = state.allPayments.data.filter(p => p.status === 1);
             this.allCustomers = state.allCustomers.data;
             this.initCharts();
             this.initValues();
@@ -179,16 +179,19 @@ export class DashboardComponent implements OnInit {
             ) {
                 this.ordersCurrentMonth += this.ordersList[i].totalCost;
             } else if (
+                currentDate.getMonth() == 0 &&
+                date.getMonth() == 11 &&
+                date.getFullYear() == currentDate.getFullYear() - 1
+            ) {
+                this.ordersLastMonth += this.ordersList[i].totalCost
+            } else if (
                 date.getMonth() == currentDate.getMonth() - 1 &&
                 date.getFullYear() == currentDate.getFullYear()
             ) {
                 this.ordersLastMonth += this.ordersList[i].totalCost;
             }
         }
-        this.porVen =
-            ((this.ordersCurrentMonth - this.ordersLastMonth) /
-                this.ordersCurrentMonth) *
-            100;
+        this.porVen = ((this.ordersCurrentMonth - this.ordersLastMonth) / this.ordersCurrentMonth) * 100;
 
 
 
@@ -200,16 +203,19 @@ export class DashboardComponent implements OnInit {
             ) {
                 this.paymentCurrentMonth += this.payments[i].amount;
             } else if (
+                currentDate.getMonth() == 0 &&
+                date.getMonth() == 11 &&
+                date.getFullYear() == currentDate.getFullYear() - 1
+            ) {
+                this.paymentLastMonth += this.payments[i].amount;
+            } else if (
                 date.getMonth() == currentDate.getMonth() - 1 &&
                 date.getFullYear() == currentDate.getFullYear()
             ) {
                 this.paymentLastMonth += this.payments[i].amount;
             }
         }
-        this.porAbo =
-            ((this.paymentCurrentMonth - this.paymentLastMonth) /
-                this.paymentCurrentMonth) *
-            100;
+        this.porAbo = ((this.paymentCurrentMonth - this.paymentLastMonth) / this.paymentCurrentMonth) * 100;
 
 
         this.customerCount = this.customers.length;

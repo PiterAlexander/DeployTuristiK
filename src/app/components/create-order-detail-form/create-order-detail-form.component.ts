@@ -8,7 +8,6 @@ import { Role } from '@/models/role';
 import { User } from '@/models/user';
 import { Customer } from '@/models/customer';
 import { Package } from '@/models/package';
-import { OrderDetail } from '@/models/orderDetail';
 import { ConfirmationService } from 'primeng/api';
 import { EditOrderDetailRequest, SaveOrderProcess, } from '@/store/ui/actions';
 import { ApiService } from '@services/api.service';
@@ -16,6 +15,7 @@ import { SelectItem } from 'primeng/api';
 import { DataView } from 'primeng/dataview';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { FrequentTraveler } from '@/models/frequentTraveler';
 
 @Component({
   selector: 'app-create-order-detail-form',
@@ -34,7 +34,6 @@ export class CreateOrderDetailFormComponent implements OnInit {
   public allCustomers: Array<Customer>
   public oneCustomer: Customer | undefined
   public onePackage: Package | undefined
-  public orderDetails: Array<OrderDetail>
   public beneficiaries: Array<any> = []
   public orderDetailCustomers: Array<Customer> = []
   public orderProcess: any
@@ -52,6 +51,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
   public customerImages: Array<string> = []
   public beneficiarieImageIndex: number = 0
   public customerImageIndex: number = 0
+  public ftCheck: boolean = false
 
   constructor(
     public apiService: ApiService,
@@ -59,8 +59,9 @@ export class CreateOrderDetailFormComponent implements OnInit {
     private store: Store<AppState>,
     private router: Router,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) { }
+
 
   ngOnInit(): void {
     this.ui = this.store.select('ui')
@@ -437,7 +438,9 @@ export class CreateOrderDetailFormComponent implements OnInit {
 
   canSelect(frequentTraveler: Customer): boolean {
     const exists: any = this.beneficiaries.find(b => b.document === frequentTraveler.document)
-    if (exists !== undefined) {
+    const alreadyExistsFromOrderDetail: Customer = this.orderDetailCustomers.find(od => od.customerId === frequentTraveler.customerId)
+    if (exists !== undefined || alreadyExistsFromOrderDetail !== undefined) {
+      this.ftCheck = true
       return true
     }
     return false
@@ -448,7 +451,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
     let arentDisabled: boolean = false
     for (const element of selected) {
       const exists: any = this.beneficiaries.find(b => b.document === element.document)
-      if (exists !== undefined) {
+      const alreadyExistsFromOrderDetail: Customer = this.orderDetailCustomers.find(od => od.customerId === element.customerId)
+      if (exists !== undefined || alreadyExistsFromOrderDetail !== undefined) {
         areDisabled = true
       } else {
         arentDisabled = true
@@ -457,11 +461,19 @@ export class CreateOrderDetailFormComponent implements OnInit {
     return arentDisabled
   }
 
+  preSelectedFrequentTravelers(frequentTraveler: FrequentTraveler) {
+    const alreadyExistsFromOrderDetail: Customer = this.orderDetailCustomers.find(od => od.customerId === frequentTraveler.travelerId)
+    if (alreadyExistsFromOrderDetail !== undefined) {
+      this.selectedFrequentTravelers.push(alreadyExistsFromOrderDetail)
+    }
+  }
+
   fillFrequentTravelersArray() {
     if (this.orderProcess.order.customer.frequentTraveler !== undefined) {
       for (const element of this.orderProcess.order.customer.frequentTraveler) {
         const customer = this.allCustomers.find(c => c.customerId === element.travelerId)
         if (customer !== undefined) {
+          this.preSelectedFrequentTravelers(element)
           this.frequentTravelers.push(customer)
         }
       }
@@ -742,11 +754,15 @@ export class CreateOrderDetailFormComponent implements OnInit {
         acceptLabel: 'Permanecer',
         acceptIcon: 'pi pi-check',
         reject: () => {
-          this.router.navigate(['Home/DetallesPedido/' + this.orderProcess.order.orderId])
+          const orderId: string = this.orderProcess.order.orderId
+          this.store.dispatch(new SaveOrderProcess(undefined))
+          this.router.navigate(['Home/DetallesPedido/' + orderId])
         }
       })
     } else {
-      this.router.navigate(['Home/DetallesPedido/' + this.orderProcess.order.orderId])
+      const orderId: string = this.orderProcess.order.orderId
+      this.store.dispatch(new SaveOrderProcess(undefined))
+      this.router.navigate(['Home/DetallesPedido/' + orderId])
     }
   }
 
@@ -764,11 +780,15 @@ export class CreateOrderDetailFormComponent implements OnInit {
           acceptLabel: 'Permanecer',
           acceptIcon: 'pi pi-check',
           reject: () => {
-            this.router.navigate(['Home/DetallesPaquete/' + this.orderProcess.order.package.packageId])
+            const packageId: string = this.orderProcess.order.package.packageId
+            this.store.dispatch(new SaveOrderProcess(undefined))
+            this.router.navigate(['Home/DetallesPaquete/' + packageId])
           }
         })
       } else {
-        this.router.navigate(['Home/DetallesPaquete/' + this.orderProcess.order.package.packageId])
+        const packageId: string = this.orderProcess.order.package.packageId
+        this.store.dispatch(new SaveOrderProcess(undefined))
+        this.router.navigate(['Home/DetallesPaquete/' + packageId])
       }
     } else {
       this.orderProcess = {
@@ -784,6 +804,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
     if (this.orderProcess.action === 'CreateOrderDetail') {
       this.backFromCreateOrderDetail(event)
     } else if (this.orderProcess.action === 'EditOrderDetail') {
+      this.store.dispatch(new SaveOrderProcess(undefined))
       this.router.navigate(['Home/DetallesAbono/' + this.orderProcess.paymentId])
     } else if (this.orderProcess.action === 'CreateOrder') {
       this.backFromCreateOrder(event)

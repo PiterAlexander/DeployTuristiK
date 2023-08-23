@@ -183,7 +183,14 @@
                     <span *ngIf="role !== 'Cliente'" class="text-700 text-xl">El abono se ha registrado
                         correctamente.</span>
                 </div>
-                <div *ngIf="orderProcess !== undefined && orderProcess.action !== 'CreatePayment' || orderProcess === undefined"
+                <div *ngIf="orderProcess !== undefined && orderProcess.action === 'RetryPayment'">
+                    <div class="text-900 font-bold text-4xl my-2">Reintento Exitoso</div>
+                    <span *ngIf="role === 'Cliente'" class="text-700 text-xl">¡Gracias! Le informaremos cuando un
+                        Empleado lo acepte.</span>
+                    <span *ngIf="role !== 'Cliente'" class="text-700 text-xl">El abono se ha aceptado
+                        automaticamente.</span>
+                </div>
+                <div *ngIf="orderProcess !== undefined && orderProcess.action !== 'CreatePayment' && orderProcess.action !== 'RetryPayment' || orderProcess === undefined"
                     class="text-900 font-medium text-4xl">Detalles del Abono</div>
                 <div class="flex mt-3 sm:mt-0">
                     <div class="flex flex-column align-items-center">
