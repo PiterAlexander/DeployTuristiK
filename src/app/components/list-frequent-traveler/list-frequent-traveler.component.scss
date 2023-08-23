@@ -26,9 +26,9 @@
 }
 
 .custom-divider {
-    width: 40%; /* Ajusta el ancho de la línea */
-    height: 2px; /* Ajusta el grosor de la línea */
-    background-color: indigo; /* Cambia el color de la línea */
+    width: 40%; 
+    height: 2px; 
+    background-color: var(--indigo-500); 
 }
 
 @media (max-width: 900px) {

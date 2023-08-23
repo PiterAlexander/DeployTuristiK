@@ -139,14 +139,14 @@
         </div>
         <div class="grid p-3" style="display: flex;">
             <div
-                class="p-3 surface-card style-cards col-4 card-shadow d-flex flex-column align-items-center justify-content-center">
+                class="p-3 mt-2 h-15rem style-cards col-4 card-shadow d-flex flex-column align-items-center justify-content-center">
                 <button pButton type="button" icon="pi pi-plus" class="p-button-lg p-button-rounded"
                     (click)="createFrequentTraveler()"></button>
                 <div class="p-divider custom-divider mt-3"></div>
                 <p style="font-size: 20px;" class="mb-0">Añadir</p>
                 <p>Viajeros Frecuentes</p>
             </div>
-            <div class=" style-cards col-4" *ngFor="let frequentTraveler of frequentTravelersList">
+            <div class="style-cards col-4" *ngFor="let frequentTraveler of frequentTravelersList">
                 <div>
                     <div class="p-3 surface-card card-shadow">
                         <div class="flex mb-3">

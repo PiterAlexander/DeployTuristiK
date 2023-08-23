@@ -68,7 +68,7 @@ export class CreatecustomerformComponent implements OnInit {
           password: new FormControl(null),
           name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
           lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
-          document: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]),
+          document: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15)]),
           birthDate: [null, [Validators.required, this.birthDateValidator.bind(this)]],
           phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
           address: new FormControl('', [Validators.required]),
