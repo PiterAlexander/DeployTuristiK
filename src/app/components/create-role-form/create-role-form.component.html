@@ -3,10 +3,12 @@
   <div class="grid mb-0">
     <div class="col" [ngClass]="{'col-6': actionTitle !== 'Editar'}">
       <div class="field">
-        <input id="role_name" type="text" pInputText placeholder="Ingrese el nombre del rol" class="w-full"
+        <input id="role_name" type="text" pInputText
+        oncopy="return false" onpaste="return false"
+        placeholder="Ingrese el nombre del rol" class="w-full"
           formControlName="name" minlength="3" maxlength="30" required="true"
-          onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)" />
-        <small class="p-error block" *ngIf="formGroup.get('name').dirty && formGroup.get('name')?.errors?.['required']">
+          onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)"/>
+        <small class="p-error block" *ngIf="(formGroup.get('name').dirty && formGroup.get('name')?.errors?.['required']) || isNaN()">
           Este campo es obligatorio
         </small>
         <small class="p-error block"

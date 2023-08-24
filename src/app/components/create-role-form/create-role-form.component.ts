@@ -3,7 +3,7 @@ import {
     EditRoleRequest,
     GetAllPermissionsRequest
 } from '@/store/ui/actions';
-import {Component, OnInit} from '@angular/core';
+import {Component,OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
 import {UiState} from '@/store/ui/state';
@@ -41,6 +41,7 @@ export class CreateRoleFormComponent implements OnInit {
     public roleData;
     statuses: Status[];
     selectedStatusCode: number;
+
 
     constructor(
         private fb: FormBuilder,
@@ -297,6 +298,8 @@ export class CreateRoleFormComponent implements OnInit {
             return (
                 this.formGroup.valid &&
                 this.formGroup.value.status != 1 &&
+                this.formGroup.value.name.toLowerCase() != 'null' &&
+                this.formGroup.value.name.toLowerCase() != 'nan' &&
                 !this.allRoles.find(
                     (item) => item.name === this.formGroup.value.name.trim()
                 ) &&
@@ -306,6 +309,8 @@ export class CreateRoleFormComponent implements OnInit {
             return (
                 this.formGroup.valid &&
                 this.formGroup.value.status != 0 &&
+                this.formGroup.value.name.toLowerCase() != 'null' &&
+                this.formGroup.value.name.toLowerCase() != 'nan' &&
                 !this.allRoles.find(
                     (item) =>
                         item.name === this.formGroup.value.name &&
@@ -331,6 +336,16 @@ export class CreateRoleFormComponent implements OnInit {
                     item.name === name && item.roleId !== this.roleData.roleId
             );
         }
+    }
+
+    isNaN(): boolean {
+      const nameControl = this.formGroup.value.name.toLowerCase();
+
+      if (nameControl== 'null' || nameControl=="nan") {
+        return true;
+      }
+
+      return false;
     }
 
     validateAssociatedPermissions(): boolean {
