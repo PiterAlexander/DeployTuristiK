@@ -55,11 +55,16 @@
                                 (click)="openEditRoleModal(role)" pTooltip="Editar" tooltipPosition="bottom"
                                 disabled></button>
 
-                            <button *ngIf="role.name !== 'Administrador'&& role.name !== 'Cliente'" pButton
+                            <button *ngIf="role.name !== 'Administrador'&& role.name !== 'Cliente'
+                            && role.name !== 'Empleado' && role.name !== 'Beneficiario'"
+
+                            pButton
                                 type="button" icon="pi pi-trash"
                                 class="p-button-outlined p-button-rounded m-1 p-button-danger" pTooltip="Eliminar"
                                 (click)="deleteRole(role)" tooltipPosition="bottom"></button>
-                            <button *ngIf="role.name === 'Administrador' || role.name === 'Cliente'" pButton
+                            <button *ngIf="role.name === 'Administrador' || role.name === 'Cliente'
+                            || role.name === 'Empleado' || role.name === 'Beneficiario'
+                            " pButton
                                 type="button" icon="pi pi-trash"
                                 class="p-button-outlined p-button-rounded m-1 p-button-danger" pTooltip="Eliminar"
                                 (click)="deleteRole(role)" tooltipPosition="bottom" disabled></button>
