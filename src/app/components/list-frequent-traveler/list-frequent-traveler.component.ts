@@ -24,9 +24,11 @@ export class ListFrequentTravelerComponent implements OnInit {
   public allRoles: Array<Role>
   public allCustomers: Array<Customer>
   public oneCustomer: Customer
-  public frequentTravelersList: Array<Customer> = []
+  public frequentTravelersList: Array<any> = []
   public loading: boolean = true
   public visible: boolean = true
+  public showAddButton: number = 0
+  public firstItem: boolean
   avatars: string[] = [
     'https://i.pinimg.com/236x/45/1c/1f/451c1fd9de0d5c1ebc813444f99aa44c.jpg',
     'https://i.pinimg.com/236x/a7/ed/12/a7ed12a602d817b5c4ef8a9aa52bd703.jpg',
@@ -58,6 +60,13 @@ export class ListFrequentTravelerComponent implements OnInit {
   compareCustomerId() {
     if (this.allCustomers !== undefined) {
       if (this.user['role'] === 'Cliente') {
+        const frequentTraveler: any = {
+          addFtButton: true
+        }
+        const alreadyExists: any = this.frequentTravelersList.find(o => o.addFtButton === frequentTraveler.addFtButton)
+        if (alreadyExists === undefined) {
+          this.frequentTravelersList.push(frequentTraveler)
+        }
         const oneCustomer: Customer = this.allCustomers.find(c => c.userId === this.user['id'])
         if (oneCustomer !== undefined) {
           this.oneCustomer = oneCustomer
@@ -77,7 +86,8 @@ export class ListFrequentTravelerComponent implements OnInit {
                   eps: customer.eps,
                   userId: customer.userId,
                   user: customer.user,
-                  img: this.avatars[index]
+                  img: this.avatars[index],
+                  addFtButton: false
                 }
                 const alreadyExists: Customer = this.frequentTravelersList.find(o => o.customerId === element.travelerId)
                 if (alreadyExists === undefined) {
@@ -169,6 +179,12 @@ export class ListFrequentTravelerComponent implements OnInit {
         const frequentTraveler: FrequentTraveler = this.oneCustomer.frequentTraveler.find(ft => ft.travelerId === customer.customerId)
         if (frequentTraveler !== undefined) {
           this.store.dispatch(new DeleteFrequentTravelerRequest({ ...frequentTraveler }))
+          const frequentTravelerToDelete: any = this.frequentTravelersList.find(ft => ft.customerId === customer.customerId)
+          if (frequentTravelerToDelete !== undefined) {
+            const index = this.frequentTravelersList.indexOf(frequentTravelerToDelete)
+            this.frequentTravelersList.splice(index, 1)
+            this.updateVisibility()
+          }
         }
       }
     })
@@ -176,5 +192,13 @@ export class ListFrequentTravelerComponent implements OnInit {
 
   close() {
     this.modalPrimeNg.close()
+  }
+
+  forEachFt(frequentTraveler: Customer): boolean {
+    if (frequentTraveler.name === 'Alexander' || frequentTraveler.name === null) {
+      return true
+    } else {
+      return false
+    }
   }
 }

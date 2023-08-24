@@ -161,7 +161,7 @@ export class ReadOrderPaymentComponent {
         order: this.order
       }
       this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
-      this.router.navigate(['Home/CrearAbono/asas']);
+      this.router.navigate(['Home/ProcesoAbonos/asas']);
     }
   }
 
@@ -182,7 +182,7 @@ export class ReadOrderPaymentComponent {
           payment: onePayment
         }
         this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
-        this.router.navigate(['Home/CrearAbono/asas']);
+        this.router.navigate(['Home/ProcesoAbonos/asas']);
       }
     }
   }
@@ -204,7 +204,7 @@ export class ReadOrderPaymentComponent {
         beneficiaries: {}
       }
       this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
-      this.router.navigate(['Home/CrearBeneficiarios/asas']);
+      this.router.navigate(['Home/ProcesoBeneficiarios/asas']);
     }
   }
 

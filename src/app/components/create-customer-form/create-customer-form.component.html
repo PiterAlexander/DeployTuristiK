@@ -436,6 +436,7 @@
                     [style]="{width: '100%'}"
                     [readonlyInput]="true"
                     [maxDate]="customerMaxDate"
+                    [defaultDate]="customerMaxDate"
                 ></p-calendar>
                 <small
                     class="p-error block"
@@ -449,7 +450,7 @@
             <div class="field">
                 <p-calendar
                     dateFormat="dd/mm/yy"
-                    appendTo="body"
+                    appendTo="body"     
                     formControlName="birthDate"
                     placeholder="Ingrese su fecha de nacimiento"
                     showIcon="true"
@@ -457,6 +458,7 @@
                     [style]="{width: '100%'}"
                     [readonlyInput]="true"
                     [maxDate]="customerMaxDate"
+                    [defaultDate]="customerMaxDate"
                 ></p-calendar>
                 <small
                     class="p-error block"

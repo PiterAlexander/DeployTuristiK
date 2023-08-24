@@ -47,14 +47,18 @@
                 style="height:3px;background:linear-gradient(90deg, var(--primary-color) 0%, rgba(33, 150, 243, 0) 37%);">
             </div>
 
+            <div *ngIf="orderProcess !== undefined && orderProcess.action === 'EditOrderDetail'"
+                class="text-900 font-bold text-4xl my-2">Proceso Exitoso</div>
+            <p *ngIf="orderProcess !== undefined && orderProcess.action === 'EditOrderDetail'"
+                class="text-700 text-xl mt-0 mb-4 p-0">El beneficiario ha sido editado exitosamente.</p>
+            <div *ngIf="orderProcess !== undefined && orderProcess.action === 'EditOrderDetail'" class="mb-5"
+                style="height:3px;background:linear-gradient(90deg, var(--primary-color) 0%, rgba(33, 150, 243, 0) 37%);">
+            </div>
 
-            <div *ngIf="orderProcess !== undefined && orderProcess.action === 'EditOrderDetail' || orderProcess === undefined"
-                class="text-900 font-bold text-4xl my-2">Detalles del Abono</div>
-            <p *ngIf="orderProcess !== undefined && orderProcess.action === 'EditOrderDetail' || orderProcess === undefined"
-                class="text-700 text-xl mt-0 mb-4 p-0">En este apartado encontrará
+            <div *ngIf="orderProcess === undefined" class="text-900 font-bold text-4xl my-2">Detalles del Abono</div>
+            <p *ngIf="orderProcess === undefined" class="text-700 text-xl mt-0 mb-4 p-0">En este apartado encontrará
                 información general del Pedido e información del Abono.</p>
-            <div *ngIf="orderProcess !== undefined && orderProcess.action === 'EditOrderDetail' || orderProcess === undefined"
-                class="mb-5"
+            <div *ngIf="orderProcess === undefined" class="mb-5"
                 style="height:3px;background:linear-gradient(90deg, var(--primary-color) 0%, rgba(33, 150, 243, 0) 57%);">
             </div>
 

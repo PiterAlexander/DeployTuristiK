@@ -399,9 +399,9 @@ export class PackageEffects {
         switchMap((customer) => {
             return this.apiService.updateCustomer(customer.customerId, customer).pipe(
                 mergeMap((customerResolved) => {
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Beneficiario editado exitosamente.' });
                     return [
                         new EditOrderDetailSuccess(customerResolved),
-                        new GetAllCustomerRequest(),
                     ];
                 }),
                 catchError((err) => of(new EditOrderDetailFailure(err)))
@@ -494,7 +494,6 @@ export class PackageEffects {
                 mergeMap((paymentResolved) => {
                     return [
                         new EditPaymentSuccess(paymentResolved),
-                        new GetAllOrdersRequest()
                     ];
                 }),
                 catchError((err) => of(new EditPaymentFailure(err)))
@@ -782,7 +781,6 @@ export class PackageEffects {
         switchMap((FrequentTraveler) => {
             return this.apiService.deleteFrequentTraveler(FrequentTraveler.frequentTravelerId).pipe(
                 mergeMap((frequentTravelerResolved) => {
-                    this.dialogRef.close();
                     this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Viajero eliminado exitosamente.' });
                     return [
                         new DeleteFrequentTravelerSuccess(frequentTravelerResolved),
@@ -1042,7 +1040,6 @@ export class PackageEffects {
                 catchError((error) => of(new ContactUsFailure(error))))
         })
     ))
-
 
     //<----------------------------->
     constructor(

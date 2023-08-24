@@ -59,10 +59,7 @@
         <p style="font-weight: bold; color: white;">No esperes más para vivir una aventura increíble. ¡Reserva ahora y
             comienza a explorar los tesoros que el mundo tiene para ofrecerte!</p>
     </div>
-
-
     <div class="mb-4 surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border" style="border-radius: 15px;">
-
         <p-dataView id="myDv" #dv *ngIf="visible" [value]="ordersList" filterBy="totalCost" [paginator]="true"
             [rows]="2" layout="list" [loading]="loading">
             <ng-template pTemplate="header">
@@ -113,8 +110,8 @@
                                     class="p-2 my-4 flex flex-column lg:flex-row justify-content-between align-items-center">
                                     <div
                                         class="flex flex-column lg:flex-row justify-content-center align-items-center px-2">
-                                        <img src="https://agenciamahaltour.com.co/wp-content/uploads/2022/04/20181207_1fd2be85c4be4528640e7905bc4779b1.jpeg"
-                                            alt="package" class="shadow-4 w-8rem h-8rem mr-3 flex-shrink-0" />
+                                        <img [src]="order.package.photos" alt="package"
+                                            class="shadow-4 w-8rem h-8rem mr-3 flex-shrink-0" />
                                         <div class="flex flex-column my-auto mb-auto text-center md:text-left">
                                             <span
                                                 class="text-900 mb-2 mt-3 lg:mt-0 font-semibold">{{order.package.name}}</span>

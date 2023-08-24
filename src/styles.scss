@@ -38,7 +38,7 @@ body::-webkit-scrollbar-track {
 body::-webkit-scrollbar-thumb {
   background-color: var(--primary-color);
   border-radius: 20px;
-  margin: 10px; 
+  margin: 10px;
 }
 
 /* Google Font Import - Poppins */
@@ -177,7 +177,7 @@ p {
   z-index: 100;
 }
 
-.sidebar::-webkit-scrollbar{
+.sidebar::-webkit-scrollbar {
   display: none;
 }
 
@@ -322,7 +322,7 @@ body.dark .sidebar li a:hover .text {
   //
 }
 
-body:not(.layout-fixed) .main-sidebar .sidebar{
+body:not(.layout-fixed) .main-sidebar .sidebar {
   overflow-y: hidden !important;
 }
 
@@ -407,7 +407,7 @@ body.dark .home .text {
 
 ::ng-deep {
   .pac-container {
-      z-index: 40000 !important;
-      display: block !important;
+    z-index: 40000 !important;
+    display: block !important;
   }
 }

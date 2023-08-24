@@ -54,9 +54,11 @@
     box-shadow: 0px 4px 25px rgba(221, 224, 255, .54);
 }
 
-.card-span{
-    border-radius: 1.5rem; left: 70%; top: 1rem;
-  }
+.card-span {
+    border-radius: 1.5rem;
+    left: 70%;
+    top: 1rem;
+}
 
 .rounded-header {
     border-top-left-radius: 20px !important;
@@ -67,7 +69,7 @@
     border-radius: 10px !important;
     padding: 4px !important;
     font-size: small;
-  }
+}
 
 .banner {
     width: 100%;
@@ -82,13 +84,13 @@
     border-bottom-left-radius: 25px !important;
     border-bottom-right-radius: 25px !important;
     margin-bottom: 15px;
-  }
-  
-  .banner a {
+}
+
+.banner a {
     color: #FFFFFF;
     text-decoration: none;
-  }
+}
 
-  ::ng-deep .p-carousel-item{
+::ng-deep .p-carousel-item {
     padding: 5px !important;
-  }
+}
