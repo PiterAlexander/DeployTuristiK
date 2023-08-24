@@ -1,18 +1,18 @@
-import {Permission} from '@/models/permission';
-import {Role} from '@/models/role';
-import {AppState} from '@/store/state';
+import { Permission } from '@/models/permission';
+import { Role } from '@/models/role';
+import { AppState } from '@/store/state';
 import {
     GetAllPermissionsRequest,
     GetAllRoleRequest,
     ToggleSidebarMenu
 } from '@/store/ui/actions';
-import {UiState} from '@/store/ui/state';
-import {Component, HostBinding, OnInit, Input} from '@angular/core';
-import {UntypedFormGroup, UntypedFormControl} from '@angular/forms';
-import {NavigationEnd, Router} from '@angular/router';
-import {Store} from '@ngrx/store';
-import {AppService} from '@services/app.service';
-import {Observable} from 'rxjs';
+import { UiState } from '@/store/ui/state';
+import { Component, HostBinding, OnInit, Input } from '@angular/core';
+import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
+import { NavigationEnd, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppService } from '@services/app.service';
+import { Observable } from 'rxjs';
 
 var BASE_CLASSES = 'main-header navbar navbar-expand';
 
@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit {
         private appService: AppService,
         private store: Store<AppState>,
         private router: Router
-    ) {}
+    ) { }
 
     onProfileButtonClick() {
         this.appService.showProfileSidebar();
@@ -65,7 +65,20 @@ export class HeaderComponent implements OnInit {
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
                 const currentRoute = this.getCurrentRoute(event.url);
-                this.route = currentRoute;
+                console.log(currentRoute)
+                if (currentRoute === 'RegistrarPedido') {
+                    this.route = 'Pedidos / Registrar Pedido'
+                } else if (currentRoute === 'DetallesPedido') {
+                    this.route = 'Pedidos / Detalles del Pedido'
+                } else if (currentRoute === 'ProcesoBeneficiarios') {
+                    this.route = 'Pedidos / Proceso de Beneficiarios'
+                } else if (currentRoute === 'ProcesoAbonos') {
+                    this.route = 'Pedidos / Proceso de Abonos'
+                } else if (currentRoute === 'DetallesAbono') {
+                    this.route = 'Pedidos / Detalles del Abono'
+                } else {
+                    this.route = currentRoute;
+                }
             }
         });
     }
@@ -95,13 +108,13 @@ export class HeaderComponent implements OnInit {
         }
 
         this.menu = this.menu.map((item) => {
-            const mutableItem = {...item};
+            const mutableItem = { ...item };
             permissions.forEach((p) => {
                 if (p.module === mutableItem.name) {
                     mutableItem.allowed = true;
                 }
-                if(this.role === 'Cliente' && mutableItem.name === 'Mis Beneficiarios' ){
-                  mutableItem.allowed = true;
+                if (this.role === 'Cliente' && mutableItem.name === 'Mis Beneficiarios') {
+                    mutableItem.allowed = true;
                 }
                 if (p.module === 'Usuarios' || p.module === 'Roles') {
                     if (mutableItem.name === 'Configuración') {
@@ -167,9 +180,9 @@ export const MENU = [
         allowed: false
     },
     {
-      name: 'Mis Beneficiarios',
-      iconClasses: 'bx bx-calendar-week',
-      path: ['/Home/MisBeneficiarios'],
-      allowed: false
+        name: 'Mis Beneficiarios',
+        iconClasses: 'bx bx-calendar-week',
+        path: ['/Home/MisBeneficiarios'],
+        allowed: false
     }
 ];

@@ -101,12 +101,12 @@ const routes: Routes = [
                 component: ReadOrderPaymentComponent
             },
             {
-                path: 'CrearPedido/:id',
+                path: 'RegistrarPedido/:id',
                 canActivate: [AuthGuard],
                 component: CreateOrderFormComponent
             },
             {
-                path: 'CrearBeneficiarios/:id',
+                path: 'ProcesoBeneficiarios/:id',
                 canActivate: [AuthGuard],
                 component: CreateOrderDetailFormComponent
             },
@@ -116,7 +116,7 @@ const routes: Routes = [
                 component: PaymentDetailsComponent
             },
             {
-                path: 'CrearAbono/:id',
+                path: 'ProcesoAbonos/:id',
                 canActivate: [AuthGuard],
                 component: CreatePaymentFormComponent,
             },

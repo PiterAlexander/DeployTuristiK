@@ -796,7 +796,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         beneficiaries: this.beneficiaries,
       }
       this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
-      this.router.navigate(['Home/CrearPedido/asas'])
+      this.router.navigate(['Home/RegistrarPedido/asas'])
     }
   }
 
@@ -804,8 +804,9 @@ export class CreateOrderDetailFormComponent implements OnInit {
     if (this.orderProcess.action === 'CreateOrderDetail') {
       this.backFromCreateOrderDetail(event)
     } else if (this.orderProcess.action === 'EditOrderDetail') {
+      const paymentId: string = this.orderProcess.paymentId
       this.store.dispatch(new SaveOrderProcess(undefined))
-      this.router.navigate(['Home/DetallesAbono/' + this.orderProcess.paymentId])
+      this.router.navigate(['Home/DetallesAbono/' + paymentId])
     } else if (this.orderProcess.action === 'CreateOrder') {
       this.backFromCreateOrder(event)
     }
@@ -830,7 +831,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
       beneficiaries: this.beneficiaries,
     }
     this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
-    this.router.navigate(['Home/CrearAbono/asas'])
+    this.router.navigate(['Home/ProcesoAbonos/asas'])
   }
 
   nextFromEditOrderDetail() {
@@ -845,7 +846,16 @@ export class CreateOrderDetailFormComponent implements OnInit {
       eps: this.formGroup.value.eps,
       userId: this.orderProcess.customer.userId
     }
-    this.store.dispatch(new EditOrderDetailRequest({ ...customer }))
+
+    this.apiService.updateCustomer(customer.customerId, customer).subscribe({
+      next: (data) => { },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+    // this.store.dispatch(new EditCustomerRequest({ ...customer }))
+
+    this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
     this.router.navigate(['Home/DetallesAbono/' + this.orderProcess.paymentId])
   }
 
@@ -856,7 +866,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
       beneficiaries: this.beneficiaries,
     }
     this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
-    this.router.navigate(['Home/CrearAbono/asas'])
+    this.router.navigate(['Home/ProcesoAbonos/asas'])
   }
 
   next() {

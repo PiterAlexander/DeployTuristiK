@@ -272,7 +272,7 @@ export class PaymentDetailsComponent implements OnInit {
         paymentId: this.onePayment.paymentId,
       }
       this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
-      this.router.navigate(['Home/CrearBeneficiarios/asas']);
+      this.router.navigate(['Home/ProcesoBeneficiarios/asas']);
     }
   }
 

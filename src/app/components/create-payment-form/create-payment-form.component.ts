@@ -253,10 +253,10 @@ export class CreatePaymentFormComponent implements OnInit {
         beneficiaries: this.orderProcess.beneficiaries
       }
       this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
-      this.router.navigate(['Home/CrearBeneficiarios/asas'])
+      this.router.navigate(['Home/ProcesoBeneficiarios/asas'])
     } else if (this.orderProcess.action === 'CreateOrder') {
       this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
-      this.router.navigate(['Home/CrearBeneficiarios/asa'])
+      this.router.navigate(['Home/ProcesoBeneficiarios/asa'])
     }
   }
 
