@@ -103,7 +103,7 @@ export class DetailsPackageComponent implements OnInit {
             beneficiaries: {}
         }
         this.store.dispatch(new SaveOrderProcess({ ...orderProcess }));
-        this.router.navigate(['Home/CrearBeneficiarios/asas'])
+        this.router.navigate(['Home/ProcesoBeneficiarios/asas'])
     }
 
     goToLogin() {
