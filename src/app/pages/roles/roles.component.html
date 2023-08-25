@@ -46,11 +46,11 @@
                         <td>
                           <!-- Modificar desde postman el admin :) -->
                             <button pButton type="button" icon="pi pi-pencil"
-                                *ngIf="role.name !== 'Administrador'&& role.name !== 'Cliente'"
+                                *ngIf="role.name !== 'Administrador'&& role.name !== 'Cliente' && role.name !== 'Beneficiario'"
                                 class="p-button-outlined p-button-warning p-button-rounded m-1"
                                 (click)="openEditRoleModal(role)" pTooltip="Editar" tooltipPosition="bottom"></button>
                             <button pButton type="button" icon="pi pi-pencil"
-                                *ngIf="role.name === 'Administrador' || role.name === 'Cliente'"
+                                *ngIf="role.name === 'Administrador' || role.name === 'Cliente' || role.name === 'Beneficiario'"
                                 class="p-button-outlined p-button-warning p-button-rounded m-1"
                                 (click)="openEditRoleModal(role)" pTooltip="Editar" tooltipPosition="bottom"
                                 disabled></button>
