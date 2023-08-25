@@ -368,7 +368,7 @@ export class CreatePaymentFormComponent implements OnInit {
     formData.append('orderId', payment.orderId)
     formData.append('amount', String(payment.amount))
     formData.append('remainingAmount', String(payment.remainingAmount))
-    formData.append('date', payment.date.toISOString())
+    formData.append('date', payment.date.toLocaleString())
     formData.append('status', String(payment.status))
 
     if (payment.imageFile instanceof File) {

@@ -1,5 +1,5 @@
 import { Order } from '@/models/order';
-import { GetAllCustomerRequest, GetAllOrdersRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, OpenModalCreateOrder } from '@/store/ui/actions';
+import { GetAllCustomerRequest, GetAllOrdersRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, OpenModalCreateOrder, SaveOrderProcess } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -21,6 +21,7 @@ export class OrdersComponent implements OnInit {
   public role: any
   public user: any
   public allCustomers: Array<Customer>
+  public orderProcess: any
   public oneCustomer: Customer
   public allOrders: Array<Order>
   public ordersList: Array<Order> = []
@@ -64,6 +65,7 @@ export class OrdersComponent implements OnInit {
     this.ui.subscribe((state: UiState) => {
       this.user = JSON.parse(localStorage.getItem('TokenPayload'))
       this.role = this.user['role']
+      this.orderProcess = state.orderProcess.data
       this.allCustomers = state.allCustomers.data
       this.allOrders = state.allOrders.data
       this.allPackages = state.allPackages.data
@@ -72,6 +74,10 @@ export class OrdersComponent implements OnInit {
       );
       this.compareCustomer()
     })
+
+    if (this.orderProcess !== undefined) {
+      this.store.dispatch(new SaveOrderProcess(undefined))
+    }
 
     this.statuses = [
       { 'label': 'Pendiente', 'code': 0 },
@@ -163,9 +169,16 @@ export class OrdersComponent implements OnInit {
     this.router.navigate(['Home/RegistrarPedido/' + 'asasas']);
   }
 
-  async sendToPayments(order: Order) {
-    this.router.navigate(['Home/DetallesPedido/' + order.orderId]);
-    console.log('hello bro', this.router.config);
+  sendToPayments(order: Order) {
+    this.router.navigate(['Home/DetallesPedido/' + order.orderId])
+  }
+
+  sendToPackage(order: Order) {
+    const orderProcess = {
+      action: 'PackageDetails'
+    }
+    this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
+    this.router.navigate(['Home/DetallesPaquete/' + order.packageId]);
   }
 
   verDetalles(elementoId: string) {

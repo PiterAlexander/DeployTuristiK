@@ -60,7 +60,7 @@
             comienza a explorar los tesoros que el mundo tiene para ofrecerte!</p>
     </div>
     <div class="mb-4 surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border" style="border-radius: 15px;">
-        <p-dataView id="myDv" #dv *ngIf="visible" [value]="ordersList" filterBy="totalCost" [paginator]="true"
+        <p-dataView id="myDv" #dv *ngIf="visible" [value]="ordersList" filterBy="package.destination" [paginator]="true"
             [rows]="2" layout="list" [loading]="loading">
             <ng-template pTemplate="header">
                 <div class="flex flex-column md:flex-row justify-content-between align-items-center">
@@ -73,7 +73,7 @@
                             <span class="p-input-icon-left input-design">
                                 <i class="pi pi-search"></i>
                                 <input class="w-full small-input" type="search" pInputText
-                                    placeholder="Buscar pedido por costo total" (input)="onFilter(dv, $event)">
+                                    placeholder="Buscar pedido por destino" (input)="onFilter(dv, $event)">
                             </span>
                         </div>
                     </div>
@@ -175,7 +175,7 @@
                                 </div>
                             </div>
                             <div class="col-12 p-0 flex border-top-1 surface-border">
-                                <a (click)="sendToPayments(order)" tabindex="0"
+                                <a (click)="sendToPackage(order)" tabindex="0"
                                     class="cursor-pointer py-4 flex flex-column md:flex-row text-center justify-content-center align-items-center text-indigo-500 hover:bg-primary hover:text-0 transition-duration-150 w-full"><i
                                         class="pi pi-info-circle mr-2"></i>Ver detalles del paquete</a>
                                 <a (click)="sendToPayments(order)" tabindex="0"

@@ -6,6 +6,7 @@ import {
     GetTopPackagesRequest,
     OpenModalCreatePackage,
     OpenModalDetailsPackage,
+    SaveOrderProcess,
 } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
@@ -33,6 +34,7 @@ export class PackagesComponent implements OnInit {
     public loading: boolean;
     public search: string;
     public total: number;
+    public orderProcess: any
     public sortOptions: SelectItem[] = [];
     public sortOrder: number = 0;
     public sortField: string = '';
@@ -59,6 +61,7 @@ export class PackagesComponent implements OnInit {
             } else {
                 this.role = undefined;
             }
+            this.orderProcess = state.orderProcess.data
             this.top = state.allTopPackages.data
             this.allCustomers = state.allCustomers.data;
             this.packagesList = state.allPackages.data;
@@ -69,6 +72,10 @@ export class PackagesComponent implements OnInit {
             this.loading = state.allPackages.loading;
         });
 
+        if (this.orderProcess !== undefined) {
+            this.store.dispatch(new SaveOrderProcess(undefined))
+        }
+
         this.sortOptions = [
             { label: 'Del mayor al menor', value: '!price' },
             { label: 'Del menor al mayor', value: 'price' }
@@ -76,7 +83,7 @@ export class PackagesComponent implements OnInit {
     }
     scrollToSelector(): void {
         this.packagesSection.nativeElement.scrollIntoView({ behavior: 'smooth' });
-      }
+    }
     onFilter(dv: DataView, event: Event) {
         dv.filter((event.target as HTMLInputElement).value);
     }
@@ -84,15 +91,12 @@ export class PackagesComponent implements OnInit {
     verDetalles(elementoId: string) {
         if (this.role == 'Administrador') {
             this.router.navigate(['Home/DetallesPaquete/' + elementoId]);
-            console.log('hello bro', this.router.config);
         }
         if (this.role == 'Cliente') {
             this.router.navigate(['Home/DetallesPaquete/' + elementoId]);
-            console.log('hello bro', this.router.config);
         }
         if (this.role == undefined) {
             this.router.navigate(['detailsPackage/' + elementoId]);
-            console.log('hello nigga', this.router.config);
         }
     }
 

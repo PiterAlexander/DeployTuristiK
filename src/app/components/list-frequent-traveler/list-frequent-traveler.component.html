@@ -128,7 +128,7 @@
                 <div class="flex flex-column md:flex-row justify-content-between align-items-center mb-2">
                     <div class="flex flex-column text-center md:text-left">
                         <span class="text-900 text-2xl mb-2">Mis viajeros frecuentes</span>
-                        <span class="text-700 text-lg">La mejor compañia para cada uno de mis viajes</span>
+                        <span class="text-700 text-lg">La mejor compañia para cada uno de mis viajes.</span>
                     </div>
                     <div class="col-5">
                         <div class="flex flex-column gap-2">
@@ -145,24 +145,23 @@
                 <div *ngIf="frequentTraveler.addFtButton" class="col-12 md:col-4">
                     <div style="min-height: 221px;;" (click)="createFrequentTraveler()"
                         class="cursor-pointer card-hover surface-card m-3 p-4 surface-border card-shadow flex flex-column align-items-center justify-content-center">
-                        <button pButton type="button" icon="pi pi-plus" class="p-button-lg p-button-rounded"></button>
-                        <div class="p-divider custom-divider mt-3"></div>
-                        <p class="mb-0 text-primary text-lg">Añadir</p>
-                        <p>Viajeros Frecuentes</p>
+                        <i class="pi pi-plus-circle border-circle shadow-2 text-primary text-7xl"></i>
+                        <h4 class="mb-0 mt-3 text-primary">Agregar</h4>
+                        <p class="text-center text-500 text-lg">Viajero Frecuente</p>
                     </div>
                 </div>
                 <div *ngIf="!frequentTraveler.addFtButton" class="col-12 md:col-4">
                     <div class="surface-card m-3 p-4 surface-border card-shadow">
-                        <div class="flex mb-3">
-                            <img [src]="frequentTraveler.img" class="w-4rem h-4rem mr-3"
-                                style="bottom: -1.5rem; right: 1.5rem">
-                            <div>
+                        <div class="flex align-items-center mb-3">
+                            <p-avatar [image]="frequentTraveler.img" styleClass="border-circle shadow-3 mr-3"
+                                size="xlarge" shape="circle"></p-avatar>
+                            <span>
                                 <div class="text-900 font-semibold text-xl">{{frequentTraveler.name + ' '+
                                     frequentTraveler.lastName}}</div>
                                 <div class="text-700">{{frequentTraveler.document}}</div>
-                            </div>
+                            </span>
                         </div>
-                        <p-panel header="Información personal" [toggleable]="true" collapsed="true"
+                        <p-panel header="Ver resto de Información" [toggleable]="true" collapsed="true"
                             class="line-height-3 m-0">
                             <div class="flex mb-1">
                                 <span class="text-900"><span class="font-bold">Teléfono: </span>

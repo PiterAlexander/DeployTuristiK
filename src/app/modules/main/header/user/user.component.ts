@@ -86,7 +86,7 @@ export class UserComponent implements OnInit {
         this.confirmationService.confirm({
             key: 'confirm2',
             header: 'Cerrar Sesión',
-            target: event.target || new EventTarget,
+            target: event.target,
             message: '¿Seguro quiere cerrar sesión?',
             icon: 'pi pi-exclamation-triangle',
             acceptLabel: "Cerrar Sesión",

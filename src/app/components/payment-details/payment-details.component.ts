@@ -80,7 +80,7 @@ export class PaymentDetailsComponent implements OnInit {
       'https://img.freepik.com/vector-premium/cute-sheep-super-hero-cartoon-vector-icono-ilustracion-animal-vacaciones-icono-concepto-aislado-plano_138676-9238.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
       'https://img.freepik.com/vector-gratis/cute-panda-summer-waving-hand-cartoon-vector-icon-illustration-concepto-icono-vacaciones-animales-aislado_138676-7160.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587'
     ]
-
+    
     this.customerImages = [
       'https://img.freepik.com/vector-gratis/lindo-husky-perro-sentado-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-premium_138676-4567.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
       'https://img.freepik.com/vector-gratis/lindo-unicornio-bebiendo-te-leche-boba-ilustracion-icono-vector-dibujos-animados-arco-iris-icono-bebida-animal_138676-7412.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',

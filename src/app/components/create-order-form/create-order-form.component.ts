@@ -89,7 +89,7 @@ export class CreateOrderFormComponent implements OnInit {
         this.beneficiariesAmount = this.orderProcess.beneficiaries.length
       } else {
         if (this.orderProcess.order.beneficiaries !== undefined) {
-          this.beneficiariesAmount = this.orderProcess.order.beneficiaries
+          this.beneficiariesAmount = 1
         }
       }
       this.formGroup.setValue({

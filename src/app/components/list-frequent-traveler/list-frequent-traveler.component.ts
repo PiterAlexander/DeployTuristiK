@@ -30,12 +30,17 @@ export class ListFrequentTravelerComponent implements OnInit {
   public showAddButton: number = 0
   public firstItem: boolean
   avatars: string[] = [
-    'https://i.pinimg.com/236x/45/1c/1f/451c1fd9de0d5c1ebc813444f99aa44c.jpg',
-    'https://i.pinimg.com/236x/a7/ed/12/a7ed12a602d817b5c4ef8a9aa52bd703.jpg',
-    'https://i.pinimg.com/236x/70/21/39/702139884f3fb43b1e4722df7ee85a30.jpg',
-    'https://i.pinimg.com/236x/c6/9a/70/c69a70f740a1ea3939021fa05c1d7f17.jpg',
-    'https://i.pinimg.com/236x/53/49/1c/53491c7a972e8c4df667ef2b511ba334.jpg',
-    'https://i.pinimg.com/236x/88/74/c9/8874c94b8691b64c4fb19723449e5844.jpg',
+    'https://img.freepik.com/vector-gratis/ilustracion-icono-vector-dibujos-animados-lindo-gato-sentado-concepto-icono-naturaleza-animal-aislado-premium-vector-estilo-dibujos-animados-plana_138676-4148.jpg?w=740&t=st=1692921535~exp=1692922135~hmac=3bed835feabe03cfb5aa9d45ae688588799d42b98f2faf54655759ba61b30a45',
+    'https://img.freepik.com/vector-gratis/ilustracion-icono-vector-dibujos-animados-lindo-gato-bostezo-sonoliento-concepto-icono-naturaleza-animal-aislado-vector-premium-estilo-dibujos-animados-plana_138676-3732.jpg?size=626&ext=jpg&ga=GA1.1.439880410.1692375587',
+    'https://img.freepik.com/vector-gratis/raton-lindo-sentado-ilustracion-icono-vector-dibujos-animados-queso-concepto-icono-alimento-animal-aislado_138676-5860.jpg?size=626&ext=jpg&ga=GA1.1.439880410.1692375587',
+    'https://img.freepik.com/vector-gratis/lindo-panda-bambu-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-vector-aislado_138676-4386.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
+    'https://img.freepik.com/vector-gratis/lindo-cerdo-sentado-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-premium-plano_138676-7818.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
+    'https://img.freepik.com/vector-gratis/linda-vaca-sentada-comiendo-hierba-cartoon-vector-icono-ilustracion-animal-naturaleza-icono-aislado-plano_138676-4780.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
+    'https://img.freepik.com/vector-gratis/lindo-gato-durmiendo-pollito-cartoon-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado_138676-5228.jpg?size=626&ext=jpg&ga=GA1.1.439880410.1692375587',
+    'https://img.freepik.com/vector-gratis/gato-lindo-ejemplo-icono-vector-historieta-agujero-concepto-icono-naturaleza-animal-aislado-premium-vector-estilo-dibujos-animados-plana_138676-4236.jpg?size=626&ext=jpg&ga=GA1.1.439880410.1692375587',
+    'https://img.freepik.com/vector-gratis/ilustracion-icono-vector-dibujos-animados-lindo-conejo-sentado-concepto-icono-naturaleza-animal-plano-aislado_138676-7351.jpg?size=626&ext=jpg&ga=GA1.1.439880410.1692375587',
+    'https://img.freepik.com/vector-gratis/ilustracion-icono-vector-dibujos-animados-pie-ardilla-linda-naturaleza-animal-icono-concepto-aislado-premium_138676-6545.jpg?size=626&ext=jpg&ga=GA1.1.439880410.1692375587',
+    'https://img.freepik.com/vector-gratis/lindo-gato-jugando-mano-telefono-dibujos-animados-vector-icono-ilustracion-concepto-icono-tecnologia-animal-aislado-premium-vector-estilo-dibujos-animados-plana_138676-4231.jpg?size=626&ext=jpg&ga=GA1.1.439880410.1692375587'
   ];
 
   constructor(
@@ -92,7 +97,7 @@ export class ListFrequentTravelerComponent implements OnInit {
                 const alreadyExists: Customer = this.frequentTravelersList.find(o => o.customerId === element.travelerId)
                 if (alreadyExists === undefined) {
                   this.frequentTravelersList.push(frequentTraveler)
-                  if (index === 5) {
+                  if (index === 10) {
                     index = 0
                   } else {
                     index++

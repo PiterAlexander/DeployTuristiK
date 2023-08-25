@@ -104,6 +104,8 @@ import { ScrollTopModule } from 'primeng/scrolltop';
 import { ChipModule } from 'primeng/chip';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { AccordionModule } from 'primeng/accordion';
+import { AvatarModule } from 'primeng/avatar';
+import { AvatarGroupModule } from 'primeng/avatargroup';
 defineCustomElements();
 
 
@@ -225,6 +227,8 @@ registerLocaleData(localeEs);
     SkeletonModule,
     ImageModule,
     AccordionModule,
+    AvatarModule,
+    AvatarGroupModule,
 
     //<------------------------->
     ToastrModule.forRoot({

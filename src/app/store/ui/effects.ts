@@ -488,10 +488,10 @@ export class PackageEffects {
         ofType(orderActions.EDIT_PAYMENT_REQUEST),
         map((action: EditPaymentRequest) => action.payload),
         switchMap((payment) => {
-            this.dialogRef.close()
-            this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Abono editado exitosamente.' });
             return this.apiService.updatePayment(payment.paymentId, payment).pipe(
                 mergeMap((paymentResolved) => {
+                    this.dialogRef.close()
+                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Abono editado exitosamente.' });
                     return [
                         new EditPaymentSuccess(paymentResolved),
                     ];

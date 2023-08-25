@@ -113,7 +113,7 @@ export class HeaderComponent implements OnInit {
                 if (p.module === mutableItem.name) {
                     mutableItem.allowed = true;
                 }
-                if (this.role === 'Cliente' && mutableItem.name === 'Mis Beneficiarios') {
+                if (this.role === 'Cliente' && mutableItem.name === 'Mis Viajeros') {
                     mutableItem.allowed = true;
                 }
                 if (p.module === 'Usuarios' || p.module === 'Roles') {
@@ -180,7 +180,7 @@ export const MENU = [
         allowed: false
     },
     {
-        name: 'Mis Beneficiarios',
+        name: 'Mis Viajeros',
         iconClasses: 'bx bx-calendar-week',
         path: ['/Home/MisBeneficiarios'],
         allowed: false

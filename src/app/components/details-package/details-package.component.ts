@@ -35,6 +35,7 @@ export class DetailsPackageComponent implements OnInit {
     public loading: boolean;
     public search: string;
     public total: number;
+    public orderProcess: any
     arrayPackagesClient: Array<Package>;
 
     color: string = 'bluegray';
@@ -58,6 +59,7 @@ export class DetailsPackageComponent implements OnInit {
         this.store.dispatch(new GetAllPackagesRequest());
         this.store.dispatch(new GetAllCustomerRequest());
         this.ui.subscribe((state: UiState) => {
+            this.orderProcess = state.orderProcess.data
             this.packagesList = state.allPackages.data;
             this.route.paramMap.subscribe((params) => {
                 this.elementId = params.get('id');
@@ -69,7 +71,6 @@ export class DetailsPackageComponent implements OnInit {
 
                 this.images = photosArray;
                 // this.images = photosArray.slice(0, 7);
-                console.log(this.images);
             });
             this.allCustomers = state.allCustomers.data;
             this.arrayPackagesClient = state.allPackages.data.filter(
@@ -91,7 +92,6 @@ export class DetailsPackageComponent implements OnInit {
         const customer: Customer = this.allCustomers.find(
             (c) => c.userId === this.user['id']
         );
-        console.log(cant);
 
         const orderProcess =
         {

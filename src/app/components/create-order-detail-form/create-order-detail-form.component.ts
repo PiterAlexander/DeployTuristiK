@@ -795,6 +795,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
         order: this.orderProcess.order,
         beneficiaries: this.beneficiaries,
       }
+      console.log(this.orderProcess);
+
       this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
       this.router.navigate(['Home/RegistrarPedido/asas'])
     }

@@ -196,7 +196,7 @@ export class EditPaymentFormComponent implements OnInit {
         image: this.payment.image,
         status: status
       }
-      
+
       const formData = new FormData();
       formData.append('paymentId', payment.paymentId)
       formData.append('orderId', payment.orderId)
@@ -212,7 +212,7 @@ export class EditPaymentFormComponent implements OnInit {
         formData.append('imageFile', payment.imageFile)
       }
 
-      this.store.dispatch(new EditPaymentRequest({ ...payment }))
+      // this.store.dispatch(new EditPaymentRequest({ ...payment }))
       this.apiService.updatePayment(formData.get('paymentId'), formData).subscribe({
         next: (data) => { },
         error: (err) => {
@@ -221,6 +221,7 @@ export class EditPaymentFormComponent implements OnInit {
       })
       this.modalPrimeNg.close()
       this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Abono editado exitosamente.' });
+      window.location.reload()
     }
   }
 }
