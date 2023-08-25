@@ -3,18 +3,18 @@ import {
     EditRoleRequest,
     GetAllPermissionsRequest
 } from '@/store/ui/actions';
-import {Component,OnInit} from '@angular/core';
-import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
-import {UiState} from '@/store/ui/state';
-import {AppState} from '@/store/state';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Role} from '@/models/role';
-import {AssociatedPermission} from '@/models/associated-permission';
-import {ApiService} from '@services/api.service';
-import {DynamicDialogRef} from 'primeng/dynamicdialog';
-import {User} from '@/models/user';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { UiState } from '@/store/ui/state';
+import { AppState } from '@/store/state';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Role } from '@/models/role';
+import { AssociatedPermission } from '@/models/associated-permission';
+import { ApiService } from '@services/api.service';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { User } from '@/models/user';
 
 interface Status {
     name: string;
@@ -51,8 +51,8 @@ export class CreateRoleFormComponent implements OnInit {
         private apiService: ApiService
     ) {
         this.statuses = [
-            {name: 'Activo', code: 1},
-            {name: 'Inactivo', code: 2}
+            { name: 'Activo', code: 1 },
+            { name: 'Inactivo', code: 2 }
         ];
     }
 
@@ -95,8 +95,8 @@ export class CreateRoleFormComponent implements OnInit {
             const roleName = roleNameControl.value;
             if (
                 roleName === 'Administrador' ||
-                roleName === 'Empleado' ||
                 roleName === 'Beneficiario' ||
+                roleName === 'Empleado' ||
                 roleName === 'Cliente'
             ) {
                 roleNameControl.disable();
@@ -149,15 +149,25 @@ export class CreateRoleFormComponent implements OnInit {
                 if (
                     this.roleData.name != 'Administrador' ||
                     this.roleData.name != 'Cliente' ||
-                    this.roleData.name != 'Empleado' ||
                     this.roleData.name != 'Beneficiario'
                 ) {
                     //acá voy a recorrer los usuarios y cambiarle los status
                     const model: Role = {
                         roleId: this.roleData.roleId,
-                        name: this.roleData.name,
+                        name: this.formGroup.value.name ? this.formGroup.value.name : this.roleData.name,
                         status: this.formGroup.value.status
                     };
+
+                    if (this.formGroup.value.name) {
+                        const model: Role = {
+                            roleId: this.roleData.roleId,
+                            name: this.formGroup.value.name,
+                            status: this.formGroup.value.status
+                        };
+                    }else{
+                        
+                    }
+
                     this.selectedStatusCode = this.formGroup.value.status;
                     this.updatingPermissionRoleAssignment();
                     this.store.dispatch(
@@ -190,18 +200,7 @@ export class CreateRoleFormComponent implements OnInit {
                             });
                         });
                     }
-                } else {
-                    const model: Role = {
-                        roleId: this.roleData.roleId,
-                        name: this.formGroup.value.name,
-                        status: this.formGroup.value.status
-                    };
-                    this.updatingPermissionRoleAssignment();
-                    this.store.dispatch(
-                        new EditRoleRequest({
-                            ...model
-                        })
-                    );
+
                 }
             }
         }
@@ -306,11 +305,23 @@ export class CreateRoleFormComponent implements OnInit {
                 this.selectedPermissions.length > 0
             );
         } else {
+            if (this.formGroup.value.name) {
+                return (
+                    this.formGroup.valid &&
+                    this.formGroup.value.status != 0 &&
+                    this.formGroup.value.name.toLowerCase() != 'null' &&
+                    this.formGroup.value.name.toLowerCase() != 'nan' &&
+                    !this.allRoles.find(
+                        (item) =>
+                            item.name === this.formGroup.value.name &&
+                            item.roleId !== this.roleData.roleId
+                    ) &&
+                    this.selectedPermissions.length > 0
+                );
+            }
             return (
                 this.formGroup.valid &&
                 this.formGroup.value.status != 0 &&
-                this.formGroup.value.name.toLowerCase() != 'null' &&
-                this.formGroup.value.name.toLowerCase() != 'nan' &&
                 !this.allRoles.find(
                     (item) =>
                         item.name === this.formGroup.value.name &&
@@ -339,13 +350,17 @@ export class CreateRoleFormComponent implements OnInit {
     }
 
     isNaN(): boolean {
-      const nameControl = this.formGroup.value.name.toLowerCase();
 
-      if (nameControl== 'null' || nameControl=="nan") {
-        return true;
-      }
+        if (
+            this.formGroup.value.name
+        ) {
+            const nameControl = this.formGroup.value.name.toLowerCase();
+            if (nameControl == 'null' || nameControl == "nan") {
+                return true;
+            }
+        }
 
-      return false;
+        return false;
     }
 
     validateAssociatedPermissions(): boolean {
