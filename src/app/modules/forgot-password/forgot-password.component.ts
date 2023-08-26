@@ -93,9 +93,12 @@ export class ForgotPasswordComponent implements OnInit {
             this.store.dispatch(new RecoverPasswordRequest({
                 ...this.modelEmail,
             }))
-            this.messageService.add({ key: 'alert-message-forgot-password', severity: 'success', summary: 'bien', detail: 'Corrreo enviado' });
+            this.messageService.add({ key: 'alert-message-forgot-password', severity: 'success', summary: '¡Éxito!', detail: 'Código de recuperación enviado' });
 
-            this.router.navigate(['/recover-password'])
+
+            setTimeout(() => {
+                this.router.navigate(['/recover-password'])
+            }, 2000);
             // this.toastr.success("Correo Enviado");
 
         } else {
