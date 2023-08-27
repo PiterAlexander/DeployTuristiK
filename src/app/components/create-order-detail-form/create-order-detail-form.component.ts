@@ -9,13 +9,13 @@ import { User } from '@/models/user';
 import { Customer } from '@/models/customer';
 import { Package } from '@/models/package';
 import { ConfirmationService } from 'primeng/api';
-import { EditOrderDetailRequest, SaveOrderProcess, } from '@/store/ui/actions';
+import { SaveOrderProcess, } from '@/store/ui/actions';
 import { ApiService } from '@services/api.service';
 import { SelectItem } from 'primeng/api';
 import { DataView } from 'primeng/dataview';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { FrequentTraveler } from '@/models/frequentTraveler';
+import { GooglePlacesService } from '@services/google-places.service';
 
 @Component({
   selector: 'app-create-order-detail-form',
@@ -60,8 +60,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
     private router: Router,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
+    private googlePlacesService: GooglePlacesService
   ) { }
-
 
   ngOnInit(): void {
     this.ui = this.store.select('ui')
@@ -169,6 +169,26 @@ export class CreateOrderDetailFormComponent implements OnInit {
   }
 
   //<--- ON INIT FROM DIFFERENT ENTRIES --->
+
+  onAddressChange(address: any) {
+    if (this.formGroup) {
+      const addressHtml = address.adr_address;
+      console.log(address);
+      const hiddenDiv = document.createElement('div');
+      hiddenDiv.style.display = 'none';
+      hiddenDiv.innerHTML = addressHtml;
+      const locality = hiddenDiv.querySelector('.locality')?.textContent || '';
+      const country = hiddenDiv.querySelector('.country-name')?.textContent || '';
+      const regionElements = hiddenDiv.querySelectorAll('.region');
+      if (regionElements.length >= 2) {
+        const region = regionElements[0].textContent || '';
+        const extractedText = `${address.name}, ${locality}, ${region}, ${country}`;
+        console.log(extractedText);
+        this.formGroup.get('address').setValue(extractedText);
+      }
+    }
+    console.log(address);
+  }
 
   searchEps(event: any) {
     const filtered: any[] = []
@@ -336,9 +356,9 @@ export class CreateOrderDetailFormComponent implements OnInit {
     if (yearAge < 5) {
       return this.onePackage.aditionalPrice
     } else if (yearAge >= 5 && yearAge < 10) {
-      return this.onePackage.price * 0.70
+      return this.onePackage.price + this.onePackage.aditionalPrice * 0.70
     } else {
-      return this.onePackage.price
+      return this.onePackage.price + this.onePackage.aditionalPrice
     }
   }
 
@@ -436,11 +456,25 @@ export class CreateOrderDetailFormComponent implements OnInit {
     }
   }
 
+  //<--- FREQUENT TRAVELER ACTIONS --->
+
+  hasCheckedFt(): boolean {
+    if (this.selectedFrequentTravelers.length > 0) {
+      for (const element of this.selectedFrequentTravelers) {
+        const alreadyExistsFromBeneficiaries: any = this.beneficiaries.find(b => b.document === element.document)
+        const alreadyExistsFromOrderDetail: Customer = this.orderDetailCustomers.find(od => od.customerId === element.customerId)
+        if (alreadyExistsFromBeneficiaries !== undefined || alreadyExistsFromOrderDetail !== undefined) {
+          return true
+        }
+        return false
+      }
+    }
+  }
+
   canSelect(frequentTraveler: Customer): boolean {
-    const exists: any = this.beneficiaries.find(b => b.document === frequentTraveler.document)
+    const alreadyExistsFromBeneficiaries: any = this.beneficiaries.find(b => b.document === frequentTraveler.document)
     const alreadyExistsFromOrderDetail: Customer = this.orderDetailCustomers.find(od => od.customerId === frequentTraveler.customerId)
-    if (exists !== undefined || alreadyExistsFromOrderDetail !== undefined) {
-      this.ftCheck = true
+    if (alreadyExistsFromBeneficiaries !== undefined || alreadyExistsFromOrderDetail !== undefined) {
       return true
     }
     return false
@@ -449,22 +483,25 @@ export class CreateOrderDetailFormComponent implements OnInit {
   areDisabled(selected: any): boolean {
     let areDisabled: boolean = false
     let arentDisabled: boolean = false
-    for (const element of selected) {
-      const exists: any = this.beneficiaries.find(b => b.document === element.document)
-      const alreadyExistsFromOrderDetail: Customer = this.orderDetailCustomers.find(od => od.customerId === element.customerId)
-      if (exists !== undefined || alreadyExistsFromOrderDetail !== undefined) {
-        areDisabled = true
-      } else {
-        arentDisabled = true
+    if (selected.length > 0) {
+      for (const element of selected) {
+        const alreadyExistsFromBeneficiaries: any = this.beneficiaries.find(b => b.customerId === element.customerId)
+        const alreadyExistsFromOrderDetail: Customer = this.orderDetailCustomers.find(od => od.customerId === element.customerId)
+        if (alreadyExistsFromBeneficiaries !== undefined || alreadyExistsFromOrderDetail !== undefined) {
+          areDisabled = true
+        } else {
+          arentDisabled = true
+        }
       }
     }
     return arentDisabled
   }
 
-  preSelectedFrequentTravelers(frequentTraveler: FrequentTraveler) {
-    const alreadyExistsFromOrderDetail: Customer = this.orderDetailCustomers.find(od => od.customerId === frequentTraveler.travelerId)
-    if (alreadyExistsFromOrderDetail !== undefined) {
-      this.selectedFrequentTravelers.push(alreadyExistsFromOrderDetail)
+  preSelectedFrequentTravelers(frequentTraveler: Customer) {
+    const alreadyExistsFromBeneficiaries: any = this.beneficiaries.find(b => b.customerId === frequentTraveler.customerId)
+    const alreadyExistsFromOrderDetail: Customer = this.orderDetailCustomers.find(od => od.customerId === frequentTraveler.customerId)
+    if (alreadyExistsFromOrderDetail !== undefined || alreadyExistsFromBeneficiaries !== undefined) {
+      this.selectedFrequentTravelers.push(frequentTraveler)
     }
   }
 
@@ -473,12 +510,58 @@ export class CreateOrderDetailFormComponent implements OnInit {
       for (const element of this.orderProcess.order.customer.frequentTraveler) {
         const customer = this.allCustomers.find(c => c.customerId === element.travelerId)
         if (customer !== undefined) {
-          this.preSelectedFrequentTravelers(element)
+          this.preSelectedFrequentTravelers(customer)
           this.frequentTravelers.push(customer)
         }
       }
     }
   }
+
+  addFrequentTraveler(event: Event, element: any) {
+    if (this.selectedFrequentTravelers !== undefined) {
+      let flag: boolean = true
+      let counter: number = this.beneficiariesAmount
+      for (const element of this.selectedFrequentTravelers) {
+        const alreadyExists = this.beneficiaries.find(b => b.document === element.document)
+        const alreadyExistsFromOrderDetail = this.orderDetailCustomers.find(od => od.document === element.document)
+        if (alreadyExists === undefined && alreadyExistsFromOrderDetail === undefined) {
+          if (this.onePackage.availableQuotas > this.beneficiaries.length) {
+            this.beneficiaries.push({
+              customerId: element.customerId,
+              name: element.name,
+              lastName: element.lastName,
+              document: element.document,
+              birthDate: element.birthDate,
+              phoneNumber: element.phoneNumber,
+              address: element.address,
+              eps: element.eps,
+              user: element.user,
+              image: this.setBeneficiarieImage(element.document),
+              price: this.adjustPriceAccordingToAge(element.birthDate),
+              addToFt: false
+            })
+            if (this.beneficiariesAmount < this.onePackage.availableQuotas && this.beneficiariesForm()) {
+              if (this.beneficiaries.length > this.beneficiariesAmount) {
+                counter++
+              }
+            }
+          } else {
+            flag = false
+          }
+        }
+      }
+      this.beneficiariesAmount = counter
+      this.updateVisibility()
+      element.hide(event)
+      if (!flag) {
+        this.messageService.add({ key: 'alert-message', severity: 'warn', summary: '¡Cupos insuficientes!', detail: 'Uno o varios Beneficiarios no se pudieron añadir.' })
+      } else {
+        this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Beneficiario/s agregado/s exitosamente.' })
+      }
+    }
+  }
+
+  //<-------------->
 
   fillCustomerInformation() {
     this.beneficiaries.push({
@@ -518,50 +601,13 @@ export class CreateOrderDetailFormComponent implements OnInit {
         if (this.beneficiariesAmount > 1) {
           this.beneficiariesAmount--
         }
+        if (this.beneficiaries.length === 0) {
+          this.ftCheck = false
+        }
         this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Beneficiario eliminado exitosamente.' })
         this.updateVisibility()
       }
     })
-  }
-
-  addFrequentTraveler(event: Event, element: any) {
-    if (this.selectedFrequentTravelers !== undefined) {
-      let flag: boolean = true
-      for (const element of this.selectedFrequentTravelers) {
-        const alreadyExists = this.beneficiaries.find(b => b.document === element.document)
-        const alreadyExistsFromOrderDetail = this.orderDetailCustomers.find(od => od.document === element.document)
-        if (alreadyExists === undefined && alreadyExistsFromOrderDetail === undefined) {
-          if (this.onePackage.availableQuotas > this.beneficiaries.length) {
-            this.beneficiaries.push({
-              customerId: element.customerId,
-              name: element.name,
-              lastName: element.lastName,
-              document: element.document,
-              birthDate: element.birthDate,
-              phoneNumber: element.phoneNumber,
-              address: element.address,
-              eps: element.eps,
-              user: element.user,
-              image: this.setBeneficiarieImage(element.document),
-              price: this.adjustPriceAccordingToAge(element.birthDate),
-              addToFt: false
-            })
-            if (this.beneficiariesAmount < this.onePackage.availableQuotas) {
-              this.beneficiariesAmount++
-            }
-          } else {
-            flag = false
-          }
-        }
-      }
-      this.updateVisibility()
-      element.hide(event)
-      if (!flag) {
-        this.messageService.add({ key: 'alert-message', severity: 'warn', summary: '¡Cupos insuficientes!', detail: 'Uno o varios Beneficiarios no se pudieron añadir.' })
-      } else {
-        this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Beneficiario/s agregado/s exitosamente.' })
-      }
-    }
   }
 
   addAnotherBeneficiarieButton(): boolean {
@@ -795,8 +841,6 @@ export class CreateOrderDetailFormComponent implements OnInit {
         order: this.orderProcess.order,
         beneficiaries: this.beneficiaries,
       }
-      console.log(this.orderProcess);
-
       this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
       this.router.navigate(['Home/RegistrarPedido/asas'])
     }

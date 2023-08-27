@@ -65,7 +65,6 @@ export class HeaderComponent implements OnInit {
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
                 const currentRoute = this.getCurrentRoute(event.url);
-                console.log(currentRoute)
                 if (currentRoute === 'RegistrarPedido') {
                     this.route = 'Pedidos / Registrar Pedido'
                 } else if (currentRoute === 'DetallesPedido') {

@@ -10,3 +10,14 @@ export interface sendPQRS {
     Subject: string;
     Body: string;
 }
+
+export interface mailRecepcion {
+    orderId: string,
+    amount: number
+}
+
+export interface paymentStatusMail {
+    orderId: string,
+    paymentId: string,
+    cause?: string
+}

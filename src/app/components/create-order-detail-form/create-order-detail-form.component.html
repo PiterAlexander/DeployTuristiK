@@ -32,14 +32,14 @@
                     <button
                         *ngIf="addAnotherBeneficiarieButton() && beneficiariesForm() && showBeneficiariesTable() || addAnotherBeneficiarieButton() && !beneficiariesForm() && showBeneficiariesTable()"
                         pButton pRipple type="button" [pTooltip]="'Cantidad de beneficiarios: ' + beneficiariesAmount"
-                        tooltipPosition="bottom" (click)="addAnotherBeneficiarie()" label="Añadir beneficiario"
+                        tooltipPosition="bottom" (click)="addAnotherBeneficiarie()" label="Aumentar beneficiarios"
                         class="p-button-success mr-2" icon="pi pi-user-plus"></button>
                     <i *ngIf="addAnotherBeneficiarieButton() && beneficiariesForm() && showBeneficiariesTable()"
                         class="pi pi-bars mr-2"></i>
                     <button *ngIf="beneficiariesForm() && showBeneficiariesTable()"
                         (click)="reduceBeneficiariesAmount()" pButton pRipple type="button"
                         [pTooltip]="'Cantidad de beneficiarios: ' + beneficiariesAmount" tooltipPosition="bottom"
-                        label="Disminuir beneficiario" icon="pi pi-user-minus" class="p-button-warning"></button>
+                        label="Disminuir beneficiarios" icon="pi pi-user-minus" class="p-button-warning"></button>
                 </ng-template>
                 <ng-template pTemplate="right">
                     <div>
@@ -54,7 +54,8 @@
                                     <ng-template pTemplate="header">
                                         <tr>
                                             <th style="width: 4rem">
-                                                <p-tableHeaderCheckbox [disabled]="ftCheck"></p-tableHeaderCheckbox>
+                                                <p-tableHeaderCheckbox
+                                                    [disabled]="hasCheckedFt()"></p-tableHeaderCheckbox>
                                             </th>
                                             <th pSortableColumn="name">Nombre completo <p-sortIcon
                                                     field="name"></p-sortIcon></th>
@@ -65,7 +66,7 @@
                                     <ng-template pTemplate="body" let-frequentTraveler>
                                         <tr>
                                             <td>
-                                                <p-tableCheckbox [value]="frequentTraveler"
+                                                <p-tableCheckbox #ftCheck [value]="frequentTraveler"
                                                     [disabled]="canSelect(frequentTraveler)"></p-tableCheckbox>
                                             </td>
                                             <td>{{frequentTraveler.name + ' ' + frequentTraveler.lastName}}</td>
@@ -124,7 +125,7 @@
                                     </small>
                                     <small class="block text-green-500"
                                         *ngIf="formGroup.get('document')?.dirty && customerInformation() && !alreadyExists()">
-                                        !Beneficiario encontrado!
+                                        !Beneficiario encontrado! Haga clic en el icono para agregarlo.
                                     </small>
                                     <small class="p-error block"
                                         *ngIf="formGroup.get('document')?.dirty && !validateOnlyNumbers()">
@@ -193,8 +194,17 @@
                                 <div class="field">
                                     <div class="p-input-icon-left w-full">
                                         <i class="pi pi-map-marker"></i>
-                                        <input pInputText type="text" formControlName="address" required="true"
-                                            placeholder="País - Departamento - Ciudad - Dirección" class="w-full">
+                                        <!-- <input pInputText type="text" formControlName="address" required="true"
+                                            placeholder="País - Departamento - Ciudad - Dirección" class="w-full"> -->
+                                        <input class="w-full" pInputText type="text" formControlName="destination"
+                                            tooltipStyleClass="tooltip" tooltipPosition="top"
+                                            placeholder="Ingrese el lugar destino" required="true"
+                                            ngx-google-places-autocomplete [options]="{
+                                                types: [],
+                                                componentRestrictions: null
+                                            }" #placesRef="ngx-places" autocomplete="on"
+                                            (onAddressChange)="onAddressChange($event)"
+                                            onchange="onAddressChange($event)" />
                                     </div>
                                     <small class="p-error block"
                                         *ngIf="formGroup.get('address')?.dirty && formGroup.get('address')?.errors?.['required']">

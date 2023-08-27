@@ -14,7 +14,7 @@ import { AuthService } from '@services/auth/auth.service';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { GetUsersRequest, RecoverPasswordRequest, SaveCurrentUserRequest, UpdateUserRequest } from '@/store/ui/actions';
-import { recoverPasswordEmail } from '@/models/recoverPasswordEmail';
+import { recoverPasswordEmail } from '@/models/mail';
 import { MessageService } from 'primeng/api';
 import { hash } from 'bcryptjs';
 

@@ -4,7 +4,7 @@ import { OrderDetail } from '@/models/orderDetail';
 import { Package } from '@/models/package';
 import { Payment } from '@/models/payment';
 import { AppState } from '@/store/state';
-import { EditOrderRequest, SaveOrderProcess, } from '@/store/ui/actions';
+import { AdminMailReceptionRequest, AdminMailReceptionToCustomerRequest, EditOrderRequest, SaveOrderProcess, } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -15,8 +15,8 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FrequentTraveler } from '@/models/frequentTraveler';
 import { MessageService } from 'primeng/api';
 import { SelectItem } from 'primeng/api';
-import { DataView } from 'primeng/dataview';
 import { Router } from '@angular/router';
+import { mailRecepcion } from '@/models/mail';
 
 @Component({
   selector: 'app-create-payment-form',
@@ -25,13 +25,12 @@ import { Router } from '@angular/router';
 })
 
 export class CreatePaymentFormComponent implements OnInit {
-  public formGroup: FormGroup
   private ui: Observable<UiState>
+  public formGroup: FormGroup
   public role: any
   public user: any
   public orderProcess: any
   public orderDetail: Array<OrderDetail> = []
-  public beneficiaries: Array<any> = []
   public allOrders: Array<Order>
   public allCustomers: Array<Customer>
   public onePackage: Package
@@ -55,7 +54,6 @@ export class CreatePaymentFormComponent implements OnInit {
     public apiService: ApiService,
     private fb: FormBuilder,
     private store: Store<AppState>,
-    private modalPrimeNg: DynamicDialogRef,
     private messageService: MessageService,
     private router: Router
   ) { }
@@ -134,82 +132,10 @@ export class CreatePaymentFormComponent implements OnInit {
           this.totalCost = totalCost
           this.remainingAmount = this.totalCost * 20 / 100
         }
-        this.fillBeneficiariesArray()
+        // this.fillBeneficiariesArray()
       }
     } else {
       this.router.navigate(['Home/Pedidos'])
-    }
-  }
-
-  fillBeneficiariesArray() {
-    for (const element of this.orderProcess.beneficiaries) {
-      if (element !== undefined) {
-        if (element.customerId !== undefined) {
-          this.beneficiaries.push({
-            name: element.name,
-            lastName: element.lastName,
-            document: element.document,
-            birthDate: element.birthDate,
-            phoneNumber: element.phoneNumber,
-            address: element.address,
-            eps: element.eps,
-            image: element.image,
-            price: element.price,
-          })
-        }
-      }
-    }
-  }
-
-  onSortChange(event: any) {
-    const value = event.value
-
-    if (value.indexOf('!') === 0) {
-      this.sortOrder = -1
-      this.sortField = value.substring(1, value.length)
-    } else {
-      this.sortOrder = 1
-      this.sortField = value
-    }
-  }
-
-  onFilter(dv: DataView, event: Event) {
-    dv.filter((event.target as HTMLInputElement).value)
-  }
-
-  showLabel(document: string): string {
-    if (this.role === 'Cliente') {
-      const oneCustomer: Customer = this.allCustomers.find(c => c.userId === this.user['id'])
-      if (oneCustomer !== undefined && oneCustomer.document === document) {
-        return 'Titular'
-      } else {
-        return 'Beneficiario'
-      }
-    } else {
-      if (this.orderProcess.order.customer.document === document) {
-        return 'Titular'
-      } else {
-        return 'Beneficiario'
-      }
-    }
-  }
-
-  showBadge(document: string): number {
-    if (this.orderProcess !== undefined) {
-      if (this.role === 'Cliente') {
-        const oneCustomer: Customer = this.allCustomers.find(c => c.userId === this.user['id'])
-        if (oneCustomer !== undefined && oneCustomer.document === document) {
-          return 0
-        } else {
-          return 1
-        }
-      } else {
-        if (this.orderProcess.order.customer.document === document) {
-          return 0
-        } else {
-          return 1
-        }
-      }
     }
   }
 
@@ -255,7 +181,16 @@ export class CreatePaymentFormComponent implements OnInit {
       this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
       this.router.navigate(['Home/ProcesoBeneficiarios/asas'])
     } else if (this.orderProcess.action === 'CreateOrder') {
-      this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
+      const orderProcess = {
+        action: this.orderProcess.action,
+        beneficiaries: this.orderProcess.beneficiaries,
+        order: {
+          beneficiaries: this.orderProcess.beneficiaries.length,
+          customer: this.orderProcess.order.customer,
+          package: this.orderProcess.order.package
+        }
+      }
+      this.store.dispatch(new SaveOrderProcess(orderProcess))
       this.router.navigate(['Home/ProcesoBeneficiarios/asa'])
     }
   }
@@ -389,6 +324,10 @@ export class CreatePaymentFormComponent implements OnInit {
       })
     })
 
+    // FUNCTION TO SEND THE MAIL RECEPTION
+    this.sendMails(this.orderProcess.order.orderId, payment.amount)
+
+
     // SOME NECESSARY ACTIONS TO END THE PROCESS
     const orderProcess: any = {
       action: 'CreatePayment'
@@ -493,15 +432,12 @@ export class CreatePaymentFormComponent implements OnInit {
       status: status,
     }
 
-    console.log(payment)
-
-
     const formData = new FormData()
     formData.append('paymentId', payment.paymentId)
     formData.append('orderId', payment.orderId)
     formData.append('amount', String(payment.amount))
     formData.append('remainingAmount', String(payment.remainingAmount))
-    formData.append('date', payment.date.toISOString())
+    formData.append('date', payment.date.toLocaleString())
     formData.append('image', String(payment.image))
     formData.append('status', String(payment.status))
 
@@ -518,9 +454,13 @@ export class CreatePaymentFormComponent implements OnInit {
       }
     })
 
+    // FUNCTION TO SEND THE MAIL RECEPTION
+    this.sendMails(this.orderProcess.order.orderId, payment.amount)
+
     const orderProcess = {
       action: 'RetryPayment'
     }
+
     const paymentId: string = this.orderProcess.payment.paymentId
     this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
     this.router.navigate(['Home/DetallesAbono/' + paymentId])
@@ -760,6 +700,9 @@ export class CreatePaymentFormComponent implements OnInit {
     }
     // END OF FOR
 
+    // SENDING TO EDIT PACKAGE
+    this.editPackage(this.onePackage)
+
     //ENDING PROCESS FROM DIFFERENT ENTRIES
     if (this.orderProcess.action === 'CreateOrder') {
 
@@ -820,7 +763,7 @@ export class CreatePaymentFormComponent implements OnInit {
       formData.append('orderId', String(payment.orderId))
       formData.append('amount', String(payment.amount))
       formData.append('remainingAmount', String(payment.remainingAmount))
-      formData.append('date', payment.date.toISOString())
+      formData.append('date', payment.date.toLocaleString())
       formData.append('status', String(payment.status))
       formData.append('OrderDetailJson', orderDetailJson)
 
@@ -842,6 +785,9 @@ export class CreatePaymentFormComponent implements OnInit {
           }
         })
       })
+
+      // FUNCTION TO SEND THE MAIL RECEPTION
+      this.sendMails(orderResolved['orderId'], payment.amount)
 
       // SOME NECESSARY ACTIONS TO END THE PROCESS
       const orderProcess: any = {
@@ -928,7 +874,7 @@ export class CreatePaymentFormComponent implements OnInit {
       formData.append('orderId', String(payment.orderId))
       formData.append('amount', String(payment.amount))
       formData.append('remainingAmount', String(payment.remainingAmount))
-      formData.append('date', payment.date.toISOString())
+      formData.append('date', payment.date.toLocaleString())
       formData.append('status', String(payment.status))
       formData.append('OrderDetailJson', orderDetailJson)
 
@@ -951,6 +897,9 @@ export class CreatePaymentFormComponent implements OnInit {
         })
       })
 
+      // FUNCTION TO SEND THE MAIL RECEPTION
+      this.sendMails(this.orderProcess.order.orderId, payment.amount)
+
       // SOME NECESSARY ACTIONS TO END THE PROCESS
       const orderProcess: any = {
         action: 'CreateOrderDetail'
@@ -959,8 +908,19 @@ export class CreatePaymentFormComponent implements OnInit {
       this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
       this.router.navigate(['Home/DetallesAbono/' + paymentResolved['paymentId']])
     }
+  }
 
-    // SENDING TO EDIT PACKAGE
-    this.editPackage(this.onePackage)
+  sendMails(orderId: string, amount: number) {
+    // HERE WE'LL DEFINE THE MAIL MODEL THATS GOING TO BE SEND
+    const mailModel: mailRecepcion = {
+      orderId: orderId,
+      amount: amount
+    }
+
+    // HERE WE'LL NOTIFY THE ADMIN ABOUT THE PAYMENT
+    this.store.dispatch(new AdminMailReceptionRequest({ ...mailModel }))
+
+    // HERE WE'LL NOTIFY THE CUSTOMER ABOUT THE ADMIN RECEPTION OF THE MAIL ABOUT THEIR PAYMENT
+    this.store.dispatch(new AdminMailReceptionToCustomerRequest({ ...mailModel }))
   }
 }

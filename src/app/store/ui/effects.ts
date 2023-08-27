@@ -132,6 +132,18 @@ import {
     userActions,
     GetAllPaymentsSuccess,
     GetAllPaymentsFailure,
+    AdminMailReceptionRequest,
+    AdminMailReceptionSuccess,
+    AdminMailReceptionFailure,
+    AdminMailReceptionToCustomerFailure,
+    AdminMailReceptionToCustomerRequest,
+    AdminMailReceptionToCustomerSuccess,
+    PaymentApprobationRequest,
+    PaymentApprobationFailure,
+    PaymentApprobationSuccess,
+    PaymentRejectionFailure,
+    PaymentRejectionRequest,
+    PaymentRejectionSuccess,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { ApiService } from '@services/api.service';
@@ -425,33 +437,6 @@ export class PackageEffects {
         })
     ));
 
-    // openModalPayments$ = createEffect(() =>
-    //     this.actions$.pipe(
-    //         ofType(orderActions.OPEN_MODAL_PAYMENTS),
-    //         tap((action) => {
-    //             this.dialogRef = this.dialogService.open(ReadOrderPaymentComponent, {
-    //                 /* Opciones del modal */
-    //                 showHeader: false,
-    //                 width: '70%',
-    //                 contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
-    //                 baseZIndex: 10000,
-    //             });
-    //         })
-    //     ), { dispatch: false });
-
-    // openModalCreatePayment$ = createEffect(() =>
-    //     this.actions$.pipe(
-    //         ofType(orderActions.OPEN_MODAL_CREATE_PAYMENT),
-    //         tap((action) => {
-    //             this.dialogRef = this.dialogService.open(CreatePaymentFormComponent, {
-    //                 /* Opciones del modal */
-    //                 showHeader: false,
-    //                 width: '40%',
-    //                 contentStyle: { padding: '1.25rem 2rem 1.25rem 2rem', overflowY: 'auto' },
-    //             });
-    //         })
-    //     ), { dispatch: false });
-
     createPayment$ = createEffect(() => this.actions$.pipe(
         ofType(orderActions.CREATE_PAYMENT_REQUEST),
         map((action: CreatePaymentRequest) => action.payload),
@@ -463,7 +448,6 @@ export class PackageEffects {
                     return [
                         new CreatePaymentSuccess(paymentResolved),
                         new GetAllOrdersRequest(),
-                        // new OpenModalPayments(paymentResolved.order)
                     ];
                 }),
                 catchError((err) => of(new CreatePaymentFailure(err)))
@@ -514,6 +498,57 @@ export class PackageEffects {
             )
         })
     ));
+
+    //<--- PAYMENT MAILS --->
+    adminMailReception$ = createEffect(() => this.actions$.pipe(
+        ofType(orderActions.SEND_ADMIN_RECEPTION_MAIL_REQUEST),
+        map((action: AdminMailReceptionRequest) => action.payload),
+        switchMap((mailRecepcion) => {
+            return this.apiService.adminMailReception(mailRecepcion).pipe(
+                mergeMap((data) => {
+                    return [new AdminMailReceptionSuccess(data)]
+                }),
+                catchError((error) => of(new AdminMailReceptionFailure(error))))
+        })
+    ))
+
+    adminMailReceptionToCustomer$ = createEffect(() => this.actions$.pipe(
+        ofType(orderActions.SEND_ADMIN_RECEPTION_MAIL_TO_CUSTOMER_REQUEST),
+        map((action: AdminMailReceptionToCustomerRequest) => action.payload),
+        switchMap((mailRecepcion) => {
+            return this.apiService.adminMailReceptionToCustomer(mailRecepcion).pipe(
+                mergeMap((data) => {
+                    return [new AdminMailReceptionToCustomerSuccess(data)]
+                }),
+                catchError((error) => of(new AdminMailReceptionToCustomerFailure(error))))
+        })
+    ))
+
+    paymentApprobation$ = createEffect(() => this.actions$.pipe(
+        ofType(orderActions.SEND_PAYMENT_APPROBATION_REQUEST),
+        map((action: PaymentApprobationRequest) => action.payload),
+        switchMap((paymentStatusMail) => {
+            return this.apiService.paymentApprobation(paymentStatusMail).pipe(
+                mergeMap((data) => {
+                    return [new PaymentApprobationSuccess(data)]
+                }),
+                catchError((error) => of(new PaymentApprobationFailure(error))))
+        })
+    ))
+
+    paymentRejection$ = createEffect(() => this.actions$.pipe(
+        ofType(orderActions.SEND_PAYMENT_REJECTION_REQUEST),
+        map((action: PaymentRejectionRequest) => action.payload),
+        switchMap((paymentStatusMail) => {
+            return this.apiService.paymentRejection(paymentStatusMail).pipe(
+                mergeMap((data) => {
+                    return [new PaymentRejectionSuccess(data)]
+                }),
+                catchError((error) => of(new PaymentRejectionFailure(error))))
+        })
+    ))
+    //<----------------------------->
+
     //<----------------------------->
 
     //<--- ROLES AND PERMISSIONS --->

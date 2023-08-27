@@ -8,7 +8,7 @@ import {UiState} from '@/store/ui/state';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {ContactUsRequest, GetTopPackagesRequest} from '@/store/ui/actions';
 import {Observable} from 'rxjs';
-import {sendPQRS} from '@/models/recoverPasswordEmail';
+import {sendPQRS} from '@/models/mail';
 
 @Component({
     selector: 'app-public-home',

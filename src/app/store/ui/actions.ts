@@ -11,7 +11,7 @@ import { FrequentTraveler } from '@/models/frequentTraveler';
 import { Payment } from '@/models/payment';
 import { OrderDetail } from '@/models/orderDetail';
 import { Token } from '@/models/token';
-import { recoverPasswordEmail, sendPQRS } from '@/models/recoverPasswordEmail';
+import { mailRecepcion, paymentStatusMail, recoverPasswordEmail, sendPQRS } from '@/models/mail';
 
 //<--- TOGGLE ACTIONS --->
 export enum toggleActions {
@@ -262,8 +262,25 @@ export enum orderActions {
   GET_ALL_PAYMENTS_REQUEST = '[PAYMENT] GET_ALL_PAYMENTS_REQUEST',
   GET_ALL_PAYMENTS_SUCCESS = '[PAYMENT] GET_ALL_PAYMENTS_SUCCESS',
   GET_ALL_PAYMENTS_FAILURE = '[PAYMENT] GET_ALL_PAYMENTS_FAILURE',
-}
 
+  //<--- PAYMENT MAILS --->
+  SEND_ADMIN_RECEPTION_MAIL_REQUEST = '[PAYMENT] SEND_ADMIN_RECEPTION_MAIL_REQUEST',
+  SEND_ADMIN_RECEPTION_MAIL_SUCCESS = '[PAYMENT] SEND_ADMIN_RECEPTION_MAIL_SUCCESS',
+  SEND_ADMIN_RECEPTION_MAIL_FAILURE = '[PAYMENT] SEND_ADMIN_RECEPTION_MAIL_FAILURE',
+
+  SEND_ADMIN_RECEPTION_MAIL_TO_CUSTOMER_REQUEST = '[PAYMENT] SEND_ADMIN_RECEPTION_MAIL_TO_CUSTOMER_REQUEST',
+  SEND_ADMIN_RECEPTION_MAIL_TO_CUSTOMER_SUCCESS = '[PAYMENT] SEND_ADMIN_RECEPTION_MAIL_TO_CUSTOMER_SUCCESS',
+  SEND_ADMIN_RECEPTION_MAIL_TO_CUSTOMER_FAILURE = '[PAYMENT] SEND_ADMIN_RECEPTION_MAIL_TO_CUSTOMER_FAILURE',
+
+  SEND_PAYMENT_APPROBATION_REQUEST = '[PAYMENT] SEND_PAYMENT_APPROBATION_REQUEST',
+  SEND_PAYMENT_APPROBATION_SUCCESS = '[PAYMENT] SEND_PAYMENT_APPROBATION_SUCCESS',
+  SEND_PAYMENT_APPROBATION_FAILURE = '[PAYMENT] SEND_PAYMENT_APPROBATION_FAILURE',
+
+  SEND_PAYMENT_REJECTION_REQUEST = '[PAYMENT] SEND_PAYMENT_REJECTION_REQUEST',
+  SEND_PAYMENT_REJECTION_SUCCESS = '[PAYMENT] SEND_PAYMENT_REJECTION_SUCCESS',
+  SEND_PAYMENT_REJECTION_FAILURE = '[PAYMENT] SEND_PAYMENT_REJECTION_FAILURE'
+  //<--------------------->
+}
 
 export class GetAllOrdersRequest implements Action {
   readonly type: string = orderActions.GET_ALL_ORDERS_REQUEST;
@@ -393,6 +410,62 @@ export class GetAllPaymentsFailure implements Action {
   readonly type: string = orderActions.GET_ALL_PAYMENTS_FAILURE;
   constructor(public payload: string) { }
 }
+
+//<--- PAYMENT MAILS --->
+
+export class AdminMailReceptionRequest implements Action {
+  readonly type: string = orderActions.SEND_ADMIN_RECEPTION_MAIL_REQUEST;
+  constructor(public payload: mailRecepcion) { }
+}
+export class AdminMailReceptionSuccess implements Action {
+  readonly type: string = orderActions.SEND_ADMIN_RECEPTION_MAIL_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class AdminMailReceptionFailure implements Action {
+  readonly type: string = orderActions.SEND_ADMIN_RECEPTION_MAIL_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class AdminMailReceptionToCustomerRequest implements Action {
+  readonly type: string = orderActions.SEND_ADMIN_RECEPTION_MAIL_TO_CUSTOMER_REQUEST;
+  constructor(public payload: mailRecepcion) { }
+}
+export class AdminMailReceptionToCustomerSuccess implements Action {
+  readonly type: string = orderActions.SEND_ADMIN_RECEPTION_MAIL_TO_CUSTOMER_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class AdminMailReceptionToCustomerFailure implements Action {
+  readonly type: string = orderActions.SEND_ADMIN_RECEPTION_MAIL_TO_CUSTOMER_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class PaymentApprobationRequest implements Action {
+  readonly type: string = orderActions.SEND_PAYMENT_APPROBATION_REQUEST;
+  constructor(public payload: paymentStatusMail) { }
+}
+export class PaymentApprobationSuccess implements Action {
+  readonly type: string = orderActions.SEND_PAYMENT_APPROBATION_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class PaymentApprobationFailure implements Action {
+  readonly type: string = orderActions.SEND_PAYMENT_APPROBATION_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class PaymentRejectionRequest implements Action {
+  readonly type: string = orderActions.SEND_PAYMENT_REJECTION_REQUEST;
+  constructor(public payload: paymentStatusMail) { }
+}
+export class PaymentRejectionSuccess implements Action {
+  readonly type: string = orderActions.SEND_PAYMENT_REJECTION_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class PaymentRejectionFailure implements Action {
+  readonly type: string = orderActions.SEND_PAYMENT_REJECTION_FAILURE;
+  constructor(public payload: string) { }
+}
+//<--------------------->
+
 //<--------------------->
 
 //<--- ROLE ACTIONS --->
@@ -921,6 +994,18 @@ export type UiAction =
   | CreatePaymentFailure
   | GetAllPaymentsSuccess
   | GetAllPaymentsFailure
+  | AdminMailReceptionRequest
+  | AdminMailReceptionSuccess
+  | AdminMailReceptionFailure
+  | AdminMailReceptionToCustomerRequest
+  | AdminMailReceptionToCustomerSuccess
+  | AdminMailReceptionToCustomerFailure
+  | PaymentApprobationRequest
+  | PaymentApprobationSuccess
+  | PaymentApprobationFailure
+  | PaymentRejectionRequest
+  | PaymentRejectionSuccess
+  | PaymentRejectionFailure
   //<--------------------->
   //<---ROLES--->
   | GetAllRoleSuccess

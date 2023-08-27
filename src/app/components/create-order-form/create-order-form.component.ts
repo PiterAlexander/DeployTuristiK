@@ -192,9 +192,9 @@ export class CreateOrderFormComponent implements OnInit {
     if (yearAge < 5) {
       return this.onePackage.aditionalPrice
     } else if (yearAge >= 5 && yearAge < 10) {
-      return this.onePackage.price * 0.70
+      return this.onePackage.price + this.onePackage.aditionalPrice * 0.70
     } else {
-      return this.onePackage.price
+      return this.onePackage.price + this.onePackage.aditionalPrice
     }
   }
 

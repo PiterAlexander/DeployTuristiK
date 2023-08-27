@@ -184,15 +184,12 @@ export class OrdersComponent implements OnInit {
   verDetalles(elementoId: string) {
     if (this.role == 'Administrador') {
       this.router.navigate(['Home/DetallesPaquete/' + elementoId]);
-      console.log('hello bro', this.router.config);
     }
     if (this.role == 'Cliente') {
       this.router.navigate(['Home/DetallesPaquete/' + elementoId]);
-      console.log('hello bro', this.router.config);
     }
     if (this.role == undefined) {
       this.router.navigate(['detailsPackage/' + elementoId]);
-      console.log('hello nigga', this.router.config);
     }
   }
 

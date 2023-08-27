@@ -14,7 +14,7 @@ import { Token } from '@/models/token';
 import { Role } from '@/models/role';
 import { Permission } from '@/models/permission';
 import { AssociatedPermission } from '@/models/associated-permission';
-import { recoverPasswordEmail, sendPQRS } from '@/models/recoverPasswordEmail';
+import { mailRecepcion, paymentStatusMail, recoverPasswordEmail, sendPQRS } from '@/models/mail';
 @Injectable({
     providedIn: 'root'
 })
@@ -94,6 +94,25 @@ export class ApiService {
     deleteOrderDetail(orderDetailId: string): Observable<void> {
         return this.http.delete<void>(`${this.endpoint}api/OrderDetail/${orderDetailId}`)
     }
+
+    //<--- PAYMENT EMAILS --->
+    adminMailReception(model: mailRecepcion) {
+        return this.http.post<any>(`${this.endpoint}api/Email/SendPaymentAdmin`, model)
+    }
+
+    adminMailReceptionToCustomer(model: mailRecepcion) {
+        return this.http.post<any>(`${this.endpoint}api/Email/SendPaymentCustomer`, model)
+    }
+
+    paymentApprobation(model: paymentStatusMail) {
+        return this.http.post<any>(`${this.endpoint}api/Email/SendPaymentApprobation`, model)
+    }
+
+    paymentRejection(model: paymentStatusMail) {
+        return this.http.post<any>(`${this.endpoint}api/Email/SendPaymentRejection`, model)
+    }
+    //<----------------->
+
     //<----------------->
 
     //<--- CUSTOMERS --->

@@ -1,7 +1,7 @@
 import { Order } from '@/models/order';
 import { Payment } from '@/models/payment';
 import { AppState } from '@/store/state';
-import { EditOrderRequest, EditPaymentRequest } from '@/store/ui/actions';
+import { EditOrderRequest, EditPaymentRequest, PaymentApprobationRequest, PaymentRejectionRequest } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -13,6 +13,7 @@ import { ApiService } from '@services/api.service';
 import { MessageService } from 'primeng/api';
 import { environment } from 'environments/environment';
 import { Router } from '@angular/router';
+import { paymentStatusMail } from '@/models/mail';
 
 @Component({
   selector: 'app-edit-payment-form',
@@ -113,6 +114,7 @@ export class EditPaymentFormComponent implements OnInit {
       conjugedAction = 'rechazado'
     }
     this.confirmationService.confirm({
+      key: 'edit-payment-confirmation',
       header: '¿Está seguro de ' + action + ' este abono?',
       message: 'Tenga en cuenta que una vez ' + conjugedAction + ' no podrá volver a cambiar su estado',
       icon: 'pi pi-exclamation-triangle',
@@ -134,6 +136,7 @@ export class EditPaymentFormComponent implements OnInit {
       let orderStatus: number
       let pending: boolean = false
       let accepted: boolean = false
+
       for (const element of this.order.payment) {
         if (element !== undefined && element.status !== 2) {
           if (element.paymentId !== this.payment.paymentId) {
@@ -153,7 +156,9 @@ export class EditPaymentFormComponent implements OnInit {
           }
         }
       }
+
       const remainingAmount: number = this.order.totalCost - addition
+
       if ((accepted && pending && remainingAmount === 0) || (accepted && pending && remainingAmount > 0)) {
         orderStatus = 1
       } else if (accepted && !pending && remainingAmount === 0) {
@@ -167,6 +172,7 @@ export class EditPaymentFormComponent implements OnInit {
       } else {
         orderStatus = 3
       }
+
       const order: Order = {
         orderId: this.order.orderId,
         customerId: this.order.customerId,
@@ -176,10 +182,9 @@ export class EditPaymentFormComponent implements OnInit {
         status: orderStatus,
         payment: this.order.payment
       }
-      console.log(order);
-
 
       this.store.dispatch(new EditOrderRequest({ ...order }))
+
       let status: number
       if (this.formGroup.value.status === 1) {
         status = 1
@@ -212,16 +217,31 @@ export class EditPaymentFormComponent implements OnInit {
         formData.append('imageFile', payment.imageFile)
       }
 
-      // this.store.dispatch(new EditPaymentRequest({ ...payment }))
       this.apiService.updatePayment(formData.get('paymentId'), formData).subscribe({
         next: (data) => { },
         error: (err) => {
           console.log('Error occured while updating: ', err);
         }
       })
+
+      if (payment.status === 1) {
+        const paymentStatusMailModel: paymentStatusMail = {
+          orderId: this.payment.orderId,
+          paymentId: this.payment.paymentId
+        }
+        this.store.dispatch(new PaymentApprobationRequest({ ...paymentStatusMailModel }))
+      } else {
+        const paymentStatusMailModel: paymentStatusMail = {
+          orderId: this.payment.orderId,
+          paymentId: this.payment.paymentId,
+          cause: this.formGroup.value.details
+        }
+        this.store.dispatch(new PaymentRejectionRequest({ ...paymentStatusMailModel }))
+      }
+
       this.modalPrimeNg.close()
       this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Abono editado exitosamente.' });
-      window.location.reload()
+      // window.location.reload()
     }
   }
 }
