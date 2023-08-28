@@ -1,10 +1,10 @@
-<p-confirmDialog></p-confirmDialog>
+<p-confirmDialog key="confirmation-message" [style]="{width: '43vw'}"></p-confirmDialog>
 <p-toast key="alert-message"></p-toast>
-<div *ngIf="beneficiariesVisibility" [ngClass]="{ 'p-4': role !== 'Cliente' }">
+<div *ngIf="beneficiariesVisibility" [ngClass]="{ 'px-4 pt-4 pb-1': role !== 'Cliente' }">
     <div class="col-12">
         <div [ngClass]="{ 
         'card p-6': role !== 'Cliente',
-        'surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border': role === 'Cliente'
+        'surface-section p-4 border-1 surface-border': role === 'Cliente'
      }" style="border-radius: 15px;">
             <span *ngIf="orderProcess !== undefined && orderProcess.action === 'CreateOrder'"
                 class="text-700 text-xl">¡Gracias!</span>
@@ -175,18 +175,18 @@
     <div class="col-12">
         <div [ngClass]="{ 
         'card p-6': role !== 'Cliente',
-        'surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border': role === 'Cliente'
+        'surface-section p-5 border-1 surface-border': role === 'Cliente'
      }" style="border-radius: 15px;">
             <div class="flex flex-column sm:flex-row sm:justify-content-between sm:align-items-center">
                 <div *ngIf="orderProcess !== undefined && orderProcess.action === 'CreatePayment'">
-                    <div class="text-900 font-bold text-4xl my-2">Abono Exitoso</div>
+                    <div class="text-900 font-bold text-4xl mb-2">Abono Exitoso</div>
                     <span *ngIf="role === 'Cliente'" class="text-700 text-xl">¡Gracias! Le informaremos cuando un
                         Empleado lo acepte.</span>
                     <span *ngIf="role !== 'Cliente'" class="text-700 text-xl">El abono se ha registrado
                         correctamente.</span>
                 </div>
                 <div *ngIf="orderProcess !== undefined && orderProcess.action === 'RetryPayment'">
-                    <div class="text-900 font-bold text-4xl my-2">Reintento Exitoso</div>
+                    <div class="text-900 font-bold text-4xl mb-2">Reintento Exitoso</div>
                     <span *ngIf="role === 'Cliente'" class="text-700 text-xl">¡Gracias! Le informaremos cuando un
                         Empleado lo acepte.</span>
                     <span *ngIf="role !== 'Cliente'" class="text-700 text-xl">El abono se ha aceptado
@@ -230,7 +230,7 @@
             </div>
 
             <div class="flex flex-wrap mt-5 pb-0">
-                <div class="w-full lg:w-6 pl-3">
+                <div class="w-full lg:w-6 pr-3">
                     <span class="font-medium text-900">Información principal del Titular</span>
                     <div class="flex flex-column text-900 mt-3 mb-5">
                         <span class="mb-1">{{ onePayment.order.customer.name + ' ' +
@@ -241,7 +241,7 @@
                         <span>C.C {{
                             onePayment.order.customer.document }}</span>
                     </div>
-                    <div class="flex justify-content-end mr-6">
+                    <div class="flex justify-content-end">
                         <p-button icon="pi pi-angle-left" (click)="back()" [label]="showButtonLabel()"></p-button>
                     </div>
                 </div>

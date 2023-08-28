@@ -15,7 +15,6 @@ import { OrderDetail } from '@/models/orderDetail';
 import { environment } from 'environments/environment';
 import { ConfirmationService } from 'primeng/api';
 import { DeleteOrderDetailRequest, GetAllCustomerRequest, SaveOrderProcess } from '@/store/ui/actions';
-import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-payment-details',
@@ -51,7 +50,6 @@ export class PaymentDetailsComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private router: Router,
     private route: ActivatedRoute,
-    private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
@@ -80,7 +78,7 @@ export class PaymentDetailsComponent implements OnInit {
       'https://img.freepik.com/vector-premium/cute-sheep-super-hero-cartoon-vector-icono-ilustracion-animal-vacaciones-icono-concepto-aislado-plano_138676-9238.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
       'https://img.freepik.com/vector-gratis/cute-panda-summer-waving-hand-cartoon-vector-icon-illustration-concepto-icono-vacaciones-animales-aislado_138676-7160.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587'
     ]
-    
+
     this.customerImages = [
       'https://img.freepik.com/vector-gratis/lindo-husky-perro-sentado-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-premium_138676-4567.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
       'https://img.freepik.com/vector-gratis/lindo-unicornio-bebiendo-te-leche-boba-ilustracion-icono-vector-dibujos-animados-arco-iris-icono-bebida-animal_138676-7412.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
@@ -97,8 +95,6 @@ export class PaymentDetailsComponent implements OnInit {
       { label: 'Precio Alto a Bajo', value: '!unitPrice' },
       { label: 'Precio Bajo a Alto', value: 'unitPrice' }
     ];
-
-    // this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Beneficiario editado exitosamente.' });
   }
 
   async getPaymentById() {
@@ -347,8 +343,9 @@ export class PaymentDetailsComponent implements OnInit {
 
   async deleteOrderDetail(customer: Customer) {
     this.confirmationService.confirm({
+      key: 'confirmation-message',
       header: '¿Está seguro de eliminar a ' + customer.name + '?',
-      message: 'Tenga en cuenta que:<br><br>- El precio del pedido no cambiará.<br>- No se hará un reembolso por el beneficiario.<br>- Deberá volver a realizar un pago si desea agregar a ' + customer.name + ' de nuevo.',
+      message: 'Tenga en cuenta que:<br><br>- El precio del pedido no cambiará.<br>- No se hará un reembolso por el beneficiario.<br>- Deberá volver a realizar un abono si desea agregar a ' + customer.name + ' de nuevo.',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Eliminar',
       rejectLabel: 'Cancelar',

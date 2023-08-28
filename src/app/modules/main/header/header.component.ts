@@ -75,6 +75,8 @@ export class HeaderComponent implements OnInit {
                     this.route = 'Pedidos / Proceso de Abonos'
                 } else if (currentRoute === 'DetallesAbono') {
                     this.route = 'Pedidos / Detalles del Abono'
+                } else if (currentRoute === 'RevisionAbono') {
+                    this.route = 'Pedidos / Revisión de Abono'
                 } else {
                     this.route = currentRoute;
                 }

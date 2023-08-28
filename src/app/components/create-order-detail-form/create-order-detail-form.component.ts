@@ -122,7 +122,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         Validators.maxLength(30)]],
       document: ['',
         [Validators.required,
-        Validators.minLength(8),
+        Validators.minLength(6),
         Validators.maxLength(15)
         ]],
       address: ['', [Validators.required]],
@@ -586,6 +586,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
   deleteBeneficiarie(document: string) {
     const oneCustomer = this.beneficiaries.find(c => c.document === document)
     this.confirmationService.confirm({
+      key: 'confirmation-message',
       header: 'Confirmación',
       message: '¿Está seguro de eliminar a ' + oneCustomer.name + ' ' + oneCustomer.lastName + '?',
       icon: 'pi pi-exclamation-triangle',
@@ -725,7 +726,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
 
   validateOnlyNumbers(): boolean {
     if (this.formGroup.value.document !== null) {
-      if (this.formGroup.value.document.length >= 8) {
+      if (this.formGroup.value.document.length >= 6) {
         const regularExpresion = /^[0-9]+$/
         return regularExpresion.test(this.formGroup.value.document)
       }
@@ -745,7 +746,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
 
   alreadyExistsFromEdit(): boolean {
     if (this.orderProcess.action === 'EditOrderDetail') {
-      if (this.formGroup.value.document.length >= 8) {
+      if (this.formGroup.value.document.length >= 6) {
         this.oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
         if (this.oneCustomer !== undefined) {
           if (this.oneCustomer.document === this.orderProcess.customer.document) {
@@ -787,10 +788,10 @@ export class CreateOrderDetailFormComponent implements OnInit {
 
   //<--- BACK AND NEXT ACTIONS --->
 
-  backFromCreateOrderDetail(event: Event) {
+  backFromCreateOrderDetail() {
     if (this.beneficiaries.length > 0) {
       this.confirmationService.confirm({
-        target: event.target,
+        key: 'confirmation-message',
         header: '¿Está seguro de regresar?',
         message: 'Perderá toda la información previamente ingresada.',
         icon: 'pi pi-exclamation-triangle',
@@ -812,11 +813,11 @@ export class CreateOrderDetailFormComponent implements OnInit {
     }
   }
 
-  backFromCreateOrder(event: Event) {
+  backFromCreateOrder() {
     if (this.role === 'Cliente') {
       if (this.beneficiaries.length > 0) {
         this.confirmationService.confirm({
-          target: event.target,
+          key: 'confirmation-message',
           header: '¿Está seguro de regresar?',
           message: 'Perderá toda la información previamente ingresada.',
           icon: 'pi pi-exclamation-triangle',
@@ -846,15 +847,15 @@ export class CreateOrderDetailFormComponent implements OnInit {
     }
   }
 
-  back(event: Event) {
+  back() {
     if (this.orderProcess.action === 'CreateOrderDetail') {
-      this.backFromCreateOrderDetail(event)
+      this.backFromCreateOrderDetail()
     } else if (this.orderProcess.action === 'EditOrderDetail') {
       const paymentId: string = this.orderProcess.paymentId
       this.store.dispatch(new SaveOrderProcess(undefined))
       this.router.navigate(['Home/DetallesAbono/' + paymentId])
     } else if (this.orderProcess.action === 'CreateOrder') {
-      this.backFromCreateOrder(event)
+      this.backFromCreateOrder()
     }
   }
 

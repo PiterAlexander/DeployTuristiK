@@ -3,7 +3,7 @@
     <div class="col-12">
         <div [ngClass]="{ 
         'card p-6': role !== 'Cliente',
-        'surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border': role === 'Cliente'
+        'surface-section p-4 border-1 surface-border': role === 'Cliente'
      }" style="border-radius: 15px;">
             <div *ngIf="orderProcess.action === 'CreateOrder'" class="text-900 text-2xl mb-3 font-semibold">Proceso de
                 Reserva</div>
@@ -27,7 +27,7 @@
             <div class="flex flex-wrap">
                 <div class="col-12 md:col-7 h-full">
                     <div class="flex flex-wrap-3 pb-3">
-                        <div class="w-full lg:w-6 pl-3 pr-2">
+                        <div class="w-full lg:w-6 pr-2">
                             <form novalidate [formGroup]="formGroup">
                                 <span class="font-medium text-900">Formulario de Abono</span>
                                 <div class="mt-3">

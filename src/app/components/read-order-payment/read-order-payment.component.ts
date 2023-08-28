@@ -4,7 +4,7 @@ import { UiState } from '@/store/ui/state';
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { OpenModalEditPayment, SaveOrderProcess } from '@/store/ui/actions';
+import { SaveOrderProcess } from '@/store/ui/actions';
 import { ApiService } from '@services/api.service';
 import { Role } from '@/models/role';
 import { Order } from '@/models/order';
@@ -122,7 +122,8 @@ export class ReadOrderPaymentComponent {
   }
 
   editPayment(payment: Payment) {
-    this.store.dispatch(new OpenModalEditPayment({ ...payment }))
+    // this.store.dispatch(new OpenModalEditPayment({ ...payment }))
+    this.router.navigate(['Home/RevisionAbono/' + payment.paymentId])
   }
 
   showStatus(status: any): string {
@@ -161,7 +162,7 @@ export class ReadOrderPaymentComponent {
         order: this.order
       }
       this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
-      this.router.navigate(['Home/ProcesoAbonos/asas']);
+      this.router.navigate(['Home/ProcesoAbonos/Agregar']);
     }
   }
 

@@ -1,19 +1,19 @@
 import { Order } from '@/models/order';
 import { Payment } from '@/models/payment';
 import { AppState } from '@/store/state';
-import { EditOrderRequest, EditPaymentRequest, PaymentApprobationRequest, PaymentRejectionRequest } from '@/store/ui/actions';
+import { EditOrderRequest, PaymentApprobationRequest, PaymentRejectionRequest } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ConfirmationService } from 'primeng/api';
 import { ApiService } from '@services/api.service';
 import { MessageService } from 'primeng/api';
 import { environment } from 'environments/environment';
 import { Router } from '@angular/router';
 import { paymentStatusMail } from '@/models/mail';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-edit-payment-form',
@@ -25,21 +25,21 @@ export class EditPaymentFormComponent implements OnInit {
   private ui: Observable<UiState>
   public formGroup: FormGroup
   public payment: Payment
-  public allOrders: Array<Order>
   public order: Order
   public user: any
   public role: any
+  public paymentId: string
   public statuses: any[] = []
   public baseUrl: string = environment.endPoint + 'resources/payments/'
 
   constructor(
     private store: Store<AppState>,
     private fb: FormBuilder,
-    private modalPrimeNg: DynamicDialogRef,
     private confirmationService: ConfirmationService,
     private apiService: ApiService,
     private messageService: MessageService,
     private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
@@ -47,9 +47,10 @@ export class EditPaymentFormComponent implements OnInit {
     this.ui.subscribe((state: UiState) => {
       this.user = JSON.parse(localStorage.getItem('TokenPayload'))
       this.role = this.user['role']
-      this.allOrders = state.allOrders.data
-      this.payment = state.onePayment.data
-      this.getOrderById(this.payment.orderId)
+      this.route.paramMap.subscribe((params) => {
+        this.paymentId = params.get('id');
+        this.getPaymentById()
+      });
     })
 
     this.formGroup = this.fb.group({
@@ -63,9 +64,36 @@ export class EditPaymentFormComponent implements OnInit {
     ]
   }
 
-  async getOrderById(orderId: string) {
+  async getPaymentById() {
+    const paymentPromise = await new Promise((resolve, reject) => {
+      this.apiService.getPaymentById(this.paymentId).subscribe({
+        next: (data) => {
+          resolve(data)
+        },
+        error: (err) => {
+          reject(err)
+        }
+      })
+    })
+    if (paymentPromise) {
+      this.payment = {
+        paymentId: paymentPromise['paymentId'],
+        amount: paymentPromise['amount'],
+        remainingAmount: paymentPromise['remainingAmount'],
+        date: paymentPromise['date'],
+        orderDetail: paymentPromise['orderDetail'],
+        image: paymentPromise['image'],
+        status: paymentPromise['status'],
+        orderId: paymentPromise['orderId'],
+        order: paymentPromise['order']
+      }
+      this.getOrderById()
+    }
+  }
+
+  async getOrderById() {
     const orderPromise = await new Promise((resolve, reject) => {
-      this.apiService.getOrderById(orderId).subscribe({
+      this.apiService.getOrderById(this.payment.orderId).subscribe({
         next: (data) => {
           resolve(data)
         },
@@ -75,7 +103,7 @@ export class EditPaymentFormComponent implements OnInit {
       })
     })
     if (orderPromise) {
-      const oneOrder: any = {
+      this.order = {
         orderId: orderPromise['orderId'],
         customerId: orderPromise['customerId'],
         customer: orderPromise['customer'],
@@ -86,7 +114,6 @@ export class EditPaymentFormComponent implements OnInit {
         orderDate: orderPromise['orderDate'],
         payment: orderPromise['payment']
       }
-      this.order = oneOrder
     }
   }
 
@@ -99,7 +126,6 @@ export class EditPaymentFormComponent implements OnInit {
   }
 
   back() {
-    this.modalPrimeNg.close()
     this.router.navigate(['Home/DetallesPedido/' + this.order.orderId]);
   }
 
@@ -136,7 +162,6 @@ export class EditPaymentFormComponent implements OnInit {
       let orderStatus: number
       let pending: boolean = false
       let accepted: boolean = false
-
       for (const element of this.order.payment) {
         if (element !== undefined && element.status !== 2) {
           if (element.paymentId !== this.payment.paymentId) {
@@ -211,12 +236,6 @@ export class EditPaymentFormComponent implements OnInit {
       formData.append('image', String(payment.image))
       formData.append('status', String(payment.status))
 
-      if (payment.imageFile instanceof File) {
-        formData.append('imageFile', payment.imageFile, payment.imageFile.name)
-      } else {
-        formData.append('imageFile', payment.imageFile)
-      }
-
       this.apiService.updatePayment(formData.get('paymentId'), formData).subscribe({
         next: (data) => { },
         error: (err) => {
@@ -226,22 +245,21 @@ export class EditPaymentFormComponent implements OnInit {
 
       if (payment.status === 1) {
         const paymentStatusMailModel: paymentStatusMail = {
-          orderId: this.payment.orderId,
+          orderId: this.order.orderId,
           paymentId: this.payment.paymentId
         }
         this.store.dispatch(new PaymentApprobationRequest({ ...paymentStatusMailModel }))
       } else {
         const paymentStatusMailModel: paymentStatusMail = {
-          orderId: this.payment.orderId,
+          orderId: this.order.orderId,
           paymentId: this.payment.paymentId,
           cause: this.formGroup.value.details
         }
         this.store.dispatch(new PaymentRejectionRequest({ ...paymentStatusMailModel }))
       }
 
-      this.modalPrimeNg.close()
+      this.router.navigate(['Home/DetallesPedido/' + this.order.orderId]);
       this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Abono editado exitosamente.' });
-      // window.location.reload()
     }
   }
 }

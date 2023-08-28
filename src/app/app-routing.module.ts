@@ -27,6 +27,7 @@ import { CreatePaymentFormComponent } from '@components/create-payment-form/crea
 import { ReadOrderPaymentComponent } from '@components/read-order-payment/read-order-payment.component';
 import { CreateOrderFormComponent } from '@components/create-order-form/create-order-form.component';
 import { PaymentDetailsComponent } from '@components/payment-details/payment-details.component';
+import { EditPaymentFormComponent } from '@components/edit-payment-form/edit-payment-form.component';
 
 const routes: Routes = [
     {
@@ -114,6 +115,11 @@ const routes: Routes = [
                 path: 'DetallesAbono/:id',
                 canActivate: [AuthGuard],
                 component: PaymentDetailsComponent
+            },
+            {
+                path: 'RevisionAbono/:id',
+                canActivate: [AuthGuard],
+                component: EditPaymentFormComponent
             },
             {
                 path: 'ProcesoAbonos/:id',

@@ -1,10 +1,10 @@
-<p-confirmDialog></p-confirmDialog>
+<p-confirmDialog key="confirmation-message"></p-confirmDialog>
 <p-toast key="alert-message"></p-toast>
 <div *ngIf="orderProcess !== undefined" [ngClass]="{ 'p-4': role !== 'Cliente' }">
     <div class="col-12">
         <div [ngClass]="{ 
         'card p-6': role !== 'Cliente', 
-        'surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border': role === 'Cliente'
+        'surface-section p-4 border-1 surface-border': role === 'Cliente'
      }" style="border-radius: 15px;">
             <div *ngIf="orderProcess.action === 'CreateOrder'" class="text-900 text-2xl mb-3 font-semibold">Proceso de
                 Reserva</div>
@@ -91,184 +91,164 @@
                     </p-divider>
                     <form novalidate [formGroup]="formGroup">
                         <div class="grid">
-                            <div class="col">
-                                <div class="field">
-                                    <div *ngIf="!comesFromEdit()" class="p-inputgroup">
-                                        <input pInputText type="text" formControlName="document" required="true"
-                                            minlength="8" maxlength="15"
-                                            placeholder="Ingrese el documento del beneficiario" class="w-full"
-                                            [ngClass]="{ 
+                            <div class="col-12 md:col-6 field">
+                                <div *ngIf="!comesFromEdit()" class="p-inputgroup">
+                                    <input pInputText type="text" formControlName="document" required="true"
+                                        minlength="6" maxlength="15" placeholder="Ingrese el documento del beneficiario"
+                                        class="w-full"
+                                        [ngClass]="{ 
                                     'border-green-500': customerInformation() && !alreadyExists(),
                                     'border-red-600': alreadyExistsFromEdit() || alreadyExists() || !validateOnlyNumbers() || validateStatus()}"
-                                            onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
-                                        <button *ngIf="customerInformation() && !alreadyExists()" pButton pRipple
-                                            type="button" (click)="fillCustomerInformation()"
-                                            pTooltip="Agregar beneficiario" tooltipPosition="bottom"
-                                            icon="pi pi-user-plus" class="p-button-success"></button>
-                                    </div>
-                                    <div *ngIf="comesFromEdit()">
-                                        <input pInputText type="text" formControlName="document" readonly="true"
-                                            [style.pointer-events]="'none'" [style.opacity]="'0.5'"
-                                            placeholder="Ingrese el documento del beneficiario" class="w-full">
-                                    </div>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['required']">
-                                        Este campo es obligatorio
-                                    </small>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['minlength']">
-                                        Deben ser mínimo 8 números
-                                    </small>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('document')?.dirty && alreadyExists()">
-                                        Este documento ya está en uso
-                                    </small>
-                                    <small class="block text-green-500"
-                                        *ngIf="formGroup.get('document')?.dirty && customerInformation() && !alreadyExists()">
-                                        !Beneficiario encontrado! Haga clic en el icono para agregarlo.
-                                    </small>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('document')?.dirty && !validateOnlyNumbers()">
-                                        Por favor ingrese solo números
-                                    </small>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('document')?.dirty && validateStatus()">
-                                        Este documento no está disponible
-                                    </small>
+                                        onkeydown="return /^\d|Backspace|Delete|Tab|Arrow(Left|Right|Up|Down)$/.test(event.key)">
+                                    <button *ngIf="customerInformation() && !alreadyExists()" pButton pRipple
+                                        type="button" (click)="fillCustomerInformation()"
+                                        pTooltip="Agregar beneficiario" tooltipPosition="bottom" icon="pi pi-user-plus"
+                                        class="p-button-success"></button>
                                 </div>
+                                <div *ngIf="comesFromEdit()">
+                                    <input pInputText type="text" formControlName="document" readonly="true"
+                                        [style.pointer-events]="'none'" [style.opacity]="'0.5'"
+                                        placeholder="Ingrese el documento del beneficiario" class="w-full">
+                                </div>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['required']">
+                                    Este campo es obligatorio
+                                </small>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['minlength']">
+                                    Deben ser mínimo 6 números
+                                </small>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('document')?.dirty && alreadyExists()">
+                                    Este documento ya está en uso
+                                </small>
+                                <small class="block text-green-500"
+                                    *ngIf="formGroup.get('document')?.dirty && customerInformation() && !alreadyExists()">
+                                    !Beneficiario encontrado! Haga clic en el icono para agregarlo.
+                                </small>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('document')?.dirty && !validateOnlyNumbers()">
+                                    Por favor ingrese solo números
+                                </small>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('document')?.dirty && validateStatus()">
+                                    Este documento no está disponible
+                                </small>
                             </div>
-                            <div class="col">
-                                <div class="field">
-                                    <input pInputText type="text" formControlName="name" required="true" minlength="3"
-                                        maxlength="30" placeholder="Ingrese los nombres del beneficiario" class="w-full"
-                                        onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)" />
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('name')?.dirty && formGroup.get('name')?.errors?.['required']">
-                                        Este campo es obligatorio
-                                    </small>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('name')?.dirty && formGroup.get('name')?.errors?.['minlength']">
-                                        Deben ser al menos 3 letras
-                                    </small>
-                                </div>
+                            <div class="col-12 md:col-6 field">
+                                <input pInputText type="text" formControlName="name" required="true" minlength="3"
+                                    maxlength="30" placeholder="Ingrese los nombres del beneficiario" class="w-full"
+                                    onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)" />
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('name')?.dirty && formGroup.get('name')?.errors?.['required']">
+                                    Este campo es obligatorio
+                                </small>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('name')?.dirty && formGroup.get('name')?.errors?.['minlength']">
+                                    Deben ser al menos 3 letras
+                                </small>
                             </div>
                         </div>
                         <div class="grid">
-                            <div class="col">
-                                <div class="field">
-                                    <input pInputText type="text" formControlName="lastName" required="true"
-                                        minlength="3" maxlength="30"
-                                        placeholder="Ingrese los apellidos del beneficiario" class="w-full"
-                                        onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('lastName')?.dirty && formGroup.get('lastName')?.errors?.['required']">
-                                        Este campo es obligatorio
-                                    </small>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('lastName')?.errors?.['minlength'] && formGroup.get('lastName')?.dirty">
-                                        Deben ser al menos 3 letras
-                                    </small>
-                                </div>
+                            <div class="col-12 md:col-6 field">
+                                <input pInputText type="text" formControlName="lastName" required="true" minlength="3"
+                                    maxlength="30" placeholder="Ingrese los apellidos del beneficiario" class="w-full"
+                                    onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)">
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('lastName')?.dirty && formGroup.get('lastName')?.errors?.['required']">
+                                    Este campo es obligatorio
+                                </small>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('lastName')?.errors?.['minlength'] && formGroup.get('lastName')?.dirty">
+                                    Deben ser al menos 3 letras
+                                </small>
                             </div>
-                            <div class="col">
-                                <div class="field">
-                                    <p-calendar *ngIf="!comesFromEdit()" dateFormat="dd/mm/yy" appendTo="body"
-                                        formControlName="birthdate" required="true"
-                                        placeholder="Fecha de nacimiento del beneficiario" [showIcon]="true"
-                                        [style]="{ width: '100%' }" [readonlyInput]="true"
-                                        [maxDate]="beneficiariesMaxDate"></p-calendar>
-                                    <p-calendar *ngIf="comesFromEdit()" dateFormat="dd/mm/yy" appendTo="body"
-                                        formControlName="birthdate" placeholder="Fecha de nacimiento del beneficiario"
-                                        [showIcon]="true" [style]="{ width: '100%' }" [readonlyInput]="true"
-                                        [maxDate]="beneficiariesMaxDate" [style.pointer-events]="'none'"
-                                        [style.opacity]="'0.5'"></p-calendar>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('birthdate')?.dirty && formGroup.get('birthdate')?.errors?.['required']">
-                                        Este campo es obligatorio
-                                    </small>
-                                </div>
+                            <div class="col-12 md:col-6 field">
+                                <span class="p-input-icon-left w-full">
+                                    <i class="pi pi-phone"></i>
+                                    <input pInputText type="text" formControlName="phoneNumber" minlength="10"
+                                        maxlength="10" required="true"
+                                        placeholder="Ingrese el teléfono del beneficiario" class="w-full" [ngClass]="{
+                                    'border-red-600': !validateOnlyNumbersForPhoneNumber()
+                                }" onkeydown="return /^\d|Backspace|Delete|Tab|Arrow(Left|Right|Up|Down)$/.test(event.key)" />
+                                </span>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('phoneNumber')?.dirty && formGroup.get('phoneNumber')?.errors?.['required']">
+                                    Este campo es obligatorio
+                                </small>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber')?.dirty">
+                                    Deben ser 10 números
+                                </small>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('phoneNumber')?.dirty && !validateOnlyNumbersForPhoneNumber()">
+                                    Por favor ingrese solo números
+                                </small>
                             </div>
                         </div>
                         <div class="grid">
-                            <div class="col-12">
-                                <div class="field">
-                                    <div class="p-input-icon-left w-full">
-                                        <i class="pi pi-map-marker"></i>
-                                        <!-- <input pInputText type="text" formControlName="address" required="true"
+                            <div class="col-12 field">
+                                <div class="p-input-icon-left w-full">
+                                    <i class="pi pi-map-marker"></i>
+                                    <!-- <input pInputText type="text" formControlName="address" required="true"
                                             placeholder="País - Departamento - Ciudad - Dirección" class="w-full"> -->
-                                        <input class="w-full" pInputText type="text" formControlName="destination"
-                                            tooltipStyleClass="tooltip" tooltipPosition="top"
-                                            placeholder="Ingrese el lugar destino" required="true"
-                                            ngx-google-places-autocomplete [options]="{
+                                    <input class="w-full" pInputText type="text" formControlName="address"
+                                        placeholder="Ingrese su dirección residencial" required="true"
+                                        ngx-google-places-autocomplete [options]="{
                                                 types: [],
                                                 componentRestrictions: null
                                             }" #placesRef="ngx-places" autocomplete="on"
-                                            (onAddressChange)="onAddressChange($event)"
-                                            onchange="onAddressChange($event)" />
-                                    </div>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('address')?.dirty && formGroup.get('address')?.errors?.['required']">
-                                        Este campo es obligatorio
-                                    </small>
+                                        (onAddressChange)="onAddressChange($event)"
+                                        onchange="onAddressChange($event)" />
                                 </div>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('address')?.dirty && formGroup.get('address')?.errors?.['required']">
+                                    Este campo es obligatorio
+                                </small>
                             </div>
                         </div>
                         <div class="grid">
-                            <div class="col">
-                                <div class="field">
-                                    <p-autoComplete formControlName="eps" [suggestions]="results"
-                                        (completeMethod)="searchEps($event)" [style]="{ width: '100%' }"
-                                        placeholder="Ingrese la EPS del beneficiario" minlength="3" maxlength="50"
-                                        [dropdown]="true" required="true"></p-autoComplete>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('eps')?.dirty && formGroup.get('eps')?.errors?.['required']">
-                                        Este campo es obligatorio
-                                    </small>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('eps')?.dirty && formGroup.get('eps')?.errors?.['minlength']">
-                                        Este campo debe contener al menos 3 letras
-                                    </small>
-                                </div>
+                            <div class="col-12 md:col-6 field">
+                                <p-autoComplete formControlName="eps" [suggestions]="results"
+                                    (completeMethod)="searchEps($event)" [style]="{ width: '100%' }"
+                                    placeholder="Ingrese la EPS del beneficiario" minlength="3" maxlength="50"
+                                    [dropdown]="true" required="true"></p-autoComplete>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('eps')?.dirty && formGroup.get('eps')?.errors?.['required']">
+                                    Este campo es obligatorio
+                                </small>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('eps')?.dirty && formGroup.get('eps')?.errors?.['minlength']">
+                                    Este campo debe contener al menos 3 letras
+                                </small>
                             </div>
-                            <div class="col">
-                                <div class="field">
-                                    <span class="p-input-icon-left w-full">
-                                        <i class="pi pi-phone"></i>
-                                        <input pInputText type="text" formControlName="phoneNumber" minlength="10"
-                                            maxlength="10" required="true"
-                                            placeholder="Ingrese el teléfono del beneficiario" class="w-full" [ngClass]="{
-                                    'border-red-600': !validateOnlyNumbersForPhoneNumber()
-                                }" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)" />
-                                    </span>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('phoneNumber')?.dirty && formGroup.get('phoneNumber')?.errors?.['required']">
-                                        Este campo es obligatorio
-                                    </small>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber')?.dirty">
-                                        Deben ser 10 números
-                                    </small>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('phoneNumber')?.dirty && !validateOnlyNumbersForPhoneNumber()">
-                                        Por favor ingrese solo números
-                                    </small>
-                                </div>
+                            <div class="col-12 md:col-6 field">
+                                <p-calendar *ngIf="!comesFromEdit()" dateFormat="dd/mm/yy" appendTo="body"
+                                    formControlName="birthdate" required="true"
+                                    placeholder="Fecha de nacimiento del beneficiario" [showIcon]="true"
+                                    [style]="{ width: '100%' }" [readonlyInput]="true"
+                                    [maxDate]="beneficiariesMaxDate"></p-calendar>
+                                <p-calendar *ngIf="comesFromEdit()" dateFormat="dd/mm/yy" appendTo="body"
+                                    formControlName="birthdate" placeholder="Fecha de nacimiento del beneficiario"
+                                    [showIcon]="true" [style]="{ width: '100%' }" [readonlyInput]="true"
+                                    [maxDate]="beneficiariesMaxDate" [style.pointer-events]="'none'"
+                                    [style.opacity]="'0.5'"></p-calendar>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('birthdate')?.dirty && formGroup.get('birthdate')?.errors?.['required']">
+                                    Este campo es obligatorio
+                                </small>
                             </div>
                         </div>
                         <div *ngIf="orderProcess.action !== 'EditOrderDetail'" class="grid">
-                            <div class="col">
-                                <div class="field-checkbox">
-                                    <p-checkbox formControlName="addToFt" inputId="addToFt"
-                                        [binary]="true"></p-checkbox>
-                                    <label for="addToFt" class="mb-0">Agregar beneficiario a mis Viajeros
-                                        Frecuentes</label>
-                                </div>
+                            <div class="col-12 field-checkbox">
+                                <p-checkbox formControlName="addToFt" inputId="addToFt" [binary]="true"></p-checkbox>
+                                <label for="addToFt" class="mb-0">Agregar beneficiario a mis Viajeros
+                                    Frecuentes</label>
                             </div>
                         </div>
                         <div class="flex justify-content-end">
-                            <button *ngIf="!showBeneficiariesTable()" pButton pRipple type="button"
-                                (click)="back($event)" label="Regresar" icon="pi pi-angle-left"
-                                class="p-button-outlined mr-3"></button>
+                            <button *ngIf="!showBeneficiariesTable()" pButton pRipple type="button" (click)="back()"
+                                label="Regresar" icon="pi pi-angle-left" class="p-button-outlined mr-3"></button>
                             <p-button
                                 *ngIf="orderProcess.action !== 'EditOrderDetail' && validForm() && beneficiariesForm()"
                                 (click)="add()" label="Guardar" icon="pi pi-check"></p-button>
@@ -287,8 +267,12 @@
                 <div class="col-12 md:col-4 mt-5 md:mt-0">
                     <div class="flex flex-column align-items-center justify-content-center h-full py-3 px-3">
                         <i class="pi pi-fw pi-users mr-2 text-4xl"></i>
-                        <p class="m-0 mt-5 text-center text-lg">Este apartado está dispuesto para que visualice y
-                            modifique la información permitida de los beneficiarios asociados a este pedido.</p>
+                        <p *ngIf="orderProcess.action !== 'EditOrderDetail'" class="m-0 mt-5 text-center text-lg">Este
+                            apartado está dispuesto para que visualice e
+                            ingrese la información requerida de los beneficiarios asociados a este pedido.</p>
+                        <p *ngIf="orderProcess.action === 'EditOrderDetail'" class="m-0 mt-5 text-center text-lg">Este
+                            apartado está dispuesto para que visualice y
+                            modifique la información permitida del beneficiario asociado a este pedido.</p>
                         <p class="mx-0 mt-5 text-center text-lg">Por favor asegurese de que toda la información
                             ingresada sea veridica.</p>
                         <p class="mx-0 mt-4 text-center text-lg text-900 font-medium">Tenga en cuenta que el Documento
@@ -380,7 +364,7 @@
                 </p-dataView>
             </div>
             <div *ngIf="showBeneficiariesTable()" class="flex justify-content-end">
-                <button pButton pRipple type="button" (click)="back($event)" label="Regresar" icon="pi pi-angle-left"
+                <button pButton pRipple type="button" (click)="back()" label="Regresar" icon="pi pi-angle-left"
                     class="p-button-outlined mr-3"></button>
                 <p-button *ngIf="orderProcess.action !== 'EditOrderDetail' && validForm()" (click)="next()"
                     label="Siguiente" icon="pi pi-check"></p-button>

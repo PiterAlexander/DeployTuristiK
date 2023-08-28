@@ -113,11 +113,11 @@ export class CreateOrderFormComponent implements OnInit {
     this.results = filtered
   }
 
-  cancel(event: Event) {
+  cancel() {
     if (this.orderProcess !== undefined) {
       if (this.orderProcess.beneficiaries.length > 0) {
         this.confirmationService.confirm({
-          target: event.target,
+          key: 'confirmation-message',
           header: '¿Está seguro de regresar?',
           message: 'Perderá toda la información previamente ingresada.',
           icon: 'pi pi-exclamation-triangle',
@@ -151,8 +151,9 @@ export class CreateOrderFormComponent implements OnInit {
   }
 
   validateOnlyNumbersForBeneficiaries(): boolean {
+
     const regularExpresion = /^[0-9]+$/;
-    if (this.formGroup.value.beneficiariesAmount !== null && this.validateBeneficiaries() && this.validateExistingBeneficiariesAmount()) {
+    if (this.formGroup.value.beneficiariesAmount !== null && this.formGroup.value.beneficiariesAmount > 0 && this.validateBeneficiaries() && this.validateExistingBeneficiariesAmount()) {
       return regularExpresion.test(this.formGroup.value.beneficiariesAmount)
     }
     return true
@@ -307,7 +308,7 @@ export class CreateOrderFormComponent implements OnInit {
             address: oneCustomer.address,
             eps: oneCustomer.eps,
             user: oneCustomer.user,
-            price: this.onePackage.price,
+            price: this.onePackage.price + this.onePackage.aditionalPrice,
             addToFt: false
           }]
           const orderProcess = {

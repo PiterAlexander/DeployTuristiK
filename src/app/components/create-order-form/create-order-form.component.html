@@ -1,4 +1,4 @@
-<p-confirmDialog></p-confirmDialog>
+<p-confirmDialog key="confirmation-message"></p-confirmDialog>
 <div class="p-4">
     <div class="col-12">
         <div class="card p-6">
@@ -19,84 +19,84 @@
                         <b>Formulario de Configuración</b>
                     </p-divider>
                     <form novalidate [formGroup]="formGroup">
-                        <div class="field mb-4">
-                            <p-dropdown class="jaja" [options]="allPackages" optionLabel="name" optionValue="packageId"
-                                placeholder="Por favor seleccione el nombre del paquete" required="true"
-                                formControlName="packageId" [style]="{ width: '100%' }"></p-dropdown>
-                            <small class="p-error block"
-                                *ngIf="formGroup.get('packageId')?.errors?.['required'] && formGroup.get('packageId')?.dirty">
-                                Este campo es obligatorio
-                            </small>
+                        <div class="grid">
+                            <div class="col-12 field">
+                                <p-dropdown [options]="allPackages" optionLabel="name" optionValue="packageId"
+                                    placeholder="Por favor seleccione el nombre del paquete" required="true"
+                                    formControlName="packageId" [style]="{ width: '100%' }"></p-dropdown>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('packageId')?.errors?.['required'] && formGroup.get('packageId')?.dirty">
+                                    Este campo es obligatorio
+                                </small>
+                            </div>
                         </div>
                         <div class="grid">
-                            <div class="col-7">
-                                <div class="field">
-                                    <p-autoComplete [forceSelection]="true" formControlName="document"
-                                        [suggestions]="results" (completeMethod)="searchDocument($event)"
-                                        [style]="{ width: '100%' }"
-                                        placeholder="Ingrese el número de documento del titular" maxlength="15"
-                                        [dropdown]="true" required="true"
-                                        onkeydown="return /^\d|Backspace|Delete$/.test(event.key)"></p-autoComplete>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['required']">
-                                        Este campo es obligatorio
-                                    </small>
-                                </div>
+                            <div class="col-12 md:col-7 field mb-2">
+                                <p-autoComplete [forceSelection]="true" formControlName="document"
+                                    [suggestions]="results" (completeMethod)="searchDocument($event)"
+                                    [style]="{ width: '100%' }" placeholder="Ingrese el número de documento del titular"
+                                    maxlength="15" [dropdown]="true" required="true"
+                                    onkeydown="return /^\d|Backspace|Delete|Tab|Arrow(Left|Right|Up|Down)$/.test(event.key)"></p-autoComplete>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('document')?.dirty && formGroup.get('document')?.errors?.['required']">
+                                    Este campo es obligatorio
+                                </small>
                             </div>
-                            <div class="col-5">
-                                <div class="field">
-                                    <span class="p-input-icon-left w-full">
-                                        <i class="pi pi-users"></i>
-                                        <input type="number"
-                                            *ngIf="!formGroup.get('packageId')?.dirty && orderProcess === undefined"
-                                            pInputText class="w-full" disabled="true" readonly="true"
-                                            placeholder="Seleccione un paquete">
-                                        <input type="number"
-                                            *ngIf="formGroup.get('packageId')?.dirty || orderProcess !== undefined"
-                                            pInputText class="w-full" [ngClass]="
+                            <div class="col-12 md:col-5 field">
+                                <span class="p-input-icon-left w-full">
+                                    <i class="pi pi-users"></i>
+                                    <input type="number"
+                                        *ngIf="!formGroup.get('packageId')?.dirty && orderProcess === undefined"
+                                        pInputText class="w-full" disabled="true" readonly="true"
+                                        placeholder="Seleccione un paquete">
+                                    <input type="number"
+                                        *ngIf="formGroup.get('packageId')?.dirty || orderProcess !== undefined"
+                                        pInputText class="w-full" [ngClass]="
                                         {
                                             'border-red-600': formGroup.get('beneficiariesAmount')?.dirty &&
                                             !validateBeneficiaries() || !validateExistingBeneficiariesAmount() || !validateOnlyNumbersForBeneficiaries()
                                         }" formControlName="beneficiariesAmount" placeholder="¿Cuántos viajarán?"
-                                            required="true" onkeydown="return /^\d|Backspace|Delete$/.test(event.key)">
-                                    </span>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('beneficiariesAmount')?.dirty && formGroup.get('beneficiariesAmount')?.errors?.['required']">
-                                        Este campo es obligatorio
-                                    </small>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('beneficiariesAmount')?.dirty && formGroup.get('beneficiariesAmount')?.errors?.['min']">
-                                        Debe haber al menos un beneficiario
-                                    </small>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('beneficiariesAmount')?.dirty && orderProcess === undefined && !validateBeneficiaries()">
-                                        Cupos disponibles: {{onePackage.availableQuotas}}
-                                    </small>
-                                    <small class="p-error block"
-                                        *ngIf="(orderProcess !== undefined && formGroup.get('packageId')?.dirty && !validateBeneficiaries()) ||
+                                        required="true"
+                                        onkeydown="return /^\d|Backspace|Delete|Tab|Arrow(Left|Right|Up|Down)$/.test(event.key)">
+                                </span>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('beneficiariesAmount')?.dirty && formGroup.get('beneficiariesAmount')?.errors?.['required']">
+                                    Este campo es obligatorio
+                                </small>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('beneficiariesAmount')?.dirty && formGroup.get('beneficiariesAmount')?.errors?.['min']">
+                                    Debe haber al menos un beneficiario
+                                </small>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('beneficiariesAmount')?.dirty && orderProcess === undefined && !validateBeneficiaries()">
+                                    Cupos disponibles: {{onePackage.availableQuotas}}
+                                </small>
+                                <small class="p-error block"
+                                    *ngIf="(orderProcess !== undefined && formGroup.get('packageId')?.dirty && !validateBeneficiaries()) ||
                                      (orderProcess !== undefined && formGroup.get('beneficiariesAmount')?.dirty && !validateBeneficiaries())">
-                                        Cupos disponibles: {{onePackage.availableQuotas}}
-                                    </small>
-                                    <small class="p-error block"
-                                        *ngIf="validateBeneficiaries() && !validateExistingBeneficiariesAmount() && formGroup.get('beneficiariesAmount')?.dirty">
-                                        Capacidad minima de beneficiarios: {{beneficiariesAmount}}
-                                    </small>
-                                    <small class="p-error block"
-                                        *ngIf="formGroup.get('beneficiariesAmount')?.dirty && !validateOnlyNumbersForBeneficiaries()">
-                                        Por favor ingrese solo números
-                                    </small>
-                                </div>
+                                    Cupos disponibles: {{onePackage.availableQuotas}}
+                                </small>
+                                <small class="p-error block"
+                                    *ngIf="validateBeneficiaries() && !validateExistingBeneficiariesAmount() && formGroup.get('beneficiariesAmount')?.dirty">
+                                    Capacidad minima de beneficiarios: {{beneficiariesAmount}}
+                                </small>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('beneficiariesAmount')?.dirty && !validateOnlyNumbersForBeneficiaries()">
+                                    Por favor ingrese solo números
+                                </small>
                             </div>
                         </div>
-                        <div *ngIf="orderProcess === undefined" class="field-checkbox mb-4">
-                            <p-checkbox [binary]="true" formControlName="titularAsBeneficiarie"
-                                inputId="titularAsBeneficiarie"></p-checkbox>
-                            <label for="titularAsBeneficiarie" class="mb-0">Marque esta opción si el titular también
-                                viajará</label>
+                        <div *ngIf="orderProcess === undefined" class="grid">
+                            <div class="col-12 field-checkbox">
+                                <p-checkbox [binary]="true" formControlName="titularAsBeneficiarie"
+                                    inputId="titularAsBeneficiarie"></p-checkbox>
+                                <label for="titularAsBeneficiarie" class="mb-0">Marque esta opción si el titular también
+                                    viajará</label>
+                            </div>
                         </div>
                         <div class="flex justify-content-end">
-                            <button pButton pRipple type="button" (click)="cancel($event)" label="Cancelar"
-                                icon="pi pi-times" class="p-button-outlined mr-3"></button>
+                            <button pButton pRipple type="button" (click)="cancel()" label="Cancelar" icon="pi pi-times"
+                                class="p-button-outlined mr-3"></button>
                             <p-button *ngIf="validForm()" type="button" (click)="next()" label="Siguiente"
                                 icon="pi pi-check"></p-button>
                             <p-button *ngIf="!validForm()" label="Siguiente" icon="pi pi-check"
