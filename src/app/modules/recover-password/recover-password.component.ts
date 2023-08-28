@@ -29,6 +29,7 @@ export class RecoverPasswordComponent implements OnInit {
     public ui: Observable<UiState>;
     public currentUser: User;
     public menssage: Token;
+    public show: boolean;
 
     Visible: boolean = false;
     Visible2: boolean = false;
@@ -78,10 +79,10 @@ export class RecoverPasswordComponent implements OnInit {
                 ...model
             })
         );
-
+        this.show = true;
         this.ui.subscribe((state: UiState) => {
             this.menssage = state.passwordChanged.data;
-            this.mensajeApi()
+            this.mensajeApi(this.show)
         });
 
     }
@@ -108,27 +109,25 @@ export class RecoverPasswordComponent implements OnInit {
         return this.formGroup.valid && this.validatePassword();
     }
 
-    mensajeApi() {
+    mensajeApi(show: boolean) {
+        if (show) {
+            if (this.menssage.success) {
+                this.show = false;
+                this.messageService.add({ key: 'alert-message-recover-password', severity: 'success', summary: '¡Proceso completado!', detail: 'Ya puedes acceder nuevamente al sistema.' });
+                setTimeout(() => {
+                    this.router.navigate(['/login']);
+                }, 2000);
 
-        if (this.menssage.success) {
-            // this.toastr.success(
-            //     'Ya puedes acceder nuevamente al sistema',
-            //     '¡' + this.menssage.message + '!'
-            // );
+            } else {
+                this.show = false;
+                this.messageService.add({
+                    key: 'alert-message-recover-password',
+                    severity: 'error',
+                    summary: '¡Lo sentimos!',
+                    detail: this.menssage.message
+                });
 
-            this.messageService.add({ key: 'alert-message-recover-password', severity: 'success', summary: '¡Proceso completado!', detail: 'Ya puedes acceder nuevamente al sistema.' });
-            setTimeout(() => {
-            this.router.navigate(['/login']);
-            }, 2000);
-
-        } else {
-
-            this.messageService.add({
-                key: 'alert-message-recover-password',
-                severity: 'error',
-                summary: '¡Lo sentimos!',
-                detail: this.menssage.message
-            });
+            }
         }
     }
 }
