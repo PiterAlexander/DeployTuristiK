@@ -68,6 +68,7 @@ export class CreateRoleFormComponent implements OnInit {
             name: new FormControl('', [
                 Validators.required,
                 Validators.minLength(3),
+                Validators.pattern(/^\s*(?:\S\s*){3,20}$/),
                 Validators.maxLength(20)
             ]),
             status: [0, Validators.required],
@@ -165,7 +166,7 @@ export class CreateRoleFormComponent implements OnInit {
                             status: this.formGroup.value.status
                         };
                     }else{
-                        
+
                     }
 
                     this.selectedStatusCode = this.formGroup.value.status;
@@ -297,8 +298,8 @@ export class CreateRoleFormComponent implements OnInit {
             return (
                 this.formGroup.valid &&
                 this.formGroup.value.status != 1 &&
-                this.formGroup.value.name.toLowerCase() != 'null' &&
-                this.formGroup.value.name.toLowerCase() != 'nan' &&
+                this.formGroup.value.name.toLowerCase().trim() != 'null' &&
+                this.formGroup.value.name.toLowerCase().trim() != 'nan' &&
                 !this.allRoles.find(
                     (item) => item.name === this.formGroup.value.name.trim()
                 ) &&
@@ -309,8 +310,8 @@ export class CreateRoleFormComponent implements OnInit {
                 return (
                     this.formGroup.valid &&
                     this.formGroup.value.status != 0 &&
-                    this.formGroup.value.name.toLowerCase() != 'null' &&
-                    this.formGroup.value.name.toLowerCase() != 'nan' &&
+                    this.formGroup.value.name.toLowerCase().trim() != 'null' &&
+                    this.formGroup.value.name.toLowerCase().trim() != 'nan' &&
                     !this.allRoles.find(
                         (item) =>
                             item.name === this.formGroup.value.name &&
@@ -354,7 +355,7 @@ export class CreateRoleFormComponent implements OnInit {
         if (
             this.formGroup.value.name
         ) {
-            const nameControl = this.formGroup.value.name.toLowerCase();
+            const nameControl = this.formGroup.value.name.toLowerCase().trim();
             if (nameControl == 'null' || nameControl == "nan") {
                 return true;
             }
