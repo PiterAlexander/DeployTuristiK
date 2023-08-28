@@ -348,13 +348,13 @@
                         </small>
                     </div>
                 </div>
-                <div class="p-fluid p-formgrid grid px-2">
+                <div class="grid field-checkbox col-12">
                     <p-checkbox
                         formControlName="termsAndConditions"
                         value="check"
-                        name="termsAndConditions"
+                        inputId="termsAndConditions"
                     ></p-checkbox>
-                    <p class="mx-2 mt-3" for="termsAndConditions">
+                    <label class="mx-1 mt-2" for="termsAndConditions">
                         He leído y acepto los
                         <a
                             href="../../../assets/TerminosYCondiciones.pdf"
@@ -363,8 +363,8 @@
                         >
                             términos y condiciones.</a
                         >
-                    </p>
-                    <div class="field col-12" style="margin-top: -1.5rem">
+                    </label>
+                    <div class="field col-12" style="margin-top: -0.5rem; margin-left: -0.5rem">
                         <small
                             class="p-error block"
                             *ngIf="formGroup.get('termsAndConditions').dirty && formGroup.get('termsAndConditions')?.errors?.['required']"
