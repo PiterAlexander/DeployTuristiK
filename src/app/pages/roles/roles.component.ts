@@ -122,20 +122,19 @@ export class RolesComponent implements OnInit {
         this.messageService.add({ key: 'alert-message', severity: 'warn', summary: '¡Acción denegada!', detail: 'Este rol tiene usuarios asociados.' });
       } else {
         this.confirmationService.confirm({
-          header: 'Confirmación', // Cambia el encabezado del cuadro de confirmación
+          header: 'Confirmación',
           message: '¿Está seguro de eliminar a ' + role.name + '?',
-          icon: 'pi pi-exclamation-triangle', // Cambia el icono del cuadro de confirmación
-          acceptLabel: 'Eliminar', // Cambia el texto del botón de aceptar
-          acceptIcon: 'pi pi-trash',
-          rejectLabel: 'Cancelar', // Cambia el texto del botón de rechazar
-          acceptButtonStyleClass: 'p-button-danger p-button-sm', // Agrega una clase CSS al botón de aceptar
-          rejectButtonStyleClass: 'p-button-outlined p-button-sm', // Agrega una clase CSS al botón de rechazar
+          icon: 'pi pi-exclamation-triangle',
+          acceptIcon: 'pi pi-times ',
+          rejectIcon: 'pi pi-trash',
+          rejectLabel: 'Eliminar',
+          acceptLabel: 'Cancelar',
+          rejectButtonStyleClass: 'p-button-danger p-button-sm',
+          acceptButtonStyleClass: 'p-button-outlined p-button-sm',
           accept: () => {
-            // Lógica para confirmar
             this.store.dispatch(new DeleteRoleRequest(role));
           },
           reject: () => {
-            // Lógica para rechazar
           }
         });
       }
