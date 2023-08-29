@@ -35,10 +35,10 @@
                                     type="text"
                                     formControlName="document"
                                     required="true"
-                                    minlength="8"
+                                    minlength="6"
                                     maxlength="15"
                                     class="w-full"
-                                    onkeydown="return /^\d|Backspace|Delete$/.test(event.key)"
+                                    onkeydown="return /^\d|Backspace|Delete|Tab|Arrow(Left|Right|Up|Down)$/.test(event.key)"
                                 />
                             </span>
                         </div>
@@ -62,7 +62,16 @@
                             class="p-error block"
                             *ngIf="formGroup.get('document')?.errors?.['minlength'] && formGroup.get('document')?.dirty"
                         >
-                            El documento debe tener mínimo 8 caracteres
+                            El documento debe tener mínimo 6 caracteres
+                        </small>
+                        <small
+                            class="p-error block"
+                            *ngIf="
+                                formGroup.get('document')?.dirty &&
+                                !validateOnlyNumbers()
+                            "
+                        >
+                            Por favor ingrese solo números
                         </small>
                     </div>
                     <div class="field col-12 md:col-4">
@@ -132,7 +141,7 @@
                                 minlength="10"
                                 maxlength="10"
                                 class="w-full"
-                                onkeydown="return /^\d|Backspace|Delete$/.test(event.key)"
+                                onkeydown="return /^\d|Backspace|Delete|Tab|Arrow(Left|Right|Up|Down)$/.test(event.key)"
                             />
                         </span>
                         <!-- validaciones de número -->
@@ -147,6 +156,15 @@
                             *ngIf="formGroup.get('phoneNumber')?.errors?.['minlength'] && formGroup.get('phoneNumber')?.dirty"
                         >
                             Este campo debe contener 10 números
+                        </small>
+                        <small
+                            class="p-error block"
+                            *ngIf="
+                                formGroup.get('phoneNumber')?.dirty &&
+                                !validateOnlyNumbersForPhoneNumber()
+                            "
+                        >
+                            Por favor ingrese solo números
                         </small>
                     </div>
                     <div class="field col-12 md:col-4">
@@ -203,16 +221,23 @@
                         <span class="p-input-icon-left">
                             <i class="pi pi-map-marker"></i>
                             <input
-                                pInputText
-                                placeholder="Dirección de residencia"
                                 class="w-full"
+                                pInputText
                                 type="text"
                                 formControlName="address"
+                                placeholder="Dirección de residencia"
                                 required="true"
-                                minlength="10"
-                                maxlength="100"
-                                onkeydown="return /[a-z A-Z 0-9 -#.\u00C0-\u017F\s]/i.test(event.key)"
+                                ngx-google-places-autocomplete
+                                [options]="{
+                                    types: [],
+                                    componentRestrictions: null
+                                }"
+                                #placesRef="ngx-places"
+                                autocomplete="on"
+                                (onAddressChange)="onAddressChange($event)"
+                                onchange="onAddressChange($event)"
                                 [style]="{width: '15rem'}"
+
                             />
                         </span>
                         <small
@@ -354,7 +379,10 @@
                         value="check"
                         inputId="termsAndConditions"
                     ></p-checkbox>
-                    <label class="mx-1 mt-2" for="termsAndConditions">
+                    <label
+                        class="mx-1 mt-2 font-normal"
+                        for="termsAndConditions"
+                    >
                         He leído y acepto los
                         <a
                             href="../../../assets/TerminosYCondiciones.pdf"
@@ -364,7 +392,10 @@
                             términos y condiciones.</a
                         >
                     </label>
-                    <div class="field col-12" style="margin-top: -0.5rem; margin-left: -0.5rem">
+                    <div
+                        class="field col-12"
+                        style="margin-top: -0.5rem; margin-left: -0.5rem"
+                    >
                         <small
                             class="p-error block"
                             *ngIf="formGroup.get('termsAndConditions').dirty && formGroup.get('termsAndConditions')?.errors?.['required']"

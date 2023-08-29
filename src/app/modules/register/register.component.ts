@@ -82,7 +82,7 @@ export class RegisterComponent implements OnInit {
 
 
         this.formGroup = this.fb.group({
-            email: new FormControl(null, [Validators.required, Validators.email, Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')]),
+            email: new FormControl(null, [Validators.required, Validators.email, Validators.pattern("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$")]),
             password: new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
             name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
             lastName: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
@@ -115,7 +115,7 @@ export class RegisterComponent implements OnInit {
 
     saveCustomer() {
 
-        var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        var regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
         if (!this.validForm()) {
             this.messageService.add({ key: 'alert-message-register', severity: 'error', summary: '¡Espera!', detail: 'Todos los campos deben estar diligenciados correctamente' });
 
@@ -211,17 +211,45 @@ export class RegisterComponent implements OnInit {
         return this.UserList.find(item => item.email == this.formGroup.value.email)
     }
 
+    validateOnlyNumbers(): boolean {
+        if (this.formGroup.value.document !== null) {
+            if (this.formGroup.value.document.length >= 6) {
+                const regularExpresion = /^[0-9]+$/
+                return regularExpresion.test(this.formGroup.value.document)
+            }
+        }
+        return true
+    }
+
     validateOnlyNumbersForPhoneNumber(): boolean {
         if (this.formGroup.value.phoneNumber !== null) {
             if (this.formGroup.value.phoneNumber.length >= 10) {
-                const regularExpresion = /^[0-9]+$/;
+                const regularExpresion = /^[0-9]+$/
                 return regularExpresion.test(this.formGroup.value.phoneNumber)
             }
         }
         return true
     }
 
-
+    onAddressChange(address: any) {
+        if (this.formGroup) {
+            const addressHtml = address.adr_address;
+            console.log(address);
+            const hiddenDiv = document.createElement('div');
+            hiddenDiv.style.display = 'none';
+            hiddenDiv.innerHTML = addressHtml;
+            const locality = hiddenDiv.querySelector('.locality')?.textContent || '';
+            const country = hiddenDiv.querySelector('.country-name')?.textContent || '';
+            const regionElements = hiddenDiv.querySelectorAll('.region');
+            if (regionElements.length >= 2) {
+                const region = regionElements[0].textContent || '';
+                const extractedText = `${address.name}, ${locality}, ${region}, ${country}`;
+                console.log(extractedText);
+                this.formGroup.get('address').setValue(extractedText);
+            }
+        }
+        console.log(address);
+    }
 
     birthDateValidator() {
         const currentDate = new Date();

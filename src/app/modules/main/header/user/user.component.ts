@@ -89,7 +89,7 @@ export class UserComponent implements OnInit {
             target: event.target,
             message: '¿Seguro quiere cerrar sesión?',
             icon: 'pi pi-exclamation-triangle',
-            acceptLabel: "Cerrar Sesión",
+            acceptLabel: "Sí, Cerrar Sesión",
             rejectLabel: "No",
             acceptIcon: 'pi pi-sign-out',
             acceptButtonStyleClass: 'p-button p-button-sm',

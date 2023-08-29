@@ -1037,8 +1037,8 @@ export class PackageEffects {
                 this.dialogRef = this.dialogService.open(ChangePasswordComponent, {
                     /* Opciones del modal */
                     showHeader: false,
-                    width: '50%',
-                    contentStyle: { padding: '1.50rem 2.25rem 1.50rem 2.25rem', overflowY: 'auto' },
+                    width: '40%',
+                    contentStyle: { padding: '3rem 1rem 3rem 1rem', overflowY: 'auto' },
                 });
             })
         ),

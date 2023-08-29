@@ -76,7 +76,7 @@ export class CreateUserFormComponent implements OnInit {
       email: [null,
         [Validators.required,
         Validators.email,
-        Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]
+        Validators.pattern("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$")]
       ],
       password: [null
       ],
@@ -245,21 +245,21 @@ export class CreateUserFormComponent implements OnInit {
     return false
   }
 
-  validateOnlyNumbersForPhoneNumber(): boolean {
-    if (this.formGroup.value.phoneNumber !== null) {
-      if (this.formGroup.value.phoneNumber.length >= 10) {
+  validateOnlyNumbers(): boolean {
+    if (this.formGroup.value.document !== null) {
+      if (this.formGroup.value.document.length >= 6) {
         const regularExpresion = /^[0-9]+$/
-        return regularExpresion.test(this.formGroup.value.phoneNumber)
+        return regularExpresion.test(this.formGroup.value.document)
       }
     }
     return true
   }
 
-  validateOnlyNumbers(): boolean {
-    if (this.formGroup.value.document !== null) {
-      if (this.formGroup.value.document.length >= 8) {
+  validateOnlyNumbersForPhoneNumber(): boolean {
+    if (this.formGroup.value.phoneNumber !== null) {
+      if (this.formGroup.value.phoneNumber.length >= 10) {
         const regularExpresion = /^[0-9]+$/
-        return regularExpresion.test(this.formGroup.value.document)
+        return regularExpresion.test(this.formGroup.value.phoneNumber)
       }
     }
     return true

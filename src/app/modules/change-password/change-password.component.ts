@@ -24,6 +24,8 @@ export class ChangePasswordComponent implements OnInit {
     public currentUser: User;
     public modelUser: User;
     public menssage: Token;
+    public show: boolean;
+
 
 
     Visible: boolean = false;
@@ -76,12 +78,12 @@ export class ChangePasswordComponent implements OnInit {
                 ...model
             })
         );
-
+        this.show = true;
         this.ui.subscribe((state: UiState) => {
             this.currentUser = state.currentUser.data
             this.menssage = state.passwordChanged.data;
             if (this.menssage) {
-                this.mensajeApi()
+                this.mensajeApi(this.show)
             }
 
         });
@@ -116,23 +118,26 @@ export class ChangePasswordComponent implements OnInit {
         this.modalPrimeNg.close();
     }
 
-    mensajeApi() {
-        if (this.menssage.success) {
-            // this.messageService.add({
-            //     key: 'alert-message-change-password',
-            //     severity: 'success',
-            //     summary: '¡Éxito!',
-            //     detail: this.menssage.message
-            // });
-        this.modalPrimeNg.close();
+    mensajeApi(show: boolean) {
+        if (show) {
+            this.show = false
+            if (this.menssage.success) {
+                this.messageService.add({
+                    key: 'alert-message-change-password',
+                    severity: 'success',
+                    summary: '¡Éxito!',
+                    detail: this.menssage.message
+                });
+                this.modalPrimeNg.close();
 
-        } else {
-            // this.messageService.add({
-            //     key: 'alert-message-change-password',
-            //     severity: 'error',
-            //     summary: '¡Lo sentimos!',
-            //     detail: this.menssage.message
-            // });
+            } else {
+                this.messageService.add({
+                    key: 'alert-message-change-password',
+                    severity: 'error',
+                    summary: '¡Lo sentimos!',
+                    detail: this.menssage.message
+                });
+            }
         }
     }
 }

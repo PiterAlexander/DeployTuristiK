@@ -120,7 +120,7 @@
     </div>
 </div>
 
-<div *ngIf="user['role'] === 'Cliente'">
+<div *ngIf="user['role'] === 'Cliente'"  class="mt-5">
     <div class="mb-4 surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border" style="border-radius: 15px;">
         <p-dataView id="myDv" #dv *ngIf="visible" [value]="frequentTravelersList" filterBy="name" [paginator]="true"
             [rows]="6" layout="grid">
