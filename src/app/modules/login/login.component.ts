@@ -26,6 +26,8 @@ export class LoginComponent implements OnInit {
     public userLogin: any;
     Visible: boolean = false;
     public loadingButton: boolean = false
+    public show: boolean;
+
 
     get dark(): boolean {
         return this.layoutService.config.colorScheme !== 'light';
@@ -44,7 +46,7 @@ export class LoginComponent implements OnInit {
         this.ui.subscribe((state: UiState) => {
             this.token = state.token.data;
             this.userLogin = state.userLoged.data;
-            this.getToken();
+            this.getToken(this.show);
         });
 
         this.formGroup = this.fb.group({
@@ -54,7 +56,7 @@ export class LoginComponent implements OnInit {
                     Validators.required,
                     Validators.email,
                     Validators.pattern(
-                        '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'
+                        "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"
                     )
                 ]
             ],
@@ -63,7 +65,8 @@ export class LoginComponent implements OnInit {
     }
 
     async saveChanges() {
-        var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        this.show = true;
+        var regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
         if (!this.validForm()) {
             this.messageService.add({ key: 'alert-message-login', severity: 'error', summary: '¡Espera!', detail: 'Todos los campos deben estar diligenciados correctamente' });
 
@@ -98,24 +101,30 @@ export class LoginComponent implements OnInit {
         return this.formGroup.valid;
     }
 
-    async getToken() {
-        if (this.token == null) {
-            //console.log("El toke aun no esta actualizado")
-        } else {
-            if (this.token.success == true) {
-                window.location.reload();
-                globalThis.payload = await this.authService.getUserInfo(
-                    this.token.result
-                );
-
-                this.authService.setToken(this.token.result);
-                this.messageService.add({ key: 'alert-message-login', severity: 'success', summary: 'Bienvenido', detail: this.token.message });
-
+    async getToken(show: boolean) {
+        if (show) {
+            if (this.token == null) {
+                //console.log("El toke aun no esta actualizado")
             } else {
-                this.messageService.add({ key: 'alert-message-login', severity: 'error', summary: '¡Lo sentimos!', detail: this.token.message });
-                this.loadingButton = false;
-            }
+                if (this.token.success == true) {
+                    this.show = false;
+                    window.location.reload();
+                    globalThis.payload = await this.authService.getUserInfo(
+                        this.token.result
+                    );
 
+                    this.authService.setToken(this.token.result);
+                    this.messageService.add({ key: 'alert-message-login', severity: 'success', summary: 'Bienvenido', detail: this.token.message });
+
+                } else {
+                    this.show = false;
+
+                    this.messageService.add({ key: 'alert-message-login', severity: 'error', summary: '¡Lo sentimos!', detail: this.token.message });
+                    this.loadingButton = false;
+                    console.log(this.token.result)
+                }
+
+            }
         }
     }
 }

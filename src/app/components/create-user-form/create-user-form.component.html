@@ -205,10 +205,10 @@
                                     !validateOnlyNumbers()
                             }"
                             required="true"
-                            minlength="8"
+                            minlength="6"
                             maxlength="15"
                             class="w-full"
-                            onkeydown="return /^\d|Backspace|Delete$/.test(event.key)"
+                            onkeydown="return /^\d|Backspace|Delete|Tab|Arrow(Left|Right|Up|Down)$/.test(event.key)"
                         />
                     </div>
                     <!-- validacion de documento -->
@@ -262,7 +262,7 @@
                                 'border-red-600':
                                     !validateOnlyNumbersForPhoneNumber()
                             }"
-                            onkeydown="return /^\d|Backspace|Delete$/.test(event.key)"
+                            onkeydown="return /^\d|Backspace|Delete|Tab|Arrow(Left|Right|Up|Down)$/.test(event.key)"
                         />
                     </span>
                     <!-- validaciones de número -->
@@ -365,26 +365,28 @@
         </div>
     </div>
     <div class="flex justify-content-end">
-        <button
-            pButton
-            pRipple
-            type="button"
-            label="Cancelar"
-            icon="pi pi-times"
-            class="p-button-outlined mr-3"
-            (click)="cancel()"
-        ></button>
         <p-button
             *ngIf="!validForm()"
             label="Guardar"
             icon="pi pi-check"
             disabled="true"
+            class="mr-3"
         ></p-button>
         <p-button
             *ngIf="validForm()"
             type="submit"
             label="Guardar"
             icon="pi pi-check"
+            class="mr-3"
         ></p-button>
+        <button
+            pButton
+            pRipple
+            type="button"
+            label="Cancelar"
+            icon="pi pi-times"
+            class="p-button-outlined"
+            (click)="cancel()"
+        ></button>
     </div>
 </form>

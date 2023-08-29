@@ -111,15 +111,14 @@ export class RecoverPasswordComponent implements OnInit {
 
     mensajeApi(show: boolean) {
         if (show) {
+            this.show = false;
+
             if (this.menssage.success) {
-                this.show = false;
                 this.messageService.add({ key: 'alert-message-recover-password', severity: 'success', summary: '¡Proceso completado!', detail: 'Ya puedes acceder nuevamente al sistema.' });
                 setTimeout(() => {
                     this.router.navigate(['/login']);
                 }, 2000);
-
             } else {
-                this.show = false;
                 this.messageService.add({
                     key: 'alert-message-recover-password',
                     severity: 'error',
