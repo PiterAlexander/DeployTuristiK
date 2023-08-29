@@ -84,6 +84,22 @@
                                 <i class="pi pi-phone text-xl text-primary"></i>
                             </span>
                             <div class="ml-3">
+                                <span class="mb-2 font-semibold">Fecha de Nacimiento</span>
+                                <p class="text-color-secondary m-0">
+                                    {{ date }}
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <li *ngIf="user.role == 'Cliente'">
+                        <div
+                            class="flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round"
+                        >
+                            <span>
+                                <i class="pi pi-phone text-xl text-primary"></i>
+                            </span>
+                            <div class="ml-3">
                                 <span class="mb-2 font-semibold">Dirección</span>
                                 <p class="text-color-secondary m-0">
                                     {{ allInfo.address }}
