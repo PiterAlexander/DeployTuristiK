@@ -20,7 +20,6 @@ import { MainPublicComponent } from '@modules/main copy/main.component';
 import { PackagePublicComponent } from '@modules/packages/package-public.component';
 import { DetailsPackageComponent } from '@components/details-package/details-package.component';
 import { PublicHomeComponent } from '@pages/public-home/public-home.component';
-import { AboutUsComponent } from '@pages/about-us/about-us.component';
 import { ListFrequentTravelerComponent } from '@components/list-frequent-traveler/list-frequent-traveler.component';
 import { CreateOrderDetailFormComponent } from '@components/create-order-detail-form/create-order-detail-form.component';
 import { CreatePaymentFormComponent } from '@components/create-payment-form/create-payment-form.component';
@@ -137,11 +136,6 @@ const routes: Routes = [
             {
                 path: '',
                 component: PublicHomeComponent,
-                canActivate: [NonAuthGuard]
-            },
-            {
-                path: 'aboutUs',
-                component: AboutUsComponent,
                 canActivate: [NonAuthGuard]
             },
             {
