@@ -1,7 +1,7 @@
 <p-toast key="alert-message"></p-toast>
-<div *ngIf="role !== 'Cliente'" class="p-4">
+<div *ngIf="role !== 'Cliente'" class="pb-4 px-4 pt-0">
     <div class="col-12">
-        <div class="card px-6 py-6" style="border-radius: 15px;">
+        <div class="card p-6" style="border-radius: 20px;">
             <p-table *ngIf="visible" #dt [value]="ordersList" [paginator]="true" [rows]="5" scrollable="true"
                 [loading]="loading"
                 [globalFilterFields]="['customer.name', 'customer.lastName', 'customer.document', 'package.name', 'totalCost', 'status']">
@@ -54,11 +54,6 @@
 </div>
 
 <div *ngIf="role === 'Cliente'">
-    <!-- <div class="banner">
-        <h1 style="color:white; font-weight: bold;">¡Elige el paquete que mas se ajuste a lo que deseas!</h1>
-        <p style="font-weight: bold; color: white;">No esperes más para vivir una aventura increíble. ¡Reserva ahora y
-            comienza a explorar los tesoros que el mundo tiene para ofrecerte!</p>
-    </div> -->
     <div class="mb-4 surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border" style="border-radius: 15px;">
         <p-dataView id="myDv" #dv *ngIf="visible" [value]="ordersList" filterBy="package.destination" [paginator]="true"
             [rows]="2" layout="list" [loading]="loading">
@@ -81,7 +76,7 @@
             </ng-template>
             <ng-template let-order pTemplate="listItem">
                 <div class="col-12">
-                    <div class="product-list-item py-4">
+                    <div class="product-list-item p-4">
                         <div class="surface-card grid grid-nogutter card-shadow">
                             <div class="col-12 flex p-2 surface-100 rounded-header">
                                 <div class="p-2 flex-auto text-center md:text-left">

@@ -1,45 +1,23 @@
 <p-toast key="alert-message"></p-toast>
-<p-confirmDialog
-    header="Confirmation"
-    icon="pi pi-exclamation-triangle"
-></p-confirmDialog>
-<div class="p-4">
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<div class="pb-4 px-4 pt-0">
     <div class="col-12">
-        <div class="card px-6 py-6" style="border-radius: 15px">
-            <p-table
-                #dt
-                [value]="employeesList"
-                [rows]="5"
-                [loading]="loading"
-                [paginator]="true"
-                [globalFilterFields]="['name', 'document', 'phoneNumber']"
-            >
+        <div class="card p-6" style="border-radius: 20px">
+            <p-table #dt [value]="employeesList" [rows]="5" [loading]="loading" [paginator]="true"
+                [globalFilterFields]="['name', 'document', 'phoneNumber']">
                 <ng-template pTemplate="caption" class="p-grid">
                     <div class="flex justify-content-between">
                         <span class="mt-2 md:mt-0 p-input-icon-right">
                             <i class="pi pi-search"></i>
-                            <input
-                                pInputText
-                                type="text"
-                                (input)="
+                            <input pInputText type="text" (input)="
                                     dt.filterGlobal(
                                         $event.target.value,
                                         'contains'
                                     )
-                                "
-                                placeholder="Buscar..."
-                            />
+                                " placeholder="Buscar..." />
                         </span>
-                        <button
-                            pButton
-                            p
-                            pRipple
-                            type="button"
-                            label="Registrar empleado"
-                            icon="pi pi-plus"
-                            (click)="openModalCreateEmployee()"
-                            class="p-button-outlined"
-                        ></button>
+                        <button pButton p pRipple type="button" label="Registrar empleado" icon="pi pi-plus"
+                            (click)="openModalCreateEmployee()" class="p-button-outlined"></button>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -69,34 +47,20 @@
                         <td style="min-width: 12rem">
                             {{ employee.phoneNumber }}
                         </td>
-                        <td
-                            style="width: 9rem"
-                            class="flex justify-content-around"
-                        >
-                            <button
-                                pButton
-                                type="button"
-                                icon="pi pi-pencil"
+                        <td style="width: 9rem" class="flex justify-content-around">
+                            <button pButton type="button" icon="pi pi-pencil"
                                 [disabled]="employee.user.userId === user.id"
                                 class="p-button-outlined p-button-warning p-button-rounded m-1"
-                                (click)="openModalEditEmployee(employee)"
-                                pTooltip="Editar"
-                                tooltipPosition="bottom"
-                            ></button>
+                                (click)="openModalEditEmployee(employee)" pTooltip="Editar"
+                                tooltipPosition="bottom"></button>
 
                             <!-- <button pButton type="button" icon="pi pi-trash" *ngIf="employee.user.userId !== user.id"
                                 class="p-button-outlined p-button-rounded p-button-danger m-1" pTooltip="Eliminar"
                                 (click)="deleteEmployee(employee)" tooltipPosition="bottom"></button> -->
-                            <button
-                                pButton
-                                type="button"
-                                icon="pi pi-trash"
+                            <button pButton type="button" icon="pi pi-trash"
                                 [disabled]="employee.user.userId === user.id"
-                                class="p-button-outlined p-button-rounded p-button-danger m-1"
-                                pTooltip="Eliminar"
-                                (click)="deleteEmployee(employee)"
-                                tooltipPosition="bottom"
-                            ></button>
+                                class="p-button-outlined p-button-rounded p-button-danger m-1" pTooltip="Eliminar"
+                                (click)="deleteEmployee(employee)" tooltipPosition="bottom"></button>
                         </td>
                     </tr>
                 </ng-template>

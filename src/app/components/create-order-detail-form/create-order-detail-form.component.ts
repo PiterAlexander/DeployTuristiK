@@ -15,7 +15,6 @@ import { SelectItem } from 'primeng/api';
 import { DataView } from 'primeng/dataview';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { GooglePlacesService } from '@services/google-places.service';
 
 @Component({
   selector: 'app-create-order-detail-form',
@@ -60,7 +59,6 @@ export class CreateOrderDetailFormComponent implements OnInit {
     private router: Router,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private googlePlacesService: GooglePlacesService
   ) { }
 
   ngOnInit(): void {
@@ -125,7 +123,10 @@ export class CreateOrderDetailFormComponent implements OnInit {
         Validators.minLength(6),
         Validators.maxLength(15)
         ]],
-      address: ['', [Validators.required]],
+      address: ['',
+        [Validators.required,
+        Validators.minLength(15)
+        ]],
       phoneNumber: ['',
         [Validators.required,
         Validators.minLength(10),
@@ -900,7 +901,6 @@ export class CreateOrderDetailFormComponent implements OnInit {
         console.log(err)
       }
     })
-    // this.store.dispatch(new EditCustomerRequest({ ...customer }))
 
     this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
     this.router.navigate(['Home/DetallesAbono/' + this.orderProcess.paymentId])

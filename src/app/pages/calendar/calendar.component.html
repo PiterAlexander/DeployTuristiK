@@ -1,8 +1,10 @@
-<div class="p-4">
-  <div class="card p-5" style="border-radius: 25px;">
-    
-  <full-calendar [options]="calendarOptions"></full-calendar>
+<div class="pb-4 px-4 pt-0">
+  <div class="col-12">
+    <div class="card p-6" style="border-radius: 20px;">
+      <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
   </div>
+
   <p-dialog #dd [(visible)]="showDialog" [breakpoints]="{'960px': '75vw', '640px': '90vw'}" [style]="{width: '50rem'}"
     [modal]="true" [closable]="true" (onHide)="view = 'x'" showHeader="true">
     <ng-template pTemplate="content">

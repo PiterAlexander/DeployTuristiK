@@ -5,11 +5,13 @@ import { DeleteFrequentTravelerRequest, GetAllRoleRequest, OpenModalCreateCustom
 import { Customer } from '@/models/customer';
 import { AppState } from '@/store/state';
 import { UiState } from '@/store/ui/state';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Role } from '@/models/role';
 import { ConfirmationService } from 'primeng/api';
 import { FrequentTraveler } from '@/models/frequentTraveler';
 import { DataView } from 'primeng/dataview';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-list-frequent-traveler',
@@ -27,6 +29,7 @@ export class ListFrequentTravelerComponent implements OnInit {
   public frequentTravelersList: Array<any> = []
   public loading: boolean = true
   public visible: boolean = true
+  public customerId: string
   public showAddButton: number = 0
   public firstItem: boolean
   avatars: string[] = [
@@ -45,8 +48,9 @@ export class ListFrequentTravelerComponent implements OnInit {
 
   constructor(
     private store: Store<AppState>,
-    private modalPrimeNg: DynamicDialogRef,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private route: ActivatedRoute,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -57,64 +61,65 @@ export class ListFrequentTravelerComponent implements OnInit {
       this.role = this.user['role']
       this.allRoles = state.allRoles.data
       this.allCustomers = state.allCustomers.data
-      this.oneCustomer = state.oneCustomer.data
-      this.compareCustomerId()
+      if (this.role !== 'Cliente') {
+        this.route.paramMap.subscribe((params) => {
+          this.customerId = params.get('id');
+          this.compareCustomerId()
+        });
+      } else {
+        this.compareCustomerId()
+      }
     })
   }
 
+  dataViewRow(): number {
+    if (this.role === 'Cliente') {
+      return 6
+    } else {
+      return 4
+    }
+  }
   compareCustomerId() {
+    console.log('yo')
     if (this.allCustomers !== undefined) {
-      if (this.user['role'] === 'Cliente') {
-        const frequentTraveler: any = {
-          addFtButton: true
-        }
-        const alreadyExists: any = this.frequentTravelersList.find(o => o.addFtButton === frequentTraveler.addFtButton)
-        if (alreadyExists === undefined) {
-          this.frequentTravelersList.push(frequentTraveler)
-        }
-        const oneCustomer: Customer = this.allCustomers.find(c => c.userId === this.user['id'])
-        if (oneCustomer !== undefined) {
-          this.oneCustomer = oneCustomer
-          if (oneCustomer.frequentTraveler.length > 0) {
-            let index: number = 0
-            for (const element of oneCustomer.frequentTraveler) {
-              const customer = this.allCustomers.find(c => c.customerId === element.travelerId)
-              if (customer !== undefined) {
-                const frequentTraveler: any = {
-                  customerId: customer.customerId,
-                  name: customer.name,
-                  lastName: customer.lastName,
-                  document: customer.document,
-                  birthDate: customer.birthDate,
-                  phoneNumber: customer.phoneNumber,
-                  address: customer.address,
-                  eps: customer.eps,
-                  userId: customer.userId,
-                  user: customer.user,
-                  img: this.avatars[index],
-                  addFtButton: false
-                }
-                const alreadyExists: Customer = this.frequentTravelersList.find(o => o.customerId === element.travelerId)
-                if (alreadyExists === undefined) {
-                  this.frequentTravelersList.push(frequentTraveler)
-                  if (index === 10) {
-                    index = 0
-                  } else {
-                    index++
-                  }
-                }
-              }
-            }
-          }
-        }
+      const frequentTraveler: any = {
+        addFtButton: true
+      }
+      const alreadyExists: any = this.frequentTravelersList.find(o => o.addFtButton === frequentTraveler.addFtButton)
+      if (alreadyExists === undefined) {
+        this.frequentTravelersList.push(frequentTraveler)
+      }
+      if (this.customerId !== undefined) {
+        this.oneCustomer = this.allCustomers.find(c => c.customerId === this.customerId)
       } else {
-        if (this.oneCustomer.frequentTraveler !== undefined) {
-          for (const element of this.oneCustomer.frequentTraveler) {
-            const customer = this.allCustomers.find(c => c.customerId === element.travelerId)
-            if (customer !== undefined) {
-              const alreadyExists: Customer = this.frequentTravelersList.find(o => o.customerId === element.travelerId)
-              if (alreadyExists === undefined) {
-                this.frequentTravelersList.push(customer)
+        this.oneCustomer = this.allCustomers.find(c => c.userId === this.user['id'])
+      }
+      if (this.oneCustomer !== undefined && this.oneCustomer.frequentTraveler.length > 0) {
+        let index: number = 0
+        for (const element of this.oneCustomer.frequentTraveler) {
+          const customer = this.allCustomers.find(c => c.customerId === element.travelerId)
+          if (customer !== undefined) {
+            const frequentTraveler: any = {
+              customerId: customer.customerId,
+              name: customer.name,
+              lastName: customer.lastName,
+              document: customer.document,
+              birthDate: customer.birthDate,
+              phoneNumber: customer.phoneNumber,
+              address: customer.address,
+              eps: customer.eps,
+              userId: customer.userId,
+              user: customer.user,
+              img: this.avatars[index],
+              addFtButton: false
+            }
+            const alreadyExists: Customer = this.frequentTravelersList.find(o => o.customerId === element.travelerId)
+            if (alreadyExists === undefined) {
+              this.frequentTravelersList.push(frequentTraveler)
+              if (index === 10) {
+                index = 0
+              } else {
+                index++
               }
             }
           }
@@ -140,7 +145,6 @@ export class ListFrequentTravelerComponent implements OnInit {
   }
 
   createFrequentTraveler() {
-    this.close()
     const oneCustomer = {
       action: 'createFrequentTraveler',
       customer: this.oneCustomer
@@ -166,7 +170,6 @@ export class ListFrequentTravelerComponent implements OnInit {
       customer: customer,
       titularCustomer: this.oneCustomer
     }
-    this.close()
     this.store.dispatch(new OpenModalCreateCustomer({ ...oneCustomer }))
   }
 
@@ -195,8 +198,8 @@ export class ListFrequentTravelerComponent implements OnInit {
     })
   }
 
-  close() {
-    this.modalPrimeNg.close()
+  back() {
+    this.router.navigate(['Home/Clientes'])
   }
 
   forEachFt(frequentTraveler: Customer): boolean {

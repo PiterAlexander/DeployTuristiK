@@ -1,37 +1,29 @@
-<div class="p-4">
+<div class="pb-4 px-4 pt-0">
     <div class="col-12">
-        <div class="content-f-luid">
+        <div class="content-fluid">
             <div class="grid">
                 <div class="col-12 md:col-6 xl:col-4">
                     <div class="card p-5 card-design h-full">
                         <span class="font-semibold text-xl">Ventas Esperadas</span>
                         <div class="flex justify-content-between mt-3">
                             <div class="w-12">
-                                <span class="text-4xl font-bold text-900"
-                                    >${{
-                                        ordersCurrentMonth
-                                            | currency: ' ':false:'1.0-0'
-                                    }}</span
-                                >
+                                <span class="text-4xl font-bold text-900">${{
+                                    ordersCurrentMonth
+                                    | currency: ' ':false:'1.0-0'
+                                    }}</span>
                             </div>
                         </div>
-                        <div
-                            class="mt-3"
-                            [ngClass]="{
+                        <div class="mt-3" [ngClass]="{
                                 'text-green-500': porVen >= 60,
                                 'text-yellow-500': porVen < 60 && porVen >= 40,
                                 'text-red-500': porVen < 39
-                            }"
-                        >
+                            }">
                             <span class="text-xl">{{ porVen ? porVen : 0 }}%</span>
-                            <i
-                                class="text-lg ml-2 pi"
-                                [ngClass]="{
+                            <i class="text-lg ml-2 pi" [ngClass]="{
                                     'pi-arrow-up': porVen >= 60,
                                     'pi-arrows-v': porVen < 60 && porVen >= 40,
                                     'pi-arrow-down': porVen < 39
-                                }"
-                            ></i>
+                                }"></i>
                         </div>
                     </div>
                 </div>
@@ -40,49 +32,34 @@
                         <span class="font-semibold text-xl">Ingreso Mensual</span>
                         <div class="flex justify-content-between align-items-start mt-3">
                             <div class="w-12">
-                                <span class="text-4xl font-bold text-900"
-                                    >${{
-                                        paymentCurrentMonth
-                                            | currency: ' ':false:'1.0-0'
-                                    }}</span
-                                >
+                                <span class="text-4xl font-bold text-900">${{
+                                    paymentCurrentMonth
+                                    | currency: ' ':false:'1.0-0'
+                                    }}</span>
                             </div>
                         </div>
-                        <div
-                            class="mt-3"
-                            [ngClass]="{
+                        <div class="mt-3" [ngClass]="{
                                 'text-green-500': porAbo >= 60,
                                 'text-yellow-500': porAbo < 60 && porAbo >= 40,
                                 'text-red-500': porAbo < 39
-                            }"
-                        >
-                            <span class="text-xl"
-                                >{{ porAbo ? porAbo : 0 }}%</span
-                            >
-                            <i
-                                class="text-lg ml-2 pi"
-                                [ngClass]="{
+                            }">
+                            <span class="text-xl">{{ porAbo ? porAbo : 0 }}%</span>
+                            <i class="text-lg ml-2 pi" [ngClass]="{
                                     'pi-arrow-up': porAbo >= 60,
                                     'pi-arrows-v': porAbo < 60 && porAbo >= 40,
                                     'pi-arrow-down': porAbo < 39
-                                }"
-                            ></i>
+                                }"></i>
                         </div>
                     </div>
                 </div>
                 <div class="col-12 md:col-6 xl:col-4">
                     <div class="card p-5 card-design h-full">
                         <span class="font-semibold text-xl">Clientes</span>
-                        <div
-                            class="flex justify-content-between align-items-start mt-3"
-                        >
+                        <div class="flex justify-content-between align-items-start mt-3">
                             <div class="w-12">
-                                <span class="text-4xl font-bold text-900"
-                                    ><i
-                                        class="pi pi-users text-primary text-3xl mb-4 mr-2"
-                                    ></i
-                                    >{{ customerCount }}</span
-                                >
+                                <span class="text-4xl font-bold text-900"><i
+                                        class="pi pi-users text-primary text-3xl mb-4 mr-2"></i>{{ customerCount
+                                    }}</span>
                             </div>
                         </div>
                     </div>
@@ -101,17 +78,12 @@
                                     <i class="pi pi-info-circle custom-icon text-indigo-500 mb-4"></i>
                                     <span class="text-indigo-500">Lo sentimos. No hay suficientes
                                         paquetes para mostrar la
-                                        comparativa.</span
-                                    >
+                                        comparativa.</span>
                                 </div>
                             </div>
                         </div>
-                        <p-chart
-                            *ngIf="packagesList.length >= 3"
-                            type="pie"
-                            [data]="pieData"
-                            [options]="pieOptions"
-                        ></p-chart>
+                        <p-chart *ngIf="packagesList.length >= 3" type="pie" [data]="pieData"
+                            [options]="pieOptions"></p-chart>
                     </div>
                 </div>
 
@@ -122,34 +94,18 @@
                                 Rango de edad de los clientes
                             </div>
                             <div class="col-12 text-center">
-                                <div
-                                    class="card bg-primary-100 text-lg py-4 align-content-center justify-content-around"
-                                    style="min-height: 230px"
-                                    *ngIf="allCustomers.length < 5"
-                                >
-                                    <div
-                                        class="d-flex flex-column align-content-around"
-                                    >
-                                        <i
-                                            class="pi pi-info-circle custom-icon text-primary-500 mb-4"
-                                        ></i>
-                                        <span class="text-primary-500"
-                                            >Lo sentimos. No hay suficientes
+                                <div class="card bg-primary-100 text-lg py-4 align-content-center justify-content-around"
+                                    style="min-height: 230px" *ngIf="allCustomers.length < 5">
+                                    <div class="d-flex flex-column align-content-around">
+                                        <i class="pi pi-info-circle custom-icon text-primary-500 mb-4"></i>
+                                        <span class="text-primary-500">Lo sentimos. No hay suficientes
                                             clientes para generar el
-                                            grafico.</span
-                                        >
+                                            grafico.</span>
                                     </div>
                                 </div>
                             </div>
-                            <div
-                                class="chart-container"
-                                *ngIf="allCustomers.length >= 5"
-                            >
-                                <p-chart
-                                    type="line"
-                                    [data]="ageChartData"
-                                    [options]="chartOptions"
-                                ></p-chart>
+                            <div class="chart-container" *ngIf="allCustomers.length >= 5">
+                                <p-chart type="line" [data]="ageChartData" [options]="chartOptions"></p-chart>
                             </div>
                         </div>
                     </div>

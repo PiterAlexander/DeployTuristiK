@@ -1,11 +1,11 @@
 <p-confirmDialog key="confirmation-message"></p-confirmDialog>
 <p-toast key="alert-message"></p-toast>
-<div *ngIf="orderProcess !== undefined" [ngClass]="{ 'p-4': role !== 'Cliente' }">
+<div *ngIf="orderProcess !== undefined" [ngClass]="{ 'pb-4 px-4 pt-0': role !== 'Cliente' }">
     <div class="col-12">
         <div [ngClass]="{ 
         'card p-6': role !== 'Cliente', 
         'surface-section p-4 border-1 surface-border': role === 'Cliente'
-     }" style="border-radius: 15px;">
+     }" style="border-radius: 20px;">
             <div *ngIf="orderProcess.action === 'CreateOrder'" class="text-900 text-2xl mb-3 font-semibold">Proceso de
                 Reserva</div>
             <div *ngIf="orderProcess.action === 'CreateOrderDetail'" class="text-900 text-2xl mb-3 font-semibold">
@@ -190,11 +190,9 @@
                             <div class="col-12 field">
                                 <div class="p-input-icon-left w-full">
                                     <i class="pi pi-map-marker"></i>
-                                    <!-- <input pInputText type="text" formControlName="address" required="true"
-                                            placeholder="País - Departamento - Ciudad - Dirección" class="w-full"> -->
                                     <input class="w-full" pInputText type="text" formControlName="address"
-                                        placeholder="Ingrese su dirección residencial" required="true"
-                                        ngx-google-places-autocomplete [options]="{
+                                        placeholder="Ingrese la dirección residencial completa del beneficario"
+                                        minlength="15" required="true" ngx-google-places-autocomplete [options]="{
                                                 types: [],
                                                 componentRestrictions: null
                                             }" #placesRef="ngx-places" autocomplete="on"
@@ -204,6 +202,10 @@
                                 <small class="p-error block"
                                     *ngIf="formGroup.get('address')?.dirty && formGroup.get('address')?.errors?.['required']">
                                     Este campo es obligatorio
+                                </small>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('address')?.dirty && formGroup.get('address')?.errors?.['minlength']">
+                                    Deben ser al menos 10 caracteres
                                 </small>
                             </div>
                         </div>

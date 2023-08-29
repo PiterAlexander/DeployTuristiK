@@ -1,11 +1,11 @@
 <p-confirmDialog key="edit-payment-confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 
-<div *ngIf="payment !== undefined" [ngClass]="{ 'px-4 pt-4 pb-1': role !== 'Cliente' }">
+<div *ngIf="payment !== undefined" [ngClass]="{ 'px-4 pt-0 pb-1': role !== 'Cliente' }">
     <div class="col-12">
         <div [ngClass]="{ 
         'card p-6': role !== 'Cliente',
         'surface-section p-4 border-1 surface-border': role === 'Cliente'
-     }" style="border-radius: 15px;">
+     }" style="border-radius: 20px;">
             <div class="text-900 font-bold text-4xl mb-4">Combrobante de Pago</div>
             <div class="flex justify-content-center">
                 <p-image class="shadow-2" [src]="baseUrl + payment.image" alt="Comprobante de Pago" width="250"
@@ -20,7 +20,7 @@
         <div [ngClass]="{ 
         'card p-6': role !== 'Cliente',
         'surface-section p-4 border-1 surface-border': role === 'Cliente'
-     }" style="border-radius: 15px;">
+     }" style="border-radius: 20px;">
             <div class="text-900 font-bold text-4xl mb-2">Revisión del Abono</div>
             <span class="text-700 text-xl">Información general</span>
             <div class="flex flex-wrap mt-5 pb-5">

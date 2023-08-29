@@ -248,11 +248,13 @@ export class PaymentDetailsComponent implements OnInit {
   }
 
   validateEditBeneficiarieAllowing(customer: any): boolean {
-    if (this.allRoles !== undefined) {
-      const role = this.allRoles.find(r => r.roleId === customer.user.roleId)
-      if (role !== undefined) {
-        if (role.name === 'Beneficiario') {
-          return true
+    if (this.onePayment.order.status !== 3) {
+      if (this.allRoles !== undefined) {
+        const role = this.allRoles.find(r => r.roleId === customer.user.roleId)
+        if (role !== undefined) {
+          if (role.name === 'Beneficiario') {
+            return true
+          }
         }
       }
     }

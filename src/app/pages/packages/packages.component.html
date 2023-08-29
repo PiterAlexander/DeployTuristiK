@@ -115,9 +115,9 @@
     <br>
 </div>
 
-<div *ngIf="role !== 'Cliente' && role !== undefined" class="p-4">
+<div *ngIf="role !== 'Cliente' && role !== undefined" class="pb-4 px-4 pt-0">
     <div class="col-12">
-        <div class="card px-6 py-6" style="border-radius: 15px;">
+        <div class="card p-6" style="border-radius: 20px;">
             <p-table #dt [value]="packagesList" [rows]="5" [loading]="loading" [paginator]="true"
                 [globalFilterFields]="['name', 'destination', 'departureDate', 'arrivalDate', 'availableQuotas', 'price', 'status']">
                 <ng-template pTemplate="caption">

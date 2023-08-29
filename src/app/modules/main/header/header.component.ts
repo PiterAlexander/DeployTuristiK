@@ -7,8 +7,8 @@ import {
     ToggleSidebarMenu
 } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
-import { Component, HostBinding, OnInit, Input } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
+import { Component, HostBinding, OnInit } from '@angular/core';
+import { UntypedFormGroup } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppService } from '@services/app.service';
@@ -183,7 +183,7 @@ export const MENU = [
     {
         name: 'Mis Viajeros',
         iconClasses: 'bx bx-calendar-week',
-        path: ['/Home/MisBeneficiarios'],
+        path: ['/Home/MisBeneficiarios/s'],
         allowed: false
     }
 ];

@@ -86,9 +86,11 @@ export class ReadOrderPaymentComponent {
   }
 
   validateEditAllowing(payment: Payment): boolean {
-    if (this.role !== 'Cliente') {
-      if (payment.status === 0) {
-        return true
+    if (this.order.status !== 3) {
+      if (this.role !== 'Cliente') {
+        if (payment.status === 0) {
+          return true
+        }
       }
     }
     return false
@@ -122,8 +124,9 @@ export class ReadOrderPaymentComponent {
   }
 
   editPayment(payment: Payment) {
-    // this.store.dispatch(new OpenModalEditPayment({ ...payment }))
-    this.router.navigate(['Home/RevisionAbono/' + payment.paymentId])
+    if (this.order.status !== 3) {
+      this.router.navigate(['Home/RevisionAbono/' + payment.paymentId])
+    }
   }
 
   showStatus(status: any): string {
@@ -137,19 +140,21 @@ export class ReadOrderPaymentComponent {
   existingRemainingAmount(): boolean {
     let addition = 0
     if (this.order !== undefined) {
-      for (const element of this.order.payment) {
-        if (element !== undefined) {
-          if (element.status === 1 || element.status === 0) {
-            addition += element.amount
-            if (element.status === 0) {
-              this.pendingPayments = true
+      if (this.order.status !== 3) {
+        for (const element of this.order.payment) {
+          if (element !== undefined) {
+            if (element.status === 1 || element.status === 0) {
+              addition += element.amount
+              if (element.status === 0) {
+                this.pendingPayments = true
+              }
             }
           }
         }
-      }
-      this.remainingAmount = this.order.totalCost - addition
-      if (this.remainingAmount > 0) {
-        return true
+        this.remainingAmount = this.order.totalCost - addition
+        if (this.remainingAmount > 0) {
+          return true
+        }
       }
       return false
     }
@@ -167,10 +172,12 @@ export class ReadOrderPaymentComponent {
   }
 
   validateRetryPaymentAllowing(payment: Payment): boolean {
-    if (payment.status === 2) {
-      return true
+    if (this.order.status !== 3) {
+      if (payment.status === 2) {
+        return true
+      }
+      return false
     }
-    return false
   }
 
   retryPayment(payment: Payment) {
@@ -190,8 +197,10 @@ export class ReadOrderPaymentComponent {
 
   addOrderDetailButton(): boolean {
     if (this.order !== undefined) {
-      if (this.order.package.availableQuotas >= 1) {
-        return true
+      if (this.order.status !== 3) {
+        if (this.order.package.availableQuotas >= 1) {
+          return true
+        }
       }
       return false
     }

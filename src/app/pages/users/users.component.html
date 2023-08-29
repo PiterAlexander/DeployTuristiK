@@ -1,9 +1,9 @@
 <!--Aquí se despliegan los mensajes de exito o error segun sea el caso-->
 <p-toast key="alert-message"></p-toast>
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
-<div class="p-4">
+<div class="pb-4 px-4 pt-0">
     <div class="col-12">
-        <div class="card px-6 py-6" style="border-radius: 15px">
+        <div class="card p-6" style="border-radius: 20px">
             <p-table #dt [value]="userList" [rows]="5" [loading]="loading" [paginator]="true"
                 [globalFilterFields]="['email', 'role.name']">
                 <ng-template pTemplate="caption">
