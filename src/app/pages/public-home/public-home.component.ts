@@ -66,6 +66,7 @@ export class PublicHomeComponent implements OnInit {
     }
 
     options: any;
+    visibleMember: number = -1;
 
     overlays: any[] = [];
 

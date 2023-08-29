@@ -1,4 +1,4 @@
-import { Package } from '@/models/package';
+import {Package} from '@/models/package';
 import {
     ChangeStatusPackageRequest,
     GetAllCustomerRequest,
@@ -6,18 +6,18 @@ import {
     GetTopPackagesRequest,
     OpenModalCreatePackage,
     OpenModalDetailsPackage,
-    SaveOrderProcess,
+    SaveOrderProcess
 } from '@/store/ui/actions';
-import { AppState } from '@/store/state';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { UiState } from '@/store/ui/state';
-import { Customer } from '@/models/customer';
-import { SelectItem } from 'primeng/api';
-import { DataView } from 'primeng/dataview';
-import { Router } from '@angular/router';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import {AppState} from '@/store/state';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs';
+import {UiState} from '@/store/ui/state';
+import {Customer} from '@/models/customer';
+import {SelectItem} from 'primeng/api';
+import {DataView} from 'primeng/dataview';
+import {Router} from '@angular/router';
+import {ConfirmationService, MessageService} from 'primeng/api';
 
 @Component({
     selector: 'app-packages',
@@ -34,7 +34,7 @@ export class PackagesComponent implements OnInit {
     public loading: boolean;
     public search: string;
     public total: number;
-    public orderProcess: any
+    public orderProcess: any;
     public sortOptions: SelectItem[] = [];
     public sortOrder: number = 0;
     public sortField: string = '';
@@ -47,7 +47,7 @@ export class PackagesComponent implements OnInit {
         private router: Router,
         private confirmationService: ConfirmationService,
         private messageService: MessageService
-    ) { }
+    ) {}
 
     ngOnInit() {
         this.store.dispatch(new GetTopPackagesRequest());
@@ -61,28 +61,38 @@ export class PackagesComponent implements OnInit {
             } else {
                 this.role = undefined;
             }
-            this.orderProcess = state.orderProcess.data
-            this.top = state.allTopPackages.data
+            this.orderProcess = state.orderProcess.data;
+            this.top = state.allTopPackages.data;
             this.allCustomers = state.allCustomers.data;
             this.packagesList = state.allPackages.data;
 
-            this.arrayPackagesClient = state.allPackages.data.filter(
-                (pkg) => pkg.availableQuotas > 0
-            );
+            const currentDate = new Date();
+            const oneMonthAgo = new Date();
+            oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+            this.arrayPackagesClient = state.allPackages.data.filter((pkg) => {
+                const departureDate = new Date(pkg.departureDate);
+                const timeDifference =
+                    departureDate.getTime() - currentDate.getTime();
+                const oneMonthInMillis = 30 * 24 * 60 * 60 * 1000;
+                const isWithinOneMonth = timeDifference >= oneMonthInMillis;
+
+                return pkg.availableQuotas > 0 && isWithinOneMonth;
+            });
+
             this.loading = state.allPackages.loading;
         });
 
         if (this.orderProcess !== undefined) {
-            this.store.dispatch(new SaveOrderProcess(undefined))
+            this.store.dispatch(new SaveOrderProcess(undefined));
         }
 
         this.sortOptions = [
-            { label: 'Del mayor al menor', value: '!price' },
-            { label: 'Del menor al mayor', value: 'price' }
+            {label: 'Del mayor al menor', value: '!price'},
+            {label: 'Del menor al mayor', value: 'price'}
         ];
     }
     scrollToSelector(): void {
-        this.packagesSection.nativeElement.scrollIntoView({ behavior: 'smooth' });
+        this.packagesSection.nativeElement.scrollIntoView({behavior: 'smooth'});
     }
     onFilter(dv: DataView, event: Event) {
         dv.filter((event.target as HTMLInputElement).value);
@@ -113,7 +123,7 @@ export class PackagesComponent implements OnInit {
     }
 
     openEditPackageModal(pack: Package) {
-        this.store.dispatch(new OpenModalCreatePackage({ ...pack }));
+        this.store.dispatch(new OpenModalCreatePackage({...pack}));
     }
 
     disablePackage(pack: Package) {
@@ -145,7 +155,7 @@ export class PackagesComponent implements OnInit {
                     detail: 'Estado editado exitosamente.'
                 });
             },
-            reject: () => { }
+            reject: () => {}
         });
     }
 

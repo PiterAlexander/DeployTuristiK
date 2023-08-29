@@ -29,6 +29,7 @@ export class HeaderComponent implements OnInit {
     public isStyleActive: boolean;
     public user;
     public menu = MENU;
+    public client = true;
     public roleList: Array<Role>;
     public permissionList: Array<Permission>;
     public route = 'Dashboard';
@@ -52,7 +53,9 @@ export class HeaderComponent implements OnInit {
             this.permissionList = state.allPermissions.data;
 
             this.allowMenuItems();
-
+            if (this.role == 'Administrador') {
+                this.client == true
+            }
             var user = JSON.parse(localStorage.getItem('TokenPayload'));
             this.role = user['role'];
 

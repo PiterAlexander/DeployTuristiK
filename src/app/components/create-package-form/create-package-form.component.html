@@ -181,9 +181,10 @@
         <input formControlName="photos" hidden>
     </div>
     <div class="flex justify-content-end">
-        <button pButton pRipple type="button" label="Cancelar" icon="pi pi-times" class="p-button-outlined mr-3"
-            (click)="cancel()"></button>
-        <p-button *ngIf="!validForm()" label="Guardar" disabled="true" icon="pi pi-check"></p-button>
-        <p-button *ngIf="validForm()" type="submit" label="Guardar" icon="pi pi-check"></p-button>
+       
+        <p-button *ngIf="!validForm()" label="Guardar" disabled="true" class=" mr-3" icon="pi pi-check"></p-button>
+        <p-button *ngIf="validForm()" type="submit" label="Guardar" class=" mr-3" icon="pi pi-check"></p-button>
+        <button pButton pRipple type="button" label="Cancelar" icon="pi pi-times" class="p-button-outlined"
+        (click)="cancel()"></button>
     </div>
 </form>
