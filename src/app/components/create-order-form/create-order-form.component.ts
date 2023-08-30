@@ -190,12 +190,13 @@ export class CreateOrderFormComponent implements OnInit {
     const milisecondsAge = currenDate.getTime() - birthdate.getTime();
     const yearAge = milisecondsAge / (1000 * 60 * 60 * 24 * 365.25);
 
+    const price: number = this.onePackage.price + this.onePackage.aditionalPrice
     if (yearAge < 5) {
       return this.onePackage.aditionalPrice
     } else if (yearAge >= 5 && yearAge < 10) {
-      return this.onePackage.price + this.onePackage.aditionalPrice * 0.70
+      return price * 0.70
     } else {
-      return this.onePackage.price + this.onePackage.aditionalPrice
+      return price
     }
   }
 

@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UiState } from '@/store/ui/state';
 import { Role } from '@/models/role';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-customers',
@@ -20,7 +21,8 @@ export class CustomersComponent implements OnInit {
   public total: number
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -58,6 +60,6 @@ export class CustomersComponent implements OnInit {
   }
 
   listFrequentTravelers(customer: Customer) {
-    this.store.dispatch(new OpenModalListFrequentTraveler({ ...customer }))
+    this.router.navigate(['Home/MisBeneficiarios/' + customer.customerId]);
   }
 }

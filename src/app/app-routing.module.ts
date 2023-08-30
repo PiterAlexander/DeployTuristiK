@@ -91,7 +91,7 @@ const routes: Routes = [
                 component: CalendarComponent
             },
             {
-                path: 'MisBeneficiarios',
+                path: 'MisBeneficiarios/:id',
                 canActivate: [AuthGuard],
                 component: ListFrequentTravelerComponent
             },

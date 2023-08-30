@@ -1,20 +1,19 @@
-<div class="p-4">
-  <div class="card p-5" style="border-radius: 25px;">
-    
-  <full-calendar [options]="calendarOptions"></full-calendar>
+<div class="pb-4 px-4 pt-0">
+  <div class="col-12">
+    <div class="card p-6" style="border-radius: 20px;">
+      <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
   </div>
+
   <p-dialog #dd [(visible)]="showDialog" [breakpoints]="{'960px': '75vw', '640px': '90vw'}" [style]="{width: '50rem'}"
     [modal]="true" [closable]="true" (onHide)="view = 'x'" showHeader="true">
     <ng-template pTemplate="content">
       <div *ngIf="view === 'display'">
-        <div class="flex justify-content-end mt-4 mb-3">
-          <i class="pi pi-times cursor-pointer" (click)="closeDialog()"></i>
-        </div>
         <div class="p-2 surface-card surface-border card-shadow">
           <div class="relative mb-5">
             <span class="surface-card text-900 shadow-2 px-3 py-2 absolute card-span">{{changedEvent.availableQuotas}}
               cupos</span>
-            <img style="max-height: 300px;" src="{{changedEvent.photos}}" class="w-full" />
+            <img style="max-height: 300px;" src="{{changedEvent.photos}}" alt="Imagen Paquete" class="w-full" />
             <span
               class="position-absolute style-edit translate-middle bg-primary border border-light rounded-circle flex"
               style="top: 95%; left: 1rem;">

@@ -1,219 +1,233 @@
 <div class="bg-circle opacity-50" style="top: -200px; left: -700px;"></div>
 <p-scrollTop [threshold]="200"></p-scrollTop>
-<div class="mt-4 px-5">
-
-    <div class="card p-5" style="box-shadow: 0px 4px 30px rgba(221, 224, 255, .54); border-radius: 25px;">
-        <div class="grid mb-3">
-            <div class="col-12 lg:col-7" style="max-height: 550px;">
-                <div class="flex h-full">
-                    <div class="h-full flex flex-column w-2 justify-content-between style-scroll-bar">
-                        <img *ngFor="let image of images; let i = index" style="max-height: 100px !important;"
-                            [ngClass]="{'border-primary': selectedImageIndex === i}" src="{{image}}"
-                            class="w-full cursor-pointer border-2 border-transparent transition-colors transition-duration-150 border-round"
-                            (click)="selectedImageIndex = i" />
-                    </div>
-                    <div class="pl-3 w-10 flex h-full">
-                        <p-image style="object-fit: unset;"
-                            class="h-full w-full max-w-full border-2 border-transparent border-round"
-                            src="{{images[selectedImageIndex]}}" alt="Image" [preview]="true"></p-image>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 lg:col-5 py-3 lg:pl-4 lg:pr-5">
-
-                <div class="flex align-items-center text-xl justify-content-between  text-900 mb-4">
-                    <h1>{{pack.name}}</h1>
-                </div>
-
-
-                <div class="flex align-items-center justify-content-between mb-2 mt-4">
-                    <div>
-                        <span class="text-900 font-medium text-3xl block"></span><span class="ml-0 mr-2 text-lg">Con
-                            destino a
-                        </span>
-                        <span class="text-lg"><b class="text-900 mr-1">{{pack.destination}}</b><span
-                                class="text-500"></span></span>
-                    </div>
-                    <div class="flex align-items-center">
-                        <span class="text-sm"><b class="text-900 mr-1">{{pack.availableQuotas}}</b><span
-                                class="text-500"></span>cupos</span>
+<div [ngClass]="{ 'pb-4 px-4 pt-0': role !== 'Cliente' }">
+    <div class="col-12">
+        <div [ngClass]="{ 
+        'card p-6': role !== 'Cliente', 
+        'surface-section p-4 border-1 surface-border': role === 'Cliente'
+     }" style="border-radius: 20px;">
+            <div class="grid mb-3">
+                <div class="col-12 lg:col-7" style="max-height: 550px;">
+                    <div class="flex h-full">
+                        <div class="h-full flex flex-column w-2 justify-content-between style-scroll-bar">
+                            <img *ngFor="let image of images; let i = index" style="max-height: 100px !important;"
+                                [ngClass]="{'border-primary': selectedImageIndex === i}" src="{{image}}" alt="Imagen Paquete"
+                                class="w-full cursor-pointer border-2 border-transparent transition-colors transition-duration-150 border-round"
+                                (click)="selectedImageIndex = i" />
+                        </div>
+                        <div class="pl-3 w-10 flex h-full">
+                            <p-image style="object-fit: unset;"
+                                class="h-full w-full max-w-full border-2 border-transparent border-round"
+                                src="{{images[selectedImageIndex]}}" alt="Image" [preview]="true"></p-image>
+                        </div>
                     </div>
                 </div>
+                <div class="col-12 lg:col-5 py-3 lg:pl-4 lg:pr-5">
 
-                <div class="flex align-items-center justify-content-between mb-2 mt-4">
-                    <div><small class="text-xl"><b class="text-900 mr-1 text-500">Desde</b></small>
+                    <div class="flex align-items-center text-xl justify-content-between  text-900 mb-4">
+                        <h1>{{pack.name}}</h1>
                     </div>
-                </div>
-                <div class="flex align-items-center text-xl font-medium text-900">
-                    <span class="text-900 font-medium text-3xl block">{{pack.price + pack.aditionalPrice | currency: ' ':false:'1.0-0'}}</span><span class="ml-2  text-lg">por persona</span>
-                </div>
-                <div class="flex align-items-center text-xl font-medium text-900 mb-4">
-                    <span class="block" style="font-size: 12px !important;">Incluye asistencia medica y seguro
-                        hotelero</span>
-                </div>
 
 
-
-                <div class="flex align-items-center mb-2">
-                    <span class="text-lg"><b class="text-900 mr-1">Desde</b><span
-                            class="text-500"></span>{{pack.departureDate | date}}</span>
-                    <span class="text-lg"><b class="text-900 mr-1 ml-2">Hasta</b>
-                        <span class="text-500"></span>{{pack.arrivalDate | date}}</span>
-                </div>
-
-                <p-tabView>
-                    <p-tabPanel header="Descripcion basica">
+                    <div class="flex align-items-center justify-content-between mb-2 mt-4">
                         <div>
-                            <p class="text-md    fw-bold">
-                                Disfruta de una habitación única en el hotel {{pack.hotel}}, hospedándote al mejor
-                                estilo, nuestras carretas inmensas en el hermoso embalse de {{pack.destination}} te
-                                permitirán deleitarte de esta experiencia, ya
-                                sea para una escapada romántica o para compartir con familia y amigos partiendo desde
-                                {{pack.departurePoint}}.
-                            </p>
+                            <span class="text-900 font-medium text-3xl block"></span><span class="ml-0 mr-2 text-lg">Con
+                                destino a
+                            </span>
+                            <span class="text-lg"><b class="text-900 mr-1">{{pack.destination}}</b><span
+                                    class="text-500"></span></span>
                         </div>
-                    </p-tabPanel>
-
-                </p-tabView>
-                <div *ngIf="role !== 'Administrador'">
-                    <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between">
-                        <div class="flex align-items-center flex-1 mt-3 sm:mt-0 ml-0 sm:ml-5">
-                            <!-- Si el usuario tiene una sesión iniciada, mostrar el botón de reserva -->
-                            <button *ngIf="isLoggedIn && orderProcess === undefined" pButton label="Reservar"
-                                class="flex-1 mr-5" (click)="reserve(pack, quantity)"></button>
-
-                            <!-- Si el usuario NO tiene una sesión iniciada, mostrar el botón de login -->
-                            <button *ngIf="!isLoggedIn" pButton label="Reservar" class="flex-1 mr-5"
-                                (click)="goToLogin()"></button>
+                        <div class="flex align-items-center">
+                            <span class="text-sm"><b class="text-900 mr-1">{{pack.availableQuotas}}</b><span
+                                    class="text-500"></span>cupos</span>
                         </div>
                     </div>
-                </div>
-                <div class="col-12" *ngIf="role === 'Administrador' || orderProcess !== undefined">
-                    <button pButton label="Regresar" class="flex-1 mr-5 w-full" (click)="goBack()"></button>
-                </div>
-            </div>
-        </div>
 
-        <p-tabView>
-            <p-tabPanel header="Descripcion">
-                <div class="text-900 font-bold text-3xl mb-4 mt-2">Descripcion del paquete</div>
-                <p class="line-height-3 text-600 p-0 mx-0 mt-0 mb-4">{{pack.details}}</p>
-            </p-tabPanel>
-            <p-tabPanel header="Detalles del paquete">
+                    <div class="flex align-items-center justify-content-between mb-2 mt-4">
+                        <div><small class="text-xl"><b class="text-900 mr-1 text-500">Desde</b></small>
+                        </div>
+                    </div>
+                    <div class="flex align-items-center text-xl font-medium text-900">
+                        <span class="text-900 font-medium text-3xl block">{{pack.price + pack.aditionalPrice | currency:
+                            ' ':false:'1.0-0'}}</span><span class="ml-2  text-lg">por persona</span>
+                    </div>
+                    <div class="flex align-items-center text-xl font-medium text-900 mb-4">
+                        <span class="block" style="font-size: 12px !important;">Incluye asistencia medica y seguro
+                            hotelero</span>
+                    </div>
 
 
 
-                <ul class="list-none p-0 m-0">
-                    <li class="p-3 border-bottom-1 m-1 surface-border">
+                    <div class="flex align-items-center mb-2">
+                        <span class="text-lg"><b class="text-900 mr-1">Desde</b><span
+                                class="text-500"></span>{{pack.departureDate | date}}</span>
+                        <span class="text-lg"><b class="text-900 mr-1 ml-2">Hasta</b>
+                            <span class="text-500"></span>{{pack.arrivalDate | date}}</span>
+                    </div>
 
-                        <div class="grid">
-
-                            <div class="col-8">
-                                <div class="text-900 font-bold text-xl my-3 flex justify-content-center">Precios por
-                                    edades
-                                </div>
-                                <div class="grid">
-
-                                    <div class="col">
-                                        <div class=" cursor-pointer relative overflow-hidden  border-round" style="box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.03), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.12) !important;
-                                        " (mouseenter)="visibleMember = 3" (mouseleave)="visibleMember = -1">
-                                            <img src="assets/img/babyIcon.png" class="w-full block" />
-                                            <div class="absolute top-0 left-0 h-full w-full border-round fadein animation-duration-300 select-none"
-                                                style="background-color: rgba(0,0,0,0.7)" *ngIf="visibleMember === 3">
-                                                <div class="flex flex-column p-3 h-full">
-                                                    <span class="block font-medium text-white text-xl mb-3">Menores de 5
-                                                        años</span>
-                                                    <span class="font-medium text-400">Los bebes menores a 5 años
-                                                        deberan
-                                                        pagar
-                                                        unicamente la asistencia medica y seguro hotelero.</span>
-
-                                                    <span
-                                                        class="block font-medium text-white text-xl mb-3">{{pack.aditionalPrice|
-                                                        currency: ' ':false:'1.0-0'}}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="cursor-pointer relative overflow-hidden  border-round" style="box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.03), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.12) !important;
-                                        " (mouseenter)="visibleMember = 2" (mouseleave)="visibleMember = -1">
-                                            <img src="assets/img/kidIcon.png" class="w-full block" />
-                                            <div class="absolute top-0 left-0 h-full w-full border-round fadein animation-duration-300 select-none"
-                                                style="background-color: rgba(0,0,0,0.7)" *ngIf="visibleMember === 2">
-                                                <div class="flex flex-column p-3 h-full">
-                                                    <span class="block font-medium text-white text-xl mb-3">Desde 5
-                                                        hasta 10
-                                                        años</span>
-                                                    <span class="font-medium text-400">Los niños mayores de 5 menores de
-                                                        10
-                                                        años
-                                                        deberan pagar el 70% de la totalidad del precio del
-                                                        paquete</span>
-
-                                                    <span
-                                                        class="block font-medium text-white text-xl mb-3">{{((pack.price
-                                                        +
-                                                        pack.aditionalPrice) * .70) |currency: ' ':false:'1.0-0'}}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="cursor-pointer relative overflow-hidden  border-round" style="box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.03), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.12) !important;
-                                        " (mouseenter)="visibleMember = 1" (mouseleave)="visibleMember = -1">
-                                            <img src="assets/img/adultIcon.png" class="w-full block" />
-                                            <div class="absolute top-0 left-0 h-full w-full border-round fadein animation-duration-300 select-none"
-                                                style="background-color: rgba(0,0,0,0.7)" *ngIf="visibleMember === 1">
-                                                <div class="flex flex-column p-3 h-full">
-                                                    <span class="block font-medium text-white text-xl mb-3">Mayores de
-                                                        10
-                                                        años</span>
-                                                    <span class="font-medium text-400">Las personas que sobrepasen los
-                                                        10
-                                                        años
-                                                        deberan pagar el 100% de la totalidad del precio del
-                                                        paquete</span>
-
-                                                    <span class="block font-medium text-white text-xl mb-3">{{pack.price
-                                                        +
-                                                        pack.aditionalPrice|currency: ' ':false:'1.0-0'}}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                    <p-tabView>
+                        <p-tabPanel header="Descripcion basica">
+                            <div>
+                                <p class="text-md    fw-bold">
+                                    Disfruta de una habitación única en el hotel {{pack.hotel}}, hospedándote al mejor
+                                    estilo, nuestras carretas inmensas en el hermoso embalse de {{pack.destination}} te
+                                    permitirán deleitarte de esta experiencia, ya
+                                    sea para una escapada romántica o para compartir con familia y amigos partiendo
+                                    desde
+                                    {{pack.departurePoint}}.
+                                </p>
                             </div>
-                            <p-divider layout="vertical"></p-divider>
-                            <div class="col">
-                                <div class="text-900 font-bold text-xl my-3 flex justify-content-center">
-                                    Especificaciones
-                                </div>
-                                <div class="grid">
-                                    <div class="col-6">
-                                        <p-card header="Alojamiento">
-                                            {{pack.hotel}}
-                                        </p-card>
-                                    </div>
-                                    <div class="col-6">
-                                        <p-card header="Transporte">
-                                            {{pack.transport == 1 ? "Terrestre" : "Aereo"}}
-                                        </p-card>
-                                    </div>
+                        </p-tabPanel>
 
-                                    <div class="col">
-                                        <p-card header="Lugar de encuentro">
-                                            {{pack.departurePoint}}
-                                        </p-card>
-                                    </div>
-                                </div>
+                    </p-tabView>
+                    <div *ngIf="role !== 'Administrador'">
+                        <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between">
+                            <div class="flex align-items-center flex-1 mt-3 sm:mt-0 ml-0 sm:ml-5">
+                                <!-- Si el usuario tiene una sesión iniciada, mostrar el botón de reserva -->
+                                <button *ngIf="isLoggedIn && orderProcess === undefined" pButton label="Reservar"
+                                    class="flex-1 mr-5" (click)="reserve(pack, quantity)"></button>
+
+                                <!-- Si el usuario NO tiene una sesión iniciada, mostrar el botón de login -->
+                                <button *ngIf="!isLoggedIn" pButton label="Reservar" class="flex-1 mr-5"
+                                    (click)="goToLogin()"></button>
                             </div>
                         </div>
-                    </li>
+                    </div>
+                    <div class="col-12" *ngIf="role === 'Administrador' || orderProcess !== undefined">
+                        <button pButton label="Regresar" class="flex-1 mr-5 w-full" (click)="goBack()"></button>
+                    </div>
+                </div>
+            </div>
 
-                </ul>
-            </p-tabPanel>
-        </p-tabView>
+            <p-tabView>
+                <p-tabPanel header="Descripcion">
+                    <div class="text-900 font-bold text-3xl mb-4 mt-2">Descripcion del paquete</div>
+                    <p class="line-height-3 text-600 p-0 mx-0 mt-0 mb-4">{{pack.details}}</p>
+                </p-tabPanel>
+                <p-tabPanel header="Detalles del paquete">
+
+
+
+                    <ul class="list-none p-0 m-0">
+                        <li class="p-3 border-bottom-1 m-1 surface-border">
+
+                            <div class="grid">
+
+                                <div class="col-8">
+                                    <div class="text-900 font-bold text-xl my-3 flex justify-content-center">Precios por
+                                        edades
+                                    </div>
+                                    <div class="grid">
+
+                                        <div class="col">
+                                            <div class=" cursor-pointer relative overflow-hidden  border-round" style="box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.03), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.12) !important;
+                                        " (mouseenter)="visibleMember = 3" (mouseleave)="visibleMember = -1">
+                                                <img src="assets/img/babyIcon.png" alt="Avatar" class="w-full block" />
+                                                <div class="absolute top-0 left-0 h-full w-full border-round fadein animation-duration-300 select-none"
+                                                    style="background-color: rgba(0,0,0,0.7)"
+                                                    *ngIf="visibleMember === 3">
+                                                    <div class="flex flex-column p-3 h-full">
+                                                        <span class="block font-medium text-white text-xl mb-3">Menores
+                                                            de 5
+                                                            años</span>
+                                                        <span class="font-medium text-400">Los bebes menores a 5 años
+                                                            deberan
+                                                            pagar
+                                                            unicamente la asistencia medica y seguro hotelero.</span>
+
+                                                        <span
+                                                            class="block font-medium text-white text-xl mb-3">{{pack.aditionalPrice|
+                                                            currency: ' ':false:'1.0-0'}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="cursor-pointer relative overflow-hidden  border-round" style="box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.03), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.12) !important;
+                                        " (mouseenter)="visibleMember = 2" (mouseleave)="visibleMember = -1">
+                                                <img src="assets/img/kidIcon.png" alt="Avatar" class="w-full block" />
+                                                <div class="absolute top-0 left-0 h-full w-full border-round fadein animation-duration-300 select-none"
+                                                    style="background-color: rgba(0,0,0,0.7)"
+                                                    *ngIf="visibleMember === 2">
+                                                    <div class="flex flex-column p-3 h-full">
+                                                        <span class="block font-medium text-white text-xl mb-3">Desde 5
+                                                            hasta 10
+                                                            años</span>
+                                                        <span class="font-medium text-400">Los niños mayores de 5
+                                                            menores de
+                                                            10
+                                                            años
+                                                            deberan pagar el 70% de la totalidad del precio del
+                                                            paquete</span>
+
+                                                        <span
+                                                            class="block font-medium text-white text-xl mb-3">{{((pack.price
+                                                            +
+                                                            pack.aditionalPrice) * .70) |currency: '
+                                                            ':false:'1.0-0'}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="cursor-pointer relative overflow-hidden  border-round" style="box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.03), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.12) !important;
+                                        " (mouseenter)="visibleMember = 1" (mouseleave)="visibleMember = -1">
+                                                <img src="assets/img/adultIcon.png" alt="Avatar" class="w-full block" />
+                                                <div class="absolute top-0 left-0 h-full w-full border-round fadein animation-duration-300 select-none"
+                                                    style="background-color: rgba(0,0,0,0.7)"
+                                                    *ngIf="visibleMember === 1">
+                                                    <div class="flex flex-column p-3 h-full">
+                                                        <span class="block font-medium text-white text-xl mb-3">Mayores
+                                                            de
+                                                            10
+                                                            años</span>
+                                                        <span class="font-medium text-400">Las personas que sobrepasen
+                                                            los
+                                                            10
+                                                            años
+                                                            deberan pagar el 100% de la totalidad del precio del
+                                                            paquete</span>
+
+                                                        <span
+                                                            class="block font-medium text-white text-xl mb-3">{{pack.price
+                                                            +
+                                                            pack.aditionalPrice|currency: ' ':false:'1.0-0'}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p-divider layout="vertical"></p-divider>
+                                <div class="col">
+                                    <div class="text-900 font-bold text-xl my-3 flex justify-content-center">
+                                        Especificaciones
+                                    </div>
+                                    <div class="grid">
+                                        <div class="col-6">
+                                            <p-card header="Alojamiento">
+                                                {{pack.hotel}}
+                                            </p-card>
+                                        </div>
+                                        <div class="col-6">
+                                            <p-card header="Transporte">
+                                                {{pack.transport == 1 ? "Terrestre" : "Aereo"}}
+                                            </p-card>
+                                        </div>
+
+                                        <div class="col">
+                                            <p-card header="Lugar de encuentro">
+                                                {{pack.departurePoint}}
+                                            </p-card>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
     </div>
-
 </div>

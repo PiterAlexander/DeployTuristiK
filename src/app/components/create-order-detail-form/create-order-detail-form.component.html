@@ -1,11 +1,11 @@
 <p-confirmDialog key="confirmation-message"></p-confirmDialog>
 <p-toast key="alert-message"></p-toast>
-<div *ngIf="orderProcess !== undefined" [ngClass]="{ 'p-4': role !== 'Cliente' }">
+<div *ngIf="orderProcess !== undefined" [ngClass]="{ 'pb-4 px-4 pt-0': role !== 'Cliente' }">
     <div class="col-12">
         <div [ngClass]="{ 
         'card p-6': role !== 'Cliente', 
         'surface-section p-4 border-1 surface-border': role === 'Cliente'
-     }" style="border-radius: 15px;">
+     }" style="border-radius: 20px;">
             <div *ngIf="orderProcess.action === 'CreateOrder'" class="text-900 text-2xl mb-3 font-semibold">Proceso de
                 Reserva</div>
             <div *ngIf="orderProcess.action === 'CreateOrderDetail'" class="text-900 text-2xl mb-3 font-semibold">
@@ -190,20 +190,21 @@
                             <div class="col-12 field">
                                 <div class="p-input-icon-left w-full">
                                     <i class="pi pi-map-marker"></i>
-                                    <!-- <input pInputText type="text" formControlName="address" required="true"
-                                            placeholder="País - Departamento - Ciudad - Dirección" class="w-full"> -->
                                     <input class="w-full" pInputText type="text" formControlName="address"
-                                        placeholder="Ingrese su dirección residencial" required="true"
-                                        ngx-google-places-autocomplete [options]="{
+                                        placeholder="Ingrese la dirección residencial completa del beneficario"
+                                        minlength="15" required="true" ngx-google-places-autocomplete [options]="{
                                                 types: [],
                                                 componentRestrictions: null
                                             }" #placesRef="ngx-places" autocomplete="on"
-                                        (onAddressChange)="onAddressChange($event)"
-                                        onchange="onAddressChange($event)" />
+                                        (onAddressChange)="onAddressChange($event)" onchange="onAddressChange($event)">
                                 </div>
                                 <small class="p-error block"
                                     *ngIf="formGroup.get('address')?.dirty && formGroup.get('address')?.errors?.['required']">
                                     Este campo es obligatorio
+                                </small>
+                                <small class="p-error block"
+                                    *ngIf="formGroup.get('address')?.dirty && formGroup.get('address')?.errors?.['minlength']">
+                                    Deben ser al menos 10 caracteres
                                 </small>
                             </div>
                         </div>
@@ -300,7 +301,7 @@
                     <ng-template let-product pTemplate="listItem">
                         <div class="col-12">
                             <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
-                                <img [src]="product.image" [alt]="product.name"
+                                <img [src]="product.image" alt="avatar"
                                     class="my-4 md:my-0 w-7 md:w-10rem shadow-2 mr-5" />
                                 <div class="flex-1 flex flex-column align-items-center text-center md:text-left">
                                     <div class="font-bold text-2xl">{{ product.name + ' ' + product.lastName }}</div>
@@ -324,7 +325,8 @@
                                     <button pButton pRipple icon="pi pi-trash"
                                         (click)="deleteBeneficiarie(product.document)" label="Eliminar"
                                         class="p-button p-button-raised p-button-text p-button-danger p-button-sm mb-1"></button>
-                                    <span class="text-2xl font-semibold">${{ product.price | currency: ' ':false:'1.0-0'}}</span>
+                                    <span class="text-2xl font-semibold">${{ product.price | currency: '
+                                        ':false:'1.0-0'}}</span>
                                 </div>
                             </div>
                         </div>
@@ -341,7 +343,7 @@
                                         showLabel(beneficiarie.document) }}</span>
                                 </div>
                                 <div class="flex flex-column align-items-center text-center mb-3">
-                                    <img [src]="beneficiarie.image" [alt]="beneficiarie.name"
+                                    <img [src]="beneficiarie.image" alt="Avatar"
                                         class="w-8 shadow-2 my-3 mx-0" />
                                     <div class="text-2xl font-bold">{{beneficiarie.name + ' ' + beneficiarie.lastName}}
                                     </div>

@@ -1,12 +1,12 @@
 <p-confirmDialog icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <p-toast key="alert-message"></p-toast>
 
-<div class="div" [ngClass]="{ 'p-4': role !== 'Cliente' }">
+<div *ngIf="order !== undefined" class="div" [ngClass]="{ 'pb-4 px-4 pt-0': role !== 'Cliente' }">
     <div class="col-12">
         <div [ngClass]="{
         'card p-6': role !== 'Cliente',
         'surface-section p-4 border-1 surface-border': role === 'Cliente'
-    }" style="border-radius: 15px;">
+    }" style="border-radius: 20px;">
             <p-toolbar styleClass="mb-4 gap-2">
                 <ng-template pTemplate="left">
                     <div class="text-primary text-3xl font-semibold">Detalles del Pedido</div>
@@ -45,8 +45,8 @@
                         <th class="font-medium" pSortableColumn="status" style="min-width: 8rem">
                             Estado <p-sortIcon field="status"></p-sortIcon>
                         </th>
-                        <th class="font-medium" style="min-width: 9rem" alignFrozen="right" pFrozenColumn
-                            class="flex justify-content-center">
+                        <th *ngIf="order.status !== 3" class="font-medium" style="min-width: 9rem" alignFrozen="right"
+                            pFrozenColumn class="flex justify-content-center">
                             Acciones
                         </th>
                     </tr>
@@ -73,7 +73,7 @@
                             <span
                                 [class]="'payment-badge status-' + payment.status">{{showStatus(payment.status)}}</span>
                         </td>
-                        <td alignFrozen="right" pFrozenColumn style="min-width: 9rem"
+                        <td *ngIf="order.status !== 3" alignFrozen="right" pFrozenColumn style="min-width: 9rem"
                             class="flex justify-content-around align-items-center">
                             <span>
                                 <button *ngIf="validateRetryPaymentAllowing(payment)" pButton pRipple type="button"
@@ -97,21 +97,27 @@
                 </ng-template>
                 <ng-template pTemplate="footer">
                     <tr>
-                        <td *ngIf="existingRemainingAmount() && pendingPayments" colspan="12">Restante: ${{
+                        <td *ngIf="existingRemainingAmount() && pendingPayments && order.status !== 3" colspan="12">
+                            Restante: ${{
                             remainingAmount
                             | currency: ' ':false:'1.0-0'}} COP - Con abonos pendientes</td>
-                        <td *ngIf="existingRemainingAmount() && !pendingPayments" colspan="12">Restante: ${{
+                        <td *ngIf="existingRemainingAmount() && !pendingPayments && order.status !== 3" colspan="12">
+                            Restante: ${{
                             remainingAmount
                             | currency: ' ':false:'1.0-0'}} COP</td>
-                        <td *ngIf="!existingRemainingAmount() && !pendingPayments" colspan="12">¡La totalidad del pedido
+                        <td *ngIf="!existingRemainingAmount() && !pendingPayments && order.status !== 3" colspan="12">
+                            ¡La totalidad del pedido
                             ya
                             fue
                             pagada!</td>
-                        <td *ngIf="!existingRemainingAmount() && pendingPayments" colspan="12">¡La totalidad del pedido
+                        <td *ngIf="!existingRemainingAmount() && pendingPayments && order.status !== 3" colspan="12">¡La
+                            totalidad del pedido
                             ya
                             fue
                             pagada! -
                             Con abonos pendientes</td>
+                        <td *ngIf="order.status === 3" colspan="12">Su pedido fue cancelado debido al incumplimiento de
+                            pago por su parte.</td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">

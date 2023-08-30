@@ -75,7 +75,7 @@ export class CreatePackageFormComponent implements OnInit {
             departurePoint: [null, Validators.required],
             totalQuotas: [null, [Validators.required, Validators.min(15)]],
             availableQuotas: [0],
-            price: [null, [Validators.required, Validators.min(100000)]],
+            price: [null, [Validators.required, Validators.min(1)]],
             type: [0, Validators.required],
             status: [1, Validators.required],
             aditionalPrice: [null, [Validators.required]],

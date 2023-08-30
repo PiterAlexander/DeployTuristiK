@@ -60,7 +60,7 @@ export class CreateEmployeeFormComponent implements OnInit {
             ]),
             document: new FormControl('', [
                 Validators.required,
-                Validators.minLength(8),
+                Validators.minLength(6),
                 Validators.maxLength(15)
             ]),
             phoneNumber: new FormControl('', [
