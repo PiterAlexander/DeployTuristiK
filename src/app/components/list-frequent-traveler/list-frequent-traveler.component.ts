@@ -80,7 +80,6 @@ export class ListFrequentTravelerComponent implements OnInit {
     }
   }
   compareCustomerId() {
-    console.log('yo')
     if (this.allCustomers !== undefined) {
       const frequentTraveler: any = {
         addFtButton: true

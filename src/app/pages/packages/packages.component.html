@@ -58,7 +58,7 @@
                             <div class="relative mb-5">
                                 <span class="surface-card text-900 shadow-2 px-3 py-2 absolute card-span">{{package.availableQuotas}}
                                     cupos</span>
-                                <img style="max-height: 300px;"
+                                <img style="max-height: 260px; min-height: 260px;"
                                     src="{{package.photos}}"
                                     class="w-full" />
                                 <span
@@ -94,7 +94,7 @@
                             <div class="flex justify-content-between">
                                 <div>
                                     <span class="small">Precio por persona</span>
-                                    <span class="flex align-items-end text-primary text-2xl font-medium">{{package.price|currency:'USD':'symbol':'3.0'}}</span>
+                                    <span class="flex align-items-end text-primary text-2xl font-medium">${{package.price|currency: ' ':false:'1.0-0'}}</span>
                                 </div>
                                 <div>
                                     <button pButton pRipple type="button" label="Ver detalles"
@@ -168,7 +168,7 @@
                             {{ package.availableQuotas }}
                         </td>
                         <td>
-                            {{ package.price | currency: 'USD':'symbol' }}
+                            {{ package.price | currency: ' ':false:'1.0-0' }}
                         </td>
                         <td class="flex justify-content-around">
                             <button pButton type="button" icon="pi pi-pencil"

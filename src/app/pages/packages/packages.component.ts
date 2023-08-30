@@ -66,9 +66,18 @@ export class PackagesComponent implements OnInit {
             this.allCustomers = state.allCustomers.data;
             this.packagesList = state.allPackages.data;
 
-            this.arrayPackagesClient = state.allPackages.data.filter(
-                (pkg) => pkg.availableQuotas > 0
-            );
+const currentDate = new Date();
+const oneMonthAgo = new Date();
+oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+this.arrayPackagesClient = state.allPackages.data.filter((pkg) => {
+    const departureDate = new Date(pkg.departureDate);
+    const timeDifference = departureDate.getTime() - currentDate.getTime();
+    const oneMonthInMillis = 30 * 24 * 60 * 60 * 1000;
+    const isWithinOneMonth = timeDifference >= oneMonthInMillis;
+
+    return pkg.availableQuotas > 0 && isWithinOneMonth;
+});
+
             this.loading = state.allPackages.loading;
         });
 

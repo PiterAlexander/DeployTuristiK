@@ -1,5 +1,5 @@
 import { Order } from '@/models/order';
-import { GetAllCustomerRequest, GetAllOrdersRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, OpenModalCreateOrder, SaveOrderProcess } from '@/store/ui/actions';
+import { EditOrderRequest, GetAllCustomerRequest, GetAllOrdersRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, OpenModalCreateOrder, SaveOrderProcess } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -9,6 +9,9 @@ import { Customer } from '@/models/customer';
 import { Package } from '@/models/package';
 import { DataView } from 'primeng/dataview';
 import { Router } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
+import { ApiService } from '@services/api.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-orders',
@@ -35,6 +38,9 @@ export class OrdersComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private router: Router,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
+    private apiService: ApiService
   ) {
     this.responsiveOptions = [
       {
@@ -116,7 +122,7 @@ export class OrdersComponent implements OnInit {
                 totalCost: element.totalCost,
                 status: element.status,
                 orderDate: element.orderDate,
-                payment: element.payment,
+                payment: element.payment
               }
               this.ordersList.push(order)
             }
@@ -148,11 +154,122 @@ export class OrdersComponent implements OnInit {
               totalCost: element.totalCost,
               status: element.status,
               orderDate: element.orderDate,
-              payment: element.payment,
             }
             this.ordersList.push(order)
           }
         }
+      }
+    }
+  }
+
+  changeOrderStatus(order: Order) {
+    if (order.status !== 3) {
+      this.confirmationService.confirm({
+        key: 'cancel-order-message',
+        header: '¿Está seguro de cancelar este Pedido?',
+        message: 'Tenga en cuenta que: <br><br>- Todas los procesos del pedido se inhabilitaran.<br>- Se le informará al titular sobre esta cancelación.<br>- Es posible revertir esta cancelación.',
+        icon: 'pi pi-exclamation-triangle',
+        rejectLabel: 'No, salir',
+        rejectButtonStyleClass: 'p-button-outlined',
+        rejectIcon: 'pi pi-times',
+        acceptLabel: 'Sí, cancelar Pedido',
+        acceptButtonStyleClass: 'p-button-danger',
+        acceptIcon: 'pi pi-ban',
+        accept: () => {
+          const orderToUpdate: Order = {
+            orderId: order.orderId,
+            customerId: order.customerId,
+            customer: order.customer,
+            packageId: order.packageId,
+            package: order.package,
+            totalCost: order.totalCost,
+            status: 3,
+            orderDate: order.orderDate,
+          }
+          this.store.dispatch(new EditOrderRequest({ ...orderToUpdate }))
+          const index = this.ordersList.indexOf(order)
+          if (index !== -1) {
+            this.ordersList.splice(index, 1)[0]; // Eliminar y obtener el elemento eliminado
+            this.ordersList.splice(index, 0, orderToUpdate); // Volver a agregar en la misma posición
+            this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Pedido cancelado exitosamente.' });
+          }
+        }
+      })
+    } else {
+      this.confirmationService.confirm({
+        key: 'cancel-order-message',
+        header: '¿Está seguro de habilitar Pedido?',
+        message: 'Tenga en cuenta que: <br><br>- Todas los procesos del pedido se habilitar de nuevo.<br>- Se le informará al titular sobre este cambio.',
+        icon: 'pi pi-exclamation-triangle',
+        rejectLabel: 'Cancelar',
+        rejectButtonStyleClass: 'p-button-outlined',
+        rejectIcon: 'pi pi-times',
+        acceptLabel: 'Sí, habilitar',
+        acceptButtonStyleClass: 'p-button-primary',
+        acceptIcon: 'pi pi-check',
+        accept: () => {
+          this.activateOrder(order)
+        }
+      })
+    }
+  }
+
+  async activateOrder(order: Order) {
+    const orderPromise: Order = await new Promise((resolve, reject) => {
+      this.apiService.getOrderById(order.orderId).subscribe({
+        next: (data) => {
+          resolve(data)
+        },
+        error: (err) => {
+          reject(err)
+        }
+      })
+    })
+    if (orderPromise) {
+      let accepted: boolean = false
+      let pending: boolean = false
+      let addition: number = 0
+
+      for (const element of orderPromise['payment']) {
+        if (element !== undefined && element.status === 1 || element.status === 0) {
+          addition += element.amount
+          if (element.status === 1) {
+            accepted = true
+          } else {
+            pending = true
+          }
+        }
+      }
+      const remainingAmount: number = orderPromise.totalCost - addition
+      let orderStatus: number
+      if ((accepted && pending && remainingAmount === 0) || (accepted && pending && remainingAmount > 0)) {
+        orderStatus = 1
+      } else if (accepted && !pending && remainingAmount === 0) {
+        orderStatus = 2
+      } else if ((!accepted && pending && remainingAmount === 0) || (!accepted && pending && remainingAmount > 0)) {
+        orderStatus = 0
+      } else if (accepted && !pending && remainingAmount > 0) {
+        orderStatus = 1
+      } else if (!accepted && !pending) {
+        orderStatus = 0
+      }
+
+      const orderToUpdate: Order = {
+        orderId: orderPromise['orderId'],
+        customerId: orderPromise['customerId'],
+        customer: orderPromise['customer'],
+        packageId: orderPromise['packageId'],
+        package: orderPromise['package'],
+        totalCost: orderPromise['totalCost'],
+        status: orderStatus,
+        orderDate: orderPromise['orderDate']
+      }
+      this.store.dispatch(new EditOrderRequest({ ...orderToUpdate }))
+      const index = this.ordersList.indexOf(order)
+      if (index !== -1) {
+        this.ordersList.splice(index, 1)[0]; // Eliminar y obtener el elemento eliminado
+        this.ordersList.splice(index, 0, orderToUpdate); // Volver a agregar en la misma posición
+        this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Pedido habilitado exitosamente.' });
       }
     }
   }

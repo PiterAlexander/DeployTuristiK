@@ -26,7 +26,9 @@
   </ng-container>
 </div>
 
-<div>
+<div [ngClass]="{ 
+  'border-header': role !== 'Administrador'
+}">
   <ng-container *ngIf="role === 'Cliente'">
     <div
       class="responsive-margin flex align-items-center justify-content-between relative lg:static py-2 px-4 mx-0 md:px-7 lg:px-4 lg:pb-4 lg:pt-6 lg:mx-8">

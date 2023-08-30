@@ -1,13 +1,11 @@
 <div class="bg-circle opacity-50" style="top: -200px; left: -700px;"></div>
-<div class="bg-circle hidden lg:flex" style="top: 50px; right:-800px; transform: rotate(60deg)"></div>
-
 <p-scrollTop [threshold]="200"></p-scrollTop>
 <div [ngClass]="{ 'pb-4 px-4 pt-0': role !== 'Cliente' }">
     <div class="col-12">
         <div [ngClass]="{ 
-    'card p-6': role !== 'Cliente', 
-    'surface-section p-4 border-1 surface-border': role === 'Cliente'
- }" style="border-radius: 20px;">
+        'card p-6': role !== 'Cliente', 
+        'surface-section p-4 border-1 surface-border': role === 'Cliente'
+     }" style="border-radius: 20px;">
             <div class="grid mb-3">
                 <div class="col-12 lg:col-7" style="max-height: 550px;">
                     <div class="flex h-full">
@@ -51,8 +49,7 @@
                     </div>
                     <div class="flex align-items-center text-xl font-medium text-900">
                         <span class="text-900 font-medium text-3xl block">{{pack.price + pack.aditionalPrice | currency:
-                            'USD':
-                            'symbol':'3.0'}}</span><span class="ml-2  text-lg">por persona</span>
+                            ' ':false:'1.0-0'}}</span><span class="ml-2  text-lg">por persona</span>
                     </div>
                     <div class="flex align-items-center text-xl font-medium text-900 mb-4">
                         <span class="block" style="font-size: 12px !important;">Incluye asistencia medica y seguro
@@ -140,7 +137,7 @@
 
                                                         <span
                                                             class="block font-medium text-white text-xl mb-3">{{pack.aditionalPrice|
-                                                            currency: 'USD':'symbol':'3.0'}}</span>
+                                                            currency: ' ':false:'1.0-0'}}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -166,8 +163,8 @@
                                                         <span
                                                             class="block font-medium text-white text-xl mb-3">{{((pack.price
                                                             +
-                                                            pack.aditionalPrice) * .70) | currency:
-                                                            'USD':'symbol':'3.0'}}</span>
+                                                            pack.aditionalPrice) * .70) |currency: '
+                                                            ':false:'1.0-0'}}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -194,8 +191,7 @@
                                                         <span
                                                             class="block font-medium text-white text-xl mb-3">{{pack.price
                                                             +
-                                                            pack.aditionalPrice|
-                                                            currency: 'USD':'symbol':'3.0'}}</span>
+                                                            pack.aditionalPrice|currency: ' ':false:'1.0-0'}}</span>
                                                     </div>
                                                 </div>
                                             </div>

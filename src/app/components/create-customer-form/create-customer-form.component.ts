@@ -11,6 +11,8 @@ import { Role } from '@/models/role';
 import { ApiService } from '@services/api.service';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FrequentTraveler } from '@/models/frequentTraveler';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-createcustomerform',
@@ -43,6 +45,7 @@ export class CreatecustomerformComponent implements OnInit {
     private store: Store<AppState>,
     private modalPrimeNg: DynamicDialogRef,
     public apiService: ApiService,
+    private router: Router
   ) {
     this.allEps = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS']
 
@@ -68,10 +71,10 @@ export class CreatecustomerformComponent implements OnInit {
           password: new FormControl(null),
           name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
           lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
-          document: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15)]),
+          document: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(15)]),
           birthDate: [null, [Validators.required, this.birthDateValidator.bind(this)]],
           phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
-          address: new FormControl('', [Validators.required]),
+          address: new FormControl('', [Validators.required, Validators.minLength(15)]),
           eps: new FormControl(null, [Validators.required]),
         })
         if (this.oneCustomer.customer.frequentTraveler !== undefined) {
@@ -84,14 +87,14 @@ export class CreatecustomerformComponent implements OnInit {
         }
       } else {
         this.formGroup = this.fb.group({
-          email: new FormControl(null, [Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')]),
+          email: new FormControl(null, [Validators.pattern("^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$")]),
           password: new FormControl(null),
           name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
           lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
-          document: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]),
+          document: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]),
           birthDate: [null, [Validators.required, this.birthDateValidator.bind(this)]],
           phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
-          address: new FormControl('', [Validators.required]),
+          address: new FormControl('', [Validators.required, Validators.minLength(15)]),
           eps: new FormControl(null, [Validators.required]),
         })
         this.customerFromAction = this.oneCustomer.customer
@@ -111,14 +114,14 @@ export class CreatecustomerformComponent implements OnInit {
       }
     } else {
       this.formGroup = this.fb.group({
-        email: new FormControl('', [Validators.required, Validators.email, Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')]),
+        email: new FormControl('', [Validators.required, Validators.email, Validators.pattern("^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$")]),
         password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
         name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
         lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
-        document: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]),
+        document: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]),
         birthDate: [null, [Validators.required, this.birthDateValidator.bind(this)]],
         phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(20)]),
-        address: new FormControl('', [Validators.required]),
+        address: new FormControl('', [Validators.required, Validators.minLength(15)]),
         eps: new FormControl(null, [Validators.required]),
       })
     }
@@ -140,6 +143,26 @@ export class CreatecustomerformComponent implements OnInit {
       return false
     }
     return true
+  }
+
+  onAddressChange(address: any) {
+    if (this.formGroup) {
+      const addressHtml = address.adr_address;
+      console.log(address);
+      const hiddenDiv = document.createElement('div');
+      hiddenDiv.style.display = 'none';
+      hiddenDiv.innerHTML = addressHtml;
+      const locality = hiddenDiv.querySelector('.locality')?.textContent || '';
+      const country = hiddenDiv.querySelector('.country-name')?.textContent || '';
+      const regionElements = hiddenDiv.querySelectorAll('.region');
+      if (regionElements.length >= 2) {
+        const region = regionElements[0].textContent || '';
+        const extractedText = `${address.name}, ${locality}, ${region}, ${country}`;
+        console.log(extractedText);
+        this.formGroup.get('address').setValue(extractedText);
+      }
+    }
+    console.log(address);
   }
 
   validateSaveButtonIfCustomerInformation(): boolean {
@@ -164,10 +187,16 @@ export class CreatecustomerformComponent implements OnInit {
     }
     return 'Registrar cliente'
   }
-  isEditingFrequentTraveler(): boolean {
-    return this.validateTitle() === 'Editar Información';
 
+  isEditingFrequentTraveler(): boolean {
+    if (this.oneCustomer !== undefined) {
+      if (this.oneCustomer.action === 'editCustomerFromFrequentTraveler') {
+        return true
+      }
+    }
+    return false
   }
+
   validateOnlyNumbers(): boolean {
     if (this.formGroup.value.document !== null) {
       if (this.formGroup.value.document.length >= 8) {
@@ -352,12 +381,11 @@ export class CreatecustomerformComponent implements OnInit {
 
   //<--- SAVE AND CANCEL ACTIONS --->
 
-  save() {
+  async save() {
     if (!this.formGroup.invalid) {
       const role: Role = this.allRoles.find(r => r.name === 'Cliente')
       if (this.oneCustomer !== undefined) {
         if (this.oneCustomer.action === 'editCustomer' || this.oneCustomer.action === "editCustomerFromFrequentTraveler") {
-
           const customer: Customer = {
             customerId: this.customerFromAction.customerId,
             name: this.formGroup.value.name,
@@ -370,6 +398,20 @@ export class CreatecustomerformComponent implements OnInit {
             userId: this.customerFromAction.userId,
           }
           this.store.dispatch(new EditCustomerRequest({ ...customer }))
+          // const customerPromise = await new Promise((resolve, reject) => {
+          //   this.apiService.updateCustomer(customer.customerId, customer).subscribe({
+          //     next: (data) => {
+          //       resolve(data)
+          //     },
+          //     error: (err) => {
+          //       reject(err)
+          //     }
+          //   })
+          // })
+          // console.log(customerPromise);
+
+          this.modalPrimeNg.close()
+          // this.router.navigate(['Home/MisBeneficiarios/' + this.oneCustomer.titularCustomer.customerId])
         } else if (this.oneCustomer.action === 'createFrequentTraveler') {
           const beneficiarieRole: Role = this.allRoles.find((r) => r.name == 'Beneficiario');
           const user: User = {
@@ -458,7 +500,6 @@ export class CreatecustomerformComponent implements OnInit {
         this.store.dispatch(new OpenModalListFrequentTraveler({ ...this.oneCustomer.customer }))
       } else if (this.oneCustomer.action === 'editCustomerFromFrequentTraveler') {
         this.modalPrimeNg.close()
-        this.store.dispatch(new OpenModalListFrequentTraveler({ ...this.oneCustomer.titularCustomer }))
       } else {
         this.modalPrimeNg.close()
       }

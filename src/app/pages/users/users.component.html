@@ -10,11 +10,27 @@
                     <div class="flex justify-content-between">
                         <span class="mt-2 md:mt-0 p-input-icon-right">
                             <i class="pi pi-search"></i>
-                            <input pInputText (input)="dt.filterGlobal($event.target.value,'contains')" type="text"
-                                placeholder="Buscar..." />
+                            <input
+                                pInputText
+                                (input)="
+                                    dt.filterGlobal(
+                                        $event.target.value,
+                                        'contains'
+                                    )
+                                "
+                                type="text"
+                                placeholder="Buscar..."
+                            />
                         </span>
-                        <button pButton pRipple type="button" (click)="openCreateUserModal()" icon="pi pi-plus"
-                            label="Registrar usuario" class="p-button p-button-outlined"></button>
+                        <button
+                            pButton
+                            pRipple
+                            type="button"
+                            (click)="openCreateUserModal()"
+                            icon="pi pi-plus"
+                            label="Registrar usuario"
+                            class="p-button p-button-outlined"
+                        ></button>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -22,12 +38,8 @@
                         <th class="font-medium" style="width: 5rem">
                             Correo electrónico
                         </th>
-                        <th class="font-medium" style="width: 5rem">
-                            Rol
-                        </th>
-                        <th class="font-medium" style="width: 5rem">
-                            Estado
-                        </th>
+                        <th class="font-medium" style="width: 5rem">Rol</th>
+                        <th class="font-medium" style="width: 5rem">Estado</th>
                         <th class="font-medium" style="width: 5rem">
                             Acciones
                         </th>
@@ -42,12 +54,29 @@
                             {{ user.role.name }}
                         </td>
                         <td>
-                            <span [class]="'user-badge status-' + user.status">{{showStatus(user.status)}}</span>
+                            <span
+                                [class]="'user-badge status-' + user.status"
+                                >{{ showStatus(user.status) }}</span
+                            >
                         </td>
                         <td class="text-center p-1">
-                            <button pButton type="button" icon="pi pi-pencil" [disabled]="user.userId === userLog.id"
+                            <button
+                                pButton
+                                icon="pi pi-pencil"
+                                *ngIf="user.userId === userLog.id"
                                 class="p-button-outlined p-button-warning p-button-rounded m-1"
-                                (click)="openUpdateUserModal(user)" pTooltip="Editar" tooltipPosition="bottom"></button>
+                                disabled
+                            ></button>
+                            <button
+                                pButton
+                                type="button"
+                                icon="pi pi-pencil"
+                                *ngIf="user.userId !== userLog.id"
+                                class="p-button-outlined p-button-warning p-button-rounded m-1"
+                                (click)="openUpdateUserModal(user)"
+                                pTooltip="Editar"
+                                tooltipPosition="bottom"
+                            ></button>
                         </td>
                     </tr>
                 </ng-template>

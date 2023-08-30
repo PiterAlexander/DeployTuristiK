@@ -53,7 +53,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
   public ftCheck: boolean = false
 
   constructor(
-    public apiService: ApiService,
+    private apiService: ApiService,
     private fb: FormBuilder,
     private store: Store<AppState>,
     private router: Router,

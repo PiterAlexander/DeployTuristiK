@@ -1,4 +1,5 @@
 <p-toast key="alert-message"></p-toast>
+<p-confirmDialog key="cancel-order-message" [style]="{width: '35vw'}"></p-confirmDialog>
 <div *ngIf="role !== 'Cliente'" class="pb-4 px-4 pt-0">
     <div class="col-12">
         <div class="card p-6" style="border-radius: 20px;">
@@ -23,7 +24,8 @@
                         <th class="font-medium" style="min-width: 6rem">Fecha</th>
                         <th class="font-medium" style="min-width: 9rem">Costo Total</th>
                         <th class="font-medium" style="min-width: 5rem">Detalles</th>
-                        <th class="font-medium" style="min-width: 10rem">Estado</th>
+                        <th class="font-medium" style="min-width: 8rem">Estado</th>
+                        <th class="font-medium" style="min-width: 5rem">Acciones</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-order>
@@ -38,8 +40,17 @@
                                 class="p-button-outlined p-button-rounded" pTooltip="Ver Detalles"
                                 (click)="sendToPayments(order)" tooltipPosition="bottom"></button>
                         </td>
-                        <td style="min-width: 10rem">
+                        <td style="min-width: 8rem">
                             <span [class]="'order-badge status-' + order.status">{{ showStatus(order.status) }}</span>
+                        </td>
+                        <td style="min-width: 5rem" class="flex justify-content-center">
+                            <button *ngIf="order.status !== 3" pButton pRipple type="button"
+                                icon="pi pi-exclamation-circle"
+                                class="p-button-outlined p-button-danger p-button-rounded" pTooltip="Cancelar Pedido"
+                                (click)="changeOrderStatus(order)" tooltipPosition="bottom"></button>
+                            <button *ngIf="order.status === 3" pButton pRipple type="button" icon="pi pi-refresh"
+                                class="p-button-outlined p-button-success p-button-rounded" pTooltip="Habilitar Pedido"
+                                (click)="changeOrderStatus(order)" tooltipPosition="bottom"></button>
                         </td>
                     </tr>
                 </ng-template>
