@@ -11,7 +11,7 @@
                     <div class="flex h-full">
                         <div class="h-full flex flex-column w-2 justify-content-between style-scroll-bar">
                             <img *ngFor="let image of images; let i = index" style="max-height: 100px !important;"
-                                [ngClass]="{'border-primary': selectedImageIndex === i}" src="{{image}}"
+                                [ngClass]="{'border-primary': selectedImageIndex === i}" src="{{image}}" alt="Imagen Paquete"
                                 class="w-full cursor-pointer border-2 border-transparent transition-colors transition-duration-150 border-round"
                                 (click)="selectedImageIndex = i" />
                         </div>
@@ -122,7 +122,7 @@
                                         <div class="col">
                                             <div class=" cursor-pointer relative overflow-hidden  border-round" style="box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.03), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.12) !important;
                                         " (mouseenter)="visibleMember = 3" (mouseleave)="visibleMember = -1">
-                                                <img src="assets/img/babyIcon.png" class="w-full block" />
+                                                <img src="assets/img/babyIcon.png" alt="Avatar" class="w-full block" />
                                                 <div class="absolute top-0 left-0 h-full w-full border-round fadein animation-duration-300 select-none"
                                                     style="background-color: rgba(0,0,0,0.7)"
                                                     *ngIf="visibleMember === 3">
@@ -145,7 +145,7 @@
                                         <div class="col">
                                             <div class="cursor-pointer relative overflow-hidden  border-round" style="box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.03), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.12) !important;
                                         " (mouseenter)="visibleMember = 2" (mouseleave)="visibleMember = -1">
-                                                <img src="assets/img/kidIcon.png" class="w-full block" />
+                                                <img src="assets/img/kidIcon.png" alt="Avatar" class="w-full block" />
                                                 <div class="absolute top-0 left-0 h-full w-full border-round fadein animation-duration-300 select-none"
                                                     style="background-color: rgba(0,0,0,0.7)"
                                                     *ngIf="visibleMember === 2">
@@ -172,7 +172,7 @@
                                         <div class="col">
                                             <div class="cursor-pointer relative overflow-hidden  border-round" style="box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.03), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.12) !important;
                                         " (mouseenter)="visibleMember = 1" (mouseleave)="visibleMember = -1">
-                                                <img src="assets/img/adultIcon.png" class="w-full block" />
+                                                <img src="assets/img/adultIcon.png" alt="Avatar" class="w-full block" />
                                                 <div class="absolute top-0 left-0 h-full w-full border-round fadein animation-duration-300 select-none"
                                                     style="background-color: rgba(0,0,0,0.7)"
                                                     *ngIf="visibleMember === 1">
