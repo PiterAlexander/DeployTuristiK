@@ -761,7 +761,23 @@ export class PackageEffects {
             return this.apiService.updateCustomer(customer.customerId, customer).pipe(
                 mergeMap((customerResolved) => {
                     this.dialogRef.close();
-                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Cliente editado exitosamente.' });
+                    var user = JSON.parse(localStorage.getItem('TokenPayload'))
+                    if (customer.userId == user.id) {
+                        this.messageService.add({
+                            key: 'alert-message',
+                            severity: 'success',
+                            summary: '¡Proceso completado!',
+                            detail: 'Información editada exitosamente.'
+                        });
+                        window.location.reload();
+                    } else {
+                        this.messageService.add({
+                            key: 'alert-message',
+                            severity: 'success',
+                            summary: '¡Proceso completado!',
+                            detail: 'Cliente editado exitosamente.'
+                        });
+                    }
                     return [
                         new EditCustomerSuccess(customerResolved),
                         new GetAllCustomerRequest(),
@@ -882,7 +898,23 @@ export class PackageEffects {
             return this.apiService.updateEmployee(employee.employeeId, employee).pipe(
                 mergeMap((employeeResolved) => {
                     this.dialogRef.close();
-                    this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Empleado editado exitosamente.' });
+                    var user = JSON.parse(localStorage.getItem('TokenPayload'))
+                    if (employee.userId == user.id) {
+                        this.messageService.add({
+                            key: 'alert-message',
+                            severity: 'success',
+                            summary: '¡Proceso completado!',
+                            detail: 'Información editada exitosamente.'
+                        });
+                        window.location.reload();
+                    } else {
+                        this.messageService.add({
+                            key: 'alert-message',
+                            severity: 'success',
+                            summary: '¡Proceso completado!',
+                            detail: 'Empleado editado exitosamente.'
+                        });
+                    }
                     return [
                         new EditEmployeeSuccess(employeeResolved),
                         new GetAllEmployeeRequest(),
