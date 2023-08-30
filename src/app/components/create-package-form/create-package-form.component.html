@@ -52,11 +52,13 @@
                 <span class="p-input-icon-left w-full">
                     <i class="pi pi-map-marker "></i>
                     <input class="w-full" pInputText type="text" formControlName="destination"
-                        tooltipStyleClass="tooltip" tooltipPosition="top" placeholder="Ingrese el lugar destino" required="true"
-                        ngx-google-places-autocomplete [options]="{
+                        tooltipStyleClass="tooltip" tooltipPosition="top" placeholder="Ingrese el lugar destino"
+                        required="true" ngx-google-places-autocomplete [options]="{
                             types: [],
                             componentRestrictions: null
-                        }" #placesRef="ngx-places" autocomplete="on" (onAddressChange)="onAddressChangeDestination($event)" onchange="onAddressChangeDestination($event)" />
+                        }" #placesRef="ngx-places" autocomplete="on"
+                        (onAddressChange)="onAddressChangeDestination($event)"
+                        onchange="onAddressChangeDestination($event)" />
                 </span>
                 <small *ngIf="formGroup.get('destination').errors?.['required'] && formGroup.get('destination')?.dirty"
                     class="p-error block">
@@ -74,7 +76,7 @@
                         ngx-google-places-autocomplete [options]="{
                         types: [],
                         componentRestrictions: null
-                    }" #placesRef="ngx-places" autocomplete="on"  (onAddressChange)="onAddressChange($event)" />
+                    }" #placesRef="ngx-places" autocomplete="on" (onAddressChange)="onAddressChange($event)" />
                 </span>
                 <small
                     *ngIf="formGroup.get('departurePoint').errors?.['required'] && formGroup.get('departurePoint')?.dirty"
@@ -87,9 +89,9 @@
     <div class="grid mb-3">
         <div class="col">
             <span class="field">
-                <p-calendar [style]="{ width: '100%' }" formControlName="departureDate" id="calendar" name="calendar"
-                    placeholder="Fecha de salida" showIcon="true" dateFormat="dd/mm/yy" [showTime]="true"
-                    [required]="true" [ngClass]="{
+                <p-calendar appendTo="body" [style]="{ width: '100%' }" formControlName="departureDate" id="calendar"
+                    name="calendar" placeholder="Fecha de salida" showIcon="true" dateFormat="dd/mm/yy"
+                    [showTime]="true" [required]="true" [ngClass]="{
                                 'border-red-600': formGroup.get('departureDate').dirty && formGroup.get('departureDate').invalid
                               }"></p-calendar>
             </span>
@@ -103,9 +105,9 @@
             </small>
         </div>
         <div class="col">
-            <p-calendar [style]="{ width: '100%' }" formControlName="arrivalDate" placeholder="Fecha de regreso"
-                showIcon="true" id="calendar" name="calendar" dateFormat="dd/mm/yy" [showTime]="true" [required]="true"
-                [ngClass]="{
+            <p-calendar appendTo="body" [style]="{ width: '100%' }" formControlName="arrivalDate"
+                placeholder="Fecha de regreso" showIcon="true" id="calendar" name="calendar" dateFormat="dd/mm/yy"
+                [showTime]="true" [required]="true" [ngClass]="{
                             'border-red-600': formGroup.get('arrivalDate').dirty && formGroup.get('arrivalDate').invalid
                           }"></p-calendar>
             <small class="p-error block"
@@ -127,8 +129,8 @@
                         ngx-google-places-autocomplete [options]="{
                             types: ['establishment'],
                             componentRestrictions: null
-                        }" #hotelPlacesRef="ngx-places" autocomplete="on"  (onAddressChange)="onHotelAddressChange($event)" 
-                        placeholder="Ingrese el nombre del hotel">
+                        }" #hotelPlacesRef="ngx-places" autocomplete="on"
+                        (onAddressChange)="onHotelAddressChange($event)" placeholder="Ingrese el nombre del hotel">
                 </span>
             </div>
         </div>
@@ -161,6 +163,10 @@
                     *ngIf="formGroup.get('price')?.dirty && formGroup.get('price')?.errors?.['required']">
                     Este campo es obligatorio
                 </small>
+                <small class="p-error block"
+                    *ngIf="formGroup.get('price')?.dirty && formGroup.get('price')?.errors?.['min']">
+                    El precio debe ser mayor a 0
+                </small>
             </div>
         </div>
         <div class="col">
@@ -181,10 +187,10 @@
         <input formControlName="photos" hidden>
     </div>
     <div class="flex justify-content-end">
-       
+
         <p-button *ngIf="!validForm()" label="Guardar" disabled="true" class=" mr-3" icon="pi pi-check"></p-button>
         <p-button *ngIf="validForm()" type="submit" label="Guardar" class=" mr-3" icon="pi pi-check"></p-button>
         <button pButton pRipple type="button" label="Cancelar" icon="pi pi-times" class="p-button-outlined"
-        (click)="cancel()"></button>
+            (click)="cancel()"></button>
     </div>
 </form>

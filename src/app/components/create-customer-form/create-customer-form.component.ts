@@ -8,6 +8,7 @@ import { UiState } from '@/store/ui/state';
 import { Observable } from 'rxjs';
 import { User } from '@/models/user';
 import { Role } from '@/models/role';
+import { GooglePlacesService } from '@services/google-places.service';
 import { ApiService } from '@services/api.service';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FrequentTraveler } from '@/models/frequentTraveler';
@@ -494,18 +495,18 @@ export class CreatecustomerformComponent implements OnInit {
   }
 
   cancel() {
-    if (this.oneCustomer !== undefined && this.user['role'] !== 'Cliente') {
-      if (this.oneCustomer.action === 'createFrequentTraveler') {
-        this.modalPrimeNg.close()
-        this.store.dispatch(new OpenModalListFrequentTraveler({ ...this.oneCustomer.customer }))
-      } else if (this.oneCustomer.action === 'editCustomerFromFrequentTraveler') {
-        this.modalPrimeNg.close()
-      } else {
-        this.modalPrimeNg.close()
-      }
-    } else {
-      this.modalPrimeNg.close()
-    }
+    this.modalPrimeNg.close()
+    // if (this.oneCustomer !== undefined && this.user['role'] !== 'Cliente') {
+    //   if (this.oneCustomer.action === 'createFrequentTraveler') {
+    //     this.modalPrimeNg.close()
+    //   } else if (this.oneCustomer.action === 'editCustomerFromFrequentTraveler') {
+    //     this.modalPrimeNg.close()
+    //   } else {
+    //     this.modalPrimeNg.close()
+    //   }
+    // } else {
+    //   this.modalPrimeNg.close()
+    // }
   }
 
 

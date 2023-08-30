@@ -182,13 +182,15 @@
         </div>
         <div class="col">
             <div class="field">
-                <p-calendar *ngIf="isEditingFrequentTraveler() || oneCustomer !== undefined" dateFormat="dd/mm/yy"
-                    formControlName="birthDate" placeholder="Ingrese su fecha de nacimiento" showIcon="true"
-                    required="true" [style]="{width: '100%'}" [readonlyInput]="true" [style.pointer-events]="'none'"
-                    [style.opacity]="0.5"></p-calendar>
-                <p-calendar *ngIf="!isEditingFrequentTraveler() && oneCustomer === undefined" dateFormat="dd/mm/yy" appendTo="body"
-                    formControlName="birthDate" placeholder="Ingrese su fecha de nacimiento" showIcon="true"
-                    required="true" [style]="{width: '100%'}" [readonlyInput]="true" [maxDate]="customerMaxDate"
+                <p-calendar *ngIf="oneCustomer !== undefined && oneCustomer.action !== 'createFrequentTraveler'"
+                    dateFormat="dd/mm/yy" formControlName="birthDate" placeholder="Ingrese su fecha de nacimiento"
+                    showIcon="true" required="true" [style]="{width: '100%'}" [readonlyInput]="true"
+                    [style.pointer-events]="'none'" [style.opacity]="0.5"></p-calendar>
+                <p-calendar
+                    *ngIf="oneCustomer === undefined || oneCustomer !== undefined && oneCustomer.action === 'createFrequentTraveler'"
+                    dateFormat="dd/mm/yy" appendTo="body" formControlName="birthDate"
+                    placeholder="Ingrese su fecha de nacimiento" showIcon="true" required="true"
+                    [style]="{width: '100%'}" [readonlyInput]="true" [maxDate]="customerMaxDate"
                     [defaultDate]="customerMaxDate"></p-calendar>
                 <small class="p-error block"
                     *ngIf="formGroup.get('birthDate')?.dirty && formGroup.get('birthDate')?.errors?.['required']">

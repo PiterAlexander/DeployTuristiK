@@ -125,12 +125,12 @@ export class RolesComponent implements OnInit {
           header: 'Confirmación',
           message: '¿Está seguro de eliminar a ' + role.name + '?',
           icon: 'pi pi-exclamation-triangle',
-          acceptIcon: 'pi pi-times ',
-          rejectIcon: 'pi pi-trash',
-          rejectLabel: 'Eliminar',
-          acceptLabel: 'Cancelar',
-          rejectButtonStyleClass: 'p-button-danger p-button-sm',
-          acceptButtonStyleClass: 'p-button-outlined p-button-sm',
+          acceptIcon: 'pi pi-trash',
+          rejectIcon: 'pi pi-times',
+          rejectLabel: 'Cancelar',
+          acceptLabel: 'Eliminar',
+          rejectButtonStyleClass: 'p-button-outlined p-button-sm',
+          acceptButtonStyleClass: 'p-button-danger p-button-sm',
           accept: () => {
             this.store.dispatch(new DeleteRoleRequest(role));
           },

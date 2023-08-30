@@ -139,8 +139,7 @@
                                     showLabel(beneficiarie.document) }}</span>
                             </div>
                             <div class="flex flex-column align-items-center text-center mb-3">
-                                <img [src]="beneficiarie.image" alt="Avatar"
-                                    class="w-8 shadow-2 my-3 mx-0" />
+                                <img [src]="beneficiarie.image" alt="Avatar" class="w-8 shadow-2 my-3 mx-0" />
                                 <div class="text-2xl font-bold">{{beneficiarie.name + ' ' + beneficiarie.lastName}}
                                 </div>
                                 <div><span pTooltip="Teléfono" tooltipPosition="bottom">{{ beneficiarie.phoneNumber
@@ -230,8 +229,9 @@
                         style="height:7px">
                         <div class="bg-primary border-round h-full" [class]="orderProcessingBar()"></div>
                     </div>
-                    <div class="border-round overflow-hidden surface-300 mb-3" style="height:7px">
-                        <div *ngIf="onePayment.order.status === 3" class="bg-red border-round h-full w-full"></div>
+                    <div *ngIf="onePayment.order.status === 3" class="border-round overflow-hidden surface-300 mb-3"
+                        style="height:7px">
+                        <div class="bg-red border-round h-full w-full"></div>
                     </div>
                     <div *ngIf="onePayment.order.status !== 3" class="flex w-full justify-content-between">
                         <span class="text-xs sm:text-base" [class]="orderProcessingLabel(0)">Pendiente</span>
