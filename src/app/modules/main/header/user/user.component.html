@@ -76,52 +76,7 @@
                             </div>
                         </div>
                     </li>
-                    <li *ngIf="user.role == 'Cliente'">
-                        <div
-                            class="flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round"
-                        >
-                            <span>
-                                <i class="pi pi-phone text-xl text-primary"></i>
-                            </span>
-                            <div class="ml-3">
-                                <span class="mb-2 font-semibold">Fecha de Nacimiento</span>
-                                <p class="text-color-secondary m-0">
-                                    {{ date }}
-                                </p>
-                            </div>
-                        </div>
-                    </li>
                     
-                    <li *ngIf="user.role == 'Cliente'">
-                        <div
-                            class="flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round"
-                        >
-                            <span>
-                                <i class="pi pi-phone text-xl text-primary"></i>
-                            </span>
-                            <div class="ml-3">
-                                <span class="mb-2 font-semibold">Dirección</span>
-                                <p class="text-color-secondary m-0">
-                                    {{ allInfo.address }}
-                                </p>
-                            </div>
-                        </div>
-                    </li>
-                    <li *ngIf="user.role == 'Cliente'">
-                        <div
-                            class="flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round"
-                        >
-                            <span>
-                                <i class="pi pi-phone text-xl text-primary"></i>
-                            </span>
-                            <div class="ml-3">
-                                <span class="mb-2 font-semibold">EPS</span>
-                                <p class="text-color-secondary m-0">
-                                    {{ allInfo.eps }}
-                                </p>
-                            </div>
-                        </div>
-                    </li>
                     
                 </ul>
             </p-tabPanel>
@@ -179,11 +134,11 @@
             </p-tabPanel>
         </p-tabView>
         <div
-            class="grid flex justify-content-center mr-1 sm:w-25rem"
+            class="grid flex justify-content-center mb-3 mr-1 sm:w-25rem"
             style="position: fixed; bottom: 0; right: 0"
         >
             <a
-                class="cursor-pointer flex mb-2 p-3 align-items-center border-1 border-round col-12 lg:col-9 border-primary bg-light"
+                class="cursor-pointer flex mb-3 p-3 align-items-center border-1 border-round col-12 lg:col-9 border-primary"
                 (click)="logoutConfirm($event)"
             >
                 <span>
