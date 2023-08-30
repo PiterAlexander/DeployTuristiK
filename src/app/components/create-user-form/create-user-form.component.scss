@@ -1,0 +1,11 @@
+::ng-deep {
+    .pac-container {
+        z-index: 11100 !important;
+        box-shadow: none;
+        border-left: 1px solid rgba(0, 0, 0, 0.3);
+        border-right: 1px solid rgba(0, 0, 0, 0.3);
+        .pac-item {
+            padding: 5px;
+        }
+    }
+}

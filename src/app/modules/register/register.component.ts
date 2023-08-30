@@ -248,7 +248,6 @@ export class RegisterComponent implements OnInit {
                 this.formGroup.get('address').setValue(extractedText);
             }
         }
-        console.log(address);
     }
 
     birthDateValidator() {

@@ -211,19 +211,41 @@
                 </div>
             </div>
         </div>
-        <div class="grid" *ngIf="admin == 2">
-            <div class="col-12">
-                <div class="field">
-                    <div class="p-input-icon-left w-full">
-                        <i class="pi pi-map-marker"></i>
-                        <input pInputText placeholder="Ingrese su dirección residencial" type="text"
-                            formControlName="address" class="w-full" />
-                    </div>
-                    <small class="p-error block"
-                        *ngIf="formGroup.get('address')?.errors?.['required'] && formGroup.get('address')?.dirty">
-                        Este campo es obligatorio
-                    </small>
-                </div>
+        <div class="p-fluid p-formgrid grid" *ngIf="admin == 2">
+            <div class="field col-12 w-full">
+                <span class="p-input-icon-left">
+                    <i class="pi pi-map-marker"></i>
+                    <input
+                        class="w-full"
+                        pInputText
+                        type="text"
+                        formControlName="address"
+                        placeholder="Dirección de residencia"
+                        required="true"
+                        ngx-google-places-autocomplete
+                        [options]="{
+                            types: [],
+                            componentRestrictions: null
+                        }"
+                        #placesRef="ngx-places"
+                        autocomplete="on"
+                        (onAddressChange)="onAddressChange($event)"
+                        onchange="onAddressChange($event)"
+                        [style]="{width: '15rem'}"
+                    />
+                </span>
+                <small
+                    class="p-error block"
+                    *ngIf="formGroup.get('address').dirty && formGroup.get('address')?.errors?.['required']"
+                >
+                    Este campo es obligatorio.
+                </small>
+                <small
+                    class="p-error block"
+                    *ngIf="formGroup.get('address').dirty && formGroup.get('address')?.errors?.['minlength']"
+                >
+                    Este campo debe tener mínimo 10 caracteres
+                </small>
             </div>
         </div>
     </div>

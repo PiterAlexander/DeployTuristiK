@@ -286,4 +286,23 @@ export class CreateUserFormComponent implements OnInit {
     this.results = filtered;
 
   }
+
+  onAddressChange(address: any) {
+    if (this.formGroup) {
+        const addressHtml = address.adr_address;
+        console.log(address);
+        const hiddenDiv = document.createElement('div');
+        hiddenDiv.style.display = 'none';
+        hiddenDiv.innerHTML = addressHtml;
+        const locality = hiddenDiv.querySelector('.locality')?.textContent || '';
+        const country = hiddenDiv.querySelector('.country-name')?.textContent || '';
+        const regionElements = hiddenDiv.querySelectorAll('.region');
+        if (regionElements.length >= 2) {
+            const region = regionElements[0].textContent || '';
+            const extractedText = `${address.name}, ${locality}, ${region}, ${country}`;
+            console.log(extractedText);
+            this.formGroup.get('address').setValue(extractedText);
+        }
+    }
+}
 }
