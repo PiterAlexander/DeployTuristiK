@@ -8,7 +8,7 @@
         placeholder="Ingrese el nombre del rol" class="w-full"
         pattern="^\s*(?:\S\s*){3,30}$"
           formControlName="name" minlength="3" maxlength="20" required="true"
-          onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)"/>
+          onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key) || event.key === '\\x{00AD}'"/>
         <small class="p-error block" *ngIf="(formGroup.get('name').dirty && formGroup.get('name')?.errors?.['required']) || isNaN()">
           Este campo es obligatorio
         </small>
@@ -59,10 +59,10 @@
   <div class="flex justify-content-end">
 
     <!-- Button to invalid form -->
-    <p-button *ngIf="!validForm()" icon="pi pi-check" label="Guardar" disabled="true"></p-button>
+    <p-button *ngIf="!validForm() || validateExistingRoleName()" icon="pi pi-check" label="Guardar" disabled="true"></p-button>
 
     <!-- Button to valid form -->
-    <p-button *ngIf="validForm()" type="submit" icon="pi pi-check" label="Guardar"></p-button>
+    <p-button *ngIf="validForm() && !validateExistingRoleName()" type="submit" icon="pi pi-check" label="Guardar"></p-button>
 
     <!-- Button to cancel -->
     <button type="button" pButton pRipple icon="pi pi-times" label="Cancelar" class="p-button p-button-outlined ml-3"
