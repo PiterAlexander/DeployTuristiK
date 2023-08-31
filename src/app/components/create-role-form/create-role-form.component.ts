@@ -68,7 +68,7 @@ export class CreateRoleFormComponent implements OnInit {
             name: new FormControl('', [
                 Validators.required,
                 Validators.minLength(3),
-                Validators.pattern(/^\s*(?:\S\s*){3,20}$/),
+                Validators.pattern(/^\s*(?:\S\s*){3,20}$/,),
                 Validators.maxLength(20)
             ]),
             status: [0, Validators.required],
@@ -335,18 +335,19 @@ export class CreateRoleFormComponent implements OnInit {
 
     validateExistingRoleName(): boolean {
         if (this.roleData == null) {
-            return this.allRoles.find(
-                (item) => item.name === this.formGroup.value.name.trim()
-            );
+          return this.allRoles.find(
+              (item) => item.name.toLowerCase() === this.formGroup.value.name.trim().toLowerCase()            );
         } else {
-            const name =
+
+          const name =
                 this.formGroup.value && this.formGroup.value.name
-                    ? this.formGroup.value.name.trim()
+                    ? this.formGroup.value.name.toLowerCase().trim()
                     : '';
-            return this.allRoles.find(
-                (item) =>
-                    item.name === name && item.roleId !== this.roleData.roleId
-            );
+
+          return this.allRoles.find(
+              (item) =>
+                  item.name.toLowerCase() === name && item.roleId !== this.roleData.roleId
+          );
         }
     }
 
