@@ -26,9 +26,9 @@
             </ul>
             <div class="flex flex-wrap">
                 <div class="col-12 md:col-7 h-full">
-                    <div class="flex flex-wrap-3 pb-3">
-                        <div class="w-full lg:w-6 pr-2">
-                            <form novalidate [formGroup]="formGroup">
+                    <form novalidate [formGroup]="formGroup">
+                        <div class="flex flex-wrap-3 pb-3">
+                            <div class="w-full lg:w-6 pr-2">
                                 <span class="font-medium text-900">Formulario de Abono</span>
                                 <div class="mt-3">
                                     <div class="field">
@@ -76,77 +76,81 @@
                                         chooseLabel="Cargar Comprobante" (onSelect)="hasBeenSelected = true"
                                         [pTooltip]="fileTooltip()" tooltipPosition="bottom"></p-fileUpload>
                                 </div>
-                            </form>
+                            </div>
+                            <div class="w-full lg:w-6 pl-3 lg:pl-0 lg:pr-3 flex align-items-end mb-5 lg:mt-0">
+                                <ul class="list-none p-0 m-0 w-full">
+                                    <li class="mb-3"><span class="font-medium text-900">Resumen del pedido</span></li>
+                                    <li class="flex justify-content-between mb-3">
+                                        <span *ngIf="!fromCreatePayment() && !higherRemainingAmountFromRetryPayment"
+                                            class="text-900">Monto inicial
+                                            - (20%)</span>
+                                        <span *ngIf="fromCreatePayment() && !higherRemainingAmountFromRetryPayment"
+                                            class="text-900">Restante</span>
+                                        <span *ngIf="!fromCreatePayment() && higherRemainingAmountFromRetryPayment"
+                                            class="text-900">Restante</span>
+                                        <span class="text-900 font-medium text-lg">${{ remainingAmount | currency:'
+                                            ':false:'1.0-0'
+                                            }} COP</span>
+                                    </li>
+                                    <li class="flex justify-content-between border-top-1 surface-border py-3">
+                                        <span class="text-900 font-medium">Total</span>
+                                        <span class="text-900 font-bold text-lg">${{ totalCost | currency:'
+                                            ':false:'1.0-0'
+                                            }}
+                                            COP</span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <div class="w-full lg:w-6 pl-3 lg:pl-0 lg:pr-3 flex align-items-end mb-5 lg:mt-0">
+                        <div class="w-full lg:w-12 pl-3 lg:pl-0 lg:pr-3 flex align-items-end mt-5 mb-1 lg:mt-0">
                             <ul class="list-none p-0 m-0 w-full">
-                                <li class="mb-3"><span class="font-medium text-900">Resumen del pedido</span></li>
+                                <li class="p-2 mb-3 bg-indigo-50"><span class=" flex font-medium text-900">Información
+                                        Bancaria</span>
+                                </li>
                                 <li class="flex justify-content-between mb-3">
-                                    <span *ngIf="!fromCreatePayment() && !higherRemainingAmountFromRetryPayment"
-                                        class="text-900">Monto inicial
-                                        - (20%)</span>
-                                    <span *ngIf="fromCreatePayment() && !higherRemainingAmountFromRetryPayment"
-                                        class="text-900">Restante</span>
-                                    <span *ngIf="!fromCreatePayment() && higherRemainingAmountFromRetryPayment"
-                                        class="text-900">Restante</span>
-                                    <span class="text-900 font-medium text-lg">${{ remainingAmount | currency:'
-                                        ':false:'1.0-0'
-                                        }} COP</span>
+                                    <span class="text-900">Titular</span>
+                                    <span class="text-900 font-medium text-lg">Esteban Muñoz Benítez</span>
+                                </li>
+                                <li class="flex justify-content-between mb-3">
+                                    <span class="text-900">C.C</span>
+                                    <span class="text-900 font-medium text-lg">1023626332</span>
+                                </li>
+                                <li class="flex justify-content-between mb-3">
+                                    <span class="text-900">Entidad Bancaria</span>
+                                    <span class="text-900 font-medium text-lg">Bancolombia</span>
+                                </li>
+                                <li class="flex justify-content-between mb-3">
+                                    <span class="text-900">Tipo de Cuenta</span>
+                                    <span class="text-900 font-medium text-lg">Ahorros</span>
                                 </li>
                                 <li class="flex justify-content-between border-top-1 surface-border py-3">
-                                    <span class="text-900 font-medium">Total</span>
-                                    <span class="text-900 font-bold text-lg">${{ totalCost | currency:' ':false:'1.0-0'
-                                        }}
-                                        COP</span>
+                                    <span class="text-900 font-medium">Número de Cuenta</span>
+                                    <span class="text-900 font-bold text-lg">36633840312</span>
                                 </li>
                             </ul>
                         </div>
-                    </div>
-                    <div class="w-full lg:w-12 pl-3 lg:pl-0 lg:pr-3 flex align-items-end mt-5 mb-1 lg:mt-0">
-                        <ul class="list-none p-0 m-0 w-full">
-                            <li class="p-2 mb-3 bg-indigo-50"><span class=" flex font-medium text-900">Información
-                                    Bancaria</span>
-                            </li>
-                            <li class="flex justify-content-between mb-3">
-                                <span class="text-900">Titular</span>
-                                <span class="text-900 font-medium text-lg">Esteban Muñoz Benítez</span>
-                            </li>
-                            <li class="flex justify-content-between mb-3">
-                                <span class="text-900">C.C</span>
-                                <span class="text-900 font-medium text-lg">1023626332</span>
-                            </li>
-                            <li class="flex justify-content-between mb-3">
-                                <span class="text-900">Entidad Bancaria</span>
-                                <span class="text-900 font-medium text-lg">Bancolombia</span>
-                            </li>
-                            <li class="flex justify-content-between mb-3">
-                                <span class="text-900">Tipo de Cuenta</span>
-                                <span class="text-900 font-medium text-lg">Ahorros</span>
-                            </li>
-                            <li class="flex justify-content-between border-top-1 surface-border py-3">
-                                <span class="text-900 font-medium">Número de Cuenta</span>
-                                <span class="text-900 font-bold text-lg">36633840312</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="field-checkbox mb-2">
-                        <p-checkbox [binary]="true" formControlName="titularAsBeneficiarie"
-                            inputId="titularAsBeneficiarie"></p-checkbox>
-                        <label for="titularAsBeneficiarie" class="mb-0">
-                            He leído y acepto los <a
-                                class="text-700 cursor-pointer hover:text-primary cursor-pointer transition-colors transition-duration-300">Términos
-                                y Condiciones.</a></label>
-                    </div>
-                    <div class="flex justify-content-end">
-                        <div class="flex align-items-end">
-                            <button pButton pRipple type="button" (click)="back()" label="Regresar"
-                                icon="pi pi-angle-left" class="p-button-outlined mr-3"></button>
-                            <p-button *ngIf="validForm() && imageFile !== undefined" (click)="save()" label="Guardar"
-                                icon="pi pi-check"></p-button>
-                            <p-button *ngIf="!validForm() || imageFile === undefined" label="Guardar" icon="pi pi-check"
-                                disabled="true"></p-button>
+                        <div class="field-checkbox mb-2">
+                            <p-checkbox formControlName="termsAndConditions" value="check"
+                                inputId="termsAndConditions"></p-checkbox>
+                            <label class="mr-1 mt-2 ml-2 font-normal" for="termsAndConditions">
+                                He leído y acepto los
+                                <a href="../../../assets/TerminosYCondiciones.pdf" class="mr-2" target="_blank">
+                                    términos y condiciones.</a>
+                            </label>
                         </div>
-                    </div>
+                        <div class="flex justify-content-end">
+                            <div class="flex align-items-end">
+                                <button pButton pRipple type="button" (click)="back()" label="Regresar"
+                                    icon="pi pi-angle-left" class="p-button-outlined mr-3"></button>
+                                <p-button
+                                    *ngIf="validForm() && imageFile !== undefined"
+                                    (click)="save()" label="Guardar" icon="pi pi-check"></p-button>
+                                <p-button
+                                    *ngIf="!validForm() || imageFile === undefined"
+                                    label="Guardar" icon="pi pi-check" disabled="true"></p-button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div class="col-12 md:col-5 mt-5 md:mt-0">
                     <div class="flex flex-column align-items-center justify-content-center h-full pb-3 pt-0 px-3">
@@ -165,7 +169,8 @@
                                 correspondiente.
                             </p-accordionTab>
                             <p-accordionTab header="Causal de Rechazo II" class="line-height-3 m-0">
-                                Su abono será rechazado en caso de que la transferencia no se vea reflejada en la Cuenta Bancaría citada.
+                                Su abono será rechazado en caso de que la transferencia no se vea reflejada en la Cuenta
+                                Bancaría citada.
                             </p-accordionTab>
                         </p-accordion>
                     </div>

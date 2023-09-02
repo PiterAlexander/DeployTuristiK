@@ -7,11 +7,10 @@ import { AppState } from '@/store/state';
 import { AdminMailReceptionRequest, AdminMailReceptionToCustomerRequest, EditOrderRequest, SaveOrderProcess, } from '@/store/ui/actions';
 import { UiState } from '@/store/ui/state';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { ApiService } from '@services/api.service';
 import { Observable } from 'rxjs';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FrequentTraveler } from '@/models/frequentTraveler';
 import { MessageService } from 'primeng/api';
 import { SelectItem } from 'primeng/api';
@@ -69,7 +68,8 @@ export class CreatePaymentFormComponent implements OnInit {
     })
 
     this.formGroup = this.fb.group({
-      amount: [null, Validators.required],
+      amount: new FormControl(null, [Validators.required]),
+      termsAndConditions: new FormControl(null, [Validators.required]),
     })
 
     this.acceptedFiles = ".png, .jpg, .jpeg"
@@ -230,9 +230,8 @@ export class CreatePaymentFormComponent implements OnInit {
   }
 
   validForm(): boolean {
-    return this.formGroup.value.amount !== null
+    return this.formGroup.valid
   }
-
 
   editPackage(onePackage: Package) {
     const updatePackage: Package = {

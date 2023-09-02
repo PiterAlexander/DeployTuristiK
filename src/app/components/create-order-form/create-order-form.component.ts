@@ -10,7 +10,9 @@ import { User } from '@/models/user';
 import { Customer } from '@/models/customer';
 import { Package } from '@/models/package';
 import { Router } from '@angular/router';
-import { GetAllCustomerRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, SaveOrderProcess } from '@/store/ui/actions';
+import { differenceInMonths, isBefore } from 'date-fns';
+import { GetAllCustomerRequest, GetAllOrdersRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, SaveOrderProcess } from '@/store/ui/actions';
+import { Order } from '@/models/order';
 
 @Component({
   selector: 'app-create-order-form',
@@ -23,6 +25,7 @@ export class CreateOrderFormComponent implements OnInit {
   public formGroup: FormGroup
   public allRoles: Array<Role>
   public allUsers: Array<User>
+  public allOrders: Array<Order>
   public oneUser: User | undefined
   public allCustomers: Array<Customer>
   public allPackages: Array<Package>
@@ -31,6 +34,7 @@ export class CreateOrderFormComponent implements OnInit {
   public beneficiariesAmount: number
   public allDocuments: Array<string> = []
   public results: string[];
+  public packagesToShow: Array<Package> = []
 
   constructor(
     private store: Store<AppState>,
@@ -42,6 +46,7 @@ export class CreateOrderFormComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(new GetAllRoleRequest)
     this.store.dispatch(new GetUsersRequest)
+    this.store.dispatch(new GetAllOrdersRequest)
     this.store.dispatch(new GetAllCustomerRequest)
     this.store.dispatch(new GetAllPackagesRequest)
     this.ui = this.store.select('ui')
@@ -49,6 +54,7 @@ export class CreateOrderFormComponent implements OnInit {
       this.allRoles = state.allRoles.data
       this.allUsers = state.allUsers.data
       this.allCustomers = state.allCustomers.data
+      this.allOrders = state.allOrders.data
       this.allPackages = state.allPackages.data
       this.orderProcess = state.orderProcess.data
       if (this.allCustomers !== undefined) {
@@ -65,6 +71,30 @@ export class CreateOrderFormComponent implements OnInit {
                       this.allDocuments.push(element.document)
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+      if (this.allPackages !== undefined) {
+        for (const element of this.allPackages) {
+          if (element !== undefined) {
+            // Obtener la fecha actual
+            const currentDate = new Date();
+            const departureDateConverted = new Date(element.departureDate);
+
+            // Comprobar si la fecha actual es después de departureDate
+            if (isBefore(currentDate, departureDateConverted)) {
+              // Calcular la diferencia en meses
+              const monthsDifference = differenceInMonths(departureDateConverted, currentDate);
+
+              // Si la diferencia es de un mes o más, ejecuta tu código aquí
+              if (monthsDifference >= 1) {
+                // Tu código aquí
+                const alreadyExist = this.packagesToShow.find(p => p.packageId === element.packageId)
+                if (alreadyExist === undefined) {
+                  this.packagesToShow.push(element)
                 }
               }
             }
@@ -99,6 +129,29 @@ export class CreateOrderFormComponent implements OnInit {
         titularAsBeneficiarie: false
       })
     }
+  }
+
+  alreadyHasAnOrder(): boolean {
+    const oneCustomer: Customer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
+    const onePackage: Package = this.allPackages.find(p => p.packageId === this.formGroup.value.packageId)
+    if (oneCustomer !== undefined && onePackage !== undefined) {
+      if (this.allOrders !== undefined) {
+        const customerOrders: Array<Order> = []
+        for (const order of this.allOrders) {
+          if (order !== undefined && order.customerId === oneCustomer.customerId) {
+            customerOrders.push(order)
+          }
+        }
+        if (customerOrders.length > 0) {
+          for (const order of customerOrders) {
+            if (order !== undefined && order.packageId === onePackage.packageId) {
+              return true
+            }
+          }
+        }
+      }
+    }
+    return false
   }
 
   searchDocument(event: any) {
@@ -147,7 +200,7 @@ export class CreateOrderFormComponent implements OnInit {
     return this.formGroup.valid &&
       this.formGroup.value.document !== null && this.formGroup.value.PackageId !== 0 &&
       this.formGroup.value.beneficiariesAmount > 0 &&
-      this.validateBeneficiaries() && this.validateExistingBeneficiariesAmount() && this.validateOnlyNumbersForBeneficiaries()
+      this.validateBeneficiaries() && this.validateExistingBeneficiariesAmount() && this.validateOnlyNumbersForBeneficiaries() && !this.alreadyHasAnOrder()
   }
 
   validateOnlyNumbersForBeneficiaries(): boolean {
