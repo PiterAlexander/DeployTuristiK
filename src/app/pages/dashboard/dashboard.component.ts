@@ -33,17 +33,20 @@ export class DashboardComponent implements OnInit {
     public packagesList: Array<Package>;
     public allCustomers: Array<Customer>;
     public ordersList: Array<Order> = [];
-    public porAbo: number;
-    public porVen: number;
     public customerCount: number;
     public paymentCurrentMonth: number;
-    public paymentLastMonth: number;
     public ordersCurrentMonth: number;
-    public ordersLastMonth: number;
     ageChartData: any;
     chartData: any; // Puedes ajustar el tipo según el formato de datos del gráfico
     chartOptions: any;
     public lineChartData: any = {};
+
+    showDate: string;
+    basicData: any;
+    barOptions: any;
+    selectedYear: any;
+    years: Array<number> = [2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035];
+
 
     public lineChartOptions: any = {
         legend: {
@@ -75,6 +78,8 @@ export class DashboardComponent implements OnInit {
             this.initValues();
             this.initAgeChartData();
         });
+
+
     }
 
     initAgeChartData() {
@@ -161,14 +166,10 @@ export class DashboardComponent implements OnInit {
 
     initValues() {
         const currentDate = new Date();
+        this.showDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + "/" + currentDate.getFullYear().toString().slice(-2);
 
         this.ordersCurrentMonth = 0
-        this.ordersLastMonth = 0
-        this.porVen = 0
         this.paymentCurrentMonth = 0;
-        this.paymentLastMonth = 0;
-        this.porAbo = 0;
-
 
 
         for (let i = 0; i < this.ordersList.length; i++) {
@@ -178,21 +179,8 @@ export class DashboardComponent implements OnInit {
                 date.getFullYear() == currentDate.getFullYear()
             ) {
                 this.ordersCurrentMonth += this.ordersList[i].totalCost;
-            } else if (
-                currentDate.getMonth() == 0 &&
-                date.getMonth() == 11 &&
-                date.getFullYear() == currentDate.getFullYear() - 1
-            ) {
-                this.ordersLastMonth += this.ordersList[i].totalCost
-            } else if (
-                date.getMonth() == currentDate.getMonth() - 1 &&
-                date.getFullYear() == currentDate.getFullYear()
-            ) {
-                this.ordersLastMonth += this.ordersList[i].totalCost;
             }
         }
-        this.porVen = ((this.ordersCurrentMonth - this.ordersLastMonth) / this.ordersCurrentMonth) * 100;
-
 
 
         for (let i = 0; i < this.payments.length; i++) {
@@ -202,23 +190,13 @@ export class DashboardComponent implements OnInit {
                 date.getFullYear() == currentDate.getFullYear()
             ) {
                 this.paymentCurrentMonth += this.payments[i].amount;
-            } else if (
-                currentDate.getMonth() == 0 &&
-                date.getMonth() == 11 &&
-                date.getFullYear() == currentDate.getFullYear() - 1
-            ) {
-                this.paymentLastMonth += this.payments[i].amount;
-            } else if (
-                date.getMonth() == currentDate.getMonth() - 1 &&
-                date.getFullYear() == currentDate.getFullYear()
-            ) {
-                this.paymentLastMonth += this.payments[i].amount;
             }
         }
-        this.porAbo = ((this.paymentCurrentMonth - this.paymentLastMonth) / this.paymentCurrentMonth) * 100;
 
 
         this.customerCount = this.customers.length;
+
+        this.initSecondChart(currentDate.getFullYear());
     }
 
     calculateAgeData(
@@ -244,5 +222,113 @@ export class DashboardComponent implements OnInit {
         });
         return ageData;
 
+    }
+
+    initSecondChart(year: number) {
+        const documentStyle = getComputedStyle(document.documentElement);
+        const textColor = documentStyle.getPropertyValue('--text-color');
+        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+        const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+
+        var arraytotalOrders: Array<number> = []
+        var arraytotalpayments: Array<number> = []
+
+
+
+        for (let i = 0; i < 12; i++) {
+            const currentDate = new Date();
+            var datitaVentas: number = 0
+            var datitaPayments: number = 0
+            for (let j = 0; j < this.ordersList.length; j++) {
+
+                const date = new Date(this.ordersList[j].orderDate);
+                if (
+                    date.getMonth() == i &&
+                    date.getFullYear() == year
+                ) {
+                    datitaVentas += this.ordersList[j].totalCost;
+                }
+            }
+            arraytotalOrders.push(datitaVentas)
+
+
+            for (let k = 0; k < this.payments.length; k++) {
+                const date = new Date(this.payments[k].date);
+                if (
+                    date.getMonth() == i &&
+                    date.getFullYear() == year
+                ) {
+                    datitaPayments += this.payments[k].amount;
+                }
+            }
+
+            arraytotalpayments.push(datitaPayments)
+
+
+        }
+
+        this.basicData = {
+
+            labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            datasets: [
+                {
+                    label: 'Total Ventas',
+                    backgroundColor: documentStyle.getPropertyValue('--primary-500'),
+                    barThickness: 12,
+                    borderRadius: 12,
+                    data: arraytotalOrders
+                },
+                {
+                    label: 'Total Ingresos',
+                    backgroundColor: documentStyle.getPropertyValue('--primary-200'),
+                    barThickness: 12,
+                    borderRadius: 12,
+                    data: arraytotalpayments
+                }
+            ]
+        };
+
+        this.barOptions = {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: textColor,
+                        usePointStyle: true,
+                        font: {
+                            weight: 700,
+                        },
+                        padding: 28
+                    },
+                    position: 'bottom'
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: textColorSecondary,
+                        font: {
+                            weight: 500
+                        }
+                    },
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: textColorSecondary
+                    },
+                    grid: {
+                        color: surfaceBorder,
+                        drawBorder: false
+                    }
+                }
+            }
+        };
+    }
+
+    onYearChange() {
+        this.initSecondChart(this.selectedYear)
     }
 }
