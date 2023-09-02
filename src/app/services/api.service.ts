@@ -111,6 +111,14 @@ export class ApiService {
     paymentRejection(model: paymentStatusMail) {
         return this.http.post<any>(`${this.endpoint}api/Email/SendPaymentRejection`, model)
     }
+
+    orderCancellation(model: paymentStatusMail) {
+        return this.http.post<any>(`${this.endpoint}api/Email/SendOrderCancellation`, model)
+    }
+
+    orderActivation(model: paymentStatusMail) {
+        return this.http.post<any>(`${this.endpoint}api/Email/SendOrderActivation`, model)
+    }
     //<----------------->
 
     //<----------------->

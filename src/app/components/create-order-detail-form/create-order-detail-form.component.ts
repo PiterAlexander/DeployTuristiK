@@ -77,27 +77,27 @@ export class CreateOrderDetailFormComponent implements OnInit {
     this.allEps = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS']
 
     this.beneficiariesImages = [
-      'https://img.freepik.com/vector-gratis/ilustracion-icono-vector-dibujos-animados-perro-lindo-jugando-bola-concepto-icono-deporte-animal-aislado-premium-vector-estilo-dibujos-animados-plana_138676-4121.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
-      'https://img.freepik.com/vector-gratis/elefante-lindo-ilustracion-icono-vector-dibujos-animados-mano-signo-amor-concepto-icono-naturaleza-animal-aislado-premium-vector-estilo-dibujos-animados-plana_138676-4107.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
-      'https://img.freepik.com/vector-gratis/lindo-hamster-sosteniendo-ilustracion-dibujos-animados-mejilla_138676-2773.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
-      'https://img.freepik.com/vector-gratis/lindo-oveja-agitando-mano-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-plano_138676-4518.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
-      'https://img.freepik.com/vector-gratis/linda-tortuga-chef-cocinando-ilustracion-dibujos-animados_138676-3230.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
-      'https://img.freepik.com/vector-gratis/lindo-panda-respeto-bambu-bandera-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado_138676-4410.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
-      'https://img.freepik.com/vector-gratis/lindo-unicornio-durmiendo-luna-celebracion-estrella-dibujos-animados-vector-icono-ilustracion-icono-naturaleza-animal_138676-6433.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
-      'https://img.freepik.com/vector-premium/cute-sheep-super-hero-cartoon-vector-icono-ilustracion-animal-vacaciones-icono-concepto-aislado-plano_138676-9238.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
-      'https://img.freepik.com/vector-gratis/cute-panda-summer-waving-hand-cartoon-vector-icon-illustration-concepto-icono-vacaciones-animales-aislado_138676-7160.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587'
+      'assets/img/avatars/od/beneficiaries/perro-futbol.jpeg',
+      'assets/img/avatars/od/beneficiaries/elefante.jpeg',
+      'assets/img/avatars/od/beneficiaries/hamster.jpeg',
+      'assets/img/avatars/od/beneficiaries/oveja.jpeg',
+      'assets/img/avatars/od/beneficiaries/tortuga-chef.jpeg',
+      'assets/img/avatars/od/beneficiaries/panda-bambu.jpeg',
+      'assets/img/avatars/od/beneficiaries/unicornio-luna.jpeg',
+      'assets/img/avatars/od/beneficiaries/dinosaurio.jpeg',
+      'assets/img/avatars/od/beneficiaries/panda-gafas.jpeg'
     ]
 
     this.customerImages = [
-      'https://img.freepik.com/vector-gratis/lindo-husky-perro-sentado-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-premium_138676-4567.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
-      'https://img.freepik.com/vector-gratis/lindo-unicornio-bebiendo-te-leche-boba-ilustracion-icono-vector-dibujos-animados-arco-iris-icono-bebida-animal_138676-7412.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
-      'https://img.freepik.com/vector-gratis/cute-rhino-gaming-cartoon-vector-icon-ilustracion-animal-tecnologia-icono-concepto-aislado-premium_138676-7638.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
-      'https://img.freepik.com/vector-gratis/lindo-elefante-sentado-agitando-mano-dibujos-animados-vector-icono-ilustracion_138676-2220.jpg?size=626&ext=jpg&ga=GA1.1.439880410.1692375587',
-      'https://img.freepik.com/vector-gratis/lindo-vaca-sentado-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-premium-plano_138676-7823.jpg?size=626&ext=jpg&ga=GA1.1.439880410.1692375587',
-      'https://img.freepik.com/vector-gratis/ilustracion-icono-vector-dibujos-animados-lindo-sentado-cebra-concepto-icono-naturaleza-animal-aislado-vector-premium-estilo-dibujos-animados-plana_138676-3465.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
-      'https://img.freepik.com/vector-gratis/lindo-unicornio-montando-bicicleta-agitando-mano-dibujos-animados-vector-icono-ilustracion-transporte-animales_138676-6444.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
-      'https://img.freepik.com/vector-gratis/lindo-gato-jugando-mano-telefono-dibujos-animados-vector-icono-ilustracion-concepto-icono-tecnologia-animal-aislado-premium-vector-estilo-dibujos-animados-plana_138676-4231.jpg?size=626&ext=jpg&ga=GA1.1.439880410.1692375587',
-      'https://img.freepik.com/vector-gratis/lindo-pan-chef-agitando-mano-dibujos-animados-vector-icono-ilustracion-comida-objeto-icono-concepto-aislado-plano_138676-4562.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
+      'assets/img/avatars/od/customers/husky.jpeg',
+      'assets/img/avatars/od/customers/unicornio-bebiendo.jpeg',
+      'assets/img/avatars/od/customers/rino-gamer.jpeg',
+      'assets/img/avatars/od/customers/elefante-saludando.jpeg',
+      'assets/img/avatars/od/customers/vaca-sentada.jpeg',
+      'assets/img/avatars/od/customers/cebra-sentada.jpeg',
+      'assets/img/avatars/od/customers/unicornio-bici.jpeg',
+      'assets/img/avatars/od/customers/gato-telefono.jpeg',
+      'assets/img/avatars/od/customers/pan-chef.jpeg',
     ]
 
     this.sortOptions = [
@@ -372,13 +372,13 @@ export class CreateOrderDetailFormComponent implements OnInit {
     if (this.role === 'Cliente') {
       const oneCustomer: Customer = this.allCustomers.find(c => c.userId === this.user['id'])
       if (oneCustomer !== undefined && oneCustomer.document === document) {
-        return 'https://img.freepik.com/vector-gratis/lindo-slot-sentado-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-premium-plano_138676-4995.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587'
+        return 'assets/img/avatars/titular.jpeg'
       } else {
         return this.nonTitularImage(document)
       }
     } else {
       if (this.orderProcess.order.customer.document === document) {
-        return 'https://img.freepik.com/vector-gratis/lindo-slot-sentado-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-premium-plano_138676-4995.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587'
+        return 'assets/img/avatars/titular.jpeg'
       } else {
         return this.nonTitularImage(document)
       }
@@ -883,7 +883,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
     this.router.navigate(['Home/ProcesoAbonos/asas'])
   }
 
-  nextFromEditOrderDetail() {
+  async nextFromEditOrderDetail() {
     const customer: Customer = {
       customerId: this.orderProcess.customer.customerId,
       name: this.formGroup.value.name,

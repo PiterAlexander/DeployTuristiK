@@ -31,19 +31,19 @@ export class ListFrequentTravelerComponent implements OnInit {
   public visible: boolean = true
   public customerId: string
   public showAddButton: number = 0
-  public firstItem: boolean
+  public index: number = 0
   avatars: string[] = [
-    'https://img.freepik.com/vector-gratis/ilustracion-icono-vector-dibujos-animados-lindo-gato-sentado-concepto-icono-naturaleza-animal-aislado-premium-vector-estilo-dibujos-animados-plana_138676-4148.jpg?w=740&t=st=1692921535~exp=1692922135~hmac=3bed835feabe03cfb5aa9d45ae688588799d42b98f2faf54655759ba61b30a45',
-    'https://img.freepik.com/vector-gratis/ilustracion-icono-vector-dibujos-animados-lindo-gato-bostezo-sonoliento-concepto-icono-naturaleza-animal-aislado-vector-premium-estilo-dibujos-animados-plana_138676-3732.jpg?size=626&ext=jpg&ga=GA1.1.439880410.1692375587',
-    'https://img.freepik.com/vector-gratis/raton-lindo-sentado-ilustracion-icono-vector-dibujos-animados-queso-concepto-icono-alimento-animal-aislado_138676-5860.jpg?size=626&ext=jpg&ga=GA1.1.439880410.1692375587',
-    'https://img.freepik.com/vector-gratis/lindo-panda-bambu-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-vector-aislado_138676-4386.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
-    'https://img.freepik.com/vector-gratis/lindo-cerdo-sentado-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-premium-plano_138676-7818.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
-    'https://img.freepik.com/vector-gratis/linda-vaca-sentada-comiendo-hierba-cartoon-vector-icono-ilustracion-animal-naturaleza-icono-aislado-plano_138676-4780.jpg?size=626&ext=jpg&ga=GA1.2.439880410.1692375587',
-    'https://img.freepik.com/vector-gratis/lindo-gato-durmiendo-pollito-cartoon-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado_138676-5228.jpg?size=626&ext=jpg&ga=GA1.1.439880410.1692375587',
-    'https://img.freepik.com/vector-gratis/gato-lindo-ejemplo-icono-vector-historieta-agujero-concepto-icono-naturaleza-animal-aislado-premium-vector-estilo-dibujos-animados-plana_138676-4236.jpg?size=626&ext=jpg&ga=GA1.1.439880410.1692375587',
-    'https://img.freepik.com/vector-gratis/ilustracion-icono-vector-dibujos-animados-lindo-conejo-sentado-concepto-icono-naturaleza-animal-plano-aislado_138676-7351.jpg?size=626&ext=jpg&ga=GA1.1.439880410.1692375587',
-    'https://img.freepik.com/vector-gratis/ilustracion-icono-vector-dibujos-animados-pie-ardilla-linda-naturaleza-animal-icono-concepto-aislado-premium_138676-6545.jpg?size=626&ext=jpg&ga=GA1.1.439880410.1692375587',
-    'https://img.freepik.com/vector-gratis/lindo-gato-jugando-mano-telefono-dibujos-animados-vector-icono-ilustracion-concepto-icono-tecnologia-animal-aislado-premium-vector-estilo-dibujos-animados-plana_138676-4231.jpg?size=626&ext=jpg&ga=GA1.1.439880410.1692375587'
+    'assets/img/avatars/ft/gato-sentado.jpeg',
+    'assets/img/avatars/ft/gato-bostezo.jpeg',
+    'assets/img/avatars/ft/raton.jpeg',
+    'assets/img/avatars/ft/panda-bambu.jpeg',
+    'assets/img/avatars/ft/cerdo.jpeg',
+    'assets/img/avatars/ft/vaca-hierba.jpeg',
+    'assets/img/avatars/ft/gato-pollo.jpeg',
+    'assets/img/avatars/ft/gato-hueco.jpeg',
+    'assets/img/avatars/ft/conejo.jpeg',
+    'assets/img/avatars/ft/ardilla.jpeg',
+    'assets/img/avatars/ft/gato-telefono.jpeg'
   ];
 
   constructor(
@@ -80,6 +80,8 @@ export class ListFrequentTravelerComponent implements OnInit {
     }
   }
   compareCustomerId() {
+    console.log(this.index);
+
     if (this.allCustomers !== undefined) {
       const frequentTraveler: any = {
         addFtButton: true
@@ -94,7 +96,6 @@ export class ListFrequentTravelerComponent implements OnInit {
         this.oneCustomer = this.allCustomers.find(c => c.userId === this.user['id'])
       }
       if (this.oneCustomer !== undefined && this.oneCustomer.frequentTraveler.length > 0) {
-        let index: number = 0
         for (const element of this.oneCustomer.frequentTraveler) {
           const customer = this.allCustomers.find(c => c.customerId === element.travelerId)
           if (customer !== undefined) {
@@ -109,16 +110,16 @@ export class ListFrequentTravelerComponent implements OnInit {
               eps: customer.eps,
               userId: customer.userId,
               user: customer.user,
-              img: this.avatars[index],
+              img: this.avatars[this.index],
               addFtButton: false
             }
             const alreadyExists: Customer = this.frequentTravelersList.find(o => o.customerId === element.travelerId)
             if (alreadyExists === undefined) {
               this.frequentTravelersList.push(frequentTraveler)
-              if (index === 10) {
-                index = 0
+              if (this.index === 10) {
+                this.index = 0
               } else {
-                index++
+                this.index++
               }
             }
           }

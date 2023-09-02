@@ -18,6 +18,6 @@ export interface mailRecepcion {
 
 export interface paymentStatusMail {
     orderId: string,
-    paymentId: string,
+    paymentId?: string,
     cause?: string
 }

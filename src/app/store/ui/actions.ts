@@ -278,7 +278,15 @@ export enum orderActions {
 
   SEND_PAYMENT_REJECTION_REQUEST = '[PAYMENT] SEND_PAYMENT_REJECTION_REQUEST',
   SEND_PAYMENT_REJECTION_SUCCESS = '[PAYMENT] SEND_PAYMENT_REJECTION_SUCCESS',
-  SEND_PAYMENT_REJECTION_FAILURE = '[PAYMENT] SEND_PAYMENT_REJECTION_FAILURE'
+  SEND_PAYMENT_REJECTION_FAILURE = '[PAYMENT] SEND_PAYMENT_REJECTION_FAILURE',
+
+  SEND_ORDER_CANCELLATION_REQUEST = '[ORDER] SEND_ORDER_CANCELLATION_REQUEST',
+  SEND_ORDER_CANCELLATION_SUCCESS = '[ORDER] SEND_ORDER_CANCELLATION_SUCCESS',
+  SEND_ORDER_CANCELLATION_FAILURE = '[ORDER] SEND_ORDER_CANCELLATION_FAILURE',
+
+  SEND_ORDER_ACTIVATION_REQUEST = '[ORDER] SEND_ORDER_ACTIVATION_REQUEST',
+  SEND_ORDER_ACTIVATION_SUCCESS = '[ORDER] SEND_ORDER_ACTIVATION_SUCCESS',
+  SEND_ORDER_ACTIVATION_FAILURE = '[ORDER] SEND_ORDER_ACTIVATION_FAILURE'
   //<--------------------->
 }
 
@@ -462,6 +470,32 @@ export class PaymentRejectionSuccess implements Action {
 }
 export class PaymentRejectionFailure implements Action {
   readonly type: string = orderActions.SEND_PAYMENT_REJECTION_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class OrderCancellationRequest implements Action {
+  readonly type: string = orderActions.SEND_ORDER_CANCELLATION_REQUEST;
+  constructor(public payload: paymentStatusMail) { }
+}
+export class OrderCancellationSuccess implements Action {
+  readonly type: string = orderActions.SEND_ORDER_CANCELLATION_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class OrderCancellationFailure implements Action {
+  readonly type: string = orderActions.SEND_ORDER_CANCELLATION_FAILURE;
+  constructor(public payload: string) { }
+}
+
+export class OrderActivationRequest implements Action {
+  readonly type: string = orderActions.SEND_ORDER_ACTIVATION_REQUEST;
+  constructor(public payload: paymentStatusMail) { }
+}
+export class OrderActivationSuccess implements Action {
+  readonly type: string = orderActions.SEND_ORDER_ACTIVATION_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class OrderActivationFailure implements Action {
+  readonly type: string = orderActions.SEND_ORDER_ACTIVATION_FAILURE;
   constructor(public payload: string) { }
 }
 //<--------------------->

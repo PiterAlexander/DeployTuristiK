@@ -1,4 +1,4 @@
-import { CreateCustomerRequest, CreateFrequentTravelerRequest, EditCustomerRequest, OpenModalListFrequentTraveler } from '@/store/ui/actions';
+import { CreateCustomerRequest, CreateFrequentTravelerRequest, EditCustomerRequest } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -8,12 +8,10 @@ import { UiState } from '@/store/ui/state';
 import { Observable } from 'rxjs';
 import { User } from '@/models/user';
 import { Role } from '@/models/role';
-import { GooglePlacesService } from '@services/google-places.service';
 import { ApiService } from '@services/api.service';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FrequentTraveler } from '@/models/frequentTraveler';
-import { Router } from '@angular/router';
-
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-createcustomerform',
@@ -45,8 +43,9 @@ export class CreatecustomerformComponent implements OnInit {
     private fb: FormBuilder,
     private store: Store<AppState>,
     private modalPrimeNg: DynamicDialogRef,
-    public apiService: ApiService,
-    private router: Router
+    private apiService: ApiService,
+    private messageService: MessageService
+
   ) {
     this.allEps = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS']
 
@@ -399,20 +398,13 @@ export class CreatecustomerformComponent implements OnInit {
             userId: this.customerFromAction.userId,
           }
           this.store.dispatch(new EditCustomerRequest({ ...customer }))
-          // const customerPromise = await new Promise((resolve, reject) => {
-          //   this.apiService.updateCustomer(customer.customerId, customer).subscribe({
-          //     next: (data) => {
-          //       resolve(data)
-          //     },
-          //     error: (err) => {
-          //       reject(err)
-          //     }
-          //   })
-          // })
-          // console.log(customerPromise);
-
-          this.modalPrimeNg.close()
-          // this.router.navigate(['Home/MisBeneficiarios/' + this.oneCustomer.titularCustomer.customerId])
+          this.messageService.add({
+            key: 'alert-message',
+            severity: 'success',
+            summary: '¡Proceso completado!',
+            detail: 'Cliente editado exitosamente.'
+          });
+          window.location.reload();
         } else if (this.oneCustomer.action === 'createFrequentTraveler') {
           const beneficiarieRole: Role = this.allRoles.find((r) => r.name == 'Beneficiario');
           const user: User = {
@@ -496,17 +488,6 @@ export class CreatecustomerformComponent implements OnInit {
 
   cancel() {
     this.modalPrimeNg.close()
-    // if (this.oneCustomer !== undefined && this.user['role'] !== 'Cliente') {
-    //   if (this.oneCustomer.action === 'createFrequentTraveler') {
-    //     this.modalPrimeNg.close()
-    //   } else if (this.oneCustomer.action === 'editCustomerFromFrequentTraveler') {
-    //     this.modalPrimeNg.close()
-    //   } else {
-    //     this.modalPrimeNg.close()
-    //   }
-    // } else {
-    //   this.modalPrimeNg.close()
-    // }
   }
 
 

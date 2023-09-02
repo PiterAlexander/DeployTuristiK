@@ -144,6 +144,12 @@ import {
     PaymentRejectionFailure,
     PaymentRejectionRequest,
     PaymentRejectionSuccess,
+    OrderCancellationRequest,
+    OrderCancellationSuccess,
+    OrderCancellationFailure,
+    OrderActivationFailure,
+    OrderActivationRequest,
+    OrderActivationSuccess,
 } from './actions';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { ApiService } from '@services/api.service';
@@ -545,6 +551,30 @@ export class PackageEffects {
                     return [new PaymentRejectionSuccess(data)]
                 }),
                 catchError((error) => of(new PaymentRejectionFailure(error))))
+        })
+    ))
+
+    orderCancellation$ = createEffect(() => this.actions$.pipe(
+        ofType(orderActions.SEND_ORDER_CANCELLATION_REQUEST),
+        map((action: OrderCancellationRequest) => action.payload),
+        switchMap((paymentStatusMail) => {
+            return this.apiService.orderCancellation(paymentStatusMail).pipe(
+                mergeMap((data) => {
+                    return [new OrderCancellationSuccess(data)]
+                }),
+                catchError((error) => of(new OrderCancellationFailure(error))))
+        })
+    ))
+
+    orderActivation$ = createEffect(() => this.actions$.pipe(
+        ofType(orderActions.SEND_ORDER_ACTIVATION_REQUEST),
+        map((action: OrderActivationRequest) => action.payload),
+        switchMap((paymentStatusMail) => {
+            return this.apiService.orderActivation(paymentStatusMail).pipe(
+                mergeMap((data) => {
+                    return [new OrderActivationSuccess(data)]
+                }),
+                catchError((error) => of(new OrderActivationFailure(error))))
         })
     ))
     //<----------------------------->

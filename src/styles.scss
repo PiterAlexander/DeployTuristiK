@@ -72,6 +72,11 @@ body {
   transform: scale(0.9);
 }
 
+.p-image-preview {
+  max-width: 90vw !important;
+  max-height: 80vh !important;
+}
+
 h1,
 h2,
 h3,

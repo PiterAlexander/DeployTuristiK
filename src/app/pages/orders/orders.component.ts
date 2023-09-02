@@ -1,5 +1,5 @@
 import { Order } from '@/models/order';
-import { EditOrderRequest, GetAllCustomerRequest, GetAllOrdersRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, OpenModalCreateOrder, SaveOrderProcess } from '@/store/ui/actions';
+import { EditOrderRequest, GetAllCustomerRequest, GetAllOrdersRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, OpenModalCreateOrder, OrderActivationRequest, OrderCancellationRequest, SaveOrderProcess } from '@/store/ui/actions';
 import { AppState } from '@/store/state';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { ApiService } from '@services/api.service';
 import { MessageService } from 'primeng/api';
+import { paymentStatusMail } from '@/models/mail';
 
 @Component({
   selector: 'app-orders',
@@ -167,7 +168,7 @@ export class OrdersComponent implements OnInit {
       this.confirmationService.confirm({
         key: 'cancel-order-message',
         header: '¿Está seguro de cancelar este Pedido?',
-        message: 'Tenga en cuenta que: <br><br>- Todas los procesos del pedido se inhabilitaran.<br>- Se le informará al titular sobre esta cancelación.<br>- Es posible revertir esta cancelación.',
+        message: 'Tenga en cuenta que: <br><br>- Todos los procesos del pedido se inhabilitarán.<br>- Se le informará al titular sobre esta cancelación.<br>- Es posible revertir esta cancelación.',
         icon: 'pi pi-exclamation-triangle',
         rejectLabel: 'No, salir',
         rejectButtonStyleClass: 'p-button-outlined',
@@ -187,6 +188,10 @@ export class OrdersComponent implements OnInit {
             orderDate: order.orderDate,
           }
           this.store.dispatch(new EditOrderRequest({ ...orderToUpdate }))
+          const mailModel: paymentStatusMail = {
+            orderId: order.orderId
+          }
+          this.store.dispatch(new OrderCancellationRequest({ ...mailModel }))
           const index = this.ordersList.indexOf(order)
           if (index !== -1) {
             this.ordersList.splice(index, 1)[0]; // Eliminar y obtener el elemento eliminado
@@ -198,13 +203,13 @@ export class OrdersComponent implements OnInit {
     } else {
       this.confirmationService.confirm({
         key: 'cancel-order-message',
-        header: '¿Está seguro de habilitar Pedido?',
-        message: 'Tenga en cuenta que: <br><br>- Todas los procesos del pedido se habilitar de nuevo.<br>- Se le informará al titular sobre este cambio.',
+        header: '¿Está seguro de activar este Pedido?',
+        message: 'Tenga en cuenta que: <br><br>- Todos los procesos del pedido se habilitarán de nuevo.<br>- Se le informará al titular sobre este cambio.',
         icon: 'pi pi-exclamation-triangle',
         rejectLabel: 'Cancelar',
         rejectButtonStyleClass: 'p-button-outlined',
         rejectIcon: 'pi pi-times',
-        acceptLabel: 'Sí, habilitar',
+        acceptLabel: 'Sí, activar Pedido',
         acceptButtonStyleClass: 'p-button-primary',
         acceptIcon: 'pi pi-check',
         accept: () => {
@@ -265,11 +270,15 @@ export class OrdersComponent implements OnInit {
         orderDate: orderPromise['orderDate']
       }
       this.store.dispatch(new EditOrderRequest({ ...orderToUpdate }))
+      const mailModel: paymentStatusMail = {
+        orderId: order.orderId
+      }
+      this.store.dispatch(new OrderActivationRequest({ ...mailModel }))
       const index = this.ordersList.indexOf(order)
       if (index !== -1) {
         this.ordersList.splice(index, 1)[0]; // Eliminar y obtener el elemento eliminado
         this.ordersList.splice(index, 0, orderToUpdate); // Volver a agregar en la misma posición
-        this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Pedido habilitado exitosamente.' });
+        this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Pedido activado exitosamente.' });
       }
     }
   }
