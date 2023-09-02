@@ -170,7 +170,7 @@ export class CreatePaymentFormComponent implements OnInit {
     if (this.orderProcess.action === 'CreatePayment' || this.orderProcess.action === 'RetryPayment') {
       const orderId: string = this.orderProcess.order.orderId
       this.store.dispatch(new SaveOrderProcess(undefined))
-      this.router.navigate(['Home/DetallesPedido/' + orderId])
+      this.router.navigate(['Home/DetallesPedido'])
     } else if (this.orderProcess.action === 'CreateOrderDetail') {
       const action: string = this.orderProcess.action
       this.orderProcess = {
@@ -179,7 +179,7 @@ export class CreatePaymentFormComponent implements OnInit {
         beneficiaries: this.orderProcess.beneficiaries
       }
       this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
-      this.router.navigate(['Home/ProcesoBeneficiarios/asas'])
+      this.router.navigate(['Home/ProcesoBeneficiarios'])
     } else if (this.orderProcess.action === 'CreateOrder') {
       const orderProcess = {
         action: this.orderProcess.action,
@@ -191,7 +191,7 @@ export class CreatePaymentFormComponent implements OnInit {
         }
       }
       this.store.dispatch(new SaveOrderProcess(orderProcess))
-      this.router.navigate(['Home/ProcesoBeneficiarios/asa'])
+      this.router.navigate(['Home/ProcesoBeneficiarios'])
     }
   }
 

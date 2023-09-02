@@ -186,7 +186,7 @@ export const MENU = [
     {
         name: 'Mis Viajeros',
         iconClasses: 'bx bx-calendar-week',
-        path: ['/Home/MisBeneficiarios/s'],
+        path: ['/Home/MisBeneficiarios/000'],
         allowed: false
     }
 ];

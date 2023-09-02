@@ -270,7 +270,7 @@ export class PaymentDetailsComponent implements OnInit {
         paymentId: this.onePayment.paymentId,
       }
       this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
-      this.router.navigate(['Home/ProcesoBeneficiarios/asas']);
+      this.router.navigate(['Home/ProcesoBeneficiarios']);
     }
   }
 
@@ -333,13 +333,13 @@ export class PaymentDetailsComponent implements OnInit {
         }
       } else if (this.orderProcess.action === 'CreateOrderDetail' || this.orderProcess.action === 'CreatePayment') {
         this.store.dispatch(new SaveOrderProcess(undefined))
-        this.router.navigate(['Home/DetallesPedido/' + this.onePayment.orderId])
+        this.router.navigate(['Home/DetallesPedido'])
       } else {
         this.store.dispatch(new SaveOrderProcess(undefined))
-        this.router.navigate(['Home/DetallesPedido/' + this.onePayment.orderId])
+        this.router.navigate(['Home/DetallesPedido'])
       }
     } else {
-      this.router.navigate(['Home/DetallesPedido/' + this.onePayment.orderId])
+      this.router.navigate(['Home/DetallesPedido'])
     }
   }
 

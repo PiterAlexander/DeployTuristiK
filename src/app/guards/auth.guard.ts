@@ -49,10 +49,9 @@ export class AuthGuard implements CanActivate, CanActivateChild {
             this.router.navigate(['/']);
             return false;
         }
-  
+
         return this.getProfile(next);
-        
-   
+
     }
 
     canActivateChild(
@@ -72,7 +71,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
             .map((r) => r.routeConfig?.path || '')
             .join('/');
         const lastSegment = fullPath.split('/').pop();
-
+        console.log(lastSegment)
 
         if (this.userLogin) {
 
@@ -103,7 +102,12 @@ export class AuthGuard implements CanActivate, CanActivateChild {
                         currentModule == 'Login' ||
                         currentModule == 'profile' ||
                         currentModule == 'Turistik' ||
-                        currentModule == ':id'
+                        currentModule == ':id' ||
+                        lastSegment == 'RegistrarPedido' ||
+                        lastSegment == 'RegistrarPedido' ||
+                        lastSegment == 'ProcesoBeneficiarios' ||
+                        lastSegment == 'RevisionAbono' ||
+                        lastSegment == 'ProcesoAbonos'
                     ) {
                         return true;
                     } else if (

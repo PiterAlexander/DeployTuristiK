@@ -126,7 +126,7 @@ export class EditPaymentFormComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['Home/DetallesPedido/' + this.order.orderId]);
+    this.router.navigate(['Home/DetallesPedido']);
   }
 
   confirmation() {
@@ -258,7 +258,7 @@ export class EditPaymentFormComponent implements OnInit {
         this.store.dispatch(new PaymentRejectionRequest({ ...paymentStatusMailModel }))
       }
 
-      this.router.navigate(['Home/DetallesPedido/' + this.order.orderId]);
+      this.router.navigate(['Home/DetallesPedido']);
       this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Abono editado exitosamente.' });
     }
   }

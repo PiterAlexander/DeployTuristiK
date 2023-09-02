@@ -348,7 +348,7 @@ export class CreateOrderFormComponent implements OnInit {
           beneficiaries: beneficiaries
         })
         this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
-        this.router.navigate(['Home/ProcesoBeneficiarios/' + orderProcess.order.customer.customerId]);
+        this.router.navigate(['Home/ProcesoBeneficiarios']);
       } else {
         const oneCustomer = this.allCustomers.find(c => c.document === this.formGroup.value.document)
         if (this.formGroup.value.titularAsBeneficiarie) {
@@ -375,7 +375,7 @@ export class CreateOrderFormComponent implements OnInit {
             beneficiaries: beneficiaries,
           }
           this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
-          this.router.navigate(['Home/ProcesoBeneficiarios/' + orderProcess.order.customer.customerId]);
+          this.router.navigate(['Home/ProcesoBeneficiarios']);
         } else {
           const orderProcess = {
             action: 'CreateOrder',
@@ -387,7 +387,7 @@ export class CreateOrderFormComponent implements OnInit {
             beneficiaries: {},
           }
           this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
-          this.router.navigate(['Home/ProcesoBeneficiarios/' + orderProcess.order.customer.customerId]);
+          this.router.navigate(['Home/ProcesoBeneficiarios']);
         }
       }
     }

@@ -805,13 +805,13 @@ export class CreateOrderDetailFormComponent implements OnInit {
         reject: () => {
           const orderId: string = this.orderProcess.order.orderId
           this.store.dispatch(new SaveOrderProcess(undefined))
-          this.router.navigate(['Home/DetallesPedido/' + orderId])
+          this.router.navigate(['Home/DetallesPedido'])
         }
       })
     } else {
       const orderId: string = this.orderProcess.order.orderId
       this.store.dispatch(new SaveOrderProcess(undefined))
-      this.router.navigate(['Home/DetallesPedido/' + orderId])
+      this.router.navigate(['Home/DetallesPedido'])
     }
   }
 
@@ -845,7 +845,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         beneficiaries: this.beneficiaries,
       }
       this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
-      this.router.navigate(['Home/RegistrarPedido/asas'])
+      this.router.navigate(['Home/RegistrarPedido'])
     }
   }
 
@@ -880,7 +880,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
       beneficiaries: this.beneficiaries,
     }
     this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
-    this.router.navigate(['Home/ProcesoAbonos/asas'])
+    this.router.navigate(['Home/ProcesoAbonos'])
   }
 
   async nextFromEditOrderDetail() {
@@ -914,7 +914,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
       beneficiaries: this.beneficiaries,
     }
     this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
-    this.router.navigate(['Home/ProcesoAbonos/asas'])
+    this.router.navigate(['Home/ProcesoAbonos'])
   }
 
   next() {
