@@ -45,7 +45,7 @@ export class DashboardComponent implements OnInit {
     basicData: any;
     barOptions: any;
     selectedYear: any;
-    years: Array<number> = [2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035];
+    years: Array<number>;
 
 
     public lineChartOptions: any = {
@@ -78,8 +78,6 @@ export class DashboardComponent implements OnInit {
             this.initValues();
             this.initAgeChartData();
         });
-
-
     }
 
     initAgeChartData() {
@@ -197,6 +195,10 @@ export class DashboardComponent implements OnInit {
         this.customerCount = this.customers.length;
 
         this.initSecondChart(currentDate.getFullYear());
+        this.years = []
+        for (let y = 2023; y <= currentDate.getFullYear() + 1; y++) {
+            this.years.push(y)
+        }
     }
 
     calculateAgeData(
@@ -233,14 +235,10 @@ export class DashboardComponent implements OnInit {
         var arraytotalOrders: Array<number> = []
         var arraytotalpayments: Array<number> = []
 
-
-
         for (let i = 0; i < 12; i++) {
-            const currentDate = new Date();
             var datitaVentas: number = 0
             var datitaPayments: number = 0
             for (let j = 0; j < this.ordersList.length; j++) {
-
                 const date = new Date(this.ordersList[j].orderDate);
                 if (
                     date.getMonth() == i &&
@@ -251,7 +249,6 @@ export class DashboardComponent implements OnInit {
             }
             arraytotalOrders.push(datitaVentas)
 
-
             for (let k = 0; k < this.payments.length; k++) {
                 const date = new Date(this.payments[k].date);
                 if (
@@ -261,26 +258,22 @@ export class DashboardComponent implements OnInit {
                     datitaPayments += this.payments[k].amount;
                 }
             }
-
             arraytotalpayments.push(datitaPayments)
-
-
         }
 
         this.basicData = {
-
             labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
             datasets: [
                 {
-                    label: 'Total Ventas',
-                    backgroundColor: documentStyle.getPropertyValue('--primary-500'),
+                    label: 'Total Ventas Estimadas',
+                    backgroundColor: documentStyle.getPropertyValue('--primary-700'),
                     barThickness: 12,
                     borderRadius: 12,
                     data: arraytotalOrders
                 },
                 {
                     label: 'Total Ingresos',
-                    backgroundColor: documentStyle.getPropertyValue('--primary-200'),
+                    backgroundColor: documentStyle.getPropertyValue('--primary-400'),
                     barThickness: 12,
                     borderRadius: 12,
                     data: arraytotalpayments
