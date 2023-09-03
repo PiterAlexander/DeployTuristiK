@@ -148,7 +148,6 @@ export class CreatecustomerformComponent implements OnInit {
   onAddressChange(address: any) {
     if (this.formGroup) {
       const addressHtml = address.adr_address;
-      console.log(address);
       const hiddenDiv = document.createElement('div');
       hiddenDiv.style.display = 'none';
       hiddenDiv.innerHTML = addressHtml;
@@ -162,7 +161,6 @@ export class CreatecustomerformComponent implements OnInit {
         this.formGroup.get('address').setValue(extractedText);
       }
     }
-    console.log(address);
   }
 
   validateSaveButtonIfCustomerInformation(): boolean {
@@ -492,7 +490,6 @@ export class CreatecustomerformComponent implements OnInit {
 
 
   searchEps(event: any) {
-    console.log(event.query);
     const filtered: any[] = [];
     const query = event.query.toLowerCase();
     for (let i = 0; i < this.allEps.length; i++) {

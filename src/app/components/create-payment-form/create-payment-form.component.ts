@@ -314,7 +314,6 @@ export class CreatePaymentFormComponent implements OnInit {
     const paymentResolved = await new Promise((resolve, reject) => {
       this.apiService.addPayment(formData).subscribe({
         next: (data) => {
-          console.log(data)
           resolve(data)
         },
         error: (err) => {

@@ -99,7 +99,6 @@ export class RegisterComponent implements OnInit {
 
 
     searchEps(event: any) {
-        console.log(event.query);
         const filtered: any[] = [];
         const query = event.query.toLowerCase();
         for (let i = 0; i < this.allEps.length; i++) {
@@ -234,7 +233,6 @@ export class RegisterComponent implements OnInit {
     onAddressChange(address: any) {
         if (this.formGroup) {
             const addressHtml = address.adr_address;
-            console.log(address);
             const hiddenDiv = document.createElement('div');
             hiddenDiv.style.display = 'none';
             hiddenDiv.innerHTML = addressHtml;

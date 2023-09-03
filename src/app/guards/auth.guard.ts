@@ -71,7 +71,6 @@ export class AuthGuard implements CanActivate, CanActivateChild {
             .map((r) => r.routeConfig?.path || '')
             .join('/');
         const lastSegment = fullPath.split('/').pop();
-        console.log(lastSegment)
 
         if (this.userLogin) {
 

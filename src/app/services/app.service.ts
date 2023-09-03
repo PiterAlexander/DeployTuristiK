@@ -31,7 +31,6 @@ export class AppService {
     getProfile() {
         try {
             this.user = JSON.parse(localStorage.getItem('TokenPayload'))
-            console.log(this.user)
             if (this.user) {
                 this.store.dispatch(new GetUserInfoRequest(this.user));
             }

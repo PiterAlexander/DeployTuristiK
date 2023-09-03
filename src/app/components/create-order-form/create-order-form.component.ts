@@ -10,7 +10,7 @@ import { User } from '@/models/user';
 import { Customer } from '@/models/customer';
 import { Package } from '@/models/package';
 import { Router } from '@angular/router';
-import { differenceInMonths, isBefore } from 'date-fns';
+import { differenceInDays, differenceInMonths, isBefore } from 'date-fns';
 import { GetAllCustomerRequest, GetAllOrdersRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, SaveOrderProcess } from '@/store/ui/actions';
 import { Order } from '@/models/order';
 
@@ -87,10 +87,10 @@ export class CreateOrderFormComponent implements OnInit {
             // Comprobar si la fecha actual es después de departureDate
             if (isBefore(currentDate, departureDateConverted)) {
               // Calcular la diferencia en meses
-              const monthsDifference = differenceInMonths(departureDateConverted, currentDate);
+              const daysDifference = differenceInDays(departureDateConverted, currentDate);
 
               // Si la diferencia es de un mes o más, ejecuta tu código aquí
-              if (monthsDifference >= 1) {
+              if (daysDifference >= 1) {
                 // Tu código aquí
                 const alreadyExist = this.packagesToShow.find(p => p.packageId === element.packageId)
                 if (alreadyExist === undefined) {

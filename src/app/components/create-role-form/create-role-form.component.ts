@@ -191,7 +191,6 @@ export class CreateRoleFormComponent implements OnInit {
                                     .updateUser(modelUser.userId, modelUser)
                                     .subscribe({
                                         next: (data) => {
-                                            console.log(data);
                                             resolve(data);
                                         },
                                         error: (err) => {

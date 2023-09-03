@@ -170,7 +170,6 @@ export class OpenModalCreatePackage implements Action {
 export class CreatePackageRequest implements Action {
   readonly type: string = packageActions.CREATE_PACKAGE_REQUEST;
   constructor(public payload: Package) {
-    console.log(payload)
   }
 }
 export class CreatePackageSuccess implements Action {

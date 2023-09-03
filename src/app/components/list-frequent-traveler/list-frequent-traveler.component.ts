@@ -12,12 +12,16 @@ import { DataView } from 'primeng/dataview';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 
-
+interface Avatar {
+  assetRoute: string;
+  link: string;
+}
 @Component({
   selector: 'app-list-frequent-traveler',
   templateUrl: './list-frequent-traveler.component.html',
   styleUrls: ['./list-frequent-traveler.component.scss']
 })
+
 
 export class ListFrequentTravelerComponent implements OnInit {
   public ui: Observable<UiState>
@@ -32,19 +36,51 @@ export class ListFrequentTravelerComponent implements OnInit {
   public customerId: string
   public showAddButton: number = 0
   public index: number = 0
-  avatars: string[] = [
-    'assets/img/avatars/ft/gato-sentado.jpeg',
-    'assets/img/avatars/ft/gato-bostezo.jpeg',
-    'assets/img/avatars/ft/raton.jpeg',
-    'assets/img/avatars/ft/panda-bambu.jpeg',
-    'assets/img/avatars/ft/cerdo.jpeg',
-    'assets/img/avatars/ft/vaca-hierba.jpeg',
-    'assets/img/avatars/ft/gato-pollo.jpeg',
-    'assets/img/avatars/ft/gato-hueco.jpeg',
-    'assets/img/avatars/ft/conejo.jpeg',
-    'assets/img/avatars/ft/ardilla.jpeg',
-    'assets/img/avatars/ft/gato-telefono.jpeg'
-  ];
+  avatars:Avatar[]=[
+    {
+      'assetRoute' : 'assets/img/avatars/ft/gato-sentado.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/ilustracion-icono-vector-dibujos-animados-lindo-gato-sentado-concepto-icono-naturaleza-animal-aislado-premium-vector-estilo-dibujos-animados-plana_22638092.htm#query=lindo%20gato%20sentado&position=0&from_view=author'
+    },
+    {
+      'assetRoute' : 'assets/img/avatars/ft/gato-bostezo.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/ilustracion-icono-vector-dibujos-animados-lindo-gato-bostezo-sonoliento-concepto-icono-naturaleza-animal-aislado-vector-premium-estilo-dibujos-animados-plana_18790511.htm#query=lindo%20gato%20sentado&position=2&from_view=author'
+    },
+    {
+      'assetRoute' : 'assets/img/avatars/ft/raton.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/raton-lindo-sentado-ilustracion-icono-vector-dibujos-animados-queso-concepto-icono-alimento-animal-aislado_30924709.htm#query=raton%20lindo%20sentado&position=0&from_view=author'
+    },
+    {
+      'assetRoute' : 'assets/img/avatars/ft/panda-bambu.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/lindo-panda-bambu-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-vector-aislado_23767976.htm#query=lindo%20panda%20bambu&position=9&from_view=author'
+    },
+    {
+      'assetRoute' : 'assets/img/avatars/ft/cerdo.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/lindo-cerdo-sentado-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-premium-plano_40513463.htm#query=lindo%20cerdo%20sentado&position=0&from_view=author'
+    },
+    {
+      'assetRoute' : 'assets/img/avatars/ft/vaca-hierba.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/linda-vaca-sentada-comiendo-hierba-cartoon-vector-icono-ilustracion-animal-naturaleza-icono-aislado-plano_26124590.htm#query=linda%20vaca%20sentada&position=0&from_view=author'
+    },
+    {
+      'assetRoute' : 'assets/img/avatars/ft/gato-pollo.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/lindo-gato-durmiendo-pollito-cartoon-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado_28268935.htm#query=lindo%20gato%20durmiendo%20pollito&position=1&from_view=author'
+    },
+    {
+      'assetRoute' : 'assets/img/avatars/ft/conejo.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/ilustracion-icono-vector-dibujos-animados-lindo-conejo-sentado-concepto-icono-naturaleza-animal-plano-aislado_37819028.htm#query=lindo%20conejo%20sentado&position=0&from_view=author'
+    },
+    {
+      'assetRoute' : 'assets/img/avatars/ft/ardilla.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/ilustracion-icono-vector-dibujos-animados-pie-ardilla-linda-naturaleza-animal-icono-concepto-aislado-premium_34010166.htm#query=pie%20ardilla&position=0&from_view=author'
+    },
+    {
+      'assetRoute' : 'assets/img/avatars/ft/gato-telefono.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/lindo-gato-jugando-mano-telefono-dibujos-animados-vector-icono-ilustracion-concepto-icono-tecnologia-animal-aislado-premium-vector-estilo-dibujos-animados-plana_23006671.htm#query=lindo%20gato%20jugando%20mano%20telefono&position=0&from_view=author'
+    },{
+      'assetRoute': 'assets/img/avatars/ft/gato-hueco.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/gato-lindo-ejemplo-icono-vector-historieta-agujero-concepto-icono-naturaleza-animal-aislado-premium-vector-estilo-dibujos-animados-plana_23006709.htm#query=gato%20lindo&position=7&from_view=author'
+    }
+  ]
 
   constructor(
     private store: Store<AppState>,
@@ -80,7 +116,6 @@ export class ListFrequentTravelerComponent implements OnInit {
     }
   }
   compareCustomerId() {
-    console.log(this.index);
 
     if (this.allCustomers !== undefined) {
       const frequentTraveler: any = {
@@ -110,7 +145,8 @@ export class ListFrequentTravelerComponent implements OnInit {
               eps: customer.eps,
               userId: customer.userId,
               user: customer.user,
-              img: this.avatars[this.index],
+              img: this.avatars[this.index].assetRoute,
+              urlAvatar: this.avatars[this.index].link,
               addFtButton: false
             }
             const alreadyExists: Customer = this.frequentTravelersList.find(o => o.customerId === element.travelerId)
@@ -135,7 +171,7 @@ export class ListFrequentTravelerComponent implements OnInit {
 
   getRandomAvatarUrl() {
     const randomIndex = Math.floor(Math.random() * this.avatars.length);
-    return this.avatars[randomIndex];
+    return this.avatars[randomIndex].assetRoute;
   }
 
   updateVisibility(): void {
