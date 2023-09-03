@@ -14,7 +14,8 @@ import { Payment } from '@/models/payment';
 import { OrderDetail } from '@/models/orderDetail';
 import { environment } from 'environments/environment';
 import { ConfirmationService } from 'primeng/api';
-import { DeleteOrderDetailRequest, GetAllCustomerRequest, SaveOrderProcess } from '@/store/ui/actions';
+import { DeleteOrderDetailRequest, GetAllCustomerRequest, GetUsersRequest, SaveOrderProcess } from '@/store/ui/actions';
+import { User } from '@/models/user';
 
 @Component({
   selector: 'app-payment-details',
@@ -33,6 +34,8 @@ export class PaymentDetailsComponent implements OnInit {
   public beneficiaries: Array<any> = []
   public sortOptions: SelectItem[] = []
   public sortOrder: number = 0;
+  public allUsers: Array<User>
+  public oneUser: User
   public sortField: string = '';
   public allRoles: Array<Role>
   public beneficiariesImages: Array<string> = []
@@ -54,11 +57,13 @@ export class PaymentDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(new GetAllCustomerRequest)
+    this.store.dispatch(new GetUsersRequest)
     this.ui = this.store.select('ui')
     this.ui.subscribe((state: UiState) => {
       this.user = JSON.parse(localStorage.getItem('TokenPayload'))
       this.role = this.user['role']
       this.allRoles = state.allRoles.data
+      this.allUsers = state.allUsers.data
       this.allCustomers = state.allCustomers.data
       this.orderProcess = state.orderProcess.data
       this.route.paramMap.subscribe((params) => {
@@ -119,6 +124,9 @@ export class PaymentDetailsComponent implements OnInit {
         status: paymentPromise['status'],
         orderId: paymentPromise['orderId'],
         order: paymentPromise['order']
+      }
+      if (this.allUsers !== undefined) {
+        this.oneUser = this.allUsers.find(u => u.userId === this.onePayment.order.customer.userId)
       }
       this.pushOrderDetail()
     }

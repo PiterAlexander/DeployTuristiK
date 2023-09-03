@@ -23,7 +23,11 @@
                             <div class="col-12 field">
                                 <p-dropdown [options]="packagesToShow" optionLabel="name" optionValue="packageId"
                                     placeholder="Por favor seleccione el nombre del paquete" required="true"
-                                    formControlName="packageId" [style]="{ width: '100%' }"></p-dropdown>
+                                    formControlName="packageId" [ngClass]="
+                                    {
+                                        'invalid-p-dropdown': formGroup.get('packageId')?.dirty && formGroup.get('document')?.dirty &&
+                                        alreadyHasAnOrder()
+                                    }" [style]="{ width: '100%' }"></p-dropdown>
                                 <small class="p-error block"
                                     *ngIf="formGroup.get('packageId')?.errors?.['required'] && formGroup.get('packageId')?.dirty">
                                     Este campo es obligatorio

@@ -252,10 +252,8 @@
                         <span class="mb-1">{{ onePayment.order.customer.name + ' ' +
                             onePayment.order.customer.lastName
                             }}</span>
-                        <span class="mb-1">{{ onePayment.order.customer.address
-                            }}</span>
-                        <span>C.C {{
-                            onePayment.order.customer.document }}</span>
+                        <span class="mb-1">C.C {{ onePayment.order.customer.document }}</span>
+                        <span *ngIf="oneUser !== undefined">{{ oneUser.email }}</span>
                     </div>
                     <div class="flex justify-content-start">
                         <p-button icon="pi pi-angle-left" (click)="back()" [label]="showButtonLabel()"></p-button>
