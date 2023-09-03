@@ -26,14 +26,15 @@
   </ng-container>
 </div>
 
-<div [ngClass]="{ 
+<div [ngClass]="{
   'border-header': role !== 'Administrador'
 }">
   <ng-container *ngIf="role === 'Cliente'">
     <div
       class="responsive-margin flex align-items-center justify-content-between relative lg:static py-2 px-4 mx-0 md:px-7 lg:px-4 lg:pb-4 lg:pt-6 lg:mx-8">
       <a class="cursor-pointer">
-        <img src="assets/img/t1.png" alt="Titulo" width="170" height="30">
+        <img src="assets/img/logo.jpg" alt="Logo" width="50" height="50">
+        <img src="assets/img/t1.png" alt="Titulo" width="190" class="mt-2 ml-1" height="30">
       </a>
       <a pRipple class="cursor-pointer block md:hidden text-700 text-primary" pStyleClass="@next" enterClass="ng-hidden"
         enterActiveClass="px-fadein" leaveToClass="ng-hidden" leaveActiveClass="px-fadeout">

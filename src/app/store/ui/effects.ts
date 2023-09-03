@@ -249,7 +249,6 @@ export class PackageEffects {
         switchMap((pack) => {
             return this.apiService.addPackage(pack).pipe(
                 mergeMap((packageResolved) => {
-                    console.log(packageResolved)
                     this.dialogRef.close()
                     this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Paquete registrado exitosamente.' });
                     return [

@@ -116,7 +116,6 @@ export class CreatePackageFormComponent implements OnInit {
     onAddressChangeDestination(address: any) {
       if (this.formGroup) {
           const addressHtml = address.adr_address;
-          console.log(address);
           const hiddenDiv = document.createElement('div');
           hiddenDiv.style.display = 'none';
           hiddenDiv.innerHTML = addressHtml;
@@ -133,7 +132,6 @@ export class CreatePackageFormComponent implements OnInit {
           }else{
             const region = regionElements[0].textContent || '';
               const extractedText = `${locality}, ${region}, ${country}`;
-              console.log(extractedText);
               this.formGroup.get('destination').setValue(extractedText);
           }
           if (address['photos']) {
@@ -150,7 +148,6 @@ export class CreatePackageFormComponent implements OnInit {
     onAddressChange(address: any) {
       if (this.formGroup) {
           const addressHtml = address.adr_address;
-          console.log(address);
           const hiddenDiv = document.createElement('div');
           hiddenDiv.style.display = 'none';
           hiddenDiv.innerHTML = addressHtml;
@@ -170,7 +167,6 @@ export class CreatePackageFormComponent implements OnInit {
     onHotelAddressChange(address: any) {
         if (this.formGroup) {
             const addressHtml = address.adr_address;
-            console.log(address);
             const hiddenDiv = document.createElement('div');
             hiddenDiv.style.display = 'none';
             hiddenDiv.innerHTML = addressHtml;
@@ -186,7 +182,6 @@ export class CreatePackageFormComponent implements OnInit {
                 this.formGroup.get('hotel').setValue(extractedText);
             }
         }
-        console.log(address);
     }
 
     openCalendar() {

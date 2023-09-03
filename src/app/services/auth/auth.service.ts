@@ -80,7 +80,6 @@ export class AuthService {
   }
 
   async logout2() {
-    console.log("Estoy aca")
     await localStorage.removeItem('TokenPayload');
     await localStorage.removeItem('token');
 

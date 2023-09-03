@@ -2,7 +2,7 @@
 <p-toast key="alert-message"></p-toast>
 <div *ngIf="beneficiariesVisibility" [ngClass]="{ 'px-4 pt-0 pb-1': role !== 'Cliente' }">
     <div class="col-12">
-        <div [ngClass]="{ 
+        <div [ngClass]="{
         'card p-6': role !== 'Cliente',
         'surface-section p-4 border-1 surface-border': role === 'Cliente'
      }" style="border-radius: 20px;">
@@ -79,8 +79,10 @@
                 <ng-template let-beneficiarie pTemplate="listItem">
                     <div class="col-12">
                         <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
+                          <a [href]="getUrlAvatar(beneficiarie.image)">
                             <img [src]="beneficiarie.image" [alt]="beneficiarie.name"
-                                class="my-4 md:my-0 w-7 md:w-10rem shadow-2 mr-5" />
+                            class="my-4 md:my-0 w-7 md:w-10rem shadow-2 mr-5" />
+                          </a>
                             <div class="flex-1 flex flex-column align-items-center text-center md:text-left">
                                 <div class="font-bold text-2xl">{{ beneficiarie.name + ' ' + beneficiarie.lastName }}
                                 </div>
@@ -139,7 +141,9 @@
                                     showLabel(beneficiarie.document) }}</span>
                             </div>
                             <div class="flex flex-column align-items-center text-center mb-3">
+                              <a [href]="getUrlAvatar(beneficiarie.image)">
                                 <img [src]="beneficiarie.image" alt="Avatar" class="w-8 shadow-2 my-3 mx-0" />
+                              </a>
                                 <div class="text-2xl font-bold">{{beneficiarie.name + ' ' + beneficiarie.lastName}}
                                 </div>
                                 <div><span pTooltip="Teléfono" tooltipPosition="bottom">{{ beneficiarie.phoneNumber
@@ -180,7 +184,7 @@
 
 <div *ngIf="onePayment !== undefined" [ngClass]="{ 'p-4': role !== 'Cliente' }">
     <div class="col-12">
-        <div [ngClass]="{ 
+        <div [ngClass]="{
         'card p-6': role !== 'Cliente',
         'surface-section p-5 border-1 surface-border': role === 'Cliente'
      }" style="border-radius: 20px;">

@@ -23,7 +23,7 @@ import {Order} from '@/models/order';
     styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent implements OnInit {
-    
+
 
     @Output() packagesInformation: EventEmitter<string> =
         new EventEmitter<string>();
@@ -237,8 +237,7 @@ export class CalendarComponent implements OnInit {
       const diferenciaDias = Math.floor(
           diferenciaMilisegundos / unDiaEnMilisegundos
       );
-      console.log(departureDate, returnDate);
-      
+
       return diferenciaDias;
   }
   closeDialog() {

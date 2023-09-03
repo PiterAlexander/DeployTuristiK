@@ -96,32 +96,32 @@ const routes: Routes = [
                 component: ListFrequentTravelerComponent
             },
             {
-                path: 'DetallesPedido/:id',
+                path: 'DetallesPedido/:id', //aqui
                 canActivate: [AuthGuard],
                 component: ReadOrderPaymentComponent
             },
             {
-                path: 'RegistrarPedido/:id',
+                path: 'RegistrarPedido', //aqui
                 canActivate: [AuthGuard],
                 component: CreateOrderFormComponent
             },
             {
-                path: 'ProcesoBeneficiarios/:id',
+                path: 'ProcesoBeneficiarios', //aqui
                 canActivate: [AuthGuard],
                 component: CreateOrderDetailFormComponent
             },
             {
-                path: 'DetallesAbono/:id',
+                path: 'DetallesAbono/:id', //aqui
                 canActivate: [AuthGuard],
                 component: PaymentDetailsComponent
             },
             {
-                path: 'RevisionAbono/:id',
+                path: 'RevisionAbono', //aqui
                 canActivate: [AuthGuard],
                 component: EditPaymentFormComponent
             },
             {
-                path: 'ProcesoAbonos/:id',
+                path: 'ProcesoAbonos', //aqui
                 canActivate: [AuthGuard],
                 component: CreatePaymentFormComponent,
             },

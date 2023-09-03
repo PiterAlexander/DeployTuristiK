@@ -292,7 +292,7 @@ export class OrdersComponent implements OnInit {
   }
 
   create() {
-    this.router.navigate(['Home/RegistrarPedido/' + 'asasas']);
+    this.router.navigate(['Home/RegistrarPedido/']);
   }
 
   sendToPayments(order: Order) {

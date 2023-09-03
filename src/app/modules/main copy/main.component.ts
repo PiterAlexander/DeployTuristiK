@@ -68,7 +68,6 @@ export class MainPublicComponent implements OnInit {
   changeBgByNavigationBar(navigationBarUrl){
     const parts = navigationBarUrl.split('/');
     const url = parts[parts.length - 1];
-    console.log(url)
     if (url == 'login' || url == 'register' || url == 'forgot-password' || url == 'recover-password') {
       this.log = true
     } else {

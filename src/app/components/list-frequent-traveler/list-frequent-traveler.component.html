@@ -3,7 +3,7 @@
 
 <div *ngIf="oneCustomer !== undefined" [ngClass]="{ 'px-4 pt-0 pb-4': role !== 'Cliente' }">
     <div class="col-12">
-        <div [ngClass]="{ 
+        <div [ngClass]="{
         'card p-6': role !== 'Cliente',
         'surface-section p-5 border-1 surface-border': role === 'Cliente'
      }" style="border-radius: 20px;">
@@ -44,8 +44,10 @@
                     }">
                         <div class="surface-card m-3 p-4 surface-border card-shadow">
                             <div class="flex align-items-center mb-3">
-                                <p-avatar [image]="frequentTraveler.img" styleClass="border-circle shadow-3 mr-3"
+                                  <a [href]="frequentTraveler.urlAvatar">
+                                    <p-avatar [image]="frequentTraveler.img" styleClass="border-circle shadow-3 mr-3"
                                     size="xlarge" shape="circle"></p-avatar>
+                                  </a>
                                 <span>
                                     <div class="text-900 font-semibold text-xl">{{frequentTraveler.name + ' '+
                                         frequentTraveler.lastName}}</div>

@@ -121,7 +121,6 @@ export class LoginComponent implements OnInit {
 
                     this.messageService.add({ key: 'alert-message-login', severity: 'error', summary: '¡Lo sentimos!', detail: this.token.message });
                     this.loadingButton = false;
-                    console.log(this.token.result)
                 }
 
             }

@@ -125,7 +125,7 @@ export class ReadOrderPaymentComponent {
 
   editPayment(payment: Payment) {
     if (this.order.status !== 3) {
-      this.router.navigate(['Home/RevisionAbono/' + payment.paymentId])
+      this.router.navigate(['Home/RevisionAbono'])
     }
   }
 
@@ -167,7 +167,7 @@ export class ReadOrderPaymentComponent {
         order: this.order
       }
       this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
-      this.router.navigate(['Home/ProcesoAbonos/Agregar']);
+      this.router.navigate(['Home/ProcesoAbonos']);
     }
   }
 
@@ -190,7 +190,7 @@ export class ReadOrderPaymentComponent {
           payment: onePayment
         }
         this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
-        this.router.navigate(['Home/ProcesoAbonos/asas']);
+        this.router.navigate(['Home/ProcesoAbonos']);
       }
     }
   }
@@ -214,7 +214,7 @@ export class ReadOrderPaymentComponent {
         beneficiaries: {}
       }
       this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
-      this.router.navigate(['Home/ProcesoBeneficiarios/asas']);
+      this.router.navigate(['Home/ProcesoBeneficiarios']);
     }
   }
 

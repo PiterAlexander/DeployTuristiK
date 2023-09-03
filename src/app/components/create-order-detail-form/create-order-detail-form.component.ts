@@ -16,6 +16,10 @@ import { DataView } from 'primeng/dataview';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 
+interface Avatar {
+  assetRoute: string;
+  link: string;
+}
 @Component({
   selector: 'app-create-order-detail-form',
   templateUrl: './create-order-detail-form.component.html',
@@ -46,11 +50,90 @@ export class CreateOrderDetailFormComponent implements OnInit {
   public sortField: string = ''
   public results: string[]
   public allEps: Array<string> = []
-  public beneficiariesImages: Array<string> = []
-  public customerImages: Array<string> = []
   public beneficiarieImageIndex: number = 0
   public customerImageIndex: number = 0
   public ftCheck: boolean = false
+  public customerImageLink:string = 'https://www.freepik.es/vector-gratis/lindo-slot-sentado-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-premium-plano_27313232.htm#query=perezoso&position=13&from_view=author'
+  public authorImagesLink:string = 'https://www.freepik.es/autor/catalyststuff'
+
+
+  public beneficiariesImages: Array<Avatar> = [
+    {
+      'assetRoute': 'assets/img/avatars/od/beneficiaries/perro-futbol.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/ilustracion-icono-vector-dibujos-animados-perro-lindo-jugando-bola-concepto-icono-deporte-animal-aislado-premium-vector-estilo-dibujos-animados-plana_22407119.htm#query=Perro%20lindo%20jugando%20con%20bola&position=0&from_view=author'
+    },
+    {
+      'assetRoute': 'assets/img/avatars/od/beneficiaries/elefante.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/elefante-lindo-ilustracion-icono-vector-dibujos-animados-mano-signo-amor-concepto-icono-naturaleza-animal-aislado-premium-vector-estilo-dibujos-animados-plana_22383451.htm#query=elefante%20lindo&position=1&from_view=author'
+    },
+    {
+      'assetRoute': 'assets/img/avatars/od/beneficiaries/hamster.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/lindo-hamster-sosteniendo-ilustracion-dibujos-animados-mejilla_13037994.htm#query=lindo%20hamster%20sosteniendo&position=0&from_view=author'
+    },
+    {
+      'assetRoute': 'assets/img/avatars/od/beneficiaries/oveja.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/lindo-oveja-agitando-mano-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-plano_24563921.htm#query=linda%20oveja%20agitando%20mano&position=1&from_view=author'
+    },
+    {
+      'assetRoute': 'assets/img/avatars/od/beneficiaries/tortuga-chef.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/linda-tortuga-chef-cocinando-ilustracion-dibujos-animados_14877534.htm#query=linda%20tortuga%20chef&position=0&from_view=author'
+    },
+    {
+      'assetRoute': 'assets/img/avatars/od/beneficiaries/panda-bambu.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/lindo-panda-bambu-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-vector-aislado_23767976.htm#query=lindo%20panda%20bambu&position=9&from_view=author'
+    },
+    {
+      'assetRoute': 'assets/img/avatars/od/beneficiaries/unicornio-luna.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/lindo-unicornio-durmiendo-luna-celebracion-estrella-dibujos-animados-vector-icono-ilustracion-icono-naturaleza-animal_33777473.htm#query=lindo%20unicornio%20durmiendo&position=0&from_view=author'
+    },
+    {
+      'assetRoute': 'assets/img/avatars/od/beneficiaries/dinosaurio.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/ilustracion-icono-vector-dibujos-animados-pie-dinosaurio-lindo-naturaleza-animal-icono-concepto-aislado-premium_34010129.htm#page=6&position=19&from_view=author'
+    },
+    {
+      'assetRoute': 'assets/img/avatars/od/beneficiaries/panda-gafas.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/cute-panda-summer-waving-hand-cartoon-vector-icon-illustration-concepto-icono-vacaciones-animales-aislado_36890859.htm#query=cute%20panda%20summer%20waving&position=0&from_view=author'
+    }
+  ];
+
+  public customerImages: Array<Avatar> = [
+    {
+      'assetRoute': 'assets/img/avatars/od/customers/husky.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/lindo-husky-perro-sentado-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-premium_24921543.htm#query=lindo%20husky%20perro%20sentado&position=0&from_view=author'
+    },
+    {
+      'assetRoute': 'assets/img/avatars/od/customers/unicornio-bebiendo.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/lindo-unicornio-bebiendo-te-leche-boba-ilustracion-icono-vector-dibujos-animados-arco-iris-icono-bebida-animal_38195156.htm#query=lindo%20unicornio%20bebiendo&position=0&from_view=author'
+    },
+    {
+      'assetRoute': 'assets/img/avatars/od/customers/rino-gamer.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/cute-rhino-gaming-cartoon-vector-icon-ilustracion-animal-tecnologia-icono-concepto-aislado-premium_39515589.htm#query=cute%20rinho%20gaming&position=4&from_view=author'
+    },
+    {
+      'assetRoute': 'assets/img/avatars/od/customers/elefante-saludando.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/lindo-elefante-sentado-agitando-mano-dibujos-animados-vector-icono-ilustracion_11047569.htm#query=lindo%20elefante%20sentado&position=0&from_view=author'
+    },
+    {
+      'assetRoute': 'assets/img/avatars/od/customers/vaca-sentada.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/lindo-vaca-sentado-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-premium-plano_40605642.htm#query=lindo%20vaca%20sentado&position=1&from_view=author'
+    },
+    {
+      'assetRoute': 'assets/img/avatars/od/customers/cebra-sentada.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/ilustracion-icono-vector-dibujos-animados-lindo-sentado-cebra-concepto-icono-naturaleza-animal-aislado-vector-premium-estilo-dibujos-animados-plana_16704035.htm#query=lindo%20sentado%20cebra&position=0&from_view=author'
+    },
+    {
+      'assetRoute': 'assets/img/avatars/od/customers/unicornio-bici.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/lindo-unicornio-montando-bicicleta-agitando-mano-dibujos-animados-vector-icono-ilustracion-transporte-animales_33777511.htm#query=lindo%20unicornio%20montando%20bicicleta&position=0&from_view=author'
+    },
+    {
+      'assetRoute': 'assets/img/avatars/od/customers/gato-telefono.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/lindo-gato-jugando-mano-telefono-dibujos-animados-vector-icono-ilustracion-concepto-icono-tecnologia-animal-aislado-premium-vector-estilo-dibujos-animados-plana_23006671.htm#query=lindo%20gato%20jugando%20mano%20telefono&position=0&from_view=author'
+    },
+    {
+      'assetRoute': 'assets/img/avatars/od/customers/pan-chef.jpeg',
+      'link': 'https://www.freepik.es/vector-gratis/lindo-pan-chef-agitando-mano-dibujos-animados-vector-icono-ilustracion-comida-objeto-icono-concepto-aislado-plano_24921538.htm#query=pan%20chef&position=0&from_view=author'
+    }
+  ];
 
   constructor(
     private apiService: ApiService,
@@ -75,30 +158,6 @@ export class CreateOrderDetailFormComponent implements OnInit {
     })
 
     this.allEps = ['COOSALUD EPS-S', 'NUEVA EPS', 'MUTUAL SER', 'ALIANSALUD EPS', 'SALUD TOTAL EPS S.A.', 'EPS SANITAS', 'EPS SURA', 'FAMISANAR', 'SERVICIO OCCIDENTAL DE SALUD EPS SOS', 'SALUD MIA', 'COMFENALCO VALLE', 'COMPENSAR EPS', 'EPM - EMPRESAS PUBLICAS MEDELLIN', 'FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA', 'CAJACOPI ATLANTICO', 'CAPRESOCA', 'COMFACHOCO', 'COMFAORIENTE', 'EPS FAMILIAR DE COLOMBIA', 'ASMET SALUD', 'ECOOPSOS ESS EPS-S', 'EMSSANAR E.S.S', 'CAPITAL SALUD EPS-S', 'SAVIA SALUD EPS', 'DUSAKAWI EPSI', 'ASOCOACION INDIGENA DEL CAUCA EPSI', 'ANAS WAYUU EPSI', 'PIJAOS SALUD EPSI', 'SALUD BOLIVAR EPS SAS']
-
-    this.beneficiariesImages = [
-      'assets/img/avatars/od/beneficiaries/perro-futbol.jpeg',
-      'assets/img/avatars/od/beneficiaries/elefante.jpeg',
-      'assets/img/avatars/od/beneficiaries/hamster.jpeg',
-      'assets/img/avatars/od/beneficiaries/oveja.jpeg',
-      'assets/img/avatars/od/beneficiaries/tortuga-chef.jpeg',
-      'assets/img/avatars/od/beneficiaries/panda-bambu.jpeg',
-      'assets/img/avatars/od/beneficiaries/unicornio-luna.jpeg',
-      'assets/img/avatars/od/beneficiaries/dinosaurio.jpeg',
-      'assets/img/avatars/od/beneficiaries/panda-gafas.jpeg'
-    ]
-
-    this.customerImages = [
-      'assets/img/avatars/od/customers/husky.jpeg',
-      'assets/img/avatars/od/customers/unicornio-bebiendo.jpeg',
-      'assets/img/avatars/od/customers/rino-gamer.jpeg',
-      'assets/img/avatars/od/customers/elefante-saludando.jpeg',
-      'assets/img/avatars/od/customers/vaca-sentada.jpeg',
-      'assets/img/avatars/od/customers/cebra-sentada.jpeg',
-      'assets/img/avatars/od/customers/unicornio-bici.jpeg',
-      'assets/img/avatars/od/customers/gato-telefono.jpeg',
-      'assets/img/avatars/od/customers/pan-chef.jpeg',
-    ]
 
     this.sortOptions = [
       { label: 'Precio Alto a Bajo', value: '!price' },
@@ -184,7 +243,6 @@ export class CreateOrderDetailFormComponent implements OnInit {
       if (regionElements.length >= 2) {
         const region = regionElements[0].textContent || '';
         const extractedText = `${address.name}, ${locality}, ${region}, ${country}`;
-        console.log(extractedText);
         this.formGroup.get('address').setValue(extractedText);
       }
     }
@@ -399,7 +457,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
   }
 
   customerImage(): string {
-    const image = this.customerImages[this.customerImageIndex]
+    const image = this.customerImages[this.customerImageIndex].assetRoute
     if (this.customerImageIndex === 8) {
       this.customerImageIndex = 0
     } else {
@@ -409,13 +467,27 @@ export class CreateOrderDetailFormComponent implements OnInit {
   }
 
   beneficiarieImage(): string {
-    const image = this.beneficiariesImages[this.beneficiarieImageIndex]
+    const image = this.beneficiariesImages[this.beneficiarieImageIndex].assetRoute
     if (this.beneficiarieImageIndex === 8) {
       this.beneficiarieImageIndex = 0
     } else {
       this.beneficiarieImageIndex++
     }
     return image
+  }
+
+  getUrlAvatar(assetRoute: string) : string{
+    if (this.beneficiariesImages.length>0) {
+      const bUrl = this.beneficiariesImages.find(b => b.assetRoute === assetRoute)
+      if (!bUrl) {
+        const cUrl = this.customerImages.find(b => b.assetRoute === assetRoute)
+        if (!cUrl) {
+          return this.customerImageLink
+        }
+        return cUrl.link
+      }
+      return bUrl.link
+    }
   }
 
   fillBeneficiariesArray() {
@@ -805,13 +877,13 @@ export class CreateOrderDetailFormComponent implements OnInit {
         reject: () => {
           const orderId: string = this.orderProcess.order.orderId
           this.store.dispatch(new SaveOrderProcess(undefined))
-          this.router.navigate(['Home/DetallesPedido/' + orderId])
+          this.router.navigate(['Home/DetallesPedido'])
         }
       })
     } else {
       const orderId: string = this.orderProcess.order.orderId
       this.store.dispatch(new SaveOrderProcess(undefined))
-      this.router.navigate(['Home/DetallesPedido/' + orderId])
+      this.router.navigate(['Home/DetallesPedido'])
     }
   }
 
@@ -845,7 +917,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         beneficiaries: this.beneficiaries,
       }
       this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
-      this.router.navigate(['Home/RegistrarPedido/asas'])
+      this.router.navigate(['Home/RegistrarPedido'])
     }
   }
 
@@ -880,7 +952,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
       beneficiaries: this.beneficiaries,
     }
     this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
-    this.router.navigate(['Home/ProcesoAbonos/asas'])
+    this.router.navigate(['Home/ProcesoAbonos'])
   }
 
   async nextFromEditOrderDetail() {
@@ -914,7 +986,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
       beneficiaries: this.beneficiaries,
     }
     this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
-    this.router.navigate(['Home/ProcesoAbonos/asas'])
+    this.router.navigate(['Home/ProcesoAbonos'])
   }
 
   next() {

@@ -290,7 +290,6 @@ export class CreateUserFormComponent implements OnInit {
   onAddressChange(address: any) {
     if (this.formGroup) {
         const addressHtml = address.adr_address;
-        console.log(address);
         const hiddenDiv = document.createElement('div');
         hiddenDiv.style.display = 'none';
         hiddenDiv.innerHTML = addressHtml;

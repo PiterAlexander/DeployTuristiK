@@ -72,7 +72,6 @@ export class ChangePasswordComponent implements OnInit {
             "newPassword": this.formGroup.value.newPassword,
             "type": "Change"
         }
-        console.log(model);
         this.store.dispatch(
             new ChangePasswordRequest({
                 ...model

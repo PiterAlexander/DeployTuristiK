@@ -87,8 +87,6 @@ export class CreateEmployeeFormComponent implements OnInit {
                 document: this.oneEmployee.document,
                 phoneNumber: this.oneEmployee.phoneNumber,
             })
-            console.log(this.formGroup.value)
-            console.log(this.formGroup.valid)
         }
     }
 
