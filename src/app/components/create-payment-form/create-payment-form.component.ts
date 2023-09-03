@@ -69,7 +69,7 @@ export class CreatePaymentFormComponent implements OnInit {
 
     this.formGroup = this.fb.group({
       amount: new FormControl(null, [Validators.required]),
-      termsAndConditions: new FormControl(null, [Validators.required]),
+      termsAndConditions: new FormControl(false),
     })
 
     this.acceptedFiles = ".png, .jpg, .jpeg"
@@ -170,7 +170,7 @@ export class CreatePaymentFormComponent implements OnInit {
     if (this.orderProcess.action === 'CreatePayment' || this.orderProcess.action === 'RetryPayment') {
       const orderId: string = this.orderProcess.order.orderId
       this.store.dispatch(new SaveOrderProcess(undefined))
-      this.router.navigate(['Home/DetallesPedido'])
+      this.router.navigate(['Home/DetallesPedido/' + orderId])
     } else if (this.orderProcess.action === 'CreateOrderDetail') {
       const action: string = this.orderProcess.action
       this.orderProcess = {
@@ -230,7 +230,11 @@ export class CreatePaymentFormComponent implements OnInit {
   }
 
   validForm(): boolean {
-    return this.formGroup.valid
+    if (this.orderProcess.action === 'CreateOrder') {
+      return this.formGroup.valid && this.formGroup.value.termsAndConditions !== false
+    } else {
+      return this.formGroup.valid
+    }
   }
 
   editPackage(onePackage: Package) {
@@ -607,7 +611,7 @@ export class CreatePaymentFormComponent implements OnInit {
   }
 
   async save() {
-    if (this.formGroup.valid && this.imageFile !== undefined) {
+    if (this.validForm() && this.imageFile !== undefined) {
       if (this.orderProcess.action === 'CreatePayment') { // IF THE PROCESS COMES FROM CREATE PAYMENT FROM ADMIN/EMPLOYEE
         this.saveFromCreatePayment()
       } else if (this.orderProcess.action === 'RetryPayment') { // IF THE PROCESS COMES FROM RETRY PAYMENT

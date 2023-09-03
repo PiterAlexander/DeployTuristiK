@@ -48,8 +48,8 @@ export class PaymentDetailsComponent implements OnInit {
   public onePayment: Payment
   public orderDetails: Array<OrderDetail> = []
   public baseUrl: string = environment.endPoint + 'resources/payments/'
-  public customerImageLink:string = 'https://www.freepik.es/vector-gratis/lindo-slot-sentado-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-premium-plano_27313232.htm#query=perezoso&position=13&from_view=author'
-  public authorImagesLink:string = 'https://www.freepik.es/autor/catalyststuff'
+  public customerImageLink: string = 'https://www.freepik.es/vector-gratis/lindo-slot-sentado-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-premium-plano_27313232.htm#query=perezoso&position=13&from_view=author'
+  public authorImagesLink: string = 'https://www.freepik.es/autor/catalyststuff'
 
 
   public beneficiariesImages: Array<Avatar> = [
@@ -267,8 +267,8 @@ export class PaymentDetailsComponent implements OnInit {
     return image
   }
 
-  getUrlAvatar(assetRoute: string) : string{
-    if (this.beneficiariesImages.length>0) {
+  getUrlAvatar(assetRoute: string): string {
+    if (this.beneficiariesImages.length > 0) {
       const bUrl = this.beneficiariesImages.find(b => b.assetRoute === assetRoute)
       if (!bUrl) {
         const cUrl = this.customerImages.find(b => b.assetRoute === assetRoute)
@@ -414,13 +414,13 @@ export class PaymentDetailsComponent implements OnInit {
         }
       } else if (this.orderProcess.action === 'CreateOrderDetail' || this.orderProcess.action === 'CreatePayment') {
         this.store.dispatch(new SaveOrderProcess(undefined))
-        this.router.navigate(['Home/DetallesPedido'])
+        this.router.navigate(['Home/DetallesPedido/' + this.onePayment.orderId])
       } else {
         this.store.dispatch(new SaveOrderProcess(undefined))
-        this.router.navigate(['Home/DetallesPedido'])
+        this.router.navigate(['Home/DetallesPedido/' + this.onePayment.orderId])
       }
     } else {
-      this.router.navigate(['Home/DetallesPedido'])
+      this.router.navigate(['Home/DetallesPedido/' + this.onePayment.orderId])
     }
   }
 

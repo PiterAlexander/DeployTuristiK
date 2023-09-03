@@ -116,7 +116,7 @@ const routes: Routes = [
                 component: PaymentDetailsComponent
             },
             {
-                path: 'RevisionAbono', //aqui
+                path: 'RevisionAbono/:id', //aqui
                 canActivate: [AuthGuard],
                 component: EditPaymentFormComponent
             },

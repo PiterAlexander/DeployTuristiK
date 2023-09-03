@@ -61,7 +61,7 @@ export class PublicHomeComponent implements OnInit {
             {name: 'Queja', code: '2'},
             {name: 'Respuesta', code: '3'},
             {name: 'Sugerencia', code: '4'},
-            {name: 'Felicitacion', code: '5'}
+            {name: 'Felicitación', code: '5'}
         ];
     }
 
@@ -89,13 +89,13 @@ export class PublicHomeComponent implements OnInit {
     content: any[] = [
         {
             icon: 'pi pi-fw pi-phone',
-            title: 'Telefono',
-            info: 'aca va el telefono de esa cucha xd'
+            title: 'Teléfono',
+            info: '+57 320-744-6109'
         },
         {
             icon: 'bx bx-message-dots',
             title: 'Redes sociales',
-            info: 'Y aca va el wasa o alguna cosa asi'
+            info: 'Estamos en todas las plataformas como @pakytours'
         }
     ];
     ngOnInit() {

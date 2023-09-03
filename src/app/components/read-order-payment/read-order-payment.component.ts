@@ -125,7 +125,7 @@ export class ReadOrderPaymentComponent {
 
   editPayment(payment: Payment) {
     if (this.order.status !== 3) {
-      this.router.navigate(['Home/RevisionAbono'])
+      this.router.navigate(['Home/RevisionAbono/' + payment.paymentId])
     }
   }
 

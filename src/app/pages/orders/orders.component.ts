@@ -206,13 +206,13 @@ export class OrdersComponent implements OnInit {
         header: '¿Está seguro de activar este Pedido?',
         message: 'Tenga en cuenta que: <br><br>- Todos los procesos del pedido se habilitarán de nuevo.<br>- Se le informará al titular sobre este cambio.',
         icon: 'pi pi-exclamation-triangle',
-        rejectLabel: 'Cancelar',
-        rejectButtonStyleClass: 'p-button-outlined',
-        rejectIcon: 'pi pi-times',
-        acceptLabel: 'Sí, activar Pedido',
-        acceptButtonStyleClass: 'p-button-primary',
-        acceptIcon: 'pi pi-check',
-        accept: () => {
+        acceptLabel: 'Cancelar',
+        acceptButtonStyleClass: 'p-button-outlined',
+        acceptIcon: 'pi pi-times',
+        rejectLabel: 'Sí, activar Pedido',
+        rejectButtonStyleClass: 'p-button-primary',
+        rejectIcon: 'pi pi-check',
+        reject: () => {
           this.activateOrder(order)
         }
       })
@@ -292,7 +292,7 @@ export class OrdersComponent implements OnInit {
   }
 
   create() {
-    this.router.navigate(['Home/RegistrarPedido/']);
+    this.router.navigate(['Home/RegistrarPedido']);
   }
 
   sendToPayments(order: Order) {
@@ -305,18 +305,6 @@ export class OrdersComponent implements OnInit {
     }
     this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
     this.router.navigate(['Home/DetallesPaquete/' + order.packageId]);
-  }
-
-  verDetalles(elementoId: string) {
-    if (this.role == 'Administrador') {
-      this.router.navigate(['Home/DetallesPaquete/' + elementoId]);
-    }
-    if (this.role == 'Cliente') {
-      this.router.navigate(['Home/DetallesPaquete/' + elementoId]);
-    }
-    if (this.role == undefined) {
-      this.router.navigate(['detailsPackage/' + elementoId]);
-    }
   }
 
   calculateDays(departureDate: Date, returnDate: Date): number {

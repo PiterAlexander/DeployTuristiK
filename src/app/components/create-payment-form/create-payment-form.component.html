@@ -1,5 +1,5 @@
 <p-toast key="alert-message"></p-toast>
-<div *ngIf="orderProcess !== undefined" [ngClass]="{ 'pb-4 px-4 pt-0': role !== 'Cliente' }">
+<div *ngIf="orderProcess !== undefined" [ngClass]="{ 'pb-4 px-4 pt-0': role !== 'Cliente', 'mb-3 mt-5': role === 'Cliente' }">
     <div class="col-12">
         <div [ngClass]="{ 
         'card p-6': role !== 'Cliente',
@@ -129,8 +129,8 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="field-checkbox mb-2">
-                            <p-checkbox formControlName="termsAndConditions" value="check"
+                        <div *ngIf="orderProcess.action === 'CreateOrder'" class="field-checkbox mb-2">
+                            <p-checkbox formControlName="termsAndConditions" [binary]="true" value="check"
                                 inputId="termsAndConditions"></p-checkbox>
                             <label class="mr-1 mt-2 ml-2 font-normal" for="termsAndConditions">
                                 He leído y acepto los
@@ -142,12 +142,10 @@
                             <div class="flex align-items-end">
                                 <button pButton pRipple type="button" (click)="back()" label="Regresar"
                                     icon="pi pi-angle-left" class="p-button-outlined mr-3"></button>
-                                <p-button
-                                    *ngIf="validForm() && imageFile !== undefined"
-                                    (click)="save()" label="Guardar" icon="pi pi-check"></p-button>
-                                <p-button
-                                    *ngIf="!validForm() || imageFile === undefined"
-                                    label="Guardar" icon="pi pi-check" disabled="true"></p-button>
+                                <p-button *ngIf="validForm() && imageFile !== undefined" (click)="save()"
+                                    label="Guardar" icon="pi pi-check"></p-button>
+                                <p-button *ngIf="!validForm() || imageFile === undefined" label="Guardar"
+                                    icon="pi pi-check" disabled="true"></p-button>
                             </div>
                         </div>
                     </form>

@@ -1,7 +1,7 @@
 <p-confirmDialog icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <p-toast key="alert-message"></p-toast>
 
-<div *ngIf="oneCustomer !== undefined" [ngClass]="{ 'px-4 pt-0 pb-4': role !== 'Cliente' }">
+<div *ngIf="oneCustomer !== undefined" [ngClass]="{ 'px-4 pt-0 pb-4': role !== 'Cliente', 'mb-3 mt-5': role === 'Cliente' }">
     <div class="col-12">
         <div [ngClass]="{
         'card p-6': role !== 'Cliente',

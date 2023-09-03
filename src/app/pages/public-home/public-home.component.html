@@ -11,8 +11,8 @@
         <div
           class="col-12 md:col-4 flex flex-column gap-4 flex-order-1 md:flex-order-0 align-items-center md:align-items-start text-center md:text-left">
           <span class="block text-900 font-bold text-4xl">Bienvenido a TuristiK</span>
-          <span class="block text-700 text-lg">La agencia de viajes encargada de hacer tus sueños realidad.</span>
-          <span class="block text-900 font-bold text-2xl">Ofrecemos servicio de:</span>
+          <span class="block text-700 text-lg">La agencia de viajes encargada de hacer sus sueños realidad.</span>
+          <span class="block text-900 font-bold text-2xl">Ofrecemos servicios de:</span>
 
           <ul class="flex flex-wrap gap-5 list-none p-0">
 
@@ -39,11 +39,10 @@
         <div class="md:col-12 sm:col-12">
           <div class="p-5 surface-card surface-border card-shadow mt-3 mb-3" style="border-radius: 25px;">
             <div class="flex flex-column text-center md:text-left">
-              <span class="text-900 text-2xl mb-3 pl-2">Mas vendidos</span>
+              <span class="text-900 font-medium text-2xl mb-3 pl-2">Nuestros Paquetes más vendidos</span>
             </div>
             <div class="grid grid-nogutter px-2 flex-column md:flex-row"
               [ngClass]="{'single-card-size': top.length === 1}" style="column-gap: 2rem; row-gap: 2rem;">
-
               <div *ngFor="let item of top"
                 class="col flex flex-column justify-content-center text-start  align-items-start border-1 surface-border py-4 px-3 border-round"
                 [ngClass]="{'single-card': top.length === 1}">
@@ -67,11 +66,11 @@
                           <div class="my-5">
                             <button pButton pRipple icon="bx bxs-hotel" class="mr-2 p-button-rounded p-button-outlined"
                               pTooltip="{{item.hotel}}" tooltipPosition="bottom"></button>
-                            <button *ngIf="item.transport == 1" pButton icon="bx bxs-bus"
+                            <button *ngIf="item.transport === 1" pButton icon="bx bxs-bus"
                               class="p-button-rounded p-button-outlined" pTooltip="Transporte terrestre"
                               tooltipPosition="bottom"></button>
-                            <button *ngIf="item.transport == 2" pButton icon="bx bxs-plane-take-off"
-                              class="p-button-rounded p-button-outlined" pTooltip="Transporte aereo"
+                            <button *ngIf="item.transport === 2" pButton icon="bx bxs-plane-take-off"
+                              class="p-button-rounded p-button-outlined" pTooltip="Transporte aéreo"
                               tooltipPosition="bottom"></button>
                           </div>
                           <div
@@ -115,7 +114,7 @@
                       <div class="col p-1" style="display: flex;
                               justify-content: center;
                               align-items: center;" *ngIf="item.transport == '2'">
-                        <a class="p-button-outlined p-button" pTooltip="Transporte: Aereo" tooltipPosition="bottom">
+                        <a class="p-button-outlined p-button" pTooltip="Transporte: Aéreo" tooltipPosition="bottom">
 
                           <i class='bx bxs-plane-take-off scale'></i>
                         </a>
@@ -172,9 +171,8 @@
         </div>
         <div class="mt-3 md:mt-8">
           <span class="block text-900 font-bold text-3xl mb-3 text-center">Nuestro equipo</span>
-          <div class="text-center text-lg line-height-3 mb-6">Somos los encargados de llevarte al lugar que deseas y
-            hacer
-            tus sueños realidad</div>
+          <div class="text-center text-lg line-height-3 mb-6">Somos los encargados de llevarlo al lugar que desee y
+            hacer sus sueños realidad.</div>
           <div class="grid">
             <div class="col-12 md:col-6 lg:col-3 p-3">
               <div class="relative overflow-hidden" (mouseenter)="visibleMember = 0" (mouseleave)="visibleMember = -1">
@@ -264,7 +262,7 @@
       <div class="grid surface-card grid-nogutter p-6 border-1 surface-border"
         style="border-radius: 25px; column-gap: 2rem; row-gap: 2rem">
         <div class="col-12">
-          <p class="text-900 font-bold">Contactenos</p>
+          <p class="text-900 font-bold">Contáctenos</p>
         </div>
         <div class="col-12">
           <div class="grid grid-nogutter px-2 flex-column md:flex-row" style="column-gap: 2rem; row-gap: 2rem">
@@ -280,33 +278,33 @@
         </div>
 
         <div class="col-12 mt-5">
-          <p class="text-900 font-bold">Envianos tu recomendacion</p>
+          <p class="text-900 font-bold">Envíenos su comentario</p>
 
           <div class="grid flex-column md:flex-row formgrid grid-nogutter mt-6" style="row-gap: 2rem; column-gap: 2rem">
             <div class="field col">
-              <label for="name" class="block text-indigo-300 font-bold">Nombre</label>
+              <label for="name" class="block text-indigo-300 font-bold">Nombres</label>
               <span class="p-input-icon-left w-full" style="height: 3.5rem">
                 <i class="pi pi-user" style="left: 1.5rem"></i>
-                <input type="text" pInputText placeholder="Ingresa tu nombre" class="w-full px-7 text-900 font-semibold"
+                <input type="text" pInputText placeholder="Ingrese sus Nombres" class="w-full px-7 text-900 font-semibold"
                   [(ngModel)]="name" style="height: 3.5rem" onkeydown="return /[a-z A-Z ]/i.test(event.key)" />
               </span>
             </div>
 
             <div class="field col">
-              <label for="email" class="block text-indigo-300 font-bold">Correo electronico</label>
+              <label for="email" class="block text-indigo-300 font-bold">Correo Electrónico</label>
               <span class="p-input-icon-left w-full" style="height: 3.5rem">
                 <i class="pi pi-envelope" style="left: 1.5rem"></i>
-                <input type="text" pInputText placeholder="Ingresa tu correo electronico"
+                <input type="text" pInputText placeholder="Ingrese su Correo Electrónico"
                   class="w-full px-7 text-900 font-semibold" [(ngModel)]="email" style="height: 3.5rem"
                   pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}" />
               </span>
             </div>
             <div class="field col-4 w-100">
-              <label for="type" class="block text-indigo-300 font-bold">Tipo de comunicacion</label>
+              <label for="type" class="block text-indigo-300 font-bold">Tipo de Comunicación</label>
               <span class="p-input-icon-left w-full">
                 <i class="pi pi-envelope" style="left: 1.5rem"></i>
 
-                <p-dropdown [options]="types" placeholder="Seleccione Tipo de comunicacion" [(ngModel)]="selectedType"
+                <p-dropdown [options]="types" placeholder="Seleccione el Tipo de Comunicación" [(ngModel)]="selectedType"
                   optionLabel="name" appendTo="body" required="true"
                   [style]="{width: '100%', height: '3.5rem'}"></p-dropdown>
               </span>
@@ -314,7 +312,7 @@
 
             <div class="field col-12 flex flex-column">
               <label for="message" class="block text-indigo-300 font-bold">Mensaje</label>
-              <textarea placeholder="Escribe aqui tu experiencia y recomendaciones" id="message" rows="5" pInputTextarea
+              <textarea placeholder="Por favor ingrese el mensaje que desea enviarnos aquí. Nos comunicaremos con usted lo antes posible." id="message" rows="5" pInputTextarea
                 class="w-full surface-border p-4 text-900 font-semibold border-round mb-4" [autoResize]="true"
                 [(ngModel)]="message" maxlength="150"></textarea>
 

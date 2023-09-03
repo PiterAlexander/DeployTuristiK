@@ -53,8 +53,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
   public beneficiarieImageIndex: number = 0
   public customerImageIndex: number = 0
   public ftCheck: boolean = false
-  public customerImageLink:string = 'https://www.freepik.es/vector-gratis/lindo-slot-sentado-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-premium-plano_27313232.htm#query=perezoso&position=13&from_view=author'
-  public authorImagesLink:string = 'https://www.freepik.es/autor/catalyststuff'
+  public customerImageLink: string = 'https://www.freepik.es/vector-gratis/lindo-slot-sentado-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-premium-plano_27313232.htm#query=perezoso&position=13&from_view=author'
+  public authorImagesLink: string = 'https://www.freepik.es/autor/catalyststuff'
 
 
   public beneficiariesImages: Array<Avatar> = [
@@ -476,8 +476,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
     return image
   }
 
-  getUrlAvatar(assetRoute: string) : string{
-    if (this.beneficiariesImages.length>0) {
+  getUrlAvatar(assetRoute: string): string {
+    if (this.beneficiariesImages.length > 0) {
       const bUrl = this.beneficiariesImages.find(b => b.assetRoute === assetRoute)
       if (!bUrl) {
         const cUrl = this.customerImages.find(b => b.assetRoute === assetRoute)
@@ -869,21 +869,21 @@ export class CreateOrderDetailFormComponent implements OnInit {
         header: '¿Está seguro de regresar?',
         message: 'Perderá toda la información previamente ingresada.',
         icon: 'pi pi-exclamation-triangle',
-        rejectLabel: 'Sí, regresar',
-        rejectButtonStyleClass: 'p-button-outlined',
-        rejectIcon: 'pi pi-times',
-        acceptLabel: 'Permanecer',
-        acceptIcon: 'pi pi-check',
-        reject: () => {
+        rejectLabel: 'Permanecer',
+        rejectIcon: 'pi pi-check',
+        acceptLabel: 'Sí, regresar',
+        acceptIcon: 'pi pi-times',
+        acceptButtonStyleClass: 'p-button-outlined',
+        accept: () => {
           const orderId: string = this.orderProcess.order.orderId
           this.store.dispatch(new SaveOrderProcess(undefined))
-          this.router.navigate(['Home/DetallesPedido'])
+          this.router.navigate(['Home/DetallesPedido/' + orderId])
         }
       })
     } else {
       const orderId: string = this.orderProcess.order.orderId
       this.store.dispatch(new SaveOrderProcess(undefined))
-      this.router.navigate(['Home/DetallesPedido'])
+      this.router.navigate(['Home/DetallesPedido/' + orderId])
     }
   }
 
@@ -895,12 +895,12 @@ export class CreateOrderDetailFormComponent implements OnInit {
           header: '¿Está seguro de regresar?',
           message: 'Perderá toda la información previamente ingresada.',
           icon: 'pi pi-exclamation-triangle',
-          rejectLabel: 'Sí, regresar',
-          rejectButtonStyleClass: 'p-button-outlined',
-          rejectIcon: 'pi pi-times',
-          acceptLabel: 'Permanecer',
-          acceptIcon: 'pi pi-check',
-          reject: () => {
+          rejectLabel: 'Permanecer',
+          rejectIcon: 'pi pi-check',
+          acceptLabel: 'Sí, regresar',
+          acceptIcon: 'pi pi-times',
+          acceptButtonStyleClass: 'p-button-outlined',
+          accept: () => {
             const packageId: string = this.orderProcess.order.package.packageId
             this.store.dispatch(new SaveOrderProcess(undefined))
             this.router.navigate(['Home/DetallesPaquete/' + packageId])
@@ -960,8 +960,8 @@ export class CreateOrderDetailFormComponent implements OnInit {
       customerId: this.orderProcess.customer.customerId,
       name: this.formGroup.value.name,
       lastName: this.formGroup.value.lastName,
-      document: this.formGroup.value.document,
-      birthDate: this.formGroup.value.birthdate,
+      document: this.orderProcess.customer.document,
+      birthDate: this.orderProcess.customer.birthDate,
       phoneNumber: this.formGroup.value.phoneNumber,
       address: this.formGroup.value.address,
       eps: this.formGroup.value.eps,

@@ -174,12 +174,12 @@ export class CreateOrderFormComponent implements OnInit {
           header: '¿Está seguro de regresar?',
           message: 'Perderá toda la información previamente ingresada.',
           icon: 'pi pi-exclamation-triangle',
-          rejectLabel: 'Sí, regresar',
-          rejectButtonStyleClass: 'p-button-outlined',
-          rejectIcon: 'pi pi-times',
-          acceptLabel: 'Permanecer',
-          acceptIcon: 'pi pi-check',
-          reject: () => {
+          rejectLabel: 'Permanecer',
+          rejectIcon: 'pi pi-check',
+          acceptLabel: 'Sí, regresar',
+          acceptIcon: 'pi pi-times',
+          acceptButtonStyleClass: 'p-button-outlined',
+          accept: () => {
             this.store.dispatch(new SaveOrderProcess(undefined))
             this.router.navigate(['Home/Pedidos']);
           }

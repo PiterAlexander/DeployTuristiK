@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit {
         this.show = true;
         var regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
         if (!this.validForm()) {
-            this.messageService.add({ key: 'alert-message-login', severity: 'error', summary: '¡Espera!', detail: 'Todos los campos deben estar diligenciados correctamente' });
+            this.messageService.add({ key: 'alert-message-login', severity: 'error', summary: '¡Falta algo!', detail: 'Todos los campos deben estar diligenciados correctamente' });
 
         } else if (regex.test(this.formGroup.value.email)) {
             this.loadingButton = true;

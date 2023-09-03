@@ -384,25 +384,33 @@ export class CreatecustomerformComponent implements OnInit {
       const role: Role = this.allRoles.find(r => r.name === 'Cliente')
       if (this.oneCustomer !== undefined) {
         if (this.oneCustomer.action === 'editCustomer' || this.oneCustomer.action === "editCustomerFromFrequentTraveler") {
+          let document: string
+          if (this.oneCustomer.action === "editCustomerFromFrequentTraveler") {
+            document = this.customerFromAction.document
+          } else {
+            document = this.formGroup.value.document
+          }
           const customer: Customer = {
             customerId: this.customerFromAction.customerId,
             name: this.formGroup.value.name,
             lastName: this.formGroup.value.lastName,
-            document: this.formGroup.value.document,
-            birthDate: this.formGroup.value.birthDate,
+            document: document,
+            birthDate: this.customerFromAction.birthDate,
             phoneNumber: this.formGroup.value.phoneNumber,
             address: this.formGroup.value.address,
             eps: this.formGroup.value.eps,
             userId: this.customerFromAction.userId,
           }
           this.store.dispatch(new EditCustomerRequest({ ...customer }))
-          this.messageService.add({
-            key: 'alert-message',
-            severity: 'success',
-            summary: '¡Proceso completado!',
-            detail: 'Cliente editado exitosamente.'
-          });
-          window.location.reload();
+          if (this.oneCustomer.action === "editCustomerFromFrequentTraveler") {
+            this.messageService.add({
+              key: 'alert-message',
+              severity: 'success',
+              summary: '¡Proceso completado!',
+              detail: 'Viajero editado exitosamente.'
+            });
+            window.location.reload();
+          }
         } else if (this.oneCustomer.action === 'createFrequentTraveler') {
           const beneficiarieRole: Role = this.allRoles.find((r) => r.name == 'Beneficiario');
           const user: User = {

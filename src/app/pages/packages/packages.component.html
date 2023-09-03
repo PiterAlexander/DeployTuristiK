@@ -5,8 +5,8 @@
     <div>
         <div class="pl-5 pr-5 pb-5">
             <div class="banner">
-                <h1 style="color:white;font-weight: bold;">¡Elige el paquete que mas se ajuste a lo que deseas!</h1>
-                <p style="font-weight: bold; color: white;">No esperes más para vivir una aventura increíble. ¡Reserva ahora y comienza a explorar los tesoros que el mundo tiene para ofrecerte!</p>
+                <h1 style="color:white;font-weight: bold;">¡Elija el Paquete que más se ajuste a lo que desee!</h1>
+                <p style="font-weight: bold; color: white;">No espere más para vivir una aventura increíble. ¡Reserve ahora y comience a explorar los tesoros que el mundo tiene para ofrecerle!</p>
                 <a (click)="scrollToSelector()" class="p-button">Ver más</a>
             </div>
         </div>
@@ -96,7 +96,7 @@
                                     <span class="small">Precio por persona</span>
                                     <span class="flex align-items-end text-primary text-2xl font-medium">${{package.price|currency: ' ':false:'1.0-0'}}</span>
                                 </div>
-                                <div>
+                                <div class="flex align-items-end mb-1">
                                     <button pButton pRipple type="button" label="Ver detalles"
                                         (click)="verDetalles(package.packageId)"
                                         class="p-button-outlined p-button-sm"></button>

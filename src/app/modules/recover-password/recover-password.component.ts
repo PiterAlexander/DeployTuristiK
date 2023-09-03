@@ -95,14 +95,16 @@ export class RecoverPasswordComponent implements OnInit {
     }
 
     validatePassword(): boolean {
-        const password1 = this.formGroup.value.password;
-        const password2 = this.formGroup.value.confirmPassword;
-
-        if (password1 === password2) {
-            return true;
-        } else {
-            return false;
+        if (this.formGroup.value.confirmPassword.length > 0) {
+            const password1 = this.formGroup.value.password
+            const password2 = this.formGroup.value.confirmPassword
+            if (password1 === password2) {
+                return true;
+            } else {
+                return false;
+            }
         }
+        return true
     }
 
     validForm(): boolean {
@@ -113,7 +115,7 @@ export class RecoverPasswordComponent implements OnInit {
         if (show) {
             if (this.menssage.success) {
                 this.show = false;
-                this.messageService.add({ key: 'alert-message-recover-password', severity: 'success', summary: '¡Proceso completado!', detail: 'Ya puedes acceder nuevamente al sistema.' });
+                this.messageService.add({ key: 'alert-message-recover-password', severity: 'success', summary: '¡Proceso completado!', detail: 'Ya puede iniciar sesión de nuevo.' });
                 setTimeout(() => {
                     this.router.navigate(['/login']);
                 }, 2000);

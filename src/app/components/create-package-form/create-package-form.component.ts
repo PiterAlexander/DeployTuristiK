@@ -53,7 +53,7 @@ export class CreatePackageFormComponent implements OnInit {
         });
 
         this.transports = [
-            {label: 'Aereo', value: 1},
+            {label: 'Aéreo', value: 1},
             {label: 'Terrestre', value: 2}
         ];
 

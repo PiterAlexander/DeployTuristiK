@@ -83,7 +83,7 @@
         <div class="grid">
             <div class="col">
                 <div class="field">
-                    <input pInputText placeholder="Ingrese sus nombres" type="text" formControlName="name"
+                    <input pInputText placeholder="Ingrese los nombres" type="text" formControlName="name"
                         required="true" minlength="3" maxlength="30" class="w-full"
                         onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)" />
                     <!-- validaciones del nombre -->
@@ -100,7 +100,7 @@
             <div class="col">
                 <div class="field">
                     <div class="input-group">
-                        <input pInputText placeholder="Ingrese sus apellidos" type="text" formControlName="lastName"
+                        <input pInputText placeholder="Ingrese los apellidos" type="text" formControlName="lastName"
                             required="true" minlength="3" maxlength="30" class="w-full"
                             onkeydown="return /^[a-zA-Z\u00C0-\u017F\s]+$/i.test(event.key)" />
                         <!-- validacion de apellidos -->
@@ -120,7 +120,7 @@
             <div class="col">
                 <div class="field">
                     <div class="p-inputgroup">
-                        <input pInputText placeholder="Ingrese su número de documento" type="text"
+                        <input pInputText placeholder="Ingrese el número de documento" type="text"
                             formControlName="document" [ngClass]="{
                                 'border-red-600':
                                     validateExistingDocument() ||
@@ -156,7 +156,7 @@
                 <div class="field">
                     <span class="p-input-icon-left w-full">
                         <i class="pi pi-phone"></i>
-                        <input pInputText placeholder="Ingrese su número de teléfono" type="text"
+                        <input pInputText placeholder="Ingrese el número de teléfono" type="text"
                             formControlName="phoneNumber" required="true" minlength="10" maxlength="10" class="w-full"
                             [ngClass]="{
                                 'border-red-600':
@@ -186,7 +186,7 @@
             <div class="col-12 md:col-6">
                 <div class="field">
                     <p-calendar appendTo="body" dateFormat="dd/mm/yy" formControlName="birthDate"
-                        placeholder="Ingrese su fecha de nacimiento" showIcon="true" [style]="{width: '100%'}"
+                        placeholder="Ingrese la fecha de nacimiento" showIcon="true" [style]="{width: '100%'}"
                         [readonlyInput]="true" [maxDate]="customerMaxDate" [defaultDate]="customerMaxDate"></p-calendar>
                     <small class="p-error block"
                         *ngIf="formGroup.get('birthDate')?.dirty && formGroup.get('birthDate')?.errors?.['required']">
@@ -197,7 +197,7 @@
             <div class="col-12 md:col-6">
                 <div class="field">
                     <p-autoComplete formControlName="eps" [suggestions]="results" (completeMethod)="searchEps($event)"
-                        [dropdown]="true" class="w-full" placeholder="EPS" minlength="3" maxlength="100"
+                        [dropdown]="true" class="w-full" placeholder="Ingrese la EPS" minlength="3" maxlength="100"
                         [style]="{width: '24.6rem'}" appendTo="body"></p-autoComplete>
 
                     <small class="p-error block"
@@ -220,7 +220,7 @@
                         pInputText
                         type="text"
                         formControlName="address"
-                        placeholder="Dirección de residencia"
+                        placeholder="Ingrese la dirección residencial completa"
                         required="true"
                         ngx-google-places-autocomplete
                         [options]="{

@@ -1,6 +1,7 @@
 <p-confirmDialog key="confirmation-message" [style]="{width: '43vw'}"></p-confirmDialog>
 <p-toast key="alert-message"></p-toast>
-<div *ngIf="beneficiariesVisibility" [ngClass]="{ 'px-4 pt-0 pb-1': role !== 'Cliente' }">
+<div *ngIf="beneficiariesVisibility"
+    [ngClass]="{ 'px-4 pt-0 pb-1': role !== 'Cliente', 'mb-3 mt-5': role === 'Cliente' }">
     <div class="col-12">
         <div [ngClass]="{
         'card p-6': role !== 'Cliente',
@@ -12,7 +13,7 @@
                 class="text-900 font-bold text-4xl my-2">Pedido Exitoso</div>
             <p *ngIf="orderProcess !== undefined && orderProcess.action === 'CreateOrder' && role === 'Cliente'"
                 class="text-700 text-xl mt-0 mb-4 p-0">Su pedido se ha registrado con
-                exito, le informaremos cuando un
+                éxito, le informaremos cuando un
                 Empleado lo acepte.</p>
             <div *ngIf="orderProcess !== undefined && orderProcess.action === 'CreateOrder' && role === 'Cliente'"
                 class="mb-5"
@@ -21,7 +22,7 @@
 
             <p *ngIf="orderProcess !== undefined && orderProcess.action === 'CreateOrder' && role !== 'Cliente'"
                 class="text-700 text-xl mt-0 mb-4 p-0">El pedido se ha registrado con
-                exito.</p>
+                éxito.</p>
             <div *ngIf="orderProcess !== undefined && orderProcess.action === 'CreateOrder' && role !== 'Cliente'"
                 class="mb-5"
                 style="height:3px;background:linear-gradient(90deg, var(--primary-color) 0%, rgba(33, 150, 243, 0) 30%);">
@@ -32,16 +33,15 @@
             <div *ngIf="orderProcess !== undefined && orderProcess.action === 'CreateOrderDetail'"
                 class="text-900 font-bold text-4xl my-2">Proceso Exitoso</div>
             <p *ngIf="orderProcess !== undefined && orderProcess.action === 'CreateOrderDetail' && role === 'Cliente'"
-                class="text-700 text-xl mt-0 mb-4 p-0">Los beneficiarios se han registrado con exito, le
-                informaremos
-                cuando un Empleado los acepte.</p>
+                class="text-700 text-xl mt-0 mb-4 p-0">Los beneficiarios se han registrado con éxito, le
+                informaremos cuando un Empleado los acepte.</p>
             <div *ngIf="orderProcess !== undefined && orderProcess.action === 'CreateOrderDetail' && role === 'Cliente'"
                 class="mb-5"
                 style="height:3px;background:linear-gradient(90deg, var(--primary-color) 0%, rgba(33, 150, 243, 0) 63%);">
             </div>
 
             <p *ngIf="orderProcess !== undefined && orderProcess.action === 'CreateOrderDetail' && role !== 'Cliente'"
-                class="text-700 text-xl mt-0 mb-4 p-0">Los beneficiarios se han registrado con exito.</p>
+                class="text-700 text-xl mt-0 mb-4 p-0">Los beneficiarios se han registrado con éxito.</p>
             <div *ngIf="orderProcess !== undefined && orderProcess.action === 'CreateOrderDetail' && role !== 'Cliente'"
                 class="mb-5"
                 style="height:3px;background:linear-gradient(90deg, var(--primary-color) 0%, rgba(33, 150, 243, 0) 37%);">
@@ -79,10 +79,10 @@
                 <ng-template let-beneficiarie pTemplate="listItem">
                     <div class="col-12">
                         <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
-                          <a [href]="getUrlAvatar(beneficiarie.image)">
-                            <img [src]="beneficiarie.image" [alt]="beneficiarie.name"
-                            class="my-4 md:my-0 w-7 md:w-10rem shadow-2 mr-5" />
-                          </a>
+                            <a [href]="getUrlAvatar(beneficiarie.image)">
+                                <img [src]="beneficiarie.image" alt="Avatar"
+                                    class="my-4 md:my-0 w-7 md:w-10rem shadow-2 mr-5" />
+                            </a>
                             <div class="flex-1 flex flex-column align-items-center text-center md:text-left">
                                 <div class="font-bold text-2xl">{{ beneficiarie.name + ' ' + beneficiarie.lastName }}
                                 </div>
@@ -141,9 +141,9 @@
                                     showLabel(beneficiarie.document) }}</span>
                             </div>
                             <div class="flex flex-column align-items-center text-center mb-3">
-                              <a [href]="getUrlAvatar(beneficiarie.image)">
-                                <img [src]="beneficiarie.image" alt="Avatar" class="w-8 shadow-2 my-3 mx-0" />
-                              </a>
+                                <a [href]="getUrlAvatar(beneficiarie.image)">
+                                    <img [src]="beneficiarie.image" alt="Avatar" class="w-8 shadow-2 my-3 mx-0" />
+                                </a>
                                 <div class="text-2xl font-bold">{{beneficiarie.name + ' ' + beneficiarie.lastName}}
                                 </div>
                                 <div><span pTooltip="Teléfono" tooltipPosition="bottom">{{ beneficiarie.phoneNumber
@@ -243,8 +243,8 @@
                         <span class="text-xs sm:text-base" [class]="orderProcessingLabel(2)">Pagado</span>
                     </div>
                     <div *ngIf="onePayment.order.status === 3" class="flex w-full justify-content-center">
-                        <span class="text-xs sm:text-base text-900 font-medium">Su pedido ha sido cancelado por
-                            incumplimiento en el pago</span>
+                        <span class="text-xs sm:text-base text-900 font-medium">Su pedido fue cancelado debido al
+                            incumplimiento de nuestros términos y condiciones.</span>
                     </div>
                 </div>
             </div>

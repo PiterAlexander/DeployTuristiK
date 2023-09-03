@@ -64,8 +64,8 @@
     </div>
 </div>
 
-<div *ngIf="role === 'Cliente'">
-    <div class="mb-4 surface-section px-2 py-4 md:px-4 lg:px-4 border-1 surface-border" style="border-radius: 15px;">
+<div *ngIf="role === 'Cliente'" class="mb-3 mt-5">
+    <div class="surface-section p-5 border-1 surface-border" style="border-radius: 20px;">
         <p-dataView id="myDv" #dv *ngIf="visible" [value]="ordersList" filterBy="package.destination" [paginator]="true"
             [rows]="2" layout="list" [loading]="loading">
             <ng-template pTemplate="header">

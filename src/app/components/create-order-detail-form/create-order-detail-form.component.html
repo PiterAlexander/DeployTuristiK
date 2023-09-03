@@ -1,6 +1,7 @@
 <p-confirmDialog key="confirmation-message"></p-confirmDialog>
 <p-toast key="alert-message"></p-toast>
-<div *ngIf="orderProcess !== undefined" [ngClass]="{ 'pb-4 px-4 pt-0': role !== 'Cliente' }">
+<div *ngIf="orderProcess !== undefined"
+    [ngClass]="{ 'pb-4 px-4 pt-0': role !== 'Cliente', 'mb-3 mt-5': role === 'Cliente' }">
     <div class="col-12">
         <div [ngClass]="{
         'card p-6': role !== 'Cliente',
@@ -275,7 +276,7 @@
                             apartado está dispuesto para que visualice y
                             modifique la información permitida del beneficiario asociado a este pedido.</p>
                         <p class="mx-0 mt-5 text-center text-lg">Por favor asegurese de que toda la información
-                            ingresada sea veridica.</p>
+                            ingresada sea verídica.</p>
                         <p class="mx-0 mt-4 text-center text-lg text-900 font-medium">Tenga en cuenta que el Documento
                             y la Fecha de Nacimiento no son campos
                             modificables.</p>
@@ -301,10 +302,10 @@
                     <ng-template let-product pTemplate="listItem">
                         <div class="col-12">
                             <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
-                              <a [href]="getUrlAvatar(product.image)">
-                                <img [src]="product.image" alt="avatar"
-                                    class="my-4 md:my-0 w-7 md:w-10rem shadow-2 mr-5" />
-                              </a>
+                                <a [href]="getUrlAvatar(product.image)">
+                                    <img [src]="product.image" alt="avatar"
+                                        class="my-4 md:my-0 w-7 md:w-10rem shadow-2 mr-5" />
+                                </a>
                                 <div class="flex-1 flex flex-column align-items-center text-center md:text-left">
                                     <div class="font-bold text-2xl">{{ product.name + ' ' + product.lastName }}</div>
                                     <div><span pTooltip="Documento" tooltipPosition="bottom">{{
@@ -345,10 +346,9 @@
                                         showLabel(beneficiarie.document) }}</span>
                                 </div>
                                 <div class="flex flex-column align-items-center text-center mb-3">
-                                  <a [href]="getUrlAvatar(beneficiarie.image)">
-                                    <img [src]="beneficiarie.image" alt="Avatar"
-                                        class="w-8 shadow-2 my-3 mx-0" />
-                                  </a>
+                                    <a [href]="getUrlAvatar(beneficiarie.image)">
+                                        <img [src]="beneficiarie.image" alt="Avatar" class="w-8 shadow-2 my-3 mx-0" />
+                                    </a>
                                     <div class="text-2xl font-bold">{{beneficiarie.name + ' ' + beneficiarie.lastName}}
                                     </div>
                                     <div><span pTooltip="Teléfono" tooltipPosition="bottom">{{ beneficiarie.phoneNumber
@@ -373,8 +373,8 @@
                     class="p-button-outlined mr-3"></button>
                 <p-button *ngIf="orderProcess.action !== 'EditOrderDetail' && validForm()" (click)="next()"
                     label="Siguiente" icon="pi pi-check"></p-button>
-                <p-button *ngIf="orderProcess.action !== 'EditOrderDetail' && !validForm()" (click)="next()"
-                    label="Siguiente" icon="pi pi-check" disabled="true"></p-button>
+                <p-button *ngIf="orderProcess.action !== 'EditOrderDetail' && !validForm()" label="Siguiente"
+                    icon="pi pi-check" disabled="true"></p-button>
             </div>
         </div>
     </div>

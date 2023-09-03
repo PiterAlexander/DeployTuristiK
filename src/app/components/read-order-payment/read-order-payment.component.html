@@ -1,7 +1,7 @@
 <p-confirmDialog icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <p-toast key="alert-message"></p-toast>
 
-<div *ngIf="order !== undefined" class="div" [ngClass]="{ 'pb-4 px-4 pt-0': role !== 'Cliente' }">
+<div *ngIf="order !== undefined" class="div" [ngClass]="{ 'pb-4 px-4 pt-0': role !== 'Cliente', 'mb-3 mt-5': role === 'Cliente' }">
     <div class="col-12">
         <div [ngClass]="{
         'card p-6': role !== 'Cliente',
@@ -117,7 +117,7 @@
                             pagada! -
                             Con abonos pendientes</td>
                         <td *ngIf="order.status === 3" colspan="12">Su pedido fue cancelado debido al incumplimiento de
-                            pago por su parte.</td>
+                            nuestros términos y condiciones.</td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">

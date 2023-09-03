@@ -1,6 +1,6 @@
 <p-toast key="alert-message"></p-toast>
 <h2 class="text-center mx-0 mt-0 mb-4 text-indigo-500">{{ ActionTitle }}</h2>
-<form novalidate id="form" (submit)="saveEmployee()" [formGroup]="formGroup">
+<form novalidate [formGroup]="formGroup">
     <div class="grid">
         <div class="col">
             <div class="field">
@@ -153,9 +153,10 @@
         </div>
     </div>
     <div class="flex justify-content-end">
-        <button pButton pRipple type="button" (click)="cancel()" label="Cancelar" icon="pi pi-times"
-            class="p-button-outlined mr-3"></button>
-        <p-button *ngIf="validForm()" type="submit" label="Guardar" icon="pi pi-check"></p-button>
         <p-button *ngIf="!validForm()" label="Guardar" icon="pi pi-check" disabled="true"></p-button>
+        <p-button *ngIf="validForm()" label="Guardar" (click)="saveEmployee()" icon=" pi
+            pi-check"></p-button>
+        <button pButton pRipple type="button" (click)="cancel()" label="Cancelar" icon="pi pi-times"
+            class="p-button-outlined ml-3"></button>
     </div>
 </form>
