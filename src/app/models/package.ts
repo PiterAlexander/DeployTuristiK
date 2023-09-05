@@ -3,7 +3,7 @@ export interface Package {
     name: string;
     destination: string;
     details: string;
-    transport: string;
+    transport: number;
     hotel: string;
     arrivalDate: Date;
     departureDate: Date;
