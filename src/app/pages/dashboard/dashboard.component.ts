@@ -86,6 +86,7 @@ export class DashboardComponent implements OnInit {
             labels: ageData.map(range => range.label),
             datasets: [
                 {
+                    
                     label: '',
                     data: ageData.map(range => range.value),
                     backgroundColor: '#6366F1',

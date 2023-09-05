@@ -75,3 +75,12 @@
   width: 100% !important;
   }
 }
+
+@media (max-width: 1400px) {
+  .text-about-us{
+    display: none !important;
+  }
+  .text-about-us-2{
+    display: block !important;
+  }
+}
