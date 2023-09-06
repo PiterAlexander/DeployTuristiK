@@ -94,7 +94,7 @@
                             <div class="flex justify-content-between">
                                 <div>
                                     <span class="small">Precio por persona</span>
-                                    <span class="flex align-items-end text-primary text-2xl font-medium">${{package.price|currency: ' ':false:'1.0-0'}}</span>
+                                    <span class="flex align-items-end text-primary text-2xl font-medium">${{package.price + package.aditionalPrice|currency: ' ':false:'1.0-0'}}</span>
                                 </div>
                                 <div class="flex align-items-end mb-1">
                                     <button pButton pRipple type="button" label="Ver detalles"
@@ -168,7 +168,7 @@
                             {{ package.availableQuotas }}
                         </td>
                         <td>
-                            {{ package.price | currency: ' ':false:'1.0-0' }}
+                            {{ package.price + package.aditionalPrice | currency: ' ':false:'1.0-0' }}
                         </td>
                         <td class="flex justify-content-around">
                             <button pButton type="button" icon="pi pi-pencil"

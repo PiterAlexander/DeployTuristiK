@@ -1,61 +1,97 @@
 <div>
-  <ng-container *ngIf="role !== 'Cliente'">
-    <div class="layout-topbar mr-5">
-      <div class="topbar-start p-3">
-        <button #menubutton type="button" (click)="onToggleMenuSidebar()" class="topbar-menubutton p-link p-trigger">
-          <i class="pi pi-bars"></i>
-        </button>
-        <nav class="layout-breadcrumb">
-          <ol>
-            <li>{{route}}</li>
-          </ol>
-        </nav>
-      </div>
+    <ng-container *ngIf="role !== 'Cliente'">
+        <div class="layout-topbar mr-5">
+            <div class="topbar-start p-3">
+                <button
+                    #menubutton
+                    type="button"
+                    (click)="onToggleMenuSidebar()"
+                    class="topbar-menubutton p-link p-trigger"
+                >
+                    <i class="pi pi-bars"></i>
+                </button>
+                <nav class="layout-breadcrumb">
+                    <ol>
+                        <li>{{ route }}</li>
+                    </ol>
+                </nav>
+            </div>
 
-      <div class="topbar-end">
-        <ul class="topbar-menu">
-          <li class="topbar-profile">
-            <button type="button" class="p-link">
-              <img src="assets/layout/images/avatar.png" (click)="onProfileButtonClick()" alt="Perfil" />
-            </button>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-  </ng-container>
+            <div class="topbar-end">
+                <ul class="topbar-menu">
+                    <li class="topbar-profile">
+                        <button type="button" class="p-link">
+                            <p-avatar
+                                image="assets/img/avatars/titular.jpeg"
+                                shape="circle"
+                                (click)="onProfileButtonClick()"
+                            ></p-avatar>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </ng-container>
 </div>
 
-<div [ngClass]="{
-  'border-header': role !== 'Administrador'
-}">
-  <ng-container *ngIf="role === 'Cliente'">
-    <div
-      class="responsive-margin flex align-items-center justify-content-between relative lg:static py-2 px-4 mx-0 md:px-7 lg:px-4 lg:pb-4 lg:pt-6 lg:mx-8">
-      <a class="cursor-pointer">
-        <img src="assets/img/logo.jpg" alt="Logo" width="50" height="50">
-        <img src="assets/img/t1.png" alt="Titulo" width="190" class="mt-2 ml-1" height="30">
-      </a>
-      <a pRipple class="cursor-pointer block md:hidden text-700 text-primary" pStyleClass="@next" enterClass="ng-hidden"
-        enterActiveClass="px-fadein" leaveToClass="ng-hidden" leaveActiveClass="px-fadeout">
-        <i class="pi pi-bars text-4xl"></i>
-      </a>
+<div
+    [ngClass]="{
+        'border-header': role !== 'Administrador'
+    }"
+>
+    <ng-container *ngIf="role === 'Cliente'">
+        <div
+            class="responsive-margin flex align-items-center justify-content-between relative lg:static py-2 px-4 mx-0 md:px-7 lg:px-4 lg:pb-4 lg:pt-6 lg:mx-8"
+        >
+            <a class="cursor-pointer">
+                <img
+                    src="assets/img/logo.jpg"
+                    alt="Logo"
+                    width="50"
+                    height="50"
+                />
+                <img
+                    src="assets/img/t1.png"
+                    alt="Titulo"
+                    width="190"
+                    class="mt-2 ml-1"
+                    height="30"
+                />
+            </a>
+            <a
+                pRipple
+                class="cursor-pointer block md:hidden text-700 text-primary"
+                pStyleClass="@next"
+                enterClass="ng-hidden"
+                enterActiveClass="px-fadein"
+                leaveToClass="ng-hidden"
+                leaveActiveClass="px-fadeout"
+            >
+                <i class="pi pi-bars text-4xl"></i>
+            </a>
 
-      <div
-        class="ml-auto list-none p-3 md:p-0 justify-content-end ng-hidden md:flex absolute md:static w-full md:w-6 md:px-0 z-3 shadow-2 md:shadow-none surface-card md:surface-ground">
-        <ng-container class="flex align-items-center" *ngFor="let item of menu">
-          <ng-container *ngIf="item.allowed">
-            <app-menu-item [menuItem]="item"></app-menu-item>
-          </ng-container>
-        </ng-container>
-      </div>
-      <li class="topbar-profile list-none ml-5">
-        <button type="button" class="p-link">
-          <img src="assets/layout/images/avatar.png" style="height: 50px;" (click)="onProfileButtonClick()"
-            alt="Perfil" />
-        </button>
-      </li>
-    </div>
-
-  </ng-container>
+            <div
+                class="ml-auto list-none p-3 md:p-0 justify-content-end ng-hidden md:flex absolute md:static w-full md:w-6 md:px-0 z-3 shadow-2 md:shadow-none surface-card md:surface-ground"
+            >
+                <ng-container
+                    class="flex align-items-center"
+                    *ngFor="let item of menu"
+                >
+                    <ng-container *ngIf="item.allowed">
+                        <app-menu-item [menuItem]="item"></app-menu-item>
+                    </ng-container>
+                </ng-container>
+            </div>
+            <li class="topbar-profile list-none ml-5">
+                <button type="button" class="p-link">
+                    <img
+                        src="assets/img/avatars/titular.jpeg"
+                        style="height: 50px"
+                        (click)="onProfileButtonClick()"
+                        alt="Perfil"
+                    />
+                </button>
+            </li>
+        </div>
+    </ng-container>
 </div>

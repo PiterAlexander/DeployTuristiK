@@ -90,7 +90,7 @@ export class PublicHomeComponent implements OnInit {
         {
             icon: 'pi pi-fw pi-phone',
             title: 'Teléfono',
-            info: '+57 320-744-6109'
+            info: '+57 321-716-5821 - +57 320-744-6109'
         },
         {
             icon: 'bx bx-message-dots',
