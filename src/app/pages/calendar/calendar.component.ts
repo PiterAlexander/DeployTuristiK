@@ -1,22 +1,22 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 // @fullcalendar plugins
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import {ApiService} from '@services/api.service';
+import { ApiService } from '@services/api.service';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
-import {formatDate} from '@angular/common';
+import { formatDate } from '@angular/common';
 import {
     GetAllOrdersRequest,
     GetAllPackagesRequest,
     OpenModalCreatePackage
 } from '@/store/ui/actions';
-import {AppState} from '@/store/state';
-import {Store} from '@ngrx/store';
-import {UiState} from '@/store/ui/state';
-import {Observable} from 'rxjs';
-import {Package} from '@/models/package';
-import {Order} from '@/models/order';
+import { AppState } from '@/store/state';
+import { Store } from '@ngrx/store';
+import { UiState } from '@/store/ui/state';
+import { Observable } from 'rxjs';
+import { Package } from '@/models/package';
+import { Order } from '@/models/order';
 
 @Component({
     templateUrl: './calendar.component.html',
@@ -59,7 +59,7 @@ export class CalendarComponent implements OnInit {
     constructor(
         private store: Store<AppState>,
         private apiService: ApiService
-    ) {}
+    ) { }
 
     ngOnInit() {
         let actualDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
@@ -99,7 +99,7 @@ export class CalendarComponent implements OnInit {
                         departureDate: p.departureDate,
                         arrivalDate: p.arrivalDate,
                         photos: p.photos,
-                        tag: {color: '#FFB6B6', name: 'a'}
+                        tag: { color: '#FFB6B6', name: 'a' }
                     };
                     packages.push(modeloEvento);
                 });
@@ -107,7 +107,7 @@ export class CalendarComponent implements OnInit {
                 this.events = packages;
                 this.calendarOptions = {
                     ...this.calendarOptions,
-                    ...{events: packages}
+                    ...{ events: packages }
                 };
                 this.tags = this.events.map((item) => item.tag);
             },
@@ -125,7 +125,7 @@ export class CalendarComponent implements OnInit {
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
-            editable: true,
+            editable: false,
             selectable: true,
             selectMirror: true,
             dayMaxEvents: true,
@@ -145,7 +145,7 @@ export class CalendarComponent implements OnInit {
         this.view = 'display';
         this.showDialog = true;
 
-        this.changedEvent = {...plainEvent, ...this.clickedEvent};
+        this.changedEvent = { ...plainEvent, ...this.clickedEvent };
         this.changedEvent.start = this.clickedEvent.start;
         this.changedEvent.end = this.clickedEvent.end
             ? this.clickedEvent.end
@@ -193,7 +193,7 @@ export class CalendarComponent implements OnInit {
 
             this.calendarOptions = {
                 ...this.calendarOptions,
-                ...{events: this.events}
+                ...{ events: this.events }
             };
             this.clickedEvent = null;
         }
@@ -215,32 +215,32 @@ export class CalendarComponent implements OnInit {
         );
         this.calendarOptions = {
             ...this.calendarOptions,
-            ...{events: this.events}
+            ...{ events: this.events }
         };
         this.showDialog = false;
     }
 
     validate() {
-        let {start, end} = this.changedEvent;
+        let { start, end } = this.changedEvent;
         return start && end;
     }
     calculateDays(departureDate: Date, returnDate: Date): number {
-      if (!(departureDate instanceof Date) || !(returnDate instanceof Date)) {
-          departureDate = new Date(departureDate);
-          returnDate = new Date(returnDate);
-      }
-      const fechaSalida = departureDate;
-      const fechaRegreso = returnDate;
-      const diferenciaMilisegundos =
-          fechaRegreso.getTime() - fechaSalida.getTime();
-      const unDiaEnMilisegundos = 1000 * 60 * 60 * 24;
-      const diferenciaDias = Math.floor(
-          diferenciaMilisegundos / unDiaEnMilisegundos
-      );
+        if (!(departureDate instanceof Date) || !(returnDate instanceof Date)) {
+            departureDate = new Date(departureDate);
+            returnDate = new Date(returnDate);
+        }
+        const fechaSalida = departureDate;
+        const fechaRegreso = returnDate;
+        const diferenciaMilisegundos =
+            fechaRegreso.getTime() - fechaSalida.getTime();
+        const unDiaEnMilisegundos = 1000 * 60 * 60 * 24;
+        const diferenciaDias = Math.floor(
+            diferenciaMilisegundos / unDiaEnMilisegundos
+        );
 
-      return diferenciaDias;
-  }
-  closeDialog() {
-    this.showDialog = false;
-  }
+        return diferenciaDias;
+    }
+    closeDialog() {
+        this.showDialog = false;
+    }
 }
