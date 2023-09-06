@@ -45,7 +45,7 @@ export class CreateEmployeeFormComponent implements OnInit {
         })
 
         this.formGroup = this.fb.group({
-            email: new FormControl('', [Validators.pattern('^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$')
+            email: new FormControl('', [Validators.pattern("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$")
             ]),
             password: new FormControl(null),
             name: new FormControl('', [

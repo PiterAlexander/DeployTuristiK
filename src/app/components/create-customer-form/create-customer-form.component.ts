@@ -87,7 +87,7 @@ export class CreatecustomerformComponent implements OnInit {
         }
       } else {
         this.formGroup = this.fb.group({
-          email: new FormControl(null, [Validators.pattern("^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$")]),
+          email: new FormControl(null, [Validators.pattern("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$")]),
           password: new FormControl(null),
           name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
           lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
@@ -114,7 +114,7 @@ export class CreatecustomerformComponent implements OnInit {
       }
     } else {
       this.formGroup = this.fb.group({
-        email: new FormControl('', [Validators.required, Validators.email, Validators.pattern("^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$")]),
+        email: new FormControl('', [Validators.required, Validators.email, Validators.pattern("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$")]),
         password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
         name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
         lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),

@@ -302,7 +302,7 @@
                     <ng-template let-product pTemplate="listItem">
                         <div class="col-12">
                             <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
-                                <a [href]="getUrlAvatar(product.image)">
+                                <a [href]="getUrlAvatar(product.image)" target="_blank">
                                     <img [src]="product.image" alt="avatar"
                                         class="my-4 md:my-0 w-7 md:w-10rem shadow-2 mr-5" />
                                 </a>
@@ -346,7 +346,7 @@
                                         showLabel(beneficiarie.document) }}</span>
                                 </div>
                                 <div class="flex flex-column align-items-center text-center mb-3">
-                                    <a [href]="getUrlAvatar(beneficiarie.image)">
+                                    <a [href]="getUrlAvatar(beneficiarie.image)" target="_blank">
                                         <img [src]="beneficiarie.image" alt="Avatar" class="w-8 shadow-2 my-3 mx-0" />
                                     </a>
                                     <div class="text-2xl font-bold">{{beneficiarie.name + ' ' + beneficiarie.lastName}}
