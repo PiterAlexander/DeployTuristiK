@@ -46,6 +46,9 @@
       ],
       "@/*": [
         "app/*"
+      ],
+      "crypto": [
+        "../node_modules/crypto-js"
       ]
     },
     "types": [
