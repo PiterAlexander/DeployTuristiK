@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    endPoint:"https://localhost:7266/"
+    endPoint:"https://turistikapi2023.azurewebsites.net/"
 };
 
 /*
