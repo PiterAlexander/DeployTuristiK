@@ -30,7 +30,7 @@ export class EditPaymentFormComponent implements OnInit {
   public role: any
   public paymentId: string
   public statuses: any[] = []
-  public baseUrl: string = environment.endPoint + 'resources/payments/'
+  public baseUrl: string = environment.endPoint + '/Uploads/Payments/'
 
   constructor(
     private store: Store<AppState>,
