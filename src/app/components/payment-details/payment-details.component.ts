@@ -47,7 +47,7 @@ export class PaymentDetailsComponent implements OnInit {
   public paymentId: string
   public onePayment: Payment
   public orderDetails: Array<OrderDetail> = []
-  public baseUrl: string = environment.endPoint + 'resources/payments/'
+  public baseUrl: string = environment.endPoint + '/Uploads/Payments/'
   public customerImageLink: string = 'https://www.freepik.es/vector-gratis/lindo-slot-sentado-dibujos-animados-vector-icono-ilustracion-animal-naturaleza-icono-concepto-aislado-premium-plano_27313232.htm#query=perezoso&position=13&from_view=author'
   public authorImagesLink: string = 'https://www.freepik.es/autor/catalyststuff'
 
