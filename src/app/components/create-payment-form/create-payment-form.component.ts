@@ -863,7 +863,7 @@ export class CreatePaymentFormComponent implements OnInit {
         orderId: this.orderProcess.order.orderId,
         amount: this.formGroup.value.amount,
         remainingAmount: orderDetailRemainingAmount,
-        date: new Date(),
+        date: new Date().toISOString(),
         imageFile: this.imageFile,
         status: paymentStatus,
       }

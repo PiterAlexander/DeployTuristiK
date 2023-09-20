@@ -7,7 +7,7 @@ export interface Payment {
     order?: Order
     amount: number
     remainingAmount: number
-    date: Date
+    date: string
     image?: string
     imageFile?: File
     orderDetailJson?: string
