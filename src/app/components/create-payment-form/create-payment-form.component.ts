@@ -297,7 +297,7 @@ export class CreatePaymentFormComponent implements OnInit {
       orderId: this.orderProcess.order.orderId,
       amount: this.formGroup.value.amount,
       remainingAmount: this.remainingAmount - this.formGroup.value.amount,
-      date: new Date(),
+      date: new Date().toISOString(),
       imageFile: this.imageFile,
       status: paymentStatus
     }
@@ -428,7 +428,7 @@ export class CreatePaymentFormComponent implements OnInit {
       orderId: this.orderProcess.order.orderId,
       amount: amount,
       remainingAmount: remainingAmount,
-      date: new Date(),
+      date: new Date().toISOString(),
       image: this.orderProcess.payment.image,
       imageFile: this.imageFile,
       status: status,
@@ -752,7 +752,7 @@ export class CreatePaymentFormComponent implements OnInit {
         orderId: orderResolved['orderId'],
         amount: this.formGroup.value.amount,
         remainingAmount: remainingAmount,
-        date: new Date(),
+        date: new Date().toISOString(),
         imageFile: this.imageFile,
         status: paymentStatus,
       }
