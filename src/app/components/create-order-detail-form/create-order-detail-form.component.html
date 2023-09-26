@@ -25,27 +25,31 @@
                 <li class="flex align-items-center text-500 mr-2">Resumen</li>
             </ul>
             <p-toolbar
-                *ngIf="orderProcess.action !== 'EditOrderDetail' && onePackage.availableQuotas > beneficiaries.length"
+                *ngIf="orderProcess.action !== 'EditOrderDetail' && onePackage.availableQuotas + takenQuotas > beneficiaries.length"
                 [ngClass]="{ 'mb-4': !beneficiariesForm()}" styleClass="gap-2">
                 <ng-template pTemplate="left">
                     <div *ngIf="!showBeneficiariesTable()" class="text-primary text-2xl font-semibold">Barra de
                         Herramientas</div>
                     <button
-                        *ngIf="addAnotherBeneficiarieButton() && beneficiariesForm() && showBeneficiariesTable() || addAnotherBeneficiarieButton() && !beneficiariesForm() && showBeneficiariesTable()"
+                        *ngIf="addAnotherBeneficiarieButton() && beneficiariesForm() && showBeneficiariesTable() && !addButtonLoading || addAnotherBeneficiarieButton() && !beneficiariesForm() && showBeneficiariesTable() && !addButtonLoading"
                         pButton pRipple type="button" [pTooltip]="'Cantidad de beneficiarios: ' + beneficiariesAmount"
                         tooltipPosition="bottom" (click)="addAnotherBeneficiarie()" label="Aumentar beneficiarios"
                         class="p-button-success mr-2" icon="pi pi-user-plus"></button>
+                    <button *ngIf="addButtonLoading" pButton pRipple disabled="true" label="Aumentar beneficiarios"
+                        class="p-button-success mr-2" icon="pi pi-spin pi-spinner"></button>
                     <i *ngIf="addAnotherBeneficiarieButton() && beneficiariesForm() && showBeneficiariesTable()"
                         class="pi pi-bars mr-2"></i>
-                    <button *ngIf="beneficiariesForm() && showBeneficiariesTable()"
+                    <button *ngIf="beneficiariesForm() && showBeneficiariesTable() && !reduceButtonLoading"
                         (click)="reduceBeneficiariesAmount()" pButton pRipple type="button"
                         [pTooltip]="'Cantidad de beneficiarios: ' + beneficiariesAmount" tooltipPosition="bottom"
                         label="Disminuir beneficiarios" icon="pi pi-user-minus" class="p-button-warning"></button>
+                    <button *ngIf="reduceButtonLoading" pButton pRipple disabled="true" label="Disminuir beneficiarios"
+                        icon="pi pi-spin pi-spinner" class="p-button-warning"></button>
                 </ng-template>
                 <ng-template pTemplate="right">
                     <div>
                         <p-button
-                            *ngIf="orderProcess.action !== 'EditOrderDetail' && onePackage.availableQuotas > beneficiaries.length && frequentTravelers.length > 0"
+                            *ngIf="orderProcess.action !== 'EditOrderDetail' && onePackage.availableQuotas + orderProcess.order.takenQuotas > beneficiaries.length && frequentTravelers.length > 0"
                             label="Mis Viajeros Frecuentes" icon="pi pi-users" (click)="op.toggle($event)"></p-button>
                         <p-overlayPanel #op [style]="{width: '500px'}">
                             <ng-template pTemplate>

@@ -82,11 +82,11 @@
                                 <small class="p-error block"
                                     *ngIf="(orderProcess !== undefined && formGroup.get('packageId')?.dirty && !validateBeneficiaries()) ||
                                      (orderProcess !== undefined && formGroup.get('beneficiariesAmount')?.dirty && !validateBeneficiaries())">
-                                    Cupos disponibles: {{onePackage.availableQuotas}}
+                                    Cupos disponibles: {{onePackage.availableQuotas + orderProcess.order.takenQuotas}}
                                 </small>
                                 <small class="p-error block"
                                     *ngIf="validateBeneficiaries() && !validateExistingBeneficiariesAmount() && formGroup.get('beneficiariesAmount')?.dirty">
-                                    Capacidad minima de beneficiarios: {{beneficiariesAmount}}
+                                    Capacidad minima de beneficiarios: {{orderProcess.order.takenQuotas}}
                                 </small>
                                 <small class="p-error block"
                                     *ngIf="formGroup.get('beneficiariesAmount')?.dirty && !validateOnlyNumbersForBeneficiaries()">

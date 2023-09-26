@@ -11,6 +11,8 @@ import { Order } from '@/models/order';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from 'environments/environment';
 import { Router } from '@angular/router';
+import { differenceInDays, differenceInMonths, isBefore } from 'date-fns';
+import { Package } from '@/models/package';
 
 @Component({
   selector: 'app-read-order-payment',
@@ -199,7 +201,32 @@ export class ReadOrderPaymentComponent {
     if (this.order !== undefined) {
       if (this.order.status !== 3) {
         if (this.order.package.availableQuotas >= 1) {
-          return true
+          // Obtener la fecha actual
+          const currentDate = new Date();
+          const departureDateConverted = new Date(this.order.package.departureDate);
+
+          // Comprobar si la fecha actual es después de departureDate
+          if (isBefore(currentDate, departureDateConverted)) {
+            if (this.order.package.transport === 1) {
+              // Calcular la diferencia en meses
+              const monthsDifference = differenceInMonths(departureDateConverted, currentDate);
+
+              // Si la diferencia es de un mes o más, ejecuta tu código aquí
+              if (monthsDifference >= 1) {
+                // Tu código aquí
+                return true
+              }
+            } else {
+              // Calcular la diferencia en días
+              const daysDifference = differenceInDays(departureDateConverted, currentDate);
+
+              // Si la diferencia es de dos días o más, ejecuta tu código aquí
+              if (daysDifference >= 2) {
+                // Tu código aquí
+                return true
+              }
+            }
+          }
         }
       }
       return false
@@ -208,14 +235,47 @@ export class ReadOrderPaymentComponent {
 
   addOrderDetail() {
     if (this.order.package.availableQuotas >= 1) {
+      this.editPackage()
       const orderProcess = {
         action: 'CreateOrderDetail',
-        order: this.order,
+        order: {
+          order: this.order,
+          takenQuotas: 1
+        },
         beneficiaries: {}
       }
       this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
       this.router.navigate(['Home/ProcesoBeneficiarios']);
     }
+  }
+
+
+  editPackage() {
+    const updatePackage: Package = {
+      packageId: this.order.package.packageId,
+      name: this.order.package.name,
+      destination: this.order.package.destination,
+      details: this.order.package.details,
+      transport: this.order.package.transport,
+      hotel: this.order.package.hotel,
+      arrivalDate: this.order.package.arrivalDate,
+      departureDate: this.order.package.departureDate,
+      departurePoint: this.order.package.departurePoint,
+      totalQuotas: this.order.package.totalQuotas,
+      availableQuotas: this.order.package.availableQuotas - 1,
+      price: this.order.package.price,
+      type: this.order.package.type,
+      status: this.order.package.status,
+      aditionalPrice: this.order.package.aditionalPrice,
+      photos: this.order.package.photos
+    }
+    this.apiService.updatePackage(updatePackage.packageId, updatePackage).subscribe({
+      next: (data) => {
+      },
+      error: (err) => {
+        console.log("Error while updating: ", err)
+      }
+    })
   }
 
   paymentDetails(paymentId: string) {
