@@ -7,17 +7,7 @@
 <h1 align="center">TuristiKApp - Angular 15.0.1</h1>
 <br>
 
-To login website use:
+## Production server
 
-`username:` admin@example.com<br />
-`password:` admin<br />
+Navigate to `https://turistik.vercel.app/`.
 
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
