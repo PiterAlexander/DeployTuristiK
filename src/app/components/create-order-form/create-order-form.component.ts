@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { differenceInDays, differenceInMonths, isBefore } from 'date-fns';
 import { GetAllCustomerRequest, GetAllOrdersRequest, GetAllPackagesRequest, GetAllRoleRequest, GetUsersRequest, SaveOrderProcess } from '@/store/ui/actions';
 import { Order } from '@/models/order';
+import { ApiService } from '@services/api.service';
 
 @Component({
   selector: 'app-create-order-form',
@@ -39,6 +40,7 @@ export class CreateOrderFormComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private fb: FormBuilder,
+    private apiService: ApiService,
     private confirmationService: ConfirmationService,
     private router: Router,
   ) { }
@@ -86,15 +88,29 @@ export class CreateOrderFormComponent implements OnInit {
 
             // Comprobar si la fecha actual es después de departureDate
             if (isBefore(currentDate, departureDateConverted)) {
-              // Calcular la diferencia en meses
-              const daysDifference = differenceInDays(departureDateConverted, currentDate);
+              if (element.transport === 1) {
+                // Calcular la diferencia en meses
+                const monthsDifference = differenceInMonths(departureDateConverted, currentDate);
 
-              // Si la diferencia es de un mes o más, ejecuta tu código aquí
-              if (daysDifference >= 1) {
-                // Tu código aquí
-                const alreadyExist = this.packagesToShow.find(p => p.packageId === element.packageId)
-                if (alreadyExist === undefined) {
-                  this.packagesToShow.push(element)
+                // Si la diferencia es de un mes o más, ejecuta tu código aquí
+                if (monthsDifference >= 1) {
+                  // Tu código aquí
+                  const alreadyExist = this.packagesToShow.find(p => p.packageId === element.packageId)
+                  if (alreadyExist === undefined) {
+                    this.packagesToShow.push(element)
+                  }
+                }
+              } else {
+                // Calcular la diferencia en días
+                const daysDifference = differenceInDays(departureDateConverted, currentDate);
+
+                // Si la diferencia es de dos días o más, ejecuta tu código aquí
+                if (daysDifference >= 2) {
+                  // Tu código aquí
+                  const alreadyExist = this.packagesToShow.find(p => p.packageId === element.packageId)
+                  if (alreadyExist === undefined) {
+                    this.packagesToShow.push(element)
+                  }
                 }
               }
             }
@@ -115,11 +131,11 @@ export class CreateOrderFormComponent implements OnInit {
     })
 
     if (this.orderProcess !== undefined) {
-      if (this.orderProcess.beneficiaries.length > 0) {
+      if (this.orderProcess.beneficiaries.length > this.orderProcess.order.takenQuotas) {
         this.beneficiariesAmount = this.orderProcess.beneficiaries.length
       } else {
         if (this.orderProcess.order.beneficiaries !== undefined) {
-          this.beneficiariesAmount = 1
+          this.beneficiariesAmount = this.orderProcess.order.takenQuotas
         }
       }
       this.formGroup.setValue({
@@ -180,11 +196,13 @@ export class CreateOrderFormComponent implements OnInit {
           acceptIcon: 'pi pi-times',
           acceptButtonStyleClass: 'p-button-outlined',
           accept: () => {
+            this.editPackage(0, true, this.orderProcess.order.takenQuotas)
             this.store.dispatch(new SaveOrderProcess(undefined))
             this.router.navigate(['Home/Pedidos']);
           }
         })
       } else {
+        this.editPackage(0, true, this.orderProcess.order.takenQuotas)
         this.store.dispatch(new SaveOrderProcess(undefined))
         this.router.navigate(['Home/Pedidos']);
       }
@@ -214,9 +232,15 @@ export class CreateOrderFormComponent implements OnInit {
 
   validateBeneficiaries(): boolean {
     if (this.formGroup.value.packageId !== 0) {
+      let takenQuotas: number
+      if (this.orderProcess !== undefined) {
+        takenQuotas = this.orderProcess.order.takenQuotas
+      } else {
+        takenQuotas = 0
+      }
       this.onePackage = this.allPackages.find(p => p.packageId === this.formGroup.value.packageId)
       if (this.onePackage !== undefined) {
-        if (this.formGroup.value.beneficiariesAmount <= this.onePackage.availableQuotas) {
+        if (this.formGroup.value.beneficiariesAmount <= this.onePackage.availableQuotas + takenQuotas) {
           return true
         }
       }
@@ -230,8 +254,10 @@ export class CreateOrderFormComponent implements OnInit {
         return true
       } else if (this.formGroup.value.beneficiariesAmount <= 0) {
         return true
-      } else if (this.formGroup.value.beneficiariesAmount < this.beneficiariesAmount) {
-        return false
+      } else if (this.orderProcess.beneficiaries.length > 0) {
+        if (this.formGroup.value.beneficiariesAmount < this.orderProcess.beneficiaries.length) {
+          return false
+        }
       }
     }
     return true
@@ -338,12 +364,18 @@ export class CreateOrderFormComponent implements OnInit {
             beneficiaries = beneficiariesPriceConverted
           }
         }
+        if (this.formGroup.value.beneficiariesAmount < this.orderProcess.order.takenQuotas) {
+          this.editPackage(this.formGroup.value.beneficiariesAmount, true)
+        } else if (this.formGroup.value.beneficiariesAmount > this.orderProcess.order.takenQuotas) {
+          this.editPackage(this.formGroup.value.beneficiariesAmount, false)
+        }
         const orderProcess = ({
           action: 'CreateOrder',
           order: {
             customer: oneCustomer,
             package: this.onePackage,
-            beneficiaries: this.formGroup.value.beneficiariesAmount
+            beneficiaries: this.formGroup.value.beneficiariesAmount,
+            takenQuotas: this.formGroup.value.beneficiariesAmount
           },
           beneficiaries: beneficiaries
         })
@@ -365,24 +397,29 @@ export class CreateOrderFormComponent implements OnInit {
             price: this.onePackage.price + this.onePackage.aditionalPrice,
             addToFt: false
           }]
+          this.editPackage(this.formGroup.value.beneficiariesAmount, false)
           const orderProcess = {
             action: 'CreateOrder',
             order: {
               customer: oneCustomer,
               package: this.onePackage,
-              beneficiaries: parseInt(this.formGroup.value.beneficiariesAmount)
+              beneficiaries: this.formGroup.value.beneficiariesAmount,
+              takenQuotas: this.formGroup.value.beneficiariesAmount
             },
             beneficiaries: beneficiaries,
           }
           this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
           this.router.navigate(['Home/ProcesoBeneficiarios']);
         } else {
+
+          this.editPackage(this.formGroup.value.beneficiariesAmount, false)
           const orderProcess = {
             action: 'CreateOrder',
             order: {
               customer: oneCustomer,
               package: this.onePackage,
-              beneficiaries: parseInt(this.formGroup.value.beneficiariesAmount)
+              beneficiaries: this.formGroup.value.beneficiariesAmount,
+              takenQuotas: this.formGroup.value.beneficiariesAmount
             },
             beneficiaries: {},
           }
@@ -390,6 +427,71 @@ export class CreateOrderFormComponent implements OnInit {
           this.router.navigate(['Home/ProcesoBeneficiarios']);
         }
       }
+    }
+  }
+
+  editPackage(beneficiaries: number, toAdd: boolean, allQuotasTaken?: number) {
+    let updatePackage: Package
+    if (toAdd) {
+      let quotasToAdd: number
+      if (allQuotasTaken !== undefined) {
+        quotasToAdd = allQuotasTaken
+      } else {
+        quotasToAdd = this.orderProcess.order.takenQuotas - beneficiaries
+      }
+      updatePackage = {
+        packageId: this.onePackage.packageId,
+        name: this.onePackage.name,
+        destination: this.onePackage.destination,
+        details: this.onePackage.details,
+        transport: this.onePackage.transport,
+        hotel: this.onePackage.hotel,
+        arrivalDate: this.onePackage.arrivalDate,
+        departureDate: this.onePackage.departureDate,
+        departurePoint: this.onePackage.departurePoint,
+        totalQuotas: this.onePackage.totalQuotas,
+        availableQuotas: this.onePackage.availableQuotas + quotasToAdd,
+        price: this.onePackage.price,
+        type: this.onePackage.type,
+        status: this.onePackage.status,
+        aditionalPrice: this.onePackage.aditionalPrice,
+        photos: this.onePackage.photos
+      }
+    } else {
+      let quotasToReduce: number
+      if (this.orderProcess !== undefined) {
+        quotasToReduce = beneficiaries - this.orderProcess.order.takenQuotas
+      } else {
+        quotasToReduce = beneficiaries
+      }
+      updatePackage = {
+        packageId: this.onePackage.packageId,
+        name: this.onePackage.name,
+        destination: this.onePackage.destination,
+        details: this.onePackage.details,
+        transport: this.onePackage.transport,
+        hotel: this.onePackage.hotel,
+        arrivalDate: this.onePackage.arrivalDate,
+        departureDate: this.onePackage.departureDate,
+        departurePoint: this.onePackage.departurePoint,
+        totalQuotas: this.onePackage.totalQuotas,
+        availableQuotas: this.onePackage.availableQuotas - quotasToReduce,
+        price: this.onePackage.price,
+        type: this.onePackage.type,
+        status: this.onePackage.status,
+        aditionalPrice: this.onePackage.aditionalPrice,
+        photos: this.onePackage.photos
+      }
+    }
+    this.apiService.updatePackage(updatePackage.packageId, updatePackage).subscribe({
+      next: (data) => {
+      },
+      error: (err) => {
+        console.log("Error while updating: ", err)
+      }
+    })
+    if (allQuotasTaken === undefined) {
+      this.onePackage = updatePackage
     }
   }
 }

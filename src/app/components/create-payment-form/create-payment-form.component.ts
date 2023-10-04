@@ -50,7 +50,7 @@ export class CreatePaymentFormComponent implements OnInit {
   public visible: boolean = true
 
   constructor(
-    public apiService: ApiService,
+    private apiService: ApiService,
     private fb: FormBuilder,
     private store: Store<AppState>,
     private messageService: MessageService,
@@ -173,9 +173,13 @@ export class CreatePaymentFormComponent implements OnInit {
       this.router.navigate(['Home/DetallesPedido/' + orderId])
     } else if (this.orderProcess.action === 'CreateOrderDetail') {
       const action: string = this.orderProcess.action
+      const takenQuotas: number = this.orderProcess.order.takenQuotas
       this.orderProcess = {
         action: action,
-        order: this.oneOrder,
+        order: {
+          order: this.oneOrder,
+          takenQuotas: takenQuotas
+        },
         beneficiaries: this.orderProcess.beneficiaries
       }
       this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
@@ -187,9 +191,11 @@ export class CreatePaymentFormComponent implements OnInit {
         order: {
           beneficiaries: this.orderProcess.beneficiaries.length,
           customer: this.orderProcess.order.customer,
-          package: this.orderProcess.order.package
+          package: this.orderProcess.order.package,
+          takenQuotas: this.orderProcess.order.takenQuotas
         }
       }
+
       this.store.dispatch(new SaveOrderProcess(orderProcess))
       this.router.navigate(['Home/ProcesoBeneficiarios'])
     }
@@ -237,35 +243,6 @@ export class CreatePaymentFormComponent implements OnInit {
     }
   }
 
-  editPackage(onePackage: Package) {
-    const updatePackage: Package = {
-      packageId: onePackage.packageId,
-      name: onePackage.name,
-      destination: onePackage.destination,
-      details: onePackage.details,
-      transport: onePackage.transport,
-      hotel: onePackage.hotel,
-      arrivalDate: onePackage.arrivalDate,
-      departureDate: onePackage.departureDate,
-      departurePoint: onePackage.departurePoint,
-      totalQuotas: onePackage.totalQuotas,
-      availableQuotas: onePackage.availableQuotas - this.orderDetail.length,
-      price: onePackage.price,
-      type: onePackage.type,
-      status: onePackage.status,
-      aditionalPrice: onePackage.aditionalPrice,
-      photos: onePackage.photos
-    }
-
-    this.apiService.updatePackage(updatePackage.packageId, updatePackage).subscribe({
-      next: (data) => {
-      },
-      error: (err) => {
-        console.log("Error while creating: ", err)
-      }
-    })
-  }
-
   async saveFromCreatePayment() {
     let paymentStatus: number
     let orderStatus: number
@@ -306,7 +283,7 @@ export class CreatePaymentFormComponent implements OnInit {
     formData.append('orderId', payment.orderId)
     formData.append('amount', String(payment.amount))
     formData.append('remainingAmount', String(payment.remainingAmount))
-    formData.append('date', payment.date.toLocaleString())
+    formData.append('date', payment.date)
     formData.append('status', String(payment.status))
 
     if (payment.imageFile instanceof File) {
@@ -340,7 +317,6 @@ export class CreatePaymentFormComponent implements OnInit {
   }
 
   async saveFromRetryPayment() {
-    // if (!this.higherRemainingAmountFromRetryPayment) {
     let acepted: boolean = false
     let pending: boolean = false
     let addition: number = 0
@@ -466,148 +442,6 @@ export class CreatePaymentFormComponent implements OnInit {
     const paymentId: string = this.orderProcess.payment.paymentId
     this.store.dispatch(new SaveOrderProcess({ ...orderProcess }))
     this.router.navigate(['Home/DetallesAbono/' + paymentId])
-    // } else {
-    //   // if (this.orderRemainingAmountsZero) {
-    //   //   let acepted: boolean = false
-    //   //   let pending: boolean = false
-    //   //   for (const element of this.orderProcess.order.payment) {
-    //   //     if (element !== undefined) {
-    //   //       if (element.status === 1) {
-    //   //         acepted = true
-    //   //       } else if (element.status === 0) {
-    //   //         pending = true
-    //   //       }
-    //   //     }
-    //   //   }
-    //   //   let status: number
-    //   //   if (acepted && !pending) {
-    //   //     status = 2
-    //   //   } else if (!acepted && pending) {
-    //   //     status = 0
-    //   //   } else if (!acepted && !pending) {
-    //   //     status = 0
-    //   //   } else if (acepted && pending) {
-    //   //     status = 1
-    //   //   }
-
-
-    //   //   const order: Order = {
-    //   //     orderId: this.orderProcess.order.orderId,
-    //   //     customerId: this.orderProcess.order.customerId,
-    //   //     packageId: this.orderProcess.order.packageId,
-    //   //     totalCost: this.orderProcess.order.totalCost,
-    //   //     orderDate: this.orderProcess.order.orderDate,
-    //   //     status: status,
-    //   //     payment: this.orderProcess.order.payment,
-    //   //   }
-    //   //   this.store.dispatch(new EditOrderRequest(order))
-
-    //   //   const payment: Payment = {
-    //   //     paymentId: this.orderProcess.payment.paymentId,
-    //   //     orderId: this.orderProcess.order.orderId,
-    //   //     amount: 0,
-    //   //     remainingAmount: 0,
-    //   //     date: new Date(),
-    //   //     image: this.orderProcess.payment.image,
-    //   //     imageFile: this.imageFile,
-    //   //     status: 1
-    //   //   }
-
-    //   //   const formData = new FormData()
-    //   //   formData.append('paymentId', payment.paymentId)
-    //   //   formData.append('orderId', payment.orderId)
-    //   //   formData.append('amount', String(payment.amount))
-    //   //   formData.append('remainingAmount', String(payment.remainingAmount))
-    //   //   formData.append('date', payment.date.toISOString())
-    //   //   formData.append('image', String(payment.image))
-    //   //   formData.append('status', String(payment.status))
-
-    //   //   if (payment.imageFile instanceof File) {
-    //   //     formData.append('imageFile', payment.imageFile, payment.imageFile.name)
-    //   //   } else {
-    //   //     formData.append('imageFile', payment.imageFile)
-    //   //   }
-
-    //   //   // this.store.dispatch(new EditPaymentRequest({ ...payment }))
-    //   //   this.apiService.updatePayment(formData.get('paymentId'), formData).subscribe({
-    //   //     next: (data) => { },
-    //   //     error: (err) => {
-    //   //       console.log('Error occured while updating: ', err)
-    //   //     }
-    //   //   })
-    //   //   this.modalPrimeNg.close()
-    //   //   this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Reintento exitoso.' })
-    //   // } else {
-    //   //   let acepted: boolean = false
-    //   //   let pending: boolean = false
-    //   //   for (const element of this.orderProcess.order.payment) {
-    //   //     if (element !== undefined) {
-    //   //       if (element.status === 1) {
-    //   //         acepted = true
-    //   //       } else if (element.status === 0) {
-    //   //         pending = true
-    //   //       }
-    //   //     }
-    //   //   }
-    //   //   let status: number
-    //   //   if (acepted && !pending) {
-    //   //     status = 1
-    //   //   } else if (!acepted && pending) {
-    //   //     status = 0
-    //   //   } else if (!acepted && !pending) {
-    //   //     status = 0
-    //   //   } else if (acepted && pending) {
-    //   //     status = 1
-    //   //   }
-    //   //   const remainingAmount = this.remainingAmount - this.formGroup.value.amount
-    //   //   const order: Order = {
-    //   //     orderId: this.orderProcess.order.orderId,
-    //   //     customerId: this.orderProcess.order.customerId,
-    //   //     packageId: this.orderProcess.order.packageId,
-    //   //     totalCost: this.orderProcess.order.totalCost,
-    //   //     orderDate: this.orderProcess.order.orderDate,
-    //   //     status: status,
-    //   //     payment: this.orderProcess.order.payment,
-    //   //   }
-    //   //   this.store.dispatch(new EditOrderRequest(order))
-
-    //   //   const payment: Payment = {
-    //   //     paymentId: this.orderProcess.payment.paymentId,
-    //   //     orderId: this.orderProcess.order.orderId,
-    //   //     amount: this.formGroup.value.amount,
-    //   //     remainingAmount: remainingAmount,
-    //   //     date: new Date(),
-    //   //     image: this.orderProcess.payment.image,
-    //   //     imageFile: this.imageFile,
-    //   //     status: 0,
-    //   //   }
-
-    //   //   const formData = new FormData()
-    //   //   formData.append('paymentId', payment.paymentId)
-    //   //   formData.append('orderId', payment.orderId)
-    //   //   formData.append('amount', String(payment.amount))
-    //   //   formData.append('remainingAmount', String(payment.remainingAmount))
-    //   //   formData.append('date', payment.date.toISOString())
-    //   //   formData.append('image', String(payment.image))
-    //   //   formData.append('status', String(payment.status))
-
-    //   //   if (payment.imageFile instanceof File) {
-    //   //     formData.append('imageFile', payment.imageFile, payment.imageFile.name)
-    //   //   } else {
-    //   //     formData.append('imageFile', payment.imageFile)
-    //   //   }
-
-    //   //   // this.store.dispatch(new EditPaymentRequest({ ...payment }))
-    //   //   this.apiService.updatePayment(formData.get('paymentId'), formData).subscribe({
-    //   //     next: (data) => { },
-    //   //     error: (err) => {
-    //   //       console.log('Error occured while updating: ', err)
-    //   //     }
-    //   //   })
-    //   //   this.modalPrimeNg.close()
-    //   //   this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Reintento exitoso.' })
-    //   // }
-    // }
   }
 
   async save() {
@@ -703,7 +537,6 @@ export class CreatePaymentFormComponent implements OnInit {
     // END OF FOR
 
     // SENDING TO EDIT PACKAGE
-    this.editPackage(this.onePackage)
 
     //ENDING PROCESS FROM DIFFERENT ENTRIES
     if (this.orderProcess.action === 'CreateOrder') {

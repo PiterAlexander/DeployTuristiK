@@ -98,7 +98,8 @@ export class DetailsPackageComponent implements OnInit {
             action: 'CreateOrder',
             order: {
                 customer: customer,
-                package: onePackage
+                package: onePackage,
+                takenQuotas: 1
             },
             beneficiaries: {}
         }

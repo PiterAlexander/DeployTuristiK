@@ -29,6 +29,10 @@ export class ApiService {
         return this.http.get<Package[]>(`${this.endpoint}api/package/`)
     }
 
+    getPackageById(packageId: string): Observable<Package> {
+        return this.http.get<Package>(`${this.endpoint}api/package/${packageId}`);
+    }
+
     addPackage(modelo: Package): Observable<Package> {
         return this.http.post<Package>(`${this.endpoint}api/package/`, modelo)
     }

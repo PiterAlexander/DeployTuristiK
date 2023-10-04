@@ -40,6 +40,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
   public beneficiaries: Array<any> = []
   public orderDetailCustomers: Array<Customer> = []
   public orderProcess: any
+  public oneOrder: any
   public beneficiariesAmount: number
   public visible: boolean = true
   public frequentTravelers: Array<Customer> = []
@@ -48,6 +49,9 @@ export class CreateOrderDetailFormComponent implements OnInit {
   public sortOptions: SelectItem[] = []
   public sortOrder: number = 0
   public sortField: string = ''
+  public addButtonLoading: boolean = false
+  public reduceButtonLoading: boolean = false
+  public takenQuotas: number = 0
   public results: string[]
   public allEps: Array<string> = []
   public beneficiarieImageIndex: number = 0
@@ -202,14 +206,16 @@ export class CreateOrderDetailFormComponent implements OnInit {
       } else if ((this.orderProcess.action === 'EditOrderDetail')) {
         this.onInitFromEditOrderDetail()
       } else if (this.orderProcess.action === 'CreateOrder') {
-        this.onePackage = this.orderProcess.order.package
+        this.takenQuotas = this.orderProcess.order.takenQuotas
+        this.oneOrder = this.orderProcess.order
+        this.onePackage = this.oneOrder.package
         if (this.orderProcess.beneficiaries.length > 0) {
           this.fillBeneficiariesArray()
           if (this.role === 'Cliente') {
             this.beneficiariesAmount = this.orderProcess.beneficiaries.length
           } else {
-            if (this.orderProcess.order.beneficiaries > this.orderProcess.beneficiaries.length) {
-              this.beneficiariesAmount = this.orderProcess.order.beneficiaries
+            if (this.oneOrder.beneficiaries > this.orderProcess.beneficiaries.length) {
+              this.beneficiariesAmount = this.oneOrder.beneficiaries
             } else {
               this.beneficiariesAmount = this.orderProcess.beneficiaries.length
             }
@@ -218,7 +224,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
           if (this.role === 'Cliente') {
             this.beneficiariesAmount = 1
           } else {
-            this.beneficiariesAmount = this.orderProcess.order.beneficiaries
+            this.beneficiariesAmount = this.oneOrder.beneficiaries
           }
         }
         this.fillFrequentTravelersArray()
@@ -233,7 +239,6 @@ export class CreateOrderDetailFormComponent implements OnInit {
   onAddressChange(address: any) {
     if (this.formGroup) {
       const addressHtml = address.adr_address;
-      console.log(address);
       const hiddenDiv = document.createElement('div');
       hiddenDiv.style.display = 'none';
       hiddenDiv.innerHTML = addressHtml;
@@ -246,7 +251,6 @@ export class CreateOrderDetailFormComponent implements OnInit {
         this.formGroup.get('address').setValue(extractedText);
       }
     }
-    console.log(address);
   }
 
   searchEps(event: any) {
@@ -296,7 +300,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         }
       }
     } else {
-      if (this.orderProcess.order.customer.document === document) {
+      if (this.oneOrder.customer.document === document) {
         return 'Titular'
       } else {
         const oneCustomer: Customer = this.allCustomers.find(c => c.document === document)
@@ -331,7 +335,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
           }
         }
       } else {
-        if (this.orderProcess.order.customer.document === document) {
+        if (this.oneOrder.customer.document === document) {
           return 0
         } else {
           const oneCustomer: Customer = this.allCustomers.find(c => c.document === document)
@@ -350,7 +354,9 @@ export class CreateOrderDetailFormComponent implements OnInit {
   }
 
   onInitFromCreateOrderDetail() {
-    for (const element of this.orderProcess.order.payment) {
+    this.takenQuotas = this.orderProcess.order.takenQuotas
+    this.oneOrder = this.orderProcess.order.order
+    for (const element of this.oneOrder.payment) {
       if (element !== undefined) {
         for (const anotherElement of element.orderDetail) {
           const customer: Customer = this.allCustomers.find(c => c.customerId === anotherElement.beneficiaryId)
@@ -366,7 +372,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
     } else {
       this.beneficiariesAmount = 1
     }
-    this.onePackage = this.orderProcess.order.package
+    this.onePackage = this.oneOrder.package
     this.fillFrequentTravelersArray()
   }
 
@@ -435,7 +441,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         return this.nonTitularImage(document)
       }
     } else {
-      if (this.orderProcess.order.customer.document === document) {
+      if (this.oneOrder.customer.document === document) {
         return 'assets/img/avatars/titular.jpeg'
       } else {
         return this.nonTitularImage(document)
@@ -580,26 +586,30 @@ export class CreateOrderDetailFormComponent implements OnInit {
   }
 
   fillFrequentTravelersArray() {
-    if (this.orderProcess.order.customer.frequentTraveler !== undefined) {
-      for (const element of this.orderProcess.order.customer.frequentTraveler) {
+    if (this.oneOrder.customer.frequentTraveler !== undefined) {
+      for (const element of this.oneOrder.customer.frequentTraveler) {
         const customer = this.allCustomers.find(c => c.customerId === element.travelerId)
         if (customer !== undefined) {
           this.preSelectedFrequentTravelers(customer)
-          this.frequentTravelers.push(customer)
+          const exists = this.frequentTravelers.find(ft => ft.customerId === customer.customerId)
+          if (exists === undefined) {
+            this.frequentTravelers.push(customer)
+          }
         }
       }
     }
   }
 
-  addFrequentTraveler(event: Event, element: any) {
+  async addFrequentTraveler(event: Event, element: any) {
     if (this.selectedFrequentTravelers !== undefined) {
       let flag: boolean = true
       let counter: number = this.beneficiariesAmount
+      let quotasToReduce: number = 0
       for (const element of this.selectedFrequentTravelers) {
         const alreadyExists = this.beneficiaries.find(b => b.document === element.document)
         const alreadyExistsFromOrderDetail = this.orderDetailCustomers.find(od => od.document === element.document)
         if (alreadyExists === undefined && alreadyExistsFromOrderDetail === undefined) {
-          if (this.onePackage.availableQuotas > this.beneficiaries.length) {
+          if (this.onePackage.availableQuotas + this.takenQuotas > this.beneficiaries.length) {
             this.beneficiaries.push({
               customerId: element.customerId,
               name: element.name,
@@ -614,9 +624,10 @@ export class CreateOrderDetailFormComponent implements OnInit {
               price: this.adjustPriceAccordingToAge(element.birthDate),
               addToFt: false
             })
-            if (this.beneficiariesAmount < this.onePackage.availableQuotas && this.beneficiariesForm()) {
+            if (this.beneficiariesAmount < this.onePackage.availableQuotas + this.takenQuotas && this.beneficiariesForm()) {
               if (this.beneficiaries.length > this.beneficiariesAmount) {
                 counter++
+                quotasToReduce++
               }
             }
           } else {
@@ -624,13 +635,81 @@ export class CreateOrderDetailFormComponent implements OnInit {
           }
         }
       }
-      this.beneficiariesAmount = counter
+      await this.quotasToReduceFromPackage(quotasToReduce)
       this.updateVisibility()
       element.hide(event)
       if (!flag) {
-        this.messageService.add({ key: 'alert-message', severity: 'warn', summary: '¡Cupos insuficientes!', detail: 'Uno o varios Beneficiarios no se pudieron añadir.' })
+        this.messageService.add({ key: 'alert-message', severity: 'warn', summary: '¡Cupos insuficientes!', detail: 'Uno o más Beneficiarios no se pudieron añadir.' })
       } else {
         this.messageService.add({ key: 'alert-message', severity: 'success', summary: '¡Proceso completado!', detail: 'Beneficiario/s agregado/s exitosamente.' })
+      }
+    }
+  }
+
+  async quotasToReduceFromPackage(quotas: number) {
+    const packagePromise: Package = await new Promise((resolve, reject) => {
+      this.apiService.getPackageById(this.onePackage.packageId).subscribe({
+        next: (data) => {
+          resolve(data)
+        },
+        error: (err) => {
+          reject(err)
+        }
+      })
+    })
+    if (packagePromise) {
+      const onePackage = {
+        packageId: packagePromise['packageId'],
+        name: packagePromise['name'],
+        destination: packagePromise['destination'],
+        details: packagePromise['details'],
+        transport: packagePromise['transport'],
+        hotel: packagePromise['hotel'],
+        arrivalDate: packagePromise['arrivalDate'],
+        departureDate: packagePromise['departureDate'],
+        departurePoint: packagePromise['departurePoint'],
+        totalQuotas: packagePromise['totalQuotas'],
+        availableQuotas: packagePromise['availableQuotas'],
+        price: packagePromise['price'],
+        type: packagePromise['type'],
+        status: packagePromise['status'],
+        aditionalPrice: packagePromise['aditionalPrice'],
+        photos: packagePromise['photos']
+      }
+      if (this.onePackage.availableQuotas + this.takenQuotas >= this.beneficiariesAmount + 1) {
+        const updatePackage: Package = {
+          packageId: onePackage.packageId,
+          name: onePackage.name,
+          destination: onePackage.destination,
+          details: onePackage.details,
+          transport: onePackage.transport,
+          hotel: onePackage.hotel,
+          arrivalDate: onePackage.arrivalDate,
+          departureDate: onePackage.departureDate,
+          departurePoint: onePackage.departurePoint,
+          totalQuotas: onePackage.totalQuotas,
+          availableQuotas: onePackage.availableQuotas - quotas,
+          price: onePackage.price,
+          type: onePackage.type,
+          status: onePackage.status,
+          aditionalPrice: onePackage.aditionalPrice,
+          photos: onePackage.photos
+        }
+        const updatedPackagePromise: boolean = await new Promise((resolve, reject) => {
+          this.apiService.updatePackage(updatePackage.packageId, updatePackage).subscribe({
+            next: () => {
+              resolve(true)
+            },
+            error: (err) => {
+              reject(err)
+            }
+          })
+        })
+        if (updatedPackagePromise) {
+          this.onePackage = updatePackage
+          this.beneficiariesAmount += quotas
+          this.takenQuotas += quotas
+        }
       }
     }
   }
@@ -674,7 +753,7 @@ export class CreateOrderDetailFormComponent implements OnInit {
         const index = this.beneficiaries.indexOf(oneCustomer)
         this.beneficiaries.splice(index, 1)
         if (this.beneficiariesAmount > 1) {
-          this.beneficiariesAmount--
+          this.reduceBeneficiariesAmountAction()
         }
         if (this.beneficiaries.length === 0) {
           this.ftCheck = false
@@ -685,23 +764,93 @@ export class CreateOrderDetailFormComponent implements OnInit {
     })
   }
 
+  async reduceBeneficiariesAmountAction() {
+    const packagePromise: Package = await new Promise((resolve, reject) => {
+      this.apiService.getPackageById(this.onePackage.packageId).subscribe({
+        next: (data) => {
+          resolve(data)
+        },
+        error: (err) => {
+          reject(err)
+        }
+      })
+    })
+    if (packagePromise) {
+      const onePackage = {
+        packageId: packagePromise['packageId'],
+        name: packagePromise['name'],
+        destination: packagePromise['destination'],
+        details: packagePromise['details'],
+        transport: packagePromise['transport'],
+        hotel: packagePromise['hotel'],
+        arrivalDate: packagePromise['arrivalDate'],
+        departureDate: packagePromise['departureDate'],
+        departurePoint: packagePromise['departurePoint'],
+        totalQuotas: packagePromise['totalQuotas'],
+        availableQuotas: packagePromise['availableQuotas'],
+        price: packagePromise['price'],
+        type: packagePromise['type'],
+        status: packagePromise['status'],
+        aditionalPrice: packagePromise['aditionalPrice'],
+        photos: packagePromise['photos']
+      }
+      const updatePackage: Package = {
+        packageId: onePackage.packageId,
+        name: onePackage.name,
+        destination: onePackage.destination,
+        details: onePackage.details,
+        transport: onePackage.transport,
+        hotel: onePackage.hotel,
+        arrivalDate: onePackage.arrivalDate,
+        departureDate: onePackage.departureDate,
+        departurePoint: onePackage.departurePoint,
+        totalQuotas: onePackage.totalQuotas,
+        availableQuotas: onePackage.availableQuotas + 1,
+        price: onePackage.price,
+        type: onePackage.type,
+        status: onePackage.status,
+        aditionalPrice: onePackage.aditionalPrice,
+        photos: onePackage.photos
+      }
+      const updatedPackagePromise: boolean = await new Promise((resolve, reject) => {
+        this.apiService.updatePackage(updatePackage.packageId, updatePackage).subscribe({
+          next: () => {
+            resolve(true)
+          },
+          error: (err) => {
+            reject(err)
+          }
+        })
+      })
+      if (updatedPackagePromise) {
+        this.onePackage = updatePackage
+        this.beneficiariesAmount--
+        this.takenQuotas--
+      }
+    }
+  }
+
   addAnotherBeneficiarieButton(): boolean {
-    if (this.onePackage.availableQuotas >= this.beneficiariesAmount + 1) {
+    if (this.onePackage.availableQuotas + this.takenQuotas >= this.beneficiariesAmount + 1) {
       return true
     }
     return false
   }
 
-  addAnotherBeneficiarie() {
-    if (this.onePackage.availableQuotas >= this.beneficiariesAmount + 1) {
-      this.beneficiariesAmount++
+  async addAnotherBeneficiarie() {
+    if (this.onePackage.availableQuotas + this.takenQuotas >= this.beneficiariesAmount + 1) {
+      this.addButtonLoading = true
+      await this.quotasToReduceFromPackage(1)
+      this.addButtonLoading = false
     }
   }
 
-  reduceBeneficiariesAmount() {
+  async reduceBeneficiariesAmount() {
     if (this.beneficiariesAmount > this.beneficiaries.length) {
       if (this.beneficiariesAmount > 1) {
-        this.beneficiariesAmount--
+        this.reduceButtonLoading = true
+        await this.reduceBeneficiariesAmountAction()
+        this.reduceButtonLoading = false
       }
     }
   }
@@ -818,6 +967,64 @@ export class CreateOrderDetailFormComponent implements OnInit {
     return true
   }
 
+  async editPackage(quotas: number) {
+    const packagePromise: Package = await new Promise((resolve, reject) => {
+      this.apiService.getPackageById(this.onePackage.packageId).subscribe({
+        next: (data) => {
+          resolve(data)
+        },
+        error: (err) => {
+          reject(err)
+        }
+      })
+    })
+    if (packagePromise) {
+      const onePackage = {
+        packageId: packagePromise['packageId'],
+        name: packagePromise['name'],
+        destination: packagePromise['destination'],
+        details: packagePromise['details'],
+        transport: packagePromise['transport'],
+        hotel: packagePromise['hotel'],
+        arrivalDate: packagePromise['arrivalDate'],
+        departureDate: packagePromise['departureDate'],
+        departurePoint: packagePromise['departurePoint'],
+        totalQuotas: packagePromise['totalQuotas'],
+        availableQuotas: packagePromise['availableQuotas'],
+        price: packagePromise['price'],
+        type: packagePromise['type'],
+        status: packagePromise['status'],
+        aditionalPrice: packagePromise['aditionalPrice'],
+        photos: packagePromise['photos']
+      }
+      const updatePackage: Package = {
+        packageId: onePackage.packageId,
+        name: onePackage.name,
+        destination: onePackage.destination,
+        details: onePackage.details,
+        transport: onePackage.transport,
+        hotel: onePackage.hotel,
+        arrivalDate: onePackage.arrivalDate,
+        departureDate: onePackage.departureDate,
+        departurePoint: onePackage.departurePoint,
+        totalQuotas: onePackage.totalQuotas,
+        availableQuotas: onePackage.availableQuotas + quotas,
+        price: onePackage.price,
+        type: onePackage.type,
+        status: onePackage.status,
+        aditionalPrice: onePackage.aditionalPrice,
+        photos: onePackage.photos
+      }
+      this.apiService.updatePackage(updatePackage.packageId, updatePackage).subscribe({
+        next: (data) => {
+        },
+        error: (err) => {
+          console.log("Error while updating: ", err)
+        }
+      })
+    }
+  }
+
   alreadyExistsFromEdit(): boolean {
     if (this.orderProcess.action === 'EditOrderDetail') {
       if (this.formGroup.value.document.length >= 6) {
@@ -875,13 +1082,15 @@ export class CreateOrderDetailFormComponent implements OnInit {
         acceptIcon: 'pi pi-times',
         acceptButtonStyleClass: 'p-button-outlined',
         accept: () => {
-          const orderId: string = this.orderProcess.order.orderId
+          const orderId: string = this.oneOrder.orderId
+          this.editPackage(this.takenQuotas)
           this.store.dispatch(new SaveOrderProcess(undefined))
           this.router.navigate(['Home/DetallesPedido/' + orderId])
         }
       })
     } else {
-      const orderId: string = this.orderProcess.order.orderId
+      const orderId: string = this.oneOrder.orderId
+      this.editPackage(this.takenQuotas)
       this.store.dispatch(new SaveOrderProcess(undefined))
       this.router.navigate(['Home/DetallesPedido/' + orderId])
     }
@@ -901,19 +1110,27 @@ export class CreateOrderDetailFormComponent implements OnInit {
           acceptIcon: 'pi pi-times',
           acceptButtonStyleClass: 'p-button-outlined',
           accept: () => {
-            const packageId: string = this.orderProcess.order.package.packageId
+            this.editPackage(this.takenQuotas)
+            const packageId: string = this.oneOrder.package.packageId
             this.store.dispatch(new SaveOrderProcess(undefined))
             this.router.navigate(['Home/DetallesPaquete/' + packageId])
           }
         })
       } else {
-        const packageId: string = this.orderProcess.order.package.packageId
+        this.editPackage(this.takenQuotas)
+        const packageId: string = this.oneOrder.package.packageId
         this.store.dispatch(new SaveOrderProcess(undefined))
         this.router.navigate(['Home/DetallesPaquete/' + packageId])
       }
     } else {
       this.orderProcess = {
-        order: this.orderProcess.order,
+        action: 'CreateOrder',
+        order: {
+          customer: this.oneOrder.customer,
+          package: this.oneOrder.package,
+          beneficiaries: this.oneOrder.beneficiaries,
+          takenQuotas: this.takenQuotas
+        },
         beneficiaries: this.beneficiaries,
       }
       this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
@@ -944,10 +1161,11 @@ export class CreateOrderDetailFormComponent implements OnInit {
     this.orderProcess = {
       action: action,
       order: {
-        orderId: this.orderProcess.order.orderId,
-        package: this.orderProcess.order.package,
-        customer: this.orderProcess.order.customer,
-        totalCost: totalCost
+        orderId: this.oneOrder.orderId,
+        package: this.oneOrder.package,
+        customer: this.oneOrder.customer,
+        totalCost: totalCost,
+        takenQuotas: this.takenQuotas
       },
       beneficiaries: this.beneficiaries,
     }
@@ -982,7 +1200,12 @@ export class CreateOrderDetailFormComponent implements OnInit {
   nextFromCreateOrder() {
     this.orderProcess = {
       action: 'CreateOrder',
-      order: this.orderProcess.order,
+      order: {
+        customer: this.oneOrder.customer,
+        package: this.oneOrder.package,
+        beneficiaries: this.beneficiariesAmount,
+        takenQuotas: this.takenQuotas
+      },
       beneficiaries: this.beneficiaries,
     }
     this.store.dispatch(new SaveOrderProcess({ ...this.orderProcess }))
